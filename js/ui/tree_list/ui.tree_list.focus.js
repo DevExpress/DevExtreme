@@ -98,7 +98,7 @@ core.registerModule('focus', extend(true, {}, focusModule, {
                                 return that.keyOf(node.data) === key;
                             });
 
-                            let pageIndex = that.pageIndex();
+                            let pageIndex = -1;
 
                             if(offset >= 0) {
                                 pageIndex = Math.floor(offset / that.pageSize());

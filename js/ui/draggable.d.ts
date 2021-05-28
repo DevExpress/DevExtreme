@@ -21,43 +21,40 @@ import {
 
 import dxSortable from './sortable';
 
+/**
+ * @namespace DevExpress.ui
+ */
 export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends DOMComponentOptions<T> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoScroll?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     boundary?: string | UserDefinedElement;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cursorOffset?: string | {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 0
        */
       x?: number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default 0
        */
       y?: number
@@ -65,7 +62,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     data?: any;
@@ -73,35 +69,30 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
      * @docid
      * @type Enums.DragDirection
      * @default "both"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dragDirection?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     group?: string;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     handle?: string;
     /**
      * @docid
      * @default 60
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollSensitivity?: number;
     /**
      * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollSpeed?: number;
@@ -111,7 +102,7 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
  * @inherits DOMComponent
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
 export interface DraggableBase { }
 
@@ -158,12 +149,14 @@ export type DragTemplateData = {
     readonly itemElement: DxElement;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clone?: boolean;
@@ -175,7 +168,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
@@ -195,7 +187,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field10 fromData:any
      * @type_function_param1_field11 toData:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragEnd?: ((e: DragEndEvent) => void);
@@ -215,7 +206,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field10 fromData:any
      * @type_function_param1_field11 toData:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragMove?: ((e: DragMoveEvent) => void);
@@ -232,7 +222,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field7 itemElement:DxElement
      * @type_function_param1_field8 fromData:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onDragStart?: ((e: DragStartEvent) => void);
@@ -243,7 +232,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @hasTranscludedContent
  * @module ui/draggable
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxDraggable extends DOMComponent implements DraggableBase {

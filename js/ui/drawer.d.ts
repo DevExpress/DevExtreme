@@ -31,19 +31,20 @@ export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
@@ -52,21 +53,18 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @default false
      * @type_function_param1 event:event
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxSize?: number;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSize?: number;
@@ -74,7 +72,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @fires dxDrawerOptions.onOptionChanged
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     opened?: boolean;
@@ -82,7 +79,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @type Enums.DrawerOpenedStateMode
      * @default "shrink"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openedStateMode?: 'overlap' | 'shrink' | 'push';
@@ -90,7 +86,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @type Enums.DrawerPosition
      * @default "left"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
@@ -98,20 +93,17 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @type Enums.DrawerRevealMode
      * @default "slide"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     revealMode?: 'slide' | 'expand';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @deprecated
      * @public
      */
@@ -120,7 +112,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @docid
      * @type_function_param1 Element:DxElement
      * @default 'panel'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     template?: template | ((Element: DxElement) => any);
@@ -131,7 +122,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @hasTranscludedContent
  * @module ui/drawer
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxDrawer extends Widget {
@@ -140,7 +131,6 @@ export default class dxDrawer extends Widget {
      * @docid
      * @publicName content()
      * @return DxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     content(): DxElement;
@@ -148,7 +138,6 @@ export default class dxDrawer extends Widget {
      * @docid
      * @publicName hide()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hide(): DxPromise<void>;
@@ -156,7 +145,6 @@ export default class dxDrawer extends Widget {
      * @docid
      * @publicName show()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     show(): DxPromise<void>;
@@ -164,7 +152,6 @@ export default class dxDrawer extends Widget {
      * @docid
      * @publicName toggle()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     toggle(): DxPromise<void>;

@@ -38,19 +38,20 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInf
     readonly value?: Array<number>;
 }
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
      * @default 60
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     end?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     endName?: string;
@@ -64,28 +65,24 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      * @type_function_param1_field4 start:number
      * @type_function_param1_field5 end:number
      * @type_function_param1_field6 value:array<number>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 40
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     start?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     startName?: string;
     /**
      * @docid
      * @default [40, 60]
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: Array<number>;
@@ -96,7 +93,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @inherits dxSliderBase
  * @module ui/range_slider
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxRangeSlider extends dxTrackBar {

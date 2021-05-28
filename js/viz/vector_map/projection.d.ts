@@ -1,12 +1,12 @@
 /**
  * @docid
+ * @namespace DevExpress.viz
  * @type object
  */
 export interface VectorMapProjectionConfig {
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     aspectRatio?: number;
@@ -14,7 +14,6 @@ export interface VectorMapProjectionConfig {
      * @docid
      * @type_function_param1 coordinates:Array<number>
      * @type_function_return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     from?: ((coordinates: Array<number>) => Array<number>);
@@ -22,15 +21,22 @@ export interface VectorMapProjectionConfig {
      * @docid
      * @type_function_param1 coordinates:Array<number>
      * @type_function_return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     to?: ((coordinates: Array<number>) => Array<number>);
 }
 
-type Projection = (data: VectorMapProjectionConfig) => any;
-
-type ProjectionMethods = {
+/**
+ * @docid viz.map.projection
+ * @publicName projection(data)
+ * @param1 data:VectorMapProjectionConfig
+ * @return object
+ * @static
+ * @namespace DevExpress.viz.map
+ * @module viz/vector_map/projection
+ * @export projection
+ */
+export const projection: {
     /**
      * @docid viz.map.projection.add
      * @publicName add(name, projection)
@@ -38,7 +44,6 @@ type ProjectionMethods = {
      * @param2 projection:VectorMapProjectionConfig|object
      * @namespace DevExpress.viz.map.projection
      * @static
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     add(name: string, projection: VectorMapProjectionConfig | any): void;
@@ -51,22 +56,8 @@ type ProjectionMethods = {
      * @namespace DevExpress.viz.map.projection
      * @static
      * @hidden
-     * @prevFileNamespace DevExpress.viz
      */
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
+
+    (data: VectorMapProjectionConfig): any;
 }
-
-/**
- * @docid viz.map.projection
- * @publicName projection(data)
- * @param1 data:VectorMapProjectionConfig
- * @return object
- * @static
- * @namespace DevExpress.viz.map
- * @module viz/vector_map/projection
- * @export projection
- * @hidden
- * @prevFileNamespace DevExpress.viz
- */
-export const projection: Projection & ProjectionMethods;
-

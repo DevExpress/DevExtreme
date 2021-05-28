@@ -895,9 +895,10 @@ QUnit.module('Labels template', {
 });
 
 QUnit.test('getTemplate called on labels drawing', function(assert) {
+    const templateOption = function() {};
     this.updateOptions({
         label: {
-            template: function() {}
+            template: templateOption
         }
     });
     this.axis.setBusinessRange({
@@ -912,6 +913,7 @@ QUnit.test('getTemplate called on labels drawing', function(assert) {
 
     // assert
     assert.strictEqual(this.getTemplate.callCount, 1);
+    assert.strictEqual(this.getTemplate.lastCall.args[0], templateOption);
 });
 
 QUnit.test('arguments passing to render', function(assert) {

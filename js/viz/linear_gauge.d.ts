@@ -55,18 +55,18 @@ export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
-
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     geometry?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.viz
        * @type Enums.Orientation
        * @default 'horizontal'
        */
@@ -75,38 +75,34 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     rangeContainer?: dxLinearGaugeRangeContainer;
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxLinearGaugeScale;
     /**
      * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
      * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueIndicator?: GaugeIndicator;
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
      * @type Enums.HorizontalAlignment
      * @default 'right'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     horizontalOrientation?: 'center' | 'left' | 'right';
@@ -114,50 +110,44 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
      * @docid dxLinearGaugeOptions.rangeContainer.verticalOrientation
      * @type Enums.VerticalAlignment
      * @default 'bottom'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     verticalOrientation?: 'bottom' | 'center' | 'top';
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.width
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     width?: {
       /**
        * @docid dxLinearGaugeOptions.rangeContainer.width.start
-       * @prevFileNamespace DevExpress.viz
        * @default 5
        */
       start?: number,
       /**
        * @docid dxLinearGaugeOptions.rangeContainer.width.end
-       * @prevFileNamespace DevExpress.viz
        * @default 5
        */
       end?: number
     } | number;
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
      * @type Enums.HorizontalAlignment
      * @default 'right'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     horizontalOrientation?: 'center' | 'left' | 'right';
     /**
      * @docid dxLinearGaugeOptions.scale.label
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: dxLinearGaugeScaleLabel;
     /**
      * @docid dxLinearGaugeOptions.scale.scaleDivisionFactor
      * @default 25
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scaleDivisionFactor?: number;
@@ -165,16 +155,15 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
      * @docid dxLinearGaugeOptions.scale.verticalOrientation
      * @type Enums.VerticalAlignment
      * @default 'bottom'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     verticalOrientation?: 'bottom' | 'center' | 'top';
 }
+/** @namespace DevExpress.viz */
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick
      * @default -10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     indentFromTick?: number;
@@ -184,7 +173,7 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @inherits BaseGauge
  * @module viz/linear_gauge
  * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
 export default class dxLinearGauge extends BaseGauge {

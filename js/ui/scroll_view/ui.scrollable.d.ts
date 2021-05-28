@@ -23,12 +23,12 @@ export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
     readonly reachedBottom?: boolean;
 }
 
+/** @namespace DevExpress.ui */
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
      * @docid
      * @default false [for](desktop)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     bounceEnabled?: boolean;
@@ -36,14 +36,12 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid
      * @type Enums.ScrollDirection
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     direction?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
@@ -61,7 +59,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onScroll?: ((e: ScrollEventInfo<T>) => void);
@@ -79,7 +76,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onUpdated?: ((e: ScrollEventInfo<T>) => void);
@@ -87,7 +83,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid
      * @default false [for](non-touch_devices)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
@@ -95,7 +90,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid
      * @default true [for](desktop)
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByThumb?: boolean;
@@ -105,7 +99,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @type string
      * @acceptValues 'onScroll'|'onHover'|'always'|'never'
      * @default 'onScroll'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
@@ -113,7 +106,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid
      * @default false [for](desktop except Mac)
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useNative?: boolean;
@@ -123,7 +115,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @inherits DOMComponent
  * @namespace DevExpress.ui
  * @hidden
- * @prevFileNamespace DevExpress.ui
  */
 export default class dxScrollable extends DOMComponent {
     constructor(element: UserDefinedElement, options?: dxScrollableOptions)
@@ -131,7 +122,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName clientHeight()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clientHeight(): number;
@@ -139,7 +129,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName clientWidth()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clientWidth(): number;
@@ -147,7 +136,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName content()
      * @return DxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     content(): DxElement;
@@ -155,7 +143,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollBy(distance)
      * @param1 distance:numeric|object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollBy(distance: number | any): void;
@@ -163,7 +150,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollHeight()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollHeight(): number;
@@ -171,7 +157,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollLeft()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollLeft(): number;
@@ -179,7 +164,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollOffset()
      * @return object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollOffset(): any;
@@ -187,7 +171,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollTo(targetLocation)
      * @param1 targetLocation:numeric|object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollTo(targetLocation: number | any): void;
@@ -195,7 +178,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollToElement(element)
      * @param1 element:Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollToElement(element: UserDefinedElement): void;
@@ -203,7 +185,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollTop()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollTop(): number;
@@ -211,7 +192,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName scrollWidth()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollWidth(): number;
@@ -219,7 +199,6 @@ export default class dxScrollable extends DOMComponent {
      * @docid
      * @publicName update()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     update(): DxPromise<void>;

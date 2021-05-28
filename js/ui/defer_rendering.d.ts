@@ -35,12 +35,14 @@ export type RenderedEvent = EventInfo<dxDeferRendering>;
 /** @public */
 export type ShownEvent = EventInfo<dxDeferRendering>;
 
-/** @deprecated use Properties instead */
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animation?: animationConfig;
@@ -48,7 +50,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @docid
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
@@ -56,7 +57,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @docid
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
@@ -64,21 +64,18 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @docid
      * @type DxPromise|bool
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     renderWhen?: PromiseLike<void> | boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showLoadIndicator?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     staggerItemSelector?: string;
@@ -88,7 +85,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @inherits Widget
  * @module ui/defer_rendering
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxDeferRendering extends Widget {
