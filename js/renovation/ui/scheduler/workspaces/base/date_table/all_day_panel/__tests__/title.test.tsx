@@ -6,7 +6,7 @@ describe('AllDayPanelTitle', () => {
     const render = (viewModel) => shallow(TitleView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
+    }) as any);
 
     it('should spread restAttributes', () => {
       const title = render({ restAttributes: { customAttribute: 'customAttribute' } });

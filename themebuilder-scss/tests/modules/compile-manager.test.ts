@@ -49,7 +49,7 @@ describe('Compile manager - integration test on test sass', () => {
       outColorScheme: 'test-theme',
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -67,7 +67,7 @@ describe('Compile manager - integration test on test sass', () => {
       assetsBasePath: 'base-path',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -86,7 +86,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#337ab7',
       });
     });
@@ -100,7 +100,7 @@ describe('Compile manager - integration test on test sass', () => {
       data: '@brand-primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -110,7 +110,7 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': 'red',
         '$accordion-title-color': 'red',
         '$accordion-item-title-opened-bg': 'transparent',
@@ -150,7 +150,7 @@ describe('Compile manager - integration test on test sass', () => {
       noClean: true,
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }

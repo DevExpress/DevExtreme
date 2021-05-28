@@ -13,7 +13,6 @@ import {
   viewFunction as ScrollbarComponent,
 } from '../scrollbar';
 
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, TopPocketState } from '../common/consts';
 
 import {
@@ -87,7 +86,7 @@ describe('Scrollbar', () => {
 
             const needHoverableClass = (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
 
-            const scrollbar = mount(ScrollbarComponent(viewModel) as JSX.Element);
+            const scrollbar = mount(ScrollbarComponent(viewModel));
 
             if (needHoverableClass) {
               expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollbar-hoverable'));
@@ -180,7 +179,7 @@ describe('Scrollbar', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
       scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
-      const detach = scrollbar.pointerDownEffect() as DisposeEffectReturn;
+      const detach = scrollbar.pointerDownEffect();
 
       expect(getEventHandlers('dxpointerdown').length).toBe(1);
       detach();
@@ -218,7 +217,7 @@ describe('Scrollbar', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
       scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
-      const detach = scrollbar.pointerUpEffect() as DisposeEffectReturn;
+      const detach = scrollbar.pointerUpEffect();
 
       expect(getEventHandlers('dxpointerup').length).toBe(1);
       detach();
@@ -450,7 +449,7 @@ describe('Scrollbar', () => {
             showScrollbar, direction,
           } as ScrollbarPropsType) as any;
 
-          const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel));
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
           expect(viewModel.isScrollbar(scrollbar.getDOMNode())).toBe(true);
@@ -461,7 +460,7 @@ describe('Scrollbar', () => {
             showScrollbar, direction,
           } as ScrollbarPropsType) as any;
 
-          const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel));
           viewModel.scrollbarRef = scrollbar.getDOMNode();
 
           expect(viewModel.isScrollbar(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(false);
@@ -472,7 +471,7 @@ describe('Scrollbar', () => {
             showScrollbar, direction,
           } as ScrollbarPropsType) as any;
 
-          const scrollbar = mount(ScrollbarComponent(viewModel) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel));
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
           expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
@@ -488,10 +487,10 @@ describe('Scrollbar', () => {
             showScrollbar, direction: invertedDirection,
           } as ScrollbarPropsType) as any;
 
-          const firstScrollbar = mount(ScrollbarComponent(firstViewModel) as JSX.Element);
+          const firstScrollbar = mount(ScrollbarComponent(firstViewModel));
           firstViewModel.scrollbarRef = firstScrollbar.getDOMNode();
 
-          const secondScrollbar = mount(ScrollbarComponent(secondViewModel) as JSX.Element);
+          const secondScrollbar = mount(ScrollbarComponent(secondViewModel));
 
           expect(firstViewModel.isThumb(secondScrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(false);
         });
@@ -501,7 +500,7 @@ describe('Scrollbar', () => {
             showScrollbar, direction,
           } as ScrollbarPropsType) as any;
 
-          const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel));
           viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
           expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
@@ -517,10 +516,10 @@ describe('Scrollbar', () => {
             showScrollbar, direction: invertedDirection,
           } as ScrollbarPropsType) as any;
 
-          const firstScrollbar = mount(ScrollbarComponent(firstViewModel) as JSX.Element);
+          const firstScrollbar = mount(ScrollbarComponent(firstViewModel));
           firstViewModel.scrollbarRef = firstScrollbar.getDOMNode();
 
-          const secondScrollbar = mount(ScrollbarComponent(secondViewModel) as JSX.Element);
+          const secondScrollbar = mount(ScrollbarComponent(secondViewModel));
 
           expect(firstViewModel.isThumb(secondScrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(false);
         });
@@ -530,7 +529,7 @@ describe('Scrollbar', () => {
             showScrollbar, direction,
           } as ScrollbarPropsType) as any;
 
-          const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel));
           viewModel.scrollbarRef = scrollbar.getDOMNode();
           expect(viewModel.isThumb(scrollbar.getDOMNode())).toBe(false);
         });
@@ -955,7 +954,7 @@ describe('Scrollbar', () => {
             onAnimatorCancel,
           });
 
-          const scrollbar = mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+          const scrollbar = mount(ScrollbarComponent(viewModel as any));
 
           viewModel.moveToMouseLocation = jest.fn();
           event.originalEvent.target = scrollbar.find(`.${targetClass}`).getDOMNode();
@@ -1129,7 +1128,7 @@ describe('Scrollbar', () => {
                     scrollByThumb,
                   } as ScrollbarPropsType);
 
-                  mount(ScrollbarComponent(viewModel as any) as JSX.Element);
+                  mount(ScrollbarComponent(viewModel as any));
 
                   viewModel.scrollBy = jest.fn();
                   Object.defineProperties(viewModel, {

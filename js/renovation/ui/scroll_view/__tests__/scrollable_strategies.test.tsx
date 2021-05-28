@@ -241,7 +241,7 @@ each([{
             viewModel.containerRef = React.createRef();
             viewModel.scrollableRef = React.createRef();
 
-            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollable = mount(viewFunction(viewModel) as JSX.Element);
             const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
             expect(scrollableTabIndex).toEqual(null);
@@ -582,7 +582,7 @@ each([{
         viewModel.locked = false;
         viewModel.update = jest.fn();
 
-        expect((viewModel as any).validate(event)).toEqual(false);
+        expect(viewModel.validate(event)).toEqual(false);
         expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
@@ -593,7 +593,7 @@ each([{
         viewModel.locked = true;
         viewModel.update = jest.fn();
 
-        expect((viewModel as any).validate(event)).toEqual(false);
+        expect(viewModel.validate(event)).toEqual(false);
         expect(viewModel.update).toHaveBeenCalledTimes(0);
       });
     });
