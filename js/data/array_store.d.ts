@@ -2,10 +2,10 @@ import Store, {
     StoreOptions
 } from './abstract_store';
 
+/** @namespace DevExpress.data */
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     data?: Array<any>;
@@ -15,7 +15,6 @@ export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
  * @inherits Store
  * @module data/array_store
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export default class ArrayStore extends Store {
@@ -23,7 +22,6 @@ export default class ArrayStore extends Store {
     /**
      * @docid
      * @publicName clear()
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     clear(): void;
@@ -31,7 +29,6 @@ export default class ArrayStore extends Store {
      * @docid
      * @publicName createQuery()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     createQuery(): any;

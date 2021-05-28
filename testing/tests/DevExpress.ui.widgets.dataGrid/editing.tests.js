@@ -1826,7 +1826,7 @@ QUnit.module('Editing', {
         });
 
         popupInstance.show();
-        const $popupContent = popupInstance.overlayContent();
+        const $popupContent = popupInstance.$overlayContent();
         $($popupContent.find('td').first()).trigger('dxclick');
         that.clock.tick();
 
@@ -4214,7 +4214,8 @@ QUnit.module('Editing with real dataController', {
 
         const headerPanelElement = that.gridContainer.find('.dx-datagrid-header-panel').first();
 
-        rowsView.scrollChanged.add(function() {
+        const scrollHandler = function() {
+            rowsView.scrollChanged.remove(scrollHandler);
             // act
             that.click(headerPanelElement, '.dx-datagrid-addrow-button');
 
@@ -4234,7 +4235,9 @@ QUnit.module('Editing with real dataController', {
             delete that.array[7].__KEY__;
             assert.deepEqual(that.array[7], { name: 'Test' }, 'added item');
             done();
-        });
+        };
+
+        rowsView.scrollChanged.add(scrollHandler);
 
         rowsView.element().dxScrollable('instance').scrollTo(45);
     });
@@ -12009,6 +12012,40 @@ QUnit.module('Editing with validation', {
         assert.equal($errorRow.find('.dx-error-message').text(), errorText, 'errorText is correct');
     });
 
+    QUnit.test('rowValidating should not throw errors when a native promise is used (T999928)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'row'
+            },
+            columns: ['name'],
+            onRowValidating: function(options) {
+                options.promise = new Promise(resolve => {
+                    resolve();
+                });
+            }
+        });
+
+        // act
+        this.addRow();
+
+        try {
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.ok(true, 'no errors');
+        } catch(error) {
+            // assert
+            assert.ok(false, `error is thrown: ${error.message}`);
+        }
+    });
+
     // T241920
     QUnit.testInActiveWindow('Cell editor invalid value don\'t miss focus on saveEditData', function(assert) {
         // arrange
@@ -12127,7 +12164,8 @@ QUnit.module('Editing with validation', {
             }
         });
 
-        rowsView.scrollChanged.add(function() {
+        const scrollHandler = function() {
+            rowsView.scrollChanged.remove(scrollHandler);
             // act
             that.addRow();
 
@@ -12144,8 +12182,11 @@ QUnit.module('Editing with validation', {
             assert.ok(that.gridContainer.find('tbody > tr').eq(1).hasClass('dx-row-inserted'), 'has inserted row');
             assert.ok(that.gridContainer.find('tbody > tr').eq(2).hasClass('dx-error-row'), 'has error row');
             assert.strictEqual(that.gridContainer.find('tbody > tr').eq(2).text(), 'Test');
+
             done();
-        });
+        };
+
+        rowsView.scrollChanged.add(scrollHandler);
 
         rowsView.element().dxScrollable('instance').scrollTo(45);
     });

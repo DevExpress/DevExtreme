@@ -87,24 +87,25 @@ export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
     animation?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       hide?: animationConfig,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
       show?: animationConfig
@@ -112,7 +113,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "OK"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyButtonText?: string;
@@ -120,28 +120,24 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @type Enums.EditorApplyValueMode
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid
      * @default "Cancel"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelButtonText?: string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cleanSearchOnOpening?: boolean;
     /**
      * @docid
      * @default "Clear"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearButtonText?: string;
@@ -152,7 +148,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return Boolean
      * @publicName closeOnOutsideClick
      * @default true [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -163,7 +158,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
@@ -171,7 +165,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default false
      * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
@@ -179,7 +172,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default false
      * @default true [for](iPhone)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -191,21 +183,18 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     grouped?: boolean;
     /**
      * @docid
      * @default "More"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     nextButtonText?: string;
@@ -217,7 +206,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onPageLoading?: ((e: PageLoadingEvent) => void);
@@ -229,7 +217,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onPullRefresh?: ((e: PullRefreshEvent) => void);
@@ -247,7 +234,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onScroll?: ((e: ScrollEvent) => void);
@@ -260,7 +246,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -276,7 +261,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
@@ -284,21 +268,18 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pageLoadMode?: 'nextButton' | 'scrollBottom';
     /**
      * @docid
      * @default "Loading..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pageLoadingText?: string;
     /**
      * @docid
      * @default "Select"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
@@ -307,7 +288,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default function() { return $(window).height() * 0.8 }
      * @type_function_return number|string
      * @default 'auto' [for](desktop|iPad)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -317,7 +297,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default function() {return $(window).width() * 0.8 }
      * @type_function_return number|string
      * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -327,7 +306,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default undefined
      * @publicName position
      * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -335,28 +313,24 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pullRefreshEnabled?: boolean;
     /**
      * @docid
      * @default "Release to refresh..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     refreshingText?: string;
@@ -365,21 +339,18 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true
      * @publicName searchEnabled
      * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchEnabled?: boolean;
     /**
      * @docid
      * @default "Search"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchPlaceholder?: string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -389,14 +360,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true
      * @publicName showCancelButton
      * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showCancelButton?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showClearButton?: boolean;
@@ -405,7 +374,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true
      * @publicName showPopupTitle
      * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -413,7 +381,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -423,7 +390,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default "title"
      * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -432,7 +398,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @default false [for](desktop except Mac)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useNativeScrolling?: boolean;
@@ -442,7 +407,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default true [for](desktop|iOS)
      * @publicName usePopover
      * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     usePopover?: boolean;
@@ -450,7 +414,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default false
      * @default true [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dropDownCentered?: boolean;
@@ -466,7 +429,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @inherits dxDropDownList
  * @module ui/lookup
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxLookup extends dxDropDownList {

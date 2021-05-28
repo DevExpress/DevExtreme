@@ -1,4 +1,4 @@
-name: Themebuilder tests
+name: Themebuilder and Styles tests
 
 on: [push, pull_request]
 
@@ -26,9 +26,9 @@ jobs:
       run: npx gulp style-compiler-themes-ci
 
     - name: Install dart
-      uses: cedx/setup-dart@v2
+      uses: dart-lang/setup-dart@v1
 
-    - name: Install dart packeges
+    - name: Install dart packages
       run: pub get
       working-directory: ./themebuilder-scss/dart-compiler
 
@@ -47,3 +47,10 @@ jobs:
     - name: Run themebuilder tests (integration only, dart)
       run: npm run test-dart
       working-directory: ./themebuilder-scss
+
+    - name: Check styles for duplicate rules (generic)
+      run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.light.css"
+
+    - name: Check styles for duplicate rules (material)
+      run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
+

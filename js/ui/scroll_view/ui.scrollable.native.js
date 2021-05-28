@@ -155,30 +155,16 @@ const NativeStrategy = Class.inherit({
     },
 
     handleScroll: function(e) {
-        if(!this._isScrollLocationChanged()) {
-            // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
-            e.stopImmediatePropagation();
-            return;
-        }
-
         this._eventForUserAction = e;
         this._moveScrollbars();
         this._scrollAction(this._createActionArgs());
-        this._lastLocation = this.location();
-    },
-
-    _isScrollLocationChanged: function() {
-        const currentLocation = this.location();
-        const lastLocation = this._lastLocation || {};
-        const isTopChanged = lastLocation.top !== currentLocation.top;
-        const isLeftChanged = lastLocation.left !== currentLocation.left;
-
-        return isTopChanged || isLeftChanged;
     },
 
     _moveScrollbars: function() {
+        const { top, left } = this._getScrollOffset();
+
         this._eachScrollbar(function(scrollbar) {
-            scrollbar.moveTo(this.location());
+            scrollbar.moveTo({ top: -top, left: -left });
             scrollbar.option('visible', true);
         });
 

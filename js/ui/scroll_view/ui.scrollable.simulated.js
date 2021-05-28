@@ -25,7 +25,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
@@ -80,10 +79,6 @@ const InertiaAnimator = Animator.inherit({
     _complete: function() {
         this.scroller._scrollComplete();
     },
-
-    _stop: function() {
-        this.scroller._stopComplete();
-    }
 });
 
 const BounceAnimator = InertiaAnimator.inherit({
@@ -281,10 +276,8 @@ export const Scroller = Class.inherit({
     },
 
     _initHandler: function(e) {
-        this._stopDeferred = new Deferred();
         this._stopScrolling();
         this._prepareThumbScrolling(e);
-        return this._stopDeferred.promise();
     },
 
     _stopScrolling: deferRenderer(function() {
@@ -322,12 +315,6 @@ export const Scroller = Class.inherit({
         const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
 
         this._scrollStep(-Math.round(location));
-    },
-
-    _stopComplete: function() {
-        if(this._stopDeferred) {
-            this._stopDeferred.resolve();
-        }
     },
 
     _startHandler: function() {
@@ -591,7 +578,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
@@ -639,7 +625,7 @@ export const SimulatedStrategy = Class.inherit({
     handleInit: function(e) {
         this._suppressDirections(e);
         this._eventForUserAction = e;
-        this._eventHandler('init', e).done(this._stopAction);
+        this._eventHandler('init', e);
     },
 
     _suppressDirections: function(e) {
@@ -848,7 +834,6 @@ export const SimulatedStrategy = Class.inherit({
 
     createActions: function() {
         this._startAction = this._createActionHandler('onStart');
-        this._stopAction = this._createActionHandler('onStop');
         this._endAction = this._createActionHandler('onEnd');
         this._updateAction = this._createActionHandler('onUpdated');
 

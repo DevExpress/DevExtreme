@@ -1935,7 +1935,7 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
 
-        callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate());
+        callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate(options.label.template));
 
         that._templatesRendered && that._templatesRendered.reject();
         that._templatesRendered = new Deferred();

@@ -47,7 +47,6 @@ const Scrollable = DOMComponent.inherit({
             onStart: null,
             onEnd: null,
             onBounce: null,
-            onStop: null,
             useSimulatedScrollbar: false,
             useKeyboard: true,
             inertiaEnabled: true,
@@ -232,7 +231,6 @@ const Scrollable = DOMComponent.inherit({
         switch(args.name) {
             case 'onStart':
             case 'onEnd':
-            case 'onStop':
             case 'onUpdated':
             case 'onScroll':
             case 'onBounce':
