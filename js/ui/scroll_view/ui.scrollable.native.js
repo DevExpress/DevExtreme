@@ -139,8 +139,10 @@ const NativeStrategy = Class.inherit({
     },
 
     _moveScrollbars: function() {
+        const { top, left } = this._getScrollOffset();
+
         this._eachScrollbar(function(scrollbar) {
-            scrollbar.moveTo(this.location());
+            scrollbar.moveTo({ top: -top, left: -left });
             scrollbar.option('visible', true);
         });
 
