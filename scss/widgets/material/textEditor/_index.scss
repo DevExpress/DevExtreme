@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -12,7 +13,6 @@
 
 // adduse
 
-
 $material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
@@ -22,7 +22,7 @@ $material-editor-custom-button-margin: 5px;
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
-  margin-top: -$material-texteditor-icon-container-size / 2;
+  margin-top: math.div(-$material-texteditor-icon-container-size, 2);
 
   @include dx-icon-sizing($material-texteditor-icon-container-size);
 }
