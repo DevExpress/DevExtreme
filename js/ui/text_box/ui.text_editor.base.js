@@ -277,11 +277,10 @@ const TextEditorBase = Editor.inherit({
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
     },
 
-    _reRenderButtonContainers: function() {
-        this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
-        this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
+    _cleanButtonContainers: function() {
+        this._$beforeButtonsContainer?.remove();
+        this._$afterButtonsContainer?.remove();
         this._buttonCollection.clean();
-        this._renderButtonContainers();
     },
 
     _clean() {
@@ -726,13 +725,15 @@ const TextEditorBase = Editor.inherit({
                 if(fullName === name) {
                     checkButtonsOptionType(value);
                 }
-                this._reRenderButtonContainers();
+                this._cleanButtonContainers();
+                this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
                 break;
             case 'visible':
                 this.callBase(args);
                 if(args.value && this.option('buttons')) {
-                    this._reRenderButtonContainers();
+                    this._cleanButtonContainers();
+                    this._renderButtonContainers();
                     this._updateButtonsStyling(this.option('stylingMode'));
                 }
                 break;
