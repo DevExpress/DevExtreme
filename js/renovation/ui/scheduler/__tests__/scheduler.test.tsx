@@ -5,6 +5,29 @@ import { Scheduler, viewFunction } from '../scheduler';
 import { Widget } from '../../common/widget';
 
 describe('Scheduler', () => {
+  describe('private', () => {
+    it('dispose', () => {
+      const scheduler = new Scheduler(new SchedulerProps());
+      const dispose = jest.fn();
+
+      scheduler.instance = {
+        dispose,
+      } as any;
+
+      scheduler.dispose()();
+
+      expect(dispose).toBeCalledTimes(1);
+    });
+
+    it('getComponentInstance', () => {
+      const scheduler = new Scheduler(new SchedulerProps());
+      const mockInstance = {};
+
+      scheduler.instance = mockInstance as any;
+      expect(scheduler.getComponentInstance()).toMatchObject(mockInstance);
+    });
+  });
+
   describe('API', () => {
     it('*Appointment\'s methods should pass call to instance', () => {
       const addAppointment = jest.fn();

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   Component,
-  // Effect,
+  Effect,
   InternalState,
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
 
-// import { DisposeEffectReturn } from '../../utils/effect_return';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 import dxScheduler from '../../../ui/scheduler';
 import { SchedulerProps } from './props';
 
@@ -108,8 +109,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     this.instance.updateAppointment(target, appointment);
   }
 
-  // @Effect({ run: 'once' })
-  // dispose(): DisposeEffectReturn {
-  //   return () => { this.instance.dispose(); };
-  // }
+  @Effect({ run: 'once' })
+  dispose(): DisposeEffectReturn {
+    return () => { this.instance.dispose(); };
+  }
 }
