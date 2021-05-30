@@ -11,7 +11,6 @@ import { DisposeEffectReturn } from '../../utils/effect_return';
 import dxScheduler from '../../../ui/scheduler';
 import { SchedulerProps } from './props';
 
-// import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
@@ -30,13 +29,6 @@ export const viewFunction = (viewModel: Scheduler): JSX.Element => {
   view: viewFunction,
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  // eslint-disable-next-line class-methods-use-this
-  // get cssClasses(): string {
-  //   return combineClasses({
-  //     'dx-form': true,
-  //   });
-  // }
-
   @InternalState()
   instance!: dxScheduler;
 

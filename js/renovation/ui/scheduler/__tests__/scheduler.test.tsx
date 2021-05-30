@@ -1,4 +1,3 @@
-// import React from 'react';
 import { mount } from 'enzyme';
 import { SchedulerProps } from '../props';
 import { Scheduler, viewFunction } from '../scheduler';
@@ -6,7 +5,7 @@ import { Widget } from '../../common/widget';
 
 describe('Scheduler', () => {
   describe('private', () => {
-    it('dispose', () => {
+    it('dispose should pass call to instance', () => {
       const scheduler = new Scheduler(new SchedulerProps());
       const dispose = jest.fn();
 
@@ -19,7 +18,7 @@ describe('Scheduler', () => {
       expect(dispose).toBeCalledTimes(1);
     });
 
-    it('getComponentInstance', () => {
+    it('getComponentInstance should pass call to instance', () => {
       const scheduler = new Scheduler(new SchedulerProps());
       const mockInstance = {};
 
@@ -81,7 +80,7 @@ describe('Scheduler', () => {
       expect(getDataSource).toHaveBeenCalled();
     });
 
-    it('sdsd should pass call to instance', () => {
+    it('*appointmentPopup and *appointmentTooltip should pass call to instance', () => {
       const hideAppointmentPopup = jest.fn();
       const hideAppointmentTooltip = jest.fn();
 
@@ -110,7 +109,7 @@ describe('Scheduler', () => {
       expect(showAppointmentTooltip).toHaveBeenCalled();
     });
 
-    it('sdsaad should pass call to instance', () => {
+    it('getEndViewDate and getStartViewDate should pass call to instance', () => {
       const getEndViewDate = jest.fn();
       const getStartViewDate = jest.fn();
 
@@ -128,7 +127,7 @@ describe('Scheduler', () => {
       expect(getStartViewDate).toHaveBeenCalled();
     });
 
-    it('sdsaadaa should pass call to instance', () => {
+    it('scroll* methods should pass call to instance', () => {
       const scrollTo = jest.fn();
       const scrollToTime = jest.fn();
 
@@ -147,7 +146,7 @@ describe('Scheduler', () => {
     });
   });
 
-  it('should be render', () => {
+  it('should be rendered', () => {
     const tree = mount(viewFunction({} as any));
 
     expect(tree.is(Widget)).toBe(true);
@@ -162,6 +161,3 @@ describe('Scheduler', () => {
       .toBe('customAttribute');
   });
 });
-
-// const props = new SchedulerProps();
-// props.currentDate = new Date(2021, 5, 5, 15, 15);
