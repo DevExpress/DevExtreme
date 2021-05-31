@@ -16,3 +16,20 @@
 .option {
     margin-top: 10px;
 }
+
+.selected-data {
+    margin-top: 20px;
+}
+
+.option > span {
+    width: 120px;
+    display: inline-block;
+}
+
+
+.option > .dx-widget {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    max-width: 350px;
+}

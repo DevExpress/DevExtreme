@@ -7,7 +7,8 @@
     [showBorders]="true"
     [columnAutoWidth]="true"
     [expandedRowKeys]="[1, 2, 10]"
-    [(selectedRowKeys)]="selectedRowKeys">
+    [(selectedRowKeys)]="selectedRowKeys"
+    (onSelectionChanged)="onSelectionChanged($event)">
     <dxo-selection
             mode="multiple"
             [recursive]="recursiveSelectionEnabled">
@@ -21,10 +22,25 @@
 <div class="options">
     <div class="caption">Options</div>
     <div class="option">
+        <span>Selection Mode</span>{{ ' ' }}
+        <dx-select-box
+            [(value)]="selectionMode"
+            [items]="['all', 'excludeRecursive', 'leavesOnly']"
+            (onValueChanged)="onOptionsChanged($event)"
+            text="Recursive Selection"> 
+        </dx-select-box>
+    </div>
+    <div class="option">
         <dx-check-box 
             [(value)]="recursiveSelectionEnabled"
-            (onValueChanged)="onValueChanged($event)"
+            (onValueChanged)="onOptionsChanged($event)"
             text="Recursive Selection"> 
         </dx-check-box>
+    </div>
+    <div class="selected-data">
+        <span class="caption">Selected Records:</span>
+        <span>
+            {{ selectedEmployeeNames }}
+        </span>
     </div>
 </div>

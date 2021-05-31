@@ -1,4 +1,14 @@
-$(function() {   
+$(function() {
+    let selectionMode = "all";
+    
+    function getEmployeeNames(employees) {
+        if (employees.length > 0) {
+            return employees.map(employee => employee.Full_Name).join(", ");
+        } else {
+            return "Nobody has been selected";
+        }
+    }
+
     var treeList = $("#employees").dxTreeList({
         dataSource: employees,
         keyExpr: "ID",
@@ -22,7 +32,11 @@ $(function() {
                 width: 120
             }
         ],
-        expandedRowKeys: [1, 2, 10]
+        expandedRowKeys: [1, 2, 10],
+        onSelectionChanged: function(selectedItems) {
+            var selectedData = treeList.getSelectedRowsData(selectionMode);
+            $("#selected-items-container").text(getEmployeeNames(selectedData));
+        }
     }).dxTreeList("instance");
 
     $("#recursive").dxCheckBox({
@@ -31,6 +45,15 @@ $(function() {
         onValueChanged: function(e) {
             treeList.clearSelection();
             treeList.option("selection.recursive", e.value);
+        }
+    });
+    
+    $("#selection-mode").dxSelectBox({
+        value: selectionMode,
+        items: ["all", "excludeRecursive", "leavesOnly"],
+        onValueChanged: function({ value }) {
+            treeList.clearSelection();
+            selectionMode = value;
         }
     });
 });

@@ -1,10 +1,24 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
+    $scope.selectedItemsText = "Nobody has been selected";
     $scope.recursiveSelectionEnabled = false;
+    $scope.selectionMode = "all";
     $scope.selectedRowKeys = [];
 
+    function getEmployeeNames(employees) {
+        if (employees.length > 0) {
+            return employees.map(employee => employee.Full_Name).join(", ");
+        } else {
+            return "Nobody has been selected";
+        }
+    }
+
     $scope.$watch("recursiveSelectionEnabled", function(value) {
+        $scope.selectedRowKeys = [];
+    });
+
+    $scope.$watch("selectionMode", function(value) {
         $scope.selectedRowKeys = [];
     });
 
@@ -34,7 +48,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 width: 120
             }
         ],
-        expandedRowKeys: [1, 2, 10]
+        expandedRowKeys: [1, 2, 10],
+        onSelectionChanged: function(e) {
+            var selectedData = e.component.getSelectedRowsData($scope.selectionMode);
+            $scope.selectedItemsText = getEmployeeNames(selectedData);
+        }
     };
 
     $scope.recursiveOptions = {
@@ -43,4 +61,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             value: "recursiveSelectionEnabled"
         }
     };
+
+    $scope.selectionModeOptions = {
+        items: ["all", "excludeRecursive", "leavesOnly"],
+        bindingOptions: {
+            value: "selectionMode"
+        }
+    }
 });
