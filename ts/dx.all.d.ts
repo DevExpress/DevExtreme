@@ -5701,6 +5701,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.columnChooser.width]
        */
       width?: number;
+      /**
+       * [descr:GridBaseOptions.columnChooser.sortOrder]
+       */
+      sortOrder?: 'asc' | 'desc';
     }
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
