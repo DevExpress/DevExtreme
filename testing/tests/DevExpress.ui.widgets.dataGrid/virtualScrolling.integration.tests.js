@@ -4081,6 +4081,35 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         assert.ok(!dataGrid.getController('data').dataSource().requireTotalCount());
     });
 
+    QUnit.test('New mode. Load panel should not be displayed at the bottom when all items are loaded', function(assert) {
+        // arrange
+        const items = generateDataSource(60);
+
+        const dataGrid = createDataGrid({
+            height: 350,
+            dataSource: items,
+            keyExpr: 'id',
+            remoteOperations: true,
+            scrolling: {
+                mode: 'infinite',
+                rowRenderingMode: 'virtual',
+                newMode: true,
+                useNative: false
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        [930, 1100, 1400, 1600, 1800].forEach((top) => {
+            dataGrid.getScrollable().scrollTo({ top });
+            this.clock.tick();
+        });
+
+        // assert
+        assert.strictEqual($(dataGrid.element()).find('.dx-datagrid-bottom-load-panel').length, 0, 'load indicator should not be displayed');
+    });
+
     QUnit.test('New mode. A modified row shold not jump to the top view port position on scroll', function(assert) {
         // arrange
         const items = generateDataSource(100);
