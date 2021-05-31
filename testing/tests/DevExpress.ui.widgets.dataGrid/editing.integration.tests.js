@@ -40,6 +40,7 @@ import themes from 'ui/themes';
 import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
+import SelectBox from 'ui/select_box';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2519,6 +2520,40 @@ QUnit.module('Editing', baseModuleConfig, () => {
             }
         });
     });
+
+    QUnit.testInActiveWindow('DropDownEditor Overlay should be closed on dropdown button click in ios (T998455)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test1' }
+            ],
+            keyExpr: 'id',
+            columns: [{
+                dataField: 'field1',
+                lookup: {
+                    valueExpr: 'this',
+                    displayExpr: 'this',
+                    dataSource: ['test1', 'test2']
+                }
+            }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            loadingTimeout: null
+        });
+
+
+        // act
+        dataGrid.editRow(0);
+        const $dropDownEditor = $(dataGrid.getRowElement(0)).find('.dx-dropdowneditor');
+        const $dropDownEditorIcon = $dropDownEditor.find('.dx-dropdowneditor-icon');
+
+        $dropDownEditorIcon.trigger('dxclick');
+
+        // assert
+        const selectBox = SelectBox.getInstance($dropDownEditor);
+        assert.ok(selectBox.option('opened'), 'dropdowneditor is opened');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -3616,6 +3651,10 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 keyboard
                     .keyDown('left')
                     .press('enter');
+
+                if(dataType === 'datetime') {
+                    keyboard.press('enter'); // confirm date
+                }
 
                 // assert
                 editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();

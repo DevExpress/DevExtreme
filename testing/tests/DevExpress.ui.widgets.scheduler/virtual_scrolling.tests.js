@@ -39,6 +39,7 @@ module('Virtual Scrolling', {
                     'scrolling.type': settings.scrolling.type
                 },
                 getCellWidth: () => { return 150; },
+                getCellHeight: () => { return 50; },
                 option: name => this.workspaceMock._options[name],
                 _getCellData: noop,
                 _insertAllDayRowsIntoDateTable: noop,

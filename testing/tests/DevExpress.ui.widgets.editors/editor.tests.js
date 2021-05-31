@@ -28,7 +28,7 @@ const Fixture = Class.inherit({
 });
 
 const getValidationMessageWrapper = (editor) => {
-    return editor._validationMessage._wrapper();
+    return editor._validationMessage.$wrapper();
 };
 
 QUnit.module('Editor', {

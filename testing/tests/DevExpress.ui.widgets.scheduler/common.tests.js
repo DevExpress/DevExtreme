@@ -2380,6 +2380,31 @@ QUnit.module('Scrolling to time', () => {
         assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
         assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
     });
+
+    QUnit.test('It should be possible to change views option when view names are specified (T995794)', function(assert) {
+        const baseViews = [{
+            type: 'day',
+            name: 'Custom Day',
+        }, {
+            type: 'week',
+            name: 'Custom Week',
+        }];
+        const timelineViews = [{
+            type: 'timelineDay',
+            name: 'Custom Timeline Day',
+        }, {
+            type: 'timelineWeek',
+            name: 'Custom Timeline Week',
+        }];
+        const scheduler = createWrapper({
+            views: baseViews,
+            currentView: 'Custom Week',
+        });
+
+        scheduler.instance.option('views', timelineViews);
+
+        assert.equal(scheduler.workSpace.getCells().length, 48, 'Everything is correct');
+    });
 })('Options');
 
 (function() {
@@ -4408,11 +4433,12 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'horizontal',
                             groupByDate: false,
-                        },
+                        }],
                         groups: ['ownerId'],
                     });
 
@@ -4443,11 +4469,12 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'horizontal',
                             groupByDate: true,
-                        },
+                        }],
                         groups: ['ownerId'],
                     });
 
@@ -4478,10 +4505,11 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'vertical',
-                        },
+                        }],
                         groups: ['ownerId'],
                         showAllDayPanel: false,
                     });
@@ -4496,10 +4524,11 @@ QUnit.module('ScrollTo', () => {
                 const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
-                    currentView: {
+                    currentView: 'week',
+                    views: [{
                         type: 'week',
                         groupOrientation: 'vertical',
-                    },
+                    }],
                     groups: ['ownerId'],
                     showAllDayPanel: true,
                 });
@@ -4513,10 +4542,11 @@ QUnit.module('ScrollTo', () => {
                 const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
-                    currentView: {
+                    currentView: 'week',
+                    views: [{
                         type: 'week',
                         groupOrientation: 'vertical',
-                    },
+                    }],
                     groups: ['ownerId'],
                     showAllDayPanel: true,
                 });
