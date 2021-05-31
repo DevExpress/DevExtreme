@@ -168,6 +168,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   updateValidationMessageVisibility(): EffectReturn {
     this.showValidationMessage = this.shouldShowValidationMessage;
+
+    return undefined;
   }
 
   @Method()

@@ -427,16 +427,13 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
   }
 
   _patchElementParam(value: Element): Element {
-    let result: dxElementWrapper;
-
     try {
-      result = $(value);
+      const result: dxElementWrapper = $(value);
+      const element = result?.get(0);
+      return element?.nodeType ? element : value;
     } catch (error) {
       return value;
     }
-
-    const element = result?.get(0);
-    return element?.nodeType ? element : value;
   }
 
   // Public API

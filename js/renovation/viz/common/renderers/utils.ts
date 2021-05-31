@@ -51,8 +51,8 @@ export const extend = (target: Record<string, unknown>, source: Record<string, u
 type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
 
 function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
-  let i: number;
-  let ii: number;
+  let i = Number.NaN;
+  let ii = Number.NaN;
   const list: Segment[] = [];
   if (Array.isArray(points[0])) {
     for (i = 0, ii = points.length; i < ii; ++i) {
@@ -92,7 +92,7 @@ function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: 
 }
 
 function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
-  let i: number;
+  let i = Number.NaN;
   let k = list.length;
   const ii = (points || []).length;
   if (ii) {
@@ -160,9 +160,8 @@ export const buildPathSegments = (points: (Point|number)[]|number[][], type: Pat
 export const combinePathParam = (segments: Segment[]): string => {
   const d: unknown[] = [];
   const ii = segments.length;
-  let segment: Segment;
   for (let i = 0; i < ii; ++i) {
-    segment = segments[i];
+    const segment = segments[i];
     for (let j = 0, jj = segment.length; j < jj; ++j) {
       d.push(segment[j]);
     }
@@ -198,18 +197,15 @@ function makeEqualLineSegments(short: Segment[], long: Segment[], type: PathType
 }
 
 function makeEqualAreaSegments(short: Segment[], long: Segment[], type: PathType): void {
-  let i: number;
-  let head: Segment[];
+  let i = Number.NaN;
+  let head: Segment[] = [];
   const shortLength = short.length;
   const longLength = long.length;
-  let constsSeg1: Segment;
-  let constsSeg2: Segment;
-
   if ((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
     i = (shortLength - 1) / 2 - 1;
     head = short.slice(0, i + 1);
-    constsSeg1 = [...head[head.length - 1]];
-    constsSeg2 = [...short.slice(i + 1)[0]];
+    const constsSeg1: Segment = [...head[head.length - 1]];
+    const constsSeg2: Segment = [...short.slice(i + 1)[0]];
     prepareConstSegment(constsSeg1, type);
     prepareConstSegment(constsSeg2, type);
     for (let j = i; j < (longLength - 1) / 2 - 1; j++) {
@@ -260,7 +256,6 @@ function maxLengthFontSize(fontSize1?: number, fontSize2?: number): number {
 }
 
 function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: any, parentClassName: string): number {
-  let style;
   const realStyle = (node as HTMLElement).style;
 
   if (isDefined((node as Text).wholeText)) {
@@ -274,7 +269,7 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
   } else if ((node as Element).tagName === 'BR') {
     ++line;
   } else if (domAdapter.isElementNode(node)) {
-    style = extend(style = {}, parentStyle);
+    const style = extend({}, parentStyle);
     switch ((node as Element).tagName) {
       case 'B':
       case 'STRONG':
@@ -305,9 +300,8 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
 
 function adjustLineHeights(items: TextItem[]): void {
   let currentItem = items[0];
-  let item: TextItem;
   for (let i = 1, ii = items.length; i < ii; ++i) {
-    item = items[i];
+    const item = items[i];
     if (item.line === currentItem.line) {
       // T177039
       currentItem.height = maxLengthFontSize(currentItem.height, item.height);

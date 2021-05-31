@@ -809,8 +809,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
     const { target } = event.originalEvent;
 
-    let verticalScrolling;
-    let horizontalScrolling;
+    let verticalScrolling = false;
+    let horizontalScrolling = false;
 
     if (this.direction.isVertical) {
       verticalScrolling = this.props.scrollByThumb
