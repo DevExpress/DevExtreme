@@ -1088,6 +1088,10 @@ class Diagram extends Widget {
     _getToolboxGroups() {
         return DiagramToolboxManager.getGroups(this.option('toolbox.groups'));
     }
+    _updateAllCustomShapes() {
+        this._diagramInstance.removeAllCustomShapes();
+        this._updateCustomShapes(this._getCustomShapes());
+    }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
             this._diagramInstance.removeCustomShapes(prevCustomShapes.map(s => s.type));
@@ -2653,13 +2657,6 @@ class Diagram extends Widget {
             });
         }
     }
-    _invalidatePropertiesPanelTabs() {
-        if(this._propertiesPanel) {
-            this._propertiesPanel.option({
-                propertyTabs: this.option('propertiesPanel.tabs')
-            });
-        }
-    }
     _invalidateMainToolbarCommands() {
         if(this._mainToolbar) {
             this._mainToolbar.option({
@@ -2752,7 +2749,7 @@ class Diagram extends Widget {
                 this._updatePageColorState();
                 break;
             case 'nodes':
-                if(args.fullName === 'nodes.autoLayout') {
+                if(args.fullName.startsWith('nodes.autoLayout')) {
                     this._refreshDataSources();
                 } else {
                     this._refreshNodesDataSource();
@@ -2762,7 +2759,11 @@ class Diagram extends Widget {
                 this._refreshEdgesDataSource();
                 break;
             case 'customShapes':
-                this._updateCustomShapes(args.value, args.previousValue);
+                if(args.fullName !== args.name) { // customShapes[i].<property>
+                    this._updateAllCustomShapes();
+                } else {
+                    this._updateCustomShapes(args.value, args.previousValue);
+                }
                 this._invalidate();
                 break;
             case 'contextMenu':
@@ -2776,11 +2777,7 @@ class Diagram extends Widget {
                 this._invalidate();
                 break;
             case 'propertiesPanel':
-                if(args.name === 'propertiesPanel.tabs') {
-                    this._invalidatePropertiesPanelTabs();
-                } else {
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'toolbox':
                 if(args.fullName === 'toolbox.groups') {
