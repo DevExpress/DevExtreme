@@ -2089,7 +2089,7 @@ class Diagram extends Widget {
                 this._updatePageColorState();
                 break;
             case 'nodes':
-                if(args.fullName.startsWith('nodes.autoLayout')) {
+                if(args.fullName.indexOf('nodes.autoLayout') === 0) {
                     this._refreshDataSources();
                 } else {
                     this._refreshNodesDataSource();
