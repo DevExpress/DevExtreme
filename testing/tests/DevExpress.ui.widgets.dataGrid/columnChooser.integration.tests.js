@@ -83,6 +83,82 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser-mode-select'), 'has select mode class');
     });
 
+    QUnit.test('Correct runtime changing of sortOrder (string)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{
+                dataField: 'field1',
+                caption: 'B',
+                visible: false
+            }, {
+                dataField: 'field2',
+                caption: 'A',
+                visible: false
+            }],
+            columnChooser: {
+                sortOrder: 'asc'
+            },
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
+
+        // assert
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(0).text(), 'A', 'first column');
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(1).text(), 'B', 'first column');
+
+        // act
+        dataGrid.option('columnChooser.sortOrder', 'desc');
+
+        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
+
+        // assert
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(0).text(), 'B', 'first column');
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(1).text(), 'A', 'first column');
+    });
+
+    QUnit.test('Correct runtime changing of sortOrder (object)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columns: [{
+                dataField: 'field1',
+                caption: 'B',
+                visible: false
+            }, {
+                dataField: 'field2',
+                caption: 'A',
+                visible: false
+            }],
+            columnChooser: {
+                sortOrder: 'asc'
+            },
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        let $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
+
+        // assert
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(0).text(), 'A', 'first column');
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(1).text(), 'B', 'second column');
+
+        // act
+        dataGrid.option({ columnChooser: { sortOrder: 'desc' } });
+
+        $overlayWrapper = dataGrid.getView('columnChooserView')._popupContainer.$wrapper();
+
+        // assert
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(0).text(), 'B', 'first column');
+        assert.strictEqual($overlayWrapper.find('.dx-treeview-item').eq(1).text(), 'A', 'second column');
+    });
+
     QUnit.test('ColumnChooser\'s treeView get correct default config (without checkboxes)', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
@@ -106,5 +182,6 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // assert
         assert.ok(!$overlayWrapper.find('.dx-checkbox').length, 'There aren\'t checkboxes in columnChooser');
     });
+
 
 });

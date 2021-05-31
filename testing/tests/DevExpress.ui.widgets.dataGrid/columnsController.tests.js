@@ -587,9 +587,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
     QUnit.test('getVisibleColumns when all columns grouped', function(assert) {
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1', groupIndex: 0 },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', groupIndex: 1 },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', groupIndex: 2 },
+                { dataField: 'TestField1', caption: 'Custom Title 1', groupIndex: 0 },
+                { dataField: 'TestField2', caption: 'Custom Title 2', groupIndex: 1 },
+                { dataField: 'TestField3', caption: 'Custom Title 3', groupIndex: 2 },
             ]
         });
 
@@ -679,9 +679,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false },
             ]
         });
 
@@ -973,9 +973,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false },
             ]
         });
 
@@ -994,10 +994,10 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false, showInColumnChooser: false },
-                { dataField: 'TestField4', headerCaption: 'Custom Title 4', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false, showInColumnChooser: false },
+                { dataField: 'TestField4', caption: 'Custom Title 4', visible: false },
             ]
         });
 
@@ -1009,6 +1009,50 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.equal(chooserColumns.length, 2, 'count chooser columns');
         assert.strictEqual(chooserColumns[0].dataField, 'TestField2', 'dataField column');
         assert.strictEqual(chooserColumns[1].dataField, 'TestField4', 'dataField column');
+    });
+
+    QUnit.test('getChooserColumns with sort ordering (asc)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: '1', caption: 'A', visible: false },
+                { dataField: '2', caption: 'C', visible: false },
+                { dataField: '3', caption: 'B', visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'asc'
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].dataField, '1', 'dataField column');
+        assert.strictEqual(chooserColumns[1].dataField, '3', 'dataField column');
+        assert.strictEqual(chooserColumns[2].dataField, '2', 'dataField column');
+    });
+
+    QUnit.test('getChooserColumns with sort ordering (desc)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: '1', caption: 'A', visible: false },
+                { dataField: '2', caption: 'C', visible: false },
+                { dataField: '3', caption: 'B', visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'desc'
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].dataField, '2', 'dataField column');
+        assert.strictEqual(chooserColumns[1].dataField, '3', 'dataField column');
+        assert.strictEqual(chooserColumns[2].dataField, '1', 'dataField column');
     });
 
     QUnit.test('column with calculateCellValue', function(assert) {
