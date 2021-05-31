@@ -302,17 +302,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             }
             this.callBase.apply(this, arguments);
         },
-        hasKnownLastPage: function() {
-            const newAppendMode = this.option(NEW_SCROLLING_MODE) && this.option('scrolling.mode') === SCROLLING_MODE_INFINITE;
-
-            if(newAppendMode && this._lastLoadOptions) {
-                const { skip, take } = this._lastLoadOptions;
-                const requireLoadCount = skip + take;
-
-                return this.totalItemsCount() < requireLoadCount;
-            }
-
-            return this.callBase.apply(this, arguments);
+        _loadPageSize: function() {
+            return this.callBase.apply(this, arguments) * this.loadPageCount();
         }
     };
 
