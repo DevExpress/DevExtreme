@@ -332,9 +332,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _updateButtonsStyling: function(editorStylingMode) {
-        each(this.option('buttons'), (_, buttonOptions) => {
-            if(buttonOptions.options && !buttonOptions.options.stylingMode && this.option('visible')) {
-                const buttonInstance = this.getButton(buttonOptions.name);
+        each(this.option('buttons'), (_, { options, name: buttonName }) => {
+            if(options && !options.stylingMode && this.option('visible')) {
+                const buttonInstance = this.getButton(buttonName);
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
         });
