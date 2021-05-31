@@ -796,9 +796,7 @@ class ScrollableTestHelper {
     setContainerWidth(width) {
         this.$scrollable.css('width', width);
 
-        if(!this._useNative) {
-            resizeCallbacks.fire();
-        }
+        resizeCallbacks.fire();
     }
 }
 
