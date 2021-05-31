@@ -1372,13 +1372,13 @@ QUnit.module('optionChanged', moduleSetup, () => {
             assert.strictEqual($items.length, 2, '$items.length');
 
             const item1 = $items.eq(0);
-            assert.roughEqual(item1.outerHeight(), 93, 1.001, 'items(0) has valid height');
+            assert.roughEqual(item1.outerHeight(), 37, 1.001, 'items(0) has valid height');
             assert.strictEqual(item1.is('.' + [ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join('.')), true, 'items(0) should have each of these classes');
             assert.strictEqual(!item1.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_CLOSED_CLASS].join(', .')), true, 'items(0) should not have no one of these classes');
             assert.strictEqual(item1.attr('aria-selected'), 'true', 'items(0) should have aria-selected=true');
 
             const item2 = $items.eq(1);
-            assert.roughEqual(item2.outerHeight(), 43, 1.001, 'items(1) has valid height');
+            assert.roughEqual(item2.outerHeight(), 21, 1.001, 'items(1) has valid height');
             assert.strictEqual(item2.is('.' + [ACCORDION_ITEM_CLOSED_CLASS].join('.')), true, 'items(1) should have each of these classes');
             assert.strictEqual(!item2.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join(', .')), true, 'items(1) should not have no one of these classes');
             assert.strictEqual(item2.attr('aria-selected'), 'false', 'items(1) should have aria-selected=false');
