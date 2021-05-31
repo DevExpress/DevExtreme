@@ -58,14 +58,6 @@ class AppointmentLayoutManager {
     }
 
     _createAppointmentsMapCore(list, positionMap) {
-        const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.leftVirtualCellsCount
-            : 0;
-        const virtualRowCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.topVirtualRowsCount
-            : 0;
-
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
                 delete data.settings;
@@ -80,9 +72,7 @@ class AppointmentLayoutManager {
                 itemData: data,
                 settings: appointmentSettings,
                 needRepaint: true,
-                needRemove: false,
-                virtualCellCount,
-                virtualRowCount
+                needRemove: false
             };
         });
     }
@@ -101,27 +91,16 @@ class AppointmentLayoutManager {
             return true;
         }
 
-        const createSettingsToCompare = (settings, index) => {
-            const virtualCellCount = settings.virtualCellCount || 0;
-            const virtualRowCount = settings.virtualRowCount || 0;
-            const cellIndex = settings[index].cellIndex + virtualCellCount;
-            const rowIndex = settings[index].rowIndex + virtualRowCount;
-
-            return {
-                ...settings[index],
-                cellIndex: cellIndex,
-                rowIndex: rowIndex,
-                virtualCellCount: -1,
-                virtualRowCount: -1
-            };
-        };
-
         for(let i = 0; i < settings.length; i++) {
-            const newSettings = createSettingsToCompare(settings, i);
-            const oldSettings = createSettingsToCompare(sourceSetting, i);
+            const newSettings = settings[i];
+            const oldSettings = sourceSetting[i];
 
-            if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
+            if(oldSettings) { // exclude properties for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
+                oldSettings.cellIndex = newSettings.cellIndex;
+                oldSettings.rowIndex = newSettings.rowIndex;
+                oldSettings.hMax = newSettings.hMax;
+                oldSettings.vMax = newSettings.vMax;
             }
 
             if(!equalByValue(newSettings, oldSettings)) {
