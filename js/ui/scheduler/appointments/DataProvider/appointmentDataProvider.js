@@ -1,6 +1,6 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
-import { getInstanceFactory } from '../../instanceFactory';
+import { getResourceManager } from '../../resources/resourceManager';
 import { extend } from '../../../../core/utils/extend';
 import { each } from '../../../../core/utils/iterator';
 
@@ -9,7 +9,9 @@ const FilterStrategies = {
     standard: 'standard'
 };
 
-export default class AppointmentDataProvider {
+let appointmentDataProvider;
+
+export class AppointmentDataProvider {
     constructor(scheduler, dataSource, appointmentDataAccessors) {
         this.scheduler = scheduler;
         this.dataSource = dataSource;
@@ -55,7 +57,7 @@ export default class AppointmentDataProvider {
 
     combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
         const result = extend(true, {}, appointmentDataAccessors);
-        const { resourceManager } = getInstanceFactory();
+        const resourceManager = getResourceManager();
 
         if(appointmentDataAccessors && resourceManager) {
             each(resourceManager._dataAccessors, (type, accessor) => {
@@ -117,3 +119,13 @@ export default class AppointmentDataProvider {
         return this.appointmentDataSource.remove(rawAppointment);
     }
 }
+
+export const createAppointmentDataProvider = (options) => {
+    appointmentDataProvider = new AppointmentDataProvider(
+        options.scheduler,
+        options.dataSource,
+        options.appointmentDataAccessors
+    );
+};
+
+export const getAppointmentDataProvider = () => appointmentDataProvider;

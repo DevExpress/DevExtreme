@@ -11,7 +11,7 @@ import messageLocalization from '../../localization/message';
 import Popup from '../popup';
 import { AppointmentForm } from './appointment_form';
 import { hide as hideLoading, show as showLoading } from './loading';
-import { getInstanceFactory } from './instanceFactory';
+import { getResourceManager } from './resources/resourceManager';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -147,9 +147,7 @@ export default class AppointmentPopup {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
 
-        const { resourceManager } = getInstanceFactory();
-
-        each(resourceManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
+        each(getResourceManager().getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
     }
@@ -173,7 +171,7 @@ export default class AppointmentPopup {
         );
 
         if(resources && resources.length) {
-            AppointmentForm.concatResources(getInstanceFactory().resourceManager.getEditors());
+            AppointmentForm.concatResources(getResourceManager().getEditors());
         }
 
         return AppointmentForm.create(
@@ -385,11 +383,9 @@ export default class AppointmentPopup {
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
 
-                    const { resourceManager } = getInstanceFactory();
-
                     this.scheduler._workSpace.updateScrollPosition(
                         startDate,
-                        resourceManager.getResourcesFromItem(this.state.lastEditData, true),
+                        getResourceManager().getResourcesFromItem(this.state.lastEditData, true),
                         inAllDayRow,
                     );
                     this.state.lastEditData = null;

@@ -4,7 +4,7 @@ import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
-import { getAppointmentDataProvider } from './instanceFactory';
+import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,

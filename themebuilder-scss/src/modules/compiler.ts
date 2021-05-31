@@ -139,13 +139,16 @@ export default class Compiler {
 
   collector(map: sass.types.Map): sass.types.ReturnValue {
     for (let mapIndex = 0; mapIndex < map.getLength(); mapIndex += 1) {
-      const variableKey = (map.getKey(mapIndex) as sass.types.String).getValue();
-      const variableValue = map.getValue(mapIndex).toString();
+      const keyMap = map.getKey(mapIndex);
+      if (keyMap instanceof sass.types.String) {
+        const variableKey = keyMap.getValue();
+        const variableValue = map.getValue(mapIndex).toString();
 
-      // eslint-disable-next-line no-continue
-      if (variableValue === 'null') continue;
+        // eslint-disable-next-line no-continue
+        if (variableValue === 'null') continue;
 
-      this.changedVariables[variableKey] = variableValue;
+        this.changedVariables[variableKey] = variableValue;
+      }
     }
     return sass.types.Null.NULL;
   }

@@ -1,7 +1,7 @@
 import { getUpdatedOptions } from '../get_updated_options';
 
 describe('get_updated_options', () => {
-  class DummyDataSource {}
+  class DummyDataSource { dummy = true; }
 
   it('simple props changed', () => {
     expect(getUpdatedOptions({ visible: true }, { visible: false }))

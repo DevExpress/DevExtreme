@@ -1508,7 +1508,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
     await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1560,7 +1560,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
     await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1621,7 +1621,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
       }
     }
   }).before(() => {
-    const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
       const items: Record<string, unknown>[] = [];
 
       for (let i = 0; i < rowCount; i += 1) {
@@ -1712,7 +1712,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -1807,7 +1807,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
@@ -2500,4 +2500,74 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
   await ClientFunction(() => {
     $('#mycontainer').remove();
   })();
+});
+
+test('New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .eql(0)
+    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .eql(0);
+
+  // act
+  await t
+    .pressKey('pagedown');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(8, 0).isFocused)
+    .ok()
+    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .eql(8)
+    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .eql(0);
+
+  // act
+  await t
+    .pressKey('pageup');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.apiOption('focusedRowIndex'))
+    .eql(0)
+    .expect(dataGrid.apiOption('focusedColumnIndex'))
+    .eql(0);
+}).before(async () => {
+  const getData = (): Record<string, unknown>[] => {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 100; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+        Description: `Description ${i + 1}`,
+      });
+    }
+    return items;
+  };
+  await createWidget('dxDataGrid', {
+    dataSource: getData(),
+    keyExpr: 'ID',
+    remoteOperations: true,
+    height: 300,
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      newMode: true,
+    },
+    columns: ['Name', 'Description'],
+    onFocusedCellChanging(e) {
+      e.isHighlighted = true;
+    },
+  });
 });

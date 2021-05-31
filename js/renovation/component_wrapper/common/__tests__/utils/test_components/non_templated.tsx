@@ -8,7 +8,7 @@ import NonTemplatedTestComponent from './component_wrapper/non_templated';
 export const view = (): JSX.Element => <div />;
 
 @ComponentBindings()
-export class NonTemplatedTestWidgetProps {}
+export class NonTemplatedTestWidgetProps { nonTemplated = true; }
 
 @Component({
   jQuery: {

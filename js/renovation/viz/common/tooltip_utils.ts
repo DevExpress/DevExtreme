@@ -347,7 +347,7 @@ export function prepareData(
   customize.color = customize.color || color;
   customize.borderColor = customize.borderColor || border.color;
   customize.fontColor = customize.fontColor || font.color;
-  return customize as CustomizedOptions;
+  return customize;
 }
 
 export function isTextEmpty({ text, html }: CustomizedOptions): boolean {

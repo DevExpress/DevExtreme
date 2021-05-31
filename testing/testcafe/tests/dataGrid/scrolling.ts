@@ -231,7 +231,7 @@ test('New virtual mode. A detail row should be rendered when the last master row
     .expect(lastRow.key)
     .eql(100);
 }).before(() => {
-  const getItems = function (): Record<string, unknown>[] {
+  const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({
@@ -282,7 +282,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     .expect(lastRow.key)
     .eql(100);
 }).before(() => {
-  const getItems = function (): Record<string, unknown>[] {
+  const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({

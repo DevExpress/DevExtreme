@@ -13,7 +13,6 @@ import {
 import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
-  SCROLLABLE_SCROLL_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
 } from '../common/consts';
@@ -23,6 +22,8 @@ import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
 
 const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
+
+interface Mock extends jest.Mock {}
 
 class ScrollableTestHelper {
   options: { [key: string]: any };
@@ -84,7 +85,7 @@ class ScrollableTestHelper {
     this.isHorizontal = isHorizontal;
     this.isBoth = isBoth;
 
-    this.scrollable = mount(viewFunction(this.viewModel) as JSX.Element);
+    this.scrollable = mount(viewFunction(this.viewModel));
 
     this.viewModel.scrollableRef.current = this.scrollable.getDOMNode();
     this.viewModel.containerRef.current = this.getContainerElement();
@@ -204,22 +205,6 @@ class ScrollableTestHelper {
     return this.scrollable.find(Scrollbar);
   }
 
-  getVerticalScroll(): any {
-    return this.scrollable.find(`.dx-scrollbar-vertical .${SCROLLABLE_SCROLL_CLASS}`);
-  }
-
-  getHorizontalScroll(): any {
-    return this.scrollable.find(`.dx-scrollbar-horizontal .${SCROLLABLE_SCROLL_CLASS}`);
-  }
-
-  getVerticalScrollElement(): any {
-    return this.getVerticalScroll().getElement();
-  }
-
-  getHorizontalScrollElement(): any {
-    return this.getHorizontalScroll().getElement();
-  }
-
   initScrollbarSettings(additionalProps:
   { [key: string]: any } = { translateOffset: 0, props: {} }): any {
     const { vScrollLocation = -50, hScrollLocation = -50, ...restProps } = additionalProps.props;
@@ -284,46 +269,22 @@ class ScrollableTestHelper {
     });
   }
 
-  changeScrollbarProp(prop: string, value: number): void {
-    if (this.isBoth) {
-      this.viewModel.hScrollbarRef.current.props[prop] = value;
-      this.viewModel.vScrollbarRef.current.props[prop] = value;
-    } else if (this.isVertical) {
-      this.viewModel.vScrollbarRef.current.props[prop] = value;
-    } else if (this.isHorizontal) {
-      this.viewModel.hScrollbarRef.current.props[prop] = value;
-    }
-  }
-
-  changeScrollbarMethod(method: string, mock): void {
+  changeScrollbarMethod(method: string, mock: Mock): void {
     const { hScrollbarRef, vScrollbarRef } = this.viewModel;
 
     if (this.isBoth) {
-      hScrollbarRef.current![method] = mock;
-      vScrollbarRef.current![method] = mock;
+      hScrollbarRef.current[method] = mock;
+      vScrollbarRef.current[method] = mock;
     } else if (this.isVertical) {
-      vScrollbarRef.current![method] = mock;
+      vScrollbarRef.current[method] = mock;
     } else if (this.isHorizontal) {
-      hScrollbarRef.current![method] = mock;
-    }
-  }
-
-  callScrollbarMethod(method: string): void {
-    const { hScrollbarRef, vScrollbarRef } = this.viewModel;
-
-    if (this.isBoth) {
-      hScrollbarRef.current![method]();
-      vScrollbarRef.current![method]();
-    } else if (this.isVertical) {
-      vScrollbarRef.current![method]();
-    } else if (this.isHorizontal) {
-      hScrollbarRef.current![method]();
+      hScrollbarRef.current[method] = mock;
     }
   }
 
   initContainerPosition({ top, left }: { top: number; left: number }): void {
-    this.viewModel.containerRef.current!.scrollTop = top;
-    this.viewModel.containerRef.current!.scrollLeft = left;
+    this.viewModel.containerRef.current.scrollTop = top;
+    this.viewModel.containerRef.current.scrollLeft = left;
 
     this.viewModel.vScrollLocation = -top;
     this.viewModel.hScrollLocation = -left;
@@ -335,18 +296,6 @@ class ScrollableTestHelper {
 
     jestExpect(scrollTop).toEqual(expectedPosition.top);
     jestExpect(scrollLeft).toEqual(expectedPosition.left);
-  }
-
-  checkScrollTransform(jestExpect: (any) => any,
-    { vertical, horizontal }: { vertical: string; horizontal: string }): void {
-    if (this.isBoth) {
-      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
-      jestExpect(this.getScrollbars().at(1).instance().scrollStyles).toHaveProperty('transform', vertical);
-    } else if (this.isVertical) {
-      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', vertical);
-    } else if (this.isHorizontal) {
-      jestExpect(this.getScrollbars().at(0).instance().scrollStyles).toHaveProperty('transform', horizontal);
-    }
   }
 
   checkScrollbarEventHandlerCalls(jestExpect: (any) => any,
@@ -393,7 +342,9 @@ class ScrollableTestHelper {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getActionHandlers(props: any): { [key: string]: any } {
+  getActionHandlers(
+    props: Pick<ScrollableSimulatedPropsType, 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce'>,
+  ): { [T in 'onStart' | 'onScroll' | 'onUpdated' | 'onEnd' | 'onPullDown' | 'onReachBottom' | 'onBounce']: any } {
     const actionHandlers = {
       onStart: jest.fn(),
       onScroll: jest.fn(),

@@ -9,7 +9,7 @@ import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
-import { isDefined, isRenderer } from '../../../core/utils/type';
+import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
@@ -57,7 +57,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   get _propsInfo(): {
     allowNull: string[];
-    twoWay: [string, boolean, string][];
+    twoWay: [string, string, string][];
     elements: string[];
     templates: string[];
     props: string[];
@@ -102,10 +102,10 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
-          [name, defaultValue, eventName],
+          [name, defaultName, eventName],
         ) => ({
           ...options,
-          [name]: defaultValue,
+          [name]: this._viewComponent.defaultProps[defaultName],
           [eventName]: (value: unknown): void => this.option(name, value),
         }),
         {},
@@ -161,6 +161,11 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._fireContentReady();
       this._shouldRaiseContentReady = false;
     }
+  }
+
+  _silent(name: string, value: any): void {
+    (this as unknown as { _options })
+      ._options.silent(name, value);
   }
 
   _render(): void { } // NOTE: Inherited from DOM_Component
@@ -242,9 +247,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
         (name: string) => defaultProps[name],
       ),
     );
-
-    twoWay.forEach(([name, defaultValue]) => {
-      setDefaultOptionValue(widgetProps, () => defaultValue)(name);
+    twoWay.forEach(([name, defaultName]) => {
+      setDefaultOptionValue(widgetProps, () => defaultProps[defaultName])(name);
     });
 
     elements.forEach((name: string) => {
@@ -382,7 +386,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
     const template = this._getTemplate(templateOption);
 
-    if (template.toString() === 'dx-renovation-template-mock') {
+    if (isString(template) && template === 'dx-renovation-template-mock') {
       return undefined;
     }
     const templateWrapper = (model: TemplateModel): VNode => createElement(
@@ -456,7 +460,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setAria(name: string, value: string): void {
+  setAria(_name: string, _value: string): void {
     throw new Error(
       '"setAria" method is deprecated, use "aria" property instead',
     );
