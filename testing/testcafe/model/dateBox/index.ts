@@ -29,7 +29,8 @@ export default class DateBox extends Widget {
     return `.dx-dateviewroller-${viewName}`;
   }
 
-  static async getRollerScrollTop(viewName: string): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  static getRollerScrollTop(viewName: string): Promise<number> {
     const rollerClass: string = DateBox.getDateViewRollerClass(viewName);
     return ClientFunction(() => $(`${rollerClass} .dx-scrollable-container`).scrollTop(),
       {

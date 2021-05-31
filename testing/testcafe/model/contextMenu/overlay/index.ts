@@ -19,7 +19,8 @@ export default class Overlay {
     );
   }
 
-  async getOverlayOffset(): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getOverlayOffset(): Promise<any> {
     const { getOverlayInstance } = this;
     return ClientFunction(
       () => {

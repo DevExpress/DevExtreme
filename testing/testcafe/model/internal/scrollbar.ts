@@ -17,7 +17,8 @@ export default class Scrollbar {
     return this.element.find(`.${CLASS.scrollableScroll}`);
   }
 
-  async isScrollVisible(): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  isScrollVisible(): Promise<boolean> {
     const scroll = this.getScroll();
     const invisibleStateClass = CLASS.stateInvisible;
 

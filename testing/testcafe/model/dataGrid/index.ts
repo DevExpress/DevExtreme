@@ -93,7 +93,8 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  async scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -102,7 +103,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async getScrollLeft(): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getScrollLeft(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -111,7 +113,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async getScrollWidth(): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getScrollWidth(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -120,7 +123,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async getScrollTop(): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getScrollTop(): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -129,7 +133,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async getScrollbarWidth(isHorizontal: boolean): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -161,7 +166,8 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
-  async apiOption(name: string, value = 'undefined'): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiOption(name: string, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -173,7 +179,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiAddRow(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiAddRow(): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -182,7 +189,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiEditRow(rowIndex: number): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiEditRow(rowIndex: number): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -191,7 +199,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiCancelEditData(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiCancelEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cancelEditData(),
@@ -199,7 +208,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiSaveEditData(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiSaveEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).saveEditData(),
@@ -207,7 +217,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).editCell(rowIndex, columnIndex),
@@ -215,7 +226,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cellValue(rowIndex, columnIndex, value),
@@ -227,7 +239,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
     const { getGridInstance } = this;
     return ClientFunction(
       () => (getGridInstance() as any).cellValue(rowIndex, columnIndex),
@@ -235,7 +248,8 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  async apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
       const dataGrid = getGridInstance() as any;
@@ -244,7 +258,8 @@ export default class DataGrid extends Widget {
     }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
   }
 
-  async apiGetVisibleRows(): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  apiGetVisibleRows(): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
       const dataGrid = getGridInstance() as any;

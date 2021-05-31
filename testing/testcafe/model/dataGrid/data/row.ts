@@ -53,7 +53,8 @@ export default class DataRow extends FocusableElement {
     return this.element.find(`.${CLASS.selectCheckBox}`);
   }
 
-  async getOffset(): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getOffset(): Promise<any> {
     const { element } = this;
 
     return ClientFunction(

@@ -32,7 +32,8 @@ export default class AppointmentTooltip {
     return new AppointmentTooltipListItem(this.wrapper, title, index);
   }
 
-  async isVisible(): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  isVisible(): Promise<boolean> {
     const { element } = this;
     const invisibleStateClass = CLASS.stateInvisible;
 

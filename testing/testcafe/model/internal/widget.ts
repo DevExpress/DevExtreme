@@ -20,7 +20,8 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  async option(option: string, value?: unknown): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  option(option: string, value?: unknown): Promise<any> {
     const { element, name } = this;
     const get = (): any => $(element())[name]('instance').option(option);
     const set = (): any => $(element())[name]('instance').option(option, value);

@@ -118,11 +118,13 @@ export default class Scheduler extends Widget {
     return new AppointmentCollector(this.element, index);
   }
 
-  async getAppointmentCount(): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
   }
 
-  async getAppointmentCollectorCount(): Promise<number> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getAppointmentCollectorCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
   }
 

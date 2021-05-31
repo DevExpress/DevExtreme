@@ -12,7 +12,8 @@ export default class OverlayWrapper {
     this.element = Selector(`.${CLASS.overlayWrapper}`);
   }
 
-  async getVisibility(): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  getVisibility(): Promise<string> {
     const { element } = this;
     const contextMenuClass = CLASS.contextMenu;
 
