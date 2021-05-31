@@ -721,15 +721,13 @@ const dxChart = AdvancedChart.inherit({
 
     _adjustViewport() {
         const that = this;
-        const argumentAxis = that.getArgumentAxis();
         const adjustOnZoom = that._themeManager.getOptions('adjustOnZoom');
-        const alignToBounds = !argumentAxis.dataVisualRangeIsReduced();
 
         if(!adjustOnZoom) {
             return;
         }
 
-        that._valueAxes.forEach(axis => axis.adjust(alignToBounds));
+        that._valueAxes.forEach(axis => axis.adjust());
     },
 
     _recreateSizeDependentObjects(isCanvasChanged) {

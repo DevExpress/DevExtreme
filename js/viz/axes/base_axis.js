@@ -2425,37 +2425,6 @@ Axis.prototype = {
         return { stopInteraction: !!isOvercoming, correctedRange: correctedRange };
     },
 
-    dataVisualRangeIsReduced() {
-        let minDataValue;
-        let maxDataValue;
-        const translator = this.getTranslator();
-
-        if(this._options.type === 'discrete') {
-            const categories = translator.getBusinessRange().categories;
-            minDataValue = categories[0];
-            maxDataValue = categories[categories.length - 1];
-        } else {
-            const seriesData = this._seriesData;
-            minDataValue = seriesData.min;
-            maxDataValue = seriesData.max;
-        }
-
-        if(!isDefined(minDataValue) || !isDefined(maxDataValue)) {
-            return false;
-        }
-
-        const startPoint = translator.translate(minDataValue);
-        const endPoint = translator.translate(maxDataValue);
-        const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
-        const visualRange = this.visualRange();
-        const visualRangeStartPoint = translator.translate(visualRange.startValue);
-        const visualRangeEndPoint = translator.translate(visualRange.endValue);
-
-        return (visualRangeStartPoint > edges[0] && visualRangeStartPoint < edges[1]) ||
-            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]) ||
-            visualRangeStartPoint === visualRangeEndPoint && edges[0] !== edges[1];
-    },
-
     isExtremePosition(isMax) {
         let extremeDataValue;
         let seriesData;
