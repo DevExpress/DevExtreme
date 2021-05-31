@@ -1176,6 +1176,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
             isAllDayPanelVisible: this.isAllDayPanelVisible,
             getAllDayCellData: this._getAllDayCellData.bind(this),
+            isDateAndTimeView: this.isDateAndTimeView,
         };
 
         if(this.isVirtualScrolling()) {
