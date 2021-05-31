@@ -960,6 +960,20 @@ export const columnsControllerModule = {
                 return column;
             };
 
+            const sortColumns = (columns, sortOrder) => {
+                if(sortOrder !== 'asc' && sortOrder !== 'desc') {
+                    return columns;
+                }
+
+                const sign = sortOrder === 'asc' ? 1 : -1;
+
+                columns.sort(function(column1, column2) {
+                    return sign * column1.caption.localeCompare(column2.caption);
+                });
+
+                return columns;
+            };
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1583,9 +1597,12 @@ export const columnsControllerModule = {
                     return result;
                 },
                 getChooserColumns: function(getAllColumns) {
-                    const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
+                    let columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
+                    columns = grep(columns, function(column) { return column.showInColumnChooser; });
 
-                    return grep(columns, function(column) { return column.showInColumnChooser; });
+                    const sortOrder = this.option('columnChooser.sortOrder');
+
+                    return sortColumns(columns, sortOrder);
                 },
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     const that = this;

@@ -1084,7 +1084,13 @@ export interface ColumnChooser {
      * @docid GridBaseOptions.columnChooser.width
      * @default 250
      */
-    width?: number
+    width?: number,
+    /**
+     * @docid GridBaseOptions.columnChooser.sortOrder
+     * @type Enums.SortOrder
+     * @default undefined
+     */
+    sortOrder?: 'asc' | 'desc'
 }
 
 export interface ColumnFixing {
@@ -3065,7 +3071,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 /** @public */
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
-/** @public */ 
+/** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
