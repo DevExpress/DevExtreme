@@ -214,7 +214,9 @@ export default class ResizingModule extends BaseModule {
                 .addClass('dx-table-column-resizer')
                 .css('left', leftPosition)
                 .appendTo(this._$columnResizeFrame);
+            this._attachColumnSeparatorEvents($columnSeparators[i], $columns, i);
         }
+
 
         // for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
         //     $columnSeparators[i] = $('<div>')
@@ -223,12 +225,19 @@ export default class ResizingModule extends BaseModule {
         // }
 
         // eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
-        if(this._columnResizer) {
-            this._columnResizer.dispose();
-        }
 
-        this._createDraggableElement($columnSeparators[0], $columns, 0);
 
+    }
+
+    _attachColumnSeparatorEvents($columnSeparator, $columns, index) {
+
+        eventsEngine.on($columnSeparator, 'dxpointerdown', () => {
+            if(this._columnResizer) {
+                this._columnResizer.dispose();
+            }
+
+            this._createDraggableElement($columnSeparator, $columns, index);
+        });
     }
 
     _createDraggableElement($columnSeparator, $columns, index) {
@@ -242,7 +251,7 @@ export default class ResizingModule extends BaseModule {
                 const newPosition = this._startDragPosition + event.offset.x;
                 // console.log('move ' + newPosition);
 
-                $columns.eq(0).css('width', /* $columns.eq(0).outerWidth() + */newPosition);
+                $columns.eq(index).css('width', this._startColumnWidth + event.offset.x);
                 $columnSeparator.css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
                 // this._updateByDrag = true;
                 // const $alphaChannelHandle = this._$alphaChannelHandle;
@@ -250,9 +259,13 @@ export default class ResizingModule extends BaseModule {
                 // this._saveValueChangeEvent(event);
                 // this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             },
-            onDragStart: ({ event }) => {
+            onDragStart: () => {
                 this._startDragPosition = parseInt($columnSeparator.css('left').replace('px', ''));
+                this._startColumnWidth = parseInt($($columns[index]).outerWidth());
                 // console.log('start ' + this._startDragPosition);
+            },
+            onDragEnd: () => {
+                // this._updateColumnResizeFrame(); // set positions only
             }
         });
     }
