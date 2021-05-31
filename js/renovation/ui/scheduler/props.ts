@@ -69,48 +69,46 @@ export class ResourceProps {
 }
 
 @ComponentBindings()
-export class ViewProps {
-  @OneWay()
-  agendaDuration?: number;
-
-  @OneWay()
-  cellDuration?: number;
-
+class BaseSchedulerProps {
   @OneWay()
   endDayHour?: number;
-
-  @OneWay()
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-  @OneWay()
-  groupByDate?: boolean;
-
-  @OneWay()
-  groupOrientation?: 'horizontal' | 'vertical';
-
-  @OneWay()
-  groups?: string[];
-
-  @OneWay()
-  intervalCount?: number;
-
-  @OneWay()
-  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
-
-  @OneWay()
-  name?: string;
-
-  @OneWay()
-  startDate?: Date | number | string;
 
   @OneWay()
   startDayHour?: number;
 
   @OneWay()
-  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-  @Nested()
-  scrolling?: ScrollingProps;
+  @OneWay()
+  cellDuration?: number;
+
+  @OneWay()
+  groups?: string[];
+
+  @OneWay()
+  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
+  /* Templates */
+
+  @Template()
+  dataCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  dateCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  timeCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+  @Template()
+  resourceCellTemplate?:
+  // eslint-disable-next-line max-len
+  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
 
   @Template()
   appointmentCollectorTemplate?:
@@ -126,31 +124,33 @@ export class ViewProps {
   appointmentTooltipTemplate?:
   // eslint-disable-next-line max-len
   template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+}
 
-  @Template()
-  dataCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+@ComponentBindings()
+export class ViewProps extends BaseSchedulerProps {
+  @OneWay()
+  agendaDuration?: number;
 
-  @Template()
-  dateCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  @OneWay()
+  groupByDate?: boolean;
 
-  @Template()
-  dropDownAppointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+  @OneWay()
+  groupOrientation?: 'horizontal' | 'vertical';
 
-  @Template()
-  resourceCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  @OneWay()
+  intervalCount?: number;
 
-  @Template()
-  timeCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+  @OneWay()
+  name?: string;
+
+  @OneWay()
+  startDate?: Date | number | string;
+
+  @OneWay()
+  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+
+  @Nested()
+  scrolling?: ScrollingProps;
 }
 
 @ComponentBindings()
@@ -217,15 +217,12 @@ export class ScrollingProps {
 }
 
 @ComponentBindings()
-export class SchedulerProps {
+export class SchedulerProps extends BaseSchedulerProps {
   @OneWay()
   adaptivityEnabled?: boolean;
 
   @Nested()
   appointmentDragging?: AppointmentDraggingProps;
-
-  @OneWay()
-  cellDuration?: number;
 
   @OneWay()
   crossScrollingEnabled?: boolean;
@@ -234,7 +231,7 @@ export class SchedulerProps {
   currentDate?: Date | number | string = new Date();
 
   @TwoWay()
-  currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
+  currentView?: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
 
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
@@ -249,28 +246,16 @@ export class SchedulerProps {
   editing?: AppointmentEditingProps;
 
   @OneWay()
-  endDayHour?: number;
-
-  @OneWay()
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
-  @OneWay()
   focusStateEnabled?: boolean;
 
   @OneWay()
   groupByDate?: boolean;
 
   @OneWay()
-  groups?: string[];
-
-  @OneWay()
   indicatorUpdateInterval?: number;
 
   @OneWay()
   max?: Date | number | string;
-
-  @OneWay()
-  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
 
   @OneWay()
   min?: Date | number | string;
@@ -302,9 +287,6 @@ export class SchedulerProps {
 
   @OneWay()
   showCurrentTimeIndicator?: boolean;
-
-  @OneWay()
-  startDayHour?: number;
 
   @OneWay()
   timeZone?: string;
@@ -358,48 +340,6 @@ export class SchedulerProps {
 
   @Event()
   onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
-
-  /* Templates */
-
-  @Template()
-  timeCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  resourceCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dropDownAppointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  appointmentCollectorTemplate?:
-  // eslint-disable-next-line max-len
-  template|((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  appointmentTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dateCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  appointmentTooltipTemplate?:
-  // eslint-disable-next-line max-len
-  template| ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-
-  @Template()
-  dataCellTemplate?:
-  // eslint-disable-next-line max-len
-  template | ((itemData: unknown, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
 
   /* Field expressions */
 
