@@ -1,18 +1,12 @@
 <template>
   <div id="data-grid-demo">
-    <DxButton
-      id="gridDeleteSelected"
-      :height="34"
-      :disabled="!selectedItemKeys.length"
-      text="Delete Selected Records"
-      @click="deleteRecords"
-    />
     <DxDataGrid
       id="gridContainer"
       :data-source="dataSource"
       :show-borders="true"
       :selected-row-keys="selectedItemKeys"
       @selection-changed="selectionChanged"
+      @toolbar-preparing="onToolbarPreparing"
     >
       <DxEditing
         :allow-updating="true"
@@ -52,6 +46,14 @@
         data-field="BirthDate"
         data-type="date"
       />
+      <template #deleteButton>
+        <DxButton
+          @click="deleteRecords()"
+          :disabled="!selectedItemKeys.length"
+          icon="trash"
+          text="Delete Selected Records"
+        />
+      </template>
     </DxDataGrid>
   </div>
 </template>
@@ -102,16 +104,22 @@ export default {
         this.dataSource.reload();
       }
     };
+  },
+  methods: {
+    onToolbarPreparing(e) {
+      e.toolbarOptions.items[0].showText = 'always';
+
+      e.toolbarOptions.items.push({
+        location: 'after',
+        template: 'deleteButton'
+      });
+    }
   }
 };
 </script>
 <style>
 #data-grid-demo {
     min-height: 700px;
-}
-
-#gridContainer {
-    padding-top: 45px;
 }
 
 #gridDeleteSelected {

@@ -2,10 +2,6 @@
     min-height: 700px;
 }
 
-#gridContainer {
-    padding-top: 45px;
-}
-
 #gridDeleteSelected {
     position: absolute;
     z-index: 1;

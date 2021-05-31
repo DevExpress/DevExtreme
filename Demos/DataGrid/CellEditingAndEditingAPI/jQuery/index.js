@@ -4,17 +4,21 @@ $(function(){
         data: employees
     });
     
-    var deleteButton = $("#gridDeleteSelected").dxButton({
+    var deleteButton;
+    var deleteButtonOptions = {
         text: "Delete Selected Records",
-        height: 34,
+        icon: "trash",
         disabled: true,
-        onClick: function () {
-            $.each(dataGrid.getSelectedRowKeys(), function() {
-                employeesStore.remove(this);
+        onClick: function() {
+            dataGrid.getSelectedRowKeys().forEach((key) => {
+                employeesStore.remove(key);
             });
             dataGrid.refresh();
+        },
+        onInitialized: function(e) {
+            deleteButton = e.component;
         }
-    }).dxButton("instance");
+    };
     
     var dataGrid = $("#gridContainer").dxDataGrid({
         dataSource: employeesStore,
@@ -31,9 +35,6 @@ $(function(){
         selection: {
             mode: "multiple"
         },
-        onSelectionChanged: function(data) {
-            deleteButton.option("disabled", !data.selectedRowsData.length);
-        }, 
         columns: [
             {
                 dataField: "Prefix",
@@ -56,8 +57,22 @@ $(function(){
             }, {
                 dataField: "BirthDate",
                 dataType: "date"
-            }
-        ]
+            },
+        ],
+        onToolbarPreparing: function(e) {
+            var dataGrid = e.component;
+            
+            e.toolbarOptions.items[0].showText = 'always';
+
+            e.toolbarOptions.items.push({
+                location: "after",
+                widget: "dxButton",
+                options: deleteButtonOptions
+            });
+        },
+        onSelectionChanged: function(data) {
+            deleteButton.option("disabled", !data.selectedRowsData.length);
+        },
     }).dxDataGrid("instance");
     
     

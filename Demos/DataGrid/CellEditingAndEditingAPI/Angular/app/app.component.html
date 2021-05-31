@@ -1,15 +1,10 @@
 <div id="data-grid-demo">
-    <dx-button id="gridDeleteSelected"
-        text="Delete Selected Records"
-        [height]="34"
-        [disabled]="!selectedItemKeys.length"
-        (onClick)="deleteRecords()">
-    </dx-button>
     <dx-data-grid 
         id="gridContainer"
         [dataSource]="dataSource"
         [showBorders]="true"
-        (onSelectionChanged)="selectionChanged($event)">
+        (onSelectionChanged)="selectionChanged($event)"
+        (onToolbarPreparing)="onToolbarPreparing($event)">
         
         <dxo-paging [enabled]="false"></dxo-paging>
         <dxo-editing 
@@ -38,6 +33,15 @@
             dataField="BirthDate"
             dataType="date">
         </dxi-column>
+
+        <dx-button
+            *dxTemplate="let data of 'deleteButton'"
+            (onClick)="deleteRecords()"
+            [disabled]="!selectedItemKeys.length"
+            icon="trash"
+            text="Delete Selected Records">
+        </dx-button>
+
     </dx-data-grid>
 </div>
 

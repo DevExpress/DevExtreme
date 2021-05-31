@@ -2,9 +2,6 @@
     min-height: 700px;
 }
 
-::ng-deep #gridContainer {
-    padding-top: 45px;
-}
 ::ng-deep #gridDeleteSelected {
     position: absolute;
     z-index: 1;
