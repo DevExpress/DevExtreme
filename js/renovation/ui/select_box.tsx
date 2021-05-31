@@ -5,6 +5,7 @@ import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
+import Store from '../../data/abstract_store';
 /* eslint-disable-next-line import/named */
 import LegacySelectBox from '../../ui/select_box';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
@@ -25,7 +26,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class SelectBoxProps extends WidgetProps {
-  @OneWay() dataSource?: string | (string | any)[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | (string | any)[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() displayExpr?: string;
 
