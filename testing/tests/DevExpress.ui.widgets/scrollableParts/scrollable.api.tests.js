@@ -1051,12 +1051,12 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
                 helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative && useSimulatedScrollbar ? 12 : 25 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative || (useNative && useSimulatedScrollbar) ? 12 : 35 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 12 : 35 });
             });
         });
 
