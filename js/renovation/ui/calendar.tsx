@@ -23,15 +23,15 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class CalendarProps extends BaseWidgetProps {
-  @OneWay() min?: Date|number|string;
+  @OneWay() min?: Date | number | string;
 
-  @OneWay() max?: Date|number|string;
+  @OneWay() max?: Date | number | string;
 
   @OneWay() firstDayOfWeek?: number;
 
-  @TwoWay() value?: Date|number| string | null = null;
+  @TwoWay() value?: Date | number | string | null = null;
 
-  @Event() valueChange?: EventCallback<Date|number|string>;
+  @Event() valueChange?: EventCallback<Date | number | string>;
 
   @OneWay() focusStateEnabled?: boolean;
 
