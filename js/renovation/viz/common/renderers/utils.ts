@@ -51,11 +51,9 @@ export const extend = (target: Record<string, unknown>, source: Record<string, u
 type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
 
 function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
-  let i = Number.NaN;
-  let ii = Number.NaN;
   const list: Segment[] = [];
   if (Array.isArray(points[0])) {
-    for (i = 0, ii = points.length; i < ii; ++i) {
+    for (let i = 0, ii = points.length; i < ii; ++i) {
       buildSimpleSegment(points[i] as number[], close, list);
     }
   } else {
@@ -92,7 +90,6 @@ function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: 
 }
 
 function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
-  let i = Number.NaN;
   let k = list.length;
   const ii = (points || []).length;
   if (ii) {
@@ -100,7 +97,7 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
     if (points[0] as Point !== undefined) {
       const arrPoints = points as Point[];
       list[k++] = ['M', arrPoints[0].x, arrPoints[0].y];
-      for (i = 1; i < ii;) {
+      for (let i = 1; i < ii;) {
         list[k++] = [
           'C',
           arrPoints[i].x,
@@ -114,7 +111,7 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
     } else {
       const arrPoints = points as number[];
       list[k++] = ['M', arrPoints[0], arrPoints[1]];
-      for (i = 2; i < ii;) {
+      for (let i = 2; i < ii;) {
         list[k++] = [
           'C',
           arrPoints[i++],
@@ -197,13 +194,11 @@ function makeEqualLineSegments(short: Segment[], long: Segment[], type: PathType
 }
 
 function makeEqualAreaSegments(short: Segment[], long: Segment[], type: PathType): void {
-  let i = Number.NaN;
-  let head: Segment[] = [];
   const shortLength = short.length;
   const longLength = long.length;
   if ((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
-    i = (shortLength - 1) / 2 - 1;
-    head = short.slice(0, i + 1);
+    const i: number = (shortLength - 1) / 2 - 1;
+    const head: Segment[] = short.slice(0, i + 1);
     const constsSeg1: Segment = [...head[head.length - 1]];
     const constsSeg2: Segment = [...short.slice(i + 1)[0]];
     prepareConstSegment(constsSeg1, type);
@@ -219,7 +214,7 @@ export const compensateSegments = (oldSegments: Segment[], newSegments: Segment[
   const oldLength = oldSegments.length;
   const newLength = newSegments.length;
   let originalNewSegments: Segment[] = [];
-  const makeEqualSegments = type.indexOf('area') !== -1 ? makeEqualAreaSegments : makeEqualLineSegments;
+  const makeEqualSegments = type.includes('area') ? makeEqualAreaSegments : makeEqualLineSegments;
 
   if (oldLength === 0) {
     for (let i = 0; i < newLength; i++) {

@@ -109,7 +109,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
     if (!text) return;
 
-    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
+    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.includes('&'))) {
       parsedHtml = removeExtraAttrs(text);
       items = parseHTML(parsedHtml);
     } else if (/\n/g.test(text)) {

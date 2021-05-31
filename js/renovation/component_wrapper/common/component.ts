@@ -13,7 +13,8 @@ import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { AbstractFunction, Option } from './types.ts';
+import { Option } from './types';
+import { AbstractFunction } from '../../common/types';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
@@ -355,7 +356,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     const { name, fullName, value } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
 
-    if (this._propsInfo.templates.indexOf(name) > -1) {
+    if (this._propsInfo.templates.includes(name)) {
       this._componentTemplates[name] = this._createTemplateComponent(value);
     }
 
