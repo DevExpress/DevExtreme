@@ -93,7 +93,7 @@ QUnit.module('common', {}, () => {
             });
             assert.ok(true);
         } catch(e) {
-            assert.ok(false, 'the error is thrown');
+            assert.ok(false, `the error is thrown: ${e.message}`);
         }
     });
 });

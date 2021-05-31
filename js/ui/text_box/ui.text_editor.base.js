@@ -731,7 +731,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'visible':
                 this.callBase(args);
-                if(args.value && this.option('buttons')) {
+                if(value && this.option('buttons')) {
                     this._cleanButtonContainers();
                     this._renderButtonContainers();
                     this._updateButtonsStyling(this.option('stylingMode'));
