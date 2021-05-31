@@ -3,6 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
+import Store from '../../data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';
 import { EventExtension, DxEvent } from '../../events/index';
@@ -36,7 +37,12 @@ export class ListProps extends BaseWidgetProps {
 
   //   @OneWay() collapsibleGroups?: boolean;
 
-  @OneWay() dataSource?: string | (string | dxListItem | any)[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?:
+  | string
+  | (string | dxListItem | any)[]
+  | Store
+  | DataSource
+  | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
 
