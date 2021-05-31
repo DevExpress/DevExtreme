@@ -243,8 +243,18 @@ export async function compareScreenshot(
   }
 }
 
+export interface ScreenshotsComparer {
+  takeScreenshot: (screenshotName: string,
+    element?: SelectorType, comparisonOptions?:
+    Partial<ComparerOptions> | undefined) => Promise<boolean>;
+  compareResults: {
+    isValid: () => boolean;
+    errorMessages: () => string;
+  };
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createScreenshotsComparer(t: TestController) {
+export function createScreenshotsComparer(t: TestController): ScreenshotsComparer {
   const errorMessages: string[] = [];
   const takeScreenshot = async (
     screenshotName: string,

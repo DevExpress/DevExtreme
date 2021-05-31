@@ -47,13 +47,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._$sidebarTable = $('<div>')
             .addClass(GROUP_TABLE_CLASS);
     }
-    _getCellFromNextRow(direction, isMultiSelection) {
-        if(!isMultiSelection) {
-            return super._getCellFromNextRow(direction, isMultiSelection);
-        }
-
-        return this._$focusedCell;
-    }
 
     _getDefaultGroupStrategy() {
         return 'vertical';
