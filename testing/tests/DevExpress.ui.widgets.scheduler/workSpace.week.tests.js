@@ -3,7 +3,7 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { initFactoryInstance, stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
@@ -25,6 +25,9 @@ testStart(function() {
 module('Work Space Week', () => {
     module('Default', {
         beforeEach: function() {
+
+            initFactoryInstance(() => this.instance.resources);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 showCurrentTimeIndicator: false
             }).dxSchedulerWorkSpaceWeek('instance');
@@ -365,14 +368,6 @@ module('Work Space Week', () => {
             assert.deepEqual(bounds.top, { hours: 7, minutes: 0 }, 'Top bound is OK');
             assert.deepEqual(bounds.bottom, { hours: 22, minutes: 0 }, 'Bottom bound is OK');
 
-        });
-
-        test('the getDistanceBetweenCells method', function(assert) {
-            this.instance.option('width', 700);
-            this.instance.$element().find('.dx-scheduler-date-table-cell').css('width', 100);
-
-            const distance = this.instance.getDistanceBetweenCells(2, 4);
-            assert.equal(distance, 300, 'distance is OK');
         });
 
         test('Cells of week after the DST switch should have right date', function(assert) {

@@ -23,7 +23,7 @@ test('Basic drag-n-drop movements in groups', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 26, 8, 30),
@@ -74,7 +74,7 @@ test('Basic drag-n-drop movements from tooltip in week view', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Appointment 1',
     startDate: new Date(2021, 2, 21, 9, 30),
@@ -121,7 +121,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Appointment 1',
     startDate: new Date(2021, 2, 31, 9, 30),
@@ -179,7 +179,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
 
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(() => createWidget('dxScheduler', {
+  }).before(async () => createWidget('dxScheduler', {
     dataSource,
     views: ['timelineWeek', 'timelineMonth'],
     currentView,
@@ -215,7 +215,7 @@ test('Basic drag-n-drop movements', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 22, 10),
@@ -254,7 +254,7 @@ test('Basic drag-n-drop movements with mouse offset', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 22, 10),
@@ -293,7 +293,7 @@ test('Basic drag-n-drop all day appointment movements', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 23, 10),
@@ -328,7 +328,7 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 22, 10),
@@ -367,7 +367,7 @@ test('Basic drag-n-drop small appointments', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 17, 10),
@@ -406,7 +406,7 @@ test('Basic drag-n-drop long appointments', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 16, 10),

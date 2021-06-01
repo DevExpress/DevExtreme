@@ -18,7 +18,7 @@ export default class DependencyCollector {
   static getWidgetFromAst(ast: SyntaxTree): string {
     if (ast.comments?.length) {
       const styleComment = ast.comments
-        .find((comment: AstComment): boolean => comment.value.indexOf('STYLE') >= 0);
+        .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
@@ -32,6 +32,11 @@ export default class DependencyCollector {
     const fullArray = currentWidget ? [...widgetsArray, currentWidget] : widgetsArray;
 
     return [...new Set(fullArray)];
+  }
+
+  static isArraysEqual(array1: string[], array2: string[]): boolean {
+    return array1.length === array2.length
+    && array1.every((value, index) => value === array2[index]);
   }
 
   treeProcessor(node: ScriptsDependencyTree): string[] {
@@ -92,16 +97,11 @@ export default class DependencyCollector {
     return cacheItem;
   }
 
-  static isArraysEqual(array1: string[], array2: string[]): boolean {
-    return array1.length === array2.length
-    && array1.every((value, index) => value === array2[index]);
-  }
-
   validate(): void {
     this.themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
       const indexContent = readFileSync(indexFileName, 'utf8');
-      const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
+      const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
         .sort();

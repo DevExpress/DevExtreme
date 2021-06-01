@@ -15,7 +15,7 @@ test('Time in appointment tooltip should has valid value in case with recurrence
       .expect(scheduler.appointmentTooltip.getListItem('Stand-up meeting').date.textContent)
       .eql('8:30 AM - 8:45 AM');
   }
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Stand-up meeting',
     startDate: '2017-05-22T15:30:00.000Z',

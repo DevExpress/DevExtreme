@@ -7,7 +7,7 @@ import {
 const extendGroupItemsForGroupingByDate = (
   groupRenderItems: GroupRenderItem[][],
   columnCountPerGroup: number,
-): GroupRenderItem[][] => [...(new Array(columnCountPerGroup))]
+): GroupRenderItem[][] => [...new Array(columnCountPerGroup)]
   .reduce((currentGroupItems, _, index) => groupRenderItems.map((groupsRow, rowIndex) => {
     const currentRow = currentGroupItems[rowIndex] || [];
 

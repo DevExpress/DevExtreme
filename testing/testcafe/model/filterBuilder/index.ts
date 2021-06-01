@@ -11,12 +11,12 @@ const CLASS = {
 export default class FilterBuilder extends Widget {
   name = 'dxFilterBuilder';
 
+  static getPopupTreeView(): Selector {
+    return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`);
+  }
+
   getField(index = 0): Field {
     const fields = this.element.find(`.${CLASS.item}`);
     return new Field(fields.nth(index));
-  }
-
-  static getPopupTreeView(): Selector {
-    return Selector(`.${CLASS.popupContent} .${CLASS.treeView}`);
   }
 }

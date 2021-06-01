@@ -11,6 +11,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import { createInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -29,6 +30,12 @@ module('Work Space Base', {
 }, () => {
     test('Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
+
+        createInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
 
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             views: ['week'],
@@ -112,20 +119,6 @@ module('Work Space Base', {
 
                     this.instance.option('width', 900);
                     assert.equal(this.instance.getWorkSpaceMinWidth(), 800, 'minWidth is ok');
-                });
-
-                test('Workspace should throw an error if target index is incorrect in getCoordinatesByDate method ', function(assert) {
-                    const instance = this.instance;
-
-                    assert.throws(
-                        function() {
-                            instance.getCoordinatesByDate(new Date(), 100, 0);
-                        },
-                        function(e) {
-                            return /E1039/.test(e.message);
-                        },
-                        'Exception messages should be correct'
-                    );
                 });
             }
 

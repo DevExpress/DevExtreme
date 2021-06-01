@@ -21,7 +21,7 @@ export default class List extends Widget {
 
   name = 'dxList';
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.items = this.element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);

@@ -148,9 +148,9 @@ describe('Pager pages logic', () => {
     expect(pages.pages[3].pageProps).toMatchObject({ index: 4, selected: true });
     expect(pages.pages).toHaveLength(8);
     expect(pageIndexChange).not.toBeCalledWith(0);
-    (pages.pages[0].pageProps!).onClick?.();
+    pages.pages[0].pageProps?.onClick?.();
     pages.props.pageIndexChange = pageIndexChange;
-    (pages.pages[0].pageProps!).onClick?.();
+    pages.pages[0].pageProps?.onClick?.();
     expect(pageIndexChange).toBeCalledWith(0);
   });
 

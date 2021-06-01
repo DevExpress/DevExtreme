@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../../core/element';
-
-import {
     NativeEventInfo
 } from '../../events/index';
 
@@ -16,11 +12,10 @@ export interface ValueChangedInfo {
 }
 
 /** @namespace DevExpress.ui */
-export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
+export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
@@ -35,14 +30,12 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readOnly?: boolean;
@@ -50,14 +43,12 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @ref
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationError?: any;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationErrors?: Array<any>;
@@ -65,7 +56,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @type Enums.ValidationMessageMode
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationMessageMode?: 'always' | 'auto';
@@ -73,7 +63,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @type Enums.ValidationStatus
      * @default "valid"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationStatus?: 'valid' | 'invalid' | 'pending';
@@ -81,7 +70,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @default null
      * @fires EditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
@@ -89,7 +77,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @prevFileNamespace DevExpress.ui
      * @hidden
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
@@ -100,16 +87,15 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @module ui/editor/editor
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
-export default class Editor extends Widget {
-    constructor(element: UserDefinedElement, options?: EditorOptions)
+export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
 }
+
+type Properties = EditorOptions<Editor<Properties>>;

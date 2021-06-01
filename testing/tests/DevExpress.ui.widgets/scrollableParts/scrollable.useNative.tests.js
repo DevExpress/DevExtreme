@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -47,8 +46,6 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
-
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('useNative', moduleConfig);
 
@@ -111,8 +108,8 @@ QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
     pointer.wheel(10);
 });
 
-QUnit.test('scroll action does not fired when scroll location does not changed', function(assert) {
-    assert.expect(isRenovation ? 2 : 1);
+QUnit.test('scroll action should be fired when scroll location does not changed', function(assert) {
+    assert.expect(2);
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,

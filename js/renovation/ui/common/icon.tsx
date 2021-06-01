@@ -2,19 +2,35 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Fragment,
 } from '@devextreme-generator/declarations';
 import { getImageSourceType } from '../../../core/utils/icon';
+import { combineClasses } from '../../utils/combine_classes';
 
 export const viewFunction = ({
   sourceType,
   cssClass,
   props: { source },
-}: Icon): JSX.Element => (
-  <Fragment>
-    {sourceType === 'dxIcon' && <i className={`dx-icon dx-icon-${source} ${cssClass}`} />}
-    {sourceType === 'fontIcon' && <i className={`dx-icon ${source} ${cssClass}`} />}
-    {sourceType === 'image' && <img alt="" src={source} className={`dx-icon ${cssClass}`} />}
-    {sourceType === 'svg' && <i className={`dx-icon dx-svg-icon ${cssClass}`}>{source}</i>}
-  </Fragment>
-);
+}: Icon): JSX.Element => {
+  const generalClasses = {
+    'dx-icon': true,
+    [cssClass]: !!cssClass,
+  };
+
+  return (
+    <Fragment>
+      {sourceType === 'dxIcon' && (
+        <i className={combineClasses({ ...generalClasses, [`dx-icon-${source}`]: true })} />
+      )}
+      {sourceType === 'fontIcon' && (
+        <i className={combineClasses({ ...generalClasses, [String(source)]: !!source })} />
+      )}
+      {sourceType === 'image' && (
+        <img className={combineClasses(generalClasses)} alt="" src={source} />
+      )}
+      {sourceType === 'svg' && (
+        <i className={combineClasses({ ...generalClasses, 'dx-svg-icon': true })}>{source}</i>
+      )}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class IconProps {

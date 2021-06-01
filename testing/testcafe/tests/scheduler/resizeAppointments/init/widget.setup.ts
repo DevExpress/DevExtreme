@@ -7,7 +7,7 @@ const resources = [
   { id: 2, color: '#1e65e8' },
 ];
 
-export default (options = {}): Promise<void> => createWidget('dxScheduler', extend({
+export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
   views: ['day'],
   dataSource: [],
   resources: [

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { wrapToArray, inArray } from '../../core/utils/array';
+import { inArray } from '../../core/utils/array';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -7,12 +7,10 @@ import errors from '../widget/ui.errors';
 import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
-import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
+import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import utils from './utils';
-import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -33,6 +31,10 @@ const subscribes = {
 
     getOption: function(name) {
         return this.option(name);
+    },
+
+    getWorkspaceOption: function(name) {
+        return this.getWorkSpace().option(name);
     },
 
     isVirtualScrolling: function() {
@@ -126,40 +128,8 @@ const subscribes = {
         this.hideAppointmentTooltip();
     },
 
-    getAppointmentColor: function(options) {
-        const resourcesManager = this._resourcesManager;
-        const resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
-        let response = new Deferred().resolve().promise();
-
-        if(resourceForPainting) {
-            const field = getResourceFieldExpr(resourceForPainting);
-            const groupIndex = options.groupIndex;
-            const groups = this._workSpace._getCellGroups(groupIndex);
-            const resourceValues = wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
-            let groupId = resourceValues.length ? resourceValues[0] : undefined;
-
-            for(let i = 0; i < groups.length; i++) {
-                if(groups[i].name === field) {
-                    groupId = groups[i].id;
-                    break;
-                }
-            }
-
-            response = resourcesManager.getResourceColor(field, groupId);
-        }
-        return response;
-    },
-
     getHeaderHeight: function() {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
-    },
-
-    getResourcesFromItem: function(itemData) {
-        return this._resourcesManager.getResourcesFromItem(itemData);
-    },
-
-    appointmentTakesSeveralDays: function(appointment) {
-        return this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
@@ -461,51 +431,6 @@ const subscribes = {
         return this.dayHasAppointment(day, appointment, trimTime);
     },
 
-    createResourcesTree: function() {
-        return this._resourcesManager.createResourcesTree(this._loadedResources);
-    },
-
-    getResourceTreeLeaves: function(tree, appointmentResources) {
-        return this._resourcesManager.getResourceTreeLeaves(tree, appointmentResources);
-    },
-
-    createReducedResourcesTree: function() {
-        const tree = this._resourcesManager.createResourcesTree(this._loadedResources);
-
-        return this._resourcesManager.reduceResourcesTree(tree, this.getFilteredItems());
-    },
-
-    groupAppointmentsByResources: function(appointments) {
-        let result = { '0': appointments };
-        const groups = this._getCurrentViewOption('groups');
-
-        if(groups && groups.length && this._resourcesManager.getResourcesData().length) {
-            result = this._resourcesManager.groupAppointmentsByResources(appointments, this._loadedResources);
-        }
-
-        let totalResourceCount = 0;
-
-        each(this._loadedResources, function(i, resource) {
-            if(!i) {
-                totalResourceCount = resource.items.length;
-            } else {
-                totalResourceCount *= resource.items.length;
-            }
-        });
-
-        for(let j = 0; j < totalResourceCount; j++) {
-            const index = j.toString();
-
-            if(result[index]) {
-                continue;
-            }
-
-            result[index] = [];
-        }
-
-        return result;
-    },
-
     getLayoutManager: function() {
         return this._layoutManager;
     },
@@ -603,14 +528,6 @@ const subscribes = {
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
         return result;
-    },
-
-    replaceWrongEndDate: function(appointment, startDate, endDate) {
-        this.appointmentDataProvider.replaceWrongEndDate(appointment, startDate, endDate);
-    },
-
-    calculateAppointmentEndDate: function(isAllDay, startDate) {
-        return this.appointmentDataProvider.calculateAppointmentEndDate(isAllDay, startDate);
     },
 
     getEndDayHour: function() {
