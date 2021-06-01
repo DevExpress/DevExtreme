@@ -336,7 +336,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
         const currentCellData = this.getCellData($cell);
         const cellCoordinates = this._getCoordinatesByCell($cell);
-        const focusedCellData = this.cellsSelectionState.focusedCell;
+        const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
 
         const nextFocusedCellData = this.cellsSelectionController.moveToCell({
             isMultiSelection,
@@ -380,7 +380,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setFocusedCell() {
-        const focusedCell = this.cellsSelectionState.getFocusedCell();
+        const focusedCell = this.cellsSelectionState.focusedCell;
 
         const { cellData, coordinates } = focusedCell;
         const { allDay } = cellData;
@@ -388,6 +388,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $correctedCell = allDay && !this._isVerticalGroupedWorkSpace()
             ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
             : this._dom_getDateCell(coordinates);
+        // debugger;
 
         this._toggleFocusedCellClass(true, $correctedCell);
         this._$focusedCell = $correctedCell;
@@ -410,7 +411,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _releaseFocusedCell() {
-        const focusedCellData = this.cellsSelectionState.focusedCell;
+        const focusedCellData = this.cellsSelectionState.focusedCell?.cellData;
         if(focusedCellData) {
             const $cell = this._getCellByData(focusedCellData);
 
@@ -1295,7 +1296,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     updateCellsSelection() {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
-        const focusedCell = this.cellsSelectionState.getFocusedCell();
+        const focusedCell = this.cellsSelectionState.focusedCell;
         const selectedCells = this.cellsSelectionState.getSelectedCells();
 
         if(focusedCell?.coordinates) {
@@ -2142,7 +2143,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.cache.clear();
         this._cleanTableWidths();
         this._cleanAllowedPositions();
-        this.cellsSelectionState.releaseSelectedAndFocusedCells();
+        this.cellsSelectionState.clearSelectedAndFocusedCells();
         if(!this.isRenovatedRender()) {
             this._$thead.empty();
             this._$dateTable.empty();
