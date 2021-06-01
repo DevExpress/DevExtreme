@@ -17,13 +17,9 @@ export interface InitializedEventInfo<T> {
 }
 
 /** @public */
-export interface BaseEventInfo<T>{
+export interface EventInfo<T> {
     readonly component: T;
-}
-
-/** @public */
-export interface EventInfo<T> extends BaseEventInfo<T> {    
-    readonly element?: DxElement;
+    readonly element: DxElement;
     readonly model?: any;
 }
 
