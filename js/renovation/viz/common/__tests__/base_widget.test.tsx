@@ -19,7 +19,7 @@ const DEFAULT_CANVAS = {
 describe('BaseWidget', () => {
   describe('View', () => {
     it('should pass size property and defs child element to the svg element (by default)', () => {
-      const widget = shallow(<BaseWidgetComponent {...{ props: {} } as any} /> as JSX.Element);
+      const widget = shallow(<BaseWidgetComponent {...{ props: {} } as any} />);
 
       expect(widget.find(RootSvgElement).props()).toMatchObject({
         height: 0,
@@ -40,7 +40,7 @@ describe('BaseWidget', () => {
         cssClasses: 'container-class',
         props,
       } as any}
-      /> as JSX.Element);
+      />);
 
       expect(widget.props().className).toBe('container-class');
       expect(widget.find(RootSvgElement).props()).toMatchObject({
@@ -56,7 +56,7 @@ describe('BaseWidget', () => {
         svgElementRef: svgRef,
         props: {},
       } as any}
-      /> as JSX.Element);
+      />);
 
       expect(widget.find(RootSvgElement).props().rootElementRef).toBe(svgRef);
     });
@@ -66,7 +66,7 @@ describe('BaseWidget', () => {
         shouldRenderConfigProvider: true,
         props: {},
       } as any}
-      /> as JSX.Element);
+      />);
 
       expect(widget.find(ConfigProvider)).toHaveLength(1);
     });
@@ -75,7 +75,7 @@ describe('BaseWidget', () => {
       const props = {
         children: <path className="child" />,
       } as BaseWidgetProps;
-      const widget = shallow(<BaseWidgetComponent {...{ props } as any} /> as JSX.Element);
+      const widget = shallow(<BaseWidgetComponent {...{ props } as any} />);
 
       expect(widget.find('.child').exists()).toBe(true);
     });
@@ -84,7 +84,7 @@ describe('BaseWidget', () => {
       const props = {
         disabled: true,
       } as BaseWidgetProps;
-      const widget = shallow(<BaseWidgetComponent {...{ props } as any} /> as JSX.Element);
+      const widget = shallow(<BaseWidgetComponent {...{ props } as any} />);
 
       expect(widget.find(RootSvgElement).props()).toMatchObject({
         filter: 'url(#DevExpress_1)',

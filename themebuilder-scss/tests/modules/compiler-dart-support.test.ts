@@ -60,7 +60,7 @@ describe('compile with server support', () => {
     });
   });
 
-  let server: net.Server;
+  let server: net.Server = null;
 
   const startServer = (error = false): Promise<void> => new Promise((resolve) => {
     server = createServer(error);
@@ -81,7 +81,7 @@ describe('compile with server support', () => {
 
     // compiled css
     expect(data.result.css.toString()).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }

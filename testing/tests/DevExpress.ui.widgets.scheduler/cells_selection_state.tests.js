@@ -1,4 +1,4 @@
-import VirtualSelectionState from 'ui/scheduler/workspaces/virtual_selection_state';
+import CellsSelectionState from 'ui/scheduler/workspaces/cells_selection_state';
 
 const { test, module } = QUnit;
 
@@ -186,11 +186,11 @@ const horizontalGroupingViewDataProviderMock = {
 
 module('Virtual Selection State', () => {
     test('Focused cell should be set correctly', function(assert) {
-        const virtualSelectionState = new VirtualSelectionState(horizontalGroupingViewDataProviderMock);
+        const cellsSelectionState = new CellsSelectionState(horizontalGroupingViewDataProviderMock);
 
-        virtualSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCellData = virtualSelectionState._focusedCell;
+        const focusedCellData = cellsSelectionState._focusedCell;
 
         assert.deepEqual(
             focusedCellData,
@@ -200,11 +200,11 @@ module('Virtual Selection State', () => {
     });
 
     test('"getFocusedCell" should work correctly', function(assert) {
-        const virtualSelectionState = new VirtualSelectionState(horizontalGroupingViewDataProviderMock);
+        const cellsSelectionState = new CellsSelectionState(horizontalGroupingViewDataProviderMock);
 
-        virtualSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCell = virtualSelectionState.getFocusedCell();
+        const focusedCell = cellsSelectionState.getFocusedCell();
 
         assert.deepEqual(
             focusedCell,
@@ -217,7 +217,7 @@ module('Virtual Selection State', () => {
     });
 
     test('"setSelectedCells" should work correctly', function(assert) {
-        const virtualSelectionState = new VirtualSelectionState({
+        const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsByGroupIndexAndAllDay: () => [[
                 testViewDataMap.horizontalGrouping[1][0].cellData,
@@ -225,7 +225,7 @@ module('Virtual Selection State', () => {
             ]],
         });
 
-        virtualSelectionState.setSelectedCells({
+        cellsSelectionState.setSelectedCells({
             rowIndex: 1,
             columnIndex: 0,
             allDay: false,
@@ -235,7 +235,7 @@ module('Virtual Selection State', () => {
             allDay: false,
         });
 
-        const selectedCells = virtualSelectionState.getSelectedCells();
+        const selectedCells = cellsSelectionState.getSelectedCells();
 
         assert.deepEqual(
             selectedCells,

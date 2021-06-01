@@ -18,7 +18,7 @@ export default class DependencyCollector {
   static getWidgetFromAst(ast: SyntaxTree): string {
     if (ast.comments?.length) {
       const styleComment = ast.comments
-        .find((comment: AstComment): boolean => comment.value.indexOf('STYLE') >= 0);
+        .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
@@ -101,7 +101,7 @@ export default class DependencyCollector {
     this.themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
       const indexContent = readFileSync(indexFileName, 'utf8');
-      const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
+      const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
         .sort();

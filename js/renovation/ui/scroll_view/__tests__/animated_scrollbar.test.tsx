@@ -82,7 +82,7 @@ describe('Public methods', () => {
   each([true, false]).describe('Stopped: %o', (stopped) => {
     each([true, false]).describe('Finished: %o', (isFinished) => {
       it('animator should do the next step if it was not stopped or finished', () => {
-        const viewModel = new AnimatedScrollbar({ }) as AnimatedScrollbar;
+        const viewModel = new AnimatedScrollbar({ });
         viewModel.stopped = stopped;
 
         Object.defineProperties(viewModel, { isFinished: { get() { return isFinished; } } });
@@ -106,7 +106,7 @@ describe('Public methods', () => {
   each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
     each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
       it('animator on the step should scrolls scrollbar on correct value', () => {
-        const viewModel = new AnimatedScrollbar({ bounceEnabled }) as AnimatedScrollbar;
+        const viewModel = new AnimatedScrollbar({ bounceEnabled });
         const scrollStepHandler = jest.fn();
 
         viewModel.velocity = -5;

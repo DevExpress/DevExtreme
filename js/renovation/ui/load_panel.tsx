@@ -8,13 +8,12 @@ import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { OverlayProps } from './overlay';
 
 export const viewFunction = ({
-  props: { rootElementRef, ...componentProps },
+  props,
   restAttributes,
 }: LoadPanel): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
     componentType={LegacyLoadPanel}
-    componentProps={componentProps}
+    componentProps={props}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

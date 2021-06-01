@@ -309,11 +309,14 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                         });
                     })
                     .forEach((testCase) => {
-                        // TODO: we should decide what startDate we should use for "dead time" - one hour before it or one hour after
                         test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
                             let index = 0;
 
-                            const validExpectedDateResults = expectedDateResults.slice(4);
+                            const validExpectedDateResults = [
+                                new Date(2020, 2, 8, 1, 0),
+                                new Date(2020, 2, 8, 1, 30),
+                                ...expectedDateResults.slice(6),
+                            ];
 
                             createWrapper({
                                 dataSource: [],
@@ -465,7 +468,6 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             });
         });
 
-        // TODO: use previous hour for DST in the dateTable
         [{
             view: 'day',
             left: 100,
@@ -483,7 +485,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             left: 400,
             top: 26,
         }].forEach(({ view, left, top }) => {
-            skip(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, function(assert) {
+            test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, function(assert) {
                 const scheduler = createWrapper({
                     dataSource: [{
                         startDate: new Date(2020, 2, 8, 3),

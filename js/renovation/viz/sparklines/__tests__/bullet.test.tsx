@@ -60,7 +60,7 @@ describe('Bullet', () => {
           disabled: false,
         },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
+      const bullet = shallow(<BulletComponent {...viewModel as any} />).childAt(0);
 
       expect(bullet.children()).toHaveLength(0);
       expect(bullet.props()).toMatchObject({
@@ -100,7 +100,7 @@ describe('Bullet', () => {
         customizedTooltipProps,
         defaultCanvas,
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
+      const bullet = shallow(<BulletComponent {...viewModel as any} />).childAt(0);
 
       expect(bullet.children()).toHaveLength(0);
       expect(bullet.props()).toMatchObject({
@@ -118,7 +118,7 @@ describe('Bullet', () => {
         ...extraProps,
         props: { color: '#e8c267' },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
+      const bullet = shallow(<BulletComponent {...viewModel as any} />);
 
       expect(bullet.children()).toHaveLength(1);
       expect(bullet.find(PathSvgElement).props()).toEqual({
@@ -148,7 +148,7 @@ describe('Bullet', () => {
           targetWidth: 4,
         },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
+      const bullet = shallow(<BulletComponent {...viewModel as any} />).childAt(0);
 
       expect(bullet.children()).toHaveLength(2);
       expect(bullet.find(PathSvgElement).length).toBe(2);
@@ -178,7 +178,7 @@ describe('Bullet', () => {
         ...extraProps,
         props: { targetColor: '#666666' },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
+      const bullet = shallow(<BulletComponent {...viewModel as any} />).childAt(0);
 
       expect(bullet.children()).toHaveLength(2);
       expect(bullet.find(PathSvgElement).length).toBe(2);
@@ -201,7 +201,7 @@ describe('Bullet', () => {
         tooltipVisible: true,
         props: { },
       };
-      const tooltip = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(1);
+      const tooltip = shallow(<BulletComponent {...viewModel as any} />).childAt(1);
 
       expect(tooltip.props()).toEqual({
         arrowLength: 10,
@@ -253,7 +253,7 @@ describe('Bullet', () => {
         tooltipVisible: true,
         props: { },
       };
-      const tooltip = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(1);
+      const tooltip = shallow(<BulletComponent {...viewModel as any} />).childAt(1);
 
       expect(tooltip.props()).toMatchObject({
         eventData: { component: widgetRef },

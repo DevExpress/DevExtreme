@@ -93,7 +93,7 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  scrollTo(options): Promise<void> {
+  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -161,7 +161,7 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
-  apiOption(name: any, value = 'undefined'): Promise<any> {
+  apiOption(name: string, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
     return ClientFunction(

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { Appointment } from 'ui/scheduler/appointments/appointment';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 
@@ -32,7 +33,14 @@ const observer = {
     }
 };
 
+const schedulerMock = {
+    isVirtualScrolling: () => false
+};
+
 const createInstance = () => {
+    createInstances({
+        scheduler: schedulerMock
+    });
     return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
 };
 
