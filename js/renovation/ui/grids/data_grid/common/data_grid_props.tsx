@@ -129,6 +129,7 @@ export class DataGridColumnHeaderFilter {
   @OneWay()
   dataSource?:
   | any[]
+  | Store
   | ((options: { component?: any; dataSource?: DataSourceOptions }) => any)
   | DataSourceOptions;
 
@@ -237,21 +238,22 @@ export class DataGridColumn {
   falseText?: string;
 
   @OneWay()
-  filterOperations?: (| '='
-  | '<>'
-  | '<'
-  | '<='
-  | '>'
-  | '>='
-  | 'contains'
-  | 'endswith'
-  | 'isblank'
-  | 'isnotblank'
-  | 'notcontains'
-  | 'startswith'
-  | 'between'
-  | 'anyof'
-  | 'noneof')[];
+  filterOperations?: (
+    | '='
+    | '<>'
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'contains'
+    | 'endswith'
+    | 'isblank'
+    | 'isnotblank'
+    | 'notcontains'
+    | 'startswith'
+    | 'between'
+    | 'anyof'
+    | 'noneof')[];
 
   @OneWay()
   filterType?: 'exclude' | 'include';
@@ -317,7 +319,7 @@ export class DataGridColumn {
     newData: any,
     value: any,
     currentRowData: any,
-  ) => void | DxPromise;
+  ) => undefined | DxPromise;
 
   @OneWay()
   showEditorAlways?: boolean;
@@ -338,15 +340,16 @@ export class DataGridColumn {
   trueText?: string;
 
   @OneWay()
-  validationRules?: (| RequiredRule
-  | NumericRule
-  | RangeRule
-  | StringLengthRule
-  | CustomRule
-  | CompareRule
-  | PatternRule
-  | EmailRule
-  | AsyncRule)[];
+  validationRules?: (
+    | RequiredRule
+    | NumericRule
+    | RangeRule
+    | StringLengthRule
+    | CustomRule
+    | CompareRule
+    | PatternRule
+    | EmailRule
+    | AsyncRule)[];
 
   @OneWay()
   visible?: boolean;
@@ -1278,7 +1281,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() columnWidth?: number;
 
-  @OneWay() dataSource?: string | any[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | any[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() dateSerializationFormat?: string;
 

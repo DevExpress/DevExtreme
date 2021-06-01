@@ -58,6 +58,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       rootElementRef={viewModel.target}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
+      className={viewModel.props.className}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
       focusStateEnabled={viewModel.props.focusStateEnabled}
@@ -113,7 +114,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() validationMessageMode?: 'auto'|'always' = 'auto';
+  @OneWay() validationMessageMode?: 'auto' | 'always' = 'auto';
 
   @OneWay() validationStatus?: string = 'valid';
 
@@ -167,6 +168,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   updateValidationMessageVisibility(): EffectReturn {
     this.showValidationMessage = this.shouldShowValidationMessage;
+
+    return undefined;
   }
 
   @Method()

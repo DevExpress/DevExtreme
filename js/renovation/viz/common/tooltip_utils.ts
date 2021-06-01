@@ -83,8 +83,8 @@ export function getCloudPoints(
 
   const cornerRadius = Math.min(halfWidth, halfHeight, options.cornerRadius);
 
-  let points;
-  let arrowArc;
+  let points = '';
+  let arrowArc = '';
 
   leftTopCorner[1] += cornerRadius;
   rightTopCorner[0] -= cornerRadius;
@@ -244,8 +244,8 @@ export function recalculateCoordinates({
     return false;
   }
 
-  let x;
-  let y;
+  let x = Number.NaN;
+  let y = Number.NaN;
   let correctedAnchorY = anchorY;
 
   if (bounds.width < size.width) {

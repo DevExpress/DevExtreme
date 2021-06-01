@@ -60,14 +60,14 @@ describe('compile with server support', () => {
     });
   });
 
-  let server: net.Server;
+  let server: net.Server = null;
 
-  const startServer = (error = false): Promise<void> => new Promise((resolve) => {
+  const startServer = async (error = false): Promise<void> => new Promise((resolve) => {
     server = createServer(error);
     server.listen(new DartClient().serverPort, '127.0.0.1', () => resolve());
   });
 
-  const stopServer = (): Promise<void> => new Promise((resolve) => {
+  const stopServer = async (): Promise<void> => new Promise((resolve) => {
     server.close(() => resolve());
   });
 

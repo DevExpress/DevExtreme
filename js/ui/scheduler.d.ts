@@ -13,6 +13,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     DxEvent,
     EventInfo,
@@ -367,7 +369,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxSchedulerAppointment> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxSchedulerAppointment> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @extends DateCellTemplate
@@ -734,7 +736,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default null
        */
-      dataSource?: string | Array<any> | DataSource | DataSourceOptions,
+      dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 resource:object

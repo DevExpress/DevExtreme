@@ -13,7 +13,7 @@ export const getFirstDayOfWeek = (
   includedDays: number[],
   firstDayOfWeek: number,
 ): number => {
-  const isFirstDayOfWeekInIncludedDays = includedDays.indexOf(firstDayOfWeek) !== -1;
+  const isFirstDayOfWeekInIncludedDays = includedDays.includes(firstDayOfWeek);
   const sortedIncludedDays = includedDays.slice().sort();
 
   return isFirstDayOfWeekInIncludedDays

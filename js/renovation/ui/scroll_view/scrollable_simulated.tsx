@@ -713,8 +713,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onReachBottom?.({});
   }
 
-  pocketStateChange(state: number): void {
-    this.topPocketState = state;
+  pocketStateChange(newState: number): void {
+    this.topPocketState = newState;
   }
 
   scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number): void {
@@ -809,8 +809,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
     const { target } = event.originalEvent;
 
-    let verticalScrolling;
-    let horizontalScrolling;
+    let verticalScrolling = false;
+    let horizontalScrolling = false;
 
     if (this.direction.isVertical) {
       verticalScrolling = this.props.scrollByThumb

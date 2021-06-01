@@ -30,7 +30,7 @@ test('Navigator can change week when current date interval is more than diff bet
   await t
     .click(navigator.nextDuration)
     .expect(navigator.nextDuration.hasClass('dx-state-disabled')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   max: new Date(2017, 4, 24),
   currentView: 'week',
 }));
@@ -49,7 +49,7 @@ test('Navigator can change week when current date interval is more than diff bet
   await t
     .click(navigator.prevDuration)
     .expect(navigator.prevDuration.hasClass('dx-state-disabled')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   min: new Date(2017, 4, 13),
   currentView: 'week',
 }));
@@ -68,7 +68,7 @@ test('Navigator can change month when current date interval is more than diff be
   await t
     .click(navigator.nextDuration)
     .expect(navigator.nextDuration.hasClass('dx-state-disabled')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   max: new Date(2017, 5, 15),
   currentView: 'month',
 }));
@@ -87,7 +87,7 @@ test('Navigator can change month when current date interval is more than diff be
   await t
     .click(navigator.prevDuration)
     .expect(navigator.prevDuration.hasClass('dx-state-disabled')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   min: new Date(2017, 3, 28),
   currentView: 'month',
 }));
