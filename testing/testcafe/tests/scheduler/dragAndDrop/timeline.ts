@@ -15,7 +15,7 @@ fixture`Drag-and-drop appointments in the Scheduler timeline views`
     .expect(draggableAppointment.size.width).eql('200px')
     .expect(draggableAppointment.date.time)
     .eql('11:00 AM - 11:30 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [view],
   currentView: view,
   dataSource,
@@ -32,7 +32,7 @@ test('Drag-n-drop in the "timelineMonth" view', async (t) => {
     .eql('200px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['timelineMonth'],
   currentView: 'timelineMonth',
   dataSource,
