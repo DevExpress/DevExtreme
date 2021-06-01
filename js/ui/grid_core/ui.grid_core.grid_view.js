@@ -354,6 +354,7 @@ const ResizingController = modules.ViewController.inherit({
         }
 
         if(!hasAutoWidth && resultWidths.length) {
+            const $rowsViewElement = that._rowsView.element();
             const contentWidth = that._rowsView.contentWidth();
             const scrollbarWidth = that._rowsView.getScrollbarWidth();
             const totalWidth = that._getTotalWidth(resultWidths, contentWidth);
@@ -365,7 +366,11 @@ const ResizingController = modules.ViewController.inherit({
                     resultWidths[lastColumnIndex] = 'auto';
                     isColumnWidthsCorrected = true;
                     if(hasWidth === false && !hasPercentWidth) {
-                        that._maxWidth = totalWidth + scrollbarWidth + (that.option('showBorders') ? 2 : 0);
+                        const borderWidth = that.option('showBorders') ?
+                            Math.ceil($rowsViewElement.outerWidth() - $rowsViewElement.innerWidth())
+                            : 0;
+
+                        that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
                         $element.css('maxWidth', that._maxWidth);
                     }
                 }
