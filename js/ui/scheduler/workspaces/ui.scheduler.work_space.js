@@ -388,7 +388,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $correctedCell = allDay && !this._isVerticalGroupedWorkSpace()
             ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
             : this._dom_getDateCell(coordinates);
-        // debugger;
 
         this._toggleFocusedCellClass(true, $correctedCell);
         this._$focusedCell = $correctedCell;
@@ -426,8 +425,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const selectedCells = this.cellsSelectionState.getSelectedCells();
 
         const $cells = $(selectedCells?.map((cellData) => {
-            return this._getCellByData(cellData).get(0);
-        }));
+            return this._getCellByData(cellData)?.get(0);
+        }).filter(cell => !!cell));
 
         if(isDefined($cells) && $cells.length) {
             this._toggleFocusClass(false, $cells);
@@ -3307,14 +3306,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         } = cellData;
 
         const position = this.viewDataProvider.findCellPositionInMap({
-            startDate, groupIndex, isAllDay: allDay, index,
+            startDate,
+            groupIndex,
+            isAllDay: allDay,
+            index,
         });
 
         if(!position) {
             return undefined;
         }
 
-        return allDay
+        return allDay && !this._isVerticalGroupedWorkSpace()
             ? this._dom_getAllDayPanelCell(position.cellIndex)
             : this._dom_getDateCell(position);
     }

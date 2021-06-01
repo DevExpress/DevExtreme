@@ -204,7 +204,7 @@ module('Virtual Selection State', () => {
 
         cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCell = cellsSelectionState.getFocusedCell();
+        const focusedCell = cellsSelectionState.focusedCell;
 
         assert.deepEqual(
             focusedCell,
