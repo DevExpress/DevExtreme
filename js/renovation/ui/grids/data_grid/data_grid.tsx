@@ -15,6 +15,7 @@ import { DataGridViews } from './data_grid_views';
 import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
@@ -505,7 +506,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
       element,
       normalizeProps(restProps),
     ) as unknown as GridInstance;
-    instance.getController('resizing').updateSize(element);
+    if (hasWindow()) {
+      instance.getController('resizing').updateSize(element);
+    }
     instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
     this.instance = instance;
   }
