@@ -88,6 +88,9 @@ const showTaskEditDialog = (gantt) => {
     const task = ganttCore.viewModel.tasks.items[0];
     ganttCore.commandManager.showTaskEditDialog.execute(task);
 };
+const getDependencyElements = (mainElement, internalId) => {
+    return mainElement.find(`[dependency-id="${internalId}"]`);
+};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -1215,6 +1218,42 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(tasks[1].ItemName, 'new item text', 'task cust field  is updated');
         assert.equal(tasks[1].TaskColor, 'red', 'task color field  is updated');
     });
+    test('updating with custom field shouldnt restore dependencies', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': 2, 'parentId': 0, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 } ] }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            title: 'new'
+        };
+        let dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 6);
+        getGanttViewCore(this.instance).commandManager.removeDependencyCommand.execute('0', false);
+
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency has been deleted');
+        this.instance.updateTask('1', data);
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency is still deleted');
+
+    });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -1887,6 +1926,51 @@ QUnit.module('Edit api', moduleConfig, () => {
 
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
         assert.equal(task.CustomText, values.CustomText, 'onTaskUpdated is triggrered');
+    });
+    test('taskUpdate with only custom field and update custom field in onTaskUpdating should trigger onTaskUpdated', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        let values = {};
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+        const onTaskUpdatingText = 'new custom text';
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = onTaskUpdatingText;
+        });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+        const taskData = this.instance.getTaskData(1);
+
+        assert.equal(taskData.CustomText, onTaskUpdatingText, 'task cust field  is updated');
+        assert.equal(values.CustomText, onTaskUpdatingText, 'onTaskUpdated is triggrered');
     });
     test('insertDependency', function(assert) {
         this.createInstance(allSourcesOptions);
