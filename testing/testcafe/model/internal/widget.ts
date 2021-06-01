@@ -11,7 +11,7 @@ export default abstract class Widget {
 
   abstract name: string;
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
   }
