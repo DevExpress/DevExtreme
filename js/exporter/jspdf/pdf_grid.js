@@ -14,9 +14,12 @@ export class PdfGrid {
         this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
     }
 
-    startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns) {
+    startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns, firstColumnWidth) {
         if(isDefined(splitByColumns)) {
             this._splitByColumns = splitByColumns;
+        }
+        if(isDefined(firstColumnWidth)) {
+            this._columnWidths[0] = firstColumnWidth;
         }
 
         const firstTableEndColumnIndex = this._splitByColumns[0]?.columnIndex ?? this._columnWidths.length;
@@ -44,20 +47,20 @@ export class PdfGrid {
         this._tables.push(...this._currentHorizontalTables);
     }
 
-    addRow(cells, rowHeight, rowType, groupLevel) {
+    addRow(cells, rowHeight) {
         let currentTableIndex = 0;
         let currentTableCells = [];
         for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
-                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, rowType, groupLevel);
+                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
                 this._trySplitColSpanArea(cells, cellIndex);
                 currentTableIndex++;
                 currentTableCells = [];
             }
             currentTableCells.push(cells[cellIndex]);
         }
-        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight, rowType, groupLevel);
+        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells, rowHeight);
     }
 
     _trySplitColSpanArea(cells, splitIndex) {

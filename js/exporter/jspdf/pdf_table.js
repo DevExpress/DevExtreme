@@ -22,22 +22,6 @@ export class PdfTable {
         this.rows = [];
     }
 
-    getGroupRowBackgroundColor() {
-        return '#D3D3D3';
-    }
-
-    getGroupFooterRowBackgroundColor() {
-        return '#FFFFE0';
-    }
-
-    getGroupRowHorizontalIndent() {
-        return 10; // TODO;
-    }
-
-    getGroupLevelIndent(groupLevel) {
-        return groupLevel * this.getGroupRowHorizontalIndent();
-    }
-
     getCellX(cellIndex) {
         return this.rect.x + this.columnWidths.slice(0, cellIndex).reduce((a, b) => a + b, 0);
     }
@@ -46,7 +30,7 @@ export class PdfTable {
         return this.rect.y + this.rowHeights.slice(0, rowIndex).reduce((a, b) => a + b, 0);
     }
 
-    addRow(cells, rowHeight, rowType, groupLevel) {
+    addRow(cells, rowHeight) {
         if(!isDefined(cells)) {
             throw 'cells is required';
         }
@@ -91,20 +75,6 @@ export class PdfTable {
                 w: columnWidth,
                 h: rowHeight
             };
-
-            if(isDefined(groupLevel) && i === 0) {
-                const indent = this.getGroupLevelIndent(groupLevel);
-                currentCell._rect.x += indent;
-                currentCell._rect.w -= indent;
-            }
-
-            if(!isDefined(currentCell.backgroundColor)) {
-                if(rowType === 'group') {
-                    currentCell.backgroundColor = this.getGroupRowBackgroundColor();
-                } else if(rowType === 'groupFooter' || rowType === 'totalFooter') {
-                    currentCell.backgroundColor = this.getGroupFooterRowBackgroundColor();
-                }
-            }
         }
         this.rect.h = this.rowHeights.reduce((a, b) => a + b, 0);
     }
