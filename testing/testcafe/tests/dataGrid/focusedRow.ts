@@ -554,7 +554,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
   await t.expect(ClientFunction(() => (window as any).focusedRowChanging_Counter)()).eql(undefined);
   await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
 }).before(() => createWidget('dxDataGrid', () => {
-  const data = (function (): Record<string, unknown>[] {
+  const data = ((): Record<string, unknown>[] => {
     const result = [];
 
     for (let i = 0; i < 200; i += 1) {
@@ -562,7 +562,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     }
 
     return result;
-  }());
+  })();
 
   return {
     height: 300,
@@ -629,13 +629,13 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
     .expect(dataGrid.getFocusedRow().exists)
     .notOk();
 }).before(() => createWidget('dxDataGrid', () => {
-  const data = (function (): Record<string, unknown>[] {
+  const data = ((): Record<string, unknown>[] => {
     const result = [];
     for (let i = 0; i < 100; i += 1) {
       result.push({ id: i + 1 });
     }
     return result;
-  }());
+  })();
 
   return {
     height: 200,
@@ -678,13 +678,13 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
     }).prependTo('body');
   })();
   await createWidget('dxDataGrid', () => {
-    const data = (function (): Record<string, unknown>[] {
+    const data = ((): Record<string, unknown>[] => {
       const result = [];
       for (let i = 0; i < 20; i += 1) {
         result.push({ id: i + 1 });
       }
       return result;
-    }());
+    })();
 
     return {
       height: 200,

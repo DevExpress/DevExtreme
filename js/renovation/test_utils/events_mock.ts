@@ -1,4 +1,5 @@
 import { keyboard } from '../../events/short';
+import { AbstractFunction } from '../common/types';
 
 let eventHandlers = {};
 let keyboardHandlers = {};
@@ -49,9 +50,9 @@ export const fakeClickEvent = {
   pageY: 0,
 };
 
-export const getEventHandlers = (e): Record<string, ((event: any) => void)[]> => eventHandlers[e];
+export const getEventHandlers = (e: string): Record<string, AbstractFunction[]> => eventHandlers[e];
 
-export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
+export const emitKeyboard = (key: string, which = key, e = defaultEvent): void => {
   Object.keys(keyboardHandlers).forEach((id) => {
     keyboardHandlers[id].forEach(
       (handler) => handler({ originalEvent: e, keyName: key, which }),
@@ -59,7 +60,7 @@ export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
   });
 };
 
-export const emit = (event, e = defaultEvent, element = null): void => {
+export const emit = (event: string, e = defaultEvent, element = null): void => {
   eventHandlers[event]?.forEach(({ handler, el }) => {
     if (!element || el === element) {
       handler(e);
@@ -69,7 +70,7 @@ export const emit = (event, e = defaultEvent, element = null): void => {
 
 let keyboardSubscriberId = 0;
 
-keyboard.on = (el, focusTarget, handler): string => {
+keyboard.on = (_el, _focusTarget, handler): string => {
   keyboardSubscriberId += 1;
   keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
   keyboardHandlers[keyboardSubscriberId].push(handler);
@@ -77,7 +78,7 @@ keyboard.on = (el, focusTarget, handler): string => {
   return keyboardSubscriberId.toString();
 };
 
-keyboard.off = (id): boolean => delete keyboardHandlers[id];
+keyboard.off = (id) => { keyboardHandlers[id] = []; };
 
 jest.mock('../../events/core/events_engine', () => {
   const originalEventsEngine = jest.requireActual('../../events/core/events_engine').default;

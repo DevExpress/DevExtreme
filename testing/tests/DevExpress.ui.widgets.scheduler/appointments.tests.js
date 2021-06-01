@@ -3,6 +3,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import { createInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -12,7 +14,6 @@ import translator from 'animation/translator';
 import dataCoreUtils from 'core/utils/data';
 import commonUtils from 'core/utils/common';
 import typeUtils, { isRenderer } from 'core/utils/type';
-import dateUtils from 'core/utils/date';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
@@ -84,9 +85,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getAppointmentDurationInMs: function(options) {
         return options.endDate.getTime() - options.startDate.getTime();
     },
-    getResourcesFromItem: () => {
-        return { someId: ['with space'] };
-    },
     getAppointmentGeometry: (settings) => {
         return {
             width: settings.width || 0,
@@ -99,15 +97,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getCellWidth: () => cellWidth,
     getStartDayHour: () => 8,
     getEndDayHour: () => 20,
-    appointmentTakesSeveralDays: (appointment) => {
-        const startDate = new Date(appointment.startDate);
-        const endDate = new Date(appointment.endDate);
-
-        const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        const endDateCopy = dateUtils.trimTime(new Date(endDate));
-
-        return startDateCopy.getTime() !== endDateCopy.getTime();
-    },
     mapAppointmentFields: (config) => {
         const result = {
             appointmentData: config.itemData,
@@ -133,6 +122,18 @@ const createInstance = (options, subscribesConfig) => {
 
             return callback && callback.apply(this, args.slice(1));
         }
+    };
+
+    createInstances({
+        resources: options.resources,
+        scheduler: {
+            isVirtualScrolling: () => false
+        },
+        appointmentDataAccessors: dataAccessors
+    });
+
+    getResourceManager().getResourcesFromItem = () => {
+        return { someId: ['with space'] };
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
@@ -697,6 +698,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             currentDate: new Date(2015, 10, 3),
             items: [item],
         }, testConfig);
+
 
         const $appointment = $('.dx-scheduler-appointment').eq(0);
         assert.equal($appointment.filter('[data-someid-with__32__space]').length, 1, 'attr is right');

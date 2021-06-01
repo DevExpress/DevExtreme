@@ -73,16 +73,8 @@ const POSITION_ALIASES = {
 };
 
 const realDevice = devices.real();
-const firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop';
 const iOS = realDevice.platform === 'ios';
 const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
-
-const forceRepaint = $element => {
-    // NOTE: force layout recalculation on FF desktop (T581681)
-    if(firefoxDesktop) {
-        $element.width();
-    }
-};
 
 const getElement = value => {
     if(isEvent(value)) {
@@ -278,8 +270,6 @@ const Overlay = Widget.inherit({
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
-        // NOTE: hack to fix B251087
-        eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
@@ -1234,8 +1224,6 @@ const Overlay = Widget.inherit({
 
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
-
-            forceRepaint(this._$content);
 
             return resultPosition;
         }

@@ -4,6 +4,7 @@ import typeUtils from 'core/utils/type';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 const { module, test, testStart } = QUnit;
 
@@ -59,7 +60,15 @@ const observer = {
     }
 };
 
+const schedulerMock = {
+    isVirtualScrolling: () => false
+};
+
 const createInstance = (options) => {
+    createInstances({
+        scheduler: schedulerMock
+    });
+
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer,
         ...options,

@@ -1,16 +1,30 @@
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { createInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
+
+export const initFactoryInstance = (resourceGetter) => {
+    createInstances({
+        scheduler: {
+            isVirtualScrolling: () => false
+        }
+    });
+
+    getResourceManager().createResourcesTree = (groups) => {
+        return new ResourceManager({}).createResourcesTree(groups);
+    };
+
+    getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
+        const resources = typeof resourceGetter === 'function'
+            ? resourceGetter()
+            : resourceGetter;
+        const resultResources = resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+        return new ResourceManager(resultResources).getResourceTreeLeaves(tree, appointmentResources);
+    };
+};
 
 export const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
         if(subscribe === 'getTimezone') {
             return options.tz || 3;
         }

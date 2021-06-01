@@ -6,6 +6,7 @@ import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 QUnit.testStart(() => {
     const markup =
@@ -131,6 +132,12 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
+            createInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+
             this.instance = $('#scheduler-work-space')[view]()[view]('instance');
             stubInvokeMethod(this.instance);
         }

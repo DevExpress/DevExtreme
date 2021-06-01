@@ -5,6 +5,7 @@ import $ from 'jquery';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
+import { createInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -21,6 +22,12 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
+            createInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
             stubInvokeMethod(this.instance);
         }
@@ -230,7 +237,7 @@ module('Work Space Month', () => {
             const origGetFirstViewDate = this.instance.getStartViewDate;
 
             this.instance.getStartViewDate = function() {
-                return new Date(2016, 1, 29, 6, 0);
+                return new Date(2016, 1, 29, 5, 0);
             };
 
             try {

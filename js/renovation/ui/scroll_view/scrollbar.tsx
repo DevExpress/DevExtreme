@@ -34,6 +34,7 @@ import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { ScrollableProps } from './scrollable_props';
 import { BaseWidgetProps } from '../common/base_props';
 import { inRange } from '../../../core/utils/math';
+import { DxMouseEvent } from './types.d';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const THUMB_MIN_SIZE = 15;
@@ -82,7 +83,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
-  @Mutable() hideScrollbarTimer?: any;
+  @Mutable() hideScrollbarTimer?: ReturnType<typeof setTimeout>;
 
   @InternalState() pendingPullDown = false;
 
@@ -123,19 +124,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  isThumb(element: HTMLDivElement): boolean {
+  isThumb(element: EventTarget | null): boolean {
     return this.scrollbarRef.current?.querySelector(`.${SCROLLABLE_SCROLL_CLASS}`) === element
       || this.scrollbarRef.current?.querySelector(`.${SCROLLABLE_SCROLL_CONTENT_CLASS}`) === element;
   }
 
   @Method()
-  isScrollbar(element: HTMLDivElement): boolean {
+  isScrollbar(element: EventTarget | null): boolean {
     return element === this.scrollbarRef.current;
   }
 
   @Method()
-  validateEvent(e): boolean {
-    const { target } = e.originalEvent;
+  validateEvent(event: DxMouseEvent): boolean {
+    const { target } = event.originalEvent;
 
     return this.isThumb(target) || this.isScrollbar(target);
   }
@@ -166,9 +167,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, crossThumbScrolling: boolean): void {
+  initHandler(event: DxMouseEvent, crossThumbScrolling: boolean): void {
     this.stopScrolling();
-    this.prepareThumbScrolling(e, crossThumbScrolling);
+    this.prepareThumbScrolling(event, crossThumbScrolling);
   }
 
   @Method()
@@ -350,7 +351,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer);
+    clearTimeout(this.hideScrollbarTimer as unknown as number);
     this.hideScrollbarTimer = undefined;
   }
 
@@ -416,19 +417,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   // TODO: cross naming with mutable variabless (crossThumbScrolling -> currentCrossThumbScrolling)
   // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
-  prepareThumbScrolling(e, currentCrossThumbScrolling: boolean): void {
-    if (isDxMouseWheelEvent(e.originalEvent)) {
+  prepareThumbScrolling(event: DxMouseEvent, currentCrossThumbScrolling: boolean): void {
+    if (isDxMouseWheelEvent(event.originalEvent)) {
       if (this.props.showScrollbar === 'onScroll') {
         this.showOnScrollByWheel = true;
       }
       return;
     }
 
-    const { target } = e.originalEvent;
+    const { target } = event.originalEvent;
     const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
 
     if (scrollbarClicked) {
-      this.moveToMouseLocation(e);
+      this.moveToMouseLocation(event);
     }
 
     // TODO: cross naming with mutable variabless (thumbScrolling -> currentThumbScrolling)
@@ -443,8 +444,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
   }
 
-  moveToMouseLocation(e): void {
-    const mouseLocation = e[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
+  moveToMouseLocation(event: DxMouseEvent): void {
+    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
     const delta = this.props.scrollLocation + mouseLocation
     / this.containerToContentRatio - this.props.containerSize / 2;
 
@@ -452,7 +453,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   updateContent(location: number): void {
-    let contentTranslateOffset: number;
+    let contentTranslateOffset = Number.NaN;
 
     if (location > 0) {
       contentTranslateOffset = location;

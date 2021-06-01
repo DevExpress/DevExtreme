@@ -3,7 +3,7 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { initFactoryInstance, stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
@@ -25,6 +25,9 @@ testStart(function() {
 module('Work Space Week', () => {
     module('Default', {
         beforeEach: function() {
+
+            initFactoryInstance(() => this.instance.resources);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 showCurrentTimeIndicator: false
             }).dxSchedulerWorkSpaceWeek('instance');

@@ -4,6 +4,7 @@ import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
+import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -88,8 +89,10 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const updatedData = this.instance.getUpdatedAppointment();
-        return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
+        const appointmentDataProvider = getAppointmentDataProvider();
+
+        const updatedData = appointmentDataProvider.getUpdatedAppointment();
+        return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
     }
 
     _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {
