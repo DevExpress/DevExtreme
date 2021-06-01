@@ -3,7 +3,7 @@ import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
 import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
-import Callbacks, { Callback } from '../../../core/utils/callbacks';
+import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from './types';
 
@@ -14,7 +14,7 @@ export default class Editor extends Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showValidationMessageTimeout: any;
 
-  validationRequest!: Callback;
+  validationRequest!: ReturnType<typeof Callbacks>;
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   _valueChangeAction!: Function;

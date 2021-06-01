@@ -106,6 +106,4 @@ const Callbacks = function(options) {
     return new Callback(options);
 };
 
-export { Callback };
-
 export default Callbacks;
