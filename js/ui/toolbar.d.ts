@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -58,7 +60,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxToolbarItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxToolbarOptions.onOptionChanged
