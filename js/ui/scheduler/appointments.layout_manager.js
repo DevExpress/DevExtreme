@@ -92,16 +92,19 @@ class AppointmentLayoutManager {
         }
 
         for(let i = 0; i < settings.length; i++) {
-            const newSettings = settings[i];
-            const oldSettings = sourceSetting[i];
+            const newSettings = {
+                ...settings[i]
+            };
 
-            if(oldSettings) { // exclude properties for comparison in commonUtils.equalByValue
-                oldSettings.sortedIndex = newSettings.sortedIndex;
-                oldSettings.cellIndex = newSettings.cellIndex;
-                oldSettings.rowIndex = newSettings.rowIndex;
-                oldSettings.hMax = newSettings.hMax;
-                oldSettings.vMax = newSettings.vMax;
-            }
+            const oldSettings = {
+                ...sourceSetting[i],
+                // exclude properties for comparison in commonUtils.equalByValue
+                sortedIndex: newSettings.sortedIndex,
+                cellIndex: newSettings.cellIndex,
+                rowIndex: newSettings.rowIndex,
+                hMax: newSettings.hMax,
+                vMax: newSettings.vMax
+            };
 
             if(!equalByValue(newSettings, oldSettings)) {
                 return true;
