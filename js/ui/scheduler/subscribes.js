@@ -35,6 +35,14 @@ const subscribes = {
         return this.option(name);
     },
 
+    getFilteredAppointmentCount() {
+        const filteredItems = this.getFilteredItems();
+
+        return filteredItems
+            ? filteredItems.length
+            : 0;
+    },
+
     isVirtualScrolling: function() {
         return this.isVirtualScrolling();
     },
