@@ -30,7 +30,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `genericGroups-base-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });
 
@@ -39,6 +39,6 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `genericGroups-timeline-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });

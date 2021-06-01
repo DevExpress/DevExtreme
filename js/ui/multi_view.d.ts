@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -59,7 +61,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxMultiViewItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true

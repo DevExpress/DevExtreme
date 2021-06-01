@@ -399,8 +399,8 @@ export class Bullet extends JSXComponent(BulletProps) {
     const translatorY = this.valueAxis.getTranslator();
     const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
     const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
-    let x1;
-    let x2;
+    let x1 = Number.NaN;
+    let x2 = Number.NaN;
 
     if (this.scaleProps.value > 0) {
       x1 = Math.max(0, this.scaleProps.startScaleValue);

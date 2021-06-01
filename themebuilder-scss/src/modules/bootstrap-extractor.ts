@@ -26,12 +26,12 @@ export default class BootstrapExtractor {
     }
   }
 
-  static readSassFile(fileName: string): Promise<string> {
+  static async readSassFile(fileName: string): Promise<string> {
     const path = require.resolve(`bootstrap/scss/${fileName}`);
     return fs.readFile(path, 'utf8');
   }
 
-  static sassRender(input: string): Promise<string> {
+  static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       sass.render(
         { data: input },
@@ -40,7 +40,7 @@ export default class BootstrapExtractor {
     });
   }
 
-  static lessRender(input: string): Promise<string> {
+  static async lessRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       less.render(
         input,
@@ -51,7 +51,7 @@ export default class BootstrapExtractor {
 
   static convertRemToPx(cssValue: string): string {
     const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
-    const replaceHandler = (match: string, value: string, separator: string): string => {
+    const replaceHandler = (_match: string, value: string, separator: string): string => {
       const pixelsInRem = 16;
       const pxValue = Math.round(parseFloat(value) * pixelsInRem);
       return `${pxValue}px${separator || ''}`;
@@ -69,7 +69,7 @@ export default class BootstrapExtractor {
       + this.getCollectorServiceCode();
   }
 
-  lessProcessor(): Promise<string> {
+  async lessProcessor(): Promise<string> {
     return Promise.resolve(
       this.getSetterServiceCode()
       + this.input

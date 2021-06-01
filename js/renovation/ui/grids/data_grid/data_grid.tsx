@@ -117,7 +117,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  byKey(key: any | string | number): DxPromise<any> {
+  async byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -163,7 +163,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(id: number | string, optionName: any, optionValue?: any): void {
+  columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
     // eslint-disable-next-line prefer-rest-params
     return this.callMethod('columnOption', arguments);
   }
@@ -179,12 +179,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  deselectAll(): DxPromise {
+  async deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  deselectRows(keys: any[]): DxPromise<any> {
+  async deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -313,7 +313,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  refresh(
+  async refresh(
     changesOnly?: boolean,
   ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
@@ -325,7 +325,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  saveEditData(): DxPromise {
+  async saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -335,19 +335,19 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  selectAll(): DxPromise {
+  async selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
-  selectRows(
+  async selectRows(
     keys: any[], preserve: boolean,
   ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
+  async selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -383,7 +383,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  addRow(): DxPromise {
+  async addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -398,7 +398,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  collapseRow(key: any): DxPromise {
+  async collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -408,7 +408,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  expandRow(key: any): DxPromise {
+  async expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 

@@ -114,7 +114,7 @@ describe('ScrollView', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
           each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
             it('strategy classes', () => {
-              const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical', showScrollbar } } as any) as JSX.Element);
+              const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical', showScrollbar } } as any));
 
               const rootClasses = viewModel.getDOMNode().className;
 
@@ -148,14 +148,14 @@ describe('ScrollView', () => {
         });
 
         it('should render scrollView content', () => {
-          const scrollView = mount(viewFunction({ props: {} } as any) as JSX.Element);
+          const scrollView = mount(viewFunction({ props: {} } as any));
 
           const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(true);
         });
 
         it('should not render top & bottom pockets', () => {
-          const scrollView = mount(viewFunction({ props: { } } as any) as JSX.Element);
+          const scrollView = mount(viewFunction({ props: { } } as any));
           const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
           expect(topPocket.exists()).toBe(true);
           const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
@@ -190,7 +190,7 @@ describe('ScrollView', () => {
       it('theme: material, texts options: undefined', () => {
         (current as Mock).mockImplementation(() => 'material');
 
-        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollView = mount(viewFunction(new ScrollView({})));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -212,7 +212,7 @@ describe('ScrollView', () => {
           pulledDownText: 'value_2',
           refreshingText: 'value_3',
           reachBottomText: 'value_4',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -234,7 +234,7 @@ describe('ScrollView', () => {
           pulledDownText: 'value_2',
           refreshingText: 'value_3',
           reachBottomText: 'value_4',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -251,7 +251,7 @@ describe('ScrollView', () => {
       it('theme: generic, texts options: undefined', () => {
         (current as Mock).mockImplementation(() => 'generic');
 
-        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollView = mount(viewFunction(new ScrollView({})));
 
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
@@ -274,7 +274,7 @@ describe('ScrollView', () => {
           pulledDownText: '',
           refreshingText: '',
           reachBottomText: '',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 

@@ -15,6 +15,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -153,7 +155,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxListItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default undefined

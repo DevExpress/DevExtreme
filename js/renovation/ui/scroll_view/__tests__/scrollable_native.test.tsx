@@ -1073,7 +1073,7 @@ describe('Methods', () => {
         it(`isScrollingOutOfBound: true, isWheelEvent: ${isWheelEvent}, disabled: false, locked: false`, () => {
           const event = { ...defaultEvent } as any;
           if (isWheelEvent) {
-            (event as any).type = 'dxmousewheel';
+            event.type = 'dxmousewheel';
           }
 
           const scrollable = new Scrollable({ disabled: false });
@@ -1295,7 +1295,7 @@ describe('Scrollbar integration', () => {
       (viewModel as any).contentRef = React.createRef();
       (viewModel as any).containerRef = React.createRef();
 
-      const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+      const scrollable = mount(viewFunction(viewModel));
       const scrollBar = scrollable.find(Scrollbar);
 
       expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
