@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
@@ -63,6 +64,7 @@ export const viewFunction = ({
     visible,
     width,
     showBorders,
+    className,
   },
   restAttributes,
 }: DataGrid): JSX.Element => (
@@ -72,6 +74,7 @@ export const viewFunction = ({
     activeStateEnabled={activeStateEnabled}
     activeStateUnit={rowSelector}
     aria={aria}
+    className={className}
     disabled={disabled}
     focusStateEnabled={focusStateEnabled}
     height={height}
@@ -92,7 +95,6 @@ export const viewFunction = ({
 );
 
 @Component({
-  defaultOptionRules: null,
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
@@ -117,7 +119,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async byKey(key: any | string | number): DxPromise<any> {
+  byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -179,12 +181,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async deselectAll(): DxPromise {
+  deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  async deselectRows(keys: any[]): DxPromise<any> {
+  deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -313,7 +315,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async refresh(
+  refresh(
     changesOnly?: boolean,
   ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
@@ -325,7 +327,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async saveEditData(): DxPromise {
+  saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -335,19 +337,19 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async selectAll(): DxPromise {
+  selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
-  async selectRows(
+  selectRows(
     keys: any[], preserve: boolean,
   ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  async selectRowsByIndexes(indexes: number[]): DxPromise<any> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -383,7 +385,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async addRow(): DxPromise {
+  addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -398,7 +400,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async collapseRow(key: any): DxPromise {
+  collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -408,7 +410,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async expandRow(key: any): DxPromise {
+  expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 

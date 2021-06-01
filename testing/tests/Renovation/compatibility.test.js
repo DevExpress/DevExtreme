@@ -4,6 +4,7 @@ import publicWidgets from 'renovation/components';
 import Button from 'ui/button';
 import 'ui/check_box';
 import 'ui/pager';
+import 'ui/data_grid';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
