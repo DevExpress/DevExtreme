@@ -324,10 +324,10 @@ class VirtualScrollingBase {
     }
 
     get outlineCount() {
-        const baseApptCount = 20;
-        const seed = Math.max(2, this.filteredApptCount / baseApptCount);
+        const baseApptCount = 15;
+        const divider = Math.max(2, this.filteredApptCount / baseApptCount);
 
-        return Math.floor(this.pageSize / seed);
+        return Math.floor(this.pageSize / divider);
     }
 
     get workspace() { return this._workspace; }

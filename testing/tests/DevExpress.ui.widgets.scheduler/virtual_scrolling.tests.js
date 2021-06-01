@@ -635,10 +635,9 @@ module('Virtual Scrolling', {
 
             [
                 { apptCount: 0, expectedOutlineCount: 3 },
-                { apptCount: 10, expectedOutlineCount: 3 },
-                { apptCount: 50, expectedOutlineCount: 2 },
-                { apptCount: 100, expectedOutlineCount: 1 },
-                { apptCount: 1000, expectedOutlineCount: 0 },
+                { apptCount: 40, expectedOutlineCount: 2 },
+                { apptCount: 50, expectedOutlineCount: 1 },
+                { apptCount: 100, expectedOutlineCount: 0 }
             ].forEach(({ apptCount, expectedOutlineCount }) => {
 
                 viewPortApptCount = apptCount;

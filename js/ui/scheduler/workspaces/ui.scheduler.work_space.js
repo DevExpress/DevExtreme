@@ -2804,7 +2804,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
+        if(this.isGroupedByDate()) {
+            const correctedGroupIndex = this._getGroupCount() - 1;
+
+            return Math.max(
+                this._groupedStrategy.getHorizontalMax(groupIndex),
+                this._groupedStrategy.getHorizontalMax(correctedGroupIndex)
+            );
+        }
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
