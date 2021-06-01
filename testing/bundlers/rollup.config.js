@@ -11,7 +11,6 @@ export default {
     input: './src/modules_esm.js',
     output: {
         file: './dist/dist_rollup/bundle_esm.js',
-        // exports: 'auto',
         format: 'es'
     },
     external: [ 'rrule' ],

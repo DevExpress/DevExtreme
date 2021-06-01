@@ -23,33 +23,33 @@ jobs:
       run: npm run build
 
     - name: Create DevExtreme package
-      working-directory: ./testing/test_bundlers  
+      working-directory: ./testing/bundlers  
       run: npm pack ../../artifacts/npm/devextreme
     
     - name: Install packages in test directory
-      working-directory: ./testing/test_bundlers  
+      working-directory: ./testing/bundlers  
       run: npm install
 
     - name: Create bundle with webpack (CJS import)
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:webpack-cjs
 
     - name: Create bundle with webpack
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:webpack-esm
 
     - name: Create bundle with rollup
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:rollup-esm
 
     - name: Create bundle with parcel
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:parcel-esm
 
     - name: Create bundle with browserify
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:browserify-cjs
 
     - name: Create bundle with vite
-      working-directory: ./testing/test_bundlers
+      working-directory: ./testing/bundlers
       run: npm run build:vite-esm

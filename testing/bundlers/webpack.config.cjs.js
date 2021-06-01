@@ -4,10 +4,10 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: path.resolve(__dirname, '../../testing/test_bundlers/src/modules_cjs.js'),
+    entry: path.resolve(__dirname, './src/modules_cjs.js'),
     output: {
         filename: 'bundle_cjs.js',
-        path: path.resolve(__dirname, '../../testing/test_bundlers/dist/dist_webpack/'),
+        path: path.resolve(__dirname, './dist/dist_webpack/'),
     },
     resolve: {
         modules: [ path.resolve(__dirname, 'node_modules/devextreme'), 'node_modules'],

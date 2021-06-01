@@ -2,14 +2,11 @@
 
 import rollupConfig from './rollup.config';
 
-const output = rollupConfig.output.file;
 delete rollupConfig.output.file;
 
 module.exports = {
-    // root: './src',
     build: {
-        // output: './dist/dist_rollup/bundle_esm.js',
-        output: output,
+        output: './dist/dist_vite/bundle_esm.js',
         rollupOptions: rollupConfig
     }
 };
