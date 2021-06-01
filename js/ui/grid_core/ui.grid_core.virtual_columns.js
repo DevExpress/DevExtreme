@@ -24,16 +24,12 @@ const VirtualScrollingRowsViewExtender = {
     }
 };
 
-const HeaderFooterViewExtender = {
+const HeaderViewExtender = {
     _renderCore: function() {
-        const that = this;
-        const scrollLeft = that._scrollLeft;
+        this.callBase.apply(this, arguments);
 
-        that.callBase.apply(that, arguments);
-
-        if(that._columnsController.isVirtualMode() && scrollLeft >= 0) {
-            that._scrollLeft = 0;
-            that.scrollTo({ left: scrollLeft });
+        if(this._columnsController.isVirtualMode()) {
+            this._updateScrollLeftPosition();
         }
     }
 };
@@ -250,8 +246,7 @@ module.exports = {
             columns: ColumnsControllerExtender
         },
         views: {
-            columnHeadersView: HeaderFooterViewExtender,
-            footerView: HeaderFooterViewExtender,
+            columnHeadersView: HeaderViewExtender,
             rowsView: VirtualScrollingRowsViewExtender
         }
     }
