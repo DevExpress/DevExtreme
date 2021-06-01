@@ -58,6 +58,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       rootElementRef={viewModel.target}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
+      className={viewModel.props.className}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
       focusStateEnabled={viewModel.props.focusStateEnabled}

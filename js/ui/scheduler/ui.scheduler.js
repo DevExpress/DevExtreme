@@ -253,8 +253,6 @@ class Scheduler extends Widget {
 
             appointmentTemplate: 'item',
 
-            dropDownAppointmentTemplate: 'dropDownAppointment',
-
             appointmentCollectorTemplate: 'appointmentCollector',
 
             dataCellTemplate: null,
@@ -275,8 +273,7 @@ class Scheduler extends Widget {
                 allowDragging: true,
                 allowResizing: true,
                 allowUpdating: true,
-                allowTimeZoneEditing: false,
-                allowEditingTimeZones: false
+                allowTimeZoneEditing: false
             },
 
             showAllDayPanel: true,
@@ -465,15 +462,6 @@ class Scheduler extends Widget {
                 }
             }
         ]);
-    }
-
-    _setDeprecatedOptions() {
-        super._setDeprecatedOptions();
-
-        extend(this._deprecatedOptions, {
-            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
-            allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
-        });
     }
 
     _getAppointmentSettingsGenerator() {
@@ -712,7 +700,6 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
-            case 'dropDownAppointmentTemplate':
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
