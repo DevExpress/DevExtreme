@@ -525,11 +525,11 @@ $transparent-border: 1px solid transparent;
   }
 }
 
-.dx-column-resize-frame {
+.dx-table-resize-frame {
   position: absolute;
   pointer-events: none;
 
-  .dx-table-column-resizer {
+  .dx-htmleditor-column-resizer {
     width: 5px;
     position: absolute;
     top: 0;
