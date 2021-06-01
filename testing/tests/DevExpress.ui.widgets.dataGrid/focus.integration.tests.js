@@ -479,7 +479,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
