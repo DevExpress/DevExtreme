@@ -3,7 +3,6 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
-// eslint-disable-next-line @typescript-eslint/promise-function-async
 const getVisibleColumns = (gridInstance: DataGrid): Promise<string[]> => {
   const { getGridInstance } = gridInstance;
 

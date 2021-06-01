@@ -45,7 +45,6 @@ export default class AppointmentPopup {
     this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   isVisible(): Promise<boolean> {
     const { element } = this;
     const invisibleStateClass = CLASS.stateInvisible;

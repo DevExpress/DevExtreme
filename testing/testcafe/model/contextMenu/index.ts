@@ -25,7 +25,6 @@ export default class ContextMenu extends Widget {
     this.overlayWrapper = new OverlayWrapper();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   getItemCount(): Promise<number> {
     return this.items.count;
   }

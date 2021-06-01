@@ -93,7 +93,6 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
@@ -103,7 +102,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   getScrollLeft(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -113,7 +111,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   getScrollWidth(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -123,7 +120,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   getScrollTop(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -133,7 +129,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getGridInstance } = this;
 
@@ -166,7 +161,6 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiOption(name: string, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
@@ -179,7 +173,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiAddRow(): Promise<void> {
     const { getGridInstance } = this;
 
@@ -189,7 +182,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiEditRow(rowIndex: number): Promise<void> {
     const { getGridInstance } = this;
 
@@ -199,7 +191,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiCancelEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -208,7 +199,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiSaveEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -217,7 +207,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -226,7 +215,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -239,7 +227,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiGetCellValue(rowIndex: number, columnIndex: number): Promise<string> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -248,7 +235,6 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
@@ -258,7 +244,6 @@ export default class DataGrid extends Widget {
     }, { dependencies: { getGridInstance, rowIndex, columnIndex } })();
   }
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   apiGetVisibleRows(): Promise<any> {
     const { getGridInstance } = this;
     return ClientFunction(() => {
