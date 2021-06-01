@@ -8,9 +8,11 @@ import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
 import baseChartModule from 'viz/chart_components/base_chart';
+import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
+const seriesFamilyNativeConstructor = { ...seriesFamilyModule }.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
@@ -4378,4 +4380,84 @@ QUnit.test('Reset axes animation before adjusting position of vertical axes (fix
     assert.strictEqual(tickAnimationSegments.from[0][1], tickAnimationSegments.to[0][1]);
     assert.strictEqual(axis._majorTicks[0].mark.getBBox().x, tickAnimationSegments.to[0][1]);
     assert.strictEqual(tickAnimationSegments.to[1][1] - axis._axisPosition, 1);
+});
+
+QUnit.module('SeriesFamily', $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+    }
+}));
+
+QUnit.test('Set bar width (via interval) for each pane (T1000672)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+
+    const chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        defaultPane: 'bottomPane',
+        dataSource: [
+            { timestamp: '2021-05-15T13:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T14:00:00-0500', name_one: 80, name_two: 40 },
+            { timestamp: '2021-05-15T17:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T21:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T22:00:00-0500', name_one: 80, name_two: 40 },
+            { timestamp: '2021-05-15T23:00:00-0500', name_one: 60, name_two: 20 },
+
+            { timestamp: '2021-05-15T12:05:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:10:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:15:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:20:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:25:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T13:30:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:35:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:40:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:45:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T15:00:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:05:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:10:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:15:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T16:10:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:15:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:20:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:25:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:30:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:35:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T17:55:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T18:00:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:10:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:15:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:20:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T20:10:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:15:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:20:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:25:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:30:00-0500', 'f-name_one': 20 },
+        ],
+        panes: [{
+            name: 'topPane'
+        }, {
+            name: 'bottomPane'
+        }],
+        commonSeriesSettings: {
+            argumentField: 'timestamp',
+            type: 'stackedbar'
+        },
+        argumentAxis: {
+            argumentType: 'datetime',
+            argumentField: 'timestamp',
+        },
+        series: [
+            { valueField: 'name_one', name: 'name_one', pane: 'topPane' },
+            { valueField: 'name_two', name: 'name_two', pane: 'topPane' },
+            { valueField: 'f-name_one' }
+        ]
+    });
+
+    assert.ok(chart);
+
+    assert.ok(chart.series[0].getPoints()[0].width > 30);
+    assert.ok(chart.series[2].getPoints()[0].width < 10);
 });
