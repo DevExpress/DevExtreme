@@ -913,6 +913,81 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
+        [
+            {
+                type: 'day',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 22),
+                firstCellDate: new Date(2021, 7, 22),
+            }, {
+                type: 'day',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 23),
+            }, {
+                type: 'day',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 24),
+                firstCellDate: new Date(2021, 7, 21),
+            }, {
+                type: 'week',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 19),
+                firstCellDate: new Date(2021, 7, 15),
+            }, {
+                type: 'week',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 22),
+            }, {
+                type: 'week',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 29),
+                firstCellDate: new Date(2021, 7, 8),
+            }, {
+                type: 'month',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 6, 19),
+                firstCellDate: new Date(2021, 5, 27),
+            }, {
+                type: 'month',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 1),
+            }, {
+                type: 'month',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 8, 1),
+                firstCellDate: new Date(2021, 4, 30),
+            }
+        ].forEach(({ type, description, startDate, firstCellDate }) => {
+            test(`dataCellTemplate should have correct firstCell startDate in ${type} view when ${description}`, function(assert) {
+                assert.expect(1);
+
+                createWrapper({
+                    views: [
+                        {
+                            type,
+                            intervalCount: 3,
+                            startDate,
+                        }
+                    ],
+                    currentView: type,
+                    showAllDayPanel: false,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    cellDuration: 60,
+                    currentDate: new Date(2021, 7, 23),
+                    renovateRender: true,
+                    dataCellTemplate: (data, index) => {
+                        if(index === 0) {
+                            assert.equal(data.startDate.getTime(), firstCellDate.getTime(), 'First cell has correct startDate');
+                        }
+                    },
+                });
+            });
+        });
+
         [{
             viewType: 'day',
             expectedTemplateOptions: [dataCells[0]],
