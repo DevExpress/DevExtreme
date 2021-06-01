@@ -26,7 +26,7 @@ test('Subject and description fields should be empty after showing popup on empt
 
     .expect(appointmentPopup.descriptionElement.value)
     .eql('');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 22),
@@ -64,7 +64,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
 
     .expect(Selector(TEXT_EDITOR_CLASS).exists)
     .eql(false);
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 22),
@@ -124,7 +124,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
 
     .expect(appointmentPopup.endDateElement.value)
     .eql('5/5/2017');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 25),
@@ -160,7 +160,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
     .click(appointmentPopup.allDayElement)
     .expect(appointmentPopup.startDateElement.value)
     .eql('5/22/2017, 2:30 PM');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Install New Router in Dev Room',
     startDate: new Date(2017, 4, 22, 14, 30),

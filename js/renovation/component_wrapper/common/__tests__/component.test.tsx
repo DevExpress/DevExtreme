@@ -497,6 +497,26 @@ describe('option', () => {
     });
   });
 
+  it('set to undefined should fall back to default value including default option rules', () => {
+    $('#component').dxOptionsTestWidget({
+      oneWayWithDefaultRule: 10,
+      twoWayWithDefaultRule: 10,
+      oneWayWithValueDefaultRule: 10,
+    });
+
+    $('#component').dxOptionsTestWidget({
+      oneWayWithDefaultRule: undefined,
+      oneWayWithValueDefaultRule: undefined,
+      twoWayWithDefaultRule: undefined,
+    });
+
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
+      oneWayWithDefaultRule: 15,
+      oneWayWithValueDefaultRule: 15,
+      twoWayWithDefaultRule: 15,
+    });
+  });
+
   describe('Options with Element type', () => {
     it('pass DOM node to component if provided option is jQuery wrapper', () => {
       const element = document.createElement('div');
@@ -721,7 +741,7 @@ describe('templates and slots', () => {
 
   it('insert template content to templates root', () => {
     $('#component').dxTemplatedTestWidget({
-      template(data, element) {
+      template(_data, element) {
         $(element).html('<span>Template content</span>');
       },
     });

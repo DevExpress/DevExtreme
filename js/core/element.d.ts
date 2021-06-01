@@ -7,14 +7,12 @@ export interface ElementsArrayWrapper<T extends Element> { }
 /**
  * @docid
  * @type HTMLElement|SVGElement|JQuery
- * @prevFileNamespace DevExpress.core
  */
 export type DxElement<T extends Element = HTMLElement> = {} extends Condition ? T : ElementWrapper<T>;
 
 /**
  * @docid
  * @type HTMLElement|SVGElement|JQuery
- * @prevFileNamespace DevExpress.core
  */
 export type UserDefinedElement<T extends Element = Element> = {} extends Condition ? T : ElementWrapper<T> | T;
 
@@ -27,7 +25,6 @@ export type InternalElement<T extends Element> = {} extends Condition ? dxElemen
  * @docid
  * @hidden
  * @type HTMLElement|JQuery
- * @prevFileNamespace DevExpress.core
  * @deprecated
  */
 export type dxElement = DxElement<HTMLElement>;
@@ -36,7 +33,6 @@ export type dxElement = DxElement<HTMLElement>;
  * @docid
  * @hidden
  * @type SVGElement|JQuery
- * @prevFileNamespace DevExpress.core
  * @deprecated
  */
 export type dxSVGElement = DxElement<SVGElement>;

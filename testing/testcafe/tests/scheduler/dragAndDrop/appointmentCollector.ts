@@ -31,7 +31,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
     .ok()
     .expect(appointment.element.exists)
     .notOk();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource: appointmentCollectorData,
@@ -52,7 +52,7 @@ test('Drag-n-drop in same table cell', async (t) => {
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource: appointmentCollectorData,

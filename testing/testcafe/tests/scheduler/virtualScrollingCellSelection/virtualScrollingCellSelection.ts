@@ -28,7 +28,7 @@ const scheduler = new Scheduler('#container');
 
     await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
-  }).before(() => createScheduler({ showAllDayPanel }));
+  }).before(async () => createScheduler({ showAllDayPanel }));
 
   test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and horizontal grouping is used`, async (t) => {
     await t
@@ -41,7 +41,7 @@ const scheduler = new Scheduler('#container');
 
     await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
     resources: [{
@@ -61,7 +61,7 @@ const scheduler = new Scheduler('#container');
 
     await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
     views: [{
@@ -89,7 +89,7 @@ const scheduler = new Scheduler('#container');
     await checkSelectionWhenFocusedInViewport(
       t, scheduler, 8 - indexDifference, 6 - indexDifference, 1,
     );
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
     views: [{
@@ -110,7 +110,7 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horiz
 
   await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   showAllDayPanel: true,
   groups: ['resourceId0'],
 }));
@@ -126,7 +126,7 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when verti
 
   await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   showAllDayPanel: true,
   groups: ['resourceId0'],
   views: [{
@@ -151,7 +151,7 @@ test('Selection should work correctly while scrolling', async (t) => {
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 14, 6, 6);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   groups: ['resourceId0'],
 }));
 
@@ -171,7 +171,7 @@ test('Selection should work correctly while scrolling when appointments are grou
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 12, 5, 5);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   groups: ['resourceId0'],
   views: [{
     type: 'week',
@@ -192,7 +192,7 @@ test('Selection should work in month view', async (t) => {
 
   await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'month',
     intervalCount: 30,
@@ -223,7 +223,7 @@ test('Selection should work in timeline views', async (t) => {
 
   await scheduler.option('currentView', 'timelineMonth');
   await checkSelection();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
   currentView: 'timelineDay',
   startDayHour: 0,

@@ -289,10 +289,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    _getDateTableBorderOffset() {
-        return this._getDateTableBorder();
-    }
-
     _getCellPositionByIndex(index, groupIndex) {
         const position = super._getCellPositionByIndex(index, groupIndex);
         const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;

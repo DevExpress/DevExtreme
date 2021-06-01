@@ -1,5 +1,5 @@
 import net from 'net';
-import Logger from './logger';
+import { log } from './logger';
 
 export default class DartClient {
   serverPort = 22000;
@@ -9,6 +9,77 @@ export default class DartClient {
   private readonly client = new net.Socket();
 
   private readonly eventListeners: SocketEventListener[] = [];
+
+  async dispose(): Promise<void> {
+    if (this.client.destroyed) return Promise.resolve();
+    this.isServerAvailable = false;
+
+    return new Promise((resolve) => {
+      this.client.once('close', resolve);
+      this.removeClientEventListeners();
+      this.client.destroy();
+    });
+  }
+
+  async check(): Promise<void> {
+    this.client.setTimeout(100);
+
+    return new Promise((resolve) => {
+      this.setClientErrorHandlers(async () => {
+        this.isServerAvailable = false;
+        await this.dispose();
+        resolve();
+      });
+
+      this.client.connect(this.serverPort, '127.0.0.1', () => {
+        this.isServerAvailable = true;
+        resolve();
+      });
+    });
+  }
+
+  async send(message: DartCompilerConfig | DartCompilerKeepAliveConfig):
+  Promise<DartCompilerResult> {
+    this.client.setTimeout(0);
+    this.removeClientEventListeners();
+
+    return new Promise((resolve) => {
+      let data = '';
+
+      this.addClientEventListener('data', (d) => {
+        data += d.toString();
+      });
+
+      this.addClientEventListener('end', () => {
+        log('DartClient received', data);
+
+        try {
+          resolve(JSON.parse(data));
+        } catch (e) {
+          resolve({ error: `Unable to parse dart server response: ${data}` });
+        }
+      });
+
+      const errorHandler = (e?: Error): void => {
+        log('Dart client error on write', e);
+        this.client.end();
+        this.dispose();
+        resolve({
+          error: `${e.name}: ${e.message}`,
+        });
+      };
+
+      if (this.client.destroyed) {
+        errorHandler({ name: 'Error', message: 'Client destroyed' });
+      }
+
+      this.setClientErrorHandlers(errorHandler);
+
+      log('DartClient send', message);
+      this.client.write(JSON.stringify(message));
+      this.client.end();
+    });
+  }
 
   private addClientEventListener(name: string, handler: (e?: Error) => void): void {
     this.eventListeners.push({ name, handler });
@@ -26,76 +97,5 @@ export default class DartClient {
     });
 
     this.eventListeners.length = 0;
-  }
-
-  dispose(): Promise<void> {
-    if (this.client.destroyed) return Promise.resolve();
-    this.isServerAvailable = false;
-
-    return new Promise((resolve) => {
-      this.client.once('close', resolve);
-      this.removeClientEventListeners();
-      this.client.destroy();
-    });
-  }
-
-  check(): Promise<void> {
-    this.client.setTimeout(100);
-
-    return new Promise((resolve) => {
-      this.setClientErrorHandlers(async () => {
-        this.isServerAvailable = false;
-        await this.dispose();
-        resolve();
-      });
-
-      this.client.connect(this.serverPort, '127.0.0.1', () => {
-        this.isServerAvailable = true;
-        resolve();
-      });
-    });
-  }
-
-  send(message: DartCompilerConfig | DartCompilerKeepAliveConfig): Promise<DartCompilerResult> {
-    this.client.setTimeout(0);
-    this.removeClientEventListeners();
-
-    return new Promise((resolve) => {
-      let data = '';
-
-      this.addClientEventListener('data', (d) => {
-        data += d.toString();
-      });
-
-      this.addClientEventListener('end', () => {
-        Logger.log('DartClient received', data);
-        let parsedData;
-        try {
-          parsedData = JSON.parse(data);
-        } catch (e) {
-          parsedData = { error: `Unable to parse dart server response: ${data}` };
-        }
-        resolve(parsedData);
-      });
-
-      const errorHandler = (e?: Error): void => {
-        Logger.log('Dart client error on write', e);
-        this.client.end();
-        this.dispose();
-        resolve({
-          error: `${e.name}: ${e.message}`,
-        });
-      };
-
-      if (this.client.destroyed) {
-        errorHandler({ name: 'Error', message: 'Client destroyed' });
-      }
-
-      this.setClientErrorHandlers(errorHandler);
-
-      Logger.log('DartClient send', message);
-      this.client.write(JSON.stringify(message));
-      this.client.end();
-    });
   }
 }

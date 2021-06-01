@@ -1,4 +1,4 @@
-import ViewDataProvider from 'ui/scheduler/workspaces/view_data_provider';
+import ViewDataProvider from 'ui/scheduler/workspaces/view_model/view_data_provider';
 
 const {
     test,

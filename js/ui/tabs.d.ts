@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -51,35 +53,30 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @fires dxTabsOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxTabsItem | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
@@ -87,20 +84,17 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @docid
      * @default true
      * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
@@ -108,7 +102,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @docid
      * @type Enums.NavSelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectionMode?: 'multiple' | 'single';
@@ -116,7 +109,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @docid
      * @default true
      * @default false [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
@@ -126,7 +118,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
  * @inherits CollectionWidget
  * @module ui/tabs
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
@@ -141,13 +132,11 @@ export default class dxTabs<TProperties = Properties> extends CollectionWidget<T
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;

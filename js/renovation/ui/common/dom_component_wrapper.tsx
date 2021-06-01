@@ -55,6 +55,9 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Mutable()
   instance!: DomComponent | null;
 
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Method()
   getInstance(): DomComponent | null {
     return this.instance;
@@ -85,9 +88,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   updateWidget(): void {
     this.getInstance()?.option(this.properties);
   }
-
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
 
   get properties(): Record<string, unknown> {
     const {

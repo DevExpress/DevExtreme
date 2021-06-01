@@ -48,23 +48,21 @@ export const extend = (target: Record<string, unknown>, source: Record<string, u
   return target;
 };
 
-type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
+type BuildSimpleSegmentFn = (points: (Point | number)[], close: boolean, list: Segment[]) => Segment[];
 
-function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
-  let i: number;
-  let ii: number;
+function buildSegments(points: (Point | number)[] | number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
   const list: Segment[] = [];
   if (Array.isArray(points[0])) {
-    for (i = 0, ii = points.length; i < ii; ++i) {
+    for (let i = 0, ii = points.length; i < ii; ++i) {
       buildSimpleSegment(points[i] as number[], close, list);
     }
   } else {
-    buildSimpleSegment(points as (Point|number)[], close, list);
+    buildSimpleSegment(points as (Point | number)[], close, list);
   }
   return list;
 }
 
-function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
+function buildSimpleLineSegment(points: (Point | number)[], close: boolean, list: Segment[]): Segment[] {
   let i = 0;
   const k0 = list.length;
   let k = k0;
@@ -91,8 +89,7 @@ function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: 
   return list;
 }
 
-function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
-  let i: number;
+function buildSimpleCurveSegment(points: (Point | number)[], close: boolean, list: Segment[]): Segment[] {
   let k = list.length;
   const ii = (points || []).length;
   if (ii) {
@@ -100,7 +97,7 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
     if (points[0] as Point !== undefined) {
       const arrPoints = points as Point[];
       list[k++] = ['M', arrPoints[0].x, arrPoints[0].y];
-      for (i = 1; i < ii;) {
+      for (let i = 1; i < ii;) {
         list[k++] = [
           'C',
           arrPoints[i].x,
@@ -114,7 +111,7 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
     } else {
       const arrPoints = points as number[];
       list[k++] = ['M', arrPoints[0], arrPoints[1]];
-      for (i = 2; i < ii;) {
+      for (let i = 2; i < ii;) {
         list[k++] = [
           'C',
           arrPoints[i++],
@@ -134,15 +131,15 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
   return list;
 }
 
-function buildLineSegments(points: (Point|number)[]|number[][], close: boolean): Segment[] {
+function buildLineSegments(points: (Point | number)[] | number[][], close: boolean): Segment[] {
   return buildSegments(points, buildSimpleLineSegment, close);
 }
 
-function buildCurveSegments(points: (Point|number)[]|number[][], close: boolean): Segment[] {
+function buildCurveSegments(points: (Point | number)[] | number[][], close: boolean): Segment[] {
   return buildSegments(points, buildSimpleCurveSegment, close);
 }
 
-export const buildPathSegments = (points: (Point|number)[]|number[][], type: PathType): Segment[] => {
+export const buildPathSegments = (points: (Point | number)[] | number[][], type: PathType): Segment[] => {
   let list: Segment[] = [['M', 0, 0]];
   if (type === 'line') {
     list = buildLineSegments(points, false);
@@ -160,9 +157,8 @@ export const buildPathSegments = (points: (Point|number)[]|number[][], type: Pat
 export const combinePathParam = (segments: Segment[]): string => {
   const d: unknown[] = [];
   const ii = segments.length;
-  let segment: Segment;
   for (let i = 0; i < ii; ++i) {
-    segment = segments[i];
+    const segment = segments[i];
     for (let j = 0, jj = segment.length; j < jj; ++j) {
       d.push(segment[j]);
     }
@@ -198,18 +194,13 @@ function makeEqualLineSegments(short: Segment[], long: Segment[], type: PathType
 }
 
 function makeEqualAreaSegments(short: Segment[], long: Segment[], type: PathType): void {
-  let i: number;
-  let head: Segment[];
   const shortLength = short.length;
   const longLength = long.length;
-  let constsSeg1: Segment;
-  let constsSeg2: Segment;
-
   if ((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
-    i = (shortLength - 1) / 2 - 1;
-    head = short.slice(0, i + 1);
-    constsSeg1 = [...head[head.length - 1]];
-    constsSeg2 = [...short.slice(i + 1)[0]];
+    const i: number = (shortLength - 1) / 2 - 1;
+    const head: Segment[] = short.slice(0, i + 1);
+    const constsSeg1: Segment = [...head[head.length - 1]];
+    const constsSeg2: Segment = [...short.slice(i + 1)[0]];
     prepareConstSegment(constsSeg1, type);
     prepareConstSegment(constsSeg2, type);
     for (let j = i; j < (longLength - 1) / 2 - 1; j++) {
@@ -223,7 +214,7 @@ export const compensateSegments = (oldSegments: Segment[], newSegments: Segment[
   const oldLength = oldSegments.length;
   const newLength = newSegments.length;
   let originalNewSegments: Segment[] = [];
-  const makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
+  const makeEqualSegments = type.includes('area') ? makeEqualAreaSegments : makeEqualLineSegments;
 
   if (oldLength === 0) {
     for (let i = 0; i < newLength; i++) {
@@ -260,7 +251,6 @@ function maxLengthFontSize(fontSize1?: number, fontSize2?: number): number {
 }
 
 function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: any, parentClassName: string): number {
-  let style;
   const realStyle = (node as HTMLElement).style;
 
   if (isDefined((node as Text).wholeText)) {
@@ -274,7 +264,7 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
   } else if ((node as Element).tagName === 'BR') {
     ++line;
   } else if (domAdapter.isElementNode(node)) {
-    style = extend(style = {}, parentStyle);
+    const style = extend({}, parentStyle);
     switch ((node as Element).tagName) {
       case 'B':
       case 'STRONG':
@@ -305,9 +295,8 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
 
 function adjustLineHeights(items: TextItem[]): void {
   let currentItem = items[0];
-  let item: TextItem;
   for (let i = 1, ii = items.length; i < ii; ++i) {
-    item = items[i];
+    const item = items[i];
     if (item.line === currentItem.line) {
       // T177039
       currentItem.height = maxLengthFontSize(currentItem.height, item.height);
@@ -324,7 +313,7 @@ export const removeExtraAttrs = (html: string): string => {
   const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
   return html.replace(findTagAttrs, (_, p1, p2, p3) => {
-    p2 = ((p2?.match(findStyleAndClassAttrs)) || []).map((str: string) => str).join(' ');
+    p2 = (p2?.match(findStyleAndClassAttrs) || []).map((str: string) => str).join(' ');
     return p1 + p2 + p3;
   });
 };
@@ -359,7 +348,7 @@ export const setTextNodeAttribute = (item: TextItem, name: string, value: any): 
 };
 
 export const getItemLineHeight = (item: TextItem, defaultValue: number): number => (
-  item.inherits ? maxLengthFontSize(item.height, defaultValue) : (item.height || defaultValue)
+  item.inherits ? maxLengthFontSize(item.height, defaultValue) : item.height || defaultValue
 );
 
 export const getLineHeight = (styles: { [key: string]: any } | undefined): number => (
@@ -370,7 +359,7 @@ export const getLineHeight = (styles: { [key: string]: any } | undefined): numbe
 export const textsAreEqual = (newItems: TextItem[], renderedItems?: TextItem[]): boolean => {
   if (!renderedItems || renderedItems.length !== newItems.length) return false;
 
-  return renderedItems.every((item, index) => (item.value === newItems[index].value));
+  return renderedItems.every((item, index) => item.value === newItems[index].value);
 };
 
 export const convertAlignmentToAnchor = (value?: LabelAlignment, rtl = false): string | undefined => (
@@ -393,21 +382,21 @@ function getTransformation(props: SvgGraphicsProps, x?: number, y?: number): str
   const transformations: string[] = [];
   const transDir = sharpDirection === 'backward' ? -1 : 1;
   const strokeOdd = (strokeWidth || 0) % 2;
-  const correctionX = (strokeOdd && (sharp === 'h' || sharp === true)) ? SHARPING_CORRECTION * transDir : 0;
-  const correctionY = (strokeOdd && (sharp === 'v' || sharp === true)) ? SHARPING_CORRECTION * transDir : 0;
+  const correctionX = strokeOdd && (sharp === 'h' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
+  const correctionY = strokeOdd && (sharp === 'v' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
 
   if (translateX || translateY || correctionX || correctionY) {
-    transformations.push(`translate(${((translateX || 0) + correctionX)},${((translateY || 0) + correctionY)})`);
+    transformations.push(`translate(${(translateX || 0) + correctionX},${(translateY || 0) + correctionY})`);
   }
 
   if (rotate) {
-    transformations.push(`rotate(${rotate},${(rotateX || x || 0)},${(rotateY || y || 0)})`);
+    transformations.push(`rotate(${rotate},${rotateX || x || 0},${rotateY || y || 0})`);
   }
 
   const scaleXDefined = isDefined(scaleX);
   const scaleYDefined = isDefined(scaleY);
   if (scaleXDefined || scaleYDefined) {
-    transformations.push(`scale(${(scaleXDefined ? scaleX : 1)},${(scaleYDefined ? scaleY : 1)})`);
+    transformations.push(`scale(${scaleXDefined ? scaleX : 1},${scaleYDefined ? scaleY : 1})`);
   }
 
   return transformations.length ? transformations.join(' ') : undefined;
@@ -427,7 +416,7 @@ function getDashStyle(props: SvgGraphicsProps): string | undefined {
     .split(',');
   let i = dashArray.length;
   while (i--) {
-    dashArray[i] = parseInt((dashArray[i] as string), 10) * sw;
+    dashArray[i] = parseInt(dashArray[i] as string, 10) * sw;
   }
   return dashArray.join(',');
 }

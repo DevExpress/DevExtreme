@@ -52,7 +52,7 @@ describe('DateTableLayoutBase', () => {
         groupOrientation: VERTICAL_GROUP_ORIENTATION,
         ...viewModel.props,
       },
-    } as any) as any);
+    }) as any);
 
     afterEach(jest.resetAllMocks);
 

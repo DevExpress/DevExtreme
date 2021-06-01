@@ -7,7 +7,7 @@ import {
 export const view = (): JSX.Element => <div />;
 
 @ComponentBindings()
-export class EmptyTestWidgetProps {}
+export class EmptyTestWidgetProps { empty = true; }
 
 @Component({
   jQuery: {

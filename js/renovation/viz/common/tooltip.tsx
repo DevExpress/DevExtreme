@@ -144,7 +144,7 @@ export const viewFunction = ({
               rotateX={correctedCoordinates.x}
               rotateY={correctedCoordinates.y}
             />
-            {(customizedOptions.html || TooltipTemplate) ? null
+            {customizedOptions.html || TooltipTemplate ? null
               : (
                 <g
                   textAnchor="middle"

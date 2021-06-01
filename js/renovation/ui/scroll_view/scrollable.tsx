@@ -42,7 +42,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  return (useNative
+  return useNative
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
@@ -115,8 +115,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       >
         {children}
       </ScrollableSimulated>
-    )
-  );
+    );
 };
 
 type ScrollablePropsType = ScrollableProps
@@ -126,7 +125,7 @@ type ScrollablePropsType = ScrollableProps
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
-  device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
+  device: (device): boolean => !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic',
   options: {
     bounceEnabled: false,
     scrollByContent: touch,
@@ -221,10 +220,6 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
-  validate(e: Event): boolean {
-    return this.scrollableRef.validate(e);
-  }
-
   @Method()
   // TODO: it uses for DataGrid only
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
@@ -236,6 +231,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
+  validate(event: Event): boolean {
+    return this.scrollableRef.validate(event);
+  }
+
+  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;

@@ -24,7 +24,7 @@ export const SimulatedStrategy = Class.inherit({
         }
     },
 
-    handleMove: function(e) {
+    handleMove: function(event) {
         if(this._isLocked()) {
             this._resetActive();
             return;
@@ -32,12 +32,12 @@ export const SimulatedStrategy = Class.inherit({
         this._saveActive();
     },
 
-    handleEnd: function(e) {
+    handleEnd: function(event) {
         this._resetActive();
-        this._refreshCursorState(e.originalEvent && e.originalEvent.target);
+        this._refreshCursorState(event.originalEvent && event.originalEvent.target);
     },
 
-    handleCancel: function(e) {
+    handleCancel: function(event) {
         this._resetActive();
     },
 
@@ -45,11 +45,11 @@ export const SimulatedStrategy = Class.inherit({
         this._resetActive();
     },
 
-    _cursorEnterHandler: function(e) {
-        e = e || {};
-        e.originalEvent = e.originalEvent || {};
+    _cursorEnterHandler: function(event) {
+        event = event || {};
+        event.originalEvent = event.originalEvent || {};
 
-        if(activeScrollable || e.originalEvent._hoverHandled) {
+        if(activeScrollable || event.originalEvent._hoverHandled) {
             return;
         }
 
@@ -59,17 +59,17 @@ export const SimulatedStrategy = Class.inherit({
 
         hoveredScrollable = this;
         this._eventHandler('cursorEnter');
-        e.originalEvent._hoverHandled = true;
+        event.originalEvent._hoverHandled = true;
     },
 
-    _cursorLeaveHandler: function(e) {
+    _cursorLeaveHandler: function(event) {
         if(hoveredScrollable !== this || activeScrollable === hoveredScrollable) {
             return;
         }
 
         this._eventHandler('cursorLeave');
         hoveredScrollable = null;
-        this._refreshCursorState(e && e.relatedTarget);
+        this._refreshCursorState(event && event.relatedTarget);
     },
 
     _refreshCursorState: function(target) {

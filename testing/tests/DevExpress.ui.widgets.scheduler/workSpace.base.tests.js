@@ -11,6 +11,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import { createInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -29,6 +30,12 @@ module('Work Space Base', {
 }, () => {
     test('Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
+
+        createInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
 
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             views: ['week'],

@@ -89,7 +89,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid
      * @default "OK"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyButtonText?: string;
@@ -97,21 +96,18 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @docid
      * @type Enums.EditorApplyValueMode
      * @default "useButtons"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid
      * @default "Cancel"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelButtonText?: string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     editAlphaChannel?: boolean;
@@ -121,20 +117,17 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @type_function_param1 value:string
      * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyStep?: number;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
@@ -151,7 +144,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @inherits dxDropDownEditor
  * @module ui/color_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

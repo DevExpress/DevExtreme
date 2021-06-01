@@ -117,7 +117,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  byKey(key: any | string | number): DxPromise<any> {
+  async byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -161,14 +161,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.columnCount();
   }
 
-  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
-  callMethod(funcName: string, args: IArguments): void {
-    return this.instance?.[funcName](...args);
-  }
-
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(id: number | string, optionName: any, optionValue?: any): void {
+  columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
     // eslint-disable-next-line prefer-rest-params
     return this.callMethod('columnOption', arguments);
   }
@@ -184,12 +179,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  deselectAll(): DxPromise {
+  async deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  deselectRows(keys: any[]): DxPromise<any> {
+  async deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -318,7 +313,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  refresh(
+  async refresh(
     changesOnly?: boolean,
   ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
@@ -330,7 +325,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  saveEditData(): DxPromise {
+  async saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -340,19 +335,19 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  selectAll(): DxPromise {
+  async selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
-  selectRows(
+  async selectRows(
     keys: any[], preserve: boolean,
   ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
+  async selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -388,7 +383,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  addRow(): DxPromise {
+  async addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -403,7 +398,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  collapseRow(key: any): DxPromise {
+  async collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -413,7 +408,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  expandRow(key: any): DxPromise {
+  async expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -495,6 +490,24 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return () => { this.instance.dispose(); };
   }
 
+  @Effect({ run: 'once' })
+  setupInstance(): void {
+    const element = this.widgetElementRef?.current as HTMLElement;
+    // TODO Vitik: Not only optionChanged should be rewrited.
+    // All other events should be re-raised by renovated grid.
+    const { onOptionChanged, ...restProps } = {
+      ...this.props,
+      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+    } as unknown as Record<string, unknown>;
+    const instance: GridInstance = new DataGridComponent(
+      element,
+      normalizeProps(restProps),
+    ) as unknown as GridInstance;
+    instance.getController('resizing').updateSize(element);
+    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.instance = instance;
+  }
+
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
     try {
       this.isTwoWayPropUpdating = true;
@@ -502,6 +515,10 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     } finally {
       this.isTwoWayPropUpdating = false;
     }
+  }
+
+  callMethod(funcName: string, args: IArguments): void {
+    return this.instance?.[funcName](...args);
   }
 
   updateTwoWayValue(e: OptionChangedEvent): void {
@@ -560,23 +577,5 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   onDimensionChanged(): void {
     this.instance?.updateDimensions(true);
-  }
-
-  @Effect({ run: 'once' })
-  setupInstance(): void {
-    const element = this.widgetElementRef?.current as HTMLElement;
-    // TODO Vitik: Not only optionChanged should be rewrited.
-    // All other events should be re-raised by renovated grid.
-    const { onOptionChanged, ...restProps } = {
-      ...this.props,
-      onContentReady: this.restAttributes.onContentReady,
-    } as Record<string, unknown>;
-    const instance: GridInstance = new DataGridComponent(
-      element,
-      normalizeProps(restProps),
-    ) as unknown as GridInstance;
-    instance.getController('resizing').updateSize(element);
-    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-    this.instance = instance;
   }
 }
