@@ -4,19 +4,17 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.selectedResource = resourcesList[0];
     $scope.resources = [{
         fieldExpr: "roomId",
-        allowMultiple: true,
         dataSource: rooms,
         label: "Room"
     }, {
         fieldExpr: "priorityId",
-        allowMultiple: true,
         dataSource: priorities,
         label: "Priority"
     }, {
-        fieldExpr: "ownerId",
+        fieldExpr: "assigneeId",
         allowMultiple: true,
-        dataSource: owners,
-        label: "Owner"
+        dataSource: assignees,
+        label: "Assignee"
     }];
 
     $scope.schedulerOptions = {
@@ -28,7 +26,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             },
             "resources[0].useColorAsDefault": "selectedResource === 'Room'",
             "resources[1].useColorAsDefault": "selectedResource === 'Priority'",
-            "resources[2].useColorAsDefault": "selectedResource === 'Owner'"
+            "resources[2].useColorAsDefault": "selectedResource === 'Assignee'"
         },
         dataSource: data,
         views: ["workWeek"],

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 
-import { data, owners, priorities } from './data.js';
+import { assignees, data, priorities } from './data.js';
 
 const currentDate = new Date(2021, 4, 11);
 const views = ['agenda'];
@@ -19,15 +19,14 @@ class App extends React.Component {
         height={600}
         startDayHour={9}>
         <Resource
-          dataSource={owners}
+          dataSource={assignees}
           allowMultiple={true}
-          fieldExpr="ownerId"
-          label="Owner"
+          fieldExpr="assigneeId"
+          label="Assignee"
           useColorAsDefault={true}
         />
         <Resource
           dataSource={priorities}
-          allowMultiple={true}
           fieldExpr="priorityId"
           label="Priority"
         />

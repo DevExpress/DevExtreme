@@ -11,10 +11,11 @@
       current-view="workWeek"
     >
       <DxResource
-        :data-source="owners"
-        :use-color-as-default="radioGroupValue === 'Owner'"
-        field-expr="ownerId"
-        label="Owner"
+        :data-source="assignees"
+        :use-color-as-default="radioGroupValue === 'Assignee'"
+        field-expr="assigneeId"
+        label="Assignee"
+        :allow-multiple="true"
       />
       <DxResource
         :data-source="rooms"
@@ -48,7 +49,7 @@ import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 
 import DxRadioGroup from 'devextreme-vue/radio-group';
 
-import { resourcesList, data, priorities, owners, rooms } from './data.js';
+import { resourcesList, data, priorities, assignees, rooms } from './data.js';
 
 export default {
   components: {
@@ -60,10 +61,10 @@ export default {
     return {
       views: ['workWeek'],
       currentDate: new Date(2021, 3, 27),
-      radioGroupValue: 'Owner',
+      radioGroupValue: 'Assignee',
       dataSource: data,
       resources: resourcesList,
-      owners: owners,
+      assignees: assignees,
       priorities: priorities,
       rooms: rooms,
     };

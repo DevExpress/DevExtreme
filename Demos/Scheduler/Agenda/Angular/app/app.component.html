@@ -7,16 +7,15 @@
     [startDayHour]="9"
     [height]="600">
     <dxi-resource
-        fieldExpr="ownerId"
-        label="Owner"
+        fieldExpr="assigneeId"
+        label="Assignee"
         [allowMultiple]="true"
-        [dataSource]="owners"
+        [dataSource]="assignees"
         [useColorAsDefault]="true">
     </dxi-resource>
     <dxi-resource
         fieldExpr="priorityId"
         label="Priority"
-        [allowMultiple]="true"
         [dataSource]="priorities">
     </dxi-resource>
 </dx-scheduler>

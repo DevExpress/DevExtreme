@@ -8,14 +8,13 @@ $(function(){
         startDayHour: 9,
         resources: [
             {
-                fieldExpr: "ownerId",
+                fieldExpr: "assigneeId",
                 allowMultiple: true,
-                dataSource: owners,
-                label: "Owner",
+                dataSource: assignees,
+                label: "Assignee",
                 useColorAsDefault: true
             }, {
                 fieldExpr: "priorityId",
-                allowMultiple: true,
                 dataSource: priorities,
                 label: "Priority"
             }],

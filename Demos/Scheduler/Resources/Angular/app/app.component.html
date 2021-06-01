@@ -10,23 +10,21 @@
     <dxi-resource
         fieldExpr="roomId"
         label="Room"
-        [allowMultiple]="true"
         [dataSource]="rooms"
         [useColorAsDefault]="selectedResource === 'Room'">
     </dxi-resource>
     <dxi-resource
         fieldExpr="priorityId"
         label="Priority"
-        [allowMultiple]="true"
         [dataSource]="priorities"
         [useColorAsDefault]="selectedResource === 'Priority'">
     </dxi-resource>
     <dxi-resource
-        fieldExpr="ownerId"
-        label="Owner"
+        fieldExpr="assigneeId"
+        label="Assignee"
         [allowMultiple]="true"
-        [dataSource]="owners"
-        [useColorAsDefault]="selectedResource === 'Owner'">
+        [dataSource]="assignees"
+        [useColorAsDefault]="selectedResource === 'Assignee'">
     </dxi-resource>
 </dx-scheduler>
 

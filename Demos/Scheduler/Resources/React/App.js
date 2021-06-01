@@ -4,7 +4,7 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 
 import RadioGroup from 'devextreme-react/radio-group';
 
-import { data, owners, rooms, priorities, resourcesList } from './data.js';
+import { data, assignees, rooms, priorities, resourcesList } from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
@@ -33,24 +33,22 @@ class App extends React.Component {
         >
           <Resource
             dataSource={rooms}
-            allowMultiple={true}
             fieldExpr="roomId"
             label="Room"
             useColorAsDefault={this.state.radioGroupValue === 'Room'}
           />
           <Resource
             dataSource={priorities}
-            allowMultiple={true}
             fieldExpr="priorityId"
             label="Priority"
             useColorAsDefault={this.state.radioGroupValue === 'Priority'}
           />
           <Resource
-            dataSource={owners}
+            dataSource={assignees}
             allowMultiple={true}
-            fieldExpr="ownerId"
-            label="Owner"
-            useColorAsDefault={this.state.radioGroupValue === 'Owner'}
+            fieldExpr="assigneeId"
+            label="Assignee"
+            useColorAsDefault={this.state.radioGroupValue === 'Assignee'}
           />
         </Scheduler>
         <div className="options">

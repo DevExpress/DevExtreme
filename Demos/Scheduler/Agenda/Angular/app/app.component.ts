@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import {Appointment, Service, Owner, Priority} from './app.service';
+import {Appointment, Service, Priority, Assignee} from './app.service';
 import {DxSchedulerModule} from 'devextreme-angular';
 
 if(!/localhost/.test(document.location.host)) {
@@ -16,13 +16,13 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: Appointment[];
-    owners: Owner[];
+    assignees: Assignee[];
     priorities: Priority[];
     currentDate: Date = new Date(2021, 4, 11);
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();
-        this.owners = service.getOwners();
+        this.assignees = service.getAssignees();
         this.priorities = service.getPriorities();
     }
 }

@@ -2,14 +2,13 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.resources = [{
-        fieldExpr: "ownerId",
+        fieldExpr: "assigneeId",
         allowMultiple: true,
-        dataSource: owners,
-        label: "Owner",
+        dataSource: assignees,
+        label: "Assignee",
         useColorAsDefault: true
     }, {
         fieldExpr: "priorityId",
-        allowMultiple: true,
         dataSource: priorities,
         label: "Priority"
     }];

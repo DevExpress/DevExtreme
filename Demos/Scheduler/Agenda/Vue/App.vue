@@ -9,10 +9,11 @@
     current-view="agenda"
   >
     <DxResource
-      :data-source="owners"
+      :data-source="assignees"
       :use-color-as-default="true"
-      field-expr="ownerId"
-      label="Owner"
+      :allow-multiple="true"
+      field-expr="assigneeId"
+      label="Assignee"
     />
     <DxResource
       :data-source="priorities"
@@ -24,7 +25,7 @@
 <script>
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 
-import { data, owners, priorities } from './data.js';
+import { data, assignees, priorities } from './data.js';
 
 export default {
   components: {
@@ -36,7 +37,7 @@ export default {
       views: ['agenda'],
       currentDate: new Date(2021, 4, 11),
       dataSource: data,
-      owners: owners,
+      assignees: assignees,
       priorities: priorities,
     };
   }

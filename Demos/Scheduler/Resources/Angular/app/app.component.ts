@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Appointment, Service, Owner, Room, Priority } from './app.service';
-import { DxSchedulerModule, DxSchedulerComponent, DxRadioGroupModule } from 'devextreme-angular';
+import { Appointment, Service, Assignee, Room, Priority } from './app.service';
+import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
     enableProdMode();
@@ -17,16 +17,16 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: Appointment[];
-    owners: Owner[];
+    assignees: Assignee[];
     rooms: Room[];
     priorities: Priority[];
-    resourcesList: string[] = ["Owner", "Room", "Priority"];
+    resourcesList: string[] = ["Assignee", "Room", "Priority"];
     currentDate: Date = new Date(2021, 3, 27);
     selectedResource: string = this.resourcesList[0];
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();
-        this.owners = service.getOwners();
+        this.assignees = service.getAssignees();
         this.rooms = service.getRooms();
         this.priorities = service.getPriorities();
     }
