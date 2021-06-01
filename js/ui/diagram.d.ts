@@ -11,6 +11,7 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
 
 import {
   EventInfo,
@@ -474,7 +475,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 data:object
@@ -647,7 +648,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 data:object

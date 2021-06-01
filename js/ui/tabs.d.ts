@@ -6,6 +6,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -57,7 +59,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true [for](desktop)
