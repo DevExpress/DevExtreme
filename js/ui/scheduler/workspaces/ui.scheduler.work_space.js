@@ -370,10 +370,22 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.updateCellsSelection();
 
-            this.option('selectedCellData', this.cellsSelectionState.selectedCells);
-            this._selectionChangedAction({
-                selectedCellData: this.cellsSelectionState.selectedCells,
-            });
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
+
+            this.option('selectedCellData', selectedCellData);
+            this._selectionChangedAction({ selectedCellData });
 
             this._dateTableScrollable.scrollToElement($cell);
         }
@@ -455,6 +467,23 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
 
             this.updateCellsSelection();
+
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
+
+            this.option('selectedCellData', selectedCellData);
+            this._selectionChangedAction({ selectedCellData });
         }
     }
 
@@ -1527,6 +1556,23 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.cellsSelectionState.setSelectedCells(cell, cell);
 
             this.updateCellsSelection();
+
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
+
+            this.option('selectedCellData', selectedCellData);
+            this._selectionChangedAction({ selectedCellData });
         }
     }
 
