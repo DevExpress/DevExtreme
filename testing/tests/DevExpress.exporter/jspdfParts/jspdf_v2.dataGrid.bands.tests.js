@@ -33,7 +33,7 @@ const JSPdfBandsTests = {
                     'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -69,7 +69,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 140, h: 60 }, columnWidths: [ 70, 70 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -100,7 +100,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 75, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -113,7 +113,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,75,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 65, h: 60 }, columnWidths: [ 65, 75 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 65, 75 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -152,7 +152,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, columnWidths: [ 70, 70, 60 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 70, 60 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -184,7 +184,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 130, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -199,7 +199,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 50, h: 60 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -231,7 +231,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -245,7 +245,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 110, h: 60 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -277,11 +277,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -297,7 +297,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 50, h: 60 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 50, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -342,7 +342,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,80,90,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -382,7 +382,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -396,7 +396,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -444,7 +444,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,140,90,{baseline:middle}', 'setLineWidth,1', 'rect,140,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -484,7 +484,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 150, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -501,7 +501,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,80,90,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -541,7 +541,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -557,7 +557,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -597,11 +597,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -620,7 +620,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 60, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -666,7 +666,7 @@ const JSPdfBandsTests = {
                     'text,f2_1_1,70,90,{baseline:middle}', 'setLineWidth,1', 'rect,70,75,70,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 130, h: 60 }, columnWidths: [ 60, 70 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -706,7 +706,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -720,7 +720,7 @@ const JSPdfBandsTests = {
                     'text,f2_1_2,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,70,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 60, h: 60 }, columnWidths: [ 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -768,7 +768,7 @@ const JSPdfBandsTests = {
                     'text,f3_1_2,140,90,{baseline:middle}', 'setLineWidth,1', 'rect,140,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -808,7 +808,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 150, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -824,7 +824,7 @@ const JSPdfBandsTests = {
                     'text,f3_1_2,80,90,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 60, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -864,7 +864,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -881,7 +881,7 @@ const JSPdfBandsTests = {
                     'text,f3_1_2,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 130, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -921,11 +921,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -944,7 +944,7 @@ const JSPdfBandsTests = {
                     'text,f3_1_2,10,90,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,80,30',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 60, h: 60 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 60, 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -982,7 +982,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,80,63,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,80,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1015,7 +1015,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1027,7 +1027,7 @@ const JSPdfBandsTests = {
                     'text,f2_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,80,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1067,7 +1067,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1100,7 +1100,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 140, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1114,7 +1114,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,90,63,{baseline:middle}', 'setLineWidth,1', 'rect,90,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1147,7 +1147,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1162,7 +1162,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1195,11 +1195,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1215,7 +1215,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1256,7 +1256,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,160,63,{baseline:middle}', 'setLineWidth,1', 'rect,160,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1290,7 +1290,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 150, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1304,7 +1304,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,90,63,{baseline:middle}', 'setLineWidth,1', 'rect,90,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1338,7 +1338,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1352,7 +1352,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1386,11 +1386,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1405,7 +1405,7 @@ const JSPdfBandsTests = {
                     'text,f3_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,60,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1448,7 +1448,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,220,63,{baseline:middle}', 'setLineWidth,1', 'rect,220,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 280, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1482,7 +1482,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 210, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1498,7 +1498,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1532,7 +1532,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 130, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1549,7 +1549,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1583,11 +1583,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 130, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1605,7 +1605,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,70,63,{baseline:middle}', 'setLineWidth,1', 'rect,70,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1639,7 +1639,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 3,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1655,7 +1655,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1689,11 +1689,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 3,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1711,7 +1711,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 280, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1745,15 +1745,15 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 80, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 60, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 3,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 70, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1772,7 +1772,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 70, h: 60 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1805,7 +1805,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 270, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1829,7 +1829,7 @@ const JSPdfBandsTests = {
                     'text,f7_1,230,63,{baseline:middle}', 'setLineWidth,1', 'rect,230,51,50,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1862,11 +1862,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 180, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 5,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 90, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1892,7 +1892,7 @@ const JSPdfBandsTests = {
                     'text,f7_1,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -1934,7 +1934,7 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 3,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 210, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -1960,7 +1960,7 @@ const JSPdfBandsTests = {
                     'text,f7_1,170,90,{baseline:middle}', 'setLineWidth,1', 'rect,170,75,50,30'
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -2002,11 +2002,11 @@ const JSPdfBandsTests = {
                 const splitToTablesByColumns = [{
                     columnIndex: 3,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 120, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }, {
                     columnIndex: 5,
                     drawOnNewPage: true,
-                    tableRect: { x: 10, y: 15, w: 90, h: 60 }
+                    tableTopLeft: { x: 10, y: 15 }
                 }];
 
                 const expectedLog = [
@@ -2035,7 +2035,7 @@ const JSPdfBandsTests = {
                     'text,f7_1,50,90,{baseline:middle}', 'setLineWidth,1', 'rect,50,75,50,30'
                 ];
 
-                exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 210, h: 60 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 70, 80, 60, 70, 50, 40, 50 ], onRowExporting, splitToTablesByColumns }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
