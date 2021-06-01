@@ -131,4 +131,13 @@ export default class DataGridWrapper extends Component {
 
         this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
     }
+
+    _getAdditionalProps(): string[] {
+        return super._getAdditionalProps().concat([
+            'onInitialized', 
+            'integrationOptions', 
+            'adaptColumnWidthByRatio', 
+            'useLegacyKeyboardNavigation'
+        ]);
+    }
 }

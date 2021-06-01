@@ -208,6 +208,10 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return this._elementAttr;
   }
 
+  _getAdditionalProps(): string[] {
+    return ['onContentReady'];
+  }
+
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     const {
       allowNull, twoWay, elements, props,
@@ -224,7 +228,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       children,
       onKeyDown,
     };
-    [...props, 'onContentReady', 'onInitialized', 'integrationOptions', 'adaptColumnWidthByRatio', 'useLegacyKeyboardNavigation'].forEach((propName) => {
+    [...props, ...this._getAdditionalProps()].forEach((propName) => {
       if (Object.prototype.hasOwnProperty.call(options, propName)) {
         widgetProps[propName] = options[propName];
       }
