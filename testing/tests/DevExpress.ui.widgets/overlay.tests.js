@@ -1173,6 +1173,18 @@ testModule('dimensions', moduleConfig, () => {
         instance.option('minHeight', 200);
         assert.strictEqual($content.height(), 200);
     });
+
+    test('overlay wrapper dimensions should be equal to window dimenstions when container is window', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            shading: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.roughEqual($wrapper.height(), $(window).height(), 1.01, 'wrapper height is equal to window height');
+        assert.roughEqual($wrapper.width(), $(window).width(), 1.01, 'wrapper width is equal to window width');
+    });
 });
 
 
@@ -2232,8 +2244,8 @@ testModule('container', moduleConfig, () => {
 
         const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual($wrapper.css('width'), `${window.innerWidth}px`, 'width is restored after container option value changed to window');
-        assert.strictEqual($wrapper.css('height'), `${window.innerHeight}px`, 'height is restored after container option value changed to window');
+        assert.strictEqual($wrapper.width(), $(window).width(), 'width is restored after container option value changed to window');
+        assert.strictEqual($wrapper.height(), $(window).height(), 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {
