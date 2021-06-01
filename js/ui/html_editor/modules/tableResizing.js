@@ -18,22 +18,22 @@ const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 
 export default class TableResizingModule extends BaseModule {
     constructor(quill, options) {
-
         super(quill, options);
         this.enabled = !!options.enabled;
 
-        this.editorInstance.on('contentReady', () => {
-            setTimeout(() => {
-                this._createTableResizeFrame();
-                this._updateFramePosition(this._$columnResizeFrame);
-                this._updateColumnResizeFrame();
-
-                quill.on('text-change', () => {
+        if(this.enabled) {
+            this.editorInstance.on('contentReady', () => {
+                this._attachResizerTimeout = setTimeout(() => {
+                    this._createTableResizeFrame();
                     this._updateFramePosition(this._$columnResizeFrame);
+                    this._updateColumnResizeFrame();
+
+                    quill.on('text-change', () => {
+                        this._updateFramePosition(this._$columnResizeFrame);
+                    });
                 });
             });
-        });
-
+        }
     }
 
     // _isAllowedTarget(targetElement) {
@@ -160,8 +160,9 @@ export default class TableResizingModule extends BaseModule {
     }
 
     clean() {
-        this._detachEvents();
-        this._$resizeFrame.remove();
-        this._$resizeFrame = undefined;
+        // this._detachEvents();
+        clearTimeout(this._attachResizerTimeout);
+        // this._$resizeFrame.remove();
+        // this._$resizeFrame = undefined;
     }
 }
