@@ -43,9 +43,7 @@ const moduleConfig = {
         this.quillMock = {
             root: this.$element.get(0),
             on: () => {},
-            off: () => {},
-            getSelection: () => this.selectedRange,
-            setSelection: (index, length) => { this.selectedRange = { index, length }; }
+            off: () => {}
         };
 
         this.options = {
@@ -81,6 +79,17 @@ module('Table resizing module', moduleConfig, () => {
         const resizingInstance = new Resizing(this.quillMock, this.options);
         assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'There is no resize frame element');
         assert.notOk(resizingInstance.enabled, 'module disabled by default');
+    });
+
+    test('create module instance with enabled equals to \'true\'', function(assert) {
+
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+        this.clock.tick();
+        const $tableResizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+        assert.strictEqual($tableResizeFrame.length, 1, 'There is a resize frame element');
+        assert.notOk($tableResizeFrame.is(':visible'), 'Resize frame element is hidden');
     });
 
 
