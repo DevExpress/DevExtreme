@@ -165,7 +165,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
     // eslint-disable-next-line prefer-rest-params
-    return this.callMethod('columnOption', arguments);
+    return this.callMethod('columnOption', [...arguments]);
   }
 
   @Method()
@@ -517,7 +517,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     }
   }
 
-  callMethod(funcName: string, args: IArguments): void {
+  callMethod(funcName: string, args: unknown[]): void {
     return this.instance?.[funcName](...args);
   }
 

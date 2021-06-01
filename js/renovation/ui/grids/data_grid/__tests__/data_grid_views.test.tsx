@@ -103,13 +103,6 @@ describe('DataGridViews', () => {
         expect(resizingController.fireContentReadyAction).toBeCalledTimes(0);
         expect(dataController.isLoaded).toBeCalledTimes(1);
       });
-
-      it('update without instance', () => {
-        const props = {} as any;
-        const component = new DataGridViews(props);
-
-        expect(component.update.bind(component)).not.toThrow();
-      });
     });
   });
 });

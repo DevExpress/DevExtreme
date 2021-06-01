@@ -155,7 +155,7 @@ describe('DataGrid', () => {
 
         (mockDataGridMethods as any).columnOption.mockClear();
 
-        component.callMethod('columnOption', [0, 'visible', undefined]);
+        component.callMethod('columnOption', [0, 'visible']);
 
         expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
         expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible']);

@@ -25,20 +25,6 @@ export default class DataGridWrapper extends Component {
         gridInstance?.endUpdate();
     }
 
-    // on(eventName: string, eventHandler: Function): DataGridWrapper {
-    //     const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-    //     gridInstance?.on(eventName, eventHandler);
-    //     return super.on(eventName, eventHandler);
-    // }
-
-    // off(eventName: string): DataGridWrapper {
-    //     const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-    //     gridInstance?.on(eventName);
-
-    //     return super.on(eventName);
-    // }
-
     isReady() {
         const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
 
@@ -62,13 +48,6 @@ export default class DataGridWrapper extends Component {
 
         return gridInstance?.state(state);
     }
-
-    /*dispose() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        gridInstance?.dispose();
-        super.dispose();
-    }*/
 
     _wrapKeyDownHandler(handler) {
         return handler;
