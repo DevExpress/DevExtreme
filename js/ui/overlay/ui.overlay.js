@@ -8,7 +8,6 @@ import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
-import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { contains, resetActiveElement } from '../../core/utils/dom';
@@ -74,7 +73,6 @@ const POSITION_ALIASES = {
 
 const realDevice = devices.real();
 const iOS = realDevice.platform === 'ios';
-const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
 
 const getElement = value => {
     if(isEvent(value)) {
@@ -1095,12 +1093,6 @@ const Overlay = Widget.inherit({
         this._$wrapper.appendTo(renderContainer);
     },
 
-    _fixHeightAfterSafariAddressBarResizing: function() {
-        if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
-            this._$wrapper.css('minHeight', window.innerHeight);
-        }
-    },
-
     _renderGeometry: function(isDimensionChanged) {
         if(this.option('visible') && hasWindow()) {
             this._renderGeometryImpl(isDimensionChanged);
@@ -1111,7 +1103,6 @@ const Overlay = Widget.inherit({
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
-        this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         const resultPosition = this._renderPosition();
 
@@ -1163,8 +1154,8 @@ const Overlay = Widget.inherit({
 
         const isWindow = this._isWindow($container);
 
-        wrapperWidth = isWindow ? '' : $container.outerWidth(),
-        wrapperHeight = isWindow ? '' : $container.outerHeight();
+        wrapperWidth = isWindow ? window.innerWidth : $container.outerWidth(),
+        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
 
         this._$wrapper.css({
             width: wrapperWidth,

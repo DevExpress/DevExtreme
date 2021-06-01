@@ -1072,26 +1072,6 @@ testModule('shading', moduleConfig, () => {
         overlay.option('shading', false);
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css('backgroundColor')));
     });
-
-    test('overlay should adjust height on iOS after positioning (T742021)', function(assert) {
-        assert.expect(1);
-        if(devices.real().platform !== 'ios' || devices.real().deviceType === 'desktop') {
-            assert.ok(true);
-            return;
-        }
-
-        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
-        sinon.stub(
-            overlay,
-            '_fixHeightAfterSafariAddressBarResizing',
-            () => {
-                const $wrapper = overlay.$wrapper();
-                assert.strictEqual($wrapper.css('position'), 'absolute', 'overlay wrapper should have a position');
-            }
-        );
-
-        overlay.show();
-    });
 });
 
 
@@ -2250,10 +2230,10 @@ testModule('container', moduleConfig, () => {
             visible: true
         }).dxOverlay('instance');
 
-        const wrapperElement = overlay.$wrapper().get(0);
+        const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual(wrapperElement.style.width, '', 'width is restored after container option value changed to window');
-        assert.strictEqual(wrapperElement.style.height, '', 'height is restored after container option value changed to window');
+        assert.strictEqual($wrapper.css('width'), `${window.innerWidth}px`, 'width is restored after container option value changed to window');
+        assert.strictEqual($wrapper.css('height'), `${window.innerHeight}px`, 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {
