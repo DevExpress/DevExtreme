@@ -106,4 +106,44 @@ export class CellsSelectionController {
             rowIndex: validRowIndex,
         };
     }
+
+    moveToCell(options) {
+        const {
+            isMultiSelection,
+            isMultiSelectionAllowed,
+            focusedCellData,
+            currentCellData,
+        } = options;
+
+        const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
+        const nextFocusedCellData = isValidMultiSelection
+            ? this._getNextCellData(currentCellData, focusedCellData)
+            : currentCellData;
+
+        return nextFocusedCellData;
+    }
+
+    _getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell) {
+        if(isVirtualCell) {
+            return focusedCellData;
+        }
+
+        const isValidNextFocusedCell = this._isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+
+        return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
+    }
+
+    _isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+        if(!focusedCellData) {
+            return true;
+        }
+
+        const { groupIndex, allDay } = focusedCellData;
+        const {
+            groupIndex: nextGroupIndex,
+            allDay: nextAllDay,
+        } = nextFocusedCellData;
+
+        return groupIndex === nextGroupIndex && allDay === nextAllDay;
+    }
 }

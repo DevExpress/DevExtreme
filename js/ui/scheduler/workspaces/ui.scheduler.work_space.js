@@ -199,13 +199,17 @@ class SchedulerWorkSpace extends WidgetObserver {
             e.preventDefault();
             e.stopPropagation();
 
-            if(this._selectedCells && this._selectedCells.length) {
-                const $itemElement = $(this.option('focusedElement'));
-                const $cellElement = $($itemElement.length ? $itemElement : this._selectedCells);
+            const selectedCells = this.cellsSelectionState.getSelectedCells();
 
-                e.target = this._selectedCells;
+            if(selectedCells?.length) {
+                const selectedCellsElement = selectedCells.map((cellData) => {
+                    return this._getCellByData(cellData);
+                });
+
+                e.target = selectedCellsElement;
                 this._showPopup = true;
-                this._cellClickAction({ event: e, cellElement: $(this._selectedCells), cellData: this.getCellData($cellElement) });
+
+                this._cellClickAction({ event: e, cellElement: $(selectedCellsElement), cellData: selectedCells[0] });
             }
         };
         const arrowPressHandler = function(e, cell) {
@@ -251,11 +255,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isRTL() {
         return this.option('rtlEnabled');
-    }
-
-    _getFocusedCell() {
-        return this._$focusedCell ||
-            this._$dateTable.find('.' + DATE_TABLE_CELL_CLASS).eq(0);
     }
 
     _getCellFromNextRow(direction) {
@@ -330,36 +329,57 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _moveToCell($cell, isMultiSelection) {
-        isMultiSelection = isMultiSelection && this.option('allowMultipleCellSelection');
-
-        this._setSelectedAndFocusedCells($cell, isMultiSelection);
-        this._dateTableScrollable.scrollToElement($cell);
-    }
-
-    _setSelectedAndFocusedCells($cell, isMultiSelection) {
         if(!isDefined($cell) || !$cell.length) {
-            return;
+            return undefined;
         }
 
-        const $correctedCell = isMultiSelection
-            ? this._correctCellForGroup($cell)
-            : $cell;
+        const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
+        const currentCellData = this.getCellData($cell);
+        const cellCoordinates = this._getCoordinatesByCell($cell);
+        const focusedCellData = this.cellsSelectionState.focusedCell;
 
-        if($correctedCell.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
-            return;
+        const nextFocusedCellData = this.cellsSelectionController.moveToCell({
+            isMultiSelection,
+            isMultiSelectionAllowed,
+            currentCellData,
+            focusedCellData,
+            isVirtualCell: $cell.hasClass(VIRTUAL_CELL_CLASS),
+        });
+
+        if(focusedCellData !== nextFocusedCellData) {
+            this._releaseFocusedCell();
+            this._releaseSelectedCells();
+
+            const nextFocusedCell = {
+                rowIndex: cellCoordinates.rowIndex,
+                columnIndex: cellCoordinates.columnIndex,
+                allDay: currentCellData.allDay,
+            };
+
+            this.cellsSelectionState.setFocusedCell(
+                nextFocusedCell.rowIndex,
+                nextFocusedCell.columnIndex,
+                nextFocusedCell.allDay,
+            );
+
+            if(isMultiSelection && isMultiSelectionAllowed) {
+                this.cellsSelectionState.setSelectedCells(nextFocusedCell);
+            } else {
+                this.cellsSelectionState.setSelectedCells(nextFocusedCell, nextFocusedCell);
+            }
+
+            this.updateCellsSelection();
+
+            this.option('selectedCellData', this.cellsSelectionState.selectedCells);
+            this._selectionChangedAction({
+                selectedCellData: this.cellsSelectionState.selectedCells,
+            });
+
+            this._dateTableScrollable.scrollToElement($cell);
         }
-
-        this._setSelectedCells($correctedCell, isMultiSelection);
-        this._setFocusedCell($correctedCell);
     }
 
-    _setFocusedCell($cell) {
-        this._releaseFocusedCell();
-
-        const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
-        const isAllDayCell = this._hasAllDayClass($cell);
-
-        this.cellsSelectionState.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
+    _setFocusedCell() {
         const focusedCell = this.cellsSelectionState.getFocusedCell();
 
         const { cellData, coordinates } = focusedCell;
@@ -371,73 +391,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._toggleFocusedCellClass(true, $correctedCell);
         this._$focusedCell = $correctedCell;
-    }
-
-    _setSelectedCells($firstCell, isMultiSelection) {
-        this._releaseSelectedCells();
-        this._selectedCells = [];
-
-        this._setSelectedCellsInVirtualMode($firstCell, isMultiSelection);
-
-        const $selectedCells = $(this._selectedCells);
-
-        this._toggleFocusClass(true, $selectedCells);
-        this.setAria('label', 'Add appointment', $selectedCells);
-
-        const selectedCellData = this.getSelectedCellData().map(({
-            startDate, endDate, allDay, groups, groupIndex,
-        }) => ({
-            startDate,
-            endDate,
-            allDay,
-            groups,
-            groupIndex: groupIndex || 0,
-        }));
-
-        this.option('selectedCellData', selectedCellData);
-        this._selectionChangedAction({ selectedCellData });
-    }
-
-    _setSelectedCellsInVirtualMode($firstCell, isMultiSelection) {
-        if(isMultiSelection) {
-            const { rowIndex: firstRow, columnIndex: firstColumn } = this._getCoordinatesByCell($firstCell);
-            const isFirstAllDay = this._hasAllDayClass($firstCell);
-            const firstCell = {
-                rowIndex: firstRow,
-                columnIndex: firstColumn,
-                allDay: isFirstAllDay,
-            };
-
-            this.cellsSelectionState.setSelectedCells(firstCell);
-        } else {
-            this._selectedCells = [$firstCell.get(0)];
-            this._$prevCell = $firstCell;
-
-            const { rowIndex, columnIndex } = this._getCoordinatesByCell($firstCell);
-            const isAllDayCell = this._hasAllDayClass($firstCell);
-            const firstCell = {
-                rowIndex,
-                columnIndex,
-                allDay: isAllDayCell,
-            };
-
-            this.cellsSelectionState.setSelectedCells(firstCell, firstCell);
-        }
-        this._setSelectedCellsByCellData(
-            this.cellsSelectionState.getSelectedCells(),
-        );
-    }
-
-    _correctCellForGroup($cell) {
-        const isVirtualCell = $cell.hasClass(VIRTUAL_CELL_CLASS);
-        if(isVirtualCell) {
-            return this._$focusedCell;
-        }
-
-        const cellData = this.getCellData($cell);
-        const isValidFocusedCell = this.cellsSelectionState.isValidFocusedCell(cellData);
-
-        return isValidFocusedCell ? $cell : this._$focusedCell;
     }
 
     _hasAllDayClass($cell) {
@@ -457,16 +410,23 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _releaseFocusedCell() {
-        const $cell = this._$focusedCell;
+        const focusedCellData = this.cellsSelectionState.focusedCell;
+        if(focusedCellData) {
+            const $cell = this._getCellByData(focusedCellData);
 
-        if(isDefined($cell) && $cell.length) {
-            this._toggleFocusedCellClass(false, $cell);
-            this.setAria('label', undefined, $cell);
+            if(isDefined($cell) && $cell.length) {
+                this._toggleFocusedCellClass(false, $cell);
+                this.setAria('label', undefined, $cell);
+            }
         }
     }
 
     _releaseSelectedCells() {
-        const $cells = $(this._selectedCells);
+        const selectedCells = this.cellsSelectionState.getSelectedCells();
+
+        const $cells = $(selectedCells?.map((cellData) => {
+            return this._getCellByData(cellData).get(0);
+        }));
 
         if(isDefined($cells) && $cells.length) {
             this._toggleFocusClass(false, $cells);
@@ -479,8 +439,22 @@ class SchedulerWorkSpace extends WidgetObserver {
             delete this._isCellClick;
             delete this._contextMenuHandled;
             super._focusInHandler.apply(this, arguments);
-            const $cell = this._getFocusedCell();
-            this._setSelectedAndFocusedCells($cell);
+
+            if(!this.cellsSelectionState.focusedCell) {
+                const cellCoordinates = {
+                    columnIndex: 0,
+                    rowIndex: 0,
+                    allDay: false,
+                };
+                this.cellsSelectionState.setFocusedCell(
+                    cellCoordinates.rowIndex,
+                    cellCoordinates.columnIndex,
+                    cellCoordinates.allDay,
+                );
+                this.cellsSelectionState.setSelectedCells(cellCoordinates, cellCoordinates);
+            }
+
+            this.updateCellsSelection();
         }
     }
 
@@ -1351,7 +1325,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setSelectedCellsByCellData(data) {
-        const cells = [];
         const $cells = this._getAllCells(data?.[0]?.allDay);
         const cellsInRow = this.viewDataProvider.getColumnsCount();
 
@@ -1376,12 +1349,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
                 if(isDefined($cell)) {
                     this._toggleFocusClass(true, $($cell));
-                    cells.push($cell);
+                    this.setAria('label', 'Add appointment', $($cell));
                 }
             }
         });
-
-        this._selectedCells = cells;
     }
 
     _isGroupsSpecified(resources) {
@@ -1518,10 +1489,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
 
-    _cellClickHandler(e) {
-        const $target = $(e.target);
-
-        if(this._showPopup && this._hasFocusClass($target)) {
+    _cellClickHandler() {
+        if(this._showPopup) {
             delete this._showPopup;
             this._showAddAppointmentPopup();
         }
@@ -1539,7 +1508,25 @@ class SchedulerWorkSpace extends WidgetObserver {
         if($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
             this._showPopup = true;
         } else {
-            this._setSelectedAndFocusedCells($target);
+            this._releaseFocusedCell();
+            this._releaseSelectedCells();
+
+            const cellCoordinates = this._getCoordinatesByCell($target);
+            const isAllDayCell = this._hasAllDayClass($target);
+            const cell = {
+                rowIndex: cellCoordinates.rowIndex,
+                columnIndex: cellCoordinates.columnIndex,
+                allDay: isAllDayCell,
+            };
+
+            this.cellsSelectionState.setFocusedCell(
+                cell.rowIndex,
+                cell.columnIndex,
+                cell.allDay,
+            );
+            this.cellsSelectionState.setSelectedCells(cell, cell);
+
+            this.updateCellsSelection();
         }
     }
 
@@ -3311,6 +3298,24 @@ class SchedulerWorkSpace extends WidgetObserver {
         newFirstViewDate.setHours(this.option('startDayHour'));
 
         return newFirstViewDate;
+    }
+
+    _getCellByData(cellData) {
+        const {
+            startDate, groupIndex, allDay, index,
+        } = cellData;
+
+        const position = this.viewDataProvider.findCellPositionInMap({
+            startDate, groupIndex, isAllDay: allDay, index,
+        });
+
+        if(!position) {
+            return undefined;
+        }
+
+        return allDay
+            ? this._dom_getAllDayPanelCell(position.cellIndex)
+            : this._dom_getDateCell(position);
     }
 }
 
