@@ -339,10 +339,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1019
     */
-    W1019: 'Filter query string exceeds maximum length limit of {0} characters.',
-
-    /**
-    * @name ErrorsUIWidgets.W1020
-    */
-    W1020: 'hideEvent is ignored when the shading property is true'
+    W1019: 'Filter query string exceeds maximum length limit of {0} characters.'
 });

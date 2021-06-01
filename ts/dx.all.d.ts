@@ -1,504 +1,505 @@
-/* #StartGlobalDeclaration */
-interface JQueryEventObject {}
-interface JQueryPromise<T> {}
-/* #EndGlobalDeclaration */
-/* #StartJQueryAugmentation */
-interface JQuery<TElement = HTMLElement> {
-  dxAccordion(): JQuery;
-  dxAccordion(options: 'instance'): DevExpress.ui.dxAccordion;
-  dxAccordion(options: DevExpress.ui.dxAccordionOptions): JQuery;
-  dxAccordion(options: string): any;
-  dxAccordion(options: string, ...params: any[]): any;
-
-  dxActionSheet(): JQuery;
-  dxActionSheet(options: 'instance'): DevExpress.ui.dxActionSheet;
-  dxActionSheet(options: DevExpress.ui.dxActionSheetOptions): JQuery;
-  dxActionSheet(options: string): any;
-  dxActionSheet(options: string, ...params: any[]): any;
-
-  dxAutocomplete(): JQuery;
-  dxAutocomplete(options: 'instance'): DevExpress.ui.dxAutocomplete;
-  dxAutocomplete(options: DevExpress.ui.dxAutocompleteOptions): JQuery;
-  dxAutocomplete(options: string): any;
-  dxAutocomplete(options: string, ...params: any[]): any;
-
-  dxBarGauge(): JQuery;
-  dxBarGauge(options: 'instance'): DevExpress.viz.dxBarGauge;
-  dxBarGauge(options: DevExpress.viz.dxBarGaugeOptions): JQuery;
-  dxBarGauge(options: string): any;
-  dxBarGauge(options: string, ...params: any[]): any;
-
-  dxBox(): JQuery;
-  dxBox(options: 'instance'): DevExpress.ui.dxBox;
-  dxBox(options: DevExpress.ui.dxBoxOptions): JQuery;
-  dxBox(options: string): any;
-  dxBox(options: string, ...params: any[]): any;
-
-  dxBullet(): JQuery;
-  dxBullet(options: 'instance'): DevExpress.viz.dxBullet;
-  dxBullet(options: DevExpress.viz.dxBulletOptions): JQuery;
-  dxBullet(options: string): any;
-  dxBullet(options: string, ...params: any[]): any;
-
-  dxButton(): JQuery;
-  dxButton(options: 'instance'): DevExpress.ui.dxButton;
-  dxButton(options: DevExpress.ui.dxButtonOptions): JQuery;
-  dxButton(options: string): any;
-  dxButton(options: string, ...params: any[]): any;
-
-  dxButtonGroup(): JQuery;
-  dxButtonGroup(options: 'instance'): DevExpress.ui.dxButtonGroup;
-  dxButtonGroup(options: DevExpress.ui.dxButtonGroupOptions): JQuery;
-  dxButtonGroup(options: string): any;
-  dxButtonGroup(options: string, ...params: any[]): any;
-
-  dxCalendar(): JQuery;
-  dxCalendar(options: 'instance'): DevExpress.ui.dxCalendar;
-  dxCalendar(options: DevExpress.ui.dxCalendarOptions): JQuery;
-  dxCalendar(options: string): any;
-  dxCalendar(options: string, ...params: any[]): any;
-
-  dxChart(): JQuery;
-  dxChart(options: 'instance'): DevExpress.viz.dxChart;
-  dxChart(options: DevExpress.viz.dxChartOptions): JQuery;
-  dxChart(options: string): any;
-  dxChart(options: string, ...params: any[]): any;
-
-  dxCheckBox(): JQuery;
-  dxCheckBox(options: 'instance'): DevExpress.ui.dxCheckBox;
-  dxCheckBox(options: DevExpress.ui.dxCheckBoxOptions): JQuery;
-  dxCheckBox(options: string): any;
-  dxCheckBox(options: string, ...params: any[]): any;
-
-  dxCircularGauge(): JQuery;
-  dxCircularGauge(options: 'instance'): DevExpress.viz.dxCircularGauge;
-  dxCircularGauge(options: DevExpress.viz.dxCircularGaugeOptions): JQuery;
-  dxCircularGauge(options: string): any;
-  dxCircularGauge(options: string, ...params: any[]): any;
-
-  dxColorBox(): JQuery;
-  dxColorBox(options: 'instance'): DevExpress.ui.dxColorBox;
-  dxColorBox(options: DevExpress.ui.dxColorBoxOptions): JQuery;
-  dxColorBox(options: string): any;
-  dxColorBox(options: string, ...params: any[]): any;
-
-  dxContextMenu(): JQuery;
-  dxContextMenu(options: 'instance'): DevExpress.ui.dxContextMenu;
-  dxContextMenu(options: DevExpress.ui.dxContextMenuOptions): JQuery;
-  dxContextMenu(options: string): any;
-  dxContextMenu(options: string, ...params: any[]): any;
-
-  dxDataGrid(): JQuery;
-  dxDataGrid(options: 'instance'): DevExpress.ui.dxDataGrid;
-  dxDataGrid(options: DevExpress.ui.dxDataGridOptions): JQuery;
-  dxDataGrid(options: string): any;
-  dxDataGrid(options: string, ...params: any[]): any;
-
-  dxDateBox(): JQuery;
-  dxDateBox(options: 'instance'): DevExpress.ui.dxDateBox;
-  dxDateBox(options: DevExpress.ui.dxDateBoxOptions): JQuery;
-  dxDateBox(options: string): any;
-  dxDateBox(options: string, ...params: any[]): any;
-
-  dxDeferRendering(): JQuery;
-  dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
-  dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
-  dxDeferRendering(options: string): any;
-  dxDeferRendering(options: string, ...params: any[]): any;
-
-  dxDiagram(): JQuery;
-  dxDiagram(options: 'instance'): DevExpress.ui.dxDiagram;
-  dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
-  dxDiagram(options: string): any;
-  dxDiagram(options: string, ...params: any[]): any;
-
-  dxDraggable(): JQuery;
-  dxDraggable(options: 'instance'): DevExpress.ui.dxDraggable;
-  dxDraggable(options: DevExpress.ui.dxDraggableOptions): JQuery;
-  dxDraggable(options: string): any;
-  dxDraggable(options: string, ...params: any[]): any;
-
-  dxDrawer(): JQuery;
-  dxDrawer(options: 'instance'): DevExpress.ui.dxDrawer;
-  dxDrawer(options: DevExpress.ui.dxDrawerOptions): JQuery;
-  dxDrawer(options: string): any;
-  dxDrawer(options: string, ...params: any[]): any;
-
-  dxDropDownBox(): JQuery;
-  dxDropDownBox(options: 'instance'): DevExpress.ui.dxDropDownBox;
-  dxDropDownBox(options: DevExpress.ui.dxDropDownBoxOptions): JQuery;
-  dxDropDownBox(options: string): any;
-  dxDropDownBox(options: string, ...params: any[]): any;
-
-  dxDropDownButton(): JQuery;
-  dxDropDownButton(options: 'instance'): DevExpress.ui.dxDropDownButton;
-  dxDropDownButton(options: DevExpress.ui.dxDropDownButtonOptions): JQuery;
-  dxDropDownButton(options: string): any;
-  dxDropDownButton(options: string, ...params: any[]): any;
-
-  dxFileManager(): JQuery;
-  dxFileManager(options: 'instance'): DevExpress.ui.dxFileManager;
-  dxFileManager(options: DevExpress.ui.dxFileManagerOptions): JQuery;
-  dxFileManager(options: string): any;
-  dxFileManager(options: string, ...params: any[]): any;
-
-  dxFileUploader(): JQuery;
-  dxFileUploader(options: 'instance'): DevExpress.ui.dxFileUploader;
-  dxFileUploader(options: DevExpress.ui.dxFileUploaderOptions): JQuery;
-  dxFileUploader(options: string): any;
-  dxFileUploader(options: string, ...params: any[]): any;
-
-  dxFilterBuilder(): JQuery;
-  dxFilterBuilder(options: 'instance'): DevExpress.ui.dxFilterBuilder;
-  dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
-  dxFilterBuilder(options: string): any;
-  dxFilterBuilder(options: string, ...params: any[]): any;
-
-  dxForm(): JQuery;
-  dxForm(options: 'instance'): DevExpress.ui.dxForm;
-  dxForm(options: DevExpress.ui.dxFormOptions): JQuery;
-  dxForm(options: string): any;
-  dxForm(options: string, ...params: any[]): any;
-
-  dxFunnel(): JQuery;
-  dxFunnel(options: 'instance'): DevExpress.viz.dxFunnel;
-  dxFunnel(options: DevExpress.viz.dxFunnelOptions): JQuery;
-  dxFunnel(options: string): any;
-  dxFunnel(options: string, ...params: any[]): any;
-
-  dxGallery(): JQuery;
-  dxGallery(options: 'instance'): DevExpress.ui.dxGallery;
-  dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
-  dxGallery(options: string): any;
-  dxGallery(options: string, ...params: any[]): any;
-
-  dxGantt(): JQuery;
-  dxGantt(options: 'instance'): DevExpress.ui.dxGantt;
-  dxGantt(options: DevExpress.ui.dxGanttOptions): JQuery;
-  dxGantt(options: string): any;
-  dxGantt(options: string, ...params: any[]): any;
-
-  dxHtmlEditor(): JQuery;
-  dxHtmlEditor(options: 'instance'): DevExpress.ui.dxHtmlEditor;
-  dxHtmlEditor(options: DevExpress.ui.dxHtmlEditorOptions): JQuery;
-  dxHtmlEditor(options: string): any;
-  dxHtmlEditor(options: string, ...params: any[]): any;
-
-  dxLinearGauge(): JQuery;
-  dxLinearGauge(options: 'instance'): DevExpress.viz.dxLinearGauge;
-  dxLinearGauge(options: DevExpress.viz.dxLinearGaugeOptions): JQuery;
-  dxLinearGauge(options: string): any;
-  dxLinearGauge(options: string, ...params: any[]): any;
-
-  dxList(): JQuery;
-  dxList(options: 'instance'): DevExpress.ui.dxList;
-  dxList(options: DevExpress.ui.dxListOptions): JQuery;
-  dxList(options: string): any;
-  dxList(options: string, ...params: any[]): any;
-
-  dxLoadIndicator(): JQuery;
-  dxLoadIndicator(options: 'instance'): DevExpress.ui.dxLoadIndicator;
-  dxLoadIndicator(options: DevExpress.ui.dxLoadIndicatorOptions): JQuery;
-  dxLoadIndicator(options: string): any;
-  dxLoadIndicator(options: string, ...params: any[]): any;
-
-  dxLoadPanel(): JQuery;
-  dxLoadPanel(options: 'instance'): DevExpress.ui.dxLoadPanel;
-  dxLoadPanel(options: DevExpress.ui.dxLoadPanelOptions): JQuery;
-  dxLoadPanel(options: string): any;
-  dxLoadPanel(options: string, ...params: any[]): any;
-
-  dxLookup(): JQuery;
-  dxLookup(options: 'instance'): DevExpress.ui.dxLookup;
-  dxLookup(options: DevExpress.ui.dxLookupOptions): JQuery;
-  dxLookup(options: string): any;
-  dxLookup(options: string, ...params: any[]): any;
-
-  dxMap(): JQuery;
-  dxMap(options: 'instance'): DevExpress.ui.dxMap;
-  dxMap(options: DevExpress.ui.dxMapOptions): JQuery;
-  dxMap(options: string): any;
-  dxMap(options: string, ...params: any[]): any;
-
-  dxMenu(): JQuery;
-  dxMenu(options: 'instance'): DevExpress.ui.dxMenu;
-  dxMenu(options: DevExpress.ui.dxMenuOptions): JQuery;
-  dxMenu(options: string): any;
-  dxMenu(options: string, ...params: any[]): any;
-
-  dxMultiView(): JQuery;
-  dxMultiView(options: 'instance'): DevExpress.ui.dxMultiView;
-  dxMultiView(options: DevExpress.ui.dxMultiViewOptions): JQuery;
-  dxMultiView(options: string): any;
-  dxMultiView(options: string, ...params: any[]): any;
-
-  dxNavBar(): JQuery;
-  dxNavBar(options: 'instance'): DevExpress.ui.dxNavBar;
-  dxNavBar(options: DevExpress.ui.dxNavBarOptions): JQuery;
-  dxNavBar(options: string): any;
-  dxNavBar(options: string, ...params: any[]): any;
-
-  dxNumberBox(): JQuery;
-  dxNumberBox(options: 'instance'): DevExpress.ui.dxNumberBox;
-  dxNumberBox(options: DevExpress.ui.dxNumberBoxOptions): JQuery;
-  dxNumberBox(options: string): any;
-  dxNumberBox(options: string, ...params: any[]): any;
-
-  dxPieChart(): JQuery;
-  dxPieChart(options: 'instance'): DevExpress.viz.dxPieChart;
-  dxPieChart(options: DevExpress.viz.dxPieChartOptions): JQuery;
-  dxPieChart(options: string): any;
-  dxPieChart(options: string, ...params: any[]): any;
-
-  dxPivotGrid(): JQuery;
-  dxPivotGrid(options: 'instance'): DevExpress.ui.dxPivotGrid;
-  dxPivotGrid(options: DevExpress.ui.dxPivotGridOptions): JQuery;
-  dxPivotGrid(options: string): any;
-  dxPivotGrid(options: string, ...params: any[]): any;
-
-  dxPivotGridFieldChooser(): JQuery;
-  dxPivotGridFieldChooser(
-    options: 'instance'
-  ): DevExpress.ui.dxPivotGridFieldChooser;
-  dxPivotGridFieldChooser(
-    options: DevExpress.ui.dxPivotGridFieldChooserOptions
-  ): JQuery;
-  dxPivotGridFieldChooser(options: string): any;
-  dxPivotGridFieldChooser(options: string, ...params: any[]): any;
-
-  dxPolarChart(): JQuery;
-  dxPolarChart(options: 'instance'): DevExpress.viz.dxPolarChart;
-  dxPolarChart(options: DevExpress.viz.dxPolarChartOptions): JQuery;
-  dxPolarChart(options: string): any;
-  dxPolarChart(options: string, ...params: any[]): any;
-
-  dxPopover(): JQuery;
-  dxPopover(options: 'instance'): DevExpress.ui.dxPopover;
-  dxPopover(options: DevExpress.ui.dxPopoverOptions): JQuery;
-  dxPopover(options: string): any;
-  dxPopover(options: string, ...params: any[]): any;
-
-  dxPopup(): JQuery;
-  dxPopup(options: 'instance'): DevExpress.ui.dxPopup;
-  dxPopup(options: DevExpress.ui.dxPopupOptions): JQuery;
-  dxPopup(options: string): any;
-  dxPopup(options: string, ...params: any[]): any;
-
-  dxProgressBar(): JQuery;
-  dxProgressBar(options: 'instance'): DevExpress.ui.dxProgressBar;
-  dxProgressBar(options: DevExpress.ui.dxProgressBarOptions): JQuery;
-  dxProgressBar(options: string): any;
-  dxProgressBar(options: string, ...params: any[]): any;
-
-  dxRadioGroup(): JQuery;
-  dxRadioGroup(options: 'instance'): DevExpress.ui.dxRadioGroup;
-  dxRadioGroup(options: DevExpress.ui.dxRadioGroupOptions): JQuery;
-  dxRadioGroup(options: string): any;
-  dxRadioGroup(options: string, ...params: any[]): any;
-
-  dxRangeSelector(): JQuery;
-  dxRangeSelector(options: 'instance'): DevExpress.viz.dxRangeSelector;
-  dxRangeSelector(options: DevExpress.viz.dxRangeSelectorOptions): JQuery;
-  dxRangeSelector(options: string): any;
-  dxRangeSelector(options: string, ...params: any[]): any;
-
-  dxRangeSlider(): JQuery;
-  dxRangeSlider(options: 'instance'): DevExpress.ui.dxRangeSlider;
-  dxRangeSlider(options: DevExpress.ui.dxRangeSliderOptions): JQuery;
-  dxRangeSlider(options: string): any;
-  dxRangeSlider(options: string, ...params: any[]): any;
-
-  dxRecurrenceEditor(): JQuery;
-  dxRecurrenceEditor(options: 'instance'): DevExpress.ui.dxRecurrenceEditor;
-  dxRecurrenceEditor(options: DevExpress.ui.dxRecurrenceEditorOptions): JQuery;
-  dxRecurrenceEditor(options: string): any;
-  dxRecurrenceEditor(options: string, ...params: any[]): any;
-
-  dxResizable(): JQuery;
-  dxResizable(options: 'instance'): DevExpress.ui.dxResizable;
-  dxResizable(options: DevExpress.ui.dxResizableOptions): JQuery;
-  dxResizable(options: string): any;
-  dxResizable(options: string, ...params: any[]): any;
-
-  dxResponsiveBox(): JQuery;
-  dxResponsiveBox(options: 'instance'): DevExpress.ui.dxResponsiveBox;
-  dxResponsiveBox(options: DevExpress.ui.dxResponsiveBoxOptions): JQuery;
-  dxResponsiveBox(options: string): any;
-  dxResponsiveBox(options: string, ...params: any[]): any;
-
-  dxSankey(): JQuery;
-  dxSankey(options: 'instance'): DevExpress.viz.dxSankey;
-  dxSankey(options: DevExpress.viz.dxSankeyOptions): JQuery;
-  dxSankey(options: string): any;
-  dxSankey(options: string, ...params: any[]): any;
-
-  dxScheduler(): JQuery;
-  dxScheduler(options: 'instance'): DevExpress.ui.dxScheduler;
-  dxScheduler(options: DevExpress.ui.dxSchedulerOptions): JQuery;
-  dxScheduler(options: string): any;
-  dxScheduler(options: string, ...params: any[]): any;
-
-  dxScrollView(): JQuery;
-  dxScrollView(options: 'instance'): DevExpress.ui.dxScrollView;
-  dxScrollView(options: DevExpress.ui.dxScrollViewOptions): JQuery;
-  dxScrollView(options: string): any;
-  dxScrollView(options: string, ...params: any[]): any;
-
-  dxSelectBox(): JQuery;
-  dxSelectBox(options: 'instance'): DevExpress.ui.dxSelectBox;
-  dxSelectBox(options: DevExpress.ui.dxSelectBoxOptions): JQuery;
-  dxSelectBox(options: string): any;
-  dxSelectBox(options: string, ...params: any[]): any;
-
-  dxSlideOut(): JQuery;
-  dxSlideOut(options: 'instance'): DevExpress.ui.dxSlideOut;
-  dxSlideOut(options: DevExpress.ui.dxSlideOutOptions): JQuery;
-  dxSlideOut(options: string): any;
-  dxSlideOut(options: string, ...params: any[]): any;
-
-  dxSlideOutView(): JQuery;
-  dxSlideOutView(options: 'instance'): DevExpress.ui.dxSlideOutView;
-  dxSlideOutView(options: DevExpress.ui.dxSlideOutViewOptions): JQuery;
-  dxSlideOutView(options: string): any;
-  dxSlideOutView(options: string, ...params: any[]): any;
-
-  dxSlider(): JQuery;
-  dxSlider(options: 'instance'): DevExpress.ui.dxSlider;
-  dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
-  dxSlider(options: string): any;
-  dxSlider(options: string, ...params: any[]): any;
-
-  dxSortable(): JQuery;
-  dxSortable(options: 'instance'): DevExpress.ui.dxSortable;
-  dxSortable(options: DevExpress.ui.dxSortableOptions): JQuery;
-  dxSortable(options: string): any;
-  dxSortable(options: string, ...params: any[]): any;
-
-  dxSparkline(): JQuery;
-  dxSparkline(options: 'instance'): DevExpress.viz.dxSparkline;
-  dxSparkline(options: DevExpress.viz.dxSparklineOptions): JQuery;
-  dxSparkline(options: string): any;
-  dxSparkline(options: string, ...params: any[]): any;
-
-  dxSpeedDialAction(): JQuery;
-  dxSpeedDialAction(options: 'instance'): DevExpress.ui.dxSpeedDialAction;
-  dxSpeedDialAction(options: DevExpress.ui.dxSpeedDialActionOptions): JQuery;
-  dxSpeedDialAction(options: string): any;
-  dxSpeedDialAction(options: string, ...params: any[]): any;
-
-  dxSwitch(): JQuery;
-  dxSwitch(options: 'instance'): DevExpress.ui.dxSwitch;
-  dxSwitch(options: DevExpress.ui.dxSwitchOptions): JQuery;
-  dxSwitch(options: string): any;
-  dxSwitch(options: string, ...params: any[]): any;
-
-  dxTabPanel(): JQuery;
-  dxTabPanel(options: 'instance'): DevExpress.ui.dxTabPanel;
-  dxTabPanel(options: DevExpress.ui.dxTabPanelOptions): JQuery;
-  dxTabPanel(options: string): any;
-  dxTabPanel(options: string, ...params: any[]): any;
-
-  dxTabs(): JQuery;
-  dxTabs(options: 'instance'): DevExpress.ui.dxTabs;
-  dxTabs(options: DevExpress.ui.dxTabsOptions): JQuery;
-  dxTabs(options: string): any;
-  dxTabs(options: string, ...params: any[]): any;
-
-  dxTagBox(): JQuery;
-  dxTagBox(options: 'instance'): DevExpress.ui.dxTagBox;
-  dxTagBox(options: DevExpress.ui.dxTagBoxOptions): JQuery;
-  dxTagBox(options: string): any;
-  dxTagBox(options: string, ...params: any[]): any;
-
-  dxTextArea(): JQuery;
-  dxTextArea(options: 'instance'): DevExpress.ui.dxTextArea;
-  dxTextArea(options: DevExpress.ui.dxTextAreaOptions): JQuery;
-  dxTextArea(options: string): any;
-  dxTextArea(options: string, ...params: any[]): any;
-
-  dxTextBox(): JQuery;
-  dxTextBox(options: 'instance'): DevExpress.ui.dxTextBox;
-  dxTextBox(options: DevExpress.ui.dxTextBoxOptions): JQuery;
-  dxTextBox(options: string): any;
-  dxTextBox(options: string, ...params: any[]): any;
-
-  dxTileView(): JQuery;
-  dxTileView(options: 'instance'): DevExpress.ui.dxTileView;
-  dxTileView(options: DevExpress.ui.dxTileViewOptions): JQuery;
-  dxTileView(options: string): any;
-  dxTileView(options: string, ...params: any[]): any;
-
-  dxToast(): JQuery;
-  dxToast(options: 'instance'): DevExpress.ui.dxToast;
-  dxToast(options: DevExpress.ui.dxToastOptions): JQuery;
-  dxToast(options: string): any;
-  dxToast(options: string, ...params: any[]): any;
-
-  dxToolbar(): JQuery;
-  dxToolbar(options: 'instance'): DevExpress.ui.dxToolbar;
-  dxToolbar(options: DevExpress.ui.dxToolbarOptions): JQuery;
-  dxToolbar(options: string): any;
-  dxToolbar(options: string, ...params: any[]): any;
-
-  dxTooltip(): JQuery;
-  dxTooltip(options: 'instance'): DevExpress.ui.dxTooltip;
-  dxTooltip(options: DevExpress.ui.dxTooltipOptions): JQuery;
-  dxTooltip(options: string): any;
-  dxTooltip(options: string, ...params: any[]): any;
-
-  dxTreeList(): JQuery;
-  dxTreeList(options: 'instance'): DevExpress.ui.dxTreeList;
-  dxTreeList(options: DevExpress.ui.dxTreeListOptions): JQuery;
-  dxTreeList(options: string): any;
-  dxTreeList(options: string, ...params: any[]): any;
-
-  dxTreeMap(): JQuery;
-  dxTreeMap(options: 'instance'): DevExpress.viz.dxTreeMap;
-  dxTreeMap(options: DevExpress.viz.dxTreeMapOptions): JQuery;
-  dxTreeMap(options: string): any;
-  dxTreeMap(options: string, ...params: any[]): any;
-
-  dxTreeView(): JQuery;
-  dxTreeView(options: 'instance'): DevExpress.ui.dxTreeView;
-  dxTreeView(options: DevExpress.ui.dxTreeViewOptions): JQuery;
-  dxTreeView(options: string): any;
-  dxTreeView(options: string, ...params: any[]): any;
-
-  dxValidationGroup(): JQuery;
-  dxValidationGroup(options: 'instance'): DevExpress.ui.dxValidationGroup;
-  dxValidationGroup(options: DevExpress.ui.dxValidationGroupOptions): JQuery;
-  dxValidationGroup(options: string): any;
-  dxValidationGroup(options: string, ...params: any[]): any;
-
-  dxValidationMessage(): JQuery;
-  dxValidationMessage(options: 'instance'): DevExpress.ui.dxValidationMessage;
-  dxValidationMessage(
-    options: DevExpress.ui.dxValidationMessageOptions
-  ): JQuery;
-  dxValidationMessage(options: string): any;
-  dxValidationMessage(options: string, ...params: any[]): any;
-
-  dxValidationSummary(): JQuery;
-  dxValidationSummary(options: 'instance'): DevExpress.ui.dxValidationSummary;
-  dxValidationSummary(
-    options: DevExpress.ui.dxValidationSummaryOptions
-  ): JQuery;
-  dxValidationSummary(options: string): any;
-  dxValidationSummary(options: string, ...params: any[]): any;
-
-  dxValidator(): JQuery;
-  dxValidator(options: 'instance'): DevExpress.ui.dxValidator;
-  dxValidator(options: DevExpress.ui.dxValidatorOptions): JQuery;
-  dxValidator(options: string): any;
-  dxValidator(options: string, ...params: any[]): any;
-
-  dxVectorMap(): JQuery;
-  dxVectorMap(options: 'instance'): DevExpress.viz.dxVectorMap;
-  dxVectorMap(options: DevExpress.viz.dxVectorMapOptions): JQuery;
-  dxVectorMap(options: string): any;
-  dxVectorMap(options: string, ...params: any[]): any;
+declare global {
+  interface JQuery<TElement = HTMLElement> {}
+  interface JQuery<TElement = HTMLElement> {
+    dxAccordion(): JQuery;
+    dxAccordion(options: 'instance'): DevExpress.ui.dxAccordion;
+    dxAccordion(options: DevExpress.ui.dxAccordionOptions): JQuery;
+    dxAccordion(options: string): any;
+    dxAccordion(options: string, ...params: any[]): any;
+
+    dxActionSheet(): JQuery;
+    dxActionSheet(options: 'instance'): DevExpress.ui.dxActionSheet;
+    dxActionSheet(options: DevExpress.ui.dxActionSheetOptions): JQuery;
+    dxActionSheet(options: string): any;
+    dxActionSheet(options: string, ...params: any[]): any;
+
+    dxAutocomplete(): JQuery;
+    dxAutocomplete(options: 'instance'): DevExpress.ui.dxAutocomplete;
+    dxAutocomplete(options: DevExpress.ui.dxAutocompleteOptions): JQuery;
+    dxAutocomplete(options: string): any;
+    dxAutocomplete(options: string, ...params: any[]): any;
+
+    dxBarGauge(): JQuery;
+    dxBarGauge(options: 'instance'): DevExpress.viz.dxBarGauge;
+    dxBarGauge(options: DevExpress.viz.dxBarGaugeOptions): JQuery;
+    dxBarGauge(options: string): any;
+    dxBarGauge(options: string, ...params: any[]): any;
+
+    dxBox(): JQuery;
+    dxBox(options: 'instance'): DevExpress.ui.dxBox;
+    dxBox(options: DevExpress.ui.dxBoxOptions): JQuery;
+    dxBox(options: string): any;
+    dxBox(options: string, ...params: any[]): any;
+
+    dxBullet(): JQuery;
+    dxBullet(options: 'instance'): DevExpress.viz.dxBullet;
+    dxBullet(options: DevExpress.viz.dxBulletOptions): JQuery;
+    dxBullet(options: string): any;
+    dxBullet(options: string, ...params: any[]): any;
+
+    dxButton(): JQuery;
+    dxButton(options: 'instance'): DevExpress.ui.dxButton;
+    dxButton(options: DevExpress.ui.dxButtonOptions): JQuery;
+    dxButton(options: string): any;
+    dxButton(options: string, ...params: any[]): any;
+
+    dxButtonGroup(): JQuery;
+    dxButtonGroup(options: 'instance'): DevExpress.ui.dxButtonGroup;
+    dxButtonGroup(options: DevExpress.ui.dxButtonGroupOptions): JQuery;
+    dxButtonGroup(options: string): any;
+    dxButtonGroup(options: string, ...params: any[]): any;
+
+    dxCalendar(): JQuery;
+    dxCalendar(options: 'instance'): DevExpress.ui.dxCalendar;
+    dxCalendar(options: DevExpress.ui.dxCalendarOptions): JQuery;
+    dxCalendar(options: string): any;
+    dxCalendar(options: string, ...params: any[]): any;
+
+    dxChart(): JQuery;
+    dxChart(options: 'instance'): DevExpress.viz.dxChart;
+    dxChart(options: DevExpress.viz.dxChartOptions): JQuery;
+    dxChart(options: string): any;
+    dxChart(options: string, ...params: any[]): any;
+
+    dxCheckBox(): JQuery;
+    dxCheckBox(options: 'instance'): DevExpress.ui.dxCheckBox;
+    dxCheckBox(options: DevExpress.ui.dxCheckBoxOptions): JQuery;
+    dxCheckBox(options: string): any;
+    dxCheckBox(options: string, ...params: any[]): any;
+
+    dxCircularGauge(): JQuery;
+    dxCircularGauge(options: 'instance'): DevExpress.viz.dxCircularGauge;
+    dxCircularGauge(options: DevExpress.viz.dxCircularGaugeOptions): JQuery;
+    dxCircularGauge(options: string): any;
+    dxCircularGauge(options: string, ...params: any[]): any;
+
+    dxColorBox(): JQuery;
+    dxColorBox(options: 'instance'): DevExpress.ui.dxColorBox;
+    dxColorBox(options: DevExpress.ui.dxColorBoxOptions): JQuery;
+    dxColorBox(options: string): any;
+    dxColorBox(options: string, ...params: any[]): any;
+
+    dxContextMenu(): JQuery;
+    dxContextMenu(options: 'instance'): DevExpress.ui.dxContextMenu;
+    dxContextMenu(options: DevExpress.ui.dxContextMenuOptions): JQuery;
+    dxContextMenu(options: string): any;
+    dxContextMenu(options: string, ...params: any[]): any;
+
+    dxDataGrid(): JQuery;
+    dxDataGrid(options: 'instance'): DevExpress.ui.dxDataGrid;
+    dxDataGrid(options: DevExpress.ui.dxDataGridOptions): JQuery;
+    dxDataGrid(options: string): any;
+    dxDataGrid(options: string, ...params: any[]): any;
+
+    dxDateBox(): JQuery;
+    dxDateBox(options: 'instance'): DevExpress.ui.dxDateBox;
+    dxDateBox(options: DevExpress.ui.dxDateBoxOptions): JQuery;
+    dxDateBox(options: string): any;
+    dxDateBox(options: string, ...params: any[]): any;
+
+    dxDeferRendering(): JQuery;
+    dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
+    dxDeferRendering(options: DevExpress.ui.dxDeferRenderingOptions): JQuery;
+    dxDeferRendering(options: string): any;
+    dxDeferRendering(options: string, ...params: any[]): any;
+
+    dxDiagram(): JQuery;
+    dxDiagram(options: 'instance'): DevExpress.ui.dxDiagram;
+    dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
+    dxDiagram(options: string): any;
+    dxDiagram(options: string, ...params: any[]): any;
+
+    dxDraggable(): JQuery;
+    dxDraggable(options: 'instance'): DevExpress.ui.dxDraggable;
+    dxDraggable(options: DevExpress.ui.dxDraggableOptions): JQuery;
+    dxDraggable(options: string): any;
+    dxDraggable(options: string, ...params: any[]): any;
+
+    dxDrawer(): JQuery;
+    dxDrawer(options: 'instance'): DevExpress.ui.dxDrawer;
+    dxDrawer(options: DevExpress.ui.dxDrawerOptions): JQuery;
+    dxDrawer(options: string): any;
+    dxDrawer(options: string, ...params: any[]): any;
+
+    dxDropDownBox(): JQuery;
+    dxDropDownBox(options: 'instance'): DevExpress.ui.dxDropDownBox;
+    dxDropDownBox(options: DevExpress.ui.dxDropDownBoxOptions): JQuery;
+    dxDropDownBox(options: string): any;
+    dxDropDownBox(options: string, ...params: any[]): any;
+
+    dxDropDownButton(): JQuery;
+    dxDropDownButton(options: 'instance'): DevExpress.ui.dxDropDownButton;
+    dxDropDownButton(options: DevExpress.ui.dxDropDownButtonOptions): JQuery;
+    dxDropDownButton(options: string): any;
+    dxDropDownButton(options: string, ...params: any[]): any;
+
+    dxFileManager(): JQuery;
+    dxFileManager(options: 'instance'): DevExpress.ui.dxFileManager;
+    dxFileManager(options: DevExpress.ui.dxFileManagerOptions): JQuery;
+    dxFileManager(options: string): any;
+    dxFileManager(options: string, ...params: any[]): any;
+
+    dxFileUploader(): JQuery;
+    dxFileUploader(options: 'instance'): DevExpress.ui.dxFileUploader;
+    dxFileUploader(options: DevExpress.ui.dxFileUploaderOptions): JQuery;
+    dxFileUploader(options: string): any;
+    dxFileUploader(options: string, ...params: any[]): any;
+
+    dxFilterBuilder(): JQuery;
+    dxFilterBuilder(options: 'instance'): DevExpress.ui.dxFilterBuilder;
+    dxFilterBuilder(options: DevExpress.ui.dxFilterBuilderOptions): JQuery;
+    dxFilterBuilder(options: string): any;
+    dxFilterBuilder(options: string, ...params: any[]): any;
+
+    dxForm(): JQuery;
+    dxForm(options: 'instance'): DevExpress.ui.dxForm;
+    dxForm(options: DevExpress.ui.dxFormOptions): JQuery;
+    dxForm(options: string): any;
+    dxForm(options: string, ...params: any[]): any;
+
+    dxFunnel(): JQuery;
+    dxFunnel(options: 'instance'): DevExpress.viz.dxFunnel;
+    dxFunnel(options: DevExpress.viz.dxFunnelOptions): JQuery;
+    dxFunnel(options: string): any;
+    dxFunnel(options: string, ...params: any[]): any;
+
+    dxGallery(): JQuery;
+    dxGallery(options: 'instance'): DevExpress.ui.dxGallery;
+    dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
+    dxGallery(options: string): any;
+    dxGallery(options: string, ...params: any[]): any;
+
+    dxGantt(): JQuery;
+    dxGantt(options: 'instance'): DevExpress.ui.dxGantt;
+    dxGantt(options: DevExpress.ui.dxGanttOptions): JQuery;
+    dxGantt(options: string): any;
+    dxGantt(options: string, ...params: any[]): any;
+
+    dxHtmlEditor(): JQuery;
+    dxHtmlEditor(options: 'instance'): DevExpress.ui.dxHtmlEditor;
+    dxHtmlEditor(options: DevExpress.ui.dxHtmlEditorOptions): JQuery;
+    dxHtmlEditor(options: string): any;
+    dxHtmlEditor(options: string, ...params: any[]): any;
+
+    dxLinearGauge(): JQuery;
+    dxLinearGauge(options: 'instance'): DevExpress.viz.dxLinearGauge;
+    dxLinearGauge(options: DevExpress.viz.dxLinearGaugeOptions): JQuery;
+    dxLinearGauge(options: string): any;
+    dxLinearGauge(options: string, ...params: any[]): any;
+
+    dxList(): JQuery;
+    dxList(options: 'instance'): DevExpress.ui.dxList;
+    dxList(options: DevExpress.ui.dxListOptions): JQuery;
+    dxList(options: string): any;
+    dxList(options: string, ...params: any[]): any;
+
+    dxLoadIndicator(): JQuery;
+    dxLoadIndicator(options: 'instance'): DevExpress.ui.dxLoadIndicator;
+    dxLoadIndicator(options: DevExpress.ui.dxLoadIndicatorOptions): JQuery;
+    dxLoadIndicator(options: string): any;
+    dxLoadIndicator(options: string, ...params: any[]): any;
+
+    dxLoadPanel(): JQuery;
+    dxLoadPanel(options: 'instance'): DevExpress.ui.dxLoadPanel;
+    dxLoadPanel(options: DevExpress.ui.dxLoadPanelOptions): JQuery;
+    dxLoadPanel(options: string): any;
+    dxLoadPanel(options: string, ...params: any[]): any;
+
+    dxLookup(): JQuery;
+    dxLookup(options: 'instance'): DevExpress.ui.dxLookup;
+    dxLookup(options: DevExpress.ui.dxLookupOptions): JQuery;
+    dxLookup(options: string): any;
+    dxLookup(options: string, ...params: any[]): any;
+
+    dxMap(): JQuery;
+    dxMap(options: 'instance'): DevExpress.ui.dxMap;
+    dxMap(options: DevExpress.ui.dxMapOptions): JQuery;
+    dxMap(options: string): any;
+    dxMap(options: string, ...params: any[]): any;
+
+    dxMenu(): JQuery;
+    dxMenu(options: 'instance'): DevExpress.ui.dxMenu;
+    dxMenu(options: DevExpress.ui.dxMenuOptions): JQuery;
+    dxMenu(options: string): any;
+    dxMenu(options: string, ...params: any[]): any;
+
+    dxMultiView(): JQuery;
+    dxMultiView(options: 'instance'): DevExpress.ui.dxMultiView;
+    dxMultiView(options: DevExpress.ui.dxMultiViewOptions): JQuery;
+    dxMultiView(options: string): any;
+    dxMultiView(options: string, ...params: any[]): any;
+
+    dxNavBar(): JQuery;
+    dxNavBar(options: 'instance'): DevExpress.ui.dxNavBar;
+    dxNavBar(options: DevExpress.ui.dxNavBarOptions): JQuery;
+    dxNavBar(options: string): any;
+    dxNavBar(options: string, ...params: any[]): any;
+
+    dxNumberBox(): JQuery;
+    dxNumberBox(options: 'instance'): DevExpress.ui.dxNumberBox;
+    dxNumberBox(options: DevExpress.ui.dxNumberBoxOptions): JQuery;
+    dxNumberBox(options: string): any;
+    dxNumberBox(options: string, ...params: any[]): any;
+
+    dxPieChart(): JQuery;
+    dxPieChart(options: 'instance'): DevExpress.viz.dxPieChart;
+    dxPieChart(options: DevExpress.viz.dxPieChartOptions): JQuery;
+    dxPieChart(options: string): any;
+    dxPieChart(options: string, ...params: any[]): any;
+
+    dxPivotGrid(): JQuery;
+    dxPivotGrid(options: 'instance'): DevExpress.ui.dxPivotGrid;
+    dxPivotGrid(options: DevExpress.ui.dxPivotGridOptions): JQuery;
+    dxPivotGrid(options: string): any;
+    dxPivotGrid(options: string, ...params: any[]): any;
+
+    dxPivotGridFieldChooser(): JQuery;
+    dxPivotGridFieldChooser(
+      options: 'instance'
+    ): DevExpress.ui.dxPivotGridFieldChooser;
+    dxPivotGridFieldChooser(
+      options: DevExpress.ui.dxPivotGridFieldChooserOptions
+    ): JQuery;
+    dxPivotGridFieldChooser(options: string): any;
+    dxPivotGridFieldChooser(options: string, ...params: any[]): any;
+
+    dxPolarChart(): JQuery;
+    dxPolarChart(options: 'instance'): DevExpress.viz.dxPolarChart;
+    dxPolarChart(options: DevExpress.viz.dxPolarChartOptions): JQuery;
+    dxPolarChart(options: string): any;
+    dxPolarChart(options: string, ...params: any[]): any;
+
+    dxPopover(): JQuery;
+    dxPopover(options: 'instance'): DevExpress.ui.dxPopover;
+    dxPopover(options: DevExpress.ui.dxPopoverOptions): JQuery;
+    dxPopover(options: string): any;
+    dxPopover(options: string, ...params: any[]): any;
+
+    dxPopup(): JQuery;
+    dxPopup(options: 'instance'): DevExpress.ui.dxPopup;
+    dxPopup(options: DevExpress.ui.dxPopupOptions): JQuery;
+    dxPopup(options: string): any;
+    dxPopup(options: string, ...params: any[]): any;
+
+    dxProgressBar(): JQuery;
+    dxProgressBar(options: 'instance'): DevExpress.ui.dxProgressBar;
+    dxProgressBar(options: DevExpress.ui.dxProgressBarOptions): JQuery;
+    dxProgressBar(options: string): any;
+    dxProgressBar(options: string, ...params: any[]): any;
+
+    dxRadioGroup(): JQuery;
+    dxRadioGroup(options: 'instance'): DevExpress.ui.dxRadioGroup;
+    dxRadioGroup(options: DevExpress.ui.dxRadioGroupOptions): JQuery;
+    dxRadioGroup(options: string): any;
+    dxRadioGroup(options: string, ...params: any[]): any;
+
+    dxRangeSelector(): JQuery;
+    dxRangeSelector(options: 'instance'): DevExpress.viz.dxRangeSelector;
+    dxRangeSelector(options: DevExpress.viz.dxRangeSelectorOptions): JQuery;
+    dxRangeSelector(options: string): any;
+    dxRangeSelector(options: string, ...params: any[]): any;
+
+    dxRangeSlider(): JQuery;
+    dxRangeSlider(options: 'instance'): DevExpress.ui.dxRangeSlider;
+    dxRangeSlider(options: DevExpress.ui.dxRangeSliderOptions): JQuery;
+    dxRangeSlider(options: string): any;
+    dxRangeSlider(options: string, ...params: any[]): any;
+
+    dxRecurrenceEditor(): JQuery;
+    dxRecurrenceEditor(options: 'instance'): DevExpress.ui.dxRecurrenceEditor;
+    dxRecurrenceEditor(
+      options: DevExpress.ui.dxRecurrenceEditorOptions
+    ): JQuery;
+    dxRecurrenceEditor(options: string): any;
+    dxRecurrenceEditor(options: string, ...params: any[]): any;
+
+    dxResizable(): JQuery;
+    dxResizable(options: 'instance'): DevExpress.ui.dxResizable;
+    dxResizable(options: DevExpress.ui.dxResizableOptions): JQuery;
+    dxResizable(options: string): any;
+    dxResizable(options: string, ...params: any[]): any;
+
+    dxResponsiveBox(): JQuery;
+    dxResponsiveBox(options: 'instance'): DevExpress.ui.dxResponsiveBox;
+    dxResponsiveBox(options: DevExpress.ui.dxResponsiveBoxOptions): JQuery;
+    dxResponsiveBox(options: string): any;
+    dxResponsiveBox(options: string, ...params: any[]): any;
+
+    dxSankey(): JQuery;
+    dxSankey(options: 'instance'): DevExpress.viz.dxSankey;
+    dxSankey(options: DevExpress.viz.dxSankeyOptions): JQuery;
+    dxSankey(options: string): any;
+    dxSankey(options: string, ...params: any[]): any;
+
+    dxScheduler(): JQuery;
+    dxScheduler(options: 'instance'): DevExpress.ui.dxScheduler;
+    dxScheduler(options: DevExpress.ui.dxSchedulerOptions): JQuery;
+    dxScheduler(options: string): any;
+    dxScheduler(options: string, ...params: any[]): any;
+
+    dxScrollView(): JQuery;
+    dxScrollView(options: 'instance'): DevExpress.ui.dxScrollView;
+    dxScrollView(options: DevExpress.ui.dxScrollViewOptions): JQuery;
+    dxScrollView(options: string): any;
+    dxScrollView(options: string, ...params: any[]): any;
+
+    dxSelectBox(): JQuery;
+    dxSelectBox(options: 'instance'): DevExpress.ui.dxSelectBox;
+    dxSelectBox(options: DevExpress.ui.dxSelectBoxOptions): JQuery;
+    dxSelectBox(options: string): any;
+    dxSelectBox(options: string, ...params: any[]): any;
+
+    dxSlideOut(): JQuery;
+    dxSlideOut(options: 'instance'): DevExpress.ui.dxSlideOut;
+    dxSlideOut(options: DevExpress.ui.dxSlideOutOptions): JQuery;
+    dxSlideOut(options: string): any;
+    dxSlideOut(options: string, ...params: any[]): any;
+
+    dxSlideOutView(): JQuery;
+    dxSlideOutView(options: 'instance'): DevExpress.ui.dxSlideOutView;
+    dxSlideOutView(options: DevExpress.ui.dxSlideOutViewOptions): JQuery;
+    dxSlideOutView(options: string): any;
+    dxSlideOutView(options: string, ...params: any[]): any;
+
+    dxSlider(): JQuery;
+    dxSlider(options: 'instance'): DevExpress.ui.dxSlider;
+    dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
+    dxSlider(options: string): any;
+    dxSlider(options: string, ...params: any[]): any;
+
+    dxSortable(): JQuery;
+    dxSortable(options: 'instance'): DevExpress.ui.dxSortable;
+    dxSortable(options: DevExpress.ui.dxSortableOptions): JQuery;
+    dxSortable(options: string): any;
+    dxSortable(options: string, ...params: any[]): any;
+
+    dxSparkline(): JQuery;
+    dxSparkline(options: 'instance'): DevExpress.viz.dxSparkline;
+    dxSparkline(options: DevExpress.viz.dxSparklineOptions): JQuery;
+    dxSparkline(options: string): any;
+    dxSparkline(options: string, ...params: any[]): any;
+
+    dxSpeedDialAction(): JQuery;
+    dxSpeedDialAction(options: 'instance'): DevExpress.ui.dxSpeedDialAction;
+    dxSpeedDialAction(options: DevExpress.ui.dxSpeedDialActionOptions): JQuery;
+    dxSpeedDialAction(options: string): any;
+    dxSpeedDialAction(options: string, ...params: any[]): any;
+
+    dxSwitch(): JQuery;
+    dxSwitch(options: 'instance'): DevExpress.ui.dxSwitch;
+    dxSwitch(options: DevExpress.ui.dxSwitchOptions): JQuery;
+    dxSwitch(options: string): any;
+    dxSwitch(options: string, ...params: any[]): any;
+
+    dxTabPanel(): JQuery;
+    dxTabPanel(options: 'instance'): DevExpress.ui.dxTabPanel;
+    dxTabPanel(options: DevExpress.ui.dxTabPanelOptions): JQuery;
+    dxTabPanel(options: string): any;
+    dxTabPanel(options: string, ...params: any[]): any;
+
+    dxTabs(): JQuery;
+    dxTabs(options: 'instance'): DevExpress.ui.dxTabs;
+    dxTabs(options: DevExpress.ui.dxTabsOptions): JQuery;
+    dxTabs(options: string): any;
+    dxTabs(options: string, ...params: any[]): any;
+
+    dxTagBox(): JQuery;
+    dxTagBox(options: 'instance'): DevExpress.ui.dxTagBox;
+    dxTagBox(options: DevExpress.ui.dxTagBoxOptions): JQuery;
+    dxTagBox(options: string): any;
+    dxTagBox(options: string, ...params: any[]): any;
+
+    dxTextArea(): JQuery;
+    dxTextArea(options: 'instance'): DevExpress.ui.dxTextArea;
+    dxTextArea(options: DevExpress.ui.dxTextAreaOptions): JQuery;
+    dxTextArea(options: string): any;
+    dxTextArea(options: string, ...params: any[]): any;
+
+    dxTextBox(): JQuery;
+    dxTextBox(options: 'instance'): DevExpress.ui.dxTextBox;
+    dxTextBox(options: DevExpress.ui.dxTextBoxOptions): JQuery;
+    dxTextBox(options: string): any;
+    dxTextBox(options: string, ...params: any[]): any;
+
+    dxTileView(): JQuery;
+    dxTileView(options: 'instance'): DevExpress.ui.dxTileView;
+    dxTileView(options: DevExpress.ui.dxTileViewOptions): JQuery;
+    dxTileView(options: string): any;
+    dxTileView(options: string, ...params: any[]): any;
+
+    dxToast(): JQuery;
+    dxToast(options: 'instance'): DevExpress.ui.dxToast;
+    dxToast(options: DevExpress.ui.dxToastOptions): JQuery;
+    dxToast(options: string): any;
+    dxToast(options: string, ...params: any[]): any;
+
+    dxToolbar(): JQuery;
+    dxToolbar(options: 'instance'): DevExpress.ui.dxToolbar;
+    dxToolbar(options: DevExpress.ui.dxToolbarOptions): JQuery;
+    dxToolbar(options: string): any;
+    dxToolbar(options: string, ...params: any[]): any;
+
+    dxTooltip(): JQuery;
+    dxTooltip(options: 'instance'): DevExpress.ui.dxTooltip;
+    dxTooltip(options: DevExpress.ui.dxTooltipOptions): JQuery;
+    dxTooltip(options: string): any;
+    dxTooltip(options: string, ...params: any[]): any;
+
+    dxTreeList(): JQuery;
+    dxTreeList(options: 'instance'): DevExpress.ui.dxTreeList;
+    dxTreeList(options: DevExpress.ui.dxTreeListOptions): JQuery;
+    dxTreeList(options: string): any;
+    dxTreeList(options: string, ...params: any[]): any;
+
+    dxTreeMap(): JQuery;
+    dxTreeMap(options: 'instance'): DevExpress.viz.dxTreeMap;
+    dxTreeMap(options: DevExpress.viz.dxTreeMapOptions): JQuery;
+    dxTreeMap(options: string): any;
+    dxTreeMap(options: string, ...params: any[]): any;
+
+    dxTreeView(): JQuery;
+    dxTreeView(options: 'instance'): DevExpress.ui.dxTreeView;
+    dxTreeView(options: DevExpress.ui.dxTreeViewOptions): JQuery;
+    dxTreeView(options: string): any;
+    dxTreeView(options: string, ...params: any[]): any;
+
+    dxValidationGroup(): JQuery;
+    dxValidationGroup(options: 'instance'): DevExpress.ui.dxValidationGroup;
+    dxValidationGroup(options: DevExpress.ui.dxValidationGroupOptions): JQuery;
+    dxValidationGroup(options: string): any;
+    dxValidationGroup(options: string, ...params: any[]): any;
+
+    dxValidationMessage(): JQuery;
+    dxValidationMessage(options: 'instance'): DevExpress.ui.dxValidationMessage;
+    dxValidationMessage(
+      options: DevExpress.ui.dxValidationMessageOptions
+    ): JQuery;
+    dxValidationMessage(options: string): any;
+    dxValidationMessage(options: string, ...params: any[]): any;
+
+    dxValidationSummary(): JQuery;
+    dxValidationSummary(options: 'instance'): DevExpress.ui.dxValidationSummary;
+    dxValidationSummary(
+      options: DevExpress.ui.dxValidationSummaryOptions
+    ): JQuery;
+    dxValidationSummary(options: string): any;
+    dxValidationSummary(options: string, ...params: any[]): any;
+
+    dxValidator(): JQuery;
+    dxValidator(options: 'instance'): DevExpress.ui.dxValidator;
+    dxValidator(options: DevExpress.ui.dxValidatorOptions): JQuery;
+    dxValidator(options: string): any;
+    dxValidator(options: string, ...params: any[]): any;
+
+    dxVectorMap(): JQuery;
+    dxVectorMap(options: 'instance'): DevExpress.viz.dxVectorMap;
+    dxVectorMap(options: DevExpress.viz.dxVectorMapOptions): JQuery;
+    dxVectorMap(options: string): any;
+    dxVectorMap(options: string, ...params: any[]): any;
+  }
+  interface JQueryEventObject {}
+  interface JQueryPromise<T> {}
 }
-/* #EndJQueryAugmentation */
 declare module DevExpress {
   /**
    * [descr:fx]
@@ -673,7 +674,7 @@ declare module DevExpress {
      */
     resetOption(optionName: string): void;
 
-    _options: { silent(path, value): void };
+    _options: { silent(path: any, value: any): void };
     _createActionByOption(optionName: string, config: object): Function;
     _dispose(): void;
     _getDefaultOptions(): object;
@@ -1964,6 +1965,9 @@ declare module DevExpress.data {
       DevExpress.data.ODataStore.PromiseExtension<any>;
   }
   module ODataStore {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface PromiseExtension<T> {
       then<TResult1 = T, TResult2 = never>(
         onfulfilled?:
@@ -3709,6 +3713,9 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.data.DataSource;
   }
   module CollectionWidget {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SelectionChangedInfo<T = any> {
       readonly addedItems: Array<T>;
       readonly removedItems: Array<T>;
@@ -3757,6 +3764,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | CollectionWidgetItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -3943,6 +3951,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<CollectionWidgetItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4096,7 +4105,7 @@ declare module DevExpress.ui {
     title?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxAccordionOptions
@@ -4115,6 +4124,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxAccordionItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4247,7 +4257,7 @@ declare module DevExpress.ui {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxActionSheetOptions
@@ -4262,6 +4272,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxActionSheetItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4348,7 +4359,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxAutocompleteOptions
@@ -4419,7 +4430,7 @@ declare module DevExpress.ui {
     shrink?: number;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
@@ -4437,6 +4448,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxBoxItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4517,7 +4529,7 @@ declare module DevExpress.ui {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
@@ -4574,7 +4586,7 @@ declare module DevExpress.ui {
     stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxButtonOptions extends WidgetOptions<dxButton> {
@@ -4643,6 +4655,9 @@ declare module DevExpress.ui {
       readonly view: string;
       readonly text?: string;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ComponentDisabledDate<T> {
       component: T;
       readonly date: Date;
@@ -4656,7 +4671,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
@@ -4751,7 +4766,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
@@ -4816,7 +4831,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxColorBoxOptions
@@ -4919,7 +4934,7 @@ declare module DevExpress.ui {
     items?: Array<dxContextMenuItem>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxContextMenuOptions
@@ -4936,6 +4951,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxContextMenuItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -5162,6 +5178,9 @@ declare module DevExpress.ui {
   module dxDataGrid {
     export type AdaptiveDetailRowPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface AdaptiveDetailRowPreparingInfo {
       readonly formOptions: any;
     }
@@ -5228,6 +5247,7 @@ declare module DevExpress.ui {
     };
     /**
      * [descr:dxDataGridColumn]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface Column extends ColumnBase {
       /**
@@ -5312,6 +5332,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:GridBaseColumn]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface ColumnBase {
       /**
@@ -5568,6 +5589,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxDataGridColumnButton]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface ColumnButton extends ColumnButtonBase {
       /**
@@ -5600,6 +5622,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:GridBaseColumnButton]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface ColumnButtonBase {
       /**
@@ -5648,6 +5671,9 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnChooser {
       /**
        * [descr:GridBaseOptions.columnChooser.allowSearch]
@@ -5682,6 +5708,9 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnCustomizeTextArg {
       value?: string | number | Date;
       valueText?: string;
@@ -5702,6 +5731,9 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnFixing {
       /**
        * [descr:GridBaseOptions.columnFixing.enabled]
@@ -5712,6 +5744,9 @@ declare module DevExpress.ui {
        */
       texts?: ColumnFixingTexts;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnFixingTexts {
       /**
        * [descr:GridBaseOptions.columnFixing.texts.fix]
@@ -5749,6 +5784,9 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly column: Column;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnHeaderFilter {
       /**
        * [descr:GridBaseColumn.headerFilter.allowSearch]
@@ -5759,6 +5797,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | ((options: {
             component?: any;
             dataSource?: DevExpress.data.DataSourceOptions;
@@ -5789,6 +5828,9 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ColumnLookup {
       /**
        * [descr:GridBaseColumn.lookup.allowClearing]
@@ -5828,6 +5870,9 @@ declare module DevExpress.ui {
         readonly rowIndex: number;
         readonly row?: RowObject;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface CustomSummaryInfo {
       readonly component: dxDataGrid;
       readonly name?: string;
@@ -5836,22 +5881,37 @@ declare module DevExpress.ui {
       totalValue?: any;
       readonly groupIndex?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DataChangeInfo {
       readonly changes: Array<DataChange>;
     }
     export type DataErrorOccurredEvent =
       DevExpress.events.EventInfo<dxDataGrid> & DataErrorOccurredInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
     export type DisposingEvent = DevExpress.events.EventInfo<dxDataGrid>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DragDropInfo {
       readonly dropInsideItem: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DragReorderInfo {
       readonly dropInsideItem: boolean;
       promise?: PromiseLike<void>;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DragStartEventInfo<T extends GridBase> {
       readonly component: T;
       readonly event: DevExpress.events.DxEvent;
@@ -5860,6 +5920,9 @@ declare module DevExpress.ui {
       readonly fromIndex: number;
       readonly fromData?: any;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface dxDataGridSortByGroupSummaryInfoItem {
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
@@ -5879,6 +5942,9 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid> &
       DataChangeInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Editing extends EditingBase {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
@@ -5901,6 +5967,9 @@ declare module DevExpress.ui {
        */
       texts?: any;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface EditingBase {
       /**
        * [descr:GridBaseOptions.editing.confirmDelete]
@@ -5957,6 +6026,9 @@ declare module DevExpress.ui {
         readonly key: any;
         readonly column?: any;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface EditingTextsBase {
       /**
        * [descr:GridBaseOptions.editing.texts.addRow]
@@ -6034,6 +6106,9 @@ declare module DevExpress.ui {
         readonly dataField?: string;
         readonly row?: RowObject;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ExcelCellInfo {
       readonly component: dxDataGrid;
       horizontalAlignment?:
@@ -6079,6 +6154,9 @@ declare module DevExpress.ui {
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.ExcelDataGridCell;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Export {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
@@ -6128,6 +6206,9 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid> & {
         fileName?: string;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ExportTexts {
       /**
        * [descr:dxDataGridOptions.export.texts.exportAll]
@@ -6149,6 +6230,9 @@ declare module DevExpress.ui {
       format?: string;
       readonly data: Blob;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FilterPanel<T extends GridBase> {
       /**
        * [descr:GridBaseOptions.filterPanel.customizeText]
@@ -6167,11 +6251,17 @@ declare module DevExpress.ui {
        */
       visible?: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FilterPanelCustomizeTextArg<T> {
       readonly component: T;
       readonly filterValue: any;
       readonly text: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FilterPanelTexts {
       /**
        * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
@@ -6186,6 +6276,9 @@ declare module DevExpress.ui {
        */
       filterEnabledHint?: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FilterRow {
       /**
        * [descr:GridBaseOptions.filterRow.applyFilter]
@@ -6224,6 +6317,9 @@ declare module DevExpress.ui {
        */
       visible?: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FilterRowOperationDescriptions {
       /**
        * [descr:GridBaseOptions.filterRow.operationDescriptions.between]
@@ -6302,6 +6398,9 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<RowObject>;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Grouping {
       /**
        * [descr:dxDataGridOptions.grouping.allowCollapsing]
@@ -6324,6 +6423,9 @@ declare module DevExpress.ui {
        */
       texts?: GroupingTexts;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface GroupingTexts {
       /**
        * [descr:dxDataGridOptions.grouping.texts.groupByThisColumn]
@@ -6346,6 +6448,9 @@ declare module DevExpress.ui {
        */
       ungroupAll?: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface GroupPanel {
       /**
        * [descr:dxDataGridOptions.groupPanel.allowColumnDragging]
@@ -6360,6 +6465,9 @@ declare module DevExpress.ui {
        */
       visible?: boolean | 'auto';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface HeaderFilter {
       /**
        * [descr:GridBaseOptions.headerFilter.allowSearch]
@@ -6386,6 +6494,9 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface HeaderFilterTexts {
       /**
        * [descr:GridBaseOptions.headerFilter.texts.cancel]
@@ -6404,6 +6515,9 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxDataGrid>;
     export type InitNewRowEvent = DevExpress.events.EventInfo<dxDataGrid> &
       NewRowInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface KeyboardNavigation {
       /**
        * [descr:GridBaseOptions.keyboardNavigation.editOnKeyPress]
@@ -6424,9 +6538,15 @@ declare module DevExpress.ui {
     }
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<dxDataGrid> &
       KeyDownInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface KeyDownInfo {
       handled: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface LoadPanel {
       /**
        * [descr:GridBaseOptions.loadPanel.enabled]
@@ -6465,6 +6585,9 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface MasterDetail {
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
@@ -6489,12 +6612,18 @@ declare module DevExpress.ui {
       readonly data: any;
       readonly watch?: Function;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface NewRowInfo {
       data: any;
       promise?: PromiseLike<void>;
     }
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Pager {
       /**
        * [descr:GridBaseOptions.pager.allowedPageSizes]
@@ -6525,6 +6654,9 @@ declare module DevExpress.ui {
        */
       visible?: boolean | 'auto';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface PagingBase {
       /**
        * [descr:GridBaseOptions.paging.enabled]
@@ -6574,6 +6706,9 @@ declare module DevExpress.ui {
         readonly groupIndex?: number;
         readonly rowElement: DevExpress.core.DxElement;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowDragging<T extends GridBase> {
       /**
        * [descr:GridBaseOptions.rowDragging.allowDropInsideItem]
@@ -6702,6 +6837,9 @@ declare module DevExpress.ui {
     export type RowDraggingEndEvent = DevExpress.events.Cancelable &
       RowDraggingEventInfo<dxDataGrid> &
       DragDropInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowDraggingEventInfo<T extends GridBase> {
       readonly component: T;
       readonly event: DevExpress.events.DxEvent;
@@ -6723,6 +6861,9 @@ declare module DevExpress.ui {
     export type RowDraggingStartEvent = DevExpress.events.Cancelable &
       DragStartEventInfo<dxDataGrid>;
     export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowDraggingTemplateDataModel {
       readonly itemData: any;
       readonly itemElement: DevExpress.core.DxElement;
@@ -6734,6 +6875,9 @@ declare module DevExpress.ui {
       RowKeyInfo;
     export type RowInsertedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowInsertedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowInsertedInfo {
       readonly data: any;
       readonly key: any;
@@ -6741,15 +6885,22 @@ declare module DevExpress.ui {
     }
     export type RowInsertingEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowInsertingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowInsertingInfo {
       data: any;
       cancel: boolean | PromiseLike<void>;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowKeyInfo {
       readonly key: any;
     }
     /**
      * [descr:dxDataGridRowObject]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface RowObject {
       /**
@@ -6808,6 +6959,9 @@ declare module DevExpress.ui {
     };
     export type RowRemovedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowRemovedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowRemovedInfo {
       readonly data: any;
       readonly key: any;
@@ -6815,6 +6969,9 @@ declare module DevExpress.ui {
     }
     export type RowRemovingEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowRemovingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowRemovingInfo {
       readonly data: any;
       readonly key: any;
@@ -6834,6 +6991,9 @@ declare module DevExpress.ui {
     };
     export type RowUpdatedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowUpdatedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowUpdatedInfo {
       readonly data: any;
       readonly key: any;
@@ -6841,6 +7001,9 @@ declare module DevExpress.ui {
     }
     export type RowUpdatingEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowUpdatingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowUpdatingInfo {
       readonly oldData: any;
       newData: any;
@@ -6849,6 +7012,9 @@ declare module DevExpress.ui {
     }
     export type RowValidatingEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowValidatingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface RowValidatingInfo {
       readonly brokenRules: Array<
         | RequiredRule
@@ -6872,17 +7038,26 @@ declare module DevExpress.ui {
       DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxDataGrid> &
       SavingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SavingInfo {
       changes: Array<DataChange>;
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Scrolling extends ScrollingBase {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
       mode?: 'infinite' | 'standard' | 'virtual';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ScrollingBase {
       /**
        * [descr:GridBaseOptions.scrolling.columnRenderingMode]
@@ -6913,6 +7088,9 @@ declare module DevExpress.ui {
        */
       useNative?: boolean | 'auto';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SearchPanel {
       /**
        * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
@@ -6943,6 +7121,9 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Selection extends SelectionBase {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
@@ -6957,6 +7138,9 @@ declare module DevExpress.ui {
        */
       showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SelectionBase {
       /**
        * [descr:GridBaseOptions.selection.allowSelectAll]
@@ -6969,12 +7153,18 @@ declare module DevExpress.ui {
     }
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxDataGrid> & SelectionChangedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SelectionChangedInfo {
       readonly currentSelectedRowKeys: Array<any>;
       readonly currentDeselectedRowKeys: Array<any>;
       readonly selectedRowKeys: Array<any>;
       readonly selectedRowsData: Array<any>;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Sorting {
       /**
        * [descr:GridBaseOptions.sorting.ascendingText]
@@ -6997,6 +7187,9 @@ declare module DevExpress.ui {
        */
       showSortIndexes?: boolean;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface StateStoring {
       /**
        * [descr:GridBaseOptions.stateStoring.customLoad]
@@ -7023,6 +7216,9 @@ declare module DevExpress.ui {
        */
       type?: 'custom' | 'localStorage' | 'sessionStorage';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Summary {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
@@ -7049,6 +7245,9 @@ declare module DevExpress.ui {
        */
       totalItems?: Array<SummaryTotalItem>;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SummaryGroupItem {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.alignByColumn]
@@ -7091,10 +7290,16 @@ declare module DevExpress.ui {
        */
       valueFormat?: format;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SummaryItemTextInfo {
       readonly value?: string | number | Date;
       readonly valueText: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SummaryTexts {
       /**
        * [descr:dxDataGridOptions.summary.texts.avg]
@@ -7133,6 +7338,9 @@ declare module DevExpress.ui {
        */
       sumOtherColumn?: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface SummaryTotalItem {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
@@ -7177,24 +7385,27 @@ declare module DevExpress.ui {
     }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ToolbarPreparingInfo {
       toolbarOptions: dxToolbarOptions;
     }
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridColumn = DevExpress.ui.dxDataGrid.Column;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridColumnButton = DevExpress.ui.dxDataGrid.ColumnButton;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridEditing = DevExpress.ui.dxDataGrid.Editing;
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
@@ -7393,15 +7604,15 @@ declare module DevExpress.ui {
     summary?: DevExpress.ui.dxDataGrid.Summary;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridRowObject = DevExpress.ui.dxDataGrid.RowObject;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
   /**
@@ -7451,7 +7662,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
@@ -7553,7 +7764,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxDeferRendering>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDeferRenderingOptions
@@ -8052,7 +8263,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
@@ -8551,6 +8762,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -8685,6 +8897,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -9469,7 +9682,7 @@ declare module DevExpress.ui {
     export type Properties = dxDraggableOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDraggableOptions
@@ -9534,7 +9747,7 @@ declare module DevExpress.ui {
     export type Properties = dxDrawerOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -9637,7 +9850,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDropDownBoxOptions
@@ -9662,6 +9875,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -9759,7 +9973,7 @@ declare module DevExpress.ui {
       | string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxDropDownButtonOptions
@@ -9770,6 +9984,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxDropDownButtonItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -9913,6 +10128,9 @@ declare module DevExpress.ui {
     open(): void;
   }
   module dxDropDownEditor {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface DropDownButtonTemplateDataModel {
       readonly text?: string;
       readonly icon?: string;
@@ -10266,7 +10484,7 @@ declare module DevExpress.ui {
     width?: number | string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
@@ -10654,7 +10872,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
@@ -11057,8 +11275,8 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
-        | DevExpress.data.DataSourceOptions
-        | DevExpress.data.Store;
+        | DevExpress.data.Store
+        | DevExpress.data.DataSourceOptions;
       /**
        * [descr:dxFilterBuilderField.lookup.displayExpr]
        */
@@ -11078,7 +11296,7 @@ declare module DevExpress.ui {
     trueText?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxFilterBuilderOptions
@@ -11418,7 +11636,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -11796,7 +12014,7 @@ declare module DevExpress.ui {
     imageSrc?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
@@ -11814,6 +12032,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxGalleryItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -12166,7 +12385,7 @@ declare module DevExpress.ui {
       | string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxGanttOptions extends WidgetOptions<dxGantt> {
@@ -12187,6 +12406,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12407,6 +12627,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12435,6 +12656,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12495,6 +12717,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12886,6 +13109,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | Array<string>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -12933,7 +13157,7 @@ declare module DevExpress.ui {
     valueExpr?: string | Function;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -13155,6 +13379,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -13302,6 +13527,9 @@ declare module DevExpress.ui {
       ListItemInfo & {
         readonly direction: string;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface ListItemInfo {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
@@ -13314,6 +13542,9 @@ declare module DevExpress.ui {
     export type PullRefreshEvent = DevExpress.events.EventInfo<dxList>;
     export type ScrollEvent = DevExpress.events.NativeEventInfo<dxList> &
       ScrollInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ScrollInfo {
       readonly scrollOffset?: any;
       readonly reachedLeft: boolean;
@@ -13351,7 +13582,7 @@ declare module DevExpress.ui {
     showChevron?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxListOptions
@@ -13379,6 +13610,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxListItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -13582,7 +13814,7 @@ declare module DevExpress.ui {
     export type Properties = dxLoadIndicatorOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxLoadIndicatorOptions
@@ -13629,7 +13861,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
@@ -13735,7 +13967,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
@@ -13995,7 +14227,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxMapOptions extends WidgetOptions<dxMap> {
@@ -14291,6 +14523,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxMenuBaseItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14344,7 +14577,7 @@ declare module DevExpress.ui {
     items?: Array<dxMenuItem>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -14358,6 +14591,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxMenuItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14458,7 +14692,7 @@ declare module DevExpress.ui {
    */
   export interface dxMultiViewItem extends CollectionWidgetItem {}
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxMultiViewOptions<T = dxMultiView>
@@ -14473,6 +14707,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxMultiViewItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14539,7 +14774,7 @@ declare module DevExpress.ui {
     badge?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
@@ -14581,7 +14816,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
@@ -14896,7 +15131,7 @@ declare module DevExpress.ui {
     export type Properties = dxPivotGridFieldChooserOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPivotGridFieldChooserOptions
@@ -15004,7 +15239,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -15587,7 +15822,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
@@ -15686,6 +15921,9 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxPopup>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       TitleRenderedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface TitleRenderedInfo {
       readonly titleElement: DevExpress.core.DxElement;
     }
@@ -15704,7 +15942,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
@@ -15872,7 +16110,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxProgressBarOptions
@@ -15917,7 +16155,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxRadioGroupOptions
@@ -15975,7 +16213,7 @@ declare module DevExpress.ui {
         };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxRangeSliderOptions
@@ -16044,6 +16282,9 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxResizable> & ResizeInfo;
     export type ResizeEvent = DevExpress.events.NativeEventInfo<dxResizable> &
       ResizeInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ResizeInfo {
       readonly width: number;
       readonly height: number;
@@ -16058,7 +16299,7 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxResizable> & ResizeInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
@@ -16175,7 +16416,7 @@ declare module DevExpress.ui {
         }>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxResponsiveBoxOptions
@@ -16207,6 +16448,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxResponsiveBoxItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -16365,6 +16607,9 @@ declare module DevExpress.ui {
         readonly toComponent?: dxSortable | dxDraggable;
         readonly toData?: any;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface AppointmentDraggingEvent {
       readonly component: dxScheduler;
       readonly event?: DevExpress.events.DxEvent;
@@ -16430,6 +16675,9 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxScheduler> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface TargetedAppointmentInfo {
       readonly appointmentData: any;
       readonly targetedAppointmentData?: any;
@@ -16494,7 +16742,7 @@ declare module DevExpress.ui {
     visible?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
@@ -16637,6 +16885,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxSchedulerAppointment>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -16874,6 +17123,7 @@ declare module DevExpress.ui {
       dataSource?:
         | string
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -17181,6 +17431,9 @@ declare module DevExpress.ui {
     update(): DevExpress.core.utils.DxPromise<void>;
   }
   module dxScrollable {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ScrollEventInfo<T = dxScrollable>
       extends DevExpress.events.NativeEventInfo<T> {
       readonly scrollOffset?: any;
@@ -17266,7 +17519,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxScrollable.ScrollEventInfo<dxScrollView>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxScrollViewOptions
@@ -17312,6 +17565,9 @@ declare module DevExpress.ui {
     export type CopyEvent = DevExpress.events.NativeEventInfo<dxSelectBox>;
     export type CustomItemCreatingEvent =
       DevExpress.events.EventInfo<dxSelectBox> & CustomItemCreatingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface CustomItemCreatingInfo {
       readonly text?: string;
       customItem?: string | any | PromiseLike<any>;
@@ -17345,7 +17601,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSelectBoxOptions<T = dxSelectBox>
@@ -17451,7 +17707,7 @@ declare module DevExpress.ui {
       | (() => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSlideOutOptions
@@ -17474,6 +17730,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxSlideOutItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -17572,7 +17829,7 @@ declare module DevExpress.ui {
     export type Properties = dxSlideOutViewOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
@@ -17695,7 +17952,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
@@ -17811,7 +18068,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
@@ -17904,7 +18161,7 @@ declare module DevExpress.ui {
     export type Properties = dxSpeedDialActionOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSpeedDialActionOptions
@@ -17958,7 +18215,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
@@ -18061,7 +18318,7 @@ declare module DevExpress.ui {
     title?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -18075,6 +18332,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTabPanelItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18173,7 +18431,7 @@ declare module DevExpress.ui {
     icon?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTabsOptions<T = dxTabs>
@@ -18184,6 +18442,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTabsItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18276,7 +18535,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
@@ -18381,7 +18640,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
@@ -18435,7 +18694,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTextBoxOptions<T = dxTextBox>
@@ -18663,7 +18922,7 @@ declare module DevExpress.ui {
     widthRatio?: number;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTileViewOptions
@@ -18686,6 +18945,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTileViewItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18754,7 +19014,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxToastOptions extends dxOverlayOptions<dxToast> {
@@ -18886,7 +19146,7 @@ declare module DevExpress.ui {
       | 'dxDropDownButton';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
@@ -18896,6 +19156,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxToolbarItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18942,7 +19203,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {}
@@ -19163,6 +19424,9 @@ declare module DevExpress.ui {
         CellInfo & {
           readonly eventType: string;
         };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface CellInfo {
       readonly data: any;
       readonly key: any;
@@ -19186,6 +19450,7 @@ declare module DevExpress.ui {
       };
     /**
      * [descr:dxTreeListColumn]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface Column extends DevExpress.ui.dxDataGrid.ColumnBase {
       /**
@@ -19238,6 +19503,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxTreeListColumnButton]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface ColumnButton
       extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
@@ -19319,6 +19585,9 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly watch?: Function;
     };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type ColumnHeaderCellTemplateData = {
       readonly component: dxTreeList;
       readonly columnIndex: number;
@@ -19344,6 +19613,9 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.DataChangeInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Editing extends DevExpress.ui.dxDataGrid.EditingBase {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
@@ -19383,6 +19655,9 @@ declare module DevExpress.ui {
         readonly key: any;
         readonly column: any;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface EditingTexts
       extends DevExpress.ui.dxDataGrid.EditingTextsBase {
       /**
@@ -19460,6 +19735,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface Node {
       /**
@@ -19497,6 +19773,9 @@ declare module DevExpress.ui {
       };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Paging extends DevExpress.ui.dxDataGrid.PagingBase {
       /**
        * [descr:dxTreeListOptions.paging.enabled]
@@ -19570,6 +19849,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.RowInsertingInfo;
     /**
      * [descr:dxTreeListRowObject]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     export interface RowObject {
       /**
@@ -19641,12 +19921,18 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.SavingInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
        */
       mode?: 'standard' | 'virtual';
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface Selection extends DevExpress.ui.dxDataGrid.SelectionBase {
       /**
        * [descr:dxTreeListOptions.selection.recursive]
@@ -19661,27 +19947,27 @@ declare module DevExpress.ui {
         DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListColumn = DevExpress.ui.dxTreeList.Column;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListColumnButton = DevExpress.ui.dxTreeList.ColumnButton;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
@@ -19854,19 +20140,19 @@ declare module DevExpress.ui {
     selection?: DevExpress.ui.dxTreeList.Selection;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
   /**
@@ -20102,7 +20388,7 @@ declare module DevExpress.ui {
     text?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTreeViewOptions
@@ -20124,6 +20410,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxTreeViewItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -20262,7 +20549,7 @@ declare module DevExpress.ui {
     export type Properties = dxValidationGroupOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxValidationGroupOptions
@@ -20352,7 +20639,7 @@ declare module DevExpress.ui {
     export type Properties = dxValidationSummaryOptions;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxValidationSummaryOptions
@@ -20401,7 +20688,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
@@ -20506,6 +20793,9 @@ declare module DevExpress.ui {
     reset(): void;
   }
   module Editor {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ValueChangedInfo {
       readonly previousValue?: any;
       readonly value?: any;
@@ -20939,19 +21229,19 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumn = DevExpress.ui.dxDataGrid.ColumnBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditing = DevExpress.ui.dxDataGrid.EditingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -21017,6 +21307,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -21311,15 +21602,15 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
@@ -21781,9 +22072,15 @@ declare module DevExpress.viz {
     render(renderOptions: any): void;
   }
   module BaseChart {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface PointInteractionInfo {
       readonly target: basePointObject;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface TooltipInfo {
       target?: basePointObject | dxChartAnnotationConfig | any;
     }
@@ -21899,6 +22196,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -22023,6 +22321,9 @@ declare module DevExpress.viz {
     value(value: number): void;
   }
   module BaseGauge {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type GaugeIndicatorType =
       | 'circle'
       | 'rangeBar'
@@ -22033,6 +22334,9 @@ declare module DevExpress.viz {
       | 'triangleMarker'
       | 'triangleNeedle'
       | 'twoColorNeedle';
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface TooltipInfo {
       target: any;
     }
@@ -22796,6 +23100,7 @@ declare module DevExpress.viz {
     );
     /**
      * [descr:BaseWidget.defaultOptions(rule)]
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     static defaultOptions(rule: {
       device?: Device | Array<Device> | Function;
@@ -22831,10 +23136,16 @@ declare module DevExpress.viz {
     svg(): string;
   }
   module BaseWidget {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface ExportInfo {
       readonly fileName: string;
       readonly format: string;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface FileSavingEventInfo<T> {
       readonly component: T;
       readonly element: DevExpress.core.DxElement;
@@ -22842,10 +23153,19 @@ declare module DevExpress.viz {
       readonly format: string;
       readonly data: Blob;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface IncidentInfo {
       readonly target: any;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type WordWrapType = 'normal' | 'breakWord' | 'none';
   }
   /**
@@ -23696,6 +24016,9 @@ declare module DevExpress.viz {
     export type Properties = dxBarGaugeOptions;
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxBarGauge> &
       TooltipInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface TooltipInfo {
       target?: any;
     }
@@ -23749,7 +24072,7 @@ declare module DevExpress.viz {
     enabled?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
@@ -23921,7 +24244,7 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBullet>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
@@ -23999,6 +24322,9 @@ declare module DevExpress.viz {
       DevExpress.events.NativeEventInfo<dxChart> & {
         readonly argument: Date | number | string;
       };
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type ChartSingleValueSeriesAggregationMethodType =
       | 'avg'
       | 'count'
@@ -24038,6 +24364,9 @@ declare module DevExpress.viz {
       };
     export type SeriesHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       SeriesInteractionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface SeriesInteractionInfo {
       target: chartSeriesObject;
     }
@@ -24903,7 +25232,7 @@ declare module DevExpress.viz {
     position?: 'inside' | 'outside';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxChartOptions extends BaseChartOptions<dxChart> {
@@ -27614,7 +27943,7 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxCircularGaugeOptions
@@ -27719,6 +28048,9 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.ExportInfo;
     export type FileSavingEvent = DevExpress.events.Cancelable &
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxFunnel>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface FunnelItemInfo {
       readonly item: dxFunnelItem;
     }
@@ -27823,7 +28155,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -27861,6 +28193,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -28203,7 +28536,7 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxLinearGaugeOptions
@@ -28326,6 +28659,9 @@ declare module DevExpress.viz {
       };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
     export type PointClickEvent =
       DevExpress.events.NativeEventInfo<dxPieChart> &
@@ -28337,6 +28673,9 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
     export type Properties = dxPieChartOptions;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
@@ -28445,7 +28784,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
@@ -28884,6 +29223,9 @@ declare module DevExpress.viz {
     export type PointSelectionChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export type PolarChartSeriesType =
       | 'area'
       | 'bar'
@@ -28897,6 +29239,9 @@ declare module DevExpress.viz {
       };
     export type SeriesHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> & SeriesInteractionInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     interface SeriesInteractionInfo {
       target: polarChartSeriesObject;
     }
@@ -29451,7 +29796,7 @@ declare module DevExpress.viz {
     hoverMode?: 'excludePoints' | 'includePoints' | 'none';
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
@@ -30465,7 +30810,7 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxRangeSelectorOptions
@@ -30657,6 +31002,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -31137,7 +31483,7 @@ declare module DevExpress.viz {
     title?: string;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
@@ -31171,6 +31517,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -31550,7 +31897,7 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxSparkline>;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxSparklineOptions
@@ -31572,6 +31919,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -31710,6 +32058,9 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTreeMap>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface InteractionInfo {
       readonly node: dxTreeMapNode;
     }
@@ -31813,7 +32164,7 @@ declare module DevExpress.viz {
     value(): number;
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
@@ -31859,6 +32210,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -32248,6 +32600,9 @@ declare module DevExpress.viz {
       };
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxVectorMap> &
       TooltipInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
     export interface TooltipInfo {
       target?: MapLayerElement | dxVectorMapAnnotationConfig;
     }
@@ -32372,7 +32727,7 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated
+   * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
@@ -32468,6 +32823,7 @@ declare module DevExpress.viz {
            */
           dataSource?:
             | any
+            | DevExpress.data.Store
             | DevExpress.data.DataSource
             | DevExpress.data.DataSourceOptions
             | string;
@@ -32579,6 +32935,7 @@ declare module DevExpress.viz {
           dataField?: string;
           dataSource?:
             | any
+            | DevExpress.data.Store
             | DevExpress.data.DataSource
             | DevExpress.data.DataSourceOptions
             | string;

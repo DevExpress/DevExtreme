@@ -11,7 +11,7 @@
 
 /**
 * @pseudo CommonVizDataSource
-* @type Array<any>|DataSource|DataSourceOptions|string
+* @type Array<any>|Store|DataSource|DataSourceOptions|string
 * @notUsedInTheme
 */
 

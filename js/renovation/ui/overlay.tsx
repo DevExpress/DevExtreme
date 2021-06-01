@@ -33,9 +33,9 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() shading? = true;
 
-  @OneWay() width?: number | string | (() => number| string);
+  @OneWay() width?: number | string | (() => number | string);
 
-  @OneWay() height?: number | string | (() => number| string);
+  @OneWay() height?: number | string | (() => number | string);
 
   @OneWay() closeOnOutsideClick? = false;
 

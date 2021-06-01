@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import HierarchicalCollectionWidget, {
     HierarchicalCollectionWidgetOptions
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
@@ -23,7 +25,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
@@ -31,19 +32,16 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      * @docid
      * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animation?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default { type: "fade", from: 1, to: 0, duration: 100 }
        */
       hide?: animationConfig,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default { type: "fade", from: 0, to: 1, duration: 100 }
        */
       show?: animationConfig
@@ -51,27 +49,23 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxMenuBaseItem>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectByClick?: boolean;
@@ -79,7 +73,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      * @docid
      * @type Enums.MenuSelectionMode
      * @default none
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectionMode?: 'none' | 'single';
@@ -87,32 +80,27 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      * @docid
      * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSubmenuMode?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default { show: 50, hide: 300 }
        */
       delay?: {
         /**
          * @docid
-         * @prevFileNamespace DevExpress.ui
          * @default 300
          */
         hide?: number,
         /**
          * @docid
-         * @prevFileNamespace DevExpress.ui
          * @default 50
          */
         show?: number
       } | number,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @type Enums.ShowSubmenuMode
        * @default "onHover"
        */
@@ -123,7 +111,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
  * @docid
  * @inherits HierarchicalCollectionWidget
  * @hidden
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  */
 export default class dxMenuBase extends HierarchicalCollectionWidget {
@@ -132,7 +119,6 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
      * @docid
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectItem(itemElement: Element): void;
@@ -140,7 +126,6 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
      * @docid
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectItem(itemElement: Element): void;

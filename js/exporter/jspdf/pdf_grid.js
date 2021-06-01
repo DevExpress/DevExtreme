@@ -14,14 +14,14 @@ export class PdfGrid {
         this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
     }
 
-    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
+    startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns) {
         if(isDefined(splitByColumns)) {
             this._splitByColumns = splitByColumns;
         }
 
         const firstTableEndColumnIndex = this._splitByColumns[0]?.columnIndex ?? this._columnWidths.length;
         this._currentHorizontalTables = [
-            new PdfTable(drawTableBorder, firstTableRect, this._columnWidths.slice(0, firstTableEndColumnIndex))
+            new PdfTable(drawTableBorder, firstTableTopLeft, this._columnWidths.slice(0, firstTableEndColumnIndex))
         ];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();
@@ -33,7 +33,7 @@ export class PdfGrid {
                 const endColumnIndex = this._splitByColumns[i + 1]?.columnIndex ?? this._columnWidths.length;
 
                 this._currentHorizontalTables.push(
-                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableRect, this._columnWidths.slice(beginColumnIndex, endColumnIndex))
+                    new PdfTable(drawTableBorder, this._splitByColumns[i].tableTopLeft, this._columnWidths.slice(beginColumnIndex, endColumnIndex))
                 );
                 if(this._splitByColumns[i].drawOnNewPage) {
                     this._addLastTableToNewPages();
