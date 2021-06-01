@@ -91,7 +91,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
