@@ -60,7 +60,7 @@ describe('compile with server support', () => {
     });
   });
 
-  let server: net.Server;
+  let server: net.Server = null;
 
   const startServer = (error = false): Promise<void> => new Promise((resolve) => {
     server = createServer(error);

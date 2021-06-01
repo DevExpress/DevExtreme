@@ -599,7 +599,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
@@ -635,7 +635,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
@@ -1723,12 +1723,11 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
 ['Cell', 'Batch'].forEach((editMode) => {
   test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
     const dataGrid = new DataGrid('#container');
-    let currentCell;
 
     // direct order
     for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
       for (let colIndex = 0; colIndex < 2; colIndex += 1) {
-        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
         // act
         await t
           .click(currentCell.getEditor().element);
@@ -1743,7 +1742,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     // reverse order
     for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
       for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
-        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
         // act
         await t
           .click(currentCell.getEditor().element);

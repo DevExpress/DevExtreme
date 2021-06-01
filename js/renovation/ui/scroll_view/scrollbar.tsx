@@ -453,7 +453,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   updateContent(location: number): void {
-    let contentTranslateOffset: number;
+    let contentTranslateOffset = Number.NaN;
 
     if (location > 0) {
       contentTranslateOffset = location;

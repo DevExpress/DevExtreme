@@ -1667,12 +1667,9 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
         await t.expect(rowCheckBox.focused).ok()
           .pressKey('tab');
       } else {
-        let cell;
-        if (columnIndex <= 2 || columnIndex >= 16) {
-          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
-        } else {
-          cell = dataGrid.getDataCell(rowIndex, columnIndex);
-        }
+        const cell = columnIndex <= 2 || columnIndex >= 16
+          ? dataGrid.getFixedDataCell(rowIndex, columnIndex)
+          : dataGrid.getDataCell(rowIndex, columnIndex);
 
         await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
 
@@ -1694,12 +1691,9 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
         await t.expect(rowCheckBox.focused).ok()
           .pressKey('shift+tab');
       } else {
-        let cell;
-        if (columnIndex <= 2 || columnIndex >= 16) {
-          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
-        } else {
-          cell = dataGrid.getDataCell(rowIndex, columnIndex);
-        }
+        const cell = columnIndex <= 2 || columnIndex >= 16
+          ? dataGrid.getFixedDataCell(rowIndex, columnIndex)
+          : dataGrid.getDataCell(rowIndex, columnIndex);
 
         await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
 
@@ -1762,12 +1756,9 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
         await t.expect(rowCheckBox.focused).ok()
           .pressKey('tab');
       } else {
-        let cell;
-        if (columnIndex <= 2 || columnIndex >= 16) {
-          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
-        } else {
-          cell = dataGrid.getDataCell(rowIndex, columnIndex);
-        }
+        const cell = columnIndex <= 2 || columnIndex >= 16
+          ? dataGrid.getFixedDataCell(rowIndex, columnIndex)
+          : dataGrid.getDataCell(rowIndex, columnIndex);
 
         await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
 
@@ -1789,12 +1780,9 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
         await t.expect(rowCheckBox.focused).ok()
           .pressKey('shift+tab');
       } else {
-        let cell;
-        if (columnIndex <= 2 || columnIndex >= 16) {
-          cell = dataGrid.getFixedDataCell(rowIndex, columnIndex);
-        } else {
-          cell = dataGrid.getDataCell(rowIndex, columnIndex);
-        }
+        const cell = columnIndex <= 2 || columnIndex >= 16
+          ? dataGrid.getFixedDataCell(rowIndex, columnIndex)
+          : dataGrid.getDataCell(rowIndex, columnIndex);
 
         await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, ${columnIndex}] is in focused`);
 
@@ -1990,9 +1978,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     async function checkNavigationOfAllCells(): Promise<void> {
-      let $buttonElement: Selector;
-      let $commandCell: CommandCell;
-
       await t
         .click(headers.getHeaderRow(0).getHeaderCell(1).element)
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
@@ -2002,13 +1987,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $commandCell = dataGrid.getFixedDataRow(0).getCommandCell(0);
-        $buttonElement = $commandCell.getButton(0);
-      } else {
-        $commandCell = dataGrid.getDataRow(0).getCommandCell(0);
-        $buttonElement = $commandCell.getButton(0);
-      }
+      const $commandCell: CommandCell = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(0).getCommandCell(0)
+        : dataGrid.getDataRow(0).getCommandCell(0);
+      let $buttonElement = $commandCell.getButton(0);
 
       await t
         .expect($commandCell.element.focused)
@@ -2024,11 +2006,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
-      }
+      $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0)
+        : dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2076,9 +2056,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const headers = dataGrid.getHeaders();
 
     async function checkNavigationOfAllCells(): Promise<void> {
-      let $commandCell: CommandCell;
-      let $buttonElement: Selector;
-
       await t
         .click(headers.getHeaderRow(0).getHeaderCell(1).element)
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
@@ -2088,13 +2065,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $commandCell = dataGrid.getFixedDataRow(0).getCommandCell(0);
-        $buttonElement = $commandCell.getButton(0);
-      } else {
-        $commandCell = dataGrid.getDataRow(0).getCommandCell(0);
-        $buttonElement = $commandCell.getButton(0);
-      }
+      const $commandCell: CommandCell = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(0).getCommandCell(0)
+        : dataGrid.getDataRow(0).getCommandCell(0);
+      let $buttonElement: Selector = $commandCell.getButton(0);
 
       await t
         .expect($commandCell.element.focused)
@@ -2110,11 +2084,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
-      }
+      $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0)
+        : dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2159,7 +2131,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
-    let $buttonElement: Selector;
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2177,11 +2148,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
-      }
+      let $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0)
+        : dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2194,11 +2163,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
-      }
+      $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0)
+        : dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2210,11 +2177,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     await t
       .pressKey('tab');
 
-    if (isCommandColumnFixed) {
-      $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
-    } else {
-      $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
-    }
+    const $buttonElement = isCommandColumnFixed
+      ? dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0)
+      : dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
 
     await t
       .expect($buttonElement.focused)
@@ -2249,8 +2214,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
 
     async function checkNavigationOfAllCells(): Promise<void> {
-      let $buttonElement: Selector;
-
       await t
         .click(headers.getHeaderRow(0).getHeaderCell(0).element)
         .expect(headers.getHeaderRow(0).getHeaderCell(0).element.focused)
@@ -2266,11 +2229,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
-      }
+      const $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0)
+        : dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2314,7 +2275,6 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
   test(`The cell focus should be restored on pressing shift and tab keys when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
-    let $buttonElement: Selector;
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2332,11 +2292,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
-      }
+      let $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0)
+        : dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2349,11 +2307,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .ok()
         .pressKey('tab');
 
-      if (isCommandColumnFixed) {
-        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
-      } else {
-        $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
-      }
+      $buttonElement = isCommandColumnFixed
+        ? dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0)
+        : dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
 
       await t
         .expect($buttonElement.focused)
@@ -2365,11 +2321,9 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     await t
       .pressKey('tab');
 
-    if (isCommandColumnFixed) {
-      $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
-    } else {
-      $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
-    }
+    const $buttonElement = isCommandColumnFixed
+      ? dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0)
+      : dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
 
     await t
       .expect($buttonElement.focused)

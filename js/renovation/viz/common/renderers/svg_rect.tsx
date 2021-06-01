@@ -62,10 +62,10 @@ export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
   @Ref() rectRef!: RefObject<SVGRectElement>;
 
   get parsedProps(): RectSvgElementProps {
-    let tmpX: number;
-    let tmpY: number;
-    let tmpWidth: number;
-    let tmpHeight: number;
+    let tmpX = Number.NaN;
+    let tmpY = Number.NaN;
+    let tmpWidth = Number.NaN;
+    let tmpHeight = Number.NaN;
     const tmpProps = { ...this.props };
     const {
       x,
@@ -74,7 +74,6 @@ export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
       width,
       strokeWidth,
     } = tmpProps;
-    let sw: number | undefined;
 
     if (x !== undefined || y !== undefined
       || width !== undefined || height !== undefined
@@ -83,7 +82,7 @@ export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
       tmpY = y !== undefined ? y : 0;
       tmpWidth = width !== undefined ? width : 0;
       tmpHeight = height !== undefined ? height : 0;
-      sw = strokeWidth !== undefined ? strokeWidth : 0;
+      const sw = strokeWidth !== undefined ? strokeWidth : 0;
 
       // eslint-disable-next-line no-bitwise
       const maxSW = ~~((tmpWidth < tmpHeight ? tmpWidth : tmpHeight) / 2);

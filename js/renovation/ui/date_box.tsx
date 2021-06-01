@@ -22,9 +22,9 @@ export const viewFunction = ({
 export class DateBoxProps extends BaseWidgetProps {
   @TwoWay() value?: Date | number | string | null = null;
 
-  @Event() valueChange?: EventCallback<Date|number|string>;
+  @Event() valueChange?: EventCallback<Date | number | string>;
 
-  @OneWay() width?: number | string | (() => number| string);
+  @OneWay() width?: number | string | (() => number | string);
 
   @OneWay() calendarOptions?: {
     firstDayOfWeek?: number;

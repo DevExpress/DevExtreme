@@ -114,7 +114,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() validationMessageMode?: 'auto'|'always' = 'auto';
+  @OneWay() validationMessageMode?: 'auto' | 'always' = 'auto';
 
   @OneWay() validationStatus?: string = 'valid';
 
@@ -168,6 +168,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   updateValidationMessageVisibility(): EffectReturn {
     this.showValidationMessage = this.shouldShowValidationMessage;
+
+    return undefined;
   }
 
   @Method()

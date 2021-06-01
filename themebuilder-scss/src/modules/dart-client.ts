@@ -51,13 +51,12 @@ export default class DartClient {
 
       this.addClientEventListener('end', () => {
         log('DartClient received', data);
-        let parsedData;
+
         try {
-          parsedData = JSON.parse(data);
+          resolve(JSON.parse(data));
         } catch (e) {
-          parsedData = { error: `Unable to parse dart server response: ${data}` };
+          resolve({ error: `Unable to parse dart server response: ${data}` });
         }
-        resolve(parsedData);
       });
 
       const errorHandler = (e?: Error): void => {

@@ -11,7 +11,7 @@ const createServer = (echo = true): net.Server => net.createServer((socket) => {
   }
 });
 
-let server: net.Server;
+let server: net.Server = null;
 
 const startServer = (echo = true): Promise<void> => new Promise((resolve) => {
   server = createServer(echo);

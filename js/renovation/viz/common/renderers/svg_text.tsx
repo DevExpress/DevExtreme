@@ -103,13 +103,13 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textItems(): TextItem[] | undefined {
-    let items;
-    let parsedHtml;
+    let items: TextItem[] | undefined = undefined;
+    let parsedHtml = '';
     const { text } = this.props;
 
     if (!text) return;
 
-    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
+    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.includes('&'))) {
       parsedHtml = removeExtraAttrs(text);
       items = parseHTML(parsedHtml);
     } else if (/\n/g.test(text)) {
@@ -206,10 +206,9 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
     const { stroke, strokeWidth } = this.props;
     const strokeOpacity = this.props.strokeOpacity || 1;
-    let tspan: SVGTSpanElement;
 
     for (let i = 0, ii = items.length; i < ii; ++i) {
-      tspan = items[i].stroke!;
+      const tspan: SVGTSpanElement = items[i].stroke!;
       tspan.setAttribute(KEY_STROKE, stroke!);
       tspan.setAttribute('stroke-width', strokeWidth!.toString());
       tspan.setAttribute('stroke-opacity', strokeOpacity.toString());
