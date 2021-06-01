@@ -202,7 +202,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().first('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
+        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
     },
 
     _init: function() {
@@ -411,7 +411,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _renderOpenHandler: function() {
-        const $inputWrapper = this._inputWrapper();
+        const $inputWrapper = this._inputWrapper().first();
         const eventName = addNamespace(clickEventName, this.NAME);
         const openOnFieldClick = this.option('openOnFieldClick');
 
