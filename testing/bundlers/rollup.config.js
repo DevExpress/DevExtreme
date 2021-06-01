@@ -34,9 +34,6 @@ export default {
                 './node_modules/devextreme-quill/**',
                 './node_modules/globalize/**',
                 './node_modules/luxon/**'
-            ],
-            dynamicRequireTargets: [
-                './node_modules/rrule/dist/esm/src/rrule.js'
             ]
         }),
 
