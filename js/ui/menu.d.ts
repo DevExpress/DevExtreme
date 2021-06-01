@@ -6,6 +6,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     Cancelable,
     EventInfo,
@@ -84,7 +86,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxMenuItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default false

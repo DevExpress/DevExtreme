@@ -186,7 +186,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         return new Color($task.css(checkedProperty)).toHex();
     };
 
-    const checkItemDataInDropDownTemplate = (assert, dataSource, currentDate) => {
+    const checkItemDataInAppointmentTooltipTemplate = (assert, dataSource, currentDate) => {
         const scheduler = createInstance({
             dataSource: dataSource,
             height: 600,
@@ -194,8 +194,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             currentDate: currentDate,
             currentView: 'month',
             views: ['month'],
-            dropDownAppointmentTemplate(itemData) {
-                assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
+            appointmentTooltipTemplate({ appointmentData }) {
+                assert.ok(dataSource.indexOf(appointmentData) > -1, 'appointment data contains in the data source');
             }
         });
 
@@ -613,9 +613,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 490,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate(data) {
-                return `<div class='custom-title'>${data.Text}</div>`;
-            }
+            appointmentTooltipTemplate: ({ appointmentData }) => `<div class='custom-title'>${appointmentData.Text}</div>`
         });
 
         scheduler.appointments.compact.click();
@@ -661,7 +659,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal($collector.find('.button-title').text(), 'Appointment count is 2', 'Template is applied correctly');
     });
 
-    test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', function(assert) {
+    test('dxScheduler should render appointmentTooltipTemplate appointment template with render function that returns dom node', function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -689,10 +687,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 500,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate: 'dropDownAppointmentTemplate',
+            appointmentTooltipTemplate: 'appointmentTooltipTemplate',
             integrationOptions: {
                 templates: {
-                    'dropDownAppointmentTemplate': {
+                    'appointmentTooltipTemplate': {
                         render(args) {
                             const $element = $('<span>')
                                 .addClass('dx-template-wrapper')
@@ -750,7 +748,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             allDay: true,
             text: 'Task 3'
         }];
-        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        checkItemDataInAppointmentTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
     test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', function(assert) {
@@ -773,7 +771,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             recurrenceRule: 'FREQ=DAILY;COUNT=4',
             text: 'Task 3'
         }];
-        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        checkItemDataInAppointmentTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
     [{

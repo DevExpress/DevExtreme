@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../../../helpers/createWidget';
-import { CLASS } from '../../../../model/scheduler';
+import Scheduler, { CLASS } from '../../../../model/scheduler';
 
 export const createScheduler = async (options = {}): Promise<void> => {
   createWidget('dxScheduler', {
@@ -20,7 +20,7 @@ export const createScheduler = async (options = {}): Promise<void> => {
   }, true);
 };
 
-export const selectCells = (
+export const selectCells = async (
   table: Selector, firstCell: Selector, secondCell: Selector,
 ): Promise<void> => ClientFunction(() => {
   const $table = $(table());
@@ -36,7 +36,8 @@ export const selectCells = (
   },
 })();
 
-export const moveMouse = (table: Selector, cell: Selector): Promise<void> => ClientFunction(() => {
+export const moveMouse = async (table: Selector, cell: Selector):
+Promise<void> => ClientFunction(() => {
   const $table = $(table());
 
   $($table).trigger($.Event('dxpointermove', { target: $(cell()).get(0), which: 1 }));
@@ -55,8 +56,8 @@ export const scrollTo = ClientFunction((x, y) => {
 });
 
 export const checkSelectionWhenFocusedInViewport = async (
-  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
-  lastCellColumnIndex: number, lastCellRowIndex = 0,
+  t: TestController, scheduler: Scheduler, selectedCellsCount: number,
+  bottomMostCellRowIndex: number, lastCellColumnIndex: number, lastCellRowIndex = 0,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
@@ -76,7 +77,7 @@ export const checkSelectionWhenFocusedInViewport = async (
 };
 
 export const checkSelectionWhenFocusedIsNotInViewport = async (
-  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex = 0,
+  t: TestController, scheduler: Scheduler, selectedCellsCount: number, bottomMostCellRowIndex = 0,
   lastCellColumnIndex = 0, lastCellRowIndex = 0,
 ): Promise<void> => {
   await t
@@ -100,7 +101,9 @@ export const checkSelectionWhenFocusedIsNotInViewport = async (
   }
 };
 
-export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any): Promise<void> => {
+export const checkAllDayCellsWhenInViewport = async (
+  t: TestController, scheduler: Scheduler,
+): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)
     .eql(2)
@@ -111,7 +114,9 @@ export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any): Pr
     .expect(scheduler.getAllDayTableCell(1).hasClass(CLASS.focusedCell))
     .ok();
 };
-export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any): Promise<void> => {
+export const checkAllDayCellsWhenNotInViewport = async (
+  t: TestController, scheduler: Scheduler,
+): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)
     .eql(0)

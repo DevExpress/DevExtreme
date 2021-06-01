@@ -94,7 +94,7 @@ const roughEqual = (actual: number, expected: number): boolean => {
       .ok()
       .expect(roughEqual(width, testCase.width))
       .ok();
-  }).before(() => createScheduler(sampleData, '80%'));
+  }).before(async () => createScheduler(sampleData, '80%'));
 });
 
 test('Compact appointment should be center by vertical alignment', async (t) => {
@@ -117,7 +117,7 @@ test('Compact appointment should be center by vertical alignment', async (t) => 
     .ok()
     .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(2).element.getBoundingClientRectProperty('left'), 177))
     .ok();
-}).before(() => createScheduler(sampleDataNotRoundedMinutes));
+}).before(async () => createScheduler(sampleDataNotRoundedMinutes));
 
 test('With a large browser width, should be visible common appointment instead of a compact', async (t) => {
   await t.resizeWindow(350, 600);
@@ -151,4 +151,4 @@ test('With a large browser width, should be visible common appointment instead o
     .ok()
     .expect(roughEqual(await scheduler.getAppointmentCollectorByIndex(1).element.getBoundingClientRectProperty('left'), 236.5))
     .ok();
-}).before(() => createScheduler(sampleData));
+}).before(async () => createScheduler(sampleData));

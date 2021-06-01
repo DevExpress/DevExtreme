@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 export default async function createWidget(
   widgetName: string,
-  options: any,
+  options: unknown,
   disableAnimation = false,
   selector = '#container',
 ): Promise<void> {

@@ -14,6 +14,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     DxEvent,
     Cancelable,
@@ -95,7 +97,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxContextMenuItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @public

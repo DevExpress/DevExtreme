@@ -23,6 +23,7 @@ const childProcess = spawn(
   },
 );
 
+/* eslint no-console: 0 */
 childProcess.stdout.on('data', (data) => console.log(String(data)));
 childProcess.stderr.on('data', (data) => console.error(String(data)));
 childProcess.on('error', (error) => console.error('Failed to start subprocess.', String(error)));

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './common/component';
-import { Option } from './common/types.ts';
+import { Option } from './common/types';
 
 export class GridPagerWrapper extends Component {
   _optionChanged(args: Option): void {

@@ -15,6 +15,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -82,7 +84,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
