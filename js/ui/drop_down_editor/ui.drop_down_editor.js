@@ -202,7 +202,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
+        return this.$element().first('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
     },
 
     _init: function() {
