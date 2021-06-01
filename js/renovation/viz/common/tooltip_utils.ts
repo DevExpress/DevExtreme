@@ -83,8 +83,8 @@ export function getCloudPoints(
 
   const cornerRadius = Math.min(halfWidth, halfHeight, options.cornerRadius);
 
-  let points;
-  let arrowArc;
+  let points = '';
+  let arrowArc = '';
 
   leftTopCorner[1] += cornerRadius;
   rightTopCorner[0] -= cornerRadius;
@@ -153,7 +153,7 @@ export function getCloudPoints(
 
       const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
       const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
-      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * (sin(bottomAngle));
+      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
 
       arrowArc = buildPath(getArc(cornerRadius, cos(topAngle), 1 - sin(topAngle)),
         'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
@@ -163,7 +163,7 @@ export function getCloudPoints(
         && arrowBaseTop <= rightBottomCorner[1] && arrowBaseBottom > rightBottomCorner[1]) {
       const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
       const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
-      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * (sin(bottomAngle));
+      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
 
       arrowArc = buildPath(getArc(cornerRadius, 1, 1),
         'L', [xr, arrowBaseTop, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
@@ -173,11 +173,11 @@ export function getCloudPoints(
         && arrowBaseBottom > rightBottomCorner[1]) {
       const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
       const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
-      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * (sin(bottomAngle));
+      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
 
       const topAngle = asin((arrowBaseTop - rightBottomCorner[1]) / cornerRadius);
       const arrowBaseTopX = rightBottomCorner[0] + cornerRadius * (cos(topAngle) - 1);
-      const arrowBaseTopY = rightBottomCorner[1] + cornerRadius * (sin(topAngle));
+      const arrowBaseTopY = rightBottomCorner[1] + cornerRadius * sin(topAngle);
 
       arrowArc = buildPath(getArc(cornerRadius, 1, 1),
         'L', rightBottomCorner,
@@ -244,8 +244,8 @@ export function recalculateCoordinates({
     return false;
   }
 
-  let x;
-  let y;
+  let x = Number.NaN;
+  let y = Number.NaN;
   let correctedAnchorY = anchorY;
 
   if (bounds.width < size.width) {
@@ -347,7 +347,7 @@ export function prepareData(
   customize.color = customize.color || color;
   customize.borderColor = customize.borderColor || border.color;
   customize.fontColor = customize.fontColor || font.color;
-  return customize as CustomizedOptions;
+  return customize;
 }
 
 export function isTextEmpty({ text, html }: CustomizedOptions): boolean {

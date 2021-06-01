@@ -8,7 +8,6 @@ import {
  * @namespace DevExpress
  * @module ui/validation_engine
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 export default class validationEngine {
@@ -18,7 +17,6 @@ export default class validationEngine {
      * @publicName getGroupConfig()
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static getGroupConfig(): any;
@@ -29,7 +27,6 @@ export default class validationEngine {
      * @param1 group:string|object
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static getGroupConfig(group: string | any): any;
@@ -38,7 +35,6 @@ export default class validationEngine {
      * @publicName registerModelForValidation(model)
      * @param1 model:object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static registerModelForValidation(model: any): void;
@@ -47,7 +43,6 @@ export default class validationEngine {
      * @section Core
      * @publicName resetGroup()
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static resetGroup(): void;
@@ -57,7 +52,6 @@ export default class validationEngine {
      * @publicName resetGroup(group)
      * @param1 group:string|object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static resetGroup(group: string | any): void;
@@ -66,7 +60,6 @@ export default class validationEngine {
      * @publicName unregisterModelForValidation(model)
      * @param1 model:object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static unregisterModelForValidation(model: any): void;
@@ -76,7 +69,6 @@ export default class validationEngine {
      * @publicName validateGroup()
      * @return dxValidationGroupResult
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static validateGroup(): dxValidationGroupResult;
@@ -87,7 +79,6 @@ export default class validationEngine {
      * @param1 group:string|object
      * @return dxValidationGroupResult
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static validateGroup(group: string | any): dxValidationGroupResult;
@@ -97,7 +88,6 @@ export default class validationEngine {
      * @param1 model:object
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static validateModel(model: any): any;

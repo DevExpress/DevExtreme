@@ -8,7 +8,6 @@
  * @namespace DevExpress.utils
  * @module mobile/init_mobile_viewport
  * @export default
- * @prevFileNamespace DevExpress.mobile
  * @public
  */
 export default function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;

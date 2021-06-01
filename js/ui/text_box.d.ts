@@ -69,7 +69,6 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxLength?: string | number;
@@ -77,14 +76,12 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
      * @docid
      * @type Enums.TextBoxMode
      * @default "text"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
@@ -95,7 +92,6 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  * @inherits dxTextEditor
  * @module ui/text_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

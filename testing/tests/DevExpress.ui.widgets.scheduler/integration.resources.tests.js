@@ -10,6 +10,7 @@ import Color from 'color';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -362,7 +363,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Alias for getResourceDataByValue method', function(assert) {
-        const scheduler = createWrapper({
+        createWrapper({
             resources: [{
                 field: 'ownerId',
                 dataSource: [
@@ -377,7 +378,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        scheduler.instance.getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
+        getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
             assert.deepEqual(resource, {
                 text: 'Jack',
                 id: 1,
@@ -386,7 +387,6 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
             done();
         });
-
     });
 
     QUnit.test('Appointments should be repainted if \'groups\' option is changed', function(assert) {
@@ -551,7 +551,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             });
 
             scheduler.instance.option('resources[0].dataSource', resourceData);
-            const resources = scheduler.instance.getResourceManager().getResources();
+            const resources = getResourceManager().getResources();
 
             assert.deepEqual(resources, [{
                 fieldExpr: 'ownerId',

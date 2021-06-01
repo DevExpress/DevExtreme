@@ -11,7 +11,7 @@ const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<void> {
+async function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<void> {
   return ClientFunction(() => {
     const gridInstance = grid.getGridInstance();
     const $row = $(gridInstance.getRowElement(rowIndex));
@@ -39,7 +39,7 @@ function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<voi
 
 fixture.disablePageReloads`Row dragging`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {

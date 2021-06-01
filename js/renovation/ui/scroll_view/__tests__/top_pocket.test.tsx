@@ -41,7 +41,7 @@ describe('TopPocket', () => {
       it('PullDown text elements', () => {
         const topPocket = mount(viewFunction(new TopPocket({
           refreshStrategy,
-        })) as JSX.Element);
+        })));
         const textElement = topPocket.find('.dx-scrollview-pull-down-text');
         expect(topPocket.exists()).toBe(true);
 
@@ -54,7 +54,7 @@ describe('TopPocket', () => {
       it('render pulldown icon element', () => {
         const topPocket = mount(viewFunction(new TopPocket({
           refreshStrategy,
-        })) as JSX.Element);
+        })));
 
         const iconElement = topPocket.find('.dx-icon-pulldown');
 
@@ -80,7 +80,7 @@ describe('TopPocket', () => {
             pocketState,
           });
 
-          const topPocket = mount(viewFunction(viewModel) as JSX.Element);
+          const topPocket = mount(viewFunction(viewModel));
           const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
 
           if (expectedText && refreshStrategy !== 'swipeDown') {

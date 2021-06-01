@@ -35,7 +35,7 @@ const getAria = (args: Record<string, unknown>):
   if (args[key]) {
     return {
       ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
+      [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
     };
   }
   return r;
@@ -82,11 +82,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 
@@ -355,7 +353,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

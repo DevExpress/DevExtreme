@@ -5,7 +5,7 @@ import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 
 const toMs = dateUtils.dateToMilliseconds;
 

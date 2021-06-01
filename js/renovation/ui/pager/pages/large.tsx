@@ -113,8 +113,8 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
 
   private canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
-    const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
-    const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
+    const currentPageNotExistInIndexes = !indexesForReuse.includes(currentPageCount);
+    const pageIndexExistInIndexes = indexesForReuse.includes(pageIndex);
     return currentPageNotExistInIndexes && pageIndexExistInIndexes;
   }
 
@@ -172,7 +172,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   get pages(): PageType[] {
     const { pageIndex } = this.props;
     const createPage = (index: PageIndex): PageType => {
-      const pagerProps = (index === 'low' || index === 'high') ? null
+      const pagerProps = index === 'low' || index === 'high' ? null
         : {
           index,
           onClick: (): void => this.onPageClick(index),

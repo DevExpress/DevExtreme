@@ -2,7 +2,7 @@ import {
   Component,
   JSXComponent,
   Effect,
-  InternalState, ForwardRef, RefObject,
+  InternalState, RefObject, Ref,
 } from '@devextreme-generator/declarations';
 
 import { Page } from './page';
@@ -27,9 +27,8 @@ export const viewFunction = ({
   pagesCountText,
   props: { pageCount },
 }: PagesSmall): JSX.Element => (
-  <div className={LIGHT_PAGES_CLASS}>
+  <div className={LIGHT_PAGES_CLASS} ref={pageIndexRef}>
     <NumberBox
-      rootElementRef={pageIndexRef}
       className={PAGER_PAGE_INDEX_CLASS}
       min={1}
       max={pageCount}
@@ -41,7 +40,7 @@ export const viewFunction = ({
     <Page
       className={PAGER_PAGES_COUNT_CLASS}
       selected={false}
-      index={(pageCount as number) - 1}
+      index={pageCount - 1}
       onClick={selectLastPageIndex}
     />
   </div>
@@ -51,14 +50,14 @@ type PagerSmallProps = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexCh
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent<PagerSmallProps>() {
-  @ForwardRef() pageIndexRef!: RefObject<HTMLDivElement>;
+  @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
     return this.props.pageIndex + 1;
   }
 
   get width(): number {
-    const pageCount = this.props.pageCount as number;
+    const { pageCount } = this.props;
     return calculateValuesFittedWidth(this.minWidth, [pageCount]);
   }
 
@@ -69,9 +68,8 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    this.minWidth = (this.pageIndexRef.current
-        && getElementMinWidth(this.pageIndexRef.current))
-      || this.minWidth;
+    const el = this.pageIndexRef.current?.querySelector(`.${PAGER_PAGE_INDEX_CLASS}`);
+    this.minWidth = (el && getElementMinWidth(el)) || this.minWidth;
   }
 
   selectLastPageIndex(): void {

@@ -83,6 +83,20 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
+  pageIndexChange(pageIndex: number): void {
+    if (this.canNavigateToPage(pageIndex)) {
+      this.props.pageIndex = pageIndex;
+    }
+  }
+
+  navigateToNextPage(): void {
+    this.navigateToPage(this.getNextDirection());
+  }
+
+  navigateToPrevPage(): void {
+    this.navigateToPage(this.getPrevDirection());
+  }
+
   private getNextDirection(): Direction {
     return !this.config?.rtlEnabled ? 'next' : 'prev';
   }
@@ -95,11 +109,11 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
     if (!this.props.hasKnownLastPage) {
       return pageIndex >= 0;
     }
-    return (pageIndex >= 0 && pageIndex <= (this.props.pageCount as number) - 1);
+    return pageIndex >= 0 && pageIndex <= this.props.pageCount - 1;
   }
 
   private getNextPageIndex(direction: Direction): number {
-    return (this.props.pageIndex as number) + getIncrement(direction);
+    return this.props.pageIndex + getIncrement(direction);
   }
 
   private canNavigateTo(direction: Direction): boolean {
@@ -132,19 +146,5 @@ export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>(
     const direction = this.getPrevDirection();
     const canNavigate = this.canNavigateTo(direction);
     return canNavigate ? prevButtonClassName : prevButtonDisabledClassName;
-  }
-
-  pageIndexChange(pageIndex: number): void {
-    if (this.canNavigateToPage(pageIndex)) {
-      this.props.pageIndex = pageIndex;
-    }
-  }
-
-  navigateToNextPage(): void {
-    this.navigateToPage(this.getNextDirection());
-  }
-
-  navigateToPrevPage(): void {
-    this.navigateToPage(this.getPrevDirection());
   }
 }

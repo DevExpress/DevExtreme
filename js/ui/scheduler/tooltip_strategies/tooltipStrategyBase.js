@@ -120,13 +120,12 @@ export class TooltipStrategyBase {
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
-        const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
         return new FunctionTemplate(options => {
             return template.render({
-                model: isEmptyDropDownAppointmentTemplate ? {
+                model: {
                     appointmentData: data,
                     targetedAppointmentData: targetData
-                } : data,
+                },
                 container: options.container,
                 index: index
             });
@@ -134,11 +133,7 @@ export class TooltipStrategyBase {
     }
 
     _getItemListTemplateName() {
-        return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
-    }
-
-    _isEmptyDropDownAppointmentTemplate() {
-        return !this._extraOptions.dropDownAppointmentTemplate || this._extraOptions.dropDownAppointmentTemplate === 'dropDownAppointment';
+        return 'appointmentTooltip';
     }
 
     _onListItemClick(e) {

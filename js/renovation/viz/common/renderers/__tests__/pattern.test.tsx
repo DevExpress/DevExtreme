@@ -16,7 +16,7 @@ describe('SvgPattern', () => {
         step: 8,
         d: 'Somepath 1 2 3 4',
       };
-      const pattern = shallow(<SvgPatternComponent {...vm as any} /> as JSX.Element);
+      const pattern = shallow(<SvgPatternComponent {...vm as any} />);
 
       expect(pattern.props()).toMatchObject({
         id: 'DevExpress_1-hatching-1',
@@ -49,7 +49,7 @@ describe('SvgPattern', () => {
         step: 8,
         d: 'Somepath 1 2 3 4',
       };
-      const pattern = shallow(<SvgPatternComponent {...vm as any} /> as JSX.Element);
+      const pattern = shallow(<SvgPatternComponent {...vm as any} />);
 
       expect(pattern.props()).toMatchObject({
         id: 'DevExpress_1-hatching-1',
