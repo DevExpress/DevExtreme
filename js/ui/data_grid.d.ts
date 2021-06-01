@@ -645,7 +645,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * @docid
      * @default -1
@@ -1725,7 +1725,7 @@ export interface EditingBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    editColumnName?: string;
+    editColumnName?: string | null;
     /**
      * @docid GridBaseOptions.editing.editRowKey
      * @default null

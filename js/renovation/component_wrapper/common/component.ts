@@ -12,7 +12,7 @@ import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
-import { updatePropsImmutable } from '../utils/update-props-immutable';
+import { updatePropsImmutable } from '../utils/update_props_immutable';
 import { AbstractFunction, Option } from './types.ts';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
@@ -145,8 +145,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }
-      InfernoEffectHost.callEffects();
       this._isNodeReplaced = true;
+      InfernoEffectHost.callEffects();
       this._shouldRaiseContentReady = true;
     } else {
       render(
@@ -224,7 +224,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       children,
       onKeyDown,
     };
-    [...props, 'onContentReady'].forEach((propName) => {
+    [...props, 'onContentReady', 'onInitialized', 'integrationOptions', 'adaptColumnWidthByRatio', 'useLegacyKeyboardNavigation'].forEach((propName) => {
       if (Object.prototype.hasOwnProperty.call(options, propName)) {
         widgetProps[propName] = options[propName];
       }
@@ -289,6 +289,10 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return {};
   }
 
+  _getActionConfigsFull(): Record<string, Record<string, unknown>> {
+    return { onContentReady: {}, ...this._getActionConfigs() };
+  }
+
   getDefaultTemplates(): Record<string, undefined> {
     const names = this.getDefaultTemplateNames();
     const result = {};
@@ -319,7 +323,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
     });
 
-    Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
+    Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
   }
@@ -329,10 +333,13 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     if (!action) {
       const actionByOption = this._createActionByOption(
         event,
-        this._getActionConfigs()[event],
+        this._getActionConfigsFull()[event],
       );
 
-      action = (actArgs: Record<string, string | Element | dxElementWrapper>): void => {
+      action = (
+        actArgs: Record<string, string | Element | dxElementWrapper>,
+      ): void => {
+        // eslint-disable-next-line no-param-reassign
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
             // eslint-disable-next-line no-param-reassign
@@ -353,14 +360,16 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       this._componentTemplates[name] = this._createTemplateComponent(value);
     }
 
-    if (name && this._getActionConfigs()[name]) {
+    if (name && this._getActionConfigsFull()[name]) {
       this._addAction(name);
     }
 
     this._shouldRaiseContentReady = this._shouldRaiseContentReady
       || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
-    this._invalidate();
+    if (!this._isUpdateAllowed()) {
+      this._invalidate();
+    }
   }
 
   _extractDefaultSlot(): VNode | null {

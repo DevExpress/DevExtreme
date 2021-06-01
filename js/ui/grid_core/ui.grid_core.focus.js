@@ -153,13 +153,13 @@ const FocusController = core.ViewController.inherit((function() {
             const keyboardController = this.getController('keyboardNavigation');
 
             if(isFocusedRowKeyDefined) {
-                this.option('focusedRowKey', undefined);
+                this.option('focusedRowKey', null);
             }
             keyboardController.setFocusedRowIndex(-1);
             this.option('focusedRowIndex', -1);
             this.getController('data').updateItems({
                 changeType: 'updateFocusedRow',
-                focusedRowKey: undefined
+                focusedRowKey: null
             });
 
             keyboardController._fireFocusedRowChanged(undefined, -1);
@@ -396,7 +396,7 @@ export const focusModule = {
 
             autoNavigateToFocusedRow: true,
 
-            focusedRowKey: undefined,
+            focusedRowKey: null,
 
             focusedRowIndex: -1,
 

@@ -2,7 +2,7 @@
 import Component from './common/component';
 import type { DataGridForComponentWrapper } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
-import { updatePropsImmutable } from "./utils/update-props-immutable";
+import { updatePropsImmutable } from "./utils/update_props_immutable";
 
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
@@ -24,6 +24,20 @@ export default class DataGridWrapper extends Component {
         super.endUpdate();
         gridInstance?.endUpdate();
     }
+
+    // on(eventName: string, eventHandler: Function): DataGridWrapper {
+    //     const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+
+    //     gridInstance?.on(eventName, eventHandler);
+    //     return super.on(eventName, eventHandler);
+    // }
+
+    // off(eventName: string): DataGridWrapper {
+    //     const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+    //     gridInstance?.on(eventName);
+
+    //     return super.on(eventName);
+    // }
 
     isReady() {
         const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
@@ -49,15 +63,23 @@ export default class DataGridWrapper extends Component {
         return gridInstance?.state(state);
     }
 
+    /*dispose() {
+        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+
+        gridInstance?.dispose();
+        super.dispose();
+    }*/
+
     _wrapKeyDownHandler(handler) {
         return handler;
     }
 
-    _optionChanging(fullName: string, value: unknown, prevValue: unknown): void {
-        super._optionChanging(fullName, value, prevValue);
+    _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
+        super._optionChanging(fullName, prevValue, value);
         if(this.viewRef) {
             const name = fullName.split(/[.[]/)[0];
             const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+
             updatePropsImmutable(prevProps, this.option(), name, fullName);
             (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
         }
@@ -84,6 +106,15 @@ export default class DataGridWrapper extends Component {
 
     _patchOptionValues(options) {
         options.onInitialized = this._onInitialized;
+        options.complexOptionChanged = (e) => {
+            if(e.fullName.startsWith('columns[')) {
+                if(this.option(e.fullName) !== e.value) {
+                    this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
+                }
+            } else {
+                this.option(e.fullName, e.value);
+            }
+        }
         return super._patchOptionValues(options);
     }
 

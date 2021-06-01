@@ -10,6 +10,7 @@ import {
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Options,
+  OptionChangedEvent,
   Column,
   RowObject,
   ColumnButtonClickEvent,
@@ -499,7 +500,7 @@ export class DataGridEditing {
   editRowKey?: any;
 
   @TwoWay()
-  editColumnName?: string; // TODO null
+  editColumnName?: string | null = null;
 }
 
 @ComponentBindings()
@@ -1120,6 +1121,8 @@ export class DataGridCommonColumnSettings {
 
 @ComponentBindings()
 export class DataGridProps extends BaseWidgetProps implements Options {
+  @OneWay() complexOptionChanged?: (e: OptionChangedEvent) => void;
+
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing = {
@@ -1327,14 +1330,13 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
-  // TODO Vitik: Default should be null, but declaration doesnt support it
-  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];
+  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
   @TwoWay() focusedColumnIndex = -1;
 
   @TwoWay() focusedRowIndex = -1;
 
-  @TwoWay() focusedRowKey: any | null = null;
+  @TwoWay() focusedRowKey: any = null;
 
   @TwoWay() selectedRowKeys: any[] = [];
 

@@ -14,7 +14,7 @@ import {
   KEY,
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
-import * as UpdatePropsImmutable from '../../utils/update-props-immutable';
+import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;

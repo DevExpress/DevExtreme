@@ -1,5 +1,5 @@
 import {
-  JSXComponent, Component, Effect,
+  JSXComponent, Component,
 } from '@devextreme-generator/declarations';
 import { GridBaseViews } from '../grid_base/grid_base_views';
 import { GridBaseView } from '../grid_base/common/types';
@@ -19,12 +19,14 @@ export const viewFunction = ({
   props: {
     showBorders,
   },
+  update,
 }: DataGridViews): JSX.Element => (
   <GridBaseViews
     views={views}
     className={DATA_GRID_CLASS}
     showBorders={showBorders}
     role={DATA_GRID_ROLE_NAME}
+    onRendered={update}
   />
 );
 
@@ -47,14 +49,8 @@ export class DataGridViews extends JSXComponent<DataGridPropsType, 'instance'>()
     }));
   }
 
-  @Effect()
   update(): void {
     const gridInstance = this.props.instance;
-
-    if (!gridInstance) {
-      return;
-    }
-
     const dataController = gridInstance.getController('data');
     const resizingController = gridInstance.getController('resizing');
 

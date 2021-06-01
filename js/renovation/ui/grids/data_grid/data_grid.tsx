@@ -162,10 +162,8 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
-  callMethod(funcName: string, args: unknown): void {
-    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
-
-    return this.instance?.[funcName](...normalizedArgs);
+  callMethod(funcName: string, args: IArguments): void {
+    return this.instance?.[funcName](...args);
   }
 
   @Method()
@@ -508,8 +506,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   updateTwoWayValue(e: OptionChangedEvent): void {
     // T867777
-    const isValueCorrect = e.value === e.component.option(e.fullName);
+    const optionValue = e.component.option(e.fullName);
+    const isValueCorrect = e.value === optionValue || e.fullName.startsWith('columns[');
+
     if (e.value !== e.previousValue && isValueCorrect) {
+      if (e.name !== e.fullName) {
+        this.props.complexOptionChanged?.(e);
+      }
       if (e.name === 'editing' && this.props.editing) {
         if (e.fullName === 'editing.changes') {
           this.props.editing.changes = e.value as [];
@@ -566,8 +569,8 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     // All other events should be re-raised by renovated grid.
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
-    } as unknown as Record<string, unknown>;
+      onContentReady: this.restAttributes.onContentReady,
+    } as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
       normalizeProps(restProps),

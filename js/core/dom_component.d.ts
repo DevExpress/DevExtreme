@@ -127,6 +127,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
+    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown);
     _templateManager: TemplateManager;
 }
 

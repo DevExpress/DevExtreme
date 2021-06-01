@@ -2,6 +2,15 @@ import { isPlainObject } from '../../../core/utils/type';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UnknownObject { }
 
+function cloneObjectProp(value: UnknownObject, fullNameParts: string[]): UnknownObject {
+  const result = { ...value };
+  if (fullNameParts.length > 1) {
+    const name = fullNameParts[0];
+    result[name] = cloneObjectProp(value[name], fullNameParts.slice(1));
+  }
+  return result;
+}
+
 export function updatePropsImmutable(
   props: UnknownObject, option: UnknownObject, name: string, fullName: string,
 ): void {
@@ -22,7 +31,7 @@ export function updatePropsImmutable(
     }
   }
   if (isPlainObject(currentPropsValue)) {
-    result[name] = { ...currentPropsValue };
+    result[name] = cloneObjectProp(currentPropsValue, fullName.split('.').slice(1));
   } else {
     result[name] = currentPropsValue;
   }
