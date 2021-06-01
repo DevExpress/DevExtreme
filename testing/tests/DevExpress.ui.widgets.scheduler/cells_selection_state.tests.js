@@ -184,7 +184,7 @@ const horizontalGroupingViewDataProviderMock = {
     findCellPositionInMap: () => ({ cellIndex: 1, rowIndex: 1 }),
 };
 
-module('Virtual Selection State', () => {
+module('Cells Selection State', () => {
     test('Focused cell should be set correctly', function(assert) {
         const cellsSelectionState = new CellsSelectionState(horizontalGroupingViewDataProviderMock);
 
@@ -241,6 +241,102 @@ module('Virtual Selection State', () => {
             selectedCells,
             [testViewDataMap.horizontalGrouping[1][0].cellData, testViewDataMap.horizontalGrouping[1][1].cellData],
             'Correct focused cell',
+        );
+    });
+
+    test('"releaseSelectedAndFocusedCells" should save current values as previous', function(assert) {
+        const cellsSelectionState = new CellsSelectionState({
+            ...horizontalGroupingViewDataProviderMock,
+            getCellsByGroupIndexAndAllDay: () => [[
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ]],
+        });
+
+        cellsSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setSelectedCells({
+            rowIndex: 1,
+            columnIndex: 0,
+            allDay: false,
+        }, {
+            rowIndex: 1,
+            columnIndex: 1,
+            allDay: false,
+        });
+
+        cellsSelectionState.releaseSelectedAndFocusedCells();
+
+        assert.deepEqual(
+            cellsSelectionState._prevFocusedCell,
+            testViewDataMap.horizontalGrouping[1][1].cellData,
+            'Correct cached focused cell data',
+        );
+        assert.deepEqual(
+            cellsSelectionState._prevSelectedCells,
+            [testViewDataMap.horizontalGrouping[1][0].cellData, testViewDataMap.horizontalGrouping[1][1].cellData],
+            'Correct cachedfocused cell',
+        );
+
+        const prevFocusedCellData = cellsSelectionState._focusedCell;
+        const prevSelectedCells = cellsSelectionState._selectedCells;
+
+        assert.deepEqual(
+            prevFocusedCellData,
+            null,
+            'Correct focused cell data',
+        );
+        assert.deepEqual(
+            prevSelectedCells,
+            null,
+            'Correct selected cells',
+        );
+    });
+
+    test('"clearSelectedAndFocusedCells" should not save current values as previous', function(assert) {
+        const cellsSelectionState = new CellsSelectionState({
+            ...horizontalGroupingViewDataProviderMock,
+            getCellsByGroupIndexAndAllDay: () => [[
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ]],
+        });
+
+        cellsSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setSelectedCells({
+            rowIndex: 1,
+            columnIndex: 0,
+            allDay: false,
+        }, {
+            rowIndex: 1,
+            columnIndex: 1,
+            allDay: false,
+        });
+
+        cellsSelectionState.clearSelectedAndFocusedCells();
+
+        assert.deepEqual(
+            cellsSelectionState._prevFocusedCell,
+            null,
+            'Correct cached focused cell data',
+        );
+        assert.deepEqual(
+            cellsSelectionState._prevSelectedCells,
+            null,
+            'Correct cachedfocused cell',
+        );
+
+        const prevFocusedCellData = cellsSelectionState._focusedCell;
+        const prevSelectedCells = cellsSelectionState._selectedCells;
+
+        assert.deepEqual(
+            prevFocusedCellData,
+            null,
+            'Correct focused cell data',
+        );
+        assert.deepEqual(
+            prevSelectedCells,
+            null,
+            'Correct selected cells',
         );
     });
 });
