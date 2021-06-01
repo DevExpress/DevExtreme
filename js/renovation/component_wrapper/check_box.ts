@@ -1,4 +1,5 @@
-import { dxElementWrapper } from '../../core/renderer.d';
+// eslint-disable-next-line import/named
+import { dxElementWrapper } from '../../core/renderer';
 import Editor from './common/editor';
 import { Option } from './common/types';
 import { addAttributes, getAriaName } from './utils/utils';

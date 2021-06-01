@@ -4,8 +4,8 @@ import {
 } from 'inferno';
 import { createElement } from 'inferno-create-element';
 import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
-import $ from '../../../core/renderer';
-import { dxElementWrapper } from '../../../core/renderer.d';
+// eslint-disable-next-line import/named
+import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
