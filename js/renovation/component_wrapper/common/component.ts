@@ -176,9 +176,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     }
   }
 
-  _silent(name: string, value: any): void {
-    (this as unknown as { _options })
-      ._options.silent(name, value);
+  _silent(name: string, value: unknown): void {
+    this._options.silent(name, value);
   }
 
   _render(): void { } // NOTE: Inherited from DOM_Component
