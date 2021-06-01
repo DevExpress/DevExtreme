@@ -277,6 +277,12 @@ const ResizingController = modules.ViewController.inherit({
             resetBestFitMode = true;
         }
 
+        const $element = this.component.$element();
+        if($element && $element[0] && this._maxWidth) {
+            delete this._maxWidth;
+            $element[0].style.maxWidth = '';
+        }
+
         deferUpdate(() => {
             if(needBestFit) {
                 resultWidths = that._getBestFitWidths();
