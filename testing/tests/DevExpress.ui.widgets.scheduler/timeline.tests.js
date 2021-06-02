@@ -1092,17 +1092,17 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
             renovateRender,
         });
 
-        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
         const $element = this.instance.$element();
 
-        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
-        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
         assert.equal(coords.hMax, 16800, 'hMax is right');
 
-        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 2, false);
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
 
-        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().top, 'Top cell coordinates are right');
-        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().left, 'Left cell coordinates are right');
         assert.equal(coords.hMax, 16800, 'hMax is right');
     });
 });
