@@ -9,7 +9,6 @@ import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import { when, Deferred } from '../../core/utils/deferred';
 import domAdapter from '../../core/dom_adapter';
-import browser from '../../core/utils/browser';
 import * as accessibility from '../shared/accessibility';
 
 const BORDERS_CLASS = 'borders';
@@ -174,11 +173,6 @@ const ResizingController = modules.ViewController.inherit({
         if(this._needStretch()) {
             $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
         }
-        if(browser.msie && parseInt(browser.version) === 11) {
-            $rowsTable.find('.' + this.addWidgetPrefix(TABLE_FIXED_CLASS)).each(function() {
-                this.style.width = isBestFit ? '10px' : '';
-            });
-        }
     },
 
     _synchronizeColumns: function() {
@@ -260,11 +254,7 @@ const ResizingController = modules.ViewController.inherit({
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
                     const isFocusOutsideWindow = getBoundingRect(focusedElement).bottom < 0;
                     if(!isFocusOutsideWindow) {
-                        if(browser.msie) {
-                            setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
-                        } else {
-                            restoreFocus(focusedElement, selectionRange);
-                        }
+                        restoreFocus(focusedElement, selectionRange);
                     }
                 }
             }

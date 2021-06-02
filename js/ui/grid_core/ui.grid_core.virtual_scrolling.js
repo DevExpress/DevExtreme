@@ -9,12 +9,10 @@ import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 
-const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
 const TABLE_CONTENT_CLASS = 'table-content';
 const GROUP_SPACE_CLASS = 'group-space';
 const CONTENT_CLASS = 'content';
-const ROW_CLASS = 'dx-row';
 const FREESPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
@@ -22,7 +20,6 @@ const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const SCROLLING_MODE_STANDARD = 'standard';
-const PIXELS_LIMIT = 250000; // this limit is defined for IE
 const LOAD_TIMEOUT = 300;
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
@@ -591,33 +588,6 @@ const VirtualScrollingRowsViewExtender = (function() {
             return result;
         },
 
-        _renderVirtualTableContent: function(container, height) {
-            const that = this;
-            const columns = that._columnsController.getVisibleColumns();
-            let html = that._createColGroup(columns).prop('outerHTML');
-            let freeSpaceCellsHtml = '';
-            const columnLinesClass = that.option('showColumnLines') ? COLUMN_LINES_CLASS : '';
-            const createFreeSpaceRowHtml = function(height) {
-                return '<tr style=\'height:' + height + 'px;\' class=\'' + FREESPACE_CLASS + ' ' + ROW_CLASS + ' ' + columnLinesClass + '\' >' + freeSpaceCellsHtml + '</tr>';
-            };
-
-            for(let i = 0; i < columns.length; i++) {
-                const classes = that._getCellClasses(columns[i]);
-                const classString = classes.length ? ' class=\'' + classes.join(' ') + '\'' : '';
-
-                freeSpaceCellsHtml += '<td' + classString + '/>';
-            }
-
-            while(height > PIXELS_LIMIT) {
-                html += createFreeSpaceRowHtml(PIXELS_LIMIT);
-                height -= PIXELS_LIMIT;
-            }
-            html += createFreeSpaceRowHtml(height);
-
-            container.addClass(that.addWidgetPrefix(TABLE_CLASS));
-            container.html(html);
-        },
-
         _getCellClasses: function(column) {
             const classes = [];
             const cssClass = column.cssClass;
@@ -813,7 +783,7 @@ export const virtualScrollingModule = {
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
 
-                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    const allowedTopOffset = browser.mozilla ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
