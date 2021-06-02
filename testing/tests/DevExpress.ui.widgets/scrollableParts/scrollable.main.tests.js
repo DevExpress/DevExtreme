@@ -24,6 +24,8 @@ import {
     SCROLLABLE_WRAPPER_CLASS,
     SCROLLBAR_HOVERABLE_CLASS
 } from './scrollable.constants.js';
+// eslint-disable-next-line spellcheck/spell-checker
+import { rerender as reRender } from 'inferno';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -876,6 +878,7 @@ if(styleUtils.styleProp('touchAction')) {
 
         $content.width(100).height(50);
         scrollable.update();
+        reRender();
         assert.equal($container.css('touchAction'), 'pan-y');
 
         $content.width(50).height(50);

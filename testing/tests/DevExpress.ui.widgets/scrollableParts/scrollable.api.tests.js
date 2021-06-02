@@ -244,7 +244,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
-                assert.equal(location.top, 0, 'scroll to correctly vertical position');
+                assert.equal(location.top, isRenovation ? -20 : 0, 'scroll to correctly vertical position');
             }
             wasFirstMove = true;
         }
@@ -362,7 +362,7 @@ QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', funct
 QUnit.test('showScrollbar: never -> onScroll, useNative: true, useSimulatedScrollbar: true, should add dx-scrollable-scrollbars-hidden class', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
-        showScrollbar: false,
+        showScrollbar: isRenovation ? 'never' : false,
         useSimulatedScrollbar: true,
     });
 
@@ -1080,12 +1080,12 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
                 helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative && useSimulatedScrollbar ? 12 : 25 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 25 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative || (useNative && useSimulatedScrollbar) ? 12 : 35 });
+                helper.checkScrollOffset({ left: 150, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: 35 });
             });
         });
 
@@ -1116,7 +1116,7 @@ class ScrollableTestHelper {
                 helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 50 }, 'scrolled to max right position after resize to 50px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
-                helper.setContainerWidth(150);
+                helper.setContainerWidth(100);
                 helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 }, 'scrolled to max right position after resize to 100px');
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 0 });
             });

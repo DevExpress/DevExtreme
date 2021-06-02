@@ -367,7 +367,7 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
         .down()
         .move(0, -10);
 
-    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, isRenovation ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
@@ -388,7 +388,7 @@ QUnit.test('scroll not updated after scrollTo if auto update is prevented', func
 
     scrollable.scrollTo(10);
 
-    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, isRenovation ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('native scrollable should be updated before dxscrollinit', function(assert) {

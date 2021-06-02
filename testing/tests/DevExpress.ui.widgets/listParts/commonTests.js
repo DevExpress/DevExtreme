@@ -21,6 +21,8 @@ import { setScrollView } from 'ui/list/ui.list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+// eslint-disable-next-line spellcheck/spell-checker
+import { rerender as reRender } from 'inferno';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -33,6 +35,8 @@ const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
+
+const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -627,12 +631,15 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
             instance.scrollTo(200);
             this.clock.tick(50);
+            reRender();
 
             instance.scrollTo(200);
             this.clock.tick(50);
+            reRender();
 
             instance.collapseGroup(2);
             this.clock.tick(50);
+            reRender();
 
             assert.ok(releaseSpy.lastCall.args[0], 'The last call of \'release\' hides load indicator');
         } finally {
@@ -2695,7 +2702,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         const scrollView = this.element.dxScrollView('instance');
 
-        assert.equal(scrollView._updateCount, 0, 'no update after render list');
+        assert.equal(scrollView._updateCount, isRenovation ? 1 : 0, 'no update after render list');
 
         list.updateDimensions().done(function() {
             assert.ok(true);
@@ -2703,7 +2710,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         });
 
         list.updateDimensions();
-        assert.equal(scrollView._updateCount, 2, '+2 after update() call');
+        assert.equal(scrollView._updateCount, isRenovation ? 3 : 2, '+2 after update() call');
     });
 
     QUnit.test('width & height option change should call update method of scroll view', function(assert) {
@@ -3057,6 +3064,7 @@ QUnit.module('scrollView integration', {
 
     QUnit.test('onScroll', function(assert) {
         const scrollActionSpy = sinon.spy();
+
         const list = $('#list').dxList({
             height: 100,
             useNativeScrolling: false,
@@ -3065,6 +3073,7 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(5);
+        reRender();
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3079,6 +3088,7 @@ QUnit.module('scrollView integration', {
         list.on('scroll', scrollActionSpy);
 
         list.scrollToItem(5);
+        reRender();
         assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
@@ -3095,7 +3105,9 @@ QUnit.module('scrollView integration', {
         $list.dxScrollView('instance').scrollToElement = scrollToElementSpy;
 
         list.scrollToItem($item);
-        assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), 'list scrolled to item');
+
+        const firstCallArgs = scrollToElementSpy.firstCall.args[0];
+        assert.equal(isRenovation ? firstCallArgs : firstCallArgs.get(0), $item.get(0), 'list scrolled to item');
     });
 
     QUnit.test('it should be possible to scroll to an item by denormalized index', function(assert) {
@@ -3113,7 +3125,9 @@ QUnit.module('scrollView integration', {
         const scrollToElementSpy = sinon.spy($list.dxScrollView('instance'), 'scrollToElement');
 
         list.scrollToItem(list.option('items')[1]);
-        assert.equal(scrollToElementSpy.getCall(0).args[0].text(), $item.text(), 'list scrolled to correct item');
+
+        const firstCallArgs = scrollToElementSpy.getCall(0).args[0];
+        assert.equal($(firstCallArgs).text(), $item.text(), 'list scrolled to correct item');
     });
 
     QUnit.test('list shouldn\'t be scrolled if item isn\'t specified', function(assert) {
@@ -3139,6 +3153,8 @@ QUnit.module('scrollView integration', {
         }).dxList('instance');
 
         list.scrollToItem(items[1]);
+        reRender();
+
         assert.expect(0);
     });
 
@@ -3539,14 +3555,15 @@ QUnit.module('keyboard navigation', {
             items: [0, 1, 2, 3, 4]
         });
 
+
         const instance = $element.dxList('instance');
         const $item = $element.find(toSelector(LIST_ITEM_CLASS)).first();
         const keyboard = keyboardMock($element);
         const itemHeight = $item.outerHeight();
 
+
         $element.trigger('focusin');
         instance.option('height', itemHeight * 3);
-
         keyboard.keyDown('end');
         assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'item scrolled to visible area at bottom end arrow were pressed');
 
