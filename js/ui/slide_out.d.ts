@@ -15,6 +15,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -86,7 +88,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxSlideOutItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxSlideOutItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxSlideOutOptions.onOptionChanged

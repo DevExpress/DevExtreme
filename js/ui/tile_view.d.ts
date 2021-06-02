@@ -6,6 +6,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -71,7 +73,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTileViewItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.Orientation

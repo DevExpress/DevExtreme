@@ -674,7 +674,7 @@ declare module DevExpress {
      */
     resetOption(optionName: string): void;
 
-    _options: { silent(path, value): void };
+    _options: { silent(path: any, value: any): void };
     _createActionByOption(optionName: string, config: object): Function;
     _dispose(): void;
     _getDefaultOptions(): object;
@@ -3764,6 +3764,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | CollectionWidgetItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -3950,6 +3951,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<CollectionWidgetItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4122,6 +4124,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxAccordionItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4269,6 +4272,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxActionSheetItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4444,6 +4448,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxBoxItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -4946,6 +4951,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxContextMenuItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -5791,6 +5797,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | ((options: {
             component?: any;
             dataSource?: DevExpress.data.DataSourceOptions;
@@ -8755,6 +8762,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -8889,6 +8897,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -9866,6 +9875,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -9974,6 +9984,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxDropDownButtonItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -11264,8 +11275,8 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
-        | DevExpress.data.DataSourceOptions
-        | DevExpress.data.Store;
+        | DevExpress.data.Store
+        | DevExpress.data.DataSourceOptions;
       /**
        * [descr:dxFilterBuilderField.lookup.displayExpr]
        */
@@ -12021,6 +12032,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxGalleryItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -12394,6 +12406,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12614,6 +12627,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12642,6 +12656,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -12702,6 +12717,7 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -13093,6 +13109,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | Array<string>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -13362,6 +13379,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -13592,6 +13610,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxListItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14504,6 +14523,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxMenuBaseItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14571,6 +14591,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxMenuItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -14686,6 +14707,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxMultiViewItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -16426,6 +16448,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxResponsiveBoxItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -16862,6 +16885,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxSchedulerAppointment>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -17099,6 +17123,7 @@ declare module DevExpress.ui {
       dataSource?:
         | string
         | Array<any>
+        | DevExpress.data.Store
         | DevExpress.data.DataSource
         | DevExpress.data.DataSourceOptions;
       /**
@@ -17705,6 +17730,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxSlideOutItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18306,6 +18332,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTabPanelItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18415,6 +18442,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTabsItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -18917,6 +18945,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxTileViewItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -19127,6 +19156,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<string | dxToolbarItem | any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -20380,6 +20410,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<dxTreeViewItem>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -21276,6 +21307,7 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
@@ -22164,6 +22196,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -28160,6 +28193,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -30968,6 +31002,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -31482,6 +31517,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -31883,6 +31919,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -32173,6 +32210,7 @@ declare module DevExpress.viz {
      */
     dataSource?:
       | Array<any>
+      | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions
       | string;
@@ -32785,6 +32823,7 @@ declare module DevExpress.viz {
            */
           dataSource?:
             | any
+            | DevExpress.data.Store
             | DevExpress.data.DataSource
             | DevExpress.data.DataSourceOptions
             | string;
@@ -32896,6 +32935,7 @@ declare module DevExpress.viz {
           dataField?: string;
           dataSource?:
             | any
+            | DevExpress.data.Store
             | DevExpress.data.DataSource
             | DevExpress.data.DataSourceOptions
             | string;
