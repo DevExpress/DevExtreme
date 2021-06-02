@@ -137,4 +137,12 @@ export class Component<TProperties> {
   resetOption(optionName: string): void;
 }
 
+/**
+ * @docid Component
+ * @module core/component
+ * @export default
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ */
 export default Component;
