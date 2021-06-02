@@ -234,8 +234,8 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return result;
     }
     _createTooltips(targets) {
-        const { Browser } = getDiagram();
-        if(Browser.TouchUI) return;
+        const { DiagramBrowser } = getDiagram();
+        if(DiagramBrowser.TouchUI) return;
 
         const $container = this.$element();
         targets.each((index, element) => {
