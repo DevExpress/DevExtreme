@@ -679,6 +679,27 @@ QUnit.module('Actions', moduleConfig, () => {
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length - 1);
     });
 
+    test('collapse and check state after validation option changed (T997932)', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).eq(1);
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+        let $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.ok($parentTasks.length > 0, 'parent tasks has className');
+
+        this.instance.option('validation.autoUpdateParentTasks', false);
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 2);
+        $parentTasks = this.$element.find(PARENT_TASK_SELECTOR);
+        assert.strictEqual($parentTasks.length, 0, 'not parent tasks');
+    });
+
     test('move splitter', function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
