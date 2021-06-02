@@ -285,9 +285,7 @@ class FileUploader extends Editor {
             eventsEngine.on(this._$fileInput, 'change', this._inputChangeHandler.bind(this));
             eventsEngine.on(this._$fileInput, 'click', e => {
                 e.stopPropagation();
-                this._doPreventInputChange = true;
-                this._$fileInput.val('');
-                this._doPreventInputChange = false;
+                this._resetInputValue();
                 return this.option('useNativeInputClick') || this._isCustomClickEvent;
             });
         }
@@ -696,10 +694,7 @@ class FileUploader extends Editor {
         this._preventRecreatingFiles = false;
 
         this._toggleFileUploaderEmptyClassName();
-
-        this._doPreventInputChange = true;
-        this._$fileInput.val('');
-        this._doPreventInputChange = false;
+        this._resetInputValue(true);
     }
 
     removeFile(fileData) {
@@ -1344,6 +1339,15 @@ class FileUploader extends Editor {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _resetInputValue(force) {
+        if(this.option('uploadMode') === 'useForm' && !force) {
+            return;
+        }
+        this._doPreventInputChange = true;
+        this._$fileInput.val('');
+        this._doPreventInputChange = false;
     }
 
     reset() {
