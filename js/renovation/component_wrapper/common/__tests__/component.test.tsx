@@ -819,7 +819,7 @@ describe('templates and slots', () => {
   });
 
   it('should not fail if template returned parent node', () => {
-    const template = (data, element) => $(element)
+    const template = (_, element) => $(element)
       .append($('<span>').text('text'))
       .addClass('modified_container');
 
