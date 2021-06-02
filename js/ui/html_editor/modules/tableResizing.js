@@ -142,6 +142,10 @@ export default class TableResizingModule extends BaseModule {
 
                 $columns.eq(index).css('width', this._startColumnWidth + event.offset.x);
                 $columnSeparator.css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
+
+                if(this._nextColumnWidth) {
+                    $columns.eq(index).css('width', this._nextColumnWidth - event.offset.x);
+                }
                 // this._updateByDrag = true;
                 // const $alphaChannelHandle = this._$alphaChannelHandle;
                 // const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
@@ -151,6 +155,16 @@ export default class TableResizingModule extends BaseModule {
             onDragStart: () => {
                 this._startDragPosition = parseInt($columnSeparator.css('left').replace('px', ''));
                 this._startColumnWidth = parseInt($($columns[index]).outerWidth());
+                this._nextColumnWidth = 0;
+                this._previousColumnWidth = 0;
+                if($columns[index + 1]) {
+                    this._nextColumnWidth = parseInt($($columns[index + 1]).outerWidth());
+                }
+
+                // if($columns[index - 1]) {
+                //     this._previousColumnWidth = parseInt($($columns[index - 1]).outerWidth());
+                // }
+
                 // console.log('start ' + this._startDragPosition);
             },
             onDragEnd: () => {
