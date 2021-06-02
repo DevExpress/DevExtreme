@@ -91,10 +91,14 @@ class DiagramContextMenuWrapper extends Widget {
     _hide() {
         this._$contextMenuTargetElement.hide();
         this._contextMenuInstance.hide();
+        delete this.isTouchMode;
     }
     _isTouchBarMode() {
-        const { Browser } = getDiagram();
-        return Browser.TouchUI;
+        if(this.isTouchMode !== undefined) {
+            return this.isTouchMode;
+        }
+        const { DiagramBrowser } = getDiagram();
+        return DiagramBrowser.TouchUI;
     }
     _onItemClick(itemData) {
         let processed = false;

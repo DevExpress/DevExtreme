@@ -1244,8 +1244,9 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
         this.toggleFullscreenLock--;
     }
-    _onShowContextMenu(x, y, selection) {
+    _onShowContextMenu(x, y, isTouchMode, selection) {
         if(this._contextMenu) {
+            this._contextMenu.isTouchMode = isTouchMode;
             this._contextMenu._show(x, y, selection);
         }
     }
