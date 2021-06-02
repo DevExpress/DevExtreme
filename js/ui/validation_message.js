@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
-import Overlay from './overlay/ui.overlay';
+import { Overlay } from './overlay';
 import { extend } from '../core/utils/extend';
 import { encodeHtml } from '../core/utils/string';
 import { getDefaultAlignment } from '../core/utils/position';

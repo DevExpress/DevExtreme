@@ -10,7 +10,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import pointerEvents from '../events/pointer';
 import registerComponent from '../core/component_registrator';
-import Overlay from './overlay/ui.overlay';
+import { Overlay } from './overlay';
 import { isMaterial } from './themes';
 
 const ready = readyCallbacks.add;

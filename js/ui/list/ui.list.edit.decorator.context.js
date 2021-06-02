@@ -3,7 +3,7 @@ import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import messageLocalization from '../../localization/message';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import EditDecorator from './ui.list.edit.decorator';
-import Overlay from '../overlay/ui.overlay';
+import { Overlay } from '../overlay';
 import { ListBase } from './ui.list.base';
 
 const CONTEXTMENU_CLASS = 'dx-list-context-menu';
