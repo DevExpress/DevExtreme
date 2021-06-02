@@ -199,7 +199,7 @@ export interface RowDraggingTemplateDataModel {
   readonly itemElement: DxElement;
 }
 
-export interface FilterPanelCustomizeTextArg<T> { 
+export interface FilterPanelCustomizeTextArg<T> {
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
@@ -3065,7 +3065,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 /** @public */
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
-/** @public */ 
+/** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
@@ -4589,6 +4589,17 @@ export interface ColumnButton extends ColumnButtonBase {
      * @public
      */
     visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
+    /**
+     * @docid dxDataGridColumnButton.visible
+     * @default false
+     * @type_function_param1 options:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 row:dxDataGridRowObject
+     * @type_function_param1_field3 column:dxDataGridColumn
+     * @type_function_return Boolean
+     * @public
+     */
+    disabled?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
 }
 
 /**

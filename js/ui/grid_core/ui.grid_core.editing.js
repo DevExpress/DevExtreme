@@ -1917,9 +1917,9 @@ const EditingController = modules.ViewController.inherit((function() {
             let icon = EDIT_ICON_CLASS[button.name];
             const useIcons = this.option('editing.useIcons');
             let $button = $('<a>')
-            .attr('href', '#')
-            .addClass(LINK_CLASS)
-            .addClass(button.cssClass);
+                .attr('href', '#')
+                .addClass(LINK_CLASS)
+                .addClass(button.cssClass);
 
             if(button.template) {
                 this._rowsView.renderTemplate($container, button.template, options, true);
