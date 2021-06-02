@@ -149,7 +149,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
                   {children}
                 </div>
               )
-              : <div>{children}</div>}
+              : children}
             {forceGeneratePockets && (
             <BottomPocket
               bottomPocketRef={bottomPocketRef}

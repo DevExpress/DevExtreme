@@ -74,12 +74,9 @@ QUnit.test('scrollable render', function(assert) {
     assert.ok($container.hasClass(SCROLLABLE_CONTAINER_CLASS), 'dx-scrollable-container class attached');
     assert.ok($content.hasClass(SCROLLABLE_CONTENT_CLASS), 'dx-scrollable-content class attached');
 
-    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
-    const $contentChildren = isRenovation ? $content.children().children() : $content.children();
-
-    assert.equal($contentChildren.length, 2, 'content was moved');
-    assert.ok($contentChildren.eq(0).hasClass('content1'));
-    assert.ok($contentChildren.eq(1).hasClass('content2'));
+    assert.equal($content.children().length, 2, 'content was moved');
+    assert.ok($content.children().eq(0).hasClass('content1'));
+    assert.ok($content.children().eq(1).hasClass('content2'));
 });
 
 QUnit.module('horizontal direction', moduleConfig);

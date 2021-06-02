@@ -1183,8 +1183,6 @@ QUnit.module('popup', moduleConfig, () => {
     });
 
     QUnit.testInActiveWindow('After search and load new page scrollTop should not be changed', function(assert) {
-        this.clock.restore();
-
         const data = [];
         const done = assert.async();
 
@@ -1227,6 +1225,8 @@ QUnit.module('popup', moduleConfig, () => {
             assert.ok(listInstance.scrollTop() === scrollTop, 'scrollTop was not changed after loading new page');
             done();
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('popup should be configured with templatesRenderAsynchronously=false (T470619)', function(assert) {

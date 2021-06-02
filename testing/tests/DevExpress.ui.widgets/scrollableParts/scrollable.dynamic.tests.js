@@ -561,14 +561,11 @@ QUnit.test('scrollable should have correct scrollPosition when content is not cr
 
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
-    const $contentChildren = isRenovation ? $content.children().eq(0) : $content.eq(0);
-
-    $contentChildren.children().eq(0).css({
+    $content.children().eq(0).css({
         width: '100px',
         height: '100px'
     });
-    $contentChildren.children().eq(1).css({
+    $content.children().eq(1).css({
         width: '300px',
         height: '300px',
         position: 'absolute',
@@ -600,14 +597,11 @@ QUnit.test('scrollable should have correct scrollPosition when content is croppe
 
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-    // https://trello.com/c/OGZIjBfC/2584-renovation-react-wrapper-in-some-cases-brokes-children-render
-    const $contentChildren = isRenovation ? $content.children().eq(0) : $content.eq(0);
-
-    $contentChildren.children().eq(0).css({
+    $content.children().eq(0).css({
         width: '100px',
         height: '100px'
     });
-    $contentChildren.children().eq(0).css({
+    $content.children().eq(1).css({
         width: '300px',
         height: '300px',
         position: 'absolute',
