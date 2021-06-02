@@ -125,6 +125,33 @@ QUnit.test('index should be correct for grouped list', function(assert) {
     assert.equal(list.getItemElementByFlatIndex(5).get(0), $item.get(0), 'item correct');
 });
 
+QUnit.test('grouped list can select items with index more then 255 (T996851)', function(assert) {
+    const items = [];
+    for(let i = 0; i < 300; i += 1) {
+        items.push(i);
+    }
+    const dataSource = [{
+        key: 'someKey',
+        items
+    }];
+    let selectedIdx;
+    const list = $('#templated-list').dxList({
+        dataSource,
+        grouped: true,
+        selectionMode: 'single',
+        onSelectionChanged: function(e) {
+            selectedIdx = e.addedItems[0].text;
+        },
+        groupTemplate: function(data) {
+            return $('<div>Assigned: ' + data.key + '</div>');
+        },
+    }).dxList('instance');
+
+    list.selectItem(280);
+
+    assert.strictEqual(selectedIdx, 280, 'item with big index selected');
+});
+
 QUnit.test('deleteItem should remove an item', function(assert) {
     const $list = $('#templated-list').dxList({
         items: [1, 2, 3, 4],
