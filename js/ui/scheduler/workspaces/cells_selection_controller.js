@@ -27,6 +27,7 @@ export class CellsSelectionController {
             isGroupedByDate,
             groupCount,
             isMultiSelection,
+            isDateAndTimeView,
         } = options;
         const {
             cellIndex,
@@ -54,7 +55,7 @@ export class CellsSelectionController {
             };
         }
 
-        return this._processEdgeCell({
+        return isDateAndTimeView ? currentCellPosition : this._processEdgeCell({
             nextCellIndex,
             rowIndex,
             cellIndex,
