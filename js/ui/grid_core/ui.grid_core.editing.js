@@ -301,7 +301,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _isButtonDisabled: function(button, options) {
             const disabled = button.disabled;
 
-            return isFunction(disabled) ? disabled.call(button, { component: options.component, row: options.row, column: options.column }) : disabled;
+            return isFunction(disabled) ? disabled.call(button, { component: options.component, row: options.row, column: options.column }) : !!disabled;
         },
 
         _getButtonConfig: function(button, options) {
