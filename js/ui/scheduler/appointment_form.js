@@ -150,11 +150,11 @@ const SchedulerAppointmentForm = {
     _changeFormItemDateType: function(itemPath, value) {
         const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
 
-        const newType = value ? 'date' : 'datetime';
+        const type = value ? 'date' : 'datetime';
 
-        itemEditorOptions.type = newType;
+        const newEditorOption = { ...itemEditorOptions, type };
 
-        this._appointmentForm.itemOption(itemPath, 'editorOptions', itemEditorOptions);
+        this._appointmentForm.itemOption(itemPath, 'editorOptions', newEditorOption);
     },
 
     _createMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
