@@ -4,7 +4,7 @@ import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import LoadIndicator from './load_indicator';
-import Overlay from './overlay/ui.overlay';
+import { Overlay } from './overlay';
 import { Deferred } from '../core/utils/deferred';
 import { isMaterial } from './themes';
 

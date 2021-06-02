@@ -13,7 +13,7 @@ import Button from '../button';
 import pointerEvents from '../../events/pointer';
 import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
-import Overlay from '../overlay/ui.overlay';
+import { Overlay } from '../overlay';
 import errors from '../widget/ui.errors';
 import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
