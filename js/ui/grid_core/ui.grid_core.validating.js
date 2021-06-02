@@ -13,7 +13,7 @@ import Button from '../button';
 import pointerEvents from '../../events/pointer';
 import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
-import Overlay from '../overlay';
+import { Overlay } from '../overlay';
 import errors from '../widget/ui.errors';
 import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -54,6 +54,7 @@ const VALIDATION_STATUS = {
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
 const VALIDATION_CANCELLED = 'cancel';
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const validationResultIsValid = function(result) {
     return isDefined(result) && result !== VALIDATION_CANCELLED;
@@ -635,8 +636,11 @@ export const validatingModule = {
                     let result = this.callBase.apply(this, arguments);
                     const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
+                    const scrollingMode = this.option('scrolling.mode');
+                    const virtualMode = scrollingMode === 'virtual';
+                    const appendMode = scrollingMode === 'infinite';
 
-                    if(result && !validationData?.isValid && this.option('scrolling.mode') !== 'virtual') {
+                    if(result && !validationData?.isValid && !virtualMode && !(appendMode && this.option(NEW_SCROLLING_MODE))) {
                         result = pageIndex === this._pageIndex;
                     }
 

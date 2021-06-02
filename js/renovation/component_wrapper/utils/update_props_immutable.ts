@@ -1,18 +1,22 @@
 import { isPlainObject } from '../../../core/utils/type';
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface UnknownObject { }
 
-function cloneObjectProp(value: UnknownObject, fullNameParts: string[]): UnknownObject {
+function cloneObjectProp(
+  value: Record<string, unknown>,
+  fullNameParts: string[],
+): Record<string, unknown> {
   const result = { ...value };
   if (fullNameParts.length > 1) {
     const name = fullNameParts[0];
-    result[name] = cloneObjectProp(value[name], fullNameParts.slice(1));
+    result[name] = cloneObjectProp(value[name] as Record<string, unknown>, fullNameParts.slice(1));
   }
   return result;
 }
 
 export function updatePropsImmutable(
-  props: UnknownObject, option: UnknownObject, name: string, fullName: string,
+  props: Record<string, unknown>,
+  option: Record<string, unknown>,
+  name: string,
+  fullName: string,
 ): void {
   const currentPropsValue = option[name];
   const result = props;

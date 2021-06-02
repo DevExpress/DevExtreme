@@ -3,6 +3,7 @@ import Component from './common/component';
 import type { DataGridForComponentWrapper } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from "./utils/update_props_immutable";
+import type { TemplateComponent } from './common/types';
 
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
@@ -72,13 +73,13 @@ export default class DataGridWrapper extends Component {
         super._optionChanged(e);
     }
 
-    _createTemplateComponent(templateOption: any): any {
-        return templateOption;
+    _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
+        return templateOption as (TemplateComponent | undefined);
     }
 
     _initializeComponent(): void {
         const options = this.option();
-        this._onInitialized = options.onInitialized;
+        this._onInitialized = options.onInitialized as Function;
         options.onInitialized = null;
         super._initializeComponent();
     }

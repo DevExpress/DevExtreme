@@ -83,7 +83,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
-  @Mutable() hideScrollbarTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() hideScrollbarTimer?: unknown;
 
   @InternalState() pendingPullDown = false;
 
@@ -351,7 +351,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer as unknown as number);
+    clearTimeout(this.hideScrollbarTimer as number);
     this.hideScrollbarTimer = undefined;
   }
 
