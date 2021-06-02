@@ -421,21 +421,21 @@ module('View Data Provider', {
             });
         });
 
-        module('getLasGroupCellPosition', () => {
+        module('getLastGroupCellPosition', () => {
             module('Vertical grouping', {
                 beforeEach: function() {
                     this.init('vertical');
                 }
             }, () => {
-                test('getLasGroupCellPosition', function(assert) {
+                test('getLastGroupCellPosition', function(assert) {
                     assert.deepEqual(
-                        this.viewDataProvider.getLasGroupCellPosition(2),
+                        this.viewDataProvider.getLastGroupCellPosition(2),
                         { rowIndex: 1, cellIndex: 1 },
                         'Last position for the group 2 is correct'
                     );
 
                     assert.deepEqual(
-                        this.viewDataProvider.getLasGroupCellPosition(3),
+                        this.viewDataProvider.getLastGroupCellPosition(3),
                         { rowIndex: 3, cellIndex: 1 },
                         'Last position for the group 3 is correct'
                     );
@@ -478,15 +478,15 @@ module('View Data Provider', {
                     });
                 }
             }, () => {
-                test('getLasGroupCellPosition', function(assert) {
+                test('getLastGroupCellPosition', function(assert) {
                     assert.deepEqual(
-                        this.viewDataProvider.getLasGroupCellPosition(2),
+                        this.viewDataProvider.getLastGroupCellPosition(2),
                         { rowIndex: 1, cellIndex: 1 },
                         'Last position for the group 2 is correct'
                     );
 
                     assert.deepEqual(
-                        this.viewDataProvider.getLasGroupCellPosition(3),
+                        this.viewDataProvider.getLastGroupCellPosition(3),
                         { rowIndex: 1, cellIndex: 2 },
                         'Last position for the group 3 is correct'
                     );

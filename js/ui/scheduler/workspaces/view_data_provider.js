@@ -892,14 +892,17 @@ class GroupedDataMapProvider {
         const { dateTableGroupedMap } = this.groupedDataMap;
         const groupedRows = dateTableGroupedMap[groupIndex];
         const lastRow = groupedRows[groupedRows.length - 1];
+        let result;
 
         if(lastRow) {
             const cellCount = lastRow.length;
-            return lastRow[cellCount - 1];
+            result = lastRow[cellCount - 1];
         }
+
+        return result;
     }
 
-    getLasGroupCellPosition(groupIndex) {
+    getLastGroupCellPosition(groupIndex) {
         let groupCell;
 
         if(this.isVerticalGroupedWorkspace) {
@@ -1033,8 +1036,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupIndices();
     }
 
-    getLasGroupCellPosition(groupIndex) {
-        return this._groupedDataMapProvider.getLasGroupCellPosition(groupIndex);
+    getLastGroupCellPosition(groupIndex) {
+        return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
     }
 
     getRowCountInGroup(groupIndex) {
