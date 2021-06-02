@@ -1155,6 +1155,21 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         assert.deepEqual(recEditor.option('startDate'), new Date(2016, 5, 4), 'startDate is ok');
     });
 
+    QUnit.test('startDate and endDate should has correct type after "allDay" and "repeat" option changed', function(assert) {
+        const scheduler = createInstance();
+
+        scheduler.instance.showAppointmentPopup();
+
+        scheduler.appointmentForm.getEditor('allDay').option('value', true);
+        scheduler.appointmentForm.getEditor('repeat').option('value', true);
+
+        const startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+        const endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+
+        assert.deepEqual(startDateEditor.option('type'), 'date', 'startDate type after is date');
+        assert.deepEqual(endDateEditor.option('type'), 'date', 'endDate type after is date');
+    });
+
     QUnit.test('Popup should contains description editor', function(assert) {
         const scheduler = createInstance({});
 
