@@ -361,7 +361,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       action = (
         actArgs: Record<string, string | Element | dxElementWrapper>,
       ): void => {
-        // eslint-disable-next-line no-param-reassign
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
             // eslint-disable-next-line no-param-reassign
