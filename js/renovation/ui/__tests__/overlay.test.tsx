@@ -2,11 +2,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { createTestRef } from '../../test_utils/create_ref';
-import LegacyOverlay from '../../../ui/overlay';
+import LegacyOverlay from '../../../ui/overlay/ui.overlay';
 import { viewFunction as OverlayView, OverlayProps, Overlay } from '../overlay';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 
-jest.mock('../../../ui/overlay', () => jest.fn());
+jest.mock('../../../ui/overlay/ui.overlay', () => jest.fn());
 
 describe('Overlay', () => {
   describe('View', () => {
