@@ -10,6 +10,8 @@ import Draggable from '../../draggable';
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 
+const DRAGGABLE_ELEMENT_OFFSET = 2;
+
 // const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
 
 // const KEYDOWN_EVENT = addNamespace('keydown', MODULE_NAMESPACE);
@@ -24,13 +26,15 @@ export default class TableResizingModule extends BaseModule {
         if(this.enabled) {
             this.editorInstance.on('contentReady', () => {
                 this._attachResizerTimeout = setTimeout(() => {
-                    this._createTableResizeFrame();
-                    this._updateFramePosition(this._$columnResizeFrame);
-                    this._updateColumnResizeFrame();
-
-                    quill.on('text-change', () => {
+                    if(this._findTables().length) {
+                        this._createTableResizeFrame();
                         this._updateFramePosition(this._$columnResizeFrame);
-                    });
+                        this._updateColumnResizeFrame();
+
+                        quill.on('text-change', () => {
+                            this._updateFramePosition(this._$columnResizeFrame);
+                        });
+                    }
                 });
             });
         }
@@ -55,6 +59,9 @@ export default class TableResizingModule extends BaseModule {
     // _findTableRoot(targetElement) {
     //     return $(targetElement).parents('table').get(0);
     // }
+    _findTables() {
+        return $(this.editorInstance._getQuillContainer()).find('table');
+    }
 
     _updateFramePosition($frame) {
         this._$target = $(this.editorInstance._getQuillContainer()).find('table').get(0);
@@ -72,7 +79,7 @@ export default class TableResizingModule extends BaseModule {
         move($frame, { left: 0, top: 0 });
     }
 
-    _createTableResizeFrame() {
+    _createTableResizeFrame(targetTable) {
         // console.log('_createTableResizeFrame');
         this._$columnResizeFrame = $('<div>')
             .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
@@ -100,7 +107,7 @@ export default class TableResizingModule extends BaseModule {
             }
 
             this._$columnSeparators[i].css({
-                left: leftPosition,
+                left: leftPosition - DRAGGABLE_ELEMENT_OFFSET,
                 transform: 'none'
             });
 
@@ -121,9 +128,14 @@ export default class TableResizingModule extends BaseModule {
     _attachColumnSeparatorEvents($columnSeparator, $columns, index) {
 
         eventsEngine.on($columnSeparator, 'dxpointerdown', () => {
-            // if(this._columnResizer) {
-            //     this._columnResizer.dispose();
-            // }
+            if(this._columnResizer) {
+                const isTheSameSeparator = this._columnResizer._$element.get(0) === $columnSeparator.get(0);
+                if(!isTheSameSeparator) {
+                    this._columnResizer.dispose();
+                } else {
+                    return;
+                }
+            }
 
             this._createDraggableElement($columnSeparator, $columns, index);
         });
@@ -144,7 +156,7 @@ export default class TableResizingModule extends BaseModule {
                 $columnSeparator.css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
 
                 if(this._nextColumnWidth) {
-                    $columns.eq(index).css('width', this._nextColumnWidth - event.offset.x);
+                    $columns.eq(index + 1).css('width', this._nextColumnWidth - event.offset.x);
                 }
                 // this._updateByDrag = true;
                 // const $alphaChannelHandle = this._$alphaChannelHandle;
@@ -172,6 +184,18 @@ export default class TableResizingModule extends BaseModule {
             }
         });
     }
+
+    // option(option, value) {
+    //     if(option === 'tableResizing') {
+    //         Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+    //         return;
+    //     }
+
+    //     if(option === 'enabled') {
+    //         this.enabled = value;
+    //         value ? this._attachEvents() : this._detachEvents();
+    //     }
+    // }
 
     clean() {
         // this._detachEvents();

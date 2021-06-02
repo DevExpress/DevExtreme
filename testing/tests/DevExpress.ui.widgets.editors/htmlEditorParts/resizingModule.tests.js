@@ -97,6 +97,7 @@ module('Resizing module', moduleConfig, () => {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
         this.attachSpies(resizingInstance);
+
         resizingInstance.option('enabled', true);
 
         assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');

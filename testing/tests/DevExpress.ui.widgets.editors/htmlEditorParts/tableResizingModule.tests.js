@@ -42,8 +42,8 @@ const moduleConfig = {
 
         this.quillMock = {
             root: this.$element.get(0),
-            on: () => {},
-            off: () => {}
+            on: (e) => {},
+            off: (e) => {}
         };
 
         this.options = {
@@ -56,18 +56,8 @@ const moduleConfig = {
             }
         };
 
-        // this.attachSpies = (instance) => {
-        //     this.attachEventsSpy = sinon.spy(instance, '_attachEvents');
-        //     this.detachEventsSpy = sinon.spy(instance, '_detachEvents');
-        //     this.createFrameSpy = sinon.spy(instance, '_createResizeFrame');
-        //     this.updateFrameSpy = sinon.spy(instance, 'updateFramePosition');
-        //     this.showFrameSpy = sinon.spy(instance, 'showFrame');
-        //     this.hideFrameSpy = sinon.spy(instance, 'hideFrame');
-        // };
     },
     afterEach: function() {
-        this.clock.tick();
-        // resizingInstance.clean();
         this.clock.restore();
     }
 };
@@ -77,20 +67,20 @@ const { test, module } = QUnit;
 module('Table resizing module', moduleConfig, () => {
     test('create module instance with default options', function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
+
+        this.clock.tick();
         assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'There is no resize frame element');
         assert.notOk(resizingInstance.enabled, 'module disabled by default');
+
+        // create module instance with enabled equals to \'true\'
+        //     this.options.enabled = true;
+        //     const resizingInstance = new Resizing(this.quillMock, this.options);
+        //     //resizingInstance.option('tableResizing', { enabled: true });
+        //     this.clock.tick();
+        //     const $tableResizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+        //     assert.strictEqual($tableResizeFrame.length, 1, 'There is a resize frame element');
+        //     assert.notOk($tableResizeFrame.is(':visible'), 'Resize frame element is hidden');
     });
-
-    test('create module instance with enabled equals to \'true\'', function(assert) {
-
-        this.options.enabled = true;
-        new Resizing(this.quillMock, this.options);
-        this.clock.tick();
-        const $tableResizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
-
-        assert.strictEqual($tableResizeFrame.length, 1, 'There is a resize frame element');
-        assert.notOk($tableResizeFrame.is(':visible'), 'Resize frame element is hidden');
-    });
-
 
 });
