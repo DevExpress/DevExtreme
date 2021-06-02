@@ -232,7 +232,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
-  @Mutable() validateWheelTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
 
@@ -956,7 +956,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   clearWheelValidationTimer(): void {
-    clearTimeout(this.validateWheelTimer as unknown as number);
+    clearTimeout(this.validateWheelTimer as number);
     this.validateWheelTimer = undefined;
   }
 
