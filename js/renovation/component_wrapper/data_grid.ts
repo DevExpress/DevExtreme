@@ -7,6 +7,7 @@ import type { TemplateComponent } from './common/types';
 
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
+    _skipInvalidate = false;
 
     _fireContentReady() {}
 
@@ -89,13 +90,21 @@ export default class DataGridWrapper extends Component {
         options.complexOptionChanged = (e) => {
             if(e.fullName.startsWith('columns[')) {
                 if(this.option(e.fullName) !== e.value) {
+                    this._skipInvalidate = true;
                     this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
+                    this._skipInvalidate = false;
                 }
             } else {
                 this.option(e.fullName, e.value);
             }
         }
         return super._patchOptionValues(options);
+    }
+
+    _invalidate() {
+        if(this._skipInvalidate && this._isUpdateAllowed()) return;
+
+        super._invalidate();
     }
 
     _setOptionsByReference() {

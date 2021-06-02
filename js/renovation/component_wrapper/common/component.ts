@@ -389,9 +389,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this._shouldRaiseContentReady = this._shouldRaiseContentReady
       || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
-    if (!this._isUpdateAllowed()) {
-      this._invalidate();
-    }
+    this._invalidate();
   }
 
   _extractDefaultSlot(): VNode | null {
