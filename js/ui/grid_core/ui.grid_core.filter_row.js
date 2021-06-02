@@ -8,7 +8,7 @@ import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import Editor from '../editor/editor';
-import Overlay from '../overlay';
+import { Overlay } from '../overlay';
 import Menu from '../menu';
 import { selectView } from '../shared/accessibility';
 
