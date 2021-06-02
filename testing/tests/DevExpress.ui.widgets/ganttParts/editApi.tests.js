@@ -237,6 +237,51 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
         assert.equal(task.CustomText, values.CustomText, 'onTaskUpdated is triggrered');
     });
+    test('taskUpdate with only custom field and update custom field in onTaskUpdating should trigger onTaskUpdated', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        let values = {};
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+        const onTaskUpdatingText = 'new custom text';
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = onTaskUpdatingText;
+        });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+        const taskData = this.instance.getTaskData(1);
+
+        assert.equal(taskData.CustomText, onTaskUpdatingText, 'task cust field  is updated');
+        assert.equal(values.CustomText, onTaskUpdatingText, 'onTaskUpdated is triggrered');
+    });
     test('insertDependency', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);

@@ -88,3 +88,7 @@ export const getTask = (mainElement, index) => {
     return mainElement.find(`[task-index="${index}"]`);
 };
 
+export const getDependencyElements = (mainElement, internalId) => {
+    return mainElement.find(`[dependency-id="${internalId}"]`);
+};
+
