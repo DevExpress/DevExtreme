@@ -15,14 +15,14 @@ export const viewFunction = ({
     role,
   },
   className,
-  onViewRendered,
+  viewRendered,
 }: GridBaseViews): JSX.Element => (
   <div className={className} role={role}>
     {(views.map(({ name, view }) => (
       <GridBaseViewWrapper
         key={name}
         view={view}
-        onRendered={onViewRendered}
+        onRendered={viewRendered}
       />
     )))}
   </div>
@@ -44,7 +44,7 @@ export class GridBaseViews extends JSXComponent<GridBaseViewPropsType, 'views' |
 
   @Mutable() viewRenderedCount = 0;
 
-  onViewRendered(): void {
+  viewRendered(): void {
     this.viewRenderedCount += 1;
 
     if (this.viewRenderedCount === this.props.views.length) {

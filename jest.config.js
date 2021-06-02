@@ -22,6 +22,7 @@ module.exports = {
         './js/renovation/component_wrapper/common/editor.ts',
         './js/renovation/component_wrapper/utils/utils.ts',
         './js/renovation/ui/grids/data_grid/datagrid_component.ts',
+        './js/renovation/ui/grids/data_grid/common/data_grid_props.tsx',
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/ui/scroll_view/utils/get_element_offset.ts',
         './js/renovation/ui/scroll_view/utils/get_element_style.ts',

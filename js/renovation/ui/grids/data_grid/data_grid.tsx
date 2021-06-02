@@ -193,10 +193,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
-    // eslint-disable-next-line prefer-rest-params
-    return this.callMethod('columnOption', [...arguments]);
+  columnOption(...args: [id: number | string] |
+  [id: number | string, optionName: string] |
+  [id: number | string, options: unknown] |
+  [id: number | string, optionName: string, optionValue: unknown]): void {
+    this.instance?.columnOption(...args as [id: string, optionName: unknown]);
   }
 
   @Method()
@@ -548,10 +549,6 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     } finally {
       this.isTwoWayPropUpdating = false;
     }
-  }
-
-  callMethod(funcName: string, args: unknown[]): void {
-    return this.instance?.[funcName](...args);
   }
 
   updateTwoWayValue(e: OptionChangedEvent): void {
