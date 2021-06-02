@@ -193,11 +193,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  columnOption(...args: [id: number | string] |
-  [id: number | string, optionName: string] |
-  [id: number | string, options: unknown] |
-  [id: number | string, optionName: string, optionValue: unknown]): void {
-    this.instance?.columnOption(...args as [id: string, optionName: unknown]);
+  columnOption(id: number | string, optionName?: string, optionValue?: unknown): any {
+    if (arguments.length === 1 || optionName === undefined) {
+      return this.instance?.columnOption(id);
+    } if (arguments.length === 2) {
+      return this.instance?.columnOption(id, optionName);
+    }
+    return this.instance?.columnOption(id, optionName, optionValue);
   }
 
   @Method()
