@@ -370,7 +370,19 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.updateCellsSelection();
 
-            const selectedCellData = this.cellsSelectionState.getSelectedCells();
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
 
             this.option('selectedCellData', selectedCellData);
             this._selectionChangedAction({ selectedCellData });
@@ -456,7 +468,19 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.updateCellsSelection();
 
-            const selectedCellData = this.cellsSelectionState.getSelectedCells();
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
 
             this.option('selectedCellData', selectedCellData);
             this._selectionChangedAction({ selectedCellData });
@@ -1535,7 +1559,19 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.updateCellsSelection();
 
-            const selectedCellData = this.cellsSelectionState.getSelectedCells();
+            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }) => ({
+                startDate,
+                endDate,
+                allDay,
+                groupIndex,
+                groups,
+            }));
 
             this.option('selectedCellData', selectedCellData);
             this._selectionChangedAction({ selectedCellData });

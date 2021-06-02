@@ -81,23 +81,9 @@ export default class CellsSelectionState {
             return selectedCells;
         }, []);
 
-        const sortedCells = filteredCells.sort(
+        this._selectedCells = filteredCells.sort(
             (firstCell, secondCell) => firstCell.startDate.getTime() - secondCell.startDate.getTime(),
         );
-
-        this._selectedCells = sortedCells.map(({
-            startDate,
-            endDate,
-            allDay,
-            groupIndex,
-            groups,
-        }) => ({
-            startDate,
-            endDate,
-            allDay,
-            groupIndex,
-            groups,
-        }));
     }
 
     getSelectedCells() {
