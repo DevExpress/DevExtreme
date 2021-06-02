@@ -369,23 +369,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
 
             this.updateCellsSelection();
-
-            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }) => ({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }));
-
-            this.option('selectedCellData', selectedCellData);
-            this._selectionChangedAction({ selectedCellData });
+            this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells(), $cell);
 
             this._dateTableScrollable.scrollToElement($cell);
         }
@@ -468,22 +452,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.updateCellsSelection();
 
-            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }) => ({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }));
-
-            this.option('selectedCellData', selectedCellData);
-            this._selectionChangedAction({ selectedCellData });
+            this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells());
         }
     }
 
@@ -1558,23 +1527,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.cellsSelectionState.setSelectedCells(cell, cell);
 
             this.updateCellsSelection();
-
-            const selectedCellData = this.cellsSelectionState.getSelectedCells().map(({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }) => ({
-                startDate,
-                endDate,
-                allDay,
-                groupIndex,
-                groups,
-            }));
-
-            this.option('selectedCellData', selectedCellData);
-            this._selectionChangedAction({ selectedCellData });
+            this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells());
         }
     }
 
@@ -3367,6 +3320,25 @@ class SchedulerWorkSpace extends WidgetObserver {
         newFirstViewDate.setHours(this.option('startDayHour'));
 
         return newFirstViewDate;
+    }
+
+    _updateSelectedCellDataOption(selectedCellData) {
+        const correctedSelectedCellData = selectedCellData.map(({
+            startDate,
+            endDate,
+            allDay,
+            groupIndex,
+            groups,
+        }) => ({
+            startDate,
+            endDate,
+            allDay,
+            groupIndex,
+            groups,
+        }));
+
+        this.option('selectedCellData', correctedSelectedCellData);
+        this._selectionChangedAction({ selectedCellData: correctedSelectedCellData });
     }
 
     _getCellByData(cellData) {
