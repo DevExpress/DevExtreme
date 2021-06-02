@@ -125,7 +125,7 @@ QUnit.test('index should be correct for grouped list', function(assert) {
     assert.equal(list.getItemElementByFlatIndex(5).get(0), $item.get(0), 'item correct');
 });
 
-QUnit.test('grouped list can select items with index more then 255 (T996851)', function(assert) {
+QUnit.test('it should be possible to select an item with index bigger then 255 in the grouped list (T996851)', function(assert) {
     const items = [];
     for(let i = 0; i < 300; i += 1) {
         items.push(i);
