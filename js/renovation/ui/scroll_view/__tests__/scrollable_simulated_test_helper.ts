@@ -20,6 +20,9 @@ import {
 import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
 import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
 
+jest.mock('../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
+jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
+
 const TOP_POCKET_HEIGHT = 80;
 const BOTTOM_POCKET_HEIGHT = 55;
 
@@ -139,10 +142,10 @@ class ScrollableTestHelper {
 
     Object.defineProperties(el, {
       offsetHeight: {
-        get() { return parseFloat(window.getComputedStyle(this).height) || 0; },
+        get() { return size.height || 0; },
       },
       offsetWidth: {
-        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+        get() { return size.width || 0; },
       },
       scrollHeight: {
         configurable: true,
@@ -154,11 +157,11 @@ class ScrollableTestHelper {
       },
       clientWidth: {
         configurable: true,
-        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+        get() { return size.width || 0; },
       },
       clientHeight: {
         configurable: true,
-        get() { return parseFloat(window.getComputedStyle(this).height) || 0; },
+        get() { return size.height || 0; },
       },
     });
 

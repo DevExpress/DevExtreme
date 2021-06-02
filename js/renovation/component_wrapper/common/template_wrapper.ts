@@ -1,6 +1,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+import { replaceWith } from '../../../core/utils/dom';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { getPublicElement } from '../../../core/element';
@@ -32,7 +33,6 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     if (node) {
       const { parentNode } = node;
       if (parentNode) {
-        parentNode.removeChild(node);
         const $parent = $(parentNode as Element);
         const $children = $parent.contents();
 
@@ -52,11 +52,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...!this.props.transclude ? { model: data } : {},
           ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
-        const result = $result.get(0) as HTMLElement;
 
-        if (result && !result.parentNode) {
-          parentNode.appendChild(result);
-        }
+        replaceWith($(node), $result);
 
         return (): void => {
           // NOTE: order is important

@@ -29,7 +29,6 @@ describe('TopPocket', () => {
         pocketTop: 0,
         pullDownIconAngle: 0,
         pullDownOpacity: 0,
-        pullDownTop: 0,
         pullDownTranslateTop: 0,
         topPocketTranslateTop: 0,
       });

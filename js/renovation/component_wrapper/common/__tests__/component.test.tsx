@@ -8,6 +8,7 @@ import './utils/test_components/base';
 import './utils/test_components/options';
 import './utils/test_components/templated';
 import './utils/test_components/non_templated';
+import './utils/test_components/children';
 import {
   defaultEvent,
   emitKeyboard,
@@ -22,6 +23,7 @@ const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrap
   dxOptionsTestWidget: any;
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
+  dxChildrenTestWidget: any;
 };
 
 beforeEach(() => {
@@ -800,6 +802,28 @@ describe('templates and slots', () => {
     const root = $('#component').children('.templates-root')[0];
 
     expect($(root.firstChild)[0]).toBe(template[0]);
+  });
+
+  it('should render content in right order if children placed between other nodes', () => {
+    const slotContent = $('<span>').html('Default slot');
+    $('#component').append(slotContent);
+    const slotBefore = $('<span>').html('Additional slot before').insertBefore(slotContent);
+    const slotAfter = $('<span>').html('Additional slot after').insertAfter(slotContent);
+    $('#component').dxChildrenTestWidget({});
+
+    const children = $('#component')[0].childNodes;
+    expect(children.length).toBe(5);
+    expect(children[1]).toBe(slotBefore[0]);
+    expect(children[2]).toBe(slotContent[0]);
+    expect(children[3]).toBe(slotAfter[0]);
+  });
+
+  it('should not fail if template returned parent node', () => {
+    const template = (_, element) => $(element)
+      .append($('<span>').text('text'))
+      .addClass('modified_container');
+
+    expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
   });
 });
 
