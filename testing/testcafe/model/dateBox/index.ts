@@ -14,7 +14,7 @@ export default class DateBox extends Widget {
 
   name = 'dxDateBox';
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.input = this.element.find(`.${CLASS.input}`);

@@ -674,7 +674,7 @@ declare module DevExpress {
      */
     resetOption(optionName: string): void;
 
-    _options: { silent(path, value): void };
+    _options: { silent(path: any, value: any): void };
     _createActionByOption(optionName: string, config: object): Function;
     _dispose(): void;
     _getDefaultOptions(): object;

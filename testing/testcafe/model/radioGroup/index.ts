@@ -11,7 +11,7 @@ export default class RadioGroup extends Widget {
 
   name = 'dxRadioGroup';
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.items = this.element.child(`.${CLASS.collection}`).child(`.${CLASS.item}`);
