@@ -9,6 +9,10 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
+
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
 import { createInstances } from 'ui/scheduler/instanceFactory';
@@ -16,8 +20,12 @@ import { createInstances } from 'ui/scheduler/instanceFactory';
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
 
-const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' };
-const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
+const WORKSPACE_DAY = { class: 'dxSchedulerWorkSpaceDay', name: 'Day View' };
+const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'Week View' };
+const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'Month View' };
+const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'Timeline Day View' };
+const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'Timeline Week View' };
+const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'Timeline Month View' };
 
 QUnit.dump.maxDepth = 10;
 
@@ -1044,5 +1052,27 @@ module('Renovated Render', {
         }, 'dxSchedulerWorkSpaceWeek');
 
         assert.ok(this.instance._$allDayTable, 'All-day panel has been initialized');
+    });
+
+    // Remove after complete workspace renovation
+    [
+        WORKSPACE_DAY,
+        WORKSPACE_WEEK,
+        WORKSPACE_MONTH,
+        TIMELINE_DAY,
+        TIMELINE_WEEK,
+        TIMELINE_MONTH,
+    ].forEach(({ class: component, name }) => {
+        test(`Cache should be cleared on rerender in ${name}`, function(assert) {
+            this.createInstance({}, component);
+
+            const cacheClearSpy = sinon.spy(this.instance.cache, 'clear');
+
+            this.instance.renderWorkSpace();
+
+            assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+
+            cacheClearSpy.restore();
+        });
     });
 });
