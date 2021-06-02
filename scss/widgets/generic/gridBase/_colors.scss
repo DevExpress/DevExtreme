@@ -202,6 +202,9 @@ $datagrid-columnchooser-overlay-border-radius: null !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
+$datagrid-text-link-disabled-opacity: 0.5 !default;
+$datagrid-icon-link-disabled-opacity: 0.6 !default;
+
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;

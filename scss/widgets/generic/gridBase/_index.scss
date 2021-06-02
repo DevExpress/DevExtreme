@@ -392,6 +392,14 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
       .dx-command-edit {
         width: $generic-grid-base-command-edit-column-width;
         min-width: $generic-grid-base-command-edit-column-width;
+
+        .dx-link.dx-state-disabled {
+          opacity: $datagrid-text-link-disabled-opacity;
+
+          &.dx-link-icon {
+            opacity: $datagrid-icon-link-disabled-opacity;
+          }
+        }
       }
 
       .dx-command-expand {
