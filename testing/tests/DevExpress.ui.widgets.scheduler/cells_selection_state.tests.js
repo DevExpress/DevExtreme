@@ -244,6 +244,32 @@ module('Cells Selection State', () => {
         );
     });
 
+    test('"setSelectedCellsByData" should work correctly', function(assert) {
+        const cellsSelectionState = new CellsSelectionState();
+
+        cellsSelectionState.setSelectedCellsByData([{
+            startDate: new Date(2021, 5, 2),
+            endDate: new Date(2021, 5, 3),
+            allDay: true,
+            groups: { resourceId: 1 },
+            groupIndex: 1,
+        }]);
+
+        const selectedCells = cellsSelectionState.getSelectedCells();
+
+        assert.deepEqual(
+            selectedCells,
+            [{
+                startDate: new Date(2021, 5, 2),
+                endDate: new Date(2021, 5, 3),
+                allDay: true,
+                groups: { resourceId: 1 },
+                groupIndex: 1,
+            }],
+            'Correct focused cell',
+        );
+    });
+
     test('"releaseSelectedAndFocusedCells" should save current values as previous', function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,

@@ -1321,7 +1321,21 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setFocusOnCellByOption(data) {
         this._releaseSelectedAndFocusedCells();
-        this._setSelectedCellsByCellData(data);
+        if(data?.length) {
+            this._setSelectedCellsByCellData(data);
+
+            const isGroupsSpecified = this._isGroupsSpecified(data[0].groups);
+            const correctedData = data.map(({
+                groups,
+                ...restProps
+            }) => ({
+                ...restProps,
+                groups,
+                groupIndex: isGroupsSpecified ? this._getGroupIndexByResourceId(groups) : 0,
+            }));
+
+            this.cellsSelectionState.setSelectedCellsByData(correctedData);
+        }
     }
 
     _setSelectedCellsByCellData(data) {

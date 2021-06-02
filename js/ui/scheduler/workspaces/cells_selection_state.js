@@ -86,6 +86,10 @@ export default class CellsSelectionState {
         );
     }
 
+    setSelectedCellsByData(selectedCellsData) {
+        this._selectedCells = selectedCellsData;
+    }
+
     getSelectedCells() {
         return this._selectedCells || this._prevSelectedCells;
     }
