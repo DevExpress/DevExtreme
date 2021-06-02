@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
-import LegacyOverlay from '../../ui/overlay';
+import LegacyOverlay from '../../ui/overlay/ui.overlay';
 import { UserDefinedElement, DxElement } from '../../core/element';
 import { template } from '../../core/templates/template';
 import { animationConfig } from '../../animation/fx';
