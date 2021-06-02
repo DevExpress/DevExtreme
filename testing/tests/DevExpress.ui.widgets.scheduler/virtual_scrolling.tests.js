@@ -619,36 +619,6 @@ module('Virtual Scrolling', {
                 'Horizontal scrolling state is correct'
             );
         });
-
-        test('outlineCount should depends on viewport appointment count', function(assert) {
-
-            this.prepareInstance();
-
-            let viewPortApptCount = 0;
-            Object.defineProperty(
-                this.verticalVirtualScrolling,
-                'filteredApptCount',
-                {
-                    get: () => viewPortApptCount
-                }
-            );
-
-            [
-                { apptCount: 0, expectedOutlineCount: 3 },
-                { apptCount: 40, expectedOutlineCount: 2 },
-                { apptCount: 50, expectedOutlineCount: 1 },
-                { apptCount: 100, expectedOutlineCount: 0 }
-            ].forEach(({ apptCount, expectedOutlineCount }) => {
-
-                viewPortApptCount = apptCount;
-
-                assert.equal(
-                    this.verticalVirtualScrolling.outlineCount,
-                    expectedOutlineCount,
-                    `Outline count is correct if ${apptCount} appointments in viewPort`
-                );
-            });
-        });
     });
 
     module('Scrolling', () => {

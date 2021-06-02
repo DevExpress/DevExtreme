@@ -319,15 +319,8 @@ class VirtualScrollingBase {
         return Math.ceil(this.viewportSize / this.itemSize);
     }
 
-    get filteredApptCount() {
-        return this.workspace.invoke('getFilteredAppointmentCount') || 0;
-    }
-
     get outlineCount() {
-        const baseApptCount = 15;
-        const divider = Math.max(2, this.filteredApptCount / baseApptCount);
-
-        return Math.floor(this.pageSize / divider);
+        return Math.floor(this.pageSize / 2);
     }
 
     get workspace() { return this._workspace; }
