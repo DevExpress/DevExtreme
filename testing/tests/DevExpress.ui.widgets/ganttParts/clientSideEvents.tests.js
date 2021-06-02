@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import messageLocalization from 'localization/message';
 import 'ui/gantt';
-import { Consts, options, data, getGanttViewCore, showTaskEditDialog } from '../../../helpers/ganttHelpers.js';
+import { Consts, options, data, getGanttViewCore, showTaskEditDialog, getDependencyElements } from '../../../helpers/ganttHelpers.js';
 const { test } = QUnit;
 
 const moduleConfig = {
@@ -615,5 +615,40 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 0, 'dialog is not shown');
+    });
+    test('updating with custom field shouldnt restore dependencies', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': 2, 'parentId': 0, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 } ] }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            title: 'new'
+        };
+        let dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 6);
+        getGanttViewCore(this.instance).commandManager.removeDependencyCommand.execute('0', false);
+
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency has been deleted');
+        this.instance.updateTask('1', data);
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, 0);
+        assert.equal(dependencies.length, 0, 'dependency is still deleted');
     });
 });
