@@ -147,6 +147,16 @@ const SchedulerAppointmentForm = {
         ];
     },
 
+    _changeFormItemDateType: function(itemPath, value) {
+        const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
+
+        const newType = value ? 'date' : 'datetime';
+
+        itemEditorOptions.type = newType;
+
+        this._appointmentForm.itemOption(itemPath, 'editorOptions', itemEditorOptions);
+    },
+
     _createMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
         return [
             {
@@ -200,8 +210,12 @@ const SchedulerAppointmentForm = {
                                     endDateEditor.option('value', endDate);
                                 }
                             }
-                            startDateEditor.option('type', value ? 'date' : 'datetime');
-                            endDateEditor.option('type', value ? 'date' : 'datetime');
+
+                            const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.startDateExpr}`;
+                            const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${dataExprs.endDateExpr}`;
+
+                            this._changeFormItemDateType(startDateItemPath, value);
+                            this._changeFormItemDateType(endDateItemPath, value);
                         }
                     }
                 }, {
