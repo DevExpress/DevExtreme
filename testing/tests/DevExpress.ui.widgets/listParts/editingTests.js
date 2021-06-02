@@ -134,22 +134,22 @@ QUnit.test('it should be possible to select an item with index bigger then 255 i
         key: 'someKey',
         items
     }];
-    let selectedIdx;
-    const list = $('#templated-list').dxList({
+    let selectedIndex;
+    const list = $('#list').dxList({
         dataSource,
         grouped: true,
         selectionMode: 'single',
         onSelectionChanged: function(e) {
-            selectedIdx = e.addedItems[0].text;
+            selectedIndex = e.addedItems[0].text;
         },
-        groupTemplate: function(data) {
-            return $('<div>Assigned: ' + data.key + '</div>');
+        groupTemplate: function() {
+            return $('<div>Group</div>');
         },
     }).dxList('instance');
 
     list.selectItem(280);
 
-    assert.strictEqual(selectedIdx, 280, 'item with big index selected');
+    assert.strictEqual(selectedIndex, 280, 'item with big index selected');
 });
 
 QUnit.test('deleteItem should remove an item', function(assert) {
