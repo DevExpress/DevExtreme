@@ -5,63 +5,60 @@
 const fs = require('fs');
 
 const eslintNoUnusedVars = '/* eslint no-unused-vars: */\n';
+const eslintNoDuplicateImports = '/* no-duplicate-imports: */\n';
 
 const globalizeCjs = 'const Globalize = require(\'globalize\');\n';
 const globalizeEsm = 'import Globalize from \'globalize\';\n';
-const devextreme = 'devextreme';
+const prefix = 'devextreme/';
 
 const modulesMetadataFilePath = '../../build/gulp/modules_metadata.json';
 
 const modulesCjsFilePath = './src/modules_cjs.js';
 const modulesEsmFilePAth = './src/modules_esm.js';
 
+const excludeModules = ['ui/set_template_engine'];
+const cjsImports = [ eslintNoUnusedVars, globalizeCjs];
+const esmImports = [ eslintNoUnusedVars, eslintNoDuplicateImports, globalizeEsm];
 
-const getCjsModuleFromObj = (module) => {
+const getModuleFromObj = (module, cjsImports, esmImports) => {
     if(module.exports) {
-        const imports = [];
-        Object.keys(module.exports).forEach((exp) => {
-            exp = (exp === 'default') ? '' : `.${exp}`;
-            imports.push(`require('${devextreme}/${module.name}')${exp};\n`);
+        Object.keys(module.exports).map((expr) => {
+            if(!(module.exports[expr].exportAs === 'type')) {
+
+                const path = module.exports[expr].path;
+                let importItem = path.slice(path.lastIndexOf('.') + 1);
+
+                if(expr === 'default') {
+                    expr = '';
+                } else {
+                    expr = `.${importItem}`;
+                    importItem = `{ ${importItem} }`;
+                }
+
+                cjsImports.push(`require('${prefix}${module.name}')${expr};\n`);
+                esmImports.push(`import ${ importItem } from '${prefix}${ module.name }';\n`);
+            }
         });
-        return imports.join('');
     } else {
-        return `require('${devextreme}/${module.name}');\n`;
+        cjsImports.push(`require('${prefix}${module.name}');\n`);
     }
-};
-
-const getEsmModuleFromObj = (module) => {
-    if(module.exports) {
-        let importItems;
-        if(module.exports.default) {
-            const path = module.exports.default.path;
-            importItems = path.slice(path.indexOf('.') + 1);
-        } else {
-            importItems = `{ ${Object.keys(module.exports).join(', ')} }`;
-        }
-        return `import ${ importItems } from '${devextreme}/${ module.name }';\n`;
-    }
-    return '';
 };
 
 try {
-    let metadata = fs.readFileSync(modulesMetadataFilePath);
-    metadata = JSON.parse(metadata);
 
-    const cjsImports = [ eslintNoUnusedVars, globalizeCjs];
-    const esmImports = [ eslintNoUnusedVars, globalizeEsm];
+    let modules_metadata = fs.readFileSync(modulesMetadataFilePath);
+    modules_metadata = JSON.parse(modules_metadata);
 
-    metadata.forEach((module) => {
-        if(module.isInternal !== true) {
-            const cjsModule = getCjsModuleFromObj(module);
-            const esmModule = getEsmModuleFromObj(module);
-
-            cjsImports.push(cjsModule);
-            esmImports.push(esmModule);
+    modules_metadata.forEach((module) => {
+        console.log(module.name);
+        if(!module.isInternal &&
+           !(excludeModules.includes(module.name))) {
+            getModuleFromObj(module, cjsImports, esmImports);
         }
     });
 
     fs.writeFileSync(modulesCjsFilePath, cjsImports.join(''));
-    fs.writeFileSync(modulesEsmFilePAth, esmImports.filter((el) => !(el === '')).join(''));
+    fs.writeFileSync(modulesEsmFilePAth, esmImports.join(''));
 
 } catch(err) {
     console.log(err);
