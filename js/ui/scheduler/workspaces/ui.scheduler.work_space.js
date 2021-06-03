@@ -2555,7 +2555,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellData($cell) {
-        const cellData = this._getFullCellData($cell);
+        const cellData = this._getFullCellData($cell) || {};
 
         return extend(true, {}, {
             startDate: cellData.startDate,
