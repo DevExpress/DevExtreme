@@ -916,6 +916,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('cell content with auto width should not be wrapper to second line on zoom (T998665)', function(assert) {
+        if($.fn.jquery.split('.')[0] === '2') {
+            assert.ok(true, 'test is not actual for jquery 2');
+            return;
+        }
         // arrange, act
         const dataGrid = $('#dataGrid').dxDataGrid({
             height: 70,
