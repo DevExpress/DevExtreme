@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
+
+import '../../../core/component';
+
 declare module '../../../core/component' {
   interface Component<TProperties> { // eslint-disable-line @typescript-eslint/no-unused-vars
     _optionsByReference: Record<string, any>;
@@ -19,5 +22,3 @@ declare module '../../../core/component' {
     _setDeprecatedOptions(): void;
   }
 }
-
-export const { }; // eslint-disable-line no-empty-pattern
