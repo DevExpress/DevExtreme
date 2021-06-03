@@ -431,7 +431,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const cellCoordinates = {
                     columnIndex: 0,
                     rowIndex: 0,
-                    allDay: false,
+                    allDay: this._isVerticalGroupedWorkSpace() && this.isAllDayPanelVisible,
                 };
                 this.cellsSelectionState.setFocusedCell(
                     cellCoordinates.rowIndex,
