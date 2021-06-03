@@ -32,7 +32,7 @@ jobs:
 
     - name: Prepare src files
       working-directory: ./testig/bundlers
-      run: node ./src/prepare_src.js
+      run: npm run create:src
 
     - name: Create bundle with webpack (CJS import)
       working-directory: ./testing/bundlers
