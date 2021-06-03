@@ -30,6 +30,10 @@ jobs:
       working-directory: ./testing/bundlers  
       run: npm install
 
+    - name: Prepare src files
+      working-directory: ./testig/bundlers
+      run: node ./src/prepare_src.js
+
     - name: Create bundle with webpack (CJS import)
       working-directory: ./testing/bundlers
       run: npm run build:webpack-cjs

@@ -1,4 +1,5 @@
 /* eslint no-unused-vars: */
+/* eslint-disable spellcheck/spell-checker */
 
 import { requestAnimationFrame, cancelAnimationFrame } from 'devextreme/animation/frame';
 import fx from 'devextreme/animation/fx';
@@ -115,3 +116,14 @@ import 'devextreme/localization/globalize/currency';
 import 'devextreme/localization/globalize/date';
 import 'devextreme/localization/globalize/message';
 import 'devextreme/localization/globalize/number';
+
+
+// import click from 'devextreme/events/click';
+// import contextmenu from 'devextreme/events/contextmenu';
+import dblclick from 'devextreme/events/dblclick';
+// import drag from 'devextreme/events/drag';
+import hold from 'devextreme/events/hold';
+// import hover from 'devextreme/events/hover';
+import pointer from 'devextreme/events/pointer';
+// import swipe from 'devextreme/events/swipe';
+// import transform from 'devextreme/events/transform';

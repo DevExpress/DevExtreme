@@ -18,4 +18,7 @@ module.exports = {
             cldr: path.resolve(__dirname, 'node_modules/cldrjs/dist/cldr')
         },
     },
+    stats: {
+        errorDetails: true
+    }
 };
