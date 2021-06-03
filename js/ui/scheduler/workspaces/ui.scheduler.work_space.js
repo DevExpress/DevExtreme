@@ -292,7 +292,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
-        const currentCellData = this.getCellData($cell);
+        const currentCellData = this._getFullCellData($cell);
         const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
         const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
             ...focusedCellData,
@@ -2555,14 +2555,24 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellData($cell) {
-        let data;
-        const currentCell = $cell[0];
+        const cellData = this._getFullCellData($cell);
 
+        return extend(true, {}, {
+            startDate: cellData.startDate,
+            endDate: cellData.endDate,
+            groups: cellData.groups,
+            groupIndex: cellData.groupIndex,
+            allDay: cellData.allDay,
+        });
+    }
+
+    _getFullCellData($cell) {
+        const currentCell = $cell[0];
         if(currentCell) {
-            data = this._getDataByCell($cell);
+            return this._getDataByCell($cell);
         }
 
-        return extend(true, {}, data);
+        return undefined;
     }
 
     _getVirtualRowOffset() {
@@ -2589,14 +2599,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const cellData = viewDataProvider.getCellData(rowIndex, columnIndex, isAllDayCell);
 
-        return cellData ? {
-            startDate: cellData.startDate,
-            endDate: cellData.endDate,
-            groups: cellData.groups,
-            groupIndex: cellData.groupIndex,
-            allDay: cellData.allDay,
-            index: cellData.index,
-        } : undefined;
+        return cellData ? cellData : undefined;
     }
 
     _getHorizontalMax(groupIndex) {
