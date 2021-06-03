@@ -158,12 +158,14 @@ const verticalWorkSpaceMock = {
         cellCountInGroupRow: undefined,
         groupOrientation: 'vertical',
         isProvideVirtualCellsWidth: true,
+        isVerticalGrouping: true,
+        isStandaloneAllDayPanel: false,
+        isGroupedAllDayPanel: true,
+        isAllDayPanelVisible: true,
+        isDateAndTimeView: true,
     }),
     _isVerticalGroupedWorkSpace: () => true,
     isAllDayPanelVisible: true,
-    isGroupedAllDayPanel: () => true,
-    isVirtualScrolling: () => false,
-    isDateAndTimeView: true
 };
 const horizontalWorkSpaceMock = {
     generateRenderOptions: () => ({
@@ -177,12 +179,14 @@ const horizontalWorkSpaceMock = {
         cellCountInGroupRow: undefined,
         groupOrientation: 'horizontal',
         isProvideVirtualCellsWidth: true,
+        isVerticalGrouping: false,
+        isAllDayPanelVisible: true,
+        isGroupedAllDayPanel: false,
+        isStandaloneAllDayPanel: true,
+        isDateAndTimeView: true,
     }),
     _isVerticalGroupedWorkSpace: () => false,
     isAllDayPanelVisible: true,
-    isGroupedAllDayPanel: () => false,
-    isVirtualScrolling: () => false,
-    isDateAndTimeView: true
 };
 
 const createViewDataProvider = ({
@@ -622,7 +626,10 @@ module('View Data Provider', {
             module('Date views', () => {
                 const workSpaceMock = {
                     ...verticalWorkSpaceMock,
-                    isDateAndTimeView: false
+                    generateRenderOptions: () => ({
+                        ...verticalWorkSpaceMock.generateRenderOptions(),
+                        isDateAndTimeView: false,
+                    }),
                 };
 
                 test('it should return correct cell start date', function(assert) {
@@ -901,7 +908,10 @@ module('View Data Provider', {
                 module('Vertical Grouping', function() {
                     const workSpaceMock = {
                         ...verticalWorkSpaceMock,
-                        isDateAndTimeView: false
+                        generateRenderOptions: () => ({
+                            ...verticalWorkSpaceMock.generateRenderOptions(),
+                            isDateAndTimeView: false,
+                        }),
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -960,7 +970,10 @@ module('View Data Provider', {
                 module('Horizontal Grouping', function() {
                     const workSpaceMock = {
                         ...horizontalWorkSpaceMock,
-                        isDateAndTimeView: false
+                        generateRenderOptions: () => ({
+                            ...horizontalWorkSpaceMock.generateRenderOptions(),
+                            isDateAndTimeView: false,
+                        }),
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -1024,8 +1037,6 @@ module('View Data Provider', {
             const baseStartDate = new Date(2021, 0, 10);
             const dataGenerationWorkSpaceMock = {
                 ...horizontalWorkSpaceMock,
-                isAllDayPanelVisible: false,
-                isGroupedByDate: () => false,
                 generateRenderOptions: () => {
                     return {
                         ...horizontalWorkSpaceMock.generateRenderOptions(),
@@ -1069,6 +1080,8 @@ module('View Data Provider', {
                                 },
                             });
                         }],
+                        isAllDayPanelVisible: false,
+                        isGroupedByDate: false,
                     };
                 },
             };
@@ -1488,17 +1501,20 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when all-day panel is enabled', function(assert) {
                 const viewDataProvider = new ViewDataProvider({
                     ...dataGenerationWorkSpaceMock,
-                    isAllDayPanelVisible: true,
-                    _getAllDayCellData: () => {
-                        return ({
-                            value: {
-                                allDay: true,
-                                startDate: new Date(2021, 0, 10),
-                                groupIndex: 0,
-                                groups: { groupId: 1 },
-                            },
-                        });
-                    }
+                    generateRenderOptions: () => ({
+                        ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                        getAllDayCellData: () => {
+                            return ({
+                                value: {
+                                    allDay: true,
+                                    startDate: new Date(2021, 0, 10),
+                                    groupIndex: 0,
+                                    groups: { groupId: 1 },
+                                },
+                            });
+                        },
+                        isAllDayPanelVisible: true,
+                    }),
                 });
 
                 viewDataProvider.update(true);
@@ -1540,22 +1556,22 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', function(assert) {
                 const viewDataProvider = new ViewDataProvider({
                     ...dataGenerationWorkSpaceMock,
-                    isAllDayPanelVisible: true,
-                    _getAllDayCellData: () => {
-                        return ({
-                            value: {
-                                allDay: true,
-                                startDate: new Date(2021, 0, 10),
-                                groupIndex: 0,
-                                groups: { groupId: 1 },
-                            },
-                        });
-                    },
                     generateRenderOptions: () => {
                         return ({
                             ...dataGenerationWorkSpaceMock.generateRenderOptions(),
                             isVerticalGrouping: true,
                             groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                            isAllDayPanelVisible: true,
+                            getAllDayCellData: () => {
+                                return ({
+                                    value: {
+                                        allDay: true,
+                                        startDate: new Date(2021, 0, 10),
+                                        groupIndex: 0,
+                                        groups: { groupId: 1 },
+                                    },
+                                });
+                            },
                         });
                     }
                 });
@@ -1626,22 +1642,22 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', function(assert) {
                 const viewDataProvider = new ViewDataProvider({
                     ...dataGenerationWorkSpaceMock,
-                    isAllDayPanelVisible: false,
-                    _getAllDayCellData: () => {
-                        return ({
-                            value: {
-                                allDay: true,
-                                startDate: new Date(2021, 0, 10),
-                                groupIndex: 0,
-                                groups: { groupId: 1 },
-                            },
-                        });
-                    },
                     generateRenderOptions: () => {
                         return ({
                             ...dataGenerationWorkSpaceMock.generateRenderOptions(),
                             isVerticalGrouping: true,
                             groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                            isAllDayPanelVisible: false,
+                            getAllDayCellData: () => {
+                                return ({
+                                    value: {
+                                        allDay: true,
+                                        startDate: new Date(2021, 0, 10),
+                                        groupIndex: 0,
+                                        groups: { groupId: 1 },
+                                    },
+                                });
+                            },
                         });
                     }
                 });
@@ -1788,11 +1804,12 @@ module('View Data Provider', {
                     totalRowCount: 4,
                     totalCellCount: 2,
                     isProvideVirtualCellsWidth: true,
+                    isVerticalGrouping: true,
+                    isAllDayPanelVisible: true,
+                    isGroupedAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => true,
-                isVirtualScrolling: () => true,
             };
             const horizontalGroupedWorkspaceMock = {
                 generateRenderOptions: () => ({
@@ -1807,11 +1824,13 @@ module('View Data Provider', {
                     totalRowCount: 4,
                     totalCellCount: 4,
                     isProvideVirtualCellsWidth: true,
+                    isVerticalGrouping: false,
+                    isAllDayPanelVisible: true,
+                    isGroupedAllDayPanel: false,
+                    isStandaloneAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => false,
-                isVirtualScrolling: () => true,
             };
             const horizontalDataMap = [[
                 {
@@ -2159,14 +2178,12 @@ module('View Data Provider', {
                     totalRowCount: 2,
                     totalCellCount: 3,
                     isProvideVirtualCellsWidth: true,
+                    isVerticalGrouping: true,
+                    isAllDayPanelVisible: true,
+                    isGroupedAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => true,
-                isVirtualScrolling: () => true,
-                virtualScrollingDispatcher: {
-                    horizontalScrollingAllowed: true
-                }
             };
 
             const horizontalGroupedWorkspaceMock = {
@@ -2184,14 +2201,13 @@ module('View Data Provider', {
                     totalRowCount: 2,
                     totalCellCount: 3,
                     isProvideVirtualCellsWidth: true,
+                    isVerticalGrouping: false,
+                    isAllDayPanelVisible: true,
+                    isGroupedAllDayPanel: false,
+                    isStandaloneAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: () => false,
-                isVirtualScrolling: () => true,
-                virtualScrollingDispatcher: {
-                    horizontalScrollingAllowed: true
-                }
             };
             const horizontalDataMap = [[
                 {
