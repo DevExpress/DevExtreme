@@ -24,7 +24,8 @@ jobs:
 
     - name: Show file in directory
       working-directory: ./testig/bundlers
-      run: ls -la 
+      run: | 
+        ls -la 
 
     - name: Create DevExtreme package
       working-directory: ./testing/bundlers  
@@ -36,11 +37,14 @@ jobs:
 
     - name: Test src files
       working-directory: ./testig/bundlers
-      run: npm run test
+      run: |
+        node test_script.js
 
     - name: Prepare src files
       working-directory: ./testig/bundlers
-      run: npm run create:src
+      run: |
+        mkdir src
+        node prepare_src.js
 
     - name: Create bundle with webpack (CJS import)
       working-directory: ./testing/bundlers
