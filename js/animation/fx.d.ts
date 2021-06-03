@@ -18,7 +18,7 @@ export interface animationConfig {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:animationConfig
+     * @type_function_param2 config:object
      * @public
      */
     complete?: (($element: DxElement, config: animationConfig) => void);
