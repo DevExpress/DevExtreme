@@ -14,12 +14,14 @@ const modulesEsmFilePAth = './src/modules_esm.js';
 
 const excludeModules = ['ui/set_template_engine', 'core/element', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay'];
 
-const cjsImports = [ globalizeCjs ];
-const esmImports = [ globalizeEsm ];
+const modulesImports = {
+    cjs: [ globalizeCjs ],
+    esm: [ globalizeEsm ]
+};
 
-const getModuleFromObj = (module, cjsImports, esmImports) => {
+const getModuleFromObj = (module, modulesImports) => {
     if(module.exports) {
-        Object.keys(module.exports).map((expr) => {
+        Object.keys(module.exports).forEach((expr) => {
             if(!(module.exports[expr].exportAs === 'type')) {
                 const path = module.exports[expr].path;
                 let importItem = path.slice(path.lastIndexOf('.') + 1);
@@ -31,12 +33,12 @@ const getModuleFromObj = (module, cjsImports, esmImports) => {
                     importItem = `{ ${importItem} }`;
                 }
 
-                cjsImports.push(`require('${prefix}${module.name}')${expr};\n`);
-                esmImports.push(`import ${ importItem } from '${prefix}${ module.name }';\n`);
+                modulesImports.cjs.push(`require('${prefix}${module.name}')${expr};\n`);
+                modulesImports.esm.push(`import ${ importItem } from '${prefix}${ module.name }';\n`);
             }
         });
     } else {
-        cjsImports.push(`require('${prefix}${module.name}');\n`);
+        modulesImports.cjs.push(`require('${prefix}${module.name}');\n`);
     }
 };
 
@@ -44,12 +46,12 @@ try {
     JSON.parse(fs.readFileSync(modulesMetadataFilePath)).forEach((module) => {
         if(!module.isInternal &&
            !(excludeModules.includes(module.name))) {
-            getModuleFromObj(module, cjsImports, esmImports);
+            getModuleFromObj(module, modulesImports);
         }
     });
 
-    fs.writeFileSync(modulesCjsFilePath, cjsImports.join(''));
-    fs.writeFileSync(modulesEsmFilePAth, esmImports.join(''));
+    fs.writeFileSync(modulesCjsFilePath, modulesImports.cjs.join(''));
+    fs.writeFileSync(modulesEsmFilePAth, modulesImports.esm.join(''));
 
 } catch(err) {
     console.log(err);
