@@ -1174,7 +1174,7 @@ testModule('dimensions', moduleConfig, () => {
         assert.strictEqual($content.height(), 200);
     });
 
-    test('overlay wrapper dimensions should be equal to window dimenstions when container is window', function(assert) {
+    test('overlay wrapper dimensions should be equal to window dimensions when container is window', function(assert) {
         const overlay = $('#overlay').dxOverlay({
             visible: true,
             shading: true
