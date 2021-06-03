@@ -1,4 +1,3 @@
-import Component from '../core/component';
 import {
     Device
 } from '../core/devices';
