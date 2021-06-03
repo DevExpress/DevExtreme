@@ -13,6 +13,10 @@ export default class ButtonWrapper extends Component {
     return ['content'];
   }
 
+  _toggleActiveState(_, value) {
+    value ? this.activate() : this.deactivate();
+  }
+
   getProps(): Record<string, unknown> {
     const props = super.getProps();
     props.validationGroup = this._validationGroupConfig;

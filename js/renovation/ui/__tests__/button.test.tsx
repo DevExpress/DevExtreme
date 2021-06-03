@@ -266,6 +266,30 @@ describe('Button', () => {
           expect(button.widgetRef.current?.focus).toHaveBeenCalledWith();
         });
       });
+
+      describe('Methods', () => {
+        describe('activate', () => {
+          it('should call widget\'s activate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { activate: jest.fn() } } as any;
+            button.activate();
+
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledWith();
+          });
+        });
+
+        describe('deactivate', () => {
+          it('should call widget\'s deactivate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { deactivate: jest.fn() } } as any;
+            button.deactivate();
+
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledWith();
+          });
+        });
+      });
     });
 
     describe('Events', () => {

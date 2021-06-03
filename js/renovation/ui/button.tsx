@@ -164,6 +164,16 @@ export class Button extends JSXComponent(ButtonProps) {
     this.widgetRef.current!.focus();
   }
 
+  @Method()
+  activate(): void {
+    this.widgetRef.current!.activate();
+  }
+
+  @Method()
+  deactivate(): void {
+    this.widgetRef.current!.deactivate();
+  }
+
   @Effect()
   submitEffect(): EffectReturn {
     const namespace = 'UIFeedback';
