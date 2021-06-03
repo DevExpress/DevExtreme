@@ -22,6 +22,10 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Show file in directory
+      working-directory: ./testig/bundlers
+      run: ls -la 
+
     - name: Create DevExtreme package
       working-directory: ./testing/bundlers  
       run: npm pack ../../artifacts/npm/devextreme
