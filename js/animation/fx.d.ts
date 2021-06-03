@@ -2,13 +2,12 @@ import { DxElement } from '../core/element';
 import { DxPromise } from '../core/utils/deferred';
 import { positionConfig } from './position';
 
-export type animationState = string | number | {
-    scale?: number,
-    opacity?: number,
-} | {
-    opacity?: number,
-    position?: positionConfig;
-};
+export type animationState = string | number | 
+{ opacity: number; } | 
+{ scale: number; } | 
+{ position: positionConfig; } |
+{ left: number; } | 
+{ top: number; };
 
 /**
  * @docid
@@ -94,7 +93,7 @@ declare const fx: {
      * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
-     * @param2 config:animationConfig
+     * @param2 config:object
      * @return Promise<void>
      * @namespace DevExpress.fx
      * @public
