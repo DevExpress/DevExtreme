@@ -18,13 +18,10 @@ export class PdfGrid {
         if(isDefined(splitByColumns)) {
             this._splitByColumns = splitByColumns;
         }
-        if(isDefined(firstColumnWidth)) {
-            this._columnWidths[0] = firstColumnWidth;
-        }
 
         const firstTableEndColumnIndex = this._splitByColumns[0]?.columnIndex ?? this._columnWidths.length;
         this._currentHorizontalTables = [
-            new PdfTable(drawTableBorder, firstTableTopLeft, this._columnWidths.slice(0, firstTableEndColumnIndex))
+            new PdfTable(drawTableBorder, firstTableTopLeft, this._columnWidths.slice(0, firstTableEndColumnIndex), firstColumnWidth)
         ];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();

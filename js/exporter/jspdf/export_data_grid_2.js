@@ -6,6 +6,8 @@ function exportDataGrid(doc, dataGrid, options) {
     if(!isDefined(options.topLeft)) {
         throw 'options.topLeft is required';
     }
+    options.indent = options.indent || 10;
+
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
@@ -18,19 +20,15 @@ function exportDataGrid(doc, dataGrid, options) {
             const dataRowsCount = dataProvider.getRowsCount();
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
+                const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
+                const groupLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex, true) : 0;
+
                 const currentRow = [];
-                let groupLevel = 0;
-                let rowType;
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
                         text: cellData.value
                     };
-
-                    rowType = cellData.cellSourceData.rowType;
-                    if(rowType !== 'header') {
-                        groupLevel = dataProvider.getGroupLevel(rowIndex, true);
-                    }
 
                     if(rowType === 'header') {
                         const cellMerging = dataProvider.getCellMerging(rowIndex, cellIndex);
@@ -65,8 +63,18 @@ function exportDataGrid(doc, dataGrid, options) {
                     currentRow.push(pdfCell);
                 }
 
-                rowsIndents.push(groupLevel * 10); // TODO: Default value for horizontalIndent : 10
-                let startNewTableWithIndent = rowsIndents.length >= 2 && rowsIndents[rowsIndents.length - 1] !== rowsIndents[rowsIndents.length - 2];
+                rowsIndents.push(groupLevel * options.indent);
+                const startNewTableWithIndent = rowsIndents.length >= 2 && rowsIndents[rowsIndents.length - 1] !== rowsIndents[rowsIndents.length - 2];
+                if(startNewTableWithIndent) {
+                    const indent = rowsIndents[rowsIndents.length - 1];
+                    const prevTable = pdfGrid._currentHorizontalTables[0];
+                    const firstColumnWidth = options.columnWidths[0] - indent;
+                    const tableTopLeft = {
+                        x: options.topLeft.x + indent,
+                        y: prevTable.rect.y + prevTable.rect.h
+                    };
+                    pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
+                }
 
                 let rowHeight = null; // TODO: Default Value
                 if(options.onRowExporting) {
@@ -75,23 +83,11 @@ function exportDataGrid(doc, dataGrid, options) {
                     const { startNewTable, addPage, tableTopLeft, splitToTablesByColumns } = args.drawNewTableFromThisRow;
                     if(startNewTable === true) {
                         pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, addPage === true, splitToTablesByColumns);
-                        startNewTableWithIndent = false;
                     }
 
                     if(isDefined(args.rowHeight)) {
                         rowHeight = args.rowHeight;
                     }
-                }
-
-                if(startNewTableWithIndent) {
-                    const offset = rowsIndents[rowsIndents.length - 1] - rowsIndents[rowsIndents.length - 2];
-                    const firstTable = pdfGrid._currentHorizontalTables[0];
-                    const firstColumnWidth = firstTable.columnWidths[0] - offset;
-                    const tableTopLeft = {
-                        x: firstTable.rect.x + offset,
-                        y: firstTable.rect.y + firstTable.rect.h
-                    };
-                    pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
                 pdfGrid.addRow(currentRow, rowHeight);
