@@ -56,7 +56,7 @@ declare const animationPresets: {
      * @param2_field2 device:Device
      * @public
      */
-    registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
+    registerPreset(name: string, config: { animation: animationConfig, device?: Device }): void;
     /**
      * @docid
      * @publicName resetToDefaults()
