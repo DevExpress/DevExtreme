@@ -216,7 +216,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             e.preventDefault();
             e.stopPropagation();
 
-            const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
+            const focusedCellData = this.cellsSelectionState.focusedCell?.cellData;
 
             if(focusedCellData) {
                 const isAllDayPanelCell = focusedCellData.allDay && !this._isVerticalGroupedWorkSpace();
