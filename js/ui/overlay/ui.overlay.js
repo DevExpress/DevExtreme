@@ -210,8 +210,7 @@ const Overlay = Widget.inherit({
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
-            _checkParentVisibility: true,
-            _fixedPosition: false
+            _checkParentVisibility: true
         });
     },
 
@@ -1109,37 +1108,39 @@ const Overlay = Widget.inherit({
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _fixWrapperPosition: function() {
-        this._$wrapper.css('position', this._useFixedPosition() ? 'fixed' : 'absolute');
+    _styleWrapperPosition: function() {
+        const positionStyle = this._isContainerWindow() ? 'fixed' : 'absolute';
+        this._$wrapper.css('position', positionStyle);
     },
 
-    _useFixedPosition: function() {
-        return this._shouldFixBodyPosition()
-            || this.option('_fixedPosition');
-    },
-
-    _shouldFixBodyPosition: function() {
+    _isContainerWindow: function() {
         const $container = this._getContainer();
-        return this._isWindow($container)
-            && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container);
+    },
+
+    _isAllWindowCovered: function() {
+        return this._isContainerWindow() && this.option('shading');
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._shouldFixBodyPosition()) {
-            const body = domAdapter.getBody();
+        const $body = $(domAdapter.getBody());
+        const shouldPreventScrolling = this.option('visible')
+            && !$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
+
+        if(iOS && this._isAllWindowCovered()) {
             if(scrollingEnabled) {
-                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-                window.scrollTo(0, this._bodyScrollTop);
-                this._bodyScrollTop = undefined;
-            } else if(this.option('visible') && window.pageYOffset) {
-                this._bodyScrollTop = window.pageYOffset;
-                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._cachedBodyScrollTop);
+                this._cachedBodyScrollTop = undefined;
+            } else if(shouldPreventScrolling) {
+                this._cachedBodyScrollTop = window.pageYOffset;
+                $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
         }
     },
 
     _renderWrapper: function() {
-        this._fixWrapperPosition();
+        this._styleWrapperPosition();
         this._renderWrapperDimensions();
         this._renderWrapperPosition();
     },
@@ -1395,9 +1396,6 @@ const Overlay = Widget.inherit({
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
-                break;
-            case '_fixedPosition':
-                this._fixWrapperPosition();
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();

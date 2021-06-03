@@ -617,7 +617,7 @@ const Popup = Overlay.inherit({
         };
     },
 
-    _shouldFixBodyPosition: function() {
+    _isAllWindowCovered: function() {
         return this.callBase() || this.option('fullScreen');
     },
 
