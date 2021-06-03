@@ -80,7 +80,8 @@ const SliderHandle = Widget.inherit({
             }).bind(this),
             animation: null,
             arrowPosition: null,
-            templatesRenderAsynchronously: false
+            templatesRenderAsynchronously: false,
+            _fixWrapperPosition: false
         });
 
         return true;

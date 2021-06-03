@@ -197,7 +197,9 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 }
+            boundaryOffset: { h: 10, v: 10 },
+
+            _fixWrapperPosition: true
 
             /**
             * @name dxPopoverOptions.focusStateEnabled
@@ -466,10 +468,6 @@ const Popover = Popup.inherit({
                 height: '100%'
             });
         }
-    },
-
-    _styleWrapperPosition: function() {
-        this._$wrapper.css('position', 'fixed');
     },
 
     _normalizePosition: function() {

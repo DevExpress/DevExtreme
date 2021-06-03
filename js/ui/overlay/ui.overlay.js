@@ -210,7 +210,8 @@ const Overlay = Widget.inherit({
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
-            _checkParentVisibility: true
+            _checkParentVisibility: true,
+            _fixWrapperPosition: false
         });
     },
 
@@ -1109,7 +1110,8 @@ const Overlay = Widget.inherit({
     },
 
     _styleWrapperPosition: function() {
-        const positionStyle = this._isContainerWindow() ? 'fixed' : 'absolute';
+        const useFixed = this._isContainerWindow() || this.option('_fixWrapperPosition');
+        const positionStyle = useFixed ? 'fixed' : 'absolute';
         this._$wrapper.css('position', positionStyle);
     },
 
@@ -1396,6 +1398,9 @@ const Overlay = Widget.inherit({
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
+                break;
+            case '_fixWrapperPosition':
+                this._styleWrapperPosition();
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
