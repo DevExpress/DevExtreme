@@ -1723,59 +1723,61 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         });
     });
 
-    QUnit.testInActiveWindow('New mode. The modified cell frame should not be rendered for an unmodified cell in a new row in Batch', function(assert) {
-        // arrange
-        const getData = function() {
-            const items = [];
-            for(let i = 0; i < 100; i++) {
-                items.push({
-                    ID: i + 1,
-                    Name: `Name ${i + 1}`,
-                    Description: `Description ${i + 1}`
-                });
-            }
-            return items;
-        };
+    ['virtual', 'infinite'].forEach(mode => {
+        QUnit.testInActiveWindow(`New mode (${mode}). The modified cell frame should not be rendered for an unmodified cell in a new row in Batch`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        ID: i + 1,
+                        Name: `Name ${i + 1}`,
+                        Description: `Description ${i + 1}`
+                    });
+                }
+                return items;
+            };
 
-        const dataGrid = createDataGrid({
-            dataSource: getData(),
-            keyExpr: 'id',
-            remoteOperations: true,
-            height: 300,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                newMode: true
-            },
-            columns: ['Name', 'Description']
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 300,
+                scrolling: {
+                    mode: mode,
+                    rowRenderingMode: 'virtual',
+                    newMode: true
+                },
+                columns: ['Name', 'Description']
+            });
+
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.cellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
+
+            // act
+            $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
         });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.cellValue(0, 0, 'test');
-        this.clock.tick();
-
-        // assert
-        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
-
-        // act
-        $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
-
-        // act
-        $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
     });
 });
 

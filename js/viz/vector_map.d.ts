@@ -15,6 +15,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     Cancelable,
     EventInfo,
@@ -358,10 +360,10 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       dataField?: string,
       /**
        * @docid
-       * @type object|DataSource|DataSourceOptions|string|Array<any>
+       * @type object|Store|DataSource|DataSourceOptions|string|Array<any>
        * @extends CommonVizDataSource
        */
-      dataSource?: any | DataSource | DataSourceOptions | string,
+      dataSource?: any | Store | DataSource | DataSourceOptions | string,
       /**
        * @docid
        * @type Enums.VectorMapMarkerType
@@ -484,7 +486,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @notUsedInTheme
        */
       type?: 'area' | 'line' | 'marker'
-    }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+    }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | Store | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
      * @type Array<Object>

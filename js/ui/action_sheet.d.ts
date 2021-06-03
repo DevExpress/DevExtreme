@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     DxEvent,
     Cancelable,
@@ -69,7 +71,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxActionSheetOptions.onOptionChanged

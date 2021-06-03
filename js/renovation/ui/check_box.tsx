@@ -114,7 +114,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() validationMessageMode?: 'auto'|'always' = 'auto';
+  @OneWay() validationMessageMode?: 'auto' | 'always' = 'auto';
 
   @OneWay() validationStatus?: string = 'valid';
 

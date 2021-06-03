@@ -11,7 +11,7 @@ import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { end as hoverEventEnd } from '../../events/hover';
 import MenuBase from '../context_menu/ui.menu_base';
-import Overlay from '../overlay';
+import { Overlay } from '../overlay';
 import Submenu from './ui.submenu';
 import Button from '../button';
 import TreeView from '../tree_view';

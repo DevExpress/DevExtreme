@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     Cancelable,
     EventInfo,
@@ -308,7 +310,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @extends CommonVizDataSource
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @default 'arg'

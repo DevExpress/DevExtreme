@@ -1330,9 +1330,10 @@ export const BaseChart = BaseWidget.inherit({
 
         _each(seriesBasis, (_, basis) => {
             const seriesTheme = basis.options;
+            const argumentAxis = that._argumentAxes?.filter(a => a.pane === seriesTheme.pane)[0] ?? that.getArgumentAxis();
             const renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
-                argumentAxis: that.getArgumentAxis(),
+                argumentAxis,
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             };
             if(basis.series) {
