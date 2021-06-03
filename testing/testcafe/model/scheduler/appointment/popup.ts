@@ -48,7 +48,7 @@ export default class AppointmentPopup {
     this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
   }
 
-  async isVisible(): Promise<boolean> {
+  isVisible(): Promise<boolean> {
     const { element } = this;
     const invisibleStateClass = CLASS.stateInvisible;
 
