@@ -6,6 +6,7 @@ import { move } from '../../../animation/translator';
 import { getBoundingRect } from '../../../core/utils/position';
 import BaseModule from './base';
 import Draggable from '../../draggable';
+import { each } from '../../../core/utils/iterator';
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
@@ -22,17 +23,24 @@ export default class TableResizingModule extends BaseModule {
     constructor(quill, options) {
         super(quill, options);
         this.enabled = !!options.enabled;
+        this._tableResizeFrames = [];
 
         if(this.enabled) {
             this.editorInstance.on('contentReady', () => {
                 this._attachResizerTimeout = setTimeout(() => {
-                    if(this._findTables().length) {
-                        this._createTableResizeFrame();
-                        this._updateFramePosition(this._$columnResizeFrame);
-                        this._updateColumnResizeFrame();
+
+                    const $tables = this._findTables();
+                    // _createResizeFrames
+                    if($tables.length) {
+                        // this._createTableResizeFrame();
+                        this._createResizeFrames($tables);
+
+
+                        this._updateFramesPositions();
+                        this._updateFramesSeparators();
 
                         quill.on('text-change', () => {
-                            this._updateFramePosition(this._$columnResizeFrame);
+                            this._updateFramesPositions(this._$columnResizeFrame);
                         });
                     }
                 });
@@ -63,9 +71,16 @@ export default class TableResizingModule extends BaseModule {
         return $(this.editorInstance._getQuillContainer()).find('table');
     }
 
-    _updateFramePosition($frame) {
-        this._$target = $(this.editorInstance._getQuillContainer()).find('table').get(0);
-        const { height, width, top: targetTop, left: targetLeft } = getBoundingRect(this._$target);
+    _updateFramesPositions() {
+        each(this._tableResizeFrames, (index, tableResizeFrame) => {
+            this._updateFramePosition(tableResizeFrame.$table, tableResizeFrame.$frame);
+        });
+
+    }
+
+    _updateFramePosition($table, $frame) {
+        // const $currentTable = $table || $(this.editorInstance._getQuillContainer()).find('table').get(0);
+        const { height, width, top: targetTop, left: targetLeft } = getBoundingRect($table.get(0));
         const { top: containerTop, left: containerLeft } = getBoundingRect(this.quill.root);
         // const borderWidth = this._getBorderWidth();
 
@@ -79,39 +94,57 @@ export default class TableResizingModule extends BaseModule {
         move($frame, { left: 0, top: 0 });
     }
 
-    _createTableResizeFrame(targetTable) {
+    _createResizeFrames($tables) {
+        $tables.each((index, $item) => {
+            this._tableResizeFrames[index] = {
+                $frame: this._createTableResizeFrame($item),
+                $table: $($item),
+                index: index
+            };
+        });
+    }
+
+    _createTableResizeFrame() {
         // console.log('_createTableResizeFrame');
-        this._$columnResizeFrame = $('<div>')
+        return $('<div>')
             .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
             .appendTo(this.editorInstance._getQuillContainer());
 
     }
 
-    _updateColumnResizeFrame() {
-        const $columns = $(this._$target).find('tr').eq(0).find('td');
+    _updateFramesSeparators() {
+        each(this._tableResizeFrames, (index, frame) => {
+            this._updateFrameSeparators(frame);
+        });
+    }
+
+    _updateFrameSeparators(frame) {
+        const $columns = frame.$table.find('tr').eq(0).find('td');
         const columnsCount = $columns.length;
         const columnsResizingElementsCount = columnsCount - 1;
         // const controlledElements = this._getControlledElements(); // th or td
-        this._$columnSeparators = this._$columnSeparators || [];
+        const $columnSeparators = frame.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}`);
 
         // this._updateFramePosition(this._$columnResizeFrame);
 
         let leftPosition = 0;
         for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
             leftPosition += $columns.eq(i).outerWidth();
+            // $columnSeparators[i] = $columnSeparators[i]
 
-            if(!isDefined(this._$columnSeparators[i])) {
-                this._$columnSeparators[i] = $('<div>')
+            if(!isDefined($columnSeparators[i])) {
+                $columnSeparators[i] = $('<div>')
                     .addClass(DX_COLUMN_RESIZER_CLASS)
-                    .appendTo(this._$columnResizeFrame);
+                    .appendTo(frame.$frame)
+                    .get(0);
             }
 
-            this._$columnSeparators[i].css({
+            $($columnSeparators[i]).css({
                 left: leftPosition - DRAGGABLE_ELEMENT_OFFSET,
                 transform: 'none'
             });
 
-            this._attachColumnSeparatorEvents(this._$columnSeparators[i], $columns, i);
+            this._attachColumnSeparatorEvents($columnSeparators[i], $columns, i, frame);
         }
 
         // for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
@@ -121,28 +154,30 @@ export default class TableResizingModule extends BaseModule {
         // }
 
         // eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
-
-
     }
 
-    _attachColumnSeparatorEvents($columnSeparator, $columns, index) {
 
-        eventsEngine.on($columnSeparator, 'dxpointerdown', () => {
-            if(this._columnResizer) {
-                const isTheSameSeparator = this._columnResizer._$element.get(0) === $columnSeparator.get(0);
-                if(!isTheSameSeparator) {
-                    this._columnResizer.dispose();
-                } else {
-                    return;
-                }
-            }
+    _attachColumnSeparatorEvents(columnSeparator, $columns, index, frame) {
 
-            this._createDraggableElement($columnSeparator, $columns, index);
+        eventsEngine.on(columnSeparator, 'dxpointerdown', () => {
+            // if(this._currentDraggableElement) {
+            // const isTheSameSeparator = this._currentDraggableElement._$element.get(0) === $($columnSeparator).get(0);
+            // if(!isTheSameSeparator) {
+            // const element = this._currentDraggableElement._$element;
+            // const leftStyle = $(element).css('left');
+            // this._currentDraggableElement.dispose();
+            // $(element).css('left', leftStyle).addClass(DX_COLUMN_RESIZER_CLASS);
+            // } else {
+            //     return;
+            // }
+            // }
+
+            this._createDraggableElement(columnSeparator, $columns, index, frame);
         });
     }
 
-    _createDraggableElement($columnSeparator, $columns, index) {
-        this._columnResizer = this.editorInstance._createComponent($columnSeparator.get(0), Draggable, {
+    _createDraggableElement(columnSeparator, $columns, index, frame) {
+        this._currentDraggableElement = this.editorInstance._createComponent(columnSeparator, Draggable, {
             contentTemplate: null,
             boundary: this._$columnResizeFrame,
             allowMoveByClick: false,
@@ -153,7 +188,7 @@ export default class TableResizingModule extends BaseModule {
                 // console.log('move ' + newPosition);
 
                 $columns.eq(index).css('width', this._startColumnWidth + event.offset.x);
-                $columnSeparator.css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
+                $(columnSeparator).css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
 
                 if(this._nextColumnWidth) {
                     $columns.eq(index + 1).css('width', this._nextColumnWidth - event.offset.x);
@@ -165,7 +200,7 @@ export default class TableResizingModule extends BaseModule {
                 // this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             },
             onDragStart: () => {
-                this._startDragPosition = parseInt($columnSeparator.css('left').replace('px', ''));
+                this._startDragPosition = parseInt($(columnSeparator).css('left').replace('px', ''));
                 this._startColumnWidth = parseInt($($columns[index]).outerWidth());
                 this._nextColumnWidth = 0;
                 this._previousColumnWidth = 0;
@@ -180,7 +215,7 @@ export default class TableResizingModule extends BaseModule {
                 // console.log('start ' + this._startDragPosition);
             },
             onDragEnd: () => {
-                this._updateColumnResizeFrame(); // set positions only
+                this._updateFrameSeparators(frame); // set positions only
             }
         });
     }
