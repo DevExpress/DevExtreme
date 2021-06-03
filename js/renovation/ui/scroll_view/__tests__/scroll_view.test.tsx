@@ -106,10 +106,61 @@ describe('ScrollView', () => {
         }
       });
     });
+
+    each([true, false, undefined]).describe('preventScrollBottom: %o', (preventScrollBottom) => {
+      it('release(preventScrollBottom)', () => {
+        const viewModel = new ScrollView({ });
+        const funcHandler = jest.fn();
+        Object.defineProperties(viewModel, {
+          scrollable: {
+            get() { return { release: funcHandler }; },
+          },
+        });
+
+        viewModel.toggleLoading = jest.fn();
+
+        viewModel.release(preventScrollBottom);
+
+        if (preventScrollBottom !== undefined) {
+          expect(viewModel.toggleLoading).toHaveBeenCalledTimes(1);
+          expect(viewModel.toggleLoading).toHaveBeenCalledWith(!preventScrollBottom);
+          expect(funcHandler).toHaveBeenCalledTimes(1);
+        } else {
+          expect(viewModel.toggleLoading).toHaveBeenCalledTimes(0);
+          expect(funcHandler).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
+
+    each([true, false]).describe('showOrHide: %o', (showOrHide) => {
+      it('toggleLoading()', () => {
+        const viewModel = new ScrollView({ });
+
+        viewModel.toggleLoading(showOrHide);
+
+        expect(viewModel.forceReachBottom).toEqual(showOrHide);
+      });
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
+      each([undefined, null, true, false]).describe('forceReachBottom: %o', (forceReachBottom) => {
+        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+          it('reachBottomEnabled()', () => {
+            const viewModel = new ScrollView({ reachBottomEnabled });
+
+            viewModel.forceReachBottom = forceReachBottom;
+
+            if (forceReachBottom !== undefined && forceReachBottom !== null) {
+              expect(viewModel.reachBottomEnabled).toEqual(forceReachBottom);
+            } else {
+              expect(viewModel.reachBottomEnabled).toEqual(reachBottomEnabled);
+            }
+          });
+        });
+      });
+
       describe('cssClasses', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
           each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
