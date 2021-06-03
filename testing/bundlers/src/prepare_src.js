@@ -16,7 +16,7 @@ const modulesMetadataFilePath = '../../build/gulp/modules_metadata.json';
 const modulesCjsFilePath = './src/modules_cjs.js';
 const modulesEsmFilePAth = './src/modules_esm.js';
 
-const excludeModules = ['ui/set_template_engine'];
+const excludeModules = ['ui/set_template_engine', 'core/element', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay'];
 const cjsImports = [ eslintNoUnusedVars, globalizeCjs];
 const esmImports = [ eslintNoUnusedVars, eslintNoDuplicateImports, globalizeEsm];
 
@@ -50,7 +50,6 @@ try {
     modules_metadata = JSON.parse(modules_metadata);
 
     modules_metadata.forEach((module) => {
-        console.log(module.name);
         if(!module.isInternal &&
            !(excludeModules.includes(module.name))) {
             getModuleFromObj(module, cjsImports, esmImports);
