@@ -14,7 +14,7 @@ import {
  * @export default
  * @public
  */
-export default class animationPresets extends Component {
+declare const animationPresets: {
     /**
      * @docid
      * @publicName applyChanges()
@@ -64,4 +64,6 @@ export default class animationPresets extends Component {
      * @public
      */
     resetToDefaults(): void;
-}
+};
+
+export default animationPresets;
