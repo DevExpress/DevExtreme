@@ -30,6 +30,10 @@ jobs:
       working-directory: ./testing/bundlers  
       run: npm install
 
+    - name: Test src files
+      working-directory: ./testig/bundlers
+      run: npm run test
+
     - name: Prepare src files
       working-directory: ./testig/bundlers
       run: npm run create:src
