@@ -127,10 +127,12 @@ QUnit.test('index should be correct for grouped list', function(assert) {
 
 QUnit.test('it should be possible to select an item with index bigger then 255 in the grouped list (T996851)', function(assert) {
     let selectedIndex;
+    const items = [];
+    for(let i = 0; i < 300; i += 1) items.push(i);
     const list = $('#list').dxList({
         dataSource: [{
             key: 'someKey',
-            items: [...Array(300).keys()]
+            items
         }],
         grouped: true,
         selectionMode: 'single',
