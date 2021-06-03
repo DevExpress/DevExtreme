@@ -3,14 +3,15 @@
 /* eslint-disable spellcheck/spell-checker */
 
 const fs = require('fs');
+const path = require('path');
 
 const globalizeCjs = 'const Globalize = require(\'globalize\');\n';
 const globalizeEsm = 'import Globalize from \'globalize\';\n';
 const prefix = 'devextreme/';
 
-const modulesMetadataFilePath = '../../build/gulp/modules_metadata.json';
-const modulesCjsFilePath = './src/modules_cjs.js';
-const modulesEsmFilePAth = './src/modules_esm.js';
+const modulesMetadataFilePath = path.join(__dirname, '../../build/gulp/modules_metadata.json');
+const modulesCjsFilePath = path.join(__dirname, './src/modules_cjs.js');
+const modulesEsmFilePAth = path.join(__dirname, './src/modules_esm.js');
 
 const excludeModules = ['ui/set_template_engine', 'core/element', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay'];
 
