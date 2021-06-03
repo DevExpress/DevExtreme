@@ -1,4 +1,52 @@
 export class CellsSelectionController {
+    onKeyPressed(options) {
+        const {
+            key,
+            currentCellPosition,
+            edgeIndices,
+            getCellDataByPosition,
+            isAllDayPanelCell,
+        } = options;
+
+        let nextCellIndices;
+
+        switch(key) {
+            case 'down':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    currentCellPosition, 'next', edgeIndices,
+                );
+                break;
+            case 'up':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    currentCellPosition, 'prev', edgeIndices,
+                );
+                break;
+            case 'left':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'prev',
+                });
+                break;
+            case 'right':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'next',
+                });
+                break;
+        }
+
+        const currentCellData = getCellDataByPosition(
+            nextCellIndices.rowIndex,
+            nextCellIndices.cellIndex,
+            isAllDayPanelCell,
+        );
+
+        return this.moveToCell({
+            ...options,
+            currentCellData,
+        });
+    }
+
     getCellFromNextRowPosition(currentCellPosition, direction, edgeIndices) {
         const {
             cellIndex,
@@ -117,6 +165,7 @@ export class CellsSelectionController {
         } = options;
 
         const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
+
         const nextFocusedCellData = isValidMultiSelection
             ? this._getNextCellData(currentCellData, focusedCellData)
             : currentCellData;

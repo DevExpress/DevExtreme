@@ -212,37 +212,72 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._cellClickAction({ event: e, cellElement: $(selectedCellsElement), cellData: selectedCells[0] });
             }
         };
-        const arrowPressHandler = function(e, cell) {
+        const onArrowPressed = (e, key) => {
             e.preventDefault();
             e.stopPropagation();
-            this._moveToCell(cell, e.shiftKey);
+
+            const currentCell = this.cellsSelectionState.focusedCell.cellData;
+
+            if(currentCell) {
+                const isAllDayPanelCell = currentCell.allDay && !this._isVerticalGroupedWorkSpace();
+                const isMultiSelection = e.shiftKey;
+                const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
+                const isRTL = this._isRTL();
+                const groupCount = this._getGroupCount();
+                const isGroupedByDate = this.isGroupedByDate();
+                const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
+                const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
+                    ...currentCell,
+                    isAllDay: currentCell.allDay,
+                });
+
+                const { groupIndex } = this.viewDataProvider.getCellData(
+                    currentCellPosition.rowIndex,
+                    currentCellPosition.cellIndex,
+                    isAllDayPanelCell,
+                );
+
+                const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
+                    ? this.viewDataProvider.getGroupEdgeIndices(groupIndex, isAllDayPanelCell)
+                    : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
+
+                const nextCellData = this.cellsSelectionController.onKeyPressed({
+                    currentCellPosition,
+                    edgeIndices,
+                    isRTL,
+                    isGroupedByDate,
+                    groupCount,
+                    isMultiSelection,
+                    isMultiSelectionAllowed,
+                    isDateAndTimeView: this.isDateAndTimeView,
+                    key,
+                    getCellDataByPosition: this.viewDataProvider.getCellData.bind(this.viewDataProvider),
+                    isAllDayPanelCell,
+                    focusedCellData: currentCell,
+                });
+
+                this._processNextSelectedCell(
+                    nextCellData,
+                    currentCellPosition,
+                    isMultiSelection && isMultiSelectionAllowed,
+                );
+            }
         };
 
         return extend(super._supportedKeys(), {
             enter: clickHandler,
             space: clickHandler,
-            downArrow: function(e) {
-                const $cell = this._getCellFromNextRow('next');
-
-                arrowPressHandler.call(this, e, $cell);
+            downArrow: (e) => {
+                onArrowPressed(e, 'down');
             },
-
-            upArrow: function(e) {
-                const $cell = this._getCellFromNextRow('prev');
-
-                arrowPressHandler.call(this, e, $cell);
+            upArrow: (e) => {
+                onArrowPressed(e, 'up');
             },
-
-            rightArrow: function(e) {
-                const $rightCell = this._getCellFromNextColumn('next', e.shiftKey);
-
-                arrowPressHandler.call(this, e, $rightCell);
+            rightArrow: (e) => {
+                onArrowPressed(e, 'right');
             },
-
-            leftArrow: function(e) {
-                const $leftCell = this._getCellFromNextColumn('prev', e.shiftKey);
-
-                arrowPressHandler.call(this, e, $leftCell);
+            leftArrow: (e) => {
+                onArrowPressed(e, 'left');
             }
         });
     }
@@ -257,70 +292,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.option('rtlEnabled');
     }
 
-    _getCellFromNextRow(direction) {
-        const currentCell = this.cellsSelectionState.focusedCell.cellData;
-
-        if(isDefined(currentCell)) {
-            const isAllDayPanelCell = currentCell.allDay && !this._isVerticalGroupedWorkSpace();
-            const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
-                ...currentCell,
-                isAllDay: currentCell.allDay,
-            });
-
-            const nextCellPosition = this.cellsSelectionController.getCellFromNextRowPosition(
-                currentCellPosition, direction, this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell),
-            );
-
-            const $cell = this._dom_getDateCell(nextCellPosition);
-
-            return $cell;
-        }
-    }
-
-    _getCellFromNextColumn(direction, isMultiSelection) {
-        const currentCell = this.cellsSelectionState.focusedCell.cellData;
-        if(!isDefined(currentCell)) {
-            return undefined;
-        }
-
-        const isAllDayPanelCell = currentCell.allDay && !this._isVerticalGroupedWorkSpace();
-        const isRTL = this._isRTL();
-        const groupCount = this._getGroupCount();
-        const isGroupedByDate = this.isGroupedByDate();
-        const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
-        const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
-            ...currentCell,
-            isAllDay: currentCell.allDay,
-        });
-
-        const { groupIndex } = this.viewDataProvider.getCellData(
-            currentCellPosition.rowIndex,
-            currentCellPosition.cellIndex,
-            isAllDayPanelCell,
-        );
-
-        const edgeIndices = isHorizontalGrouping && isMultiSelection && !isGroupedByDate
-            ? this.viewDataProvider.getGroupEdgeIndices(groupIndex, isAllDayPanelCell)
-            : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
-
-        const nextCellPosition = this.cellsSelectionController.getCellFromNextColumnPosition({
-            currentCellPosition,
-            direction,
-            edgeIndices,
-            isRTL,
-            isGroupedByDate,
-            groupCount,
-            isMultiSelection,
-            isDateAndTimeView: this.isDateAndTimeView,
-        });
-
-        const $nextCell = isAllDayPanelCell
-            ? this._dom_getAllDayPanelCell(nextCellPosition.cellIndex)
-            : this._dom_getDateCell(nextCellPosition);
-
-        return $nextCell;
-    }
-
     _moveToCell($cell, isMultiSelection) {
         if(!isDefined($cell) || !$cell.length) {
             return undefined;
@@ -328,8 +299,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
         const currentCellData = this.getCellData($cell);
-        const cellCoordinates = this._getCoordinatesByCell($cell);
         const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
+        const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
+            ...focusedCellData,
+            isAllDay: focusedCellData.allDay,
+        });
 
         const nextFocusedCellData = this.cellsSelectionController.moveToCell({
             isMultiSelection,
@@ -339,27 +313,49 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVirtualCell: $cell.hasClass(VIRTUAL_CELL_CLASS),
         });
 
-        if(focusedCellData !== nextFocusedCellData) {
+        this._processNextSelectedCell(
+            nextFocusedCellData,
+            currentCellPosition,
+            isMultiSelectionAllowed && isMultiSelection,
+        );
+    }
+
+    _processNextSelectedCell(nextCellData, focusedCellPosition, isMultiSelection) {
+        const nextCellPosition = this.viewDataProvider.findCellPositionInMap({
+            startDate: nextCellData.startDate,
+            groupIndex: nextCellData.groupIndex,
+            isAllDay: nextCellData.allDay,
+        });
+
+        if(nextCellPosition.cellIndex !== focusedCellPosition.cellIndex
+                || nextCellPosition.rowIndex !== focusedCellPosition.rowIndex
+                || nextCellData.allDay !== focusedCellPosition.allDay) {
             this._releaseFocusedCell();
             this._releaseSelectedCells();
 
-            const nextFocusedCell = {
-                rowIndex: cellCoordinates.rowIndex,
-                columnIndex: cellCoordinates.columnIndex,
-                allDay: currentCellData.allDay,
-            };
+            const isNextCellAllDay = nextCellData.allDay;
 
             this.cellsSelectionState.setFocusedCell(
-                nextFocusedCell.rowIndex,
-                nextFocusedCell.columnIndex,
-                nextFocusedCell.allDay,
+                nextCellPosition.rowIndex,
+                nextCellPosition.cellIndex,
+                isNextCellAllDay,
             );
 
-            if(isMultiSelection && isMultiSelectionAllowed) {
-                this.cellsSelectionState.setSelectedCells(nextFocusedCell);
+            const nextCellCoordinates = {
+                rowIndex: nextCellPosition.rowIndex,
+                columnIndex: nextCellPosition.cellIndex,
+                allDay: isNextCellAllDay,
+            };
+
+            if(isMultiSelection) {
+                this.cellsSelectionState.setSelectedCells(nextCellCoordinates);
             } else {
-                this.cellsSelectionState.setSelectedCells(nextFocusedCell, nextFocusedCell);
+                this.cellsSelectionState.setSelectedCells(nextCellCoordinates, nextCellCoordinates);
             }
+
+            const $cell = nextCellData.allDay && !this._isVerticalGroupedWorkSpace()
+                ? this._dom_getAllDayPanelCell(nextCellPosition.cellIndex)
+                : this._dom_getDateCell(nextCellPosition);
 
             this.updateCellsSelection();
             this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells(), $cell);
