@@ -147,10 +147,10 @@ const SchedulerAppointmentForm = {
         ];
     },
 
-    _changeFormItemDateType: function(itemPath, value) {
+    _changeFormItemDateType: function(itemPath, isAllDay) {
         const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
 
-        const type = value ? 'date' : 'datetime';
+        const type = isAllDay ? 'date' : 'datetime';
 
         const newEditorOption = { ...itemEditorOptions, type };
 
