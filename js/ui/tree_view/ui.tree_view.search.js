@@ -24,6 +24,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
                 this._initDataAdapter();
                 this._updateSearch();
                 this._repaintContainer();
+                this._refreshSelectAllCheckboxValue();
                 break;
             case 'searchExpr':
                 this._initDataAdapter();

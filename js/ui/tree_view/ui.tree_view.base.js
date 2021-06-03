@@ -1225,6 +1225,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
         });
 
+        this._refreshSelectAllCheckboxValue();
+    },
+
+    _refreshSelectAllCheckboxValue() {
         if(this._selectAllEnabled()) {
             const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
 
