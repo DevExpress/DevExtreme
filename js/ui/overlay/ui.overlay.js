@@ -1131,7 +1131,7 @@ const Overlay = Widget.inherit({
                 $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
                 window.scrollTo(0, this._bodyScrollTop);
                 this._bodyScrollTop = undefined;
-            } else if(this.option('visible')) {
+            } else if(this.option('visible') && window.pageYOffset) {
                 this._bodyScrollTop = window.pageYOffset;
                 $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
