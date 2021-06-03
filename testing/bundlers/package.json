@@ -2,7 +2,7 @@
   "name": "test_devextreme_modules",
   "version": "1.0.0",
   "scripts": {
-    "create:src": "node ./prepare_src.js",
+    "create:src": "mkdir src && node ./prepare_src.js",
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
     "build:webpack-esm": "webpack --config ./webpack.config.js",
     "build:rollup-esm": "rollup -c",
