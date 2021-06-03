@@ -37,10 +37,10 @@ declare const animationPresets: {
      * @docid
      * @publicName getPreset(name)
      * @param1 name:string
-     * @return object
+     * @return animationConfig
      * @public
      */
-    getPreset(name: string): { animation?: animationConfig, device?: Device };
+    getPreset(name: string): animationConfig;
     /**
      * @docid
      * @publicName registerDefaultPresets()
