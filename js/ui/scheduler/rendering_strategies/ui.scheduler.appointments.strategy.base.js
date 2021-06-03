@@ -156,11 +156,9 @@ class BaseRenderingStrategy {
                         height: height
                     }, position[j]);
 
-
                     if(this._isRtl()) {
                         position[j].left = currentMaxAllowedPosition;
                     }
-
                 }
             }
 

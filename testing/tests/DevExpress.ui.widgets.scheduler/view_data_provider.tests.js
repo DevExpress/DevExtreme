@@ -273,20 +273,6 @@ module('View Data Provider', {
                 assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
             });
 
-            test('getLasGroupCellPosition', function(assert) {
-                assert.deepEqual(
-                    this.viewDataProvider.getLasGroupCellPosition(2),
-                    { rowIndex: 1, cellIndex: 1 },
-                    'Last position for the group 2 is correct'
-                );
-
-                assert.deepEqual(
-                    this.viewDataProvider.getLasGroupCellPosition(3),
-                    { rowIndex: 3, cellIndex: 1 },
-                    'Last position for the group 3 is correct'
-                );
-            });
-
             test('getRowCountInGroup', function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getRowCountInGroup(2),
@@ -432,6 +418,79 @@ module('View Data Provider', {
                     ],
                     'Groups info is correct'
                 );
+            });
+        });
+
+        module('getLastGroupCellPosition', () => {
+            module('Vertical grouping', {
+                beforeEach: function() {
+                    this.init('vertical');
+                }
+            }, () => {
+                test('getLastGroupCellPosition', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.getLastGroupCellPosition(2),
+                        { rowIndex: 1, cellIndex: 1 },
+                        'Last position for the group 2 is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.getLastGroupCellPosition(3),
+                        { rowIndex: 3, cellIndex: 1 },
+                        'Last position for the group 3 is correct'
+                    );
+                });
+            });
+
+            module('Horizontal grouping', {
+                beforeEach: function() {
+                    this.viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalWorkSpaceMock,
+                        completeViewDataMap: [
+                            testViewDataMap.horizontalGrouping[0],
+                            testViewDataMap.horizontalGrouping[1],
+                            [
+                                {
+                                    allDay: false,
+                                    startDate: new Date(2020, 7, 24, 1, 0),
+                                    endDate: new Date(2020, 7, 24, 1, 30),
+                                    groups: 'group_2',
+                                    groupIndex: 2
+                                },
+                                {
+                                    allDay: false,
+                                    startDate: new Date(2020, 7, 25, 1, 0),
+                                    endDate: new Date(2020, 7, 25, 1, 30),
+                                    groups: 'group_2',
+                                    groupIndex: 2
+                                },
+                                {
+                                    allDay: false,
+                                    startDate: new Date(2020, 7, 24, 2, 0),
+                                    endDate: new Date(2020, 7, 24, 2, 30),
+                                    groups: 'group_3',
+                                    groupIndex: 3
+                                }
+                            ]
+                        ],
+                        completeDateHeaderMap: testHeaderDataMap.horizontalGrouping,
+                        completeTimePanelMap: [],
+                    });
+                }
+            }, () => {
+                test('getLastGroupCellPosition', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.getLastGroupCellPosition(2),
+                        { rowIndex: 1, cellIndex: 1 },
+                        'Last position for the group 2 is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.getLastGroupCellPosition(3),
+                        { rowIndex: 1, cellIndex: 2 },
+                        'Last position for the group 3 is correct'
+                    );
+                });
             });
         });
 

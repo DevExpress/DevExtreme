@@ -2804,7 +2804,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
+        if(this.isGroupedByDate()) {
+            const correctedGroupIndex = this._getGroupCount() - 1;
+
+            return Math.max(
+                this._groupedStrategy.getHorizontalMax(groupIndex),
+                this._groupedStrategy.getHorizontalMax(correctedGroupIndex)
+            );
+        }
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
@@ -3075,7 +3082,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedPosition[groupIndex]) {
-            const { cellIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { cellIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(cellIndex);
         }
 
@@ -3125,7 +3132,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedVerticalPosition[groupIndex]) {
-            const { rowIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(rowIndex);
         }
 
