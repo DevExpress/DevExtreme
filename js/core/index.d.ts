@@ -8,6 +8,7 @@ type Seal<T, K extends keyof any> = T & {
   [P in Exclude<K, keyof T>]?: never;
 };
 
+// Exact props check, see https://github.com/Microsoft/TypeScript/issues/12936
 export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, T7 = never, T8 = never, T9 = never> =
   | Seal<T1, KeysOf<T2, T3, T4, T5, T6, T7, T8, T9>>
   | Seal<T2, KeysOf<T1, T3, T4, T5, T6, T7, T8, T9>>
