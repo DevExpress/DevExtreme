@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { getBoundingRect } from 'core/utils/position';
-// import { each } from 'core/utils/iterator';
+import { each } from 'core/utils/iterator';
 
 import PointerMock from '../../../helpers/pointerMock.js';
 
@@ -129,21 +129,6 @@ module('Resizing integration', {
         assert.strictEqual($resizeFrame.length, 0, 'Frame is not created');
     });
 
-    test('Two frames is created if the content has two tables', function(assert) {
-        this.createWidget({
-            value: tableMarkup + tableMarkup
-        });
-        this.clock.tick();
-
-        // this.$element
-        //     .find('img')
-        //     .trigger(clickEvent);
-
-        const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
-
-        assert.strictEqual($resizeFrame.length, 2, 'Frame is created for table');
-    });
-
     test('Check table resize frame position', function(assert) {
         this.createWidget();
         this.clock.tick();
@@ -176,12 +161,16 @@ module('Resizing integration', {
     });
 
     test('Check table resize frames positions for a two tables', function(assert) {
-        this.createWidget();
+        this.createWidget({
+            value: tableMarkup + '<br>' + tableMarkup
+        });
         this.clock.tick();
 
         const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
 
         assert.strictEqual($resizeFrame.length, 2, 'Frame is created for table');
+        assert.strictEqual($columnResizerElements.length, 8, 'Coulumn resize elements are created for the both tables');
     });
 
     test('Check column resizers elements positions', function(assert) {
@@ -244,8 +233,52 @@ module('Resizing integration', {
             assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
         });
 
-        assert.roughEqual(columnBorderOffsets[0], 150, 2);
-        assert.roughEqual(columnBorderOffsets[1], 200, 2);
+        assert.roughEqual(columnBorderOffsets[0], 150, 3);
+        assert.roughEqual(columnBorderOffsets[1], 200, 3);
+    });
+
+    test('Table has fixed width style for every column if we drag the last column', function(assert) {
+        this.createWidget({ width: 450 });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table').width(400);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $columns = $table.find('tr').eq(0).find('td');
+
+        each($columns, (_, element) => {
+            const styleAttr = $(element).attr('style') || '';
+            assert.ok(styleAttr.indexOf('width') >= 0);
+        });
+    });
+
+
+    test('Table width was changed if we drag the last column', function(assert) {
+        this.createWidget({ width: 400 });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        const startTableWidth = $table.outerWidth();
+        const offset = -20;
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(offset, 0)
+            .dragEnd();
+
+        this.clock.tick();
+
+        assert.roughEqual($table.outerWidth(), startTableWidth + offset, 3);
     });
 
 

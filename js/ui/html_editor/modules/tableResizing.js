@@ -119,7 +119,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _updateFrameSeparators(frame) {
-        const $columns = frame.$table.find('tr').eq(0).find('td');
+        const $columns = this._getTableDeterminantElements(frame.$table);
         const columnsCount = $columns.length;
         const columnsResizingElementsCount = columnsCount - 1;
         // const controlledElements = this._getControlledElements(); // th or td
@@ -156,6 +156,13 @@ export default class TableResizingModule extends BaseModule {
         // eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
     }
 
+    _getTableDeterminantElements($table, direction) {
+        if(direction === 'vertical') {
+            return $table.find('td:first-child');
+        } else {
+            return $table.find('tr').eq(0).find('td');
+        }
+    }
 
     _attachColumnSeparatorEvents(columnSeparator, $columns, index, frame) {
 
@@ -177,21 +184,30 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _createDraggableElement(columnSeparator, $columns, index, frame) {
+        let nextColumnWidth;
+        let startDragPosition;
+        let startColumnWidth;
+
+        if(!$columns[index + 1]) {
+            this._fixColumnsWidth(frame.$table);
+            frame.$table.css('width', 'auto');
+        }
+
         this._currentDraggableElement = this.editorInstance._createComponent(columnSeparator, Draggable, {
             contentTemplate: null,
-            boundary: this._$columnResizeFrame,
+            boundary: frame.$frame,
             allowMoveByClick: false,
             dragDirection: 'horizontal',
             onDragMove: ({ event }) => {
                 // debugger;
-                const newPosition = this._startDragPosition + event.offset.x;
+                const newPosition = startDragPosition + event.offset.x;
                 // console.log('move ' + newPosition);
 
-                $columns.eq(index).css('width', this._startColumnWidth + event.offset.x);
+                $columns.eq(index).css('width', startColumnWidth + event.offset.x);
                 $(columnSeparator).css('left', newPosition /* + $columnSeparators[0].css('left').replace('px', '')*/);
 
-                if(this._nextColumnWidth) {
-                    $columns.eq(index + 1).css('width', this._nextColumnWidth - event.offset.x);
+                if(nextColumnWidth) {
+                    $columns.eq(index + 1).css('width', nextColumnWidth - event.offset.x);
                 }
                 // this._updateByDrag = true;
                 // const $alphaChannelHandle = this._$alphaChannelHandle;
@@ -200,12 +216,11 @@ export default class TableResizingModule extends BaseModule {
                 // this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             },
             onDragStart: () => {
-                this._startDragPosition = parseInt($(columnSeparator).css('left').replace('px', ''));
-                this._startColumnWidth = parseInt($($columns[index]).outerWidth());
-                this._nextColumnWidth = 0;
-                this._previousColumnWidth = 0;
+                startDragPosition = parseInt($(columnSeparator).css('left').replace('px', ''));
+                startColumnWidth = parseInt($($columns[index]).outerWidth());
+                nextColumnWidth = 0;
                 if($columns[index + 1]) {
-                    this._nextColumnWidth = parseInt($($columns[index + 1]).outerWidth());
+                    nextColumnWidth = parseInt($($columns[index + 1]).outerWidth());
                 }
 
                 // if($columns[index - 1]) {
@@ -220,17 +235,13 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    // option(option, value) {
-    //     if(option === 'tableResizing') {
-    //         Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
-    //         return;
-    //     }
+    _fixColumnsWidth($table) {
+        const determinantElements = this._getTableDeterminantElements($table);
 
-    //     if(option === 'enabled') {
-    //         this.enabled = value;
-    //         value ? this._attachEvents() : this._detachEvents();
-    //     }
-    // }
+        each(determinantElements, (index, element) => {
+            $(element).width($(element).width());
+        });
+    }
 
     clean() {
         // this._detachEvents();
