@@ -2,6 +2,7 @@ import { Selector } from 'testcafe';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
+import { compareScreenshot } from '../../helpers/screenshot-comparer';
 
 fixture`Appointment popup form`
   .page(url(__dirname, '../container.html'));
@@ -175,26 +176,20 @@ test('From elements for disabled appointments should be read only (T835731)', as
   height: 600,
 }));
 
-test.only('StartDate and endDate should has correct type after "allDay" and "repeat" option changed (T1002864)', async (t) => {
+test('StartDate and endDate should has correct type after "allDay" and "repeat" option changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getDateTableCell(0, 0))
-    .expect(appointmentPopup.startDateElement.value)
-    .eql('2/1/2021, 12:00 AM')
-
-    .expect(appointmentPopup.endDateElement.value)
-    .eql('2/1/2021, 12:30 AM')
+    .expect(await compareScreenshot(t, 'form-before-change-allday-and-reccurence-options.png'))
+    .ok()
 
     .click(appointmentPopup.allDayElement)
     .click(appointmentPopup.recurrenceElement)
 
-    .expect(appointmentPopup.startDateElement.value)
-    .eql('2/1/2021')
-
-    .expect(appointmentPopup.endDateElement.value)
-    .eql('2/2/2021');
+    .expect(await compareScreenshot(t, 'form-after-change-allday-and-reccurence-options.png'))
+    .ok();
 }).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2021, 1, 1),
 }));
