@@ -467,18 +467,18 @@ export class ResourceManager {
     }
 
     getAppointmentColor(options) {
-        const {
-            groups,
-            workspaceGroups
-        } = options;
+        const { groups } = options;
         const resourceForPainting = this.getResourceForPainting(groups);
         let response = new Deferred().resolve().promise();
 
         if(resourceForPainting) {
             const field = getFieldExpr(resourceForPainting);
-            const groupIndex = options.groupIndex;
-            const cellGroups = this.getCellGroups(groupIndex, workspaceGroups);
-            const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(options.itemData));
+            const {
+                groupIndex,
+                itemData
+            } = options;
+            const cellGroups = this.getCellGroups(groupIndex, this.loadedResources);
+            const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(itemData));
 
             let groupId = resourceValues.length
                 ? resourceValues[0]
