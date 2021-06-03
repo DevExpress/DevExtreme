@@ -4,9 +4,6 @@
 
 const fs = require('fs');
 
-const eslintNoUnusedVars = '/* eslint no-unused-vars: */\n';
-const eslintNoDuplicateImports = '/* no-duplicate-imports: */\n';
-
 const globalizeCjs = 'const Globalize = require(\'globalize\');\n';
 const globalizeEsm = 'import Globalize from \'globalize\';\n';
 const prefix = 'devextreme/';
@@ -17,8 +14,8 @@ const modulesCjsFilePath = './src/modules_cjs.js';
 const modulesEsmFilePAth = './src/modules_esm.js';
 
 const excludeModules = ['ui/set_template_engine', 'core/element', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay'];
-const cjsImports = [ eslintNoUnusedVars, globalizeCjs];
-const esmImports = [ eslintNoUnusedVars, eslintNoDuplicateImports, globalizeEsm];
+const cjsImports = [ globalizeCjs ];
+const esmImports = [ globalizeEsm ];
 
 const getModuleFromObj = (module, cjsImports, esmImports) => {
     if(module.exports) {
@@ -45,10 +42,8 @@ const getModuleFromObj = (module, cjsImports, esmImports) => {
 };
 
 try {
-
     let modules_metadata = fs.readFileSync(modulesMetadataFilePath);
     modules_metadata = JSON.parse(modules_metadata);
-
     modules_metadata.forEach((module) => {
         if(!module.isInternal &&
            !(excludeModules.includes(module.name))) {
