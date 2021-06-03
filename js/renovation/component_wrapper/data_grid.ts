@@ -57,10 +57,9 @@ export default class DataGridWrapper extends Component {
 
     _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
         super._optionChanging(fullName, prevValue, value);
-        if(this.viewRef) {
+        if(this.viewRef && prevValue !== value) {
             const name = fullName.split(/[.[]/)[0];
             const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
-
             updatePropsImmutable(prevProps, this.option(), name, fullName);
             (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
         }
@@ -126,7 +125,10 @@ export default class DataGridWrapper extends Component {
             'onInitialized', 
             'integrationOptions', 
             'adaptColumnWidthByRatio', 
-            'useLegacyKeyboardNavigation'
+            'useLegacyKeyboardNavigation',
+            'templatesRenderAsynchronously',
+            'forceApplyBindings',
+            'nestedComponentOptions',
         ]);
     }
 }
