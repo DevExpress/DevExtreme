@@ -232,7 +232,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
-  @Mutable() validateWheelTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
 
@@ -713,8 +713,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onReachBottom?.({});
   }
 
-  pocketStateChange(state: number): void {
-    this.topPocketState = state;
+  pocketStateChange(newState: number): void {
+    this.topPocketState = newState;
   }
 
   scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number): void {
@@ -809,8 +809,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
     const { target } = event.originalEvent;
 
-    let verticalScrolling;
-    let horizontalScrolling;
+    let verticalScrolling = false;
+    let horizontalScrolling = false;
 
     if (this.direction.isVertical) {
       verticalScrolling = this.props.scrollByThumb
@@ -956,7 +956,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   clearWheelValidationTimer(): void {
-    clearTimeout(this.validateWheelTimer as unknown as number);
+    clearTimeout(this.validateWheelTimer as number);
     this.validateWheelTimer = undefined;
   }
 

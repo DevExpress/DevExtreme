@@ -29,6 +29,9 @@ export class ScrollableSimulatedProps extends ScrollableProps {
 
   @Event()
   scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
+
+  @Event()
+  pocketStateChange?: (newState: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps

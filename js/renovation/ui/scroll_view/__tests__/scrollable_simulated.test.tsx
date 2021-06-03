@@ -362,8 +362,8 @@ describe('Simulated > Behavior', () => {
           const target = helper.getScrollable().find(`.${targetClass}`).at(0).getDOMNode();
           (event.originalEvent as any).target = target;
 
-          let expectedVThumbScrolling;
-          let expectedHThumbScrolling;
+          let expectedVThumbScrolling = false;
+          let expectedHThumbScrolling = false;
 
           if (helper.isVertical) {
             expectedVThumbScrolling = scrollByThumb

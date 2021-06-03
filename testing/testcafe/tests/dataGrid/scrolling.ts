@@ -53,7 +53,7 @@ test('DataGrid should set the scrollbar position to the left on resize (T934842)
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(0);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
 }));
@@ -84,7 +84,7 @@ test('DataGrid should set the scrollbar position to the right on resize when RTL
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(maxRightOffset);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   rtlEnabled: true,
   columnWidth: 100,
@@ -114,7 +114,7 @@ test('DataGrid should not reset its left scroll position on window resize when c
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(100);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
   scrolling: {
@@ -156,7 +156,7 @@ test('DataGrid should not reset its right scroll position on window resize when 
   // assert
   await t
     .expect(await getRightScrollOffset(dataGrid)).eql(100);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
   rtlEnabled: true,
@@ -189,7 +189,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   // assert
   const newScrollTop = await dataGrid.getScrollTop();
   await t.expect(Math.abs(scrollTop - newScrollTop) < 2).ok(`ScrollTop ${scrollTop} changes after editing to ${newScrollTop}`);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   height: 300,
   dataSource: [{ FirstName: 'A', LastName: 'B' }, { FirstName: 'C', LastName: 'D' }],
   editing: {
@@ -230,7 +230,7 @@ test('New virtual mode. A detail row should be rendered when the last master row
     .eql('detail')
     .expect(lastRow.key)
     .eql(100);
-}).before(() => {
+}).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
@@ -281,7 +281,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     .eql('detailAdaptive')
     .expect(lastRow.key)
     .eql(100);
-}).before(() => {
+}).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {

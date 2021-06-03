@@ -18,7 +18,7 @@ const includePaths = [path.join(dataPath, 'scss', 'widgets', 'generic'), path.jo
 const file = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
 describe('compile', () => {
-  test('Compile with empty modifications (check that items can be undefined)', () => {
+  test('Compile with empty modifications (check that items can be undefined)', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(null, {
@@ -40,7 +40,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with one base and one accordion items modified', () => {
+  test('Compile with one base and one accordion items modified', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile([
@@ -70,7 +70,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with error', () => {
+  test('Compile with error', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile([], { file: 'dx.error.scss' }).then(
@@ -82,7 +82,7 @@ describe('compile', () => {
     );
   });
 
-  test('Compile with custom sass compiler options (try to compile with custom data)', () => {
+  test('Compile with custom sass compiler options (try to compile with custom data)', async () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     const bundleContent = fs.readFileSync(file, 'utf8');

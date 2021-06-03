@@ -182,7 +182,9 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this._virtualScrollController.handleDataChanged(callBase, e);
         },
         _customizeRemoteOperations: function(options, operationTypes) {
-            if(isVirtualMode(this) && !operationTypes.reload && (operationTypes.skip || this.option(NEW_SCROLLING_MODE)) && this._renderTime < this.option('scrolling.renderingThreshold')) {
+            const newMode = this.option(NEW_SCROLLING_MODE);
+
+            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && this._renderTime < this.option('scrolling.renderingThreshold')) {
                 options.delay = undefined;
             }
 
@@ -299,6 +301,9 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                 options.storeLoadOptions.take = loadPageCount * this.pageSize();
             }
             this.callBase.apply(this, arguments);
+        },
+        _loadPageSize: function() {
+            return this.callBase.apply(this, arguments) * this.loadPageCount();
         }
     };
 
@@ -634,9 +639,8 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _updateBottomLoading: function() {
             const that = this;
-            const scrollingMode = that.option('scrolling.mode');
-            const virtualMode = scrollingMode === SCROLLING_MODE_VIRTUAL;
-            const appendMode = scrollingMode === SCROLLING_MODE_INFINITE;
+            const virtualMode = isVirtualMode(this);
+            const appendMode = isAppendMode(this);
             const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || appendMode);
             const $contentElement = that._findContentElement();
             const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
@@ -680,7 +684,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 if(this.option(NEW_SCROLLING_MODE) && !isDefined(dataController._loadViewportParams)) {
                     const viewportSize = dataController.viewportSize();
-                    const viewportIsNotFilled = viewportSize > dataController._items.length && dataController.totalItemsCount() > viewportSize;
+                    const viewportIsNotFilled = viewportSize > dataController.items().length && (isAppendMode(this) || dataController.totalItemsCount() > viewportSize);
                     viewportIsNotFilled && dataController.loadViewport();
                 }
             }
@@ -1077,6 +1081,9 @@ export const virtualScrollingModule = {
                         let offset = 0;
                         const dataSource = this.dataSource();
                         const rowsScrollController = this._rowsScrollController;
+                        const virtualMode = isVirtualMode(this);
+                        const appendMode = isAppendMode(this);
+                        const newMode = this.option(NEW_SCROLLING_MODE);
 
                         if(rowsScrollController && !byLoadedRows) {
                             if(this.option(NEW_SCROLLING_MODE) && isDefined(this._loadViewportParams)) {
@@ -1085,7 +1092,7 @@ export const virtualScrollingModule = {
                             } else {
                                 offset = rowsScrollController.beginPageIndex() * rowsScrollController.pageSize();
                             }
-                        } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
+                        } else if((virtualMode || (appendMode && newMode)) && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
 
@@ -1149,7 +1156,7 @@ export const virtualScrollingModule = {
                         };
                     },
                     loadViewport: function() {
-                        if(isVirtualMode(this)) {
+                        if(isVirtualMode(this) || isAppendMode(this)) {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;

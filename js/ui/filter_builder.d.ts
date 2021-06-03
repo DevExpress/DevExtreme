@@ -469,7 +469,7 @@ export interface dxFilterBuilderField {
        * @docid
        * @default undefined
        */
-      dataSource?: Array<any> | DataSourceOptions | Store,
+      dataSource?: Array<any> | Store | DataSourceOptions,
       /**
        * @docid
        * @default undefined

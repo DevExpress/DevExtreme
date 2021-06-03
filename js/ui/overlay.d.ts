@@ -258,7 +258,7 @@ export default class dxOverlay<TProperties> extends Widget<TProperties> {
  * @param1 zIndex:number
  * @namespace DevExpress.ui.dxOverlay
  * @module ui/overlay
- * @export dxOverlay.baseZIndex
+ * @export baseZIndex
  * @static
  * @public
  */

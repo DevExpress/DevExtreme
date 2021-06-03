@@ -3,8 +3,8 @@ import { PdfGrid } from './pdf_grid';
 
 
 function exportDataGrid(doc, dataGrid, options) {
-    if(!isDefined(options.rect)) {
-        throw 'options.rect is required';
+    if(!isDefined(options.topLeft)) {
+        throw 'options.topLeft is required';
     }
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
@@ -12,7 +12,7 @@ function exportDataGrid(doc, dataGrid, options) {
             const columns = dataProvider.getColumns();
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
-            pdfGrid.startNewTable(options.drawTableBorder, options.rect);
+            pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
 
             const dataRowsCount = dataProvider.getRowsCount();
 
@@ -44,9 +44,9 @@ function exportDataGrid(doc, dataGrid, options) {
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRow };
                     options.onRowExporting(args);
-                    const { startNewTable, addPage, tableRect, splitToTablesByColumns } = args.drawNewTableFromThisRow;
+                    const { startNewTable, addPage, tableTopLeft, splitToTablesByColumns } = args.drawNewTableFromThisRow;
                     if(startNewTable === true) {
-                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, splitToTablesByColumns);
+                        pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, addPage === true, splitToTablesByColumns);
                     }
 
                     if(isDefined(args.rowHeight)) {

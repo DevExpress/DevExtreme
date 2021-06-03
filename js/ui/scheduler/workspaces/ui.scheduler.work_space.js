@@ -1176,6 +1176,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     renderWorkSpace(isGenerateNewViewData = true) {
         this._cleanAllowedPositions();
+        this.cache.clear();
+
         this.viewDataProvider.update(isGenerateNewViewData);
 
         if(this.isRenovatedRender()) {
@@ -2382,12 +2384,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._getCellPositionWithCache(
             $cell,
             cellCoordinates,
-            groupIndex
+            groupIndex,
+            inAllDayRow && !this._isVerticalGroupedWorkSpace(),
         );
     }
 
-    _getCellPositionWithCache($cell, cellCoordinates, groupIndex) {
-        const result = this._getCellPosition($cell);
+    _getCellPositionWithCache($cell, cellCoordinates, groupIndex, inAllDayPanel) {
+        const result = this._getCellPosition(cellCoordinates, inAllDayPanel);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
 
@@ -2399,12 +2402,27 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    _getCellPosition($cell) {
-        const position = $cell.position();
+    _getCellPosition(cellCoordinates, isAllDayPanel) {
+        const {
+            dateTableCellsMeta,
+            allDayPanelCellsMeta,
+        } = this.getDOMElementsMetaData();
+        const {
+            cellIndex,
+            rowIndex,
+        } = cellCoordinates;
+
+        const position = isAllDayPanel
+            ? allDayPanelCellsMeta[cellIndex]
+            : dateTableCellsMeta[rowIndex][cellIndex];
+
+        const validPosition = { ...position };
+
         if(this.option('rtlEnabled')) {
-            position.left += getBoundingRect($cell.get(0)).width;
+            validPosition.left += position.width;
         }
-        return position;
+
+        return validPosition;
     }
 
     _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
@@ -2625,7 +2643,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const $cell = this._dom_getDateCell(positionByMap);
-        const position = this._getCellPositionWithCache($cell, positionByMap, validGroupIndex);
+        const position = this._getCellPositionWithCache(
+            $cell,
+            positionByMap,
+            validGroupIndex,
+            inAllDayRow && !this._isVerticalGroupedWorkSpace(),
+        );
 
         const shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date), inAllDayRow);
         const horizontalHMax = this._getHorizontalMax(validGroupIndex, date);
@@ -3313,6 +3336,59 @@ class SchedulerWorkSpace extends WidgetObserver {
         newFirstViewDate.setHours(this.option('startDayHour'));
 
         return newFirstViewDate;
+    }
+
+    // Must replace all DOM manipulations
+    getDOMElementsMetaData() {
+        return this.cache.get('cellElementsMeta', () => {
+            const dateTableCells = this._getAllCells(false);
+            const columnsCount = this.viewDataProvider.getColumnsCount();
+
+            const dateTable = this._getDateTable();
+
+            // We should use getBoundingClientRect in renovation
+            const dateTableRect = getBoundingRect(dateTable.get(0));
+
+            const dateTableCellsMeta = [];
+            const allDayPanelCellsMeta = [];
+
+            dateTableCells.each((index, cell) => {
+                const rowIndex = Math.floor(index / columnsCount);
+
+                if(dateTableCellsMeta.length === rowIndex) {
+                    dateTableCellsMeta.push([]);
+                }
+
+                this._addCellMetaData(dateTableCellsMeta[rowIndex], cell, dateTableRect);
+            });
+
+            if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace()) {
+                const allDayCells = this._getAllCells(true);
+
+                const allDayAppointmentContainer = this.getAllDayContainer();
+                const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
+
+                allDayCells.each((_, cell) => {
+                    this._addCellMetaData(allDayPanelCellsMeta, cell, allDayPanelRect);
+                });
+            }
+
+            return {
+                dateTableCellsMeta,
+                allDayPanelCellsMeta,
+            };
+        });
+    }
+
+    _addCellMetaData(cellMetaDataArray, cell, parentRect) {
+        const cellRect = getBoundingRect(cell);
+
+        cellMetaDataArray.push({
+            left: cellRect.left - parentRect.left,
+            top: cellRect.top - parentRect.top,
+            width: cellRect.width,
+            height: cellRect.height,
+        });
     }
 }
 

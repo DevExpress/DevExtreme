@@ -124,7 +124,11 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  release(): void {
+  release(preventScrollBottom: boolean): void {
+    if (preventScrollBottom !== undefined) {
+      this.toggleLoading(!preventScrollBottom);
+    }
+
     this.scrollable.release();
   }
 
@@ -196,8 +200,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  /* istanbul ignore next */
-  // TODO: avoid using this method in List
   toggleLoading(showOrHide: boolean): void {
     this.forceReachBottom = showOrHide;
   }
@@ -211,7 +213,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   get reachBottomEnabled(): boolean {
-    /* istanbul ignore next */
     if (isDefined(this.forceReachBottom)) {
       return this.forceReachBottom;
     }

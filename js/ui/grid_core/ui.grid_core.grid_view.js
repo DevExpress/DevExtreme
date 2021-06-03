@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import modules from './ui.grid_core.modules';
 import { deferRender, deferUpdate } from '../../core/utils/common';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
 import { isString, isDefined, isNumeric } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -231,6 +231,12 @@ const ResizingController = modules.ViewController.inherit({
             resetBestFitMode = true;
         }
 
+        const $element = this.component.$element();
+        if($element && $element[0] && this._maxWidth) {
+            delete this._maxWidth;
+            $element[0].style.maxWidth = '';
+        }
+
         deferUpdate(() => {
             if(needBestFit) {
                 resultWidths = this._getBestFitWidths();
@@ -347,12 +353,8 @@ const ResizingController = modules.ViewController.inherit({
             }
         }
 
-        if($element && that._maxWidth) {
-            delete that._maxWidth;
-            $element.css('maxWidth', '');
-        }
-
         if(!hasAutoWidth && resultWidths.length) {
+            const $rowsViewElement = that._rowsView.element();
             const contentWidth = that._rowsView.contentWidth();
             const scrollbarWidth = that._rowsView.getScrollbarWidth();
             const totalWidth = that._getTotalWidth(resultWidths, contentWidth);
@@ -364,7 +366,11 @@ const ResizingController = modules.ViewController.inherit({
                     resultWidths[lastColumnIndex] = 'auto';
                     isColumnWidthsCorrected = true;
                     if(hasWidth === false && !hasPercentWidth) {
-                        that._maxWidth = totalWidth + scrollbarWidth + (that.option('showBorders') ? 2 : 0);
+                        const borderWidth = that.option('showBorders') ?
+                            Math.ceil($rowsViewElement.outerWidth() - $rowsViewElement.innerWidth())
+                            : 0;
+
+                        that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
                         $element.css('maxWidth', that._maxWidth);
                     }
                 }
@@ -535,7 +541,12 @@ const ResizingController = modules.ViewController.inherit({
     _checkSize: function(checkSize) {
         const $rootElement = this.component.$element();
 
-        if(checkSize && (this._lastWidth === $rootElement.width() && this._lastHeight === $rootElement.height() || !$rootElement.is(':visible'))) {
+        if(checkSize && (
+            this._lastWidth === $rootElement.width() &&
+            this._lastHeight === $rootElement.height() &&
+            this._devicePixelRatio === getWindow().devicePixelRatio ||
+            !$rootElement.is(':visible')
+        )) {
             return false;
         }
         return true;
@@ -616,6 +627,7 @@ const ResizingController = modules.ViewController.inherit({
     _updateLastSizes: function($rootElement) {
         this._lastWidth = $rootElement.width();
         this._lastHeight = $rootElement.height();
+        this._devicePixelRatio = getWindow().devicePixelRatio;
     },
 
     optionChanged: function(args) {
