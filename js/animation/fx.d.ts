@@ -93,7 +93,7 @@ declare const fx: {
      * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
-     * @param2 config:object
+     * @param2 config:animationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
      * @public
