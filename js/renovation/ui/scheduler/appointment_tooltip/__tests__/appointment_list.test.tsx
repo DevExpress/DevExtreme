@@ -13,7 +13,7 @@ jest.mock('../item_layout', () => ({
   TooltipItemLayout: () => null,
 }));
 
-jest.mock('../../../list', () => ({
+jest.mock('../../../editors/list', () => ({
   __esModule: true,
   List: (props) => {
     // eslint-disable-next-line react/prop-types
