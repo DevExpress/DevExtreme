@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, compileSetter } from '../../core/utils/data';
-import { grep } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -968,7 +967,23 @@ export const columnsControllerModule = {
                 const sign = sortOrder === 'asc' ? 1 : -1;
 
                 columns.sort(function(column1, column2) {
-                    return sign * column1.caption.localeCompare(column2.caption);
+                    const caption1 = column1.caption;
+                    const caption2 = column2.caption;
+
+                    if(!isDefined(caption1) && !isDefined(caption2)) {
+                        return 0;
+                    }
+
+                    // columns with no title will go after others, doesn't matter what order is used
+                    if(!isDefined(caption1)) {
+                        return 1;
+                    }
+
+                    if(!isDefined(caption2)) {
+                        return -1;
+                    }
+
+                    return sign * caption1.localeCompare(caption2);
                 });
 
                 return columns;
@@ -1597,12 +1612,12 @@ export const columnsControllerModule = {
                     return result;
                 },
                 getChooserColumns: function(getAllColumns) {
-                    let columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
-                    columns = grep(columns, function(column) { return column.showInColumnChooser; });
+                    const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
+                    const columnChooserColumns = columns.filter(column => column.showInColumnChooser);
 
                     const sortOrder = this.option('columnChooser.sortOrder');
 
-                    return sortColumns(columns, sortOrder);
+                    return sortColumns(columnChooserColumns, sortOrder);
                 },
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     const that = this;

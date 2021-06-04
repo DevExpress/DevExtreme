@@ -1055,6 +1055,28 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.strictEqual(chooserColumns[2].dataField, '1', 'dataField column');
     });
 
+    QUnit.test('getChooserColumns with sort ordering when caption is undefined', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { caption: '2', visible: false },
+                { caption: '1', visible: false },
+                { visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'asc',
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].caption, '1', 'dataField column');
+        assert.strictEqual(chooserColumns[1].caption, '2', 'dataField column');
+        assert.strictEqual(chooserColumns[2].caption, undefined, 'dataField column');
+    });
+
     QUnit.test('column with calculateCellValue', function(assert) {
         const calculateCellValue = function() { return 1; };
         this.applyOptions({
