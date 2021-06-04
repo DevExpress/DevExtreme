@@ -10,6 +10,7 @@ const { test, module } = QUnit;
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
+const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 const DX_DRAGGABLE_CLASS = 'dx-draggable';
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
@@ -65,10 +66,12 @@ module('Resizing integration', {
 
         const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
 
         assert.strictEqual($resizeFrame.length, 1, 'Frame is created for table');
         assert.strictEqual($columnResizerElements.length, 4, 'Column resizers are created for every column separator');
+        assert.strictEqual($rowResizerElements.length, 4, 'Row resizers are created for every row separator');
         assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
     });
 
