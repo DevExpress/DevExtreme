@@ -284,5 +284,52 @@ module('Resizing integration', {
         assert.roughEqual($table.outerWidth(), startTableWidth + offset, 3);
     });
 
+    test('Table height was changed if we drag the row height resizer', function(assert) {
+        this.createWidget({ height: 300 });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        const startTableHeight = $table.outerHeight();
+        const offset = 20;
+
+        $columnResizerElements.eq(1)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(0, offset)
+            .dragEnd();
+
+        this.clock.tick();
+
+        assert.roughEqual($table.outerHeight(), startTableHeight + offset, 3);
+    });
+
+    test('Check row resizers elements positions', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        const rowBorderOffsets = [];
+
+        $table.find('td:first-child').each((i, element) => {
+            const rowHeight = $(element).outerHeight();
+            if(i > 0) {
+                rowBorderOffsets[i] = rowBorderOffsets[i - 1] + rowHeight;
+            } else {
+                rowBorderOffsets[i] = rowHeight;
+            }
+        });
+
+        $rowResizerElements.each((i, row) => {
+            const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border, index = ' + i);
+        });
+    });
 
 });
