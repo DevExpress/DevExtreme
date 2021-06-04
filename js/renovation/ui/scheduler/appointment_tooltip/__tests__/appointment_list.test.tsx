@@ -4,7 +4,7 @@ import {
   AppointmentList,
   viewFunction as AppointmentListView,
 } from '../appointment_list';
-import { List } from '../../../list';
+import { List } from '../../../editors/list';
 import { TooltipItemLayout } from '../item_layout';
 import getCurrentAppointment from '../utils/get_current_appointment';
 

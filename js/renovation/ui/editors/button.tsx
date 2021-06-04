@@ -11,19 +11,19 @@ import {
   Slot,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { createDefaultOptionRules } from '../../core/options/utils';
-import devices from '../../core/devices';
-import { isMaterial, current } from '../../ui/themes';
-import { click } from '../../events/short';
-import { combineClasses } from '../utils/combine_classes';
-import { getImageSourceType } from '../../core/utils/icon';
-import { Icon } from './common/icon';
-import { InkRipple, InkRippleConfig } from './common/ink_ripple';
-import { Widget } from './common/widget';
-import { BaseWidgetProps } from './common/base_props';
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import { isMaterial, current } from '../../../ui/themes';
+import { click } from '../../../events/short';
+import { combineClasses } from '../../utils/combine_classes';
+import { getImageSourceType } from '../../../core/utils/icon';
+import { Icon } from '../common/icon';
+import { InkRipple, InkRippleConfig } from '../common/ink_ripple';
+import { Widget } from '../common/widget';
+import { BaseWidgetProps } from '../common/base_props';
 // eslint-disable-next-line import/no-cycle
-import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import BaseComponent from '../../component_wrapper/editors/button';
+import { EffectReturn } from '../../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 

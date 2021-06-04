@@ -1,21 +1,21 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import devices from '../../../core/devices';
-import { convertRulesToOptions } from '../../../core/options/utils';
-import { current } from '../../../ui/themes';
+import devices from '../../../../core/devices';
+import { convertRulesToOptions } from '../../../../core/options/utils';
+import { current } from '../../../../ui/themes';
 import {
   clear as clearEventHandlers,
   defaultEvent,
   emit,
   getEventHandlers,
   EVENT,
-} from '../../test_utils/events_mock';
+} from '../../../test_utils/events_mock';
 import {
   Button, ButtonProps, defaultOptionRules, viewFunction,
 } from '../button';
-import { Widget } from '../common/widget';
-import { Icon } from '../common/icon';
-import { InkRipple } from '../common/ink_ripple';
+import { Widget } from '../../common/widget';
+import { Icon } from '../../common/icon';
+import { InkRipple } from '../../common/ink_ripple';
 
 interface Mock extends jest.Mock {}
 

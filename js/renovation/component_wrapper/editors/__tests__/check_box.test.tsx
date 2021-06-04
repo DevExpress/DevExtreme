@@ -1,6 +1,6 @@
 import CheckBox from '../check_box';
 
-import { addAttributes, getAriaName } from '../utils/utils';
+import { addAttributes, getAriaName } from '../../utils/utils';
 import Mock = jest.Mock;
 
 jest.mock('../utils/utils');

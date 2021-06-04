@@ -3,13 +3,13 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
-import LegacyOverlay from '../../ui/overlay/ui.overlay';
-import { UserDefinedElement, DxElement } from '../../core/element';
-import { template } from '../../core/templates/template';
-import { animationConfig } from '../../animation/fx';
+import LegacyOverlay from '../../../ui/overlay/ui.overlay';
+import { UserDefinedElement, DxElement } from '../../../core/element';
+import { template } from '../../../core/templates/template';
+import { animationConfig } from '../../../animation/fx';
 /* eslint-enable import/named */
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,

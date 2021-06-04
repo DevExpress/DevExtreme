@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
-import LegacyList from '../../../ui/list';
+import LegacyList from '../../../../ui/list';
 import { viewFunction as ListView, ListProps, List } from '../list';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
 jest.mock('../../../ui/list', () => jest.fn());
 

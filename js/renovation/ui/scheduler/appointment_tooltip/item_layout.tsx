@@ -13,7 +13,7 @@ import {
   AppointmentTooltipTemplate,
 } from './types.d';
 import { Marker } from './marker';
-import { Button } from '../../button';
+import { Button } from '../../editors/button';
 import { TooltipItemContent } from './item_content';
 import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';

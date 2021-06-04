@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../number_box';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import LegacyNumberBox from '../../../ui/number_box';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
+import LegacyNumberBox from '../../../../ui/number_box';
 
 jest.mock('../../../ui/number_box', () => jest.fn());
 

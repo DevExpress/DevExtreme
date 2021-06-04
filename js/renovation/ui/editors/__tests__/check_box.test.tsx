@@ -3,18 +3,18 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
-import devices from '../../../core/devices';
-import { convertRulesToOptions } from '../../../core/options/utils';
-import { current } from '../../../ui/themes';
+import devices from '../../../../core/devices';
+import { convertRulesToOptions } from '../../../../core/options/utils';
+import { current } from '../../../../ui/themes';
 import {
   clear as clearEventHandlers,
-} from '../../test_utils/events_mock';
+} from '../../../test_utils/events_mock';
 import {
   CheckBox, CheckBoxProps, defaultOptionRules, viewFunction,
 } from '../check_box';
-import { Widget } from '../common/widget';
-import { InkRipple } from '../common/ink_ripple';
-import { ValidationMessage } from '../validation_message';
+import { Widget } from '../../common/widget';
+import { InkRipple } from '../../common/ink_ripple';
+import { ValidationMessage } from '../../overlays/validation_message';
 
 interface Mock extends jest.Mock {}
 

@@ -2,8 +2,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as OverlayView, OverlayProps, Overlay } from '../overlay';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
-import LegacyOverlay from '../../../ui/overlay/ui.overlay';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
+import LegacyOverlay from '../../../../ui/overlay/ui.overlay';
 
 jest.mock('../../../ui/overlay/ui.overlay', () => jest.fn());
 

@@ -7,7 +7,7 @@ import {
   RefObject,
   Ref,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../load_indicator';
+import { LoadIndicator } from '../editors/load_indicator';
 import { isDefined } from '../../../core/utils/type';
 import messageLocalization from '../../../localization/message';
 import { BaseWidgetProps } from '../common/base_props';

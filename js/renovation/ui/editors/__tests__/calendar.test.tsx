@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import LegacyCalendar from '../../../ui/calendar';
+import LegacyCalendar from '../../../../ui/calendar';
 import { viewFunction as CalendarView, CalendarProps, Calendar } from '../calendar';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
 jest.mock('../../../ui/calendar', () => jest.fn());
 

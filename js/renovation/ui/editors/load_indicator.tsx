@@ -3,9 +3,9 @@ import {
 } from '@devextreme-generator/declarations';
 
 /* eslint-disable-next-line import/named */
-import LegacyLoadIndicator from '../../ui/load_indicator';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import LegacyLoadIndicator from '../../../ui/load_indicator';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,

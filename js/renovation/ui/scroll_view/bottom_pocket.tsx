@@ -6,7 +6,7 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { LoadIndicator } from '../load_indicator';
+import { LoadIndicator } from '../editors/load_indicator';
 import { isDefined } from '../../../core/utils/type';
 
 import {

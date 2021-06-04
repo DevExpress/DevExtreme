@@ -2,15 +2,15 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import DataSource, { DataSourceOptions } from '../../data/data_source';
-import Store from '../../data/abstract_store';
-import LegacyList, { dxListItem } from '../../ui/list';
-import { DxElement } from '../../core/element';
-import { EventExtension, DxEvent } from '../../events/index';
+import DataSource, { DataSourceOptions } from '../../../data/data_source';
+import Store from '../../../data/abstract_store';
+import LegacyList, { dxListItem } from '../../../ui/list';
+import { DxElement } from '../../../core/element';
+import { EventExtension, DxEvent } from '../../../events/index';
 
 // import renderTemplate from '../utils/render_template';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,

@@ -8,7 +8,7 @@ import {
   viewFunction as TooltipItemLayoutView,
   TooltipItemLayoutProps,
 } from '../item_layout';
-import { Button as DeleteButton } from '../../../button';
+import { Button as DeleteButton } from '../../../editors/button';
 import { Marker } from '../marker';
 import { TooltipItemContent } from '../item_content';
 import getCurrentAppointment from '../utils/get_current_appointment';
