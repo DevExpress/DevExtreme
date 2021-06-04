@@ -691,6 +691,8 @@ class GroupedDataMapProvider {
         this._workspace = workspace;
     }
 
+    get isVerticalGroupedWorkspace() { return this._workspace._isVerticalGroupedWorkSpace(); }
+
     getGroupStartDate(groupIndex) {
         const firstRow = this.getFirstGroupRow(groupIndex);
 
@@ -886,10 +888,32 @@ class GroupedDataMapProvider {
         }
     }
 
-    getLasGroupCellPosition(groupIndex) {
-        const groupRow = this.getLastGroupRow(groupIndex);
+    getLastGroupCell(groupIndex) {
+        const { dateTableGroupedMap } = this.groupedDataMap;
+        const groupedRows = dateTableGroupedMap[groupIndex];
+        const lastRow = groupedRows[groupedRows.length - 1];
+        let result;
 
-        return groupRow[groupRow.length - 1].position;
+        if(lastRow) {
+            const cellCount = lastRow.length;
+            result = lastRow[cellCount - 1];
+        }
+
+        return result;
+    }
+
+    getLastGroupCellPosition(groupIndex) {
+        let groupCell;
+
+        if(this.isVerticalGroupedWorkspace) {
+            const groupRow = this.getLastGroupRow(groupIndex);
+
+            groupCell = groupRow[groupRow.length - 1];
+        } else {
+            groupCell = this.getLastGroupCell(groupIndex);
+        }
+
+        return groupCell?.position;
     }
 
     getRowCountInGroup(groupIndex) {
@@ -1012,8 +1036,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupIndices();
     }
 
-    getLasGroupCellPosition(groupIndex) {
-        return this._groupedDataMapProvider.getLasGroupCellPosition(groupIndex);
+    getLastGroupCellPosition(groupIndex) {
+        return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
     }
 
     getRowCountInGroup(groupIndex) {

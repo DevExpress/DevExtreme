@@ -246,7 +246,7 @@ export default class dxOverlay extends Widget {
  * @param1 zIndex:number
  * @namespace DevExpress.ui.dxOverlay
  * @module ui/overlay
- * @export dxOverlay.baseZIndex
+ * @export baseZIndex
  * @static
  * @public
  */

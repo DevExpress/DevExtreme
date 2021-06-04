@@ -11,7 +11,7 @@ import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
 import { animation } from 'ui/drawer/ui.drawer.animation';
-import Overlay from 'ui/overlay';
+import { Overlay } from 'ui/overlay';
 
 
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
