@@ -1,8 +1,8 @@
 export class CellsSelectionController {
-    onKeyPressed(options) {
+    handleArrowClick(options) {
         const {
             key,
-            currentCellPosition,
+            focusedCellPosition,
             edgeIndices,
             getCellDataByPosition,
             isAllDayPanelCell,
@@ -13,12 +13,12 @@ export class CellsSelectionController {
         switch(key) {
             case 'down':
                 nextCellIndices = this.getCellFromNextRowPosition(
-                    currentCellPosition, 'next', edgeIndices,
+                    focusedCellPosition, 'next', edgeIndices,
                 );
                 break;
             case 'up':
                 nextCellIndices = this.getCellFromNextRowPosition(
-                    currentCellPosition, 'prev', edgeIndices,
+                    focusedCellPosition, 'prev', edgeIndices,
                 );
                 break;
             case 'left':
@@ -47,11 +47,11 @@ export class CellsSelectionController {
         });
     }
 
-    getCellFromNextRowPosition(currentCellPosition, direction, edgeIndices) {
+    getCellFromNextRowPosition(focusedCellPosition, direction, edgeIndices) {
         const {
             cellIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
 
         const deltaPosition = direction === 'next' ? 1 : -1;
         const nextRowIndex = rowIndex + deltaPosition;
@@ -68,7 +68,7 @@ export class CellsSelectionController {
 
     getCellFromNextColumnPosition(options) {
         const {
-            currentCellPosition,
+            focusedCellPosition,
             direction,
             edgeIndices,
             isRTL,
@@ -80,7 +80,7 @@ export class CellsSelectionController {
         const {
             cellIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
         const {
             firstCellIndex,
             lastCellIndex,
@@ -103,7 +103,7 @@ export class CellsSelectionController {
             };
         }
 
-        return isDateAndTimeView ? currentCellPosition : this._processEdgeCell({
+        return isDateAndTimeView ? focusedCellPosition : this._processEdgeCell({
             nextCellIndex,
             rowIndex,
             cellIndex,

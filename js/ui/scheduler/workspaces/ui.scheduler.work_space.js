@@ -226,7 +226,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const groupCount = this._getGroupCount();
                 const isGroupedByDate = this.isGroupedByDate();
                 const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
-                const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
+                const focusedCellPosition = this.viewDataProvider.findCellPositionInMap({
                     ...focusedCellData,
                     isAllDay: focusedCellData.allDay,
                 });
@@ -235,8 +235,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                     ? this.viewDataProvider.getGroupEdgeIndices(focusedCellData.groupIndex, isAllDayPanelCell)
                     : this.viewDataProvider.getViewEdgeIndices(isAllDayPanelCell);
 
-                const nextCellData = this.cellsSelectionController.onKeyPressed({
-                    currentCellPosition,
+                const nextCellData = this.cellsSelectionController.handleArrowClick({
+                    focusedCellPosition,
                     edgeIndices,
                     isRTL,
                     isGroupedByDate,
@@ -252,7 +252,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
                 this._processNextSelectedCell(
                     nextCellData,
-                    currentCellPosition,
+                    focusedCellData,
                     isMultiSelection && isMultiSelectionAllowed,
                 );
             }
