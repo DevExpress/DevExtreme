@@ -876,6 +876,9 @@ export class DataGridColumnChooser {
 
   @OneWay()
   width?: number;
+
+  @OneWay()
+  sortOrder?: 'asc' | 'desc';
 }
 
 @ComponentBindings()
