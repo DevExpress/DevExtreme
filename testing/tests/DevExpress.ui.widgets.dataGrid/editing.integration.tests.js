@@ -2220,7 +2220,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const errorMessageTopOffset = errorMessageTopPosition - bottomCellPosition;
 
         // assert
-        assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
+        assert.roughEqual(errorMessageTopOffset, 0, 1.1, 'error message offset');
     });
 
     ['close edit cell', 'cancel editing'].forEach(action => {

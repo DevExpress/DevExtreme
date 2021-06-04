@@ -3912,9 +3912,14 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render($testElement);
+        const columnWidths = rowsView.getColumnWidths();
+        const values = [30, 100, 100];
 
         // assert
-        assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], 'calculate widths');
+        assert.strictEqual(columnWidths.length, values.length, 'number of widths');
+        columnWidths.forEach((width, index) => {
+            assert.roughEqual(width, values[index], 0.02, `calculate width of the ${index} column`);
+        });
     });
 
     QUnit.test('GetRowsElements method is called once when opacity is applied to rows', function(assert) {
