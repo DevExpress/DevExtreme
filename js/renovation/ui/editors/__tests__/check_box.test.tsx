@@ -18,7 +18,7 @@ import { ValidationMessage } from '../../overlays/validation_message';
 
 interface Mock extends jest.Mock {}
 
-jest.mock('../../validation_message', () => ({ ValidationMessage: () => null }));
+jest.mock('../../overlays/validation_message', () => ({ ValidationMessage: () => null }));
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../core/devices').default;
