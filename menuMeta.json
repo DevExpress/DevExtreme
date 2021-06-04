@@ -1830,7 +1830,6 @@
           {
             "Title": "Custom Templates",
             "Name": "CustomTemplates",
-            "DocUrl": "Guide/UI_Components/Scheduler/Appointments/Customize_Appointment/",
             "Credits": "www.wikipedia.org",
             "Widget": "Scheduler",
             "Modules": "globalize--vue&react",

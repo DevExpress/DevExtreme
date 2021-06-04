@@ -1,1 +1,7 @@
-This demo illustrates the rich collection of&nbsp;the appearance customization properties available as&nbsp;a&nbsp;part of&nbsp;the Scheduler component. The appearance of&nbsp;appointments and appointment tooltips are defined using custom templates. Properties for the appointment details form are set within the **appointmentFormOpening** event handler. Properties for the Scheduler are also modified: the **timelineDay** view is&nbsp;added to&nbsp;the _View Selector_ and the _All-day panel_ is&nbsp;hidden.
+The Scheduler contains the following properties used to specify custom templates globally and for individual views:
+
+* Appointment rectangle: [appointmentTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentTemplate) / **views[]**.[appointmentTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentTemplate)
+
+* Tooltip: [appointmentTooltipTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentTooltipTemplate) / **views[]**.[appointmentTooltipTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentTooltipTemplate).
+
+To customize the appointment details form, implement the [onAppointmentFormOpening](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) handler. In this demo, this handler adds custom fields to the appointment details form.
