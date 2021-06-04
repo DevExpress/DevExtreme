@@ -1769,11 +1769,11 @@
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/AppointmentWithResources.cs",
-              "/Models/OwnerResource.cs",
+              "/Models/AssigneeResource.cs",
               "/Models/RoomResource.cs",
               "/Models/PriorityResource.cs",
               "/Models/SampleData/AppointmentsWithResources.cs",
-              "/Models/SampleData/OwnerResources.cs",
+              "/Models/SampleData/AssigneeResources.cs",
               "/Models/SampleData/RoomResources.cs",
               "/Models/SampleData/PriorityResources.cs"
             ],
