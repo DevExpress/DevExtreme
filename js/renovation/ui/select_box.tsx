@@ -29,7 +29,7 @@ export class SelectBoxProps extends BaseWidgetProps {
 
   @OneWay() displayExpr?: string;
 
-  @TwoWay() value?: string | null = null;
+  @TwoWay() value?: any = null;
 
   @OneWay() valueExpr?: string;
 
