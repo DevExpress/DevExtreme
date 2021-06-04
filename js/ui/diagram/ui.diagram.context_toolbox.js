@@ -48,9 +48,9 @@ class DiagramContextToolbox extends Widget {
         const $popoverElement = $('<div>')
             .appendTo(this.$element());
 
-        const { DiagramBrowser } = getDiagram();
+        const { Browser } = getDiagram();
         let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
-        if(DiagramBrowser.TouchUI) {
+        if(Browser.TouchUI) {
             popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
