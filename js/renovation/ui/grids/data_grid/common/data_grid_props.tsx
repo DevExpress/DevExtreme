@@ -119,6 +119,15 @@ export class DataGridColumnButton {
     row?: RowObject;
     column?: Column;
   }) => boolean);
+
+  @OneWay()
+  disabled?:
+  | boolean
+  | ((options: {
+    component?: DxDataGrid;
+    row?: RowObject;
+    column?: Column;
+  }) => boolean);
 }
 
 @ComponentBindings()
