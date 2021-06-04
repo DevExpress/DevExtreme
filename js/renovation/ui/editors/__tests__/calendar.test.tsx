@@ -4,7 +4,7 @@ import LegacyCalendar from '../../../../ui/calendar';
 import { viewFunction as CalendarView, CalendarProps, Calendar } from '../calendar';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
-jest.mock('../../../ui/calendar', () => jest.fn());
+jest.mock('../../../../ui/calendar', () => jest.fn());
 
 describe('Calendar', () => {
   describe('View', () => {

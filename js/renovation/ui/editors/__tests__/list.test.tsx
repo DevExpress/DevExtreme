@@ -5,7 +5,7 @@ import LegacyList from '../../../../ui/list';
 import { viewFunction as ListView, ListProps, List } from '../list';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
-jest.mock('../../../ui/list', () => jest.fn());
+jest.mock('../../../../ui/list', () => jest.fn());
 
 describe('List', () => {
   describe('View', () => {

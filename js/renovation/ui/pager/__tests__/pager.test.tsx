@@ -7,7 +7,7 @@ import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PagerProps } from '../common/pager_props';
 
-jest.mock('../../select_box', () => ({ SelectBox: jest.fn() }));
+jest.mock('../../editors/select_box', () => ({ SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {

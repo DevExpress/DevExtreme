@@ -4,7 +4,7 @@ import LegacyDateBox from '../../../../ui/date_box';
 import { viewFunction as DateBoxView, DateBoxProps, DateBox } from '../date_box';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
-jest.mock('../../../ui/date_box', () => jest.fn());
+jest.mock('../../../../ui/date_box', () => jest.fn());
 
 describe('DateBox', () => {
   describe('View', () => {

@@ -17,7 +17,7 @@ jest.mock('../utils/get_current_appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
 
-jest.mock('../../../button', () => ({ __esModule: true, Button: () => null }));
+jest.mock('../../../editors/button', () => ({ __esModule: true, Button: () => null }));
 jest.mock('../marker', () => ({ __esModule: true, Marker: () => null }));
 jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: () => null }));
 

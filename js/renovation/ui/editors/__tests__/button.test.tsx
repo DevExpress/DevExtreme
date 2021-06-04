@@ -19,7 +19,7 @@ import { InkRipple } from '../../common/ink_ripple';
 
 interface Mock extends jest.Mock {}
 
-jest.mock('../../../core/devices', () => {
+jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
@@ -30,7 +30,7 @@ jest.mock('../../../core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../../../ui/themes', () => ({
+jest.mock('../../../../ui/themes', () => ({
   ...jest.requireActual('../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));

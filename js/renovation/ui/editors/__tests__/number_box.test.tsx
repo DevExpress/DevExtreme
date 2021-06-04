@@ -4,7 +4,7 @@ import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../num
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyNumberBox from '../../../../ui/number_box';
 
-jest.mock('../../../ui/number_box', () => jest.fn());
+jest.mock('../../../../ui/number_box', () => jest.fn());
 
 describe('NumberBox', () => {
   describe('View', () => {
