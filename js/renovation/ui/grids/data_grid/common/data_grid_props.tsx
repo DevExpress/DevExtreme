@@ -457,50 +457,50 @@ export class DataGridEditingTexts {
 @ComponentBindings()
 export class DataGridEditing {
   @OneWay()
-  allowAdding?: boolean;
+  allowAdding? = false;
 
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
-  confirmDelete?: boolean;
+  confirmDelete? = true;
 
   @OneWay()
-  form?: dxFormOptions;
+  form?: dxFormOptions = { colCount: 2 };
 
   @OneWay()
-  mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+  mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup' = 'row';
 
   @OneWay()
-  popup?: PopupProperties;
+  popup?: PopupProperties = {};
 
   @OneWay()
-  refreshMode?: 'full' | 'reshape' | 'repaint';
+  refreshMode?: 'full' | 'reshape' | 'repaint' = 'full';
 
   @OneWay()
-  selectTextOnEditStart?: boolean;
+  selectTextOnEditStart? = false;
 
   @OneWay()
-  startEditAction?: 'click' | 'dblClick';
+  startEditAction?: 'click' | 'dblClick' = 'click';
 
   @Nested()
   texts?: DataGridEditingTexts;
 
   @OneWay()
-  useIcons?: boolean;
+  useIcons? = false;
 
   @TwoWay()
   changes?: [];
 
   @TwoWay()
-  editRowKey?: any;
+  editRowKey?: any = null;
 
   @TwoWay()
   editColumnName?: string | null = null;
@@ -1128,24 +1128,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @Nested() columns?: (DataGridColumn | string)[];
 
-  @Nested() editing?: DataGridEditing = {
-    mode: 'row',
-    refreshMode: 'full',
-    allowAdding: false,
-    allowUpdating: false,
-    allowDeleting: false,
-    useIcons: false,
-    selectTextOnEditStart: false,
-    confirmDelete: true,
-    form: {
-      colCount: 2,
-    },
-    popup: {},
-    startEditAction: 'click',
-    editRowKey: null,
-    editColumnName: undefined,
-    changes: [],
-  };
+  @Nested() editing?: DataGridEditing = new DataGridEditing();
 
   @OneWay() export?: DataGridExport;
 
