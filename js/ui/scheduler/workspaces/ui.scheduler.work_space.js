@@ -322,10 +322,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             index: nextCellData.index,
         });
 
-        if(!focusedCellPosition ||
-            nextCellPosition.cellIndex !== focusedCellPosition.cellIndex
-                || nextCellPosition.rowIndex !== focusedCellPosition.rowIndex
-                || nextCellData.allDay !== focusedCellPosition.allDay) {
+        if(this._isUpdateCellsSelection(focusedCellPosition, nextCellPosition)) {
             this._releaseFocusedCell();
             this._releaseSelectedCells();
 
@@ -340,6 +337,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this._dateTableScrollable.scrollToElement($cell);
         }
+    }
+
+    _isUpdateCellsSelection(focusedCellPosition, nextFocusedCellPosition) {
+        return !focusedCellPosition || !!nextFocusedCellPosition
+            || nextFocusedCellPosition.cellIndex !== focusedCellPosition.cellIndex
+            || nextFocusedCellPosition.rowIndex !== focusedCellPosition.rowIndex
+            || nextFocusedCellPosition.allDay !== focusedCellPosition.allDay;
     }
 
     _setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
