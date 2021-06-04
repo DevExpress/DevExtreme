@@ -322,7 +322,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             index: nextCellData.index,
         });
 
-        if(nextCellPosition.cellIndex !== focusedCellPosition.cellIndex
+        if(!focusedCellPosition ||
+            nextCellPosition.cellIndex !== focusedCellPosition.cellIndex
                 || nextCellPosition.rowIndex !== focusedCellPosition.rowIndex
                 || nextCellData.allDay !== focusedCellPosition.allDay) {
             this._releaseFocusedCell();
