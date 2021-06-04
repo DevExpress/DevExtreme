@@ -33,8 +33,6 @@ export default class VirtualScrollingDispatcher {
 
     get renderer() { return this._renderer; }
 
-    get isVirtualScrolling() { return this.workspace.isVirtualScrolling(); }
-
     get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
     set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
 
