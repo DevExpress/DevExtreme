@@ -947,7 +947,7 @@ module('Renovated Render', {
     });
 
     test('getDataByDroppableCell should work correctly', function(assert) {
-        this.createInstance();
+        this.createInstance({ cellDuration: 60 });
 
         this.instance.$element().find('.' + CELL_CLASS).eq(1).addClass('dx-scheduler-date-table-droppable-cell');
 
