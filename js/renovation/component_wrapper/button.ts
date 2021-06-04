@@ -14,7 +14,8 @@ export default class ButtonWrapper extends Component {
   }
 
   _toggleActiveState(_, value) {
-    value ? this.activate() : this.deactivate();
+    const button = (this.viewRef as Button);
+    value ? button.activate() : button.deactivate();
   }
 
   getProps(): Record<string, unknown> {
