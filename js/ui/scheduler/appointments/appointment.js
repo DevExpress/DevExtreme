@@ -44,6 +44,7 @@ export class Appointment extends DOMComponent {
         return extend(super._getDefaultOptions(), {
             data: {},
             groupIndex: -1,
+            groups: [],
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -147,8 +148,7 @@ export class Appointment extends DOMComponent {
         const deferredColor = getResourceManager().getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
-            groups: this.invoke('getOption', 'groups'),
-            workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
+            groups: this.option('groups'),
         });
 
         deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));

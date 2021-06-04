@@ -153,7 +153,8 @@ class SchedulerAppointments extends CollectionWidget {
             allowResize: true,
             allowAllDayResize: true,
             onAppointmentDblClick: null,
-            _collectorOffset: 0
+            _collectorOffset: 0,
+            groups: []
         });
     }
 
@@ -534,6 +535,7 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
+                groups: this.option('groups')
             };
 
             if(this.isAgendaView) {
