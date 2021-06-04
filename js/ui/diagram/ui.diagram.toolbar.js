@@ -281,7 +281,7 @@ class DiagramToolbar extends DiagramPanel {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
-        const { DiagramBrowser } = getDiagram();
+        const { Browser } = getDiagram();
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
@@ -291,7 +291,7 @@ class DiagramToolbar extends DiagramPanel {
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: '',
                 closeOnOutsideClick: (e) => {
-                    return !DiagramBrowser.TouchUI && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
+                    return !Browser.TouchUI && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
                 },
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
@@ -317,7 +317,7 @@ class DiagramToolbar extends DiagramPanel {
             });
 
             // prevent showing context menu by toggle "close" click
-            if(!DiagramBrowser.TouchUI) {
+            if(!Browser.TouchUI) {
                 widget._contextMenu._dropDownButtonElement = widget.$element(); // i.e. widget.NAME === 'dxButton'
                 if(widget.NAME === 'dxTextBox') {
                     widget._contextMenu._dropDownButtonElement = widget.getButton('dropDown').element();
