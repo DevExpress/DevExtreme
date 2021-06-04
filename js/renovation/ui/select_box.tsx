@@ -33,7 +33,7 @@ export class SelectBoxProps extends BaseWidgetProps {
 
   @OneWay() valueExpr?: string;
 
-  @Event() valueChange?: EventCallback<string | null>;
+  @Event() valueChange?: EventCallback<any>;
 
   @OneWay() focusStateEnabled?: boolean = true;
 
