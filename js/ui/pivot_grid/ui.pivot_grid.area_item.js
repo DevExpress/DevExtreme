@@ -572,7 +572,7 @@ export const AreaItem = Class.inherit({
     },
 
     _getMaxLeftOffset(scrollable) {
-        return scrollable._container().get(0).scrollWidth - scrollable._container().get(0).clientWidth;
+        return scrollable.container().scrollWidth - scrollable.container().clientWidth;
     },
 
     on: function(eventName, handler) {
