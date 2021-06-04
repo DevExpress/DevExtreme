@@ -381,4 +381,3 @@ export const Component = Class.inherit({
     }
 });
 
-export default Component;

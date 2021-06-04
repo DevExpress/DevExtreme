@@ -36,9 +36,9 @@ export interface ComponentOptions<TComponent> {
   onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
 }
 /**
- * @docid
+ * @docid Component
  * @module core/component
- * @export default
+ * @export Component
  * @namespace DevExpress
  * @hidden
  * @wrappable
@@ -136,13 +136,3 @@ export class Component<TProperties> {
    */
   resetOption(optionName: string): void;
 }
-
-/**
- * @docid Component
- * @module core/component
- * @export default
- * @namespace DevExpress
- * @hidden
- * @wrappable
- */
-export default Component;
