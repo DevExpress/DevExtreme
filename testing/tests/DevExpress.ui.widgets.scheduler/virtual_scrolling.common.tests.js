@@ -3053,6 +3053,7 @@ module('Virtual scrolling integration', () => {
                 dataSource: data
             });
 
+            const expectedAppointmentElement = this.scheduler.appointments.getAppointment()[0];
             const scrollable = this.instance.getWorkSpaceScrollable();
 
             return asyncWrapper(
@@ -3067,13 +3068,18 @@ module('Virtual scrolling integration', () => {
                         assert.notOk(appointmentsItems[0].needRepaint, 'Item should not be repainted');
                         assert.notOk(appointmentsItems[0].needRemove, 'Item0 should not be removed');
                         assert.equal(this.instance.getWorkSpace().virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'Virtual cells count is correct');
+
+                        assert.equal(
+                            this.scheduler.appointments.getAppointment()[0],
+                            expectedAppointmentElement,
+                            'Appointment is the same'
+                        );
                     },
                     scrollable,
                     { x: 500 }
                 )
             );
         });
-
 
         [
             {

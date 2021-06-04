@@ -7,7 +7,7 @@ import { isDefined } from '../../../core/utils/type';
 const DEFAULT_CELL_HEIGHT = 50;
 const MIN_CELL_WIDTH = 1;
 const MIN_SCROLL_OFFSET = 10;
-const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
+const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 30;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
 const scrollingOrientations = {

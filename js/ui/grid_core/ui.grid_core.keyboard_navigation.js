@@ -1578,13 +1578,23 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const keyPressEvent = createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
         const inputEvent = createEvent(eventArgs, { type: 'input', target: $input.get(0) });
 
+        $input.get(0).select();
         eventsEngine.trigger($input, keyDownEvent);
+
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
                 const timeout = browser.mozilla ? 25 : 0; // T882996
+
                 setTimeout(() => {
                     $input.val(editorValue);
+
+                    if(browser.msie) {
+                        gridCoreUtils.setSelectionRange($input.get(0), {
+                            selectionStart: editorValue.length,
+                            selectionEnd: editorValue.length
+                        });
+                    }
 
                     const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
                     eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
