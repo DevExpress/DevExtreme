@@ -1084,26 +1084,23 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
+        const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
-        const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
-        const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
-        const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
+        const horizontalGroupCount = isVerticalGrouping ? 1 : groupCount;
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
-        const rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
+        const rowCount = this._getTotalRowCount(groupCount, isVerticalGrouping);
         const groupOrientation = groupCount > 0
             ? this.option('groupOrientation')
             : this._getDefaultGroupStrategy();
 
         const options = {
             horizontalGroupCount,
-            verticalGroupCount,
             rowCountInGroup,
             cellCount,
             cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
-            allDayElements,
             startRowIndex: 0,
             startCellIndex: 0,
             groupOrientation,
@@ -1118,8 +1115,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.isGroupedByDate(),
             groupsList: this._getAllGroups(),
             isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
-            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+            isVerticalGrouping,
             isProvideVirtualCellsWidth,
+            isStandaloneAllDayPanel: !isVerticalGrouping && this.isAllDayPanelVisible,
+            isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
+            isAllDayPanelVisible: this.isAllDayPanelVisible,
+            getAllDayCellData: this._getAllDayCellData.bind(this),
+            isDateAndTimeView: this.isDateAndTimeView,
         };
 
         if(this.isVirtualScrolling()) {

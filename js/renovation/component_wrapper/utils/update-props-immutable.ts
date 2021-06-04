@@ -1,9 +1,10 @@
 import { isPlainObject } from '../../../core/utils/type';
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface UnknownObject { }
 
 export function updatePropsImmutable(
-  props: UnknownObject, option: UnknownObject, name: string, fullName: string,
+  props: Record<string, unknown>,
+  option: Record<string, unknown>,
+  name: string,
+  fullName: string,
 ): void {
   const currentPropsValue = option[name];
   const result = props;
@@ -22,7 +23,7 @@ export function updatePropsImmutable(
     }
   }
   if (isPlainObject(currentPropsValue)) {
-    result[name] = { ...currentPropsValue };
+    result[name] = { ...currentPropsValue as Record<string, unknown> };
   } else {
     result[name] = currentPropsValue;
   }
