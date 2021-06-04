@@ -8,19 +8,19 @@ Depending on a column's [dataType](/Documentation/ApiReference/UI_Components/dxT
         <th>Editor</th>
     </tr>
     <tr>
-        <td>*"string"*, *"number"*, *"object"*</td>
+        <td><i>"string"</i>, <i>"number"</i>, <i>"object"</i></td>
         <td>Text box</td>
     </tr>
     <tr>
-        <td>*"boolean"*</td>
+        <td><i>"boolean"</i></td>
         <td>Drop-down list</td>
     </tr> 
     <tr>
-        <td>*"date"*</td>
+        <td><i>"date"</i></td>
         <td>Date picker</td>
     </tr> 
     <tr>
-        <td>*"datetime"*</td>
+        <td><i>"datetime"</i></td>
         <td>Date and time picker</td>
     </tr> 
 </table>
