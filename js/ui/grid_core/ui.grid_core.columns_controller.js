@@ -967,21 +967,8 @@ export const columnsControllerModule = {
                 const sign = sortOrder === 'asc' ? 1 : -1;
 
                 columns.sort(function(column1, column2) {
-                    const caption1 = column1.caption;
-                    const caption2 = column2.caption;
-
-                    if(!isDefined(caption1) && !isDefined(caption2)) {
-                        return 0;
-                    }
-
-                    // columns with no title will go after others, doesn't matter what order is used
-                    if(!isDefined(caption1)) {
-                        return 1;
-                    }
-
-                    if(!isDefined(caption2)) {
-                        return -1;
-                    }
+                    const caption1 = column1.caption || '';
+                    const caption2 = column2.caption || '';
 
                     return sign * caption1.localeCompare(caption2);
                 });
