@@ -381,3 +381,11 @@ export const Component = Class.inherit({
     }
 });
 
+/**
+ * @name Component
+ * @module core/component
+ * @export Component
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ */
