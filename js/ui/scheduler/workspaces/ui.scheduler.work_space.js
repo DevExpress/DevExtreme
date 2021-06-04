@@ -294,10 +294,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
         const currentCellData = this._getFullCellData($cell);
         const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
-        const currentCellPosition = this.viewDataProvider.findCellPositionInMap({
-            ...focusedCellData,
-            isAllDay: focusedCellData.allDay,
-        });
 
         const nextFocusedCellData = this.cellsSelectionController.moveToCell({
             isMultiSelection,
@@ -309,12 +305,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._processNextSelectedCell(
             nextFocusedCellData,
-            currentCellPosition,
+            focusedCellData,
             isMultiSelectionAllowed && isMultiSelection,
         );
     }
 
-    _processNextSelectedCell(nextCellData, focusedCellPosition, isMultiSelection) {
+    _processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
         const nextCellPosition = this.viewDataProvider.findCellPositionInMap({
             startDate: nextCellData.startDate,
             groupIndex: nextCellData.groupIndex,
@@ -322,7 +318,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             index: nextCellData.index,
         });
 
-        if(this._isUpdateCellsSelection(focusedCellPosition, nextCellPosition)) {
+        if(!this.viewDataProvider.isSameCell(focusedCellData, nextCellData)) {
             this._releaseFocusedCell();
             this._releaseSelectedCells();
 
@@ -337,13 +333,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this._dateTableScrollable.scrollToElement($cell);
         }
-    }
-
-    _isUpdateCellsSelection(focusedCellPosition, nextFocusedCellPosition) {
-        return !focusedCellPosition || !!nextFocusedCellPosition
-            || nextFocusedCellPosition.cellIndex !== focusedCellPosition.cellIndex
-            || nextFocusedCellPosition.rowIndex !== focusedCellPosition.rowIndex
-            || nextFocusedCellPosition.allDay !== focusedCellPosition.allDay;
     }
 
     _setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
