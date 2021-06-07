@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
 import { titleize } from '../../../../core/utils/inflector';
 
 import {
@@ -10,6 +11,7 @@ import {
   ScrollableNative as Scrollable,
   viewFunction,
   ScrollableNativePropsType,
+  ScrollableNative,
 } from '../scrollable_native';
 
 import {
@@ -27,9 +29,9 @@ jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.fo
 const BOTTOM_POCKET_HEIGHT = 55;
 
 class ScrollableTestHelper {
-  options: { [key: string]: any };
+  options: Partial<ScrollableNativePropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>;
 
-  viewModel: any;
+  viewModel: ScrollableNative;
 
   scrollable: any;
 
@@ -38,20 +40,6 @@ class ScrollableTestHelper {
   isHorizontal: boolean;
 
   isBoth: boolean;
-
-  initHandlerMock?: jest.Mock;
-
-  startHandlerMock?: jest.Mock;
-
-  endHandlerMock?: jest.Mock;
-
-  cancelHandlerMock?: jest.Mock;
-
-  stopHandlerMock?: jest.Mock;
-
-  scrollByHandlerMock?: jest.Mock;
-
-  scrollBarHandlers?: string[];
 
   actionHandlers: { [key: string]: any };
 
@@ -68,14 +56,14 @@ class ScrollableTestHelper {
       onReachBottom: this.actionHandlers.onReachBottom,
       ...this.options,
     }) as any;
-    this.viewModel.scrollableRef = React.createRef();
-    this.viewModel.containerRef = React.createRef();
-    this.viewModel.contentRef = React.createRef();
-    this.viewModel.wrapperRef = React.createRef();
-    this.viewModel.topPocketRef = React.createRef();
-    this.viewModel.bottomPocketRef = React.createRef();
-    this.viewModel.vScrollbarRef = React.createRef();
-    this.viewModel.hScrollbarRef = React.createRef();
+    this.viewModel.scrollableRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.containerRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.contentRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.wrapperRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.topPocketRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.bottomPocketRef = React.createRef() as RefObject<HTMLDivElement>;
+    this.viewModel.vScrollbarRef = React.createRef() as RefObject<Scrollbar>;
+    this.viewModel.hScrollbarRef = React.createRef() as RefObject<Scrollbar>;
 
     const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.options.direction);
     this.isVertical = isVertical;
@@ -109,7 +97,7 @@ class ScrollableTestHelper {
     this.initStyles(this.viewModel.contentRef.current,
       { width: contentSize, height: contentHeight },
       { width: contentSize, height: contentHeight }, overflow);
-    this.initStyles(this.viewModel.scrollableRef.current,
+    this.initStyles(this.viewModel.scrollableRef.current!,
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });
 
@@ -169,7 +157,7 @@ class ScrollableTestHelper {
     return el;
   }
 
-  getScrollable(): any {
+  getScrollable(): ReactWrapper<ScrollableNative> {
     return this.scrollable;
   }
 
@@ -193,8 +181,16 @@ class ScrollableTestHelper {
     return this.scrollable.find(Scrollbar);
   }
 
+  getVScrollbar(): Scrollbar {
+    return this.viewModel.vScrollbarRef.current!;
+  }
+
+  getHScrollbar(): Scrollbar {
+    return this.viewModel.hScrollbarRef.current!;
+  }
+
   initScrollbarSettings(additionalProps:
-  { [key: string]: any } = { translateOffset: 0, props: {} }): any {
+  { [key: string]: any } = { translateOffset: 0, props: {} }): void {
     const scrollbars = this.getScrollbars();
 
     const initSettings = (scrollbarRef) => {
@@ -232,58 +228,17 @@ class ScrollableTestHelper {
     }
   }
 
-  initScrollbarHandlerMocks(): void {
-    this.scrollBarHandlers = ['init', 'start', 'end', 'cancel', 'stop', 'move', 'scrollBy', 'release'];
-
-    this.scrollBarHandlers.forEach((handler) => {
-      this[`${handler}HandlerMock`] = jest.fn();
-      if (this.isVertical) {
-        this.viewModel.vScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
-      }
-      if (this.isHorizontal) {
-        this.viewModel.hScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
-      }
-    });
-  }
-
   initContainerPosition({ top, left }: { top: number; left: number }): void {
-    this.viewModel.containerRef.current.scrollTop = top;
-    this.viewModel.containerRef.current.scrollLeft = left;
+    this.viewModel.containerRef.current!.scrollTop = top;
+    this.viewModel.containerRef.current!.scrollLeft = left;
 
     if (this.isVertical && this.options.useSimulatedScrollbar) {
-      this.viewModel.vScrollbarRef.current.props.scrollLocation = -top;
+      this.getVScrollbar().props.scrollLocation = -top;
     }
 
     if (this.isHorizontal && this.options.useSimulatedScrollbar) {
-      this.viewModel.hScrollbarRef.current.props.scrollLocation = -left;
+      this.getHScrollbar().props.scrollLocation = -left;
     }
-  }
-
-  checkScrollbarEventHandlerCalls(jestExpect: (any) => any,
-    expectedHandlers: string[],
-    expectedArgs: (boolean | { x: number; y: number } | { [key: string]: any })[][]): void {
-    this.scrollBarHandlers?.forEach((handler) => {
-      const indexOf = expectedHandlers.indexOf(handler);
-      if (indexOf !== -1) {
-        if (this.isBoth) {
-          jestExpect(this[`${handler}HandlerMock`]).toBeCalledTimes(2);
-          if (expectedArgs[indexOf].length === 2) {
-            jestExpect(this[`${handler}HandlerMock`]).toHaveBeenNthCalledWith(1, expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else if (expectedArgs[indexOf].length === 1) {
-            jestExpect(this[`${handler}HandlerMock`]).toHaveBeenNthCalledWith(2, expectedArgs[indexOf][0]);
-          }
-        } else {
-          jestExpect(this[`${handler}HandlerMock`]).toBeCalledTimes(1);
-          if (expectedArgs[indexOf].length === 2) {
-            jestExpect(this[`${handler}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else if (expectedArgs[indexOf].length === 1) {
-            jestExpect(this[`${handler}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0]);
-          }
-        }
-      } else {
-        jestExpect(this[`${handler}HandlerMock`]).toBeCalledTimes(0);
-      }
-    });
   }
 
   checkActionHandlerCalls(jestExpect: (any) => any,

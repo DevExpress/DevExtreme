@@ -520,7 +520,7 @@ each([{
         const viewModel = new Scrollable({ needScrollViewContentWrapper });
 
         const contentEl = { clientHeight: 100 };
-        const scrollViewContentEl = { clientHeight: 100 };
+        const scrollViewContentEl = { clientHeight: 200 };
 
         viewModel.contentRef = { current: contentEl } as RefObject<HTMLDivElement>;
         viewModel.scrollViewContentRef = {
@@ -530,6 +530,16 @@ each([{
         const expectedContentEl = needScrollViewContentWrapper ? scrollViewContentEl : contentEl;
 
         expect(viewModel.content()).toEqual(expectedContentEl);
+      });
+
+      it('Container()', () => {
+        const viewModel = new Scrollable({});
+
+        const containerElement = { clientHeight: 100 };
+
+        viewModel.containerRef = { current: containerElement } as RefObject<HTMLDivElement>;
+
+        expect(viewModel.container()).toEqual(containerElement);
       });
 
       describe('ScrollOffset', () => {

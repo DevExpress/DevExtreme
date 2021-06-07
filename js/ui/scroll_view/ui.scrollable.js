@@ -229,7 +229,19 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
+        return this._moveIsAllowed(e);
+    },
+
+    _moveIsAllowed(e) {
         return this._strategy.validate(e);
+    },
+
+    handleMove(e) {
+        this._strategy.handleMove(e);
+    },
+
+    _prepareDirections(value) {
+        this._strategy._prepareDirections(value);
     },
 
     _initHandler: function() {
