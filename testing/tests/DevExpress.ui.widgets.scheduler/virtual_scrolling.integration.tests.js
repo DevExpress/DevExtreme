@@ -51,12 +51,6 @@ module('Virtual scrolling integration', () => {
                     const workspace = instance.getWorkSpace();
 
                     assert.equal(
-                        !!workspace.virtualScrollingDispatcher,
-                        result,
-                        'Virtual scrolling initialised',
-                    );
-
-                    assert.equal(
                         workspace.isRenovatedRender(),
                         result,
                         'Render type is correct'
