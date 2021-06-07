@@ -6,6 +6,8 @@ import caretWorkaround from './caretWorkaround.js';
 
 import 'ui/text_box/ui.text_editor';
 
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
 const testMaskRule = (title, config) => {
     QUnit.test(title, function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
@@ -14,7 +16,7 @@ const testMaskRule = (title, config) => {
             valueChangeEvent: 'keyup'
         });
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input, true);
@@ -50,7 +52,7 @@ QUnit.module('rendering', {}, () => {
         assert.ok(!$textEditor.hasClass('dx-texteditor-masked'), 'textEditor has no mask');
         $textEditor.dxTextEditor('option', 'mask', 'X');
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), '_', 'mask is rendered');
         assert.ok($textEditor.hasClass('dx-texteditor-masked'), 'textEditor masked');
     });
@@ -63,7 +65,7 @@ QUnit.module('rendering', {}, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), '(_)', 'mask is rendered');
     });
 });
@@ -77,7 +79,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -97,7 +99,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -115,7 +117,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -133,7 +135,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -152,7 +154,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -169,7 +171,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input, true);
 
@@ -185,7 +187,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -202,7 +204,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
         keyboard.caret(0).type('x');
 
@@ -217,7 +219,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('x').type('x');
@@ -240,7 +242,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(1).type('y');
@@ -256,7 +258,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('x').type('x').caret(0);
@@ -273,7 +275,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -291,7 +293,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0)
@@ -311,13 +313,29 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(1)
             .type('x');
 
         assert.equal(keyboard.caret().start, 3, 'caret in correct position');
+    });
+
+    QUnit.test('autofill input with mask should not throw error (T996580)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (X00) 000-0000',
+            value: '+1'
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        try {
+            $($input).trigger($.Event('input', { originalEvent: $.Event('input') }));
+
+            assert.ok(true, 'everything is ok');
+        } catch(e) {
+            assert.ok(false, 'error is thrown');
+        }
     });
 
     QUnit.test('arrow keys should not be prevented', function(assert) {
@@ -341,7 +359,7 @@ QUnit.module('typing', moduleConfig, () => {
             mask: ' '
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.on('keypress', e => {
@@ -360,7 +378,7 @@ QUnit.module('typing', moduleConfig, () => {
             mask: ' '
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         let isKeyPressPrevented = false;
@@ -379,7 +397,7 @@ QUnit.module('typing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input, true);
 
@@ -396,7 +414,7 @@ QUnit.module('typing', moduleConfig, () => {
             mask: '000000'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -437,7 +455,7 @@ QUnit.module('typing', moduleConfig, () => {
                 mode: 'tel',
                 useMaskedValue: true
             });
-            const $input = $textEditor.find('.dx-texteditor-input');
+            const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
 
             const textEditor = $textEditor.dxTextEditor('instance');
@@ -516,7 +534,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('x').press('backspace');
@@ -534,7 +552,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -557,7 +575,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -576,7 +594,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
         keyboard.caret(0).press('backspace');
 
@@ -591,7 +609,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -623,7 +641,7 @@ QUnit.module('backspace key', moduleConfig, () => {
             value: 'xxx'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -647,7 +665,7 @@ QUnit.module('delete key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -666,7 +684,7 @@ QUnit.module('delete key', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -690,7 +708,7 @@ QUnit.module('selection', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -714,7 +732,7 @@ QUnit.module('selection', moduleConfig, () => {
         });
         const instance = $textEditor.dxTextEditor('instance');
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -743,7 +761,7 @@ QUnit.module('selection', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -790,7 +808,7 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal(textEditor.option('text'), '__', 'editor is empty');
 
@@ -808,7 +826,7 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         assert.equal(textEditor.option('text'), '', 'editor is empty');
@@ -836,7 +854,7 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         assert.equal(textEditor.option('text'), '', 'editor is empty');
@@ -863,7 +881,7 @@ QUnit.module('showMaskMode', moduleConfig, () => {
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal(textEditor.option('text'), '__', 'placeholder is visible');
 
@@ -884,7 +902,7 @@ QUnit.module('focusing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0);
@@ -902,7 +920,7 @@ QUnit.module('focusing', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(3);
@@ -928,7 +946,7 @@ QUnit.module('focusing', moduleConfig, () => {
             focusStateEnabled: true
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(1);
@@ -944,7 +962,7 @@ QUnit.module('focusing', moduleConfig, () => {
             focusStateEnabled: true
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         $input.focus();
@@ -968,7 +986,7 @@ QUnit.module('value', moduleConfig, () => {
         }).dxTextEditor('instance');
         $textEditor.option('value', '9998887777');
 
-        const $input = $textEditor.$element().find('.dx-texteditor-input');
+        const $input = $textEditor.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         const BACKSPACE_CNT = 12;
@@ -990,7 +1008,7 @@ QUnit.module('value', moduleConfig, () => {
         }).dxTextEditor('instance');
         $textEditor.option('value', '9998887777');
 
-        const $input = $textEditor.$element().find('.dx-texteditor-input');
+        const $input = $textEditor.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         const LAST_CARET = 12;
@@ -1014,7 +1032,7 @@ QUnit.module('value', moduleConfig, () => {
 
         $textEditor.option('value', '9998887777');
 
-        const $input = $textEditor.$element().find('.dx-texteditor-input');
+        const $input = $textEditor.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         const MIDDLE_CARET = 7;
@@ -1038,7 +1056,7 @@ QUnit.module('value', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -1058,7 +1076,7 @@ QUnit.module('value', moduleConfig, () => {
             value: '123'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '1(123)', 'value is set correctly');
     });
@@ -1070,7 +1088,7 @@ QUnit.module('value', moduleConfig, () => {
             value: '11'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '111', 'value is set');
     });
@@ -1084,7 +1102,7 @@ QUnit.module('value', moduleConfig, () => {
             value: 'x'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const textEditor = $textEditor.dxTextEditor('instance');
 
         assert.equal($input.val(), '(x)', 'initial value');
@@ -1105,7 +1123,7 @@ QUnit.module('value', moduleConfig, () => {
             value: 'xyz'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '(xy)z', 'initial value');
     });
@@ -1123,7 +1141,7 @@ QUnit.module('value', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         caretWorkaround($input);
@@ -1150,7 +1168,7 @@ QUnit.module('value', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         caretWorkaround($input);
@@ -1177,7 +1195,7 @@ QUnit.module('value', moduleConfig, () => {
         textEditor.option('value', '1');
         valueChangedHandler.reset();
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         caretWorkaround($input);
@@ -1204,7 +1222,7 @@ QUnit.module('value', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         caretWorkaround($input);
@@ -1230,7 +1248,7 @@ QUnit.module('value', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         caretWorkaround($input);
 
@@ -1250,7 +1268,7 @@ QUnit.module('value', moduleConfig, () => {
             onValueChanged: valueChangeSpy
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $textEditor.dxTextEditor('instance');
         const keyboard = keyboardMock($input, true);
 
@@ -1292,7 +1310,7 @@ QUnit.module('value', moduleConfig, () => {
             useMaskedValue: true
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.trigger('change');
 
         assert.equal($input.val(), maskText + $textEditor.dxTextEditor('option', 'maskChar'), 'text was set');
@@ -1310,7 +1328,7 @@ QUnit.module('value', moduleConfig, () => {
             useMaskedValue: true
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.trigger('change');
 
         assert.equal($textEditor.dxTextEditor('option', 'value'), ' -x', 'text was set');
@@ -1322,7 +1340,7 @@ QUnit.module('value', moduleConfig, () => {
             value: undefined
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), 'X', 'special symbols is rendered');
     });
 
@@ -1334,7 +1352,7 @@ QUnit.module('value', moduleConfig, () => {
 
         $textEditor.dxTextEditor('instance').option('mask', '');
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), '', 'value is empty');
     });
 
@@ -1378,7 +1396,7 @@ QUnit.module('value', moduleConfig, () => {
         });
 
         const instance = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         try {
             instance.option('mask', '');
@@ -1405,7 +1423,7 @@ QUnit.module('clear button', () => {
             });
 
             const instance = $textEditor.dxTextEditor('instance');
-            const $input = $textEditor.find('.dx-texteditor-input');
+            const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const $clearButton = $textEditor.find('.dx-clear-button-area');
 
             caretWorkaround($input);
@@ -1453,7 +1471,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0).paste('bxbxb');
@@ -1470,7 +1488,7 @@ QUnit.module('paste', moduleConfig, () => {
             value: 'xy'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(2).paste('x');
@@ -1486,7 +1504,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(2).paste('x');
@@ -1503,7 +1521,7 @@ QUnit.module('paste', moduleConfig, () => {
             value: '1234567890'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret({ start: 5, end: 8 }).paste('999');
@@ -1519,7 +1537,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(2).paste('178');
@@ -1535,7 +1553,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         this.focusAndTick($input);
@@ -1552,7 +1570,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0);
@@ -1573,7 +1591,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0).paste('xyx');
@@ -1589,7 +1607,7 @@ QUnit.module('paste', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         this.focusAndTick($input);
@@ -1605,7 +1623,7 @@ QUnit.module('paste', moduleConfig, () => {
             value: '12'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0).paste('0');
@@ -1621,7 +1639,7 @@ QUnit.module('paste', moduleConfig, () => {
             value: ''
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
         const event = $.Event('keypress', {
             ctrlKey: true,
@@ -1651,7 +1669,7 @@ QUnit.module('drag text', moduleConfig, () => {
             value: ' x'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('(x)_').trigger('drop');
 
@@ -1669,7 +1687,7 @@ QUnit.module('drag text', moduleConfig, () => {
             value: ' x y'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('(x__y)').trigger('drop');
 
@@ -1689,7 +1707,7 @@ QUnit.module('cut', () => {
             value: 'xxx'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret({ start: 1, end: 2 });
@@ -1742,7 +1760,7 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
             value: '1'
         });
 
-        assert.equal($textEditor.find('.dx-texteditor-input').val(), '1', '\'0\' rule preserved');
+        assert.equal($textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '1', '\'0\' rule preserved');
     });
 
     QUnit.test('custom function get fullText and current index', function(assert) {
@@ -1780,7 +1798,7 @@ QUnit.module('custom mask maskRules', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0).paste('xy');
@@ -1823,7 +1841,7 @@ QUnit.module('escape built-in rules', {}, () => {
             value: 'a'
         });
 
-        assert.equal($textEditor.find('.dx-texteditor-input').val(), 'la', 'first rule work as stub');
+        assert.equal($textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'la', 'first rule work as stub');
     });
 });
 
@@ -1849,7 +1867,7 @@ QUnit.module('validation', {}, () => {
             valueChangeEvent: 'change'
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
         caretWorkaround($input);
 
@@ -1868,7 +1886,7 @@ QUnit.module('validation', {}, () => {
                 maskIsValidOnValueChange = e.component.option('isValid');
             }
         });
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -1899,7 +1917,7 @@ QUnit.module('validation', {}, () => {
         });
 
         const textEditor = $textEditor.dxTextEditor('instance');
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
@@ -1923,7 +1941,7 @@ QUnit.module('T9', moduleConfig, () => {
                 'X': 'x'
             }
         });
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -1949,7 +1967,7 @@ QUnit.module('T9', moduleConfig, () => {
                 'X': 'x'
             }
         });
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -1979,7 +1997,7 @@ QUnit.module('T9', moduleConfig, () => {
             }
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         this.focusAndTick($input);
@@ -2010,7 +2028,7 @@ QUnit.module('states', {}, () => {
             readOnly: true
         });
 
-        const $input = $textEditor.find('.dx-texteditor-input');
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const event = $.Event('keypress');
         event.key = 'F9';
 
@@ -2027,7 +2045,7 @@ QUnit.module('Hidden input', {}, () => {
             mask: '(X)'
         });
 
-        const $visibleInput = $textEditor.find('.dx-texteditor-input');
+        const $visibleInput = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $hiddenInput = $textEditor.find('input[type=hidden]');
 
         assert.equal($hiddenInput.length, 1, 'there is a hidden input');
@@ -2051,7 +2069,7 @@ QUnit.module('Hidden input', {}, () => {
 
         $textEditor.dxTextEditor('instance').option('mask', '+1 (00) 00-00');
 
-        const $visibleInput = $textEditor.find('.dx-texteditor-input');
+        const $visibleInput = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $hiddenInput = $textEditor.find('input[type=hidden]');
 
         assert.equal($hiddenInput.length, 1, 'there is a hidden input');
@@ -2067,7 +2085,7 @@ QUnit.module('Hidden input', {}, () => {
 
         $textEditor.dxTextEditor('instance').option('mask', null);
 
-        const $visibleInput = $textEditor.find('.dx-texteditor-input');
+        const $visibleInput = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $hiddenInput = $textEditor.find('input[type=hidden]');
 
         assert.equal($hiddenInput.length, 0, 'Hidden value is removed');
@@ -2164,7 +2182,7 @@ QUnit.module('Hidden input', {}, () => {
             });
             const instance = $textEditor.dxTextEditor('instance');
 
-            const $input = $textEditor.find('.dx-texteditor-input');
+            const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             keyboardMock($input, true)
                 .caret(6)
                 .type('5')
