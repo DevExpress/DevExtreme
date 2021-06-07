@@ -1072,9 +1072,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         const chooserColumns = this.columnsController.getChooserColumns();
 
         // assert
-        assert.strictEqual(chooserColumns[0].caption, '1', 'dataField column');
-        assert.strictEqual(chooserColumns[1].caption, '2', 'dataField column');
-        assert.strictEqual(chooserColumns[2].caption, undefined, 'dataField column');
+        assert.strictEqual(chooserColumns[0].caption, undefined, 'dataField column');
+        assert.strictEqual(chooserColumns[1].caption, '1', 'dataField column');
+        assert.strictEqual(chooserColumns[2].caption, '2', 'dataField column');
     });
 
     QUnit.test('column with calculateCellValue', function(assert) {
