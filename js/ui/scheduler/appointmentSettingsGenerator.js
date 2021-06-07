@@ -327,7 +327,10 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
 
                 return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
-            }
+            },
+            convertExceptionDate: (date) => {
+                return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+            },
         };
     }
 

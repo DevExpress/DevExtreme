@@ -202,7 +202,8 @@ class RecurrenceProcessor {
             const exceptionStrings = options.exception;
             const exceptionDates = exceptionStrings
                 .split(',')
-                .map(rule => this.getDateByAsciiString(rule));
+                .map(rule => this.getDateByAsciiString(rule))
+                .map(date => options.convertExceptionDate?.(date) || date);
 
             exceptionDates.forEach(date => {
                 if(options.getPostProcessedException) {
