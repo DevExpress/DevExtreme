@@ -3,6 +3,7 @@ import { DxMouseEvent } from '../ui/scroll_view/types';
 import Component from './common/component';
 import { Option } from './common/types';
 import { Deferred } from '../../core/utils/deferred';
+import type { dxElementWrapper } from '../../core/renderer';
 
 export class ScrollableWrapper extends Component {
   handleMove(event: DxMouseEvent): void {
@@ -20,12 +21,12 @@ export class ScrollableWrapper extends Component {
     super.repaint();
   }
 
-  _container(): JQuery {
-    return $((this.viewRef as Scrollable).container());
+  _container(): dxElementWrapper {
+    return (this.$element() as unknown as dxElementWrapper).find('.dx-scrollable-container').eq(0);
   }
 
-  $content(): JQuery {
-    return $((this.viewRef as Scrollable).content());
+  $content(): dxElementWrapper {
+    return (this.$element() as unknown as dxElementWrapper).find('.dx-scrollable-content').eq(0);
   }
 
   _moveIsAllowed(event: DxMouseEvent): boolean {
