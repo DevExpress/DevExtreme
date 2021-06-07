@@ -223,7 +223,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = text ?? icon;
+    let label = (text ?? '') || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
