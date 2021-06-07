@@ -25,6 +25,13 @@ export default class ButtonWrapper extends Component {
     }
   }
 
+  _optionsWithDefaultTemplates(options: Record<string, unknown>): Record<string, unknown> {
+    return {
+      ...options,
+      template: "content",
+    };
+  }
+
   getProps() {
     const props = super.getProps();
     props.validationGroup = this._validationGroupConfig;

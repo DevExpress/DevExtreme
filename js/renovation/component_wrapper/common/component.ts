@@ -322,13 +322,17 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return [];
   }
 
+  _optionsWithDefaultTemplates(options: Record<string, unknown>): Record<string, unknown> {
+    return { ...options };
+  }
+
   _init(): void {
     super._init();
 
     this.customKeyHandlers = {};
     this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
-    this._props = { ...this.option() };
+    this._props = this._optionsWithDefaultTemplates(this.option());
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
