@@ -266,7 +266,11 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return appointmentList.map(source => ({
             startDate: new Date(source.startDate),
             endDate: new Date(source.endDate),
-            source,
+            source: {
+                ...source,
+                startDate: this.timeZoneCalculator.createDate(source.startDate, { path: 'fromGrid' }),
+                endDate: this.timeZoneCalculator.createDate(source.endDate, { path: 'fromGrid' }),
+            },
         }));
     }
 
