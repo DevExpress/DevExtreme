@@ -970,6 +970,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setTableSizes() {
+        this.cache.clear();
         this._attachTableClasses();
 
         let cellWidth = this.getCellWidth();
