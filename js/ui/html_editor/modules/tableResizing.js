@@ -148,6 +148,9 @@ export default class TableResizingModule extends BaseModule {
                     .get(0);
             }
 
+            if($($lineSeparators[i]).hasClass('dx-draggable')) {
+                $($lineSeparators[i]).dxDraggable('instance')._initialLocate = { left: 0, top: 0 };
+            }
 
             styleOptions[positionCoordinate] = currentPosition - DRAGGABLE_ELEMENT_OFFSET;
 
@@ -156,6 +159,7 @@ export default class TableResizingModule extends BaseModule {
             // console.log(styleOptions);
 
             this._attachColumnSeparatorEvents($lineSeparators[i], $determinantElements, i, frame, direction);
+
         }
 
         // for(let i = 0; i <= columnsResizingElementsCount; i++) { //  headers
@@ -196,7 +200,7 @@ export default class TableResizingModule extends BaseModule {
 
     _createDraggableElement(lineSeparator, $determinantElements, index, frame, direction) {
         let nextLineSize;
-        let startDragPosition;
+        // let startDragPosition;
         let startLineSize;
 
         // console.log(direction);
@@ -208,7 +212,7 @@ export default class TableResizingModule extends BaseModule {
 
         const getSizeFunction = direction === 'vertical' ? 'outerHeight' : 'outerWidth';
         const positionStyleProperty = direction === 'vertical' ? 'height' : 'width';
-        const positionCoordinate = direction === 'vertical' ? 'top' : 'left';
+        // const positionCoordinate = direction === 'vertical' ? 'top' : 'left';
         const positionCoordinateName = direction === 'vertical' ? 'y' : 'x';
         const currentDirection = direction;
 
@@ -217,15 +221,17 @@ export default class TableResizingModule extends BaseModule {
             // boundary: frame.$frame,
             allowMoveByClick: false,
             dragDirection: direction,
-            onDragMove: ({ event }) => {
+            onDragMove: ({ component, event }) => {
                 // debugger;
-                const newPosition = startDragPosition + event.offset[positionCoordinateName];
+                // const newPosition = startDragPosition + event.offset[positionCoordinateName];
                 // console.log('move ' + newPosition);
                 // console.log(newPosition);
 
 
                 $determinantElements.eq(index).css(positionStyleProperty, startLineSize + event.offset[positionCoordinateName]);
-                $(lineSeparator).css(positionCoordinate, newPosition /* + $lineSeparators[0].css('left').replace('px', '')*/);
+                // $(lineSeparator).css(positionCoordinate, newPosition /* + $lineSeparators[0].css('left').replace('px', '')*/);
+                // component.move();
+
 
                 if(currentDirection === 'horizontal' && nextLineSize) {
                     // console.log('currentDirection === horizontal');
@@ -240,7 +246,7 @@ export default class TableResizingModule extends BaseModule {
                 // this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             },
             onDragStart: () => {
-                startDragPosition = parseInt($(lineSeparator).css(positionCoordinate).replace('px', ''));
+                // startDragPosition = parseInt($(lineSeparator).css(positionCoordinate).replace('px', ''));
                 startLineSize = parseInt($($determinantElements[index])[getSizeFunction]());
                 nextLineSize = 0;
                 if($determinantElements[index + 1]) {
@@ -256,7 +262,7 @@ export default class TableResizingModule extends BaseModule {
             onDragEnd: () => {
                 // this._updateFrameSeparators(frame, 'horizontal'); // set positions only
                 // this._updateFrameSeparators(frame, 'vertical');
-
+                // this._currentDraggableElement.dxDraggable('instance')._resetDragElement();
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
