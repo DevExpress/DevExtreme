@@ -23,8 +23,8 @@ jobs:
       run: npm run build
 
     - name: Test modules
-    working-directory: ./testing/bundlers  
-    run: npm run test
+      working-directory: ./testing/bundlers  
+      run: npm run test
 
     # - name: Create DevExtreme package
     #   working-directory: ./testing/bundlers  
