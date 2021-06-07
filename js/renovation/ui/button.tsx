@@ -242,7 +242,11 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return icon || type === 'back' ? (icon ?? '') || 'back' : '';
+    if (icon || type === 'back') {
+      return (icon ?? '') || 'back';
+    }
+
+    return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
