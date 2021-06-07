@@ -5,6 +5,7 @@ import Callbacks from '../../core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
+import Draggble from '../../ui/draggable';
 import { KoTemplate } from './template';
 import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
@@ -205,7 +206,7 @@ if(ko) {
                 createComponent();
 
                 return {
-                    controlsDescendantBindings: componentClass.subclassOf(Widget)
+                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(Draggble)
                 };
             }
         };
