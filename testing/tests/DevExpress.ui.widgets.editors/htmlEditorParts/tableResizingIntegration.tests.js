@@ -13,7 +13,7 @@ const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 const DX_DRAGGABLE_CLASS = 'dx-draggable';
 
-const DRAGGABLE_ELEMENT_OFFSET = 2;
+const DRAGGABLE_ELEMENT_OFFSET = 1;
 
 const tableMarkup = '\
     <table>\

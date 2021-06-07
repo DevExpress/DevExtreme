@@ -12,7 +12,7 @@ const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 
-const DRAGGABLE_ELEMENT_OFFSET = 2;
+const DRAGGABLE_ELEMENT_OFFSET = 1;
 
 // const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
 
@@ -115,8 +115,9 @@ export default class TableResizingModule extends BaseModule {
 
     _updateFramesSeparators() {
         each(this._tableResizeFrames, (index, frame) => {
-            this._updateFrameSeparators(frame, 'horizontal');
+
             this._updateFrameSeparators(frame, 'vertical');
+            this._updateFrameSeparators(frame, 'horizontal');
         });
     }
 

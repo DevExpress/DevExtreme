@@ -532,17 +532,18 @@ $transparent-border: 1px solid transparent;
   > div {
     position: absolute;
     pointer-events: auto;
+    background-color: transparent;
   }
 
   .dx-htmleditor-column-resizer {
-    width: 5px;
+    width: 3px;
     top: 0;
     height: 100%;
     cursor: col-resize;
   }
 
   .dx-htmleditor-row-resizer {
-    height: 5px;
+    height: 3px;
     left: 0;
     width: 100%;
     cursor: row-resize;
