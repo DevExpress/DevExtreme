@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
 import { DataGrid, viewFunction as DataGridView, defaultOptionRules } from '../data_grid';
-import { DataGridProps } from '../common/data_grid_props';
+import { DataGridEditing, DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
@@ -559,6 +559,13 @@ describe('DataGrid', () => {
     });
 
     afterEach(() => jest.resetAllMocks());
+
+    describe('editing', () => {
+      it('defaults should be defined for nested editing props', () => {
+        const editing = new DataGridEditing();
+        expect(editing.changes).toEqual([]);
+      });
+    });
 
     describe('showRowLines', () => {
       it('should be false by default', () => {
