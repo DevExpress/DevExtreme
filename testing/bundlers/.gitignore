@@ -1,4 +1,4 @@
 .parcel-cache
 /dist
 devextreme*
-/src/**
+/src
