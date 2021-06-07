@@ -102,45 +102,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal($('.dx-scrollable').dxScrollable('instance').scrollLeft(), 100);
     });
 
-    // T388508
-    QUnit.test('Scroll position after grouping when RTL', function(assert) {
-        // arrange
-        const done = assert.async();
-        const dataGrid = createDataGrid({
-            width: 200,
-            rtlEnabled: true,
-            columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }, { dataField: 'field3', width: 100 }, { dataField: 'field4', width: 100 }, { dataField: 'field5', width: 100 }],
-            dataSource: [{ field1: '1', field2: '2', field3: '3', field4: '4' }]
-        });
-        const getRightScrollOffset = function(scrollable) {
-            return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
-        };
-
-        this.clock.tick();
-        const scrollable = $('.dx-scrollable').dxScrollable('instance');
-
-        // assert
-        assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
-
-        this.clock.restore();
-        scrollable.scrollTo({ x: 100 });
-        const scrollRight = getRightScrollOffset(scrollable);
-
-        setTimeout(function() {
-            // act
-            dataGrid.columnOption('field1', 'groupIndex', 0);
-
-            setTimeout(function() {
-                // assert
-
-                const scrollRightAfterGrouping = getRightScrollOffset(scrollable);
-                assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('tbody > tr').first().hasClass('dx-group-row'));
-                assert.equal(scrollRightAfterGrouping, scrollRight, 'scroll position after grouping');
-                done();
-            });
-        });
-    });
-
     QUnit.test('Scroller state', function(assert) {
         const dataGrid = createDataGrid({ width: 120, height: 230 });
         assert.ok(dataGrid);

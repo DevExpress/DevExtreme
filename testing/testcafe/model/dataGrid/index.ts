@@ -111,6 +111,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  getScrollRight(): Promise<number> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      const scrollable = dataGrid.getScrollable();
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
+    }, { dependencies: { getGridInstance } })();
+  }
+
   getScrollWidth(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -170,6 +179,22 @@ export default class DataGrid extends Widget {
         return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
       },
       { dependencies: { getGridInstance, name, value } },
+    )();
+  }
+
+  apiColumnOption(id: any, name: any, value: any = 'empty'): Promise<any> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const dataGrid = getGridInstance() as any;
+        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
+      },
+      {
+        dependencies: {
+          getGridInstance, id, name, value,
+        },
+      },
     )();
   }
 
