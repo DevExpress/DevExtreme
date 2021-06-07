@@ -101,7 +101,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createAppointments(appointment, resources) {
-        const convertedAppointment = appointment;
+        const convertedAppointment = appointment.clone();
 
         const startDate = this.timeZoneCalculator.createDate(convertedAppointment.startDate, { path: 'toGrid' });
         const endDate = this.timeZoneCalculator.createDate(convertedAppointment.endDate, { path: 'toGrid' });
