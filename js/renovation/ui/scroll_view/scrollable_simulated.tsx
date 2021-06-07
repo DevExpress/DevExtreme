@@ -367,7 +367,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.onStart();
     this.eventHandler(
       (scrollbar) => scrollbar.scrollByHandler(
-        { x: location.left || 0, y: location.top || 0 },
+        { x: location.left ?? 0, y: location.top ?? 0 },
       ),
     );
   }
@@ -1037,8 +1037,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
     }
     this.scrollBy({
-      top: (lines.y || 0) * scrollOffset,
-      left: (lines.x || 0) * scrollOffset,
+      top: (lines.y ?? 0) * scrollOffset,
+      left: (lines.x ?? 0) * scrollOffset,
     });
   }
 

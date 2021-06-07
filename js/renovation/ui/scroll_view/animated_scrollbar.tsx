@@ -186,7 +186,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       if (!thumbScrolling && crossThumbScrolling) {
         this.velocity = 0;
       } else {
-        this.velocity = receivedVelocity || 0;
+        this.velocity = receivedVelocity ?? 0;
       }
 
       this.suppressInertia(thumbScrolling);

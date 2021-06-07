@@ -4,7 +4,7 @@ export const getCurrentDate = (
   currentDate: Date,
   startDate?: Date,
 ): Date => {
-  const validCurrentDate = startDate || currentDate;
+  const validCurrentDate = startDate ?? currentDate;
 
   return dateUtils.trimTime(validCurrentDate);
 };
