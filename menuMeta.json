@@ -1857,7 +1857,6 @@
           {
             "Title": "Customize Individual Views",
             "Name": "CustomizeIndividualViews",
-            "DocUrl": "Guide/UI_Components/Scheduler/Views/Customize_Individual_Views/",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Views/Scheduler/_DateCellTemplate.cshtml",
