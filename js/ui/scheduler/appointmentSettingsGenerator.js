@@ -4,6 +4,7 @@ import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
 import { getResourceManager } from './resources/resourceManager';
+// import { map } from '../../core/utils/iterator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -45,9 +46,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointment); // T983264
 
-        if(this._canProcessNotNativeTimezoneDates(appointment)) {
-            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
-        }
+        // if(this._canProcessNotNativeTimezoneDates(appointment)) {
+        //     appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
+        // }
 
         let gridAppointmentList = this._createGridAppointmentList(appointmentList, appointment);
 
@@ -100,12 +101,20 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createAppointments(appointment, resources) {
-        let appointments = this._createRecurrenceAppointments(appointment, resources);
+        const convertedAppointment = appointment;
 
-        if(!appointment.isRecurrent && appointments.length === 0) {
+        const startDate = this.timeZoneCalculator.createDate(convertedAppointment.startDate, { path: 'toGrid' });
+        const endDate = this.timeZoneCalculator.createDate(convertedAppointment.endDate, { path: 'toGrid' });
+
+        convertedAppointment.startDate = startDate;
+        convertedAppointment.endDate = endDate;
+
+        let appointments = this._createRecurrenceAppointments(convertedAppointment, resources);
+
+        if(!convertedAppointment.isRecurrent && appointments.length === 0) {
             appointments.push({
-                startDate: appointment.startDate,
-                endDate: appointment.endDate
+                startDate: convertedAppointment.startDate,
+                endDate: convertedAppointment.endDate
             });
         }
 
@@ -236,24 +245,29 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createGridAppointmentList(appointmentList, appointment) {
-        return appointmentList.map(source => {
-            const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
+        // return appointmentList.map(source => {
+        //     const offsetDifference = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
-            if(offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointment)) {
-                source.startDate = new Date(source.startDate.getTime() + offsetDifference * toMs('minute'));
-                source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
-                source.exceptionDate = new Date(source.startDate);
-            }
+        //     if(offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointment)) {
+        //         source.startDate = new Date(source.startDate.getTime() + offsetDifference * toMs('minute'));
+        //         source.endDate = new Date(source.endDate.getTime() + offsetDifference * toMs('minute'));
+        //         source.exceptionDate = new Date(source.startDate);
+        //     }
 
-            const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
-            const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
+        //     const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
+        //     const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
 
-            return {
-                startDate,
-                endDate,
-                source // TODO
-            };
-        });
+        //     return {
+        //         startDate,
+        //         endDate,
+        //         source // TODO
+        //     };
+        // });
+        return appointmentList.map(source => ({
+            startDate: new Date(source.startDate),
+            endDate: new Date(source.endDate),
+            source,
+        }));
     }
 
     _createExtremeRecurrenceDates(rawAppointment) {
