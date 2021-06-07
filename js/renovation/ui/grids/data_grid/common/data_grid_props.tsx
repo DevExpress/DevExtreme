@@ -497,7 +497,7 @@ export class DataGridEditing {
   useIcons? = false;
 
   @TwoWay()
-  changes?: [];
+  changes?: [] = [];
 
   @TwoWay()
   editRowKey?: any = null;
