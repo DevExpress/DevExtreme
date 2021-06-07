@@ -322,7 +322,7 @@ QUnit.module('typing', moduleConfig, () => {
         assert.equal(keyboard.caret().start, 3, 'caret in correct position');
     });
 
-    QUnit.test('autofill input with mask should not throw error (T996580)', function(assert) {
+    QUnit.test('no errors should be logged on autofill (T996580)', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '+1 (X00) 000-0000',
             value: '+1'
@@ -330,11 +330,11 @@ QUnit.module('typing', moduleConfig, () => {
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         try {
-            $($input).trigger($.Event('input', { originalEvent: $.Event('input') }));
+            keyboardMock($input).input();
 
-            assert.ok(true, 'everything is ok');
-        } catch(e) {
-            assert.ok(false, 'error is thrown');
+            assert.ok(true, 'no error logged');
+        } catch({ message }) {
+            assert.ok(false, `error is thrown: ${message}`);
         }
     });
 
