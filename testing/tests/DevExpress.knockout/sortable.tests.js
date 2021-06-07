@@ -17,9 +17,6 @@ QUnit.testStart(function() {
 });
 
 QUnit.test('render with content', function(assert) {
-    const vm = {
-    };
-
-    ko.applyBindings(vm, $('#testItemTemplate').get(0));
+    ko.applyBindings({}, $('#testItemTemplate').get(0));
     assert.equal($('.test').length, 2);
 });
