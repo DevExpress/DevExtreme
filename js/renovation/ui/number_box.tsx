@@ -3,25 +3,24 @@ import {
 } from '@devextreme-generator/declarations';
 /* eslint-disable-next-line import/named */
 import LegacyNumberBox from '../../ui/number_box';
-import { WidgetProps } from './common/widget';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
+import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
-  props: { rootElementRef, ...componentProps },
+  props,
   restAttributes,
 }: NumberBox): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
     componentType={LegacyNumberBox}
-    componentProps={componentProps}
+    componentProps={props}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
 
 @ComponentBindings()
-export class NumberBoxProps extends WidgetProps {
+export class NumberBoxProps extends BaseWidgetProps {
   // props was copied from js\ui\number_box.d.ts
 
   // buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;

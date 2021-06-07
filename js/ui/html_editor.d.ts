@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -390,7 +392,7 @@ export interface dxHtmlEditorMention {
      * @default null
      * @public
      */
-    dataSource?: Array<string> | DataSource | DataSourceOptions;
+    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default "this"
@@ -527,7 +529,7 @@ export interface dxHtmlEditorVariables {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default ""

@@ -6,6 +6,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import HierarchicalCollectionWidget, {
     HierarchicalCollectionWidgetOptions
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
@@ -51,7 +53,7 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @public

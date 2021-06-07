@@ -34,7 +34,7 @@ jest.mock('../../src/modules/post-compiler', () => ({
 }));
 
 describe('Compile manager - integration test on test sass', () => {
-  test('compile test bundle without swatch', () => {
+  test('compile test bundle without swatch', async () => {
     const manager = new CompileManager();
     return manager.compile({}).then((result) => {
       expect(result.css).toBe(noModificationsResult);
@@ -42,7 +42,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with swatch', () => {
+  test('compile test bundle with swatch', async () => {
     const manager = new CompileManager();
     return manager.compile({
       makeSwatch: true,
@@ -61,7 +61,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with assetsBasePath', () => {
+  test('compile test bundle with assetsBasePath', async () => {
     const manager = new CompileManager();
     return manager.compile({
       assetsBasePath: 'base-path',
@@ -79,7 +79,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with widgets option', () => {
+  test('compile test bundle with widgets option', async () => {
     const manager = new CompileManager();
     return manager.compile({
       widgets: ['datebox'],
@@ -92,7 +92,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle using bootstrap (3) file as input', () => {
+  test('compile test bundle using bootstrap (3) file as input', async () => {
     const manager = new CompileManager();
     return manager.compile({
       isBootstrap: true,
@@ -118,7 +118,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle using bootstrap (4) file as input', () => {
+  test('compile test bundle using bootstrap (4) file as input', async () => {
     const manager = new CompileManager();
     return manager.compile({
       isBootstrap: true,
@@ -144,7 +144,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with noClean option', () => {
+  test('compile test bundle with noClean option', async () => {
     const manager = new CompileManager();
     return manager.compile({
       noClean: true,
@@ -162,7 +162,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with error', () => {
+  test('compile test bundle with error', async () => {
     const manager = new CompileManager();
     return expect(manager.compile({
       makeSwatch: true,
@@ -170,7 +170,7 @@ describe('Compile manager - integration test on test sass', () => {
     })).rejects.toBeInstanceOf(Error);
   });
 
-  test('compile test bundle with removeExternalResources option', () => {
+  test('compile test bundle with removeExternalResources option', async () => {
     const manager = new CompileManager();
     return manager.compile({
       themeName: 'material',

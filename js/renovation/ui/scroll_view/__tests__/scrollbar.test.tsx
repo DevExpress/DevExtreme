@@ -135,7 +135,7 @@ describe('Scrollbar', () => {
 
                       expect(viewModel.isVisible).toEqual(expectedScrollbarVisibility);
 
-                      let expectedScrollVisibility;
+                      let expectedScrollVisibility: boolean | undefined = undefined;
 
                       if (!expectedScrollbarVisibility) {
                         expectedScrollVisibility = false;
@@ -964,7 +964,7 @@ describe('Scrollbar', () => {
 
           const isScrollbarClicked = targetClass !== 'dx-scrollable-scroll' && scrollByThumb;
 
-          let expectedShowOnScrollByWheel;
+          let expectedShowOnScrollByWheel: boolean | undefined = undefined;
           let expectedThumbScrolling = false;
           let expectedCrossThumbScrolling = crossThumbScrolling;
 

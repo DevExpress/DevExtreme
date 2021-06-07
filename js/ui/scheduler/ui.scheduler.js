@@ -253,8 +253,6 @@ class Scheduler extends Widget {
 
             appointmentTemplate: 'item',
 
-            dropDownAppointmentTemplate: 'dropDownAppointment',
-
             appointmentCollectorTemplate: 'appointmentCollector',
 
             dataCellTemplate: null,
@@ -275,8 +273,7 @@ class Scheduler extends Widget {
                 allowDragging: true,
                 allowResizing: true,
                 allowUpdating: true,
-                allowTimeZoneEditing: false,
-                allowEditingTimeZones: false
+                allowTimeZoneEditing: false
             },
 
             showAllDayPanel: true,
@@ -465,15 +462,6 @@ class Scheduler extends Widget {
                 }
             }
         ]);
-    }
-
-    _setDeprecatedOptions() {
-        super._setDeprecatedOptions();
-
-        extend(this._deprecatedOptions, {
-            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
-            allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
-        });
     }
 
     _getAppointmentSettingsGenerator() {
@@ -712,7 +700,6 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
-            case 'dropDownAppointmentTemplate':
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
@@ -1364,8 +1351,6 @@ class Scheduler extends Widget {
     }
 
     _appointmentsConfig() {
-        const that = this;
-
         const config = {
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
@@ -1380,8 +1365,10 @@ class Scheduler extends Widget {
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
-            onContentReady: function() {
-                that._workSpace && that._workSpace.option('allDayExpanded', that._isAllDayExpanded(getAppointmentDataProvider().filteredItems));
+            groups: this._getCurrentViewOption('groups'),
+            onContentReady: () => {
+                const filteredItems = getAppointmentDataProvider().filteredItems;
+                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             }
         };
 

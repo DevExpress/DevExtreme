@@ -31,7 +31,7 @@ const getCssClasses = (model: ButtonProps): string => {
   const {
     text, icon, stylingMode, type, iconPosition,
   } = model;
-  const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
+  const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
@@ -58,6 +58,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       aria={viewModel.aria}
+      className={viewModel.props.className}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
       focusStateEnabled={viewModel.props.focusStateEnabled}
@@ -225,7 +226,7 @@ export class Button extends JSXComponent(ButtonProps) {
     let label = text || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
-      label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+      label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
     return {

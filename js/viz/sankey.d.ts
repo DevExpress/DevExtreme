@@ -16,6 +16,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     Cancelable,
     EventInfo,
@@ -114,7 +116,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @extends CommonVizDataSource
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @default true

@@ -1,5 +1,5 @@
 import { keyboard } from '../../events/short';
-import { AbstractFunction } from '../component_wrapper/common/types.ts';
+import { AbstractFunction } from '../common/types';
 
 let eventHandlers = {};
 let keyboardHandlers = {};

@@ -91,7 +91,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
@@ -176,7 +176,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.releaseHandler();
   }
 
-  start(animatorName: 'inertia'| 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
+  start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
     this.animator = animatorName;
 
     if (this.isBounceAnimator) {

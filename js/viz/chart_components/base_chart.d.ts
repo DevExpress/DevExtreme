@@ -16,6 +16,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo
@@ -107,7 +109,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @extends CommonVizDataSource
      * @public
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
      * @inherits BaseLegend

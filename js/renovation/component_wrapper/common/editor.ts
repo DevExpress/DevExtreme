@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import Component from './component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
@@ -6,23 +5,23 @@ import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
-import { Option } from './types.ts';
+import { Option } from './types';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
 export default class Editor extends Component {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   showValidationMessageTimeout: any;
 
-  validationRequest: any;
+  validationRequest!: ReturnType<typeof Callbacks>;
 
-  _valueChangeAction: any;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  _valueChangeAction!: Function;
 
-  _valueChangeEventInstance: any;
+  _valueChangeEventInstance?: Event;
 
-  getProps(): any {
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+  getProps(): Record<string, unknown> {
     const props = super.getProps();
     props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';

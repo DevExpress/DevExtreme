@@ -26,12 +26,12 @@ export default class BootstrapExtractor {
     }
   }
 
-  static readSassFile(fileName: string): Promise<string> {
+  static async readSassFile(fileName: string): Promise<string> {
     const path = require.resolve(`bootstrap/scss/${fileName}`);
     return fs.readFile(path, 'utf8');
   }
 
-  static sassRender(input: string): Promise<string> {
+  static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       sass.render(
         { data: input },
@@ -40,7 +40,7 @@ export default class BootstrapExtractor {
     });
   }
 
-  static lessRender(input: string): Promise<string> {
+  static async lessRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       less.render(
         input,
@@ -69,7 +69,7 @@ export default class BootstrapExtractor {
       + this.getCollectorServiceCode();
   }
 
-  lessProcessor(): Promise<string> {
+  async lessProcessor(): Promise<string> {
     return Promise.resolve(
       this.getSetterServiceCode()
       + this.input

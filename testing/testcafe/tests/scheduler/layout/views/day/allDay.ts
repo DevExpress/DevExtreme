@@ -31,7 +31,7 @@ const enableNativeScroll = ClientFunction(() => {
 
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(() => createWidget('dxScheduler', {
+      }).before(async () => createWidget('dxScheduler', {
         resources: [{
           fieldExpr: 'roomId',
           dataSource: [{
