@@ -28,4 +28,4 @@ jobs:
 
     - name: Run module bundler tests
       working-directory: ./testing/bundlers
-      run: npm run test
+      run: npm run test:bundlers

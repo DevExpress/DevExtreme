@@ -11,7 +11,7 @@ const globalizeCjs = 'const Globalize = require("globalize");';
 const globalizeEsm = 'import Globalize from "globalize";';
 const prefix = 'devextreme/';
 
-const excludeModules = ['ui/set_template_engine', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay'];
+const excludeModules = new Set(['ui/set_template_engine', 'data/utils', 'viz/export', 'ui/diagram', 'ui/overlay']);
 
 const modulesImports = {
     cjs: [ globalizeCjs ],
@@ -37,11 +37,11 @@ const getEsmImportString = (prefix, moduleName, importName) => {
     return `import ${ importName }'${prefix}${ moduleName }';`;
 };
 
-const addModuleImport = (module, modulesImports) => {
+const addModule = (module, modulesImports) => {
     if(module.exports) {
         Object.entries(module.exports).forEach(([moduleExport, exportOptions]) => {
-            const exportNotType = (exportOptions.exportAs !== 'type');
-            if(exportNotType) {
+            const notType = (exportOptions.exportAs !== 'type');
+            if(notType) {
                 modulesImports.cjs.push(getCjsImportString(prefix, module.name, moduleExport));
                 modulesImports.esm.push(getEsmImportString(prefix, module.name, moduleExport));
             }
@@ -55,9 +55,9 @@ const addModuleImport = (module, modulesImports) => {
 const modulesMetadata = fs.readFileSync(modulesMetadataFilePath);
 JSON.parse(modulesMetadata).forEach((moduleMetadata) => {
     const externalModule = !moduleMetadata.isInternal;
-    const includedModule = !excludeModules.includes(moduleMetadata.name);
+    const includedModule = !excludeModules.has(moduleMetadata.name);
     if(externalModule && includedModule) {
-        addModuleImport(moduleMetadata, modulesImports);
+        addModule(moduleMetadata, modulesImports);
     }
 });
 
