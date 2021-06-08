@@ -3,6 +3,8 @@ import { Appointment } from 'ui/scheduler/appointments/appointment';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const { module, test, testStart } = QUnit;
 
@@ -14,31 +16,35 @@ testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
 });
 
-const observer = {
-    fire: (command, field, obj, value) => {
-        switch(command) {
-            case 'getCellHeight':
-                return CELL_HEIGHT;
-            case 'getCellWidth':
-                return CELL_WIDTH;
-            case 'getResizableStep':
-                return CELL_WIDTH;
-            case 'isGroupedByDate':
-                return false;
-            case 'getAppointmentColor':
-                return new Deferred().resolve().promise();
-            default:
-                break;
-        }
-    }
-};
-
 const schedulerMock = {
     isVirtualScrolling: () => false
 };
 
 const createInstance = () => {
-    createFactoryInstances({
+    const observer = {
+        fire: (command, field, obj, value) => {
+            switch(command) {
+                case 'getCellHeight':
+                    return CELL_HEIGHT;
+                case 'getCellWidth':
+                    return CELL_WIDTH;
+                case 'getResizableStep':
+                    return CELL_WIDTH;
+                case 'isGroupedByDate':
+                    return false;
+                case 'getAppointmentColor':
+                    return new Deferred().resolve().promise();
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+
+    const key = createFactoryInstances({
         scheduler: schedulerMock
     });
     return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');

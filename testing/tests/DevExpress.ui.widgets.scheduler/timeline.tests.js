@@ -11,6 +11,8 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
@@ -24,9 +26,31 @@ const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'SchedulerTimeline
 const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'SchedulerTimelineWeek' };
 const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTimelineMonth' };
 
-const stubInvokeMethod = function(instance) {
-    sinon.stub(instance, 'invoke', function() {
+const stubInvokeMethod = function(instance, key) {
+    sinon.stub(instance, 'invoke', function(subscribe) {
+        if(subscribe === 'getResourceManager') {
+            return getResourceManager(key);
+        }
+
+        if(subscribe === 'getAppointmentDataProvider') {
+            return getAppointmentDataProvider(key);
+        }
     });
+};
+
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
 };
 
 QUnit.module('Timeline Base', {
@@ -39,14 +63,16 @@ QUnit.module('Timeline Base', {
             }
 
             const resources = options && options.resources || {};
-            createFactoryInstances({
+            const key = createFactoryInstances({
                 resources,
                 scheduler: {
                     isVirtualScrolling: () => true
                 }
             });
 
-            this.instance = $('#scheduler-timeline').dxSchedulerTimeline().dxSchedulerTimeline('instance');
+            this.instance = $('#scheduler-timeline').dxSchedulerTimeline({ observer: getObserver(key) }).dxSchedulerTimeline('instance');
+
+            stubInvokeMethod(this.instance, key);
         };
 
         this.createInstance();
@@ -239,13 +265,21 @@ QUnit.test('Group table cells should have correct height', function(assert) {
     });
 });
 
-QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline', function(assert) {
+QUnit.test('the "getCoordinatesByDate" method should return right coordinates for grouped timeline', function(assert) {
+    const key = createFactoryInstances({
+        scheduler: {
+            isVirtualScrolling: () => true
+        }
+    });
+
     const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
         'currentDate': new Date(2015, 9, 28),
-        groupOrientation: 'vertical'
+        groupOrientation: 'vertical',
+        observer: getObserver(key)
     }).dxSchedulerTimelineDay('instance');
 
-    stubInvokeMethod(instance);
+    stubInvokeMethod(instance, key);
+
     try {
         instance.option('groups', [
             { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
@@ -345,8 +379,14 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 
 QUnit.module('Timeline Day', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay().dxSchedulerTimelineDay('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({ observer: getObserver(key) }).dxSchedulerTimelineDay('instance');
+        stubInvokeMethod(this.instance, key);
     }
 });
 
@@ -410,10 +450,18 @@ QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
-            groupOrientation: 'horizontal'
+            groupOrientation: 'horizontal',
+            observer: getObserver(key)
         }).dxSchedulerTimelineDay('instance');
-        stubInvokeMethod(this.instance);
+
+        stubInvokeMethod(this.instance, key);
 
         this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
     }
@@ -478,8 +526,15 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
 
 QUnit.module('Timeline Week', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek().dxSchedulerTimelineWeek('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({ observer: getObserver(key) }).dxSchedulerTimelineWeek('instance');
+
+        stubInvokeMethod(this.instance, key);
     }
 });
 
@@ -606,12 +661,20 @@ QUnit.test('Get visible bounds for timelineWeek', function(assert) {
 });
 
 QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
+    const key = createFactoryInstances({
+        scheduler: {
+            isVirtualScrolling: () => true
+        }
+    });
+    const observer = getObserver(key);
+
     const instance = $('#scheduler-timeline-rtl').dxSchedulerTimelineWeek({
         width: 850,
         rtlEnabled: true,
         currentDate: new Date(2015, 2, 2),
         firstDayOfWeek: 1,
-        height: 400
+        height: 400,
+        observer
     }).dxSchedulerTimelineWeek('instance');
 
     const scrollable = instance.getScrollable();
@@ -628,8 +691,20 @@ QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
 
 QUnit.module('Timeline Month', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({ currentDate: new Date(2015, 9, 16), showCurrentTimeIndicator: false, shadeUntilCurrentTime: false }).dxSchedulerTimelineMonth('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+            currentDate: new Date(2015, 9, 16),
+            showCurrentTimeIndicator: false,
+            shadeUntilCurrentTime: false,
+            observer: getObserver(key)
+        }).dxSchedulerTimelineMonth('instance');
+
+        stubInvokeMethod(this.instance, key);
     }
 });
 
@@ -684,6 +759,12 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
         QUnit.module(moduleDescription, {
             beforeEach: function() {
+                const key = createFactoryInstances({
+                    scheduler: {
+                        isVirtualScrolling: () => true
+                    }
+                });
+
                 this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
                     currentDate: new Date(2015, 9, 16),
                     focusStateEnabled: true,
@@ -695,8 +776,10 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                     },
                     renovateRender: scrollingMode === 'virtual',
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
+                    observer: getObserver(key)
                 }).dxSchedulerTimelineMonth('instance');
-                stubInvokeMethod(this.instance);
+
+                stubInvokeMethod(this.instance, key);
             }
         }, () => {
             QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
@@ -865,7 +948,14 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 QUnit.module('Mouse Interaction', () => {
     [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach((workSpace) => {
         QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
-            const $element = $('#scheduler-timeline')[workSpace.class]({});
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => true
+                }
+            });
+            const observer = getObserver(key);
+
+            const $element = $('#scheduler-timeline')[workSpace.class]({ observer });
 
             const cells = $element.find(`.${CELL_CLASS}`);
 
@@ -878,10 +968,18 @@ QUnit.module('Mouse Interaction', () => {
 
 QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
-            currentDate: new Date(2015, 9, 16)
+            currentDate: new Date(2015, 9, 16),
+            observer: getObserver(key)
         }).dxSchedulerTimelineWorkWeek('instance');
-        stubInvokeMethod(this.instance);
+
+        stubInvokeMethod(this.instance, key);
     }
 });
 
@@ -916,16 +1014,24 @@ QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week 
 
 QUnit.module('TimelineWeek with grouping by date', {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
             currentDate: new Date(2018, 2, 1),
             groupByDate: true,
             startDayHour: 9,
             endDayHour: 12,
             groupOrientation: 'horizontal',
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            observer
         }).dxSchedulerTimelineWeek('instance');
 
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, key);
 
         this.instance.option('groups', [{
             name: 'one',
@@ -1073,16 +1179,24 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
 
 QUnit.module('TimelineDay with grouping by date', {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
             currentDate: new Date(2018, 2, 1),
             groupByDate: true,
             startDayHour: 9,
             endDayHour: 12,
             groupOrientation: 'horizontal',
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            observer
         }).dxSchedulerTimelineDay('instance');
 
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, key);
 
         this.instance.option('groups', [{
             name: 'one',
@@ -1136,15 +1250,23 @@ QUnit.module('Renovated Render', {
         QUnit.dump.maxDepth = 10;
     },
     beforeEach() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => true
+            }
+        });
+        const observer = getObserver(key);
+
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
                 renovateRender: true,
                 currentDate: new Date(2020, 11, 21),
                 startDayHour: 0,
                 endDayHour: 1,
+                observer,
                 ...options,
             })[workSpace]('instance');
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, key);
         };
     },
     after() {

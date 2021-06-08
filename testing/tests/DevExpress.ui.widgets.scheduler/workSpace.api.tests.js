@@ -6,12 +6,29 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const {
     test,
     module,
     testStart
 } = QUnit;
+
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+};
 
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
@@ -23,18 +40,21 @@ module('API', () => {
             this.createInstance = function(type, options, skipInvokeStub) {
                 const workSpace = 'dxSchedulerWorkSpace' + type;
 
-                createFactoryInstances({
+                const key = createFactoryInstances({
                     scheduler: {
                         isVirtualScrolling: () => false
                     }
                 });
 
                 if(!skipInvokeStub) {
-                    this.instance = $('#scheduler-work-space')[workSpace]()[workSpace]('instance');
-                    stubInvokeMethod(this.instance);
+                    this.instance = $('#scheduler-work-space')[workSpace]({ observer: getObserver(key) })[workSpace]('instance');
+                    stubInvokeMethod(this.instance, { key });
                     this.instance.option(options);
                 } else {
-                    this.instance = $('#scheduler-work-space')[workSpace](options)[workSpace]('instance');
+                    this.instance = $('#scheduler-work-space')[workSpace]({
+                        ...options,
+                        observer: getObserver(key)
+                    })[workSpace]('instance');
                 }
             };
         }
@@ -91,7 +111,6 @@ module('API', () => {
                 groupOrientation: 'vertical'
             }, true);
 
-            stubInvokeMethod(this.instance);
             this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
             const index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });

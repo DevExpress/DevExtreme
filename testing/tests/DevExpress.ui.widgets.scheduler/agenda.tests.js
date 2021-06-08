@@ -3,6 +3,7 @@ import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -43,7 +44,9 @@ module('Agenda', {}, () => {
                             }
                         };
                     } else if(functionName === 'getResourceManager') {
-                        return resourceManager;
+                        return getResourceManager(key);
+                    } else if(functionName === 'getAppointmentDataProvider') {
+                        return getAppointmentDataProvider(key);
                     }
                 }
             }
@@ -51,12 +54,12 @@ module('Agenda', {}, () => {
 
         const schedulerMock = { isVirtualScrolling: () => false };
         const resources = options && options.groups || { };
-        createFactoryInstances({
+        const key = createFactoryInstances({
             scheduler: schedulerMock,
             resources
         });
 
-        const resourceManager = getResourceManager();
+        const resourceManager = getResourceManager(key);
         resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });

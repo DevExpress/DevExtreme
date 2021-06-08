@@ -16,6 +16,8 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -35,6 +37,21 @@ const {
     testStart
 } = QUnit;
 
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+};
+
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
@@ -46,12 +63,13 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            createFactoryInstances({
+            const key = createFactoryInstances({
                 scheduler: {
                     isVirtualScrolling: () => false,
                     getAppointmentDurationInMinutes: () => 60
                 }
             });
+            const observer = getObserver(key);
 
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
@@ -59,13 +77,14 @@ module('Renovated Render', {
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
+                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {

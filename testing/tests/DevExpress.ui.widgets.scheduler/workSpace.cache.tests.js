@@ -6,12 +6,29 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const {
     test,
     module,
     testStart
 } = QUnit;
+
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+};
 
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
@@ -20,14 +37,15 @@ testStart(function() {
 module('Work Space cellData Cache', {
     beforeEach: function() {
 
-        createFactoryInstances({
+        const key = createFactoryInstances({
             scheduler: {
                 isVirtualScrolling: () => false
             }
         });
+        const observer = getObserver(key);
 
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ observer }).dxSchedulerWorkSpaceWeek('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 }, () => {
     test('Workspace should be able to cache cellData', function(assert) {

@@ -5,6 +5,7 @@ import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -107,7 +108,10 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     },
     appendSingleAppointmentData: (data) => data,
     getResourceManager: () => {
-        return getResourceManager();
+        return getResourceManager(0);
+    },
+    getAppointmentDataProvider: () => {
+        return getAppointmentDataProvider(0);
     }
 });
 
