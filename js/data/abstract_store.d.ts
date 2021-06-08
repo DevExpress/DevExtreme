@@ -98,6 +98,9 @@ export interface StoreOptions<T = Store> {
      */
     onUpdating?: ((key: any | string | number, values: any) => void);
 }
+
+type EventNames = 'loaded'|'loading'|'inserted'|'inserting'|'updated'|'updating'|'push'|'removed'|'removing'|'modified'|'modifying';
+
 /**
  * @docid
  * @hidden
@@ -161,7 +164,7 @@ export default class Store {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventNames): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -170,7 +173,7 @@ export default class Store {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -179,7 +182,7 @@ export default class Store {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -187,7 +190,7 @@ export default class Store {
      * @return this
      * @public
      */
-     on(events: {[key: string]: Function}): this;
+     on(events: {[key in EventNames]?: Function}): this;
     /**
      * @docid
      * @publicName push(changes)
