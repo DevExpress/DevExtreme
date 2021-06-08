@@ -1,4 +1,10 @@
-import Component from "./component";
+import DOMComponent from './dom_component';
+import { UserDefinedElement } from './element';
+
+declare interface IComponentFactory<TComponent> {
+    new(): TComponent;
+    getInstance(element: UserDefinedElement): TComponent;
+}
 
 /**
  * @docid
@@ -9,7 +15,7 @@ import Component from "./component";
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, componentClass: Component): void;
+export default function registerComponent<TComponent>(name: string, componentClass: IComponentFactory<TComponent>): void;
 
 /**
  * @docid
@@ -21,4 +27,4 @@ export default function registerComponent(name: string, componentClass: Componen
  * @namespace DevExpress
  * @hidden
  */
-export default function registerComponent(name: string, namespace: { [key:string]: Component }, componentClass: Component): void;
+export default function registerComponent<TComponent>(name: string, namespace: { [key:string]: IComponentFactory<DOMComponent> }, componentClass: IComponentFactory<TComponent>): void;

@@ -23,6 +23,10 @@ import {
     DashStyleType
 } from '../common';
 
+import {
+    Rule
+} from '../../core/options/utils';
+
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
 
@@ -589,7 +593,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @param1_field2 options:Object
      * @hidden
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+     static defaultOptions<TProperties>(rule: Rule<TProperties>): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)

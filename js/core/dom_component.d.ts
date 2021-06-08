@@ -88,7 +88,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @param1_field2 options:Object
      * @public
      */
-    static defaultOptions(rule: Rule<DOMComponentOptions>): void;
+    static defaultOptions<TProperties = Properties>(rule: Rule<TProperties>): void;
     /**
      * @docid
      * @publicName dispose()
