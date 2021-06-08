@@ -237,7 +237,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
     .eql('data')
     .expect(visibleRows[0].key)
     .eql(1);
-}).before(() => {
+}).before(async () => {
   const getItems = function (): Record<string, unknown>[] {
     const items: Record<string, unknown>[] = [];
     for (let i = 1; i <= 25; i += 1) {
@@ -293,7 +293,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     .eql('group')
     .expect(Math.floor(scrollRightAfterGrouping))
     .eql(Math.floor(scrollRight));
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   width: 200,
   rtlEnabled: true,
   columns: [
