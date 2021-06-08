@@ -1,6 +1,9 @@
+import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+
+const groupRow = Selector('.dx-group-row');
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -229,6 +232,11 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 
   // act
   await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
+
+  await t
+    .expect(groupRow.exists)
+    .notOk();
+
   visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
@@ -284,6 +292,11 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   await dataGrid.scrollTo({ x: 100 });
   const scrollRight = await dataGrid.getScrollRight();
   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
+
+  await t
+    .expect(groupRow.exists)
+    .ok();
+
   const visibleRows = await dataGrid.apiGetVisibleRows();
   const scrollRightAfterGrouping = await dataGrid.getScrollRight();
 
