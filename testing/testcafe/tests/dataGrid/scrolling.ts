@@ -233,6 +233,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
   // act
   await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
 
+  // assert
   await t
     .expect(groupRow.exists)
     .notOk();
@@ -293,6 +294,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
   const scrollRight = await dataGrid.getScrollRight();
   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
 
+  // assert
   await t
     .expect(groupRow.exists)
     .ok();
