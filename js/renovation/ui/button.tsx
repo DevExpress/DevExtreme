@@ -161,7 +161,9 @@ export class Button extends JSXComponent(ButtonProps) {
 
   @Method()
   focus(): void {
-    this.widgetRef.current!.focus();
+    if (this.widgetRef.current) {
+      this.widgetRef.current.focus();
+    }
   }
 
   @Effect()
@@ -182,25 +184,52 @@ export class Button extends JSXComponent(ButtonProps) {
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
+    let element;
 
-    useInkRipple && this.inkRippleRef.current!.showWave({
-      element: this.contentRef.current!, event,
-    });
+    if (this.contentRef.current) {
+      element = this.contentRef.current;
+    } else {
+      element = this.contentRef
+    }
+
+    if (useInkRipple) {
+      if (this.inkRippleRef.current) {
+        this.inkRippleRef.current.showWave({
+          element, event,
+        });
+      }
+    }
   }
 
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
+    let element;
 
-    useInkRipple && this.inkRippleRef.current!.hideWave({
-      element: this.contentRef.current!, event,
-    });
+    if (this.contentRef.current) {
+      element = this.contentRef.current;
+    } else {
+      element = this.contentRef
+    }
+
+    if (useInkRipple) {
+      if (this.inkRippleRef.current) {
+        this.inkRippleRef.current.hideWave({
+          element, event,
+        });
+      }
+    }
   }
 
   onWidgetClick(event: Event): void {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
     onClick?.({ event, validationGroup });
-    useSubmitBehavior && this.submitInputRef.current!.click();
+
+    if (useSubmitBehavior) {
+      if (this.submitInputRef.current) {
+        this.submitInputRef.current.click();
+      }
+    }
   }
 
   onWidgetKeyDown(options): Event | undefined {

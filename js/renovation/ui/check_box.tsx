@@ -174,7 +174,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Method()
   focus(): void {
-    this.widgetRef.current!.focus();
+    if (this.widgetRef.current) {
+      this.widgetRef.current.focus();
+    }
   }
 
   onActive(event: Event): void {
@@ -269,8 +271,20 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef.current![type]({
-      element: this.iconRef.current!, event, wave: waveId,
-    });
+    let element;
+
+    if (this.iconRef.current) {
+      element = this.iconRef.current;
+    } else {
+      element = this.iconRef
+    }
+
+    if (useInkRipple) {
+      if (this.inkRippleRef.current) {
+        this.inkRippleRef.current[type]({
+          element, event, wave: waveId,
+        });
+      }
+    }
   }
 }
