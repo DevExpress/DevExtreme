@@ -2660,6 +2660,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($commandColumnCells.eq(2).index(), 0, 'command cell 3 in first td');
     });
 
+    QUnit.test('onColumnsChanging should be fired if change column option', function(assert) {
+        const onColumnsChanging = sinon.spy();
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            onColumnsChanging,
+            dataSource: [],
+            columns: ['id', 'name']
+        });
+        onColumnsChanging.reset();
+
+        // act
+        dataGrid.columnOption('name', 'visible', false);
+
+        // assert
+        assert.ok(onColumnsChanging.calledOnce, 'onColumnsChanging is called once');
+    });
+
     QUnit.test('Repaint row', function(assert) {
         // arrange
         const dataSource = new DataSource({

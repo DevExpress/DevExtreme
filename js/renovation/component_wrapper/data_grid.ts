@@ -122,7 +122,8 @@ export default class DataGridWrapper extends Component {
 
     _getAdditionalProps(): string[] {
         return super._getAdditionalProps().concat([
-            'onInitialized', 
+            'onInitialized',
+            'onColumnsChanging', // for dashboards
             'integrationOptions', 
             'adaptColumnWidthByRatio', 
             'useLegacyKeyboardNavigation',
