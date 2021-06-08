@@ -30,6 +30,9 @@ import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
+const defaultFeedbackHideTimeout: number = 400;
+const defaultFeedbackShowTimeout: number = 30;
+
 const getAria = (args: Record<string, unknown>):
 { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -70,9 +73,9 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 export class WidgetProps extends BaseWidgetProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() _feedbackHideTimeout?: number = 400;
+  @OneWay() _feedbackHideTimeout?: number = defaultFeedbackHideTimeout;
 
-  @OneWay() _feedbackShowTimeout?: number = 30;
+  @OneWay() _feedbackShowTimeout?: number = defaultFeedbackShowTimeout;
 
   @OneWay() activeStateUnit?: string;
 
