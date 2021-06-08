@@ -205,7 +205,7 @@ export default class Store {
      * @return Promise<void>
      * @public
      */
-    remove(key: any): DxPromise<void>;
+    remove(key: any | string | number): DxPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
