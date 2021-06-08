@@ -27,7 +27,7 @@
                 .addClass("item")
                 .appendTo("#drag-area")
                 .dxDraggable({
-                    group: 'group',
+                    group: 'draggableGroup',
                     data: data,
                     onDragStart: function (e) {
                         e.itemData = e.fromData;
@@ -35,7 +35,7 @@
                 });
 
             $("#drag-area").dxDraggable({
-                group: 'group',
+                group: 'draggableGroup',
             });
         });
     </script>
