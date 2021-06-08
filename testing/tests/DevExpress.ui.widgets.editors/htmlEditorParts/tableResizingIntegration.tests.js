@@ -5,6 +5,7 @@ import { getBoundingRect } from 'core/utils/position';
 import { each } from 'core/utils/iterator';
 
 import PointerMock from '../../../helpers/pointerMock.js';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const { test, module } = QUnit;
 
@@ -71,7 +72,7 @@ module('Resizing integration', {
 
         assert.strictEqual($resizeFrame.length, 1, 'Frame is created for table');
         assert.strictEqual($columnResizerElements.length, 4, 'Column resizers are created for every column separator');
-        assert.strictEqual($rowResizerElements.length, 4, 'Row resizers are created for every row separator');
+        assert.strictEqual($rowResizerElements.length, 3, 'Row resizers are created for every row separator');
         assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
     });
 
@@ -240,6 +241,66 @@ module('Resizing integration', {
         assert.roughEqual(columnBorderOffsets[1], 200, 3);
     });
 
+    test('Check column border positions after drag (min width)', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table').width(400);
+        const columnBorderOffsets = [];
+
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(40, 0)
+            .drag(30, 0)
+            .dragEnd();
+
+        this.clock.tick();
+
+        $table.find('tr').eq(0).find('td').each((i, element) => {
+            const columnWidth = $(element).outerWidth();
+            if(i > 0) {
+                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
+            } else {
+                columnBorderOffsets[i] = columnWidth;
+            }
+        });
+
+        assert.roughEqual(columnBorderOffsets[0], 140, 3);
+        assert.roughEqual(columnBorderOffsets[1], 200, 3);
+    });
+
+    test('Check last column min width limitation after drag', function(assert) {
+        this.createWidget({ width: 430 });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(-30, 0)
+            .drag(-25, 0)
+            .drag(-20, 0)
+            .dragEnd();
+
+        this.clock.tick();
+
+        assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 45, 3);
+    });
+
     test('Table has fixed width style for every column if we drag the last column', function(assert) {
         this.createWidget({ width: 450 });
         this.clock.tick();
@@ -331,5 +392,34 @@ module('Resizing integration', {
             assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border, index = ' + i);
         });
     });
+
+
+    test('Check resizers elements positions after window resize', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const columnBorderOffsets = [];
+
+        const $table = this.$element.find('table').width(400);
+        resizeCallbacks.fire();
+
+        this.clock.tick();
+
+        $table.find('tr').eq(0).find('td').each((i, element) => {
+            const columnWidth = $(element).outerWidth();
+            if(i > 0) {
+                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
+            } else {
+                columnBorderOffsets[i] = columnWidth;
+            }
+        });
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+    });
+
 
 });

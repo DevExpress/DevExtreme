@@ -2,6 +2,7 @@ import $ from '../../../core/renderer';
 import eventsEngine from '../../../events/core/events_engine';
 import { isDefined } from '../../../core/utils/type';
 // import { addNamespace } from '../../../events/utils/index';
+import _windowResizeCallbacks from '../../../core/utils/resize_callbacks';
 import { move } from '../../../animation/translator';
 import { getBoundingRect } from '../../../core/utils/position';
 import BaseModule from './base';
@@ -11,6 +12,7 @@ import { each } from '../../../core/utils/iterator';
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
+const DEFAULT_MIN_COLUMN_WIDTH = 40;
 
 const DRAGGABLE_ELEMENT_OFFSET = 1;
 
@@ -27,6 +29,8 @@ export default class TableResizingModule extends BaseModule {
         this._tableResizeFrames = [];
 
         if(this.enabled) {
+
+
             this.editorInstance.on('contentReady', () => {
                 this._attachResizerTimeout = setTimeout(() => {
 
@@ -45,6 +49,15 @@ export default class TableResizingModule extends BaseModule {
                         });
                     }
                 });
+            });
+
+            _windowResizeCallbacks.add(() => {
+                setTimeout(() => {
+                    this._fixColumnsWidth(this._tableResizeFrames[0].$table);
+                    this._updateFramesPositions();
+                    this._updateFramesSeparators();
+                });
+
             });
         }
     }
@@ -232,10 +245,12 @@ export default class TableResizingModule extends BaseModule {
                 // const newPosition = startDragPosition + event.offset[positionCoordinateName];
                 // console.log('move ' + newPosition);
                 // console.log(newPosition);
-                const minSize = 50;
+                const minSize = DEFAULT_MIN_COLUMN_WIDTH;
+
+                const currentColumnNewSize = startLineSize + event.offset[positionCoordinateName];
 
                 if(currentDirection === 'horizontal') {
-                    const currentColumnNewSize = startLineSize + event.offset[positionCoordinateName];
+
                     const nextColumnNewSize = nextLineSize && nextLineSize - event.offset[positionCoordinateName];
                     const isCurrentColumnHasEnoughPlace = currentColumnNewSize >= minSize;
                     const isNextColumnHasEnoughPlace = !nextLineSize || nextColumnNewSize >= minSize;
@@ -247,6 +262,8 @@ export default class TableResizingModule extends BaseModule {
                             $determinantElements.eq(index + 1).css(positionStyleProperty, nextColumnNewSize);
                         }
                     }
+                } else {
+                    $determinantElements.eq(index).css(positionStyleProperty, currentColumnNewSize);
                 }
 
 
@@ -285,7 +302,8 @@ export default class TableResizingModule extends BaseModule {
         const determinantElements = this._getTableDeterminantElements($table);
 
         each(determinantElements, (index, element) => {
-            $(element).width($(element).width());
+            const columnWidth = $(element).width();
+            $(element).width(columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
         });
     }
 
