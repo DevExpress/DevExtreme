@@ -10,7 +10,7 @@ export interface ODataRequestOptions {
     dataType: string;
     headers: any;
     jsonp?: boolean;
-    method: 'get' | 'post' | 'patch' | 'merge';
+    method: Lowercase<HttpMethod>;
     timeout: number;
     url: string;
     xhrFields: any;
@@ -106,7 +106,7 @@ export default class ODataContext {
      * @return Promise<void>
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: 'get' | 'post' | 'patch' | 'merge'): DxPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)
@@ -117,3 +117,5 @@ export default class ODataContext {
      */
     objectLink(entityAlias: string, key: any | string | number): any;
 }
+
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';
