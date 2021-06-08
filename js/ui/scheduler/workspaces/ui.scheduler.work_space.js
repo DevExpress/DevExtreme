@@ -3456,6 +3456,26 @@ const createDragBehaviorConfig = (
         }
     };
 
+    const getCalculatedOffset = (element, offsets) => {
+        const result = offsets || {
+            left: 0,
+            top: 0
+        };
+
+        const parent = element.parent();
+        if(parent[0] !== getWindow().document) {
+            if($(parent).css('transform').indexOf('matrix') > -1) {
+                const currentOffsets = parent.offset();
+
+                result.left += currentOffsets.left;
+                result.top += currentOffsets.top;
+            }
+
+            return getCalculatedOffset(parent, result);
+        }
+        return result;
+    };
+
     const onDragMove = () => {
         if(isDefaultDraggingMode) {
             return;
@@ -3466,10 +3486,13 @@ const createDragBehaviorConfig = (
         const appointmentWidth = $(state.dragElement).width();
         const isWideAppointment = appointmentWidth > getCellWidth();
 
-        const draggableElement = locate($(state.dragElement).parent());
+        const parent = $(state.dragElement).parent();
 
-        const newX = draggableElement.left + mouseIndent;
-        const newY = draggableElement.top + mouseIndent;
+        const offsets = getCalculatedOffset(parent);
+        const draggableElementOffsets = locate(parent);
+
+        const newX = (draggableElementOffsets.left + offsets.left) + mouseIndent;
+        const newY = (draggableElementOffsets.top + offsets.top) + mouseIndent;
 
         const elements = isWideAppointment ?
             getElementsFromPoint(newX, newY) :
