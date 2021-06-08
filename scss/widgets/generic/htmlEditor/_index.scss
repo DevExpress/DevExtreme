@@ -309,6 +309,6 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
 .dx-table-resize-frame {
   > .dx-draggable-dragging {
-    background-color: color.change($base-accent, $alpha: 0.5);
+    background-color: $htmleditor-cells-separator-bg;
   }
 }

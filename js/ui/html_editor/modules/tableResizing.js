@@ -149,7 +149,11 @@ export default class TableResizingModule extends BaseModule {
             }
 
             if($($lineSeparators[i]).hasClass('dx-draggable')) {
-                $($lineSeparators[i]).dxDraggable('instance')._initialLocate = { left: 0, top: 0 };
+                const draggable = $($lineSeparators[i]).dxDraggable('instance');
+
+                draggable.dispose();
+
+                $($lineSeparators[i]).addClass(lineResizerClass);
             }
 
             styleOptions[positionCoordinate] = currentPosition - DRAGGABLE_ELEMENT_OFFSET;
@@ -216,6 +220,8 @@ export default class TableResizingModule extends BaseModule {
         const positionCoordinateName = direction === 'vertical' ? 'y' : 'x';
         const currentDirection = direction;
 
+        // const boundaryConfig = ;
+
         this._currentDraggableElement = this.editorInstance._createComponent(lineSeparator, Draggable, {
             contentTemplate: null,
             // boundary: frame.$frame,
@@ -226,17 +232,23 @@ export default class TableResizingModule extends BaseModule {
                 // const newPosition = startDragPosition + event.offset[positionCoordinateName];
                 // console.log('move ' + newPosition);
                 // console.log(newPosition);
+                const minSize = 50;
 
+                if(currentDirection === 'horizontal') {
+                    const currentColumnNewSize = startLineSize + event.offset[positionCoordinateName];
+                    const nextColumnNewSize = nextLineSize && nextLineSize - event.offset[positionCoordinateName];
+                    const isCurrentColumnHasEnoughPlace = currentColumnNewSize >= minSize;
+                    const isNextColumnHasEnoughPlace = !nextLineSize || nextColumnNewSize >= minSize;
 
-                $determinantElements.eq(index).css(positionStyleProperty, startLineSize + event.offset[positionCoordinateName]);
-                // $(lineSeparator).css(positionCoordinate, newPosition /* + $lineSeparators[0].css('left').replace('px', '')*/);
-                // component.move();
+                    if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
+                        $determinantElements.eq(index).css(positionStyleProperty, currentColumnNewSize);
 
-
-                if(currentDirection === 'horizontal' && nextLineSize) {
-                    // console.log('currentDirection === horizontal');
-                    $determinantElements.eq(index + 1).css(positionStyleProperty, nextLineSize - event.offset[positionCoordinateName]);
+                        if(nextLineSize) {
+                            $determinantElements.eq(index + 1).css(positionStyleProperty, nextColumnNewSize);
+                        }
+                    }
                 }
+
 
                 // console.log(event.offset[positionCoordinateName]);
                 // this._updateByDrag = true;
