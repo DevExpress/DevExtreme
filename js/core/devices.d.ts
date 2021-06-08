@@ -60,6 +60,8 @@ export interface Device {
     version?: Array<number>;
 }
 
+type EventNames = 'orientationChanged';
+
 /**
  * @docid
  * @publicName devices
@@ -92,7 +94,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventNames): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -101,7 +103,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -110,7 +112,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -118,7 +120,7 @@ declare class DevicesObject {
      * @return this
      * @public
      */
-     on(events: {[key: string]: Function}): this;
+    on(events: {[key in EventNames]?: Function}): this;
     /**
      * @docid
      * @publicName orientation()
