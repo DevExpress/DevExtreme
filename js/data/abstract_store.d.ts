@@ -224,5 +224,5 @@ export default class Store {
      * @return Promise<any>
      * @public
      */
-    update(key: any, values: any): DxPromise<any>;
+    update(key: any | string | number, values: any): DxPromise<any>;
 }
