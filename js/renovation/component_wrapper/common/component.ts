@@ -304,8 +304,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       ...this.elementAttr,
       ...elementAttr,
       className: [
-        ...(this.elementAttr.class || '').split(' '),
-        ...(elementAttr?.class || '').split(' '),
+        ...(this.elementAttr.class ?? '').split(' '),
+        ...(elementAttr?.class ?? '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')

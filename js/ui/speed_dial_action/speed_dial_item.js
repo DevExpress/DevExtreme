@@ -4,7 +4,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
-import { Overlay } from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import { render } from '../widget/utils.ink_ripple';
 import { isMaterial } from '../themes';
 
@@ -135,12 +135,6 @@ class SpeedDialItem extends Overlay {
         this._$content.css('zIndex', zIndex);
     }
 
-    _fixWrapperPosition() {
-        const $wrapper = this._$wrapper;
-        const $container = this._getContainer();
-
-        $wrapper.css('position', this._isWindow($container) ? 'fixed' : 'absolute');
-    }
 
     _setClickAction() {
         const eventName = addNamespace(clickEventName, this.NAME);

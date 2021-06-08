@@ -13,7 +13,7 @@ import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import errors from 'core/errors';
-import { Overlay } from 'ui/overlay';
+import Overlay from 'ui/overlay/ui.overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from 'ui/widget/selectors';
@@ -1072,26 +1072,6 @@ testModule('shading', moduleConfig, () => {
         overlay.option('shading', false);
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css('backgroundColor')));
     });
-
-    test('overlay should adjust height on iOS after positioning (T742021)', function(assert) {
-        assert.expect(1);
-        if(devices.real().platform !== 'ios' || devices.real().deviceType === 'desktop') {
-            assert.ok(true);
-            return;
-        }
-
-        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
-        sinon.stub(
-            overlay,
-            '_fixHeightAfterSafariAddressBarResizing',
-            () => {
-                const $wrapper = overlay.$wrapper();
-                assert.strictEqual($wrapper.css('position'), 'absolute', 'overlay wrapper should have a position');
-            }
-        );
-
-        overlay.show();
-    });
 });
 
 
@@ -1192,6 +1172,18 @@ testModule('dimensions', moduleConfig, () => {
 
         instance.option('minHeight', 200);
         assert.strictEqual($content.height(), 200);
+    });
+
+    test('overlay wrapper dimensions should be equal to window dimensions when container is window', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+            shading: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.roughEqual($wrapper.height(), $(window).height(), 1.01, 'wrapper height is equal to window height');
+        assert.roughEqual($wrapper.width(), $(window).width(), 1.01, 'wrapper width is equal to window width');
     });
 });
 
@@ -2250,10 +2242,10 @@ testModule('container', moduleConfig, () => {
             visible: true
         }).dxOverlay('instance');
 
-        const wrapperElement = overlay.$wrapper().get(0);
+        const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual(wrapperElement.style.width, '', 'width is restored after container option value changed to window');
-        assert.strictEqual(wrapperElement.style.height, '', 'height is restored after container option value changed to window');
+        assert.strictEqual($wrapper.width(), $(window).width(), 'width is restored after container option value changed to window');
+        assert.strictEqual($wrapper.height(), $(window).height(), 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {

@@ -23,7 +23,7 @@ import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
-import { Overlay } from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
 
@@ -617,17 +617,8 @@ const Popup = Overlay.inherit({
         };
     },
 
-    _shouldFixBodyPosition: function() {
+    _isAllWindowCovered: function() {
         return this.callBase() || this.option('fullScreen');
-    },
-
-    _toggleSafariFullScreen: function(value) {
-        const toggleFullScreenBeforeShown = this._shouldFixBodyPosition() && value && !this._isShown;
-        if(toggleFullScreenBeforeShown) {
-            this._bodyScrollTop = value ? window.pageYOffset : undefined;
-        } else {
-            this._toggleSafariScrolling(!value);
-        }
     },
 
     _renderDimensions: function() {
@@ -711,8 +702,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
-
-                this._toggleSafariFullScreen(args.value);
+                this._toggleSafariScrolling(!args.value);
 
                 this._renderGeometry();
 

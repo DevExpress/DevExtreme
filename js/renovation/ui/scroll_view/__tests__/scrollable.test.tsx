@@ -58,6 +58,8 @@ describe('Scrollable', () => {
       { name: 'update', calledWith: [] },
       { name: 'release', calledWith: [] },
       { name: 'refresh', calledWith: [] },
+      { name: 'startLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [] },
       { name: 'validate', calledWith: ['arg1'] },
       { name: 'getScrollElementPosition', aliasName: 'getElementLocation', calledWith: ['arg1', 'arg2'] },
     ]).describe('Method: %o', (methodInfo) => {
