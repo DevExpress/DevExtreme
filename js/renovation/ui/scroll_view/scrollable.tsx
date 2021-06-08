@@ -7,6 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
+  DxMouseEvent,
   ScrollableDirection,
   ScrollOffset,
 } from './types.d';
@@ -37,7 +38,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
   } = viewModel;
@@ -103,6 +104,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
+        onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
         scrollByContent={scrollByContent}
@@ -119,7 +121,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
@@ -153,6 +155,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   content(): HTMLDivElement {
     return this.scrollableRef.content();
+  }
+
+  @Method()
+  container(): HTMLDivElement {
+    return this.scrollableRef.container();
   }
 
   @Method()
@@ -241,7 +248,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.finishLoading();
   }
 
-  validate(event: Event): boolean {
+  validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event);
   }
 

@@ -34,6 +34,7 @@ import {
 } from './utils';
 
 import { ScrollableTestHelper } from './scrollable_simulated_test_helper';
+import { DxKeyboardEvent, DxMouseEvent } from '../types';
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
@@ -148,7 +149,7 @@ describe('Simulated > Render', () => {
       const scrollableTabIndex = helper.getScrollable().getDOMNode().attributes.getNamedItem('tabindex');
 
       if (useKeyboard) {
-        expect(scrollableTabIndex.value).toEqual('0');
+        expect(scrollableTabIndex?.value).toEqual('0');
       } else {
         expect(scrollableTabIndex).toEqual(null);
       }
@@ -367,16 +368,16 @@ describe('Simulated > Behavior', () => {
 
           if (helper.isVertical) {
             expectedVThumbScrolling = scrollByThumb
-              && helper.viewModel.vScrollbarRef.current.isThumb(target);
+              && helper.getVScrollbar().isThumb(target);
           }
 
           if (helper.isHorizontal) {
             expectedHThumbScrolling = scrollByThumb
-              && helper.viewModel.hScrollbarRef.current.isThumb(target);
+              && helper.getHScrollbar().isThumb(target);
           }
 
           helper.viewModel.suppressDirections = jest.fn();
-          helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+          helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
           helper.viewModel.initEffect();
           emit('dxscrollinit', event);
@@ -397,7 +398,11 @@ describe('Simulated > Behavior', () => {
         ['dx-scrollable-scrollbar', 'dx-scrollable-scroll', 'dx-scrollable-container'],
       ]))('suppressDirections(event), isDxWheelEvent: %o, scrollByThumb: %o, scrollByContent: %o, targetClass: %o',
         (isDxWheelEvent, scrollByThumb, scrollByContent, targetClass) => {
-          const event = { ...defaultEvent, originalEvent: {} };
+          const event = {
+            ...defaultEvent,
+            originalEvent: {},
+          } as unknown as DxMouseEvent;
+
           if (isDxWheelEvent) {
             (event.originalEvent as any).type = 'dxmousewheel';
           }
@@ -461,13 +466,13 @@ describe('Simulated > Behavior', () => {
 
         helper.initScrollbarSettings();
         helper.initScrollbarHandlerMocks();
-        helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
         helper.viewModel.startEffect();
         emit('dxscrollstart', event);
 
         expect(helper.viewModel.eventForUserAction).toEqual(event);
-        helper.checkActionHandlerCalls(expect, ['onStart'], [[{ fakeEventArg: { value: 5 } }]]);
+        helper.checkActionHandlerCalls(expect, ['onStart'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
         helper.checkScrollbarEventHandlerCalls(expect, ['start'], [[]]);
       });
 
@@ -483,7 +488,7 @@ describe('Simulated > Behavior', () => {
         helper.initScrollbarHandlerMocks();
 
         helper.viewModel.adjustDistance = jest.fn();
-        helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
         helper.viewModel.endEffect();
         emit('dxscrollend', event);
@@ -529,6 +534,29 @@ describe('Simulated > Behavior', () => {
           expect(helper.viewModel.eventForUserAction).toEqual(event);
           helper.checkActionHandlerCalls(expect, [], [[]]);
           helper.checkScrollbarEventHandlerCalls(expect, ['move'], [[event.delta]]);
+        }
+      });
+
+      test.each([jest.fn(), undefined])('emit "dxscroll" event, e.preventDefault: %o, locked: false', (preventDefault) => {
+        const event = {
+          ...defaultEvent,
+          delta: { x: 10.5633, y: 25.5986 },
+          preventDefault,
+          cancel: false,
+        };
+
+        const helper = new ScrollableTestHelper({ direction });
+
+        helper.initScrollbarSettings();
+
+        helper.viewModel.adjustDistance = jest.fn();
+        helper.viewModel.locked = false;
+
+        helper.viewModel.moveEffect();
+        emit('dxscroll', event as any);
+
+        if (preventDefault) {
+          expect(event.preventDefault).toBeCalled();
         }
       });
 
@@ -594,7 +622,7 @@ describe('Simulated > Behavior', () => {
 
           helper.initContainerPosition({ top: 50, left: 50 });
 
-          helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+          helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
           helper.viewModel.scrollBy(scrollByValues.actual);
 
@@ -602,8 +630,8 @@ describe('Simulated > Behavior', () => {
           helper.checkActionHandlerCalls(expect,
             ['onStart', 'onUpdated'],
             [
-              [{ fakeEventArg: { value: 5 } }],
-              [{ fakeEventArg: { value: 5 } }],
+              [{ scrollOffset: { top: 5, left: 10 } }],
+              [{ scrollOffset: { top: 5, left: 10 } }],
             ]);
           helper.checkScrollbarEventHandlerCalls(expect, ['scrollBy'], [[scrollByValues.expected]]);
         });
@@ -621,7 +649,7 @@ describe('Simulated > Behavior', () => {
               ? helper.viewModel.containerRef.current.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
               : helper.viewModel.containerRef.current;
 
-            const event = { ...defaultEvent, target };
+            const event = { ...defaultEvent, target } as unknown as DxMouseEvent;
 
             const validateMoveResult = helper.viewModel.validateMove(event);
 
@@ -658,7 +686,7 @@ describe('Simulated > Behavior', () => {
             ? direction
             : undefined;
 
-          const event = { ...defaultEvent, shiftKey };
+          const event = { ...defaultEvent, shiftKey } as unknown as DxMouseEvent;
           if (isDxWheelEvent) {
             (event as any).type = 'dxmousewheel';
           }
@@ -686,7 +714,7 @@ describe('Simulated > Behavior', () => {
             });
             helper.initContainerPosition({ top: -scrollLocation, left: -scrollLocation });
 
-            const event = { ...defaultEvent, delta };
+            const event = { ...defaultEvent, delta } as unknown as DxMouseEvent;
 
             const expectedValidationResult = (scrollLocation < 0 && delta > 0)
                 || (scrollLocation >= 0 && delta < 0) || scrollLocation === -50;
@@ -730,7 +758,10 @@ describe('Simulated > Behavior', () => {
               disabled: false,
             });
 
-            const event = { ...defaultEvent, type: isDxWheelEvent ? 'dxmousewheel' : undefined };
+            const event = {
+              ...defaultEvent,
+              type: isDxWheelEvent ? 'dxmousewheel' : undefined,
+            } as unknown as DxMouseEvent;
 
             helper.viewModel.locked = false;
             helper.viewModel.validateWheel = jest.fn();
@@ -772,12 +803,12 @@ describe('Simulated > Behavior', () => {
       each(['leftArrow', 'upArrow', 'rightArrow', 'downArrow']).describe('Key: %o', (keyName) => {
         it(`should prevent default key down event by key - ${keyName}`, () => {
           const event = {
+            key: keyName,
             originalEvent: {
-              key: keyName,
               preventDefault: jest.fn(),
               stopPropagation: jest.fn(),
             },
-          };
+          } as unknown as DxKeyboardEvent;
           const helper = new ScrollableTestHelper({ direction });
 
           helper.viewModel.scrollByLine = jest.fn();
@@ -792,12 +823,12 @@ describe('Simulated > Behavior', () => {
         each([1, 2, undefined]).describe('devicePixelRatio: %o', (pixelRatio) => {
           it(`should call scrollBy by ${keyName} key`, () => {
             const event = {
+              key: keyName,
               originalEvent: {
-                key: keyName,
                 preventDefault: jest.fn(),
                 stopPropagation: jest.fn(),
               },
-            };
+            } as unknown as DxKeyboardEvent;
             const helper = new ScrollableTestHelper({ direction });
 
             helper.viewModel.tryGetDevicePixelRatio = () => pixelRatio;
@@ -827,12 +858,12 @@ describe('Simulated > Behavior', () => {
         it(`should prevent default key down event by key - ${keyName}`, () => {
           const scrollByPageHandler = jest.fn();
           const event = {
+            key: keyName,
             originalEvent: {
-              key: keyName,
               preventDefault: jest.fn(),
               stopPropagation: jest.fn(),
             },
-          };
+          } as unknown as DxKeyboardEvent;
           const helper = new ScrollableTestHelper({ direction });
           helper.viewModel.scrollByPage = scrollByPageHandler;
           helper.viewModel.handleKeyDown(event);
@@ -845,12 +876,12 @@ describe('Simulated > Behavior', () => {
         it(`should call scrollBy by ${keyName} key`, () => {
           const scrollByHandler = jest.fn();
           const event = {
+            key: keyName,
             originalEvent: {
-              key: keyName,
               preventDefault: jest.fn(),
               stopPropagation: jest.fn(),
             },
-          };
+          } as unknown as DxKeyboardEvent;
           const helper = new ScrollableTestHelper({ direction });
           helper.viewModel.scrollBy = scrollByHandler;
           helper.viewModel.handleKeyDown(event);
@@ -860,12 +891,12 @@ describe('Simulated > Behavior', () => {
 
       it('should prevent default key down event by "home" key', () => {
         const event = {
+          key: 'home',
           originalEvent: {
-            key: 'home',
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           },
-        };
+        } as unknown as DxKeyboardEvent;
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollToHome = jest.fn();
         helper.viewModel.handleKeyDown(event);
@@ -877,12 +908,12 @@ describe('Simulated > Behavior', () => {
 
       it('should scroll to start by "home" key', () => {
         const event = {
+          key: 'home',
           originalEvent: {
-            key: 'home',
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           },
-        };
+        } as unknown as DxKeyboardEvent;
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollTo = jest.fn();
         helper.viewModel.handleKeyDown(event);
@@ -893,12 +924,12 @@ describe('Simulated > Behavior', () => {
 
       it('should prevent default key down event by "end" key', () => {
         const event = {
+          key: 'end',
           originalEvent: {
-            key: 'end',
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           },
-        };
+        } as unknown as DxKeyboardEvent;
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollToEnd = jest.fn();
         helper.viewModel.handleKeyDown(event);
@@ -909,12 +940,12 @@ describe('Simulated > Behavior', () => {
 
       it('should scroll to end by "end" key', () => {
         const event = {
+          key: 'end',
           originalEvent: {
-            key: 'end',
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           },
-        };
+        } as unknown as DxKeyboardEvent;
         const helper = new ScrollableTestHelper({ direction });
         helper.viewModel.scrollTo = jest.fn();
         helper.viewModel.handleKeyDown(event);
@@ -925,12 +956,12 @@ describe('Simulated > Behavior', () => {
     it('should not prevent default key down event by common keys down', () => {
       const scrollFunc = jest.fn();
       const event = {
+        key: 'A',
         originalEvent: {
-          key: 'A',
           preventDefault: jest.fn(),
           stopPropagation: jest.fn(),
         },
-      };
+      } as unknown as DxKeyboardEvent;
       const helper = new ScrollableTestHelper({ });
       helper.viewModel.scrollToHome = scrollFunc;
       helper.viewModel.scrollToEnd = scrollFunc;
@@ -945,12 +976,12 @@ describe('Simulated > Behavior', () => {
 
     it('should not prevent default key down event by tab key down', () => {
       const event = {
+        key: 'tab',
         originalEvent: {
-          key: 'tab',
           preventDefault: jest.fn(),
           stopPropagation: jest.fn(),
         },
-      };
+      } as unknown as DxKeyboardEvent;
       const helper = new ScrollableTestHelper({ });
       helper.viewModel.tabWasPressed = false;
 
@@ -1078,15 +1109,34 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
-        helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.updateSizes = jest.fn();
 
         helper.viewModel.update();
 
         if (actionHandler) {
-          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
+          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
+        }
+        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+      });
+
+      test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
+        const helper = new ScrollableTestHelper({
+          onUpdated: jest.fn(),
+          onVisibilityChange: actionHandler,
+        });
+
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
+        helper.viewModel.updateSizes = jest.fn();
+
+        helper.viewModel.onVisibilityChangeHandler(visible);
+
+        if (actionHandler) {
+          helper.checkActionHandlerCalls(expect, ['onUpdated', 'onVisibilityChange'], [[{ scrollOffset: { top: 5, left: 10 } }], [visible]]);
+        } else {
+          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
         }
         expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
       });
@@ -1096,12 +1146,14 @@ describe('Simulated > Behavior', () => {
           [`${action}`]: actionHandler,
         });
 
-        helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
         helper.viewModel[action]();
 
         if (actionHandler) {
-          helper.checkActionHandlerCalls(expect, [action], [[{ fakeEventArg: { value: 5 } }]]);
+          helper.checkActionHandlerCalls(expect, [action], [
+            [{ scrollOffset: { top: 5, left: 10 } }],
+          ]);
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
@@ -1122,7 +1174,8 @@ describe('Simulated > Behavior', () => {
               });
 
               helper.viewModel.endActionDirections = { ...endActionDirections };
-              helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+              helper.viewModel.getEventArgs = jest.fn(() => (
+                { scrollOffset: { top: 5, left: 10 } }));
 
               helper.viewModel.onEnd(scrollbarDirection);
 
@@ -1143,7 +1196,7 @@ describe('Simulated > Behavior', () => {
               }
 
               if (actionHandler && onEndWasCalled) {
-                helper.checkActionHandlerCalls(expect, ['onEnd'], [[{ fakeEventArg: { value: 5 } }]]);
+                helper.checkActionHandlerCalls(expect, ['onEnd'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
               } else {
                 helper.checkActionHandlerCalls(expect, [], []);
               }
@@ -1194,12 +1247,12 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
-        helper.viewModel.getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 5 } }));
+        helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
 
         helper.viewModel.onRelease();
 
         if (actionHandler) {
-          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ fakeEventArg: { value: 5 } }]]);
+          helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
@@ -1228,7 +1281,6 @@ describe('Simulated > Behavior', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.triggerScrollEvent = jest.fn();
           helper.viewModel.update = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
@@ -1243,7 +1295,6 @@ describe('Simulated > Behavior', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.triggerScrollEvent = jest.fn();
           helper.viewModel.update = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
@@ -1273,7 +1324,6 @@ describe('Simulated > Behavior', () => {
                 contentSize: 100,
                 containerSize: 200,
               });
-              helper.viewModel.triggerScrollEvent = jest.fn();
 
               helper.initScrollbarSettings({
                 props: {
@@ -1316,7 +1366,6 @@ describe('Simulated > Behavior', () => {
                 contentSize: 100,
                 containerSize: 200,
               });
-              helper.viewModel.triggerScrollEvent = jest.fn();
 
               helper.initScrollbarSettings({
                 props: {

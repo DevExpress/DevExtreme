@@ -7,7 +7,9 @@ import {
   ComponentBindings,
   Method,
   Event,
+  Effect,
 } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
 
@@ -174,6 +176,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Method()
   releaseHandler(): void {
     this.scrollbar.releaseHandler();
+  }
+
+  @Effect({ run: 'once' })
+  disposeAnimationFrame(): DisposeEffectReturn {
+    return (): void => { this.cancel(); };
   }
 
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
