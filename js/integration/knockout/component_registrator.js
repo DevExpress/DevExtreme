@@ -7,6 +7,7 @@ import inflector from '../../core/utils/inflector';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
+import Draggble from '../../ui/draggable';
 import { KoTemplate } from './template';
 import Editor from '../../ui/editor/editor';
 import Locker from '../../core/utils/locker';
@@ -213,7 +214,7 @@ const registerComponentKoBinding = function(componentName, componentClass) {
             createComponent();
 
             return {
-                controlsDescendantBindings: componentClass.subclassOf(Widget)
+                controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(Draggble)
             };
         }
     };
