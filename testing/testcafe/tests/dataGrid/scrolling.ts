@@ -290,7 +290,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     .eql(300);
 
   // act
-  await dataGrid.scrollTo({ left: 100 });
+  await dataGrid.scrollTo({ x: 100 });
   const scrollRight = await dataGrid.getScrollRight();
   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
 
