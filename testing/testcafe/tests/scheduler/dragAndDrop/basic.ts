@@ -125,7 +125,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
 fixture`Drag-n-drop from another draggable area`
   .page(url(__dirname, './pages/containerWithDnD.html'));
 
-test.only('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
+test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
   const scheduler = new Scheduler('#container');
 
   scheduler.option('cellDuration', 10);
