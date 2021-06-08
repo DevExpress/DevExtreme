@@ -1,4 +1,3 @@
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'data/array_store';
@@ -1070,10 +1069,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     const realSetTimeout = window.setTimeout;
 
     QUnit.test('ungrouping after grouping should works correctly if row rendering mode is virtual', function(assert) {
-        if(browser.msie) {
-            assert.ok(true, 'This test is unstable in IE/Edge');
-            return;
-        }
         this.clock.restore();
         const done = assert.async();
         // arrange, act

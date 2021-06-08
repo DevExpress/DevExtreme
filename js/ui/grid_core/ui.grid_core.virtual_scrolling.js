@@ -783,7 +783,7 @@ export const virtualScrollingModule = {
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
                                     const isChromeLatest = browser.chrome && browser.version >= 91;
-                                    const allowedTopOffset = browser.mozilla || browser.msie || isChromeLatest ? 1 : 0; // T884308
+                                    const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
