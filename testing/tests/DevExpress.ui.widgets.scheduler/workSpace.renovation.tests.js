@@ -15,7 +15,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -46,7 +46,7 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            createInstances({
+            createFactoryInstances({
                 scheduler: {
                     isVirtualScrolling: () => false,
                     getAppointmentDurationInMinutes: () => 60

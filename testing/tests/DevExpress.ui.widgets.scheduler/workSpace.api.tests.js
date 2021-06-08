@@ -5,7 +5,7 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createInstances } from 'ui/scheduler/instanceFactory.js';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -23,7 +23,7 @@ module('API', () => {
             this.createInstance = function(type, options, skipInvokeStub) {
                 const workSpace = 'dxSchedulerWorkSpace' + type;
 
-                createInstances({
+                createFactoryInstances({
                     scheduler: {
                         isVirtualScrolling: () => false
                     }

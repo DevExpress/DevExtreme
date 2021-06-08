@@ -1,8 +1,8 @@
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 export const initFactoryInstance = (resourceGetter) => {
-    createInstances({
+    createFactoryInstances({
         scheduler: {
             isVirtualScrolling: () => false
         }

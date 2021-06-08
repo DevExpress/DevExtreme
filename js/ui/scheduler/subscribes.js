@@ -11,10 +11,21 @@ import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import utils from './utils';
+import { getResourceManager } from './resources/resourceManager';
+import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
+    getResourceManager: function() {
+        return getResourceManager(this.key);
+    },
+
+    getAppointmentDataProvider: function() {
+        return getAppointmentDataProvider(this.key);
+    },
+
     getTimeZoneCalculator: function() {
         return this.timeZoneCalculator;
     },

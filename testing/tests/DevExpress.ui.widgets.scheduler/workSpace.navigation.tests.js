@@ -9,7 +9,7 @@ import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -42,7 +42,7 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     this.createInstance = (options, workSpaceName) => {
-                        createInstances({
+                        createFactoryInstances({
                             scheduler: {
                                 isVirtualScrolling: () => false
                             }

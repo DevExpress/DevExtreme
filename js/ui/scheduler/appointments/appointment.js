@@ -23,7 +23,6 @@ import {
     APPOINTMENT_CONTENT_CLASSES
 } from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
-import { getResourceManager } from '../resources/resourceManager';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -145,7 +144,8 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const deferredColor = getResourceManager().getAppointmentColor({
+        const resourceManager = this.invoke('getResourceManager');
+        const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
             groups: this.option('groups'),

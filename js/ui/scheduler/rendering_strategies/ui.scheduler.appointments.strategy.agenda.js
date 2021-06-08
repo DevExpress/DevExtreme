@@ -2,8 +2,6 @@ import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
 import { merge } from '../../../core/utils/array';
 import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
-import { getResourceManager } from '../resources/resourceManager';
-import { getAppointmentDataProvider } from '../appointments/DataProvider/appointmentDataProvider';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {
@@ -21,7 +19,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     groupAppointmentByResources(appointments) {
-        return getResourceManager().groupAppointmentsByResources(
+        const resourceManager = this.instance.fire('getResourceManager');
+        return resourceManager.groupAppointmentsByResources(
             appointments,
             this.instance._getCurrentViewOption('groups')
         );
@@ -191,7 +190,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
                 const startDate = this.instance.fire('getField', 'startDate', appointment);
                 const endDate = this.instance.fire('getField', 'endDate', appointment);
 
-                getAppointmentDataProvider().replaceWrongEndDate(appointment, startDate, endDate);
+                this.instance.fire('getAppointmentDataProvider').replaceWrongEndDate(appointment, startDate, endDate);
 
                 needClearSettings && delete appointment.settings;
 
@@ -215,7 +214,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
                 for(let j = 0; j < appointmentCount; j++) {
                     const appointmentData = currentAppointments[j].settings || currentAppointments[j];
-                    const appointmentIsLong = getAppointmentDataProvider().appointmentTakesSeveralDays(currentAppointments[j]);
+                    const appointmentIsLong = this.instance.fire('getAppointmentDataProvider').appointmentTakesSeveralDays(currentAppointments[j]);
                     const appointmentIsRecurrence = this.instance.fire('getField', 'recurrenceRule', currentAppointments[j]);
 
                     if(this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {

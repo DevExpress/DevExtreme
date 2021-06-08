@@ -5,7 +5,7 @@ import $ from 'jquery';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createInstances } from 'ui/scheduler/instanceFactory.js';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -20,7 +20,7 @@ testStart(function() {
 module('Work Space cellData Cache', {
     beforeEach: function() {
 
-        createInstances({
+        createFactoryInstances({
             scheduler: {
                 isVirtualScrolling: () => false
             }
