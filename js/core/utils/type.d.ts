@@ -24,7 +24,7 @@ export declare function isPlainObject(object: any): object is object;
 
 export declare function isPrimitive<T>(value: T): value is Exclude<T, Function>&Exclude<T, object>&Exclude<T, any[]>;
 
-export declare function isWindow(object: any): object is Window & typeof globalThis;
+export declare function isWindow(object: any): object is (Window & typeof globalThis);
 
 export declare function isRenderer(object: any): boolean;
 
