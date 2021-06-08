@@ -220,6 +220,34 @@ QUnit.test('Legend\'s title as string', function(assert) {
     assert.strictEqual(drawn.callCount, 1);
 });
 
+// T999609
+QUnit.test('Value axis range ajusting after resetVisualRange', function(assert) {
+    const dataSource = [];
+
+    for(let i = 0; i < 10; i++) {
+        dataSource.push({ arg: i, val: i });
+    }
+
+    const chart = $('#chart').dxChart({
+        dataSource,
+        argumentAxis: {
+            visualRange: {
+                startValue: 8
+            }
+        },
+        legend: { visible: false },
+        series: {
+            aggregation: {
+                enabled: true
+            }
+        }
+    }).dxChart('instance');
+
+    chart.resetVisualRange();
+
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 9 });
+});
+
 QUnit.module('series API', {
     beforeEach: function() {
         this.options = {

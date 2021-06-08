@@ -15,7 +15,7 @@ export default class ViewDataProvider {
 
     get viewDataGenerator() {
         if(!this._viewDataGenerator) {
-            this._viewDataGenerator = new ViewDataGenerator(this._workspace);
+            this._viewDataGenerator = new ViewDataGenerator();
         }
         return this._viewDataGenerator;
     }
@@ -46,8 +46,8 @@ export default class ViewDataProvider {
     get isVerticalGroupedWorkspace() { return this._workspace._isVerticalGroupedWorkSpace(); }
 
     update(isGenerateNewViewData) {
-        const { viewDataGenerator, _workspace } = this;
-        const renderOptions = _workspace.generateRenderOptions();
+        const viewDataGenerator = this.viewDataGenerator;
+        const renderOptions = this._workspace.generateRenderOptions();
 
         if(isGenerateNewViewData) {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
@@ -63,7 +63,10 @@ export default class ViewDataProvider {
             this.viewDataGenerator,
             this.viewDataMap,
             this.completeViewDataMap,
-            this._workspace,
+            {
+                isVerticalGrouping: renderOptions.isVerticalGrouping,
+                isDateAndTimeView: renderOptions.isDateAndTimeView,
+            },
         );
 
         this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
@@ -275,5 +278,48 @@ export default class ViewDataProvider {
 
     getColumnsCount() {
         return this.viewDataMap.dateTableMap[0].length;
+    }
+
+    getViewEdgeIndices(isAllDayPanel) {
+        if(isAllDayPanel) {
+            return {
+                firstCellIndex: 0,
+                lastCellIndex: this.viewDataMap.allDayPanelMap.length - 1,
+                firstRowIndex: 0,
+                lastRowIndex: 0,
+            };
+        }
+
+        return {
+            firstCellIndex: 0,
+            lastCellIndex: this.viewDataMap.dateTableMap[0].length - 1,
+            firstRowIndex: 0,
+            lastRowIndex: this.viewDataMap.dateTableMap.length - 1,
+        };
+    }
+
+    getGroupEdgeIndices(groupIndex, isAllDay) {
+        const groupedDataMap = this.groupedDataMap.dateTableGroupedMap[groupIndex];
+        const cellsCount = groupedDataMap[0].length;
+        const rowsCount = groupedDataMap.length;
+
+        const firstCellIndex = groupedDataMap[0][0].position.cellIndex;
+        const lastCellIndex = groupedDataMap[0][cellsCount - 1].position.cellIndex;
+
+        if(isAllDay) {
+            return {
+                firstCellIndex,
+                lastCellIndex,
+                firstRowIndex: 0,
+                lastRowIndex: 0,
+            };
+        }
+
+        return {
+            firstCellIndex,
+            lastCellIndex,
+            firstRowIndex: groupedDataMap[0][0].position.rowIndex,
+            lastRowIndex: groupedDataMap[rowsCount - 1][0].position.rowIndex,
+        };
     }
 }

@@ -13,6 +13,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     DxEvent,
     EventInfo,
@@ -367,7 +369,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxSchedulerAppointment> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxSchedulerAppointment> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @extends DateCellTemplate
@@ -386,17 +388,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     descriptionExpr?: string;
-    /**
-     * @docid
-     * @default "dropDownAppointment"
-     * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 contentElement:DxElement
-     * @type_function_return string|Element|jQuery
-     * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-     * @public
-     */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -435,12 +426,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default true
        */
       allowUpdating?: boolean,
-      /**
-       * @docid
-       * @default false
-       * @deprecated dxSchedulerOptions.editing.allowTimeZoneEditing
-       */
-      allowEditingTimeZones?: boolean
     };
     /**
      * @docid
@@ -751,7 +736,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default null
        */
-      dataSource?: string | Array<any> | DataSource | DataSourceOptions,
+      dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 resource:object
@@ -898,16 +883,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @extends DateCellTemplate
        */
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
-      /**
-       * @docid
-       * @default "dropDownAppointment"
-       * @type_function_param1 itemData:object
-       * @type_function_param2 itemIndex:number
-       * @type_function_param3 contentElement:DxElement
-       * @type_function_return string|Element|jQuery
-       * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
-       */
-      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @extends EndDayHour

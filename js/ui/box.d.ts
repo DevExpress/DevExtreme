@@ -2,6 +2,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -63,7 +65,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.BoxDirection

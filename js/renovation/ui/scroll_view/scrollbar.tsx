@@ -66,7 +66,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 export type ScrollbarPropsType = ScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
@@ -83,7 +83,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
-  @Mutable() hideScrollbarTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() hideScrollbarTimer?: unknown;
 
   @InternalState() pendingPullDown = false;
 
@@ -351,7 +351,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer as unknown as number);
+    clearTimeout(this.hideScrollbarTimer as number);
     this.hideScrollbarTimer = undefined;
   }
 
@@ -453,7 +453,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   updateContent(location: number): void {
-    let contentTranslateOffset: number;
+    let contentTranslateOffset = Number.NaN;
 
     if (location > 0) {
       contentTranslateOffset = location;
@@ -494,8 +494,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.onRelease?.();
   }
 
-  setPocketState(state: number): void {
-    this.props.pocketStateChange?.(state);
+  setPocketState(newState: number): void {
+    this.props.pocketStateChange?.(newState);
   }
 
   get isPullDown(): boolean {

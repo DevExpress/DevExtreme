@@ -80,7 +80,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     updateHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
     scrollableRef, isLoadPanelVisible, topPocketState, refreshStrategy,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
-    topPocketTop, contentStyles, scrollViewContentRef, contentTranslateTop,
+    topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
     hScrollLocation, vScrollLocation,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
@@ -121,7 +121,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               pullDownIconAngle={pullDownIconAngle}
               topPocketTranslateTop={contentTranslateTop}
               pullDownOpacity={pullDownOpacity}
-              pocketTop={topPocketTop}
+              pocketTop={topPocketHeight}
               visible={!!pullDownEnabled}
             />
             )}
@@ -135,7 +135,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
                   {children}
                 </div>
               )
-              : <div>{children}</div>}
+              : children}
             {forceGeneratePockets && (
             <BottomPocket
               bottomPocketRef={bottomPocketRef}
@@ -213,11 +213,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Mutable() loadingIndicatorEnabled = true;
 
-  @Mutable() hideScrollbarTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() hideScrollbarTimer?: unknown;
 
-  @Mutable() releaseTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() releaseTimer?: unknown;
 
-  @Mutable() refreshTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() refreshTimer?: unknown;
 
   @Mutable() eventForUserAction?: DxMouseEvent;
 
@@ -246,8 +246,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @InternalState() pullDownIconAngle = 0;
 
   @InternalState() pullDownOpacity = 0;
-
-  @InternalState() topPocketTop = -80; // TODO: set default as topPocketClientHeight
 
   @InternalState() contentTranslateTop = 0;
 
@@ -521,7 +519,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearReleaseTimer(): void {
-    clearTimeout(this.releaseTimer as unknown as number);
+    clearTimeout(this.releaseTimer as number);
     this.releaseTimer = undefined;
   }
 
@@ -547,8 +545,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.unlock();
   }
 
-  setPocketState(state: number): void {
-    this.topPocketState = state;
+  setPocketState(newState: number): void {
+    this.topPocketState = newState;
   }
 
   handleScroll(event: DxMouseEvent): void {
@@ -679,7 +677,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearHideScrollbarTimer(): void {
-    clearTimeout(this.hideScrollbarTimer as unknown as number);
+    clearTimeout(this.hideScrollbarTimer as number);
     this.hideScrollbarTimer = undefined;
   }
 
@@ -781,12 +779,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   clearRefreshTimer(): void {
-    clearTimeout(this.refreshTimer as unknown as number);
+    clearTimeout(this.refreshTimer as number);
     this.refreshTimer = undefined;
   }
 
   get topPocketHeight(): number {
-    return this.topPocketRef.current?.clientHeight || 0;
+    return this.topPocketRef?.current?.clientHeight || 0;
   }
 
   pullDownRefreshing(): void {
