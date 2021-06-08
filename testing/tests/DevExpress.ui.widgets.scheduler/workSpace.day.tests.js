@@ -138,15 +138,14 @@ module('Work Space Day', {
                 ]
             }
         ]);
-        this.instance.option('hoursInterval', 1);
 
         this.instance.$element().find('.' + CELL_CLASS).eq(3).addClass('dx-scheduler-date-table-droppable-cell');
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2015, 1, 18, 1),
-            endDate: new Date(2015, 1, 18, 2),
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: new Date(2015, 1, 18, 1),
             groups: {
                 res: 2
             }
