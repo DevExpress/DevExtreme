@@ -62,7 +62,7 @@ class ScrollableTestHelper {
 
   constructor(props: Partial<ScrollableSimulatedPropsType & ScrollbarPropsType & { overflow: 'hidden' | 'visible' }>) {
     this.options = props;
-    this.options.direction = this.options.direction || 'vertical';
+    this.options.direction = this.options.direction ?? 'vertical';
     this.actionHandlers = this.getActionHandlers(this.options);
 
     this.viewModel = new Scrollable({
