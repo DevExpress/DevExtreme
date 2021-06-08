@@ -148,5 +148,4 @@ export default class Component<TProperties> {
   _optionsByReference: object;
   _setDeprecatedOptions(): void;
   _deprecatedOptions: object;
-  _isUpdateAllowed(): boolean;
 }

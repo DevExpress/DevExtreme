@@ -559,12 +559,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   updateTwoWayValue(e: OptionChangedEvent): void {
     // T867777
     const optionValue = e.component.option(e.fullName);
-    const isValueCorrect = e.value === optionValue || e.fullName.startsWith('columns[');
+    const isValueCorrect = e.value === optionValue;
 
     if (e.value !== e.previousValue && isValueCorrect) {
-      if (e.name !== e.fullName) {
-        this.props.complexOptionChanged?.(e);
-      }
       if (e.name === 'editing' && this.props.editing) {
         if (e.fullName === 'editing.changes') {
           this.props.editing.changes = e.value as [];

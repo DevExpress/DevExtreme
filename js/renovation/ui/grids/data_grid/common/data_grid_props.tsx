@@ -10,7 +10,6 @@ import {
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Options,
-  OptionChangedEvent,
   Column,
   RowObject,
   ColumnButtonClickEvent,
@@ -1124,8 +1123,6 @@ export class DataGridCommonColumnSettings {
 
 @ComponentBindings()
 export class DataGridProps extends BaseWidgetProps implements Options {
-  @OneWay() complexOptionChanged?: (e: OptionChangedEvent) => void;
-
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing = {

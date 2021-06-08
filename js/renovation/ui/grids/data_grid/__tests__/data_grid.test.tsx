@@ -523,30 +523,6 @@ describe('DataGrid', () => {
       component.instanceOptionChangedHandler({ } as any);
       expect(component.instance.option).not.toBeCalled();
     });
-
-    it('complexOptionChanged should be called for complex option', () => {
-      const name = 'columns';
-      const fullName = 'columns[0].visible';
-      const prevValue = false;
-      const newValue = true;
-      const props = {
-        columns: [{ visible: prevValue }],
-      } as DataGridProps;
-      props.complexOptionChanged = jest.fn();
-      const component = new DataGrid(props);
-
-      const optionChangedArgs = {
-        name,
-        fullName,
-        value: newValue,
-        previousValue: prevValue,
-        component: { option: (optionName) => optionName === fullName && newValue },
-      } as any;
-
-      component.instanceOptionChangedHandler(optionChangedArgs);
-
-      expect(component.props.complexOptionChanged).toBeCalledWith(optionChangedArgs);
-    });
   });
 
   describe('Default options', () => {

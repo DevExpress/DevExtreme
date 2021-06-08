@@ -1,55 +1,48 @@
 /* eslint-disable */
 import Component from './common/component';
-import type { DataGridForComponentWrapper } from '../ui/grids/data_grid/common/types';
+import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from "./utils/update_props_immutable";
 import type { TemplateComponent } from './common/types';
+import type { OptionChangedEvent } from '../../ui/data_grid';
 
 export default class DataGridWrapper extends Component {
     _onInitialized!: Function;
     _skipInvalidate = false;
 
-    _fireContentReady() {}
-
     static registerModule = gridCore.registerModule.bind(gridCore);
 
     beginUpdate() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
         super.beginUpdate();
-        gridInstance?.beginUpdate();
+        this._getInternalInstance()?.beginUpdate();
     }
 
     endUpdate() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
         super.endUpdate();
-        gridInstance?.endUpdate();
+        this._getInternalInstance()?.endUpdate();
     }
 
     isReady() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.isReady();
+        return this._getInternalInstance()?.isReady();
     }
 
     getView(name) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.getView(name);
+        return this._getInternalInstance()?.getView(name);
     }
 
     getController(name) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.getController(name);
+        return this._getInternalInstance()?.getController(name);
     }
 
     state(state) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.state(state);
+        return this._getInternalInstance()?.state(state);
     }
+
+    _getInternalInstance(): GridInstance {
+        return (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+    }
+
+    _fireContentReady() {}
 
     _wrapKeyDownHandler(handler) {
         return handler;
@@ -86,7 +79,24 @@ export default class DataGridWrapper extends Component {
 
     _patchOptionValues(options) {
         options.onInitialized = this._onInitialized;
-        options.complexOptionChanged = (e) => {
+
+        return super._patchOptionValues(options);
+    }
+
+    _renderWrapper(props: Record<string, unknown>): void {
+        const isFirstRender = !this._isNodeReplaced;
+        super._renderWrapper(props);
+        if(isFirstRender) {
+            this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
+        }
+    }
+
+    _internalOptionChangedHandler(e: OptionChangedEvent): void {
+        const internalOptionValue = e.component.option(e.fullName);
+        const isValueCorrect = e.value === internalOptionValue || e.fullName.startsWith('columns[');
+        const isSecondLevelOption = e.name !== e.fullName;
+    
+        if (isSecondLevelOption && e.value !== e.previousValue && isValueCorrect) {
             if(e.fullName.startsWith('columns[')) {
                 if(this.option(e.fullName) !== e.value) {
                     this._skipInvalidate = true;
@@ -94,14 +104,15 @@ export default class DataGridWrapper extends Component {
                     this._skipInvalidate = false;
                 }
             } else {
+                this._skipInvalidate = true;
                 this.option(e.fullName, e.value);
+                this._skipInvalidate = false;
             }
         }
-        return super._patchOptionValues(options);
     }
 
     _invalidate() {
-        if(this._skipInvalidate && this._isUpdateAllowed()) return;
+        if(this._skipInvalidate) return;
 
         super._invalidate();
     }
@@ -124,7 +135,7 @@ export default class DataGridWrapper extends Component {
         return super._getAdditionalProps().concat([
             'onInitialized',
             'onColumnsChanging', // for dashboards
-            'integrationOptions', 
+            'integrationOptions',
             'adaptColumnWidthByRatio', 
             'useLegacyKeyboardNavigation',
             'templatesRenderAsynchronously',
