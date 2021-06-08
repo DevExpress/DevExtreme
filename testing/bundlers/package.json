@@ -16,9 +16,8 @@
     "webpack-cli": "^4.7.0"
   },
   "scripts": {
-    "test": "npm run generate:entry && npm run build:all && npm run clean",
-    "install:win": "powershell npm install --no-save $(npm pack ../../artifacts/npm/devextreme/)",
-    "install:ununtu": "sh ./install_devextreme_package.sh",
+    "test": "npm run install:devextreme && npm run generate:entry && npm run build:all && npm run clean",
+    "install:devextreme": "sh ./install_devextreme_package.sh",
     "generate:entry": "mkdir src && node ./generate_entry_files.js",
     "build:all": "npm run build:webpack-cjs && npm run build:webpack-esm && npm run build:rollup-esm && npm run build:parcel-esm && npm run build:browserify-cjs && npm run build:vite-esm",
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
@@ -27,7 +26,7 @@
     "build:parcel-esm": "parcel build ./src/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel",
     "build:browserify-cjs": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./src/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js",
     "build:vite-esm": "vite build",
-    "clean": "npx rimraf src dist devextreme-** && npm uninstall devextreme"
+    "clean": "npx rimraf dist src devextreme-** && npm uninstall devextreme"
   },
   "alias": {
     "globalize$": "~/node_modules/globalize/dist/globalize.js",

@@ -26,22 +26,6 @@ jobs:
       working-directory: ./testing/bundlers  
       run: npm install
 
-    # - name: Pack and install DevExtreme package
-    #   working-directory: ./testing/bundlers  
-    #   run: npm install $(npm pack ../../artifacts/npm/devextreme)
-    
-    - name: Pack and install win
-      working-directory: ./testing/bundlers  
-      run: npm run install:win
-
-    - name: Pack and install ubuntu
-      working-directory: ./testing/bundlers  
-      run: npm run install:ununtu
-
-    - name: Generate entry files
-      working-directory: ./testing/bundlers
-      run: npm run generate:entry
-
     - name: Run test
       working-directory: ./testing/bundlers
-      run: npm run build:all
+      run: npm run test
