@@ -19,7 +19,7 @@ const modulesImports = {
 };
 
 const getDefaultImportName = (moduleName) => {
-    return moduleName.replace(/\/[a-z]/g, '');
+    return moduleName.replace(/(\/|_)[a-z]/g, (match) => match[1].toUpperCase());
 };
 
 const getCjsImportString = (prefix, moduleName, importName) => {

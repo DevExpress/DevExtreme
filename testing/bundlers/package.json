@@ -16,9 +16,9 @@
     "webpack-cli": "^4.7.0"
   },
   "scripts": {
-    "test": "npm run install:devextreme && npm run generate:entry && npm run build:all && npm run clean",
-    "install:devextreme": "sh ./install_devextreme_package.sh",
-    "generate:entry": "mkdir src && node ./generate_entry_files.js",
+    "test": "npm run install:dev && npm run generate:entry-files && npm run build:all && npm run clean",
+    "install:dev": "bash -c \"npm install --save-dev $(npm pack ../../artifacts/npm/devextreme/)\"",
+    "generate:entry-files": "rimraf src && mkdir src && node ./generate_entry_files.js",
     "build:all": "npm run build:webpack-cjs && npm run build:webpack-esm && npm run build:rollup-esm && npm run build:parcel-esm && npm run build:browserify-cjs && npm run build:vite-esm",
     "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
     "build:webpack-esm": "webpack --config ./webpack.config.js",

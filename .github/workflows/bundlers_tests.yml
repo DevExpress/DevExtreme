@@ -26,6 +26,6 @@ jobs:
       working-directory: ./testing/bundlers  
       run: npm install
 
-    - name: Run test
+    - name: Run module bundler tests
       working-directory: ./testing/bundlers
       run: npm run test
