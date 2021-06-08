@@ -1,12 +1,21 @@
 import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
 
-
-function exportDataGrid(doc, dataGrid, options) {
-    if(!isDefined(options.topLeft)) {
+function _getFullOptions(options) {
+    const fullOptions = extend({}, options);
+    if(!isDefined(fullOptions.topLeft)) {
         throw 'options.topLeft is required';
     }
-    options.indent = options.indent || 10;
+    if(!isDefined(fullOptions.indent)) {
+        fullOptions.indent = 10;
+    }
+
+    return fullOptions;
+}
+
+function exportDataGrid(doc, dataGrid, options) {
+    options = extend({}, _getFullOptions(options));
 
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
