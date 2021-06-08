@@ -3292,20 +3292,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 pageSize: 2
             }
         });
-        const callback = sinon.spy();
 
         // act
         const d = dataGrid.navigateToRow(3);
 
         // assert
         assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
-        d.done(callback);
 
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
-
-        // promise value should be an index of row in this page
-        // for row with id `3` it is `1`
-        assert.strictEqual(callback.getCall(0).args[0], 1, 'promise value is correct');
     });
 
     QUnit.test('navigateToRow should return promise: remoteOperations is true', function(assert) {
@@ -3333,7 +3327,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 pageSize: 2
             }
         });
-        const callback = sinon.spy();
 
         // act
         deferred.resolve(items, { totalCount: 4 }); // resolve first page that is already visible
@@ -3342,7 +3335,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'visible row count is correct');
 
         // act
-        const d = dataGrid.navigateToRow(3).done(callback);
+        const d = dataGrid.navigateToRow(3);
 
         // assert
         assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
@@ -3355,10 +3348,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'page is resolved');
-
-        // promise value should be an index of row in this page
-        // for row with id `3` it is `1`
-        assert.strictEqual(callback.getCall(0).args[0], 1, 'promise value is correct');
     });
 
     QUnit.test('navigateToRow should return promise: one large page', function(assert) {

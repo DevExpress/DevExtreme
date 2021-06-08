@@ -1163,7 +1163,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): DxPromise<number>;
+    navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;

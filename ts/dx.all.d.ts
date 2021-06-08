@@ -19162,7 +19162,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): DevExpress.core.utils.DxPromise<number>;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
