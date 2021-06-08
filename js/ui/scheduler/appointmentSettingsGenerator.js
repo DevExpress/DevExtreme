@@ -270,6 +270,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 ...source,
                 startDate: this.timeZoneCalculator.createDate(source.startDate, { path: 'fromGrid' }),
                 endDate: this.timeZoneCalculator.createDate(source.endDate, { path: 'fromGrid' }),
+                exceptionDate: new Date(this.timeZoneCalculator.createDate(source.startDate, { path: 'fromGrid' })),
             },
         }));
     }
