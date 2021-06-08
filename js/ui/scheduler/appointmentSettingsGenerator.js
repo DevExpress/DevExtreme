@@ -330,7 +330,18 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
             },
             convertExceptionDate: (date) => {
-                return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+                const nextDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+                let diff = 0;
+                const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone);
+
+                if(hasAppointmentTimeZone) {
+                    const dateOffset = this.timeZoneCalculator.getOffsets(date, appointment.startDateTimeZone).appointment;
+                    const appointmentDateOffset = this.timeZoneCalculator.getOffsets(minRecurrenceDate, appointment.startDateTimeZone).appointment;
+
+                    diff = dateOffset - appointmentDateOffset;
+                }
+
+                return new Date(nextDate.getTime() + diff * dateUtils.dateToMilliseconds('hour'));
             },
         };
     }
