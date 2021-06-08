@@ -18546,7 +18546,8 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+  export interface dxTagBoxOptions
+    extends Omit<dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'> {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
