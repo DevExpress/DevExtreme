@@ -35,7 +35,7 @@ const getCssClasses = (model: ButtonProps): string => {
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
-    [`dx-button-${type || 'normal'}`]: true,
+    [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
@@ -122,7 +122,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() type?: string = 'normal';
+  @OneWay() type?: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
   @OneWay() useInkRipple?: boolean = false;
 
@@ -223,7 +223,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = text || icon;
+    let label = (text ?? '') || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
@@ -242,7 +242,11 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return icon || type === 'back' ? icon || 'back' : '';
+    if (icon || type === 'back') {
+      return (icon ?? '') || 'back';
+    }
+
+    return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {

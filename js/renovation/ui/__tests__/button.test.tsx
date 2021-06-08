@@ -411,6 +411,10 @@ describe('Button', () => {
           expect(new Button({ icon: 'icon' }).aria)
             .toEqual({ label: 'icon', role: 'button' });
         });
+
+        it('should return text value if it is specified', () => {
+          expect(new Button({ text: 'text' }).aria).toEqual({ label: 'text', role: 'button' });
+        });
       });
 
       describe('cssClasses', () => {
@@ -487,7 +491,7 @@ describe('Button', () => {
           expect(new Button({ type: 'back' }).iconSource).toBe('back');
         });
 
-        it('should return empty string if the icon property value is empty', () => {
+        it('should return "back" if icon property is empty and type is "back"', () => {
           expect(new Button({}).iconSource).toBe('');
         });
 
@@ -525,8 +529,7 @@ describe('Button', () => {
 
       beforeEach(() => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => false);
+        (devices.isSimulator as Mock).mockImplementation(() => false);
         (current as Mock).mockImplementation(() => 'generic');
       });
 
@@ -555,7 +558,7 @@ describe('Button', () => {
         });
 
         it('should be false on simulator', () => {
-          (devices as any).isSimulator.mockImplementation(() => true);
+          (devices.isSimulator as Mock).mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });
