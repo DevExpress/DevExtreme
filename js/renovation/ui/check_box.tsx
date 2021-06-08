@@ -178,17 +178,17 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onActive(event: Event): void {
-    const waveIndex: number = 1;
+    const waveIndex = 1;
     this.wave(event, 'showWave', waveIndex);
   }
 
   onInactive(event: Event): void {
-    const waveIndex: number = 1;
+    const waveIndex = 1;
     this.wave(event, 'hideWave', waveIndex);
   }
 
   onFocusIn(event: Event): void {
-    const waveIndex: number = 0;
+    const waveIndex = 0;
     const { onFocusIn } = this.props;
     this.wave(event, 'showWave', waveIndex);
 
@@ -197,7 +197,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onFocusOut(event: Event): void {
-    const waveIndex: number = 0;
+    const waveIndex = 0;
     this.wave(event, 'hideWave', waveIndex);
   }
 

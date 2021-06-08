@@ -34,11 +34,11 @@ export default class Editor extends Component {
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
         clearTimeout(this.showValidationMessageTimeout);
-
+        const timeoutValue = 150;
         // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
           $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
-        }, 150);
+        }, timeoutValue);
       }
     };
     props.saveValueChangeEvent = (e: Event): void => {
