@@ -602,7 +602,7 @@ QUnit.test('content size should be rounded to prevent unexpected scrollbar appea
 
 QUnit.test('scrollbar should be hidden when container size is almost similar to content size when zooming', function(assert) {
     const scrollable = new Scrollable($('#scrollable'), {
-        'useNative': false
+        useNative: false
     });
 
     const dimension = 'height';
@@ -611,11 +611,11 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
     const fakeContentAndContainerSizeWhenZoomIs100 = 405;
 
     const scroller = scrollable._strategy._scrollers['vertical'];
-    const scrollerContainer = scroller._$container.get(0);
-    const scrollerContent = scroller._$content.get(0);
+    const scrollableContainerElement = scrollable.container();
+    const scrollableContentElement = scrollable.content();
 
-    sinon.stub(scrollerContainer, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
-    sinon.stub(scrollerContent, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
+    sinon.stub(scrollableContainerElement, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
+    sinon.stub(scrollableContentElement, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
     sinon.stub(scroller, '_getBaseDimension').returns(fakeContentAndContainerSizeWhenZoomIs100);
 
     scrollable.update();
