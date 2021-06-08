@@ -104,7 +104,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _fireContentReady(): void {
-    this.option('onContentReady')?.({ component: this, element: this.$element() });
+    this._actionsMap.onContentReady({});
   }
 
   _getDefaultOptions(): Record<string, unknown> {
@@ -227,8 +227,16 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return this._elementAttr;
   }
 
+  _getAdditionalActionConfigs(): Record<string, Record<string, unknown>> {
+    return {
+      onContentReady: {
+        excludeValidators: ['disabled', 'readOnly'],
+      },
+    };
+  }
+
   _getAdditionalProps(): string[] {
-    return ['onContentReady'];
+    return [];
   }
 
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
@@ -312,7 +320,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _getActionConfigsFull(): Record<string, Record<string, unknown>> {
-    return { onContentReady: {}, ...this._getActionConfigs() };
+    return {
+      ...this._getActionConfigs(),
+      ...this._getAdditionalActionConfigs(),
+    };
   }
 
   getDefaultTemplates(): Record<string, undefined> {
