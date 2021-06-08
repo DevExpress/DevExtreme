@@ -1119,7 +1119,7 @@ export const validatingModule = {
                                 boundaryOffset: '0 0',
                                 offset: {
                                     x: 0,
-                                    // IE and Firefox consider the top row/cell border when calculating a cell offset.
+                                    // Firefox consider the top row/cell border when calculating a cell offset.
                                     y: !isOverlayVisible && browser.mozilla ? -1 : 0
                                 },
                                 my: myPosition,
