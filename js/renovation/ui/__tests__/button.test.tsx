@@ -525,8 +525,7 @@ describe('Button', () => {
 
       beforeEach(() => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => false);
+        (devices.isSimulator as Mock).mockImplementation(() => false);
         (current as Mock).mockImplementation(() => 'generic');
       });
 
@@ -555,7 +554,7 @@ describe('Button', () => {
         });
 
         it('should be false on simulator', () => {
-          (devices as any).isSimulator.mockImplementation(() => true);
+          (devices.isSimulator as Mock).mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });
