@@ -2,7 +2,6 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  OneWay,
 } from '@devextreme-generator/declarations';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
@@ -46,9 +45,7 @@ export const viewFunction = ({
   </Table>
 );
 @ComponentBindings()
-export class DateTableLayoutBaseProps extends DateTableLayoutProps {
-  @OneWay() className?: string;
-}
+export class DateTableLayoutBaseProps extends DateTableLayoutProps {}
 
 @Component({
   defaultOptionRules: null,
