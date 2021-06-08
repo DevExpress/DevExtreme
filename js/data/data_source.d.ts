@@ -111,7 +111,7 @@ export interface DataSourceOptions {
      * @default "contains"
      * @public
      */
-    searchOperation?: '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
+    searchOperation?: SearchOperations;
     /**
      * @docid
      * @default null
@@ -142,8 +142,8 @@ export interface DataSourceOptions {
  * @export default
  * @public
  */
-export default class DataSource {
-    constructor(data: Array<any>);
+export default class DataSource<TKey = any | string | number, TValue = any> {
+    constructor(data: Array<TValue>);
     constructor(options: CustomStoreOptions | DataSourceOptions);
     constructor(store: Store);
     constructor(url: string);
@@ -222,7 +222,7 @@ export default class DataSource {
      * @return object|string|number
      * @public
      */
-    key(): any | string | number;
+    key(): TKey;
     /**
      * @docid
      * @publicName load()
@@ -244,7 +244,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventNames): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -253,7 +253,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -262,7 +262,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventNames, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -270,7 +270,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-     on(events: {[key: string]: Function}): this;
+     on(events: {[key in EventNames]?: Function}): this;
     /**
      * @docid
      * @publicName pageIndex()
@@ -419,3 +419,6 @@ export default class DataSource {
      */
     totalCount(): number;
 }
+
+type SearchOperations = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
+type EventNames = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;

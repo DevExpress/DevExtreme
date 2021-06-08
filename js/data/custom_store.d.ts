@@ -7,14 +7,14 @@ import {
 } from './load_options';
 
 /** @namespace DevExpress.data */
-export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+export interface CustomStoreOptions<TKey = any | string | number, TValue = any, TStore extends CustomStore = CustomStore<TKey, TValue>> extends StoreOptions<TKey, TValue, TStore> {
     /**
      * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<any>
      * @public
      */
-    byKey?: ((key: any | string | number) => PromiseLike<any>);
+    byKey?: ((key: TKey) => PromiseLike<TValue>);
     /**
      * @docid
      * @default true
@@ -27,14 +27,14 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @type_function_return Promise<any>
      * @public
      */
-    insert?: ((values: any) => PromiseLike<any>);
+    insert?: ((values: TValue) => PromiseLike<TValue>);
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
      * @type_function_return Promise<any>|Array<any>
      * @public
      */
-    load?: ((options: LoadOptions) => PromiseLike<any> | Array<any>);
+    load?: ((options: LoadOptions) => PromiseLike<TValue> | Array<TValue>);
     /**
      * @docid
      * @type string
@@ -49,7 +49,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @type_function_return Promise<void>
      * @public
      */
-    remove?: ((key: any | string | number) => PromiseLike<void>);
+    remove?: ((key: TKey) => PromiseLike<void>);
     /**
      * @docid
      * @type_function_param1 loadOptions:object
@@ -66,7 +66,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @type_function_return Promise<any>
      * @public
      */
-    update?: ((key: any | string | number, values: any) => PromiseLike<any>);
+    update?: ((key: TKey, values: TValue) => PromiseLike<any>);
     /**
      * @docid
      * @default undefined
@@ -81,8 +81,8 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
  * @export default
  * @public
  */
-export default class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions)
+export default class CustomStore<TKey = any | string | number, TValue = any> extends Store<TKey, TValue> {
+    constructor(options?: CustomStoreOptions<TKey, TValue>)
     /**
      * @docid
      * @publicName clearRawDataCache()

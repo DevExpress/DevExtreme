@@ -9,6 +9,7 @@ import Store, {
 import {
     LoadOptions
 } from '../load_options';
+import { Query } from '../query';
 import { ODataRequestOptions } from './context'
 
 interface PromiseExtension<T> {
@@ -19,7 +20,7 @@ interface PromiseExtension<T> {
 }
 
 /** @namespace DevExpress.data */
-export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+export interface ODataStoreOptions<TKey = any | string | number, TValue = any, TStore extends ODataStore<TKey, TValue> = ODataStore<TKey, TValue>> extends StoreOptions<TKey, TValue, TStore> {
     /**
      * @docid
      * @type_function_param1 options:object
@@ -104,9 +105,9 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  * @export default
  * @public
  */
-export default class ODataStore extends Store {
-    constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): DxPromise<any>;
+export default class ODataStore<TKey = any | string | number, TValue = any> extends Store<TKey, TValue> {
+    constructor(options?: ODataStoreOptions<TKey, TValue>)
+    byKey(key: TKey): DxPromise<TValue>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -117,7 +118,7 @@ export default class ODataStore extends Store {
      * @return Promise<any>
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<any>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<TValue>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -125,7 +126,7 @@ export default class ODataStore extends Store {
      * @return object
      * @public
      */
-    createQuery(loadOptions?: {expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any}): any;
+    createQuery(loadOptions?: {expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any}): Query;
 
     /**
      * @docid
@@ -134,5 +135,5 @@ export default class ODataStore extends Store {
      * @return Promise<any>
      * @public
      */
-    insert(values: any): DxPromise<any> & PromiseExtension<any>;
+    insert(values: TValue): DxPromise<TValue> & PromiseExtension<TValue>;
 }
