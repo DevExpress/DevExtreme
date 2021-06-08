@@ -100,13 +100,25 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createAppointments(appointment, resources) {
-        let appointments = this._createRecurrenceAppointments(appointment, resources);
+        const convertedAppointment = appointment.clone();
+
+        convertedAppointment.startDate = this.timeZoneCalculator.createDate(convertedAppointment.startDate, { path: 'toGrid' });
+        convertedAppointment.endDate = this.timeZoneCalculator.createDate(convertedAppointment.endDate, { path: 'toGrid' });
+
+
+        let appointments = this._createRecurrenceAppointments(convertedAppointment, resources);
 
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
                 startDate: appointment.startDate,
                 endDate: appointment.endDate
             });
+        } else {
+            appointments = appointments.map(({ startDate, endDate, ...restProps }) => ({
+                ...restProps,
+                startDate: this.timeZoneCalculator.createDate(startDate, { path: 'fromGrid' }),
+                endDate: this.timeZoneCalculator.createDate(endDate, { path: 'fromGrid' }),
+            }));
         }
 
         // T817857
@@ -258,21 +270,21 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _createExtremeRecurrenceDates(rawAppointment) {
         const dateRange = this.scheduler._workSpace.getDateRange();
-        let startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
+        const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
             : dateRange[0];
-        let endViewDate = dateRange[1];
+        const endViewDate = dateRange[1];
 
-        const commonTimeZone = this.scheduler.option('timeZone');
-        if(commonTimeZone) {
-            startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
-            endViewDate = this.timeZoneCalculator.createDate(endViewDate, { path: 'fromGrid' });
+        // const commonTimeZone = this.scheduler.option('timeZone');
+        // if(commonTimeZone) {
+        //     startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
+        //     endViewDate = this.timeZoneCalculator.createDate(endViewDate, { path: 'fromGrid' });
 
-            const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDate);
-            if(daylightOffset) {
-                endViewDate = new Date(endViewDate.getTime() + daylightOffset);
-            }
-        }
+        //     const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDate);
+        //     if(daylightOffset) {
+        //         endViewDate = new Date(endViewDate.getTime() + daylightOffset);
+        //     }
+        // }
 
         return [
             startViewDate,
