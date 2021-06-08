@@ -13,15 +13,15 @@ export default class ButtonWrapper extends Component {
     return ['content'];
   }
 
-  _toggleActiveState(_, value) {
-    const button = (this.viewRef as Button);
-    value ? button.activate() : button.deactivate();
-  }
-
   getProps(): Record<string, unknown> {
     const props = super.getProps();
     props.validationGroup = this._validationGroupConfig;
     return props;
+  }
+
+  _toggleActiveState(_: HTMLElement, value: boolean): void {
+    const button = this.viewRef as Button;
+    value ? button.activate() : button.deactivate();
   }
 
   _getSubmitAction(): any {
