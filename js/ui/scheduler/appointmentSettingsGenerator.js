@@ -321,13 +321,15 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                     return date;
                 }
 
-                const appointmentOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common;
-                const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
+                // const appointmentOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common;
+                // const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
 
-                let diff = appointmentOffset - exceptionAppointmentOffset;
-                diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
+                // let diff = appointmentOffset - exceptionAppointmentOffset;
+                // diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
 
-                return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
+                // return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
+
+                return date;
             },
             convertExceptionDate: (date) => {
                 const nextDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
