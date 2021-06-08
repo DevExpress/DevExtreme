@@ -792,7 +792,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   get topPocketHeight(): number {
-    return this.topPocketRef?.current?.clientHeight || 0;
+    return this.topPocketRef?.current?.clientHeight ?? 0;
   }
 
   pullDownRefreshing(): void {

@@ -63,19 +63,19 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) 
   }
 
   get topVirtualRowHeight(): number {
-    return this.props.viewData.topVirtualRowHeight || 0;
+    return this.props.viewData.topVirtualRowHeight ?? 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.viewData.bottomVirtualRowHeight || 0;
+    return this.props.viewData.bottomVirtualRowHeight ?? 0;
   }
 
   get leftVirtualCellWidth(): number {
-    return this.props.viewData.leftVirtualCellWidth || 0;
+    return this.props.viewData.leftVirtualCellWidth ?? 0;
   }
 
   get rightVirtualCellWidth(): number {
-    return this.props.viewData.rightVirtualCellWidth || 0;
+    return this.props.viewData.rightVirtualCellWidth ?? 0;
   }
 
   get virtualCellsCount(): number {

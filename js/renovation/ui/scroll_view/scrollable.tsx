@@ -238,6 +238,16 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
+  @Method()
+  startLoading(): void {
+    this.scrollableRef.startLoading();
+  }
+
+  @Method()
+  finishLoading(): void {
+    this.scrollableRef.finishLoading();
+  }
+
   validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event);
   }
