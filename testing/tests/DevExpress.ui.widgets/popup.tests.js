@@ -92,7 +92,6 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -877,34 +876,6 @@ QUnit.module('options changed callbacks', {
         assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), 'wrapper has correct height');
     });
 
-    QUnit.test('has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)', function(assert) {
-        this.instance.option({
-            fullScreen: true,
-            visible: true
-        });
-
-        const $body = $('body');
-        const $wrapper = this.instance.$content().parent().parent();
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct');
-
-        this.instance.hide();
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-
-        this.instance.show();
-        this.instance.option('fullScreen', false);
-
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body if fullScreen is changed to \'false\' at runtime');
-        assert.strictEqual($wrapper.css('position') === 'fixed', !IS_SAFARI, 'popup wrapper position type is correct if fullScreen is changed to \'false\' at runtime');
-
-        this.instance.option('fullScreen', true);
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, 'class added to the body if fullScreen is changed to \'true\' at runtime');
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct if fullScreen is changed to \'true\' at runtime');
-        this.instance.hide();
-    });
-
     QUnit.test('start scroll position is saved after full screen popup hiding', function(assert) {
         let $additionalElement;
 
@@ -921,43 +892,6 @@ QUnit.module('options changed callbacks', {
             this.instance.hide();
 
             assert.strictEqual(window.pageYOffset, 100);
-        } finally {
-            window.scrollTo(0, 0);
-            $additionalElement.remove();
-        }
-    });
-
-    QUnit.test('works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScreen option is changed on showing event in safari (T825004)', function(assert) {
-        if(!IS_SAFARI) {
-            assert.expect(0);
-            return;
-        }
-        let $additionalElement;
-
-        try {
-            const $body = $('body');
-            $additionalElement = $('<div>').height(2000).appendTo($body);
-
-            this.instance.option({
-                fullScreen: false,
-                visible: false,
-                onShowing(e) {
-                    e.component.option('fullScreen', true);
-                }
-            });
-
-            const $wrapper = this.instance.$content().parent();
-
-            window.scrollTo(0, 200);
-            this.instance.show();
-            this.clock.tick(500);
-
-            assert.ok($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
-            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
-            this.instance.hide();
-
-            assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-            assert.strictEqual(window.pageYOffset, 200, 'scroll position is saved');
         } finally {
             window.scrollTo(0, 0);
             $additionalElement.remove();
