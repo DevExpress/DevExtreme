@@ -16,7 +16,7 @@
     "webpack-cli": "^4.7.0"
   },
   "scripts": {
-    "test": "npm install && npm run install:devextreme && npm run generate:entry && npm run build:all && npm run clean",
+    "test": "npm run generate:entry && npm run build:all && npm run clean",
     "install:devextreme": "install_devextreme_package.sh",
     "generate:entry": "mkdir src && node ./generate_entry_files.js",
     "build:all": "npm run build:webpack-cjs && npm run build:webpack-esm && npm run build:rollup-esm && npm run build:parcel-esm && npm run build:browserify-cjs && npm run build:vite-esm",

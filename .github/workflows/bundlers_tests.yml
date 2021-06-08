@@ -22,25 +22,29 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Test modules
-      working-directory: ./testing/bundlers  
-      run: npm run test
+    # - name: Install
+    #   working-directory: ./testing/bundlers  
+    #   run: npm run test
 
     # - name: Create DevExtreme package
     #   working-directory: ./testing/bundlers  
     #   run: npm pack ../../artifacts/npm/devextreme
     
-    # - name: Install packages in test directory
-    #   working-directory: ./testing/bundlers  
-    #   run: npm install
+    - name: Install packages in test directory
+      working-directory: ./testing/bundlers  
+      run: npm install
 
-    # - name: Prepare src files
-    #   working-directory: ./testing/bundlers
-    #   run: npm run create:src
+    - name: Create and Install DevExtreme package
+      working-directory: ./testing/bundlers  
+      run: npm install $(npm pack ../../artifacts/npm/devextreme)
 
-    # - name: Create bundle with webpack (CJS import)
-    #   working-directory: ./testing/bundlers
-    #   run: npm run build:webpack-cjs
+    - name: Prepare src files
+      working-directory: ./testing/bundlers
+      run: npm run generate:entry
+
+    - name: Run test
+      working-directory: ./testing/bundlers
+      run: npm run build:all
 
     # - name: Create bundle with webpack
     #   working-directory: ./testing/bundlers
