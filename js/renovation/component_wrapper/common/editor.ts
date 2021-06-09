@@ -32,6 +32,7 @@ export default class Editor extends Component {
         const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
+        const timeToWaitBeforeShow = 150;
         if (this.showValidationMessageTimeout) {
           clearTimeout(this.showValidationMessageTimeout);
         }
@@ -39,7 +40,7 @@ export default class Editor extends Component {
         // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
           $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
-        }, 150);
+        }, timeToWaitBeforeShow);
       }
     };
     props.saveValueChangeEvent = (e: Event): void => {
