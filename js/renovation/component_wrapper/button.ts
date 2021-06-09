@@ -19,6 +19,11 @@ export default class ButtonWrapper extends Component {
     return props;
   }
 
+  _toggleActiveState(_: HTMLElement, value: boolean): void {
+    const button = this.viewRef as Button;
+    value ? button.activate() : button.deactivate();
+  }
+
   _getSubmitAction(): any {
     let needValidate = true;
     let validationStatus = 'valid';

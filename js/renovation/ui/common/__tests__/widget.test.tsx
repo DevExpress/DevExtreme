@@ -579,6 +579,25 @@ describe('Widget', () => {
     });
 
     describe('Methods', () => {
+      describe('activate', () => {
+        it('should switch active state to "true"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          expect(widget.active).toBe(false);
+          widget.activate();
+          expect(widget.active).toBe(true);
+        });
+      });
+
+      describe('deactivate', () => {
+        it('should switch active state to "false"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          widget.activate();
+          expect(widget.active).toBe(true);
+          widget.deactivate();
+          expect(widget.active).toBe(false);
+        });
+      });
+
       describe('focus', () => {
         it('should trigger focus at element', () => {
           const widget = new Widget({ focusStateEnabled: true });
