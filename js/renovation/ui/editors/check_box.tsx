@@ -11,17 +11,17 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { createDefaultOptionRules } from '../../core/options/utils';
-import devices from '../../core/devices';
-import Guid from '../../core/guid';
-import { InkRipple, InkRippleConfig } from './common/ink_ripple';
-import { Widget } from './common/widget';
-import { isMaterial, current } from '../../ui/themes';
-import BaseComponent from '../component_wrapper/check_box';
-import { BaseWidgetProps } from './common/base_props';
-import { combineClasses } from '../utils/combine_classes';
-import { EffectReturn } from '../utils/effect_return.d';
-import { ValidationMessage } from './validation_message';
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import Guid from '../../../core/guid';
+import { InkRipple, InkRippleConfig } from '../common/ink_ripple';
+import { Widget } from '../common/widget';
+import { isMaterial, current } from '../../../ui/themes';
+import BaseComponent from '../../component_wrapper/editors/check_box';
+import { BaseWidgetProps } from '../common/base_props';
+import { combineClasses } from '../../utils/combine_classes';
+import { EffectReturn } from '../../utils/effect_return';
+import { ValidationMessage } from '../overlays/validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {

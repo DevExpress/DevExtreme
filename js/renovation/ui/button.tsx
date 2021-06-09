@@ -23,7 +23,7 @@ import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 

@@ -1,9 +1,9 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
-import LegacyValidationMessage from '../../ui/validation_message';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import LegacyValidationMessage from '../../../ui/validation_message';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,
