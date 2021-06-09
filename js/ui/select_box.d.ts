@@ -20,7 +20,8 @@ import {
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
-    dxDropDownListOptions, SingleSelectionChangedInfo
+    dxDropDownListOptions,
+    SelectionChangedInfo
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -89,7 +90,7 @@ export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxSelectBox>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxSelectBox> & SingleSelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxSelectBox> & ValueChangedInfo;

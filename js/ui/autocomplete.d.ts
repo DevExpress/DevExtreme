@@ -11,7 +11,8 @@ import {
 } from '../events/index';
 
 import dxDropDownList, {
-    dxDropDownListOptions, SingleSelectionChangedInfo
+    dxDropDownListOptions,
+    SelectionChangedInfo
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -77,7 +78,7 @@ export type OptionChangedEvent = EventInfo<dxAutocomplete> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxAutocomplete>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SingleSelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxAutocomplete> & ValueChangedInfo;

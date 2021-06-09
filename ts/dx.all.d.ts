@@ -4353,7 +4353,7 @@ declare module DevExpress.ui {
     export type Properties = dxAutocompleteOptions;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxAutocomplete> &
-        DevExpress.ui.dxDropDownList.SingleSelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxAutocomplete> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -10214,7 +10214,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    export interface SingleSelectionChangedInfo<T = any> {
+    export interface SelectionChangedInfo<T = any> {
       readonly selectedItem: T;
     }
   }
@@ -10261,7 +10261,7 @@ declare module DevExpress.ui {
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<T> &
-        DevExpress.ui.dxDropDownList.SingleSelectionChangedInfo
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onValueChanged]
@@ -17603,7 +17603,7 @@ declare module DevExpress.ui {
     export type Properties = dxSelectBoxOptions;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxSelectBox> &
-        DevExpress.ui.dxDropDownList.SingleSelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxSelectBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
