@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Button from '../button';
-import { move } from '../../animation/translator';
+import { move, locate } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
@@ -66,14 +66,14 @@ export class CompactAppointmentsHelper {
         this.instance.showAppointmentTooltipCore(
             $button,
             $button.data('items'),
-            this._getExtraOptionsForTooltip(options)
+            this._getExtraOptionsForTooltip(options, $button)
         );
     }
 
-    _getExtraOptionsForTooltip(options) {
+    _getExtraOptionsForTooltip(options, $appointmentCollector) {
         return {
             clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
-            dragBehavior: options.allowDrag && this._createTooltipDragBehavior().bind(this),
+            dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
             isButtonClick: true
         };
     }
@@ -94,7 +94,7 @@ export class CompactAppointmentsHelper {
         };
     }
 
-    _createTooltipDragBehavior() {
+    _createTooltipDragBehavior($appointmentCollector) {
         return (e) => {
             const $element = $(e.element);
             const workSpace = this.instance.getWorkSpace();
@@ -103,19 +103,12 @@ export class CompactAppointmentsHelper {
             const getItemSettings = (_, event) => {
                 return event.itemSettings;
             };
-            const getInitialPosition = (event) => {
-                const settings = event.itemSettings;
-
-                return {
-                    left: settings.left,
-                    top: settings.top,
-                };
-            };
+            const initialPosition = locate($appointmentCollector);
 
             const options = {
                 filter: `.${LIST_ITEM_CLASS}`,
                 isSetCursorOffset: true,
-                getInitialPosition,
+                initialPosition,
                 getItemData,
                 getItemSettings,
             };

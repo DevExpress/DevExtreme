@@ -3409,7 +3409,7 @@ const createDragBehaviorConfig = (
 
         state.itemData = options.getItemData(e.itemElement, appointments);
         const settings = options.getItemSettings($itemElement, e);
-        const initialPosition = options.getInitialPosition?.(e);
+        const initialPosition = options.initialPosition;
 
         if(state.itemData && !state.itemData.disabled) {
             event.data = event.data || {};
