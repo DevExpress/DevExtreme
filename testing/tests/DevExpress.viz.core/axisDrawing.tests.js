@@ -63,7 +63,7 @@ const environment = {
     },
     createAxis: function(options) {
         const stripsGroup = this.renderer.g();
-        const labelAxesGroup = this.renderer.g();
+        const stripLabelAxesGroup = this.renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = this.renderer.g();
         const gridGroup = this.renderer.g();
@@ -75,7 +75,7 @@ const environment = {
         this.axis = new Axis($.extend(true, {
             renderer: this.renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             scaleBreaksGroup: scaleBreaksGroup,
@@ -144,19 +144,19 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     // arrange
     const renderer = this.renderer;
     const stripsGroup = this.renderer.g();
-    const labelAxesGroup = this.renderer.g();
+    const stripLabelAxesGroup = this.renderer.g();
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = this.renderer.g();
     const gridGroup = this.renderer.g();
-    const axesElementsGroup = this.renderer.g();
+    const labelsAxesGroup = this.renderer.g();
 
     this.createAxis({
         axesContainerGroup: axesContainerGroup,
         stripsGroup: stripsGroup,
-        labelAxesGroup: labelAxesGroup,
+        stripLabelAxesGroup: stripLabelAxesGroup,
         constantLinesGroup: constantLinesGroup,
         gridGroup: gridGroup,
-        axesElementsGroup: axesElementsGroup
+        labelsAxesGroup: labelsAxesGroup
     });
     this.updateOptions({
         isHorizontal: true
@@ -170,7 +170,7 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     assert.deepEqual(g.getCall(0).returnValue.append.getCall(0).args[0], axesContainerGroup, '_axisGroup');
     assert.deepEqual(g.getCall(1).returnValue.append.getCall(0).args[0], stripsGroup, '_axisStripGroup');
     assert.deepEqual(g.getCall(2).returnValue.append.getCall(0).args[0], gridGroup, '_axisGridGroup');
-    assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], axesElementsGroup, '_axisElementsGroup');
+    assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], labelsAxesGroup, '_labelsAxesGroup');
     assert.deepEqual(g.getCall(4).returnValue.linkOn.getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
     assert.deepEqual(g.getCall(5).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, '_axisTitleGroup');
     // above
@@ -181,7 +181,7 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     assert.deepEqual(g.getCall(9).returnValue.append.getCall(0).args[0], constantLinesGroup.under, '_axisConstantLineGroups.under.insideGroup');
     assert.deepEqual(g.getCall(10).returnValue.append.getCall(0).args[0], constantLinesGroup.under, '_axisConstantLineGroups.under.outsideGroup1');
     assert.deepEqual(g.getCall(11).returnValue.append.getCall(0).args[0], constantLinesGroup.under, '_axisConstantLineGroups.under.outsideGroup2');
-    assert.deepEqual(g.getCall(12).returnValue.append.getCall(0).args[0], labelAxesGroup, '_axisStripLabelGroup');
+    assert.deepEqual(g.getCall(12).returnValue.append.getCall(0).args[0], stripLabelAxesGroup, '_axisStripLabelGroup');
 });
 
 QUnit.test('Some groups are not passed - created groups are not appended', function(assert) {
@@ -192,7 +192,7 @@ QUnit.test('Some groups are not passed - created groups are not appended', funct
     this.createAxis({
         axesContainerGroup: axesContainerGroup,
         stripsGroup: null,
-        labelAxesGroup: null,
+        stripLabelAxesGroup: null,
         constantLinesGroup: null,
         gridGroup: null
     });

@@ -291,8 +291,8 @@ export const Axis = function(renderSettings) {
     that._eventTrigger = renderSettings.eventTrigger;
 
     that._stripsGroup = renderSettings.stripsGroup;
-    that._labelAxesGroup = renderSettings.labelAxesGroup;
-    that._axesElementsGroup = renderSettings.axesElementsGroup;
+    that._stripLabelAxesGroup = renderSettings.stripLabelAxesGroup;
+    that._labelsAxesGroup = renderSettings.labelsAxesGroup;
     that._constantLinesGroup = renderSettings.constantLinesGroup;
     that._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
     that._axesContainerGroup = renderSettings.axesContainerGroup;
@@ -899,7 +899,7 @@ Axis.prototype = {
         that._axisStripGroup = that._axisConstantLineGroups = that._axisStripLabelGroup = that._axisBreaksGroup = null;
         that._axisLineGroup = that._axisElementsGroup = that._axisGridGroup = null;
         that._axisGroup = that._axisTitleGroup = null;
-        that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = that._axesElementsGroup = null;
+        that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = that._labelsAxesGroup = null;
 
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
@@ -1959,10 +1959,10 @@ Axis.prototype = {
 
         that._dateMarkers = that._drawDateMarkers() || [];
 
-        that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
+        that._stripLabelAxesGroup && that._axisStripLabelGroup.append(that._stripLabelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
-        that._axesElementsGroup && that._axisElementsGroup.append(that._axesElementsGroup);
+        that._labelsAxesGroup && that._axisElementsGroup.append(that._labelsAxesGroup);
 
         if(that._constantLinesGroup) {
             that._axisConstantLineGroups.above.inside.append(that._constantLinesGroup.above);

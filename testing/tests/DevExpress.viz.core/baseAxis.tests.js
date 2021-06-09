@@ -87,7 +87,7 @@ QUnit.module('Creation', environment);
 QUnit.test('Create axis', function(assert) {
     const renderer = this.renderer;
     const stripsGroup = renderer.g();
-    const labelAxesGroup = renderer.g();
+    const stripLabelAxesGroup = renderer.g();
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
@@ -97,7 +97,7 @@ QUnit.test('Create axis', function(assert) {
     const axis = new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
-        labelAxesGroup: labelAxesGroup,
+        stripLabelAxesGroup: stripLabelAxesGroup,
         constantLinesGroup: constantLinesGroup,
         axesContainerGroup: axesContainerGroup,
         gridGroup: gridGroup,
@@ -129,7 +129,7 @@ QUnit.test('Create axis', function(assert) {
 QUnit.test('Create axis when axis class is undefined', function(assert) {
     const renderer = this.renderer;
     const stripsGroup = renderer.g();
-    const labelAxesGroup = renderer.g();
+    const stripLabelAxesGroup = renderer.g();
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
@@ -139,7 +139,7 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
     new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
-        labelAxesGroup: labelAxesGroup,
+        stripLabelAxesGroup: stripLabelAxesGroup,
         constantLinesGroup: constantLinesGroup,
         axesContainerGroup: axesContainerGroup,
         gridGroup: gridGroup,
@@ -179,7 +179,7 @@ QUnit.module('API', {
 
         const renderer = that.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -189,7 +189,7 @@ QUnit.module('API', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -816,7 +816,7 @@ QUnit.module('Labels template', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -831,7 +831,7 @@ QUnit.module('Labels template', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1027,7 +1027,7 @@ QUnit.module('Labels Settings', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1037,7 +1037,7 @@ QUnit.module('Labels Settings', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1113,7 +1113,7 @@ QUnit.module('Validate', {
         environment.beforeEach.call(this);
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1124,7 +1124,7 @@ QUnit.module('Validate', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1209,7 +1209,7 @@ QUnit.module('Zoom', {
         environment.beforeEach.call(this);
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1219,7 +1219,7 @@ QUnit.module('Zoom', {
         this.axisOptions = {
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             eventTrigger: this.eventTrigger,
@@ -1624,7 +1624,7 @@ QUnit.module('VisualRange', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1634,7 +1634,7 @@ QUnit.module('VisualRange', {
         this.axis = new Axis({
             renderer: this.renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1728,7 +1728,7 @@ const dataMarginsEnvironment = {
         const axis = new Axis({
             renderer: renderer,
             stripsGroup: renderer.g(),
-            labelAxesGroup: renderer.g(),
+            stripLabelAxesGroup: renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: renderer.g(),
             gridGroup: renderer.g(),
