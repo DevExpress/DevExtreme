@@ -28,7 +28,7 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "2.0.25",
+    "devexpress-diagram": "2.0.26",
     "devexpress-gantt": "2.0.38",
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "~1.1.1",
