@@ -92,11 +92,9 @@ export default class DataGridWrapper extends Component {
     }
 
     _internalOptionChangedHandler(e: OptionChangedEvent): void {
-        const internalOptionValue = e.component.option(e.fullName);
-        const isValueCorrect = e.value === internalOptionValue || e.fullName.startsWith('columns[');
         const isSecondLevelOption = e.name !== e.fullName;
     
-        if (isSecondLevelOption && e.value !== e.previousValue && isValueCorrect) {
+        if (isSecondLevelOption && e.value !== e.previousValue) {
             if(e.fullName.startsWith('columns[')) {
                 if(this.option(e.fullName) !== e.value) {
                     this._skipInvalidate = true;
@@ -105,6 +103,7 @@ export default class DataGridWrapper extends Component {
                 }
             } else {
                 this._skipInvalidate = true;
+                this._options.silent(e.fullName, e.previousValue);
                 this.option(e.fullName, e.value);
                 this._skipInvalidate = false;
             }
