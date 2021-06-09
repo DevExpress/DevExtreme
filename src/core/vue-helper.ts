@@ -172,7 +172,7 @@ function findConfigurationComponents(children: VNode[]) {
 function hasInlineTemplate(children: VNode[]): boolean {
     let hasTemplate = false;
     children.forEach((child) => {
-        if (!isConfiguration(child) && !isFragment(child)) {
+        if (!isConfiguration(child) && !isFragment(child) && child.children !== "v-if") {
             hasTemplate = true;
         }
     });
