@@ -13,7 +13,7 @@ import Button from '../button';
 import pointerEvents from '../../events/pointer';
 import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import errors from '../widget/ui.errors';
 import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -1119,8 +1119,8 @@ export const validatingModule = {
                                 boundaryOffset: '0 0',
                                 offset: {
                                     x: 0,
-                                    // IE and Firefox consider the top row/cell border when calculating a cell offset.
-                                    y: !isOverlayVisible && (browser.mozilla || browser.msie) ? -1 : 0
+                                    // Firefox consider the top row/cell border when calculating a cell offset.
+                                    y: !isOverlayVisible && browser.mozilla ? -1 : 0
                                 },
                                 my: myPosition,
                                 at: atPosition

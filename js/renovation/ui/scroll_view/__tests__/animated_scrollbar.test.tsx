@@ -49,6 +49,16 @@ describe('Public methods', () => {
     });
   });
 
+  it('should call cancel() when disposeAnimationFrame() method was called', () => {
+    const viewModel = new AnimatedScrollbar({ });
+
+    viewModel.cancel = jest.fn();
+
+    viewModel.disposeAnimationFrame()();
+
+    expect(viewModel.cancel).toHaveBeenCalledTimes(1);
+  });
+
   each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
     it('animator should call scrollComplete during step if was finished', () => {
       const scrollCompleteHandler = jest.fn();

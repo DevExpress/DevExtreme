@@ -774,6 +774,9 @@ const DiagramCommandsManager = {
                 return allCommands[c];
             } else if(c.text || c.icon || c.name) {
                 const internalCommand = c.name && allCommands[c.name];
+                if(internalCommand === SEPARATOR_COMMAND) {
+                    return internalCommand;
+                }
                 const command = {
                     command: internalCommand && internalCommand.command,
                     name: c.name,

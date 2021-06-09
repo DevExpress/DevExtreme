@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
-  render, createRef, RefObject, VNode,
+  render, createRef, RefObject, VNode, Component,
 } from 'inferno';
 import { createElement } from 'inferno-create-element';
 import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
@@ -13,27 +14,38 @@ import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { Option } from './types';
-import { AbstractFunction } from '../../common/types';
+import { Option, TemplateComponent } from './types';
 
-const setDefaultOptionValue = (options, defaultValueGetter) => (name): void => {
+const setDefaultOptionValue = (
+  options: Record<string, unknown>,
+  defaultValueGetter: (name: string) => unknown,
+) => (name: string): void => {
   if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
     // eslint-disable-next-line no-param-reassign
     options[name] = defaultValueGetter(name);
   }
 };
 
-export default class ComponentWrapper extends DOMComponent<Record<string, any>> {
+interface ElementAttributes extends Record<string, unknown> {
+  class: string;
+}
+
+interface ComponentWrapperProps extends Record<string, unknown> {
+  onContentReady?: (e: Record<string, unknown>) => void;
+  elementAttr?: ElementAttributes;
+}
+
+export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
   static IS_RENOVATED_WIDGET = false;
 
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
-    [name: string]: AbstractFunction;
+    [name: string]: Function;
   };
 
-  customKeyHandlers!: Record<string, AbstractFunction>;
+  customKeyHandlers!: Record<string, Function>;
 
-  defaultKeyHandlers!: Record<string, AbstractFunction>;
+  defaultKeyHandlers!: Record<string, Function>;
 
   _documentFragment!: DocumentFragment;
 
@@ -50,11 +62,11 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
 
   _viewRef!: RefObject<unknown>;
 
-  _viewComponent!: any;
+  _viewComponent!: typeof Component;
 
   _shouldRaiseContentReady = false;
 
-  _componentTemplates!: Record<string, any>;
+  _componentTemplates!: Record<string, TemplateComponent | undefined>;
 
   get _propsInfo(): {
     allowNull: string[];
@@ -72,7 +84,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     };
   }
 
-  get viewRef(): any {
+  public get viewRef(): unknown {
     return this._viewRef?.current;
   }
 
@@ -164,9 +176,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     }
   }
 
-  _silent(name: string, value: any): void {
-    (this as unknown as { _options })
-      ._options.silent(name, value);
+  _silent(name: string, value: unknown): void {
+    this._options.silent(name, value);
   }
 
   _render(): void { } // NOTE: Inherited from DOM_Component
@@ -281,8 +292,8 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
       ...this.elementAttr,
       ...elementAttr,
       className: [
-        ...(this.elementAttr.class || '').split(' '),
-        ...(elementAttr.class || '').split(' '),
+        ...(this.elementAttr.class ?? '').split(' '),
+        ...(elementAttr?.class ?? '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')
@@ -331,7 +342,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     this._viewRef = createRef();
   }
 
-  _addAction(event: string, actionToAdd?: AbstractFunction): void {
+  _addAction(event: string, actionToAdd?: Function): void {
     let action = actionToAdd;
     if (!action) {
       const actionByOption = this._createActionByOption(
@@ -380,7 +391,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return null;
   }
 
-  _createTemplateComponent(templateOption: unknown): ((model: TemplateModel) => VNode) | undefined {
+  _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
     if (!templateOption) {
       return undefined;
     }
@@ -401,8 +412,12 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     return templateWrapper;
   }
 
-  _wrapKeyDownHandler(initialHandler: AbstractFunction): AbstractFunction {
-    return (options: { originalEvent: Event; keyName: string; which: string }): Event => {
+  _wrapKeyDownHandler(initialHandler: Function): Function {
+    return (options: {
+      originalEvent: Event & { cancel: boolean };
+      keyName: string;
+      which: string;
+    }): Event => {
       const { originalEvent, keyName, which } = options;
       const keys = this.customKeyHandlers;
       const func = keys[keyName] || keys[which];
@@ -413,7 +428,7 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
         const result = handler(originalEvent, options);
 
         if (!result) {
-          (originalEvent as any).cancel = true;
+          originalEvent.cancel = true;
           return originalEvent;
         }
       }
@@ -444,14 +459,14 @@ export default class ComponentWrapper extends DOMComponent<Record<string, any>> 
     this._refresh();
   }
 
-  _supportedKeys(): Record<string, AbstractFunction> {
+  _supportedKeys(): Record<string, Function> {
     return {
       ...this.defaultKeyHandlers,
       ...this.customKeyHandlers,
     };
   }
 
-  registerKeyHandler(key: string, handler: AbstractFunction): void {
+  registerKeyHandler(key: string, handler: Function): void {
     this.customKeyHandlers[key] = handler;
   }
 

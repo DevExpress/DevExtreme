@@ -1085,5 +1085,3 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
     });
 });
-
-

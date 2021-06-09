@@ -799,8 +799,9 @@ export const rowsModule = {
 
                 _getHeightCorrection: function() {
                     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    const isChromeLatest = browser.chrome && browser.version >= 91;
                     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
-                    return isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
+                    return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
                 },
 
                 _columnOptionChanged: function(e) {

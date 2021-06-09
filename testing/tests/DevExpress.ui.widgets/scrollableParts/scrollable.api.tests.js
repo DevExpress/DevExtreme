@@ -113,15 +113,22 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
     });
 });
 
+[true, false].forEach((useNative) => {
+    QUnit.test('content', function(assert) {
+        const $scrollable = $('#scrollable').dxScrollable({ useNative });
+        const content = $scrollable.dxScrollable('instance').content();
 
-QUnit.test('content', function(assert) {
-    const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false
+        assert.equal(isRenderer(content), !!config().useJQuery, 'content is correct');
+        assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), 'returns content');
     });
-    const content = $scrollable.dxScrollable('instance').content();
 
-    assert.equal(isRenderer(content), !!config().useJQuery, 'content is correct');
-    assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), 'returns content');
+    QUnit.test('container', function(assert) {
+        const $scrollable = $('#scrollable').dxScrollable({ useNative });
+        const container = $scrollable.dxScrollable('instance').container();
+
+        assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
+        assert.ok($(container).hasClass(SCROLLABLE_CONTAINER_CLASS), 'returns container');
+    });
 });
 
 QUnit.test('scrollBy with plain object', function(assert) {
@@ -694,7 +701,7 @@ class ScrollableTestHelper {
         this._useSimulatedScrollbar = useSimulatedScrollbar;
         this.$scrollable = $('#scrollable');
         this.scrollable = this._getScrollable();
-        this.$container = this._getScrollableContainer();
+        this.$container = $(this.scrollable.container());
     }
 
     _getScrollable() {
@@ -717,10 +724,6 @@ class ScrollableTestHelper {
             vertical: maxVerticalOffset,
             horizontal: maxHorizontalOffset
         };
-    }
-
-    _getScrollableContainer() {
-        return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
     }
 
     getScrollbarSize(prop) {
@@ -763,7 +766,7 @@ class ScrollableTestHelper {
 
             if(this._useNative && this._useSimulatedScrollbar) {
                 this.scrollable.update();
-                this._getScrollableContainer().trigger('scroll');
+                this.$container.trigger('scroll');
             }
 
             checkTranslateValues({ vertical, horizontal });

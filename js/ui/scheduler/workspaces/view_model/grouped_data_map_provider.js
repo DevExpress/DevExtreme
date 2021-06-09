@@ -1,10 +1,10 @@
 import dateUtils from '../../../../core/utils/date';
 
 export class GroupedDataMapProvider {
-    constructor(viewDataGenerator, viewDataMap, completeViewDataMap, workspace) {
+    constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
         this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(viewDataMap);
         this.completeViewDataMap = completeViewDataMap;
-        this._workspace = workspace;
+        this._viewOptions = viewOptions;
     }
 
     getGroupStartDate(groupIndex) {
@@ -95,7 +95,7 @@ export class GroupedDataMapProvider {
             : startDate.getTime();
 
         const isStartDateInCell = cellData => {
-            if(!this._workspace.isDateAndTimeView) {
+            if(!this._viewOptions.isDateAndTimeView) {
                 return dateUtils.sameDate(startDate, cellData.startDate);
             }
 
@@ -112,7 +112,7 @@ export class GroupedDataMapProvider {
             dateTableGroupedMap
         } = this.groupedDataMap;
 
-        const rows = isAllDay && !this._workspace._isVerticalGroupedWorkSpace()
+        const rows = isAllDay && !this._viewOptions.isVerticalGrouping
             ? [allDayPanelGroupedMap[groupIndex]] || []
             : dateTableGroupedMap[groupIndex] || [];
 

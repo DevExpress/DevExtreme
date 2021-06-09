@@ -2,15 +2,6 @@ import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 
 export class ViewDataGenerator {
-    constructor(workspace) {
-        this.workspace = workspace;
-    }
-
-    get workspace() { return this._workspace; }
-    set workspace(value) { this._workspace = value; }
-    get isVerticalGroupedWorkspace() { return this.workspace._isVerticalGroupedWorkSpace(); }
-    get isStandaloneAllDayPanel() { return !this.isVerticalGroupedWorkspace && this.workspace.isAllDayPanelVisible; }
-
     _getCompleteViewDataMap(options) {
         const {
             rowCountInGroup,
@@ -22,6 +13,7 @@ export class ViewDataGenerator {
             totalCellCount,
             groupCount,
         } = options;
+
         let viewDataMap = [];
         const step = groupByDate ? groupCount : 1;
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow, step);
@@ -278,7 +270,8 @@ export class ViewDataGenerator {
         const {
             rowCount,
             startCellIndex,
-            cellCount
+            cellCount,
+            isStandaloneAllDayPanel,
         } = options;
         const { startRowIndex } = options;
 
@@ -299,7 +292,7 @@ export class ViewDataGenerator {
 
         let correctedStartRowIndex = startRowIndex;
         let allDayPanelMap = [];
-        if(this.isStandaloneAllDayPanel) {
+        if(isStandaloneAllDayPanel) {
             correctedStartRowIndex++;
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
@@ -398,12 +391,12 @@ export class ViewDataGenerator {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             cellCountInGroupRow,
+            isGroupedAllDayPanel,
+            isVerticalGrouping,
+            isAllDayPanelVisible,
         } = options;
 
-        const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
-        const showAllDayPanel = this.workspace.isAllDayPanelVisible;
-
-        const indexDifference = this.isVerticalGroupedWorkspace || !showAllDayPanel ? 0 : 1;
+        const indexDifference = isVerticalGrouping || !isAllDayPanelVisible ? 0 : 1;
         const correctedStartRowIndex = startRowIndex + indexDifference;
 
         const timePanelMap = completeTimePanelMap
@@ -462,9 +455,9 @@ export class ViewDataGenerator {
             startRowIndex,
             startCellIndex,
             isProvideVirtualCellsWidth,
+            isGroupedAllDayPanel,
+            isStandaloneAllDayPanel,
         } = options;
-        const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
-
         const {
             allDayPanelMap,
             dateTableMap
@@ -499,7 +492,7 @@ export class ViewDataGenerator {
             };
         }, { previousGroupIndex: -1, previousGroupedData: [] });
 
-        if(this.isStandaloneAllDayPanel) {
+        if(isStandaloneAllDayPanel) {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
         }
 
@@ -535,14 +528,12 @@ export class ViewDataGenerator {
     }
 
     _generateAllDayPanelData(options, cellCount, step = 1) {
-        const workSpace = this.workspace;
-        if(!workSpace.isAllDayPanelVisible) {
+        if(!options.isAllDayPanelVisible) {
             return null;
         }
 
         return this._generateCellsRow(
-            options, [workSpace._getAllDayCellData.bind(workSpace)],
-            0, cellCount, step,
+            options, [options.getAllDayCellData], 0, cellCount, step,
         );
     }
 
@@ -651,9 +642,10 @@ export class ViewDataGenerator {
             rowCountInGroup,
             cellCountInGroupRow,
             groupCount,
+            groupByDate,
         } = options;
 
-        if(this.workspace.isGroupedByDate()) {
+        if(groupByDate) {
             return columnIndex % groupCount === 0;
         }
 
@@ -670,9 +662,10 @@ export class ViewDataGenerator {
             rowCountInGroup,
             cellCountInGroupRow,
             groupCount,
+            groupByDate
         } = options;
 
-        if(this.workspace.isGroupedByDate()) {
+        if(groupByDate) {
             return (columnIndex + 1) % groupCount === 0;
         }
 
