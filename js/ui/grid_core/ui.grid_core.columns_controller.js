@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, compileSetter } from '../../core/utils/data';
-import { grep } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -960,6 +959,23 @@ export const columnsControllerModule = {
                 return column;
             };
 
+            const sortColumns = (columns, sortOrder) => {
+                if(sortOrder !== 'asc' && sortOrder !== 'desc') {
+                    return columns;
+                }
+
+                const sign = sortOrder === 'asc' ? 1 : -1;
+
+                columns.sort(function(column1, column2) {
+                    const caption1 = column1.caption || '';
+                    const caption2 = column2.caption || '';
+
+                    return sign * caption1.localeCompare(caption2);
+                });
+
+                return columns;
+            };
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1584,8 +1600,11 @@ export const columnsControllerModule = {
                 },
                 getChooserColumns: function(getAllColumns) {
                     const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
+                    const columnChooserColumns = columns.filter(column => column.showInColumnChooser);
 
-                    return grep(columns, function(column) { return column.showInColumnChooser; });
+                    const sortOrder = this.option('columnChooser.sortOrder');
+
+                    return sortColumns(columnChooserColumns, sortOrder);
                 },
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     const that = this;
