@@ -271,12 +271,12 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    let element;
+    let element: RefObject | HTMLDivElement;
 
     if (this.iconRef.current) {
       element = this.iconRef.current;
     } else {
-      element = this.iconRef
+      element = this.iconRef;
     }
 
     if (useInkRipple) {
