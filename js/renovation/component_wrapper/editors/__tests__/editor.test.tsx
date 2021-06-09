@@ -6,7 +6,7 @@ const mockIsEditorMock = jest.fn().mockReturnValue(false);
 
 jest.mock('../../../../ui/editor/editor', () => (
   { isEditor: (inst) => mockIsEditorMock(inst) }));
-jest.mock('../component');
+jest.mock('../../common/component');
 class TestEditor extends Editor {
 
 }

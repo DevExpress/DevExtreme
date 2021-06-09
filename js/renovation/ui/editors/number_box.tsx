@@ -2,10 +2,12 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, React,
 } from '@devextreme-generator/declarations';
 /* eslint-disable-next-line import/named */
-import LegacyNumberBox from '../../ui/number_box';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { EventCallback } from './common/event_callback.d';
-import { BaseWidgetProps } from './common/base_props';
+import LegacyNumberBox from '../../../ui/number_box';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { EventCallback } from '../common/event_callback';
+import { BaseWidgetProps } from '../common/base_props';
+
+const DEFAULT_VALUE = 0;
 
 const DEFAULT_VALUE = 0;
 

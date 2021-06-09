@@ -3,8 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 
 /* eslint-disable-next-line import/named */
-import LegacyLoadPanel from '../../ui/load_panel';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
+import LegacyLoadPanel from '../../../ui/load_panel';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { OverlayProps } from './overlay';
 
 export const viewFunction = ({
