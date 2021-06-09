@@ -2578,7 +2578,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getVirtualCellOffset() {
-        return this.virtualScrollingDispatcher?.virtualCellOffset;
+        return this.virtualScrollingDispatcher.virtualCellOffset;
     }
 
     _getDataByCell($cell) {
