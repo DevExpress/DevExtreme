@@ -938,7 +938,7 @@ describe('Methods', () => {
                 helper.viewModel.handlePocketState = jest.fn();
                 helper.viewModel.getEventArgs = jest.fn();
 
-                helper.viewModel.scrollTo(scrollToValue);
+                helper.viewModel.scrollTo(scrollToValue as any);
                 if (useSimulatedScrollbar) {
                   helper.viewModel.scrollEffect();
                   emit('scroll');
@@ -1013,7 +1013,7 @@ describe('Methods', () => {
                 helper.viewModel.handlePocketState = jest.fn();
                 helper.viewModel.getEventArgs = jest.fn();
 
-                helper.viewModel.scrollBy(scrollByValue);
+                helper.viewModel.scrollBy(scrollByValue as any);
                 if (useSimulatedScrollbar) {
                   helper.viewModel.scrollEffect();
                   emit('scroll');

@@ -35,7 +35,7 @@ export const viewFunction = ({
   styles, textAnchor, isStroked,
   computedProps,
 }: TextSvgElement): JSX.Element => {
-  const texts = textItems || [];
+  const texts = textItems ?? [];
   const {
     text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
   } = computedProps;
@@ -94,7 +94,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   config?: ConfigContextValue;
 
   get styles(): { [key: string]: any } {
-    const style = this.props.styles || {};
+    const style = this.props.styles ?? {};
 
     return {
       whiteSpace: 'pre',
@@ -187,7 +187,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
   locateTextNodes(items: TextItem[]): void {
     const { x, y, styles } = this.props;
-    const lineHeight = getLineHeight(styles || {});
+    const lineHeight = getLineHeight(styles ?? {});
     let item = items[0];
     setTextNodeAttribute(item, 'x', x);
     setTextNodeAttribute(item, 'y', y);
@@ -205,7 +205,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     if (!this.isStroked) return;
 
     const { stroke, strokeWidth } = this.props;
-    const strokeOpacity = this.props.strokeOpacity || 1;
+    const strokeOpacity = Number(this.props.strokeOpacity) || 1;
 
     for (let i = 0, ii = items.length; i < ii; ++i) {
       const tspan: SVGTSpanElement = items[i].stroke!;

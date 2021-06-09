@@ -7,6 +7,8 @@ import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
 import { BaseWidgetProps } from './common/base_props';
 
+const DEFAULT_VALUE = 0;
+
 export const viewFunction = ({
   props,
   restAttributes,
@@ -42,7 +44,7 @@ export class NumberBoxProps extends BaseWidgetProps {
 
   @OneWay() useLargeSpinButtons?: boolean;
 
-  @TwoWay() value: number | null = 0;
+  @TwoWay() value: number | null = DEFAULT_VALUE;
 
   @Event() valueChange?: EventCallback<number>;
 

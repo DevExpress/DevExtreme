@@ -263,6 +263,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
+  container(): HTMLDivElement {
+    return this.containerRef.current!;
+  }
+
+  @Method()
   update(): void {
     this.updateSizes();
     this.onUpdated();
@@ -505,13 +510,16 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   validate(event: DxMouseEvent): boolean {
-    const { disabled } = this.props;
-
     if (this.isLocked()) {
       return false;
     }
 
-    if (disabled || (isDxMouseWheelEvent(event) && this.isScrollingOutOfBound(event))) {
+    return this.moveIsAllowed(event);
+  }
+
+  @Method()
+  moveIsAllowed(event: DxMouseEvent): boolean {
+    if (this.props.disabled || (isDxMouseWheelEvent(event) && this.isScrollingOutOfBound(event))) {
       return false;
     }
 
@@ -784,7 +792,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   get topPocketHeight(): number {
-    return this.topPocketRef?.current?.clientHeight || 0;
+    return this.topPocketRef?.current?.clientHeight ?? 0;
   }
 
   pullDownRefreshing(): void {

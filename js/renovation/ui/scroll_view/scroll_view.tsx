@@ -212,6 +212,16 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     // TODO: this.clientHeight() should be containerRef.current.clientHeight
   }
 
+  @Method()
+  startLoading(): void {
+    this.scrollable.startLoading();
+  }
+
+  @Method()
+  finishLoading(): void {
+    this.scrollable.finishLoading();
+  }
+
   get reachBottomEnabled(): boolean {
     if (isDefined(this.forceReachBottom)) {
       return this.forceReachBottom;

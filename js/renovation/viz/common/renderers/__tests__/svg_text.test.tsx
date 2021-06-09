@@ -203,6 +203,27 @@ describe('TextSvgElement', () => {
         expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 12);
       });
 
+      it('"dy" attribute value should be calculated considering font size specified in "styles" property', () => {
+        const text = new TextSvgElement({
+          styles: { 'font-size': 15 },
+          text: 'Multiline\ntext',
+          x: 50,
+          y: 100,
+        });
+
+        text.textRef = React.createRef() as any;
+        text.textRef.current = {
+          setAttribute: jest.fn(),
+          children: [
+            { setAttribute: jest.fn() }, { setAttribute: jest.fn() },
+          ],
+        } as any;
+        text.effectUpdateText();
+
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 15);
+      });
+
       it('should locate text nodes with style', () => {
         const text = new TextSvgElement({
           text: '<div><p>Text1</p><br /><p style="font-size: 18px">TextText2</p><p>StilText2</p></div>',
