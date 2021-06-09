@@ -1,4 +1,7 @@
 {
+    "globals": {
+        "__dirname": "writable"
+    },
     "plugins": [
         "spellcheck"
     ],
@@ -6,19 +9,30 @@
         "spellcheck/spell-checker": [1,
             {
                 "skipWords": [
-                    "fs",
-                    "Metadata",
-                    "Cjs",
-                    "Esm",
+                    "cjs",
+                    "const",
+                    "devextreme",
+                    "devexpress",
                     "dirname",
-                    "src",
+                    "esm",
+                    "filename",
+                    "fs",
                     "js",
+                    "jszip",
+                    "gantt",
+                    "luxon",                    
+                    "metadata",
+                    "rollup",
+                    "rrule",
+                    "rxjs",
+                    "src",
                     "utils",
                     "vite",
-                    "const",
-                    "ui",
-                    "devextreme",
-                    "rollup"
+                    "webpack",
+                    "ui"
+                ],
+                "skipWordIfMatch": [
+                    "^cldr.*$"
                 ]
             }
         ]

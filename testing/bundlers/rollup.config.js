@@ -1,5 +1,3 @@
-/* global  __dirname */
-
 import path from 'path';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonJs from '@rollup/plugin-commonjs';
