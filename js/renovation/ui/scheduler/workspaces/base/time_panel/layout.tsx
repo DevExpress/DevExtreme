@@ -109,11 +109,11 @@ export class TimePanelTableLayoutProps {
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
   get topVirtualRowHeight(): number {
-    return this.props.timePanelData.topVirtualRowHeight || 0;
+    return this.props.timePanelData.topVirtualRowHeight ?? 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.timePanelData.bottomVirtualRowHeight || 0;
+    return this.props.timePanelData.bottomVirtualRowHeight ?? 0;
   }
 
   get isVerticalGroupOrientation(): boolean {

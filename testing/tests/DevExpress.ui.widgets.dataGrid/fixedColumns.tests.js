@@ -182,7 +182,7 @@ QUnit.module('Fixed columns', {
         assert.equal($fixTable.find('tbody > tr').first().find('td').length, 3, 'count fixed column');
         assert.strictEqual($fixedCells.first().text(), 'test4', 'fixed column');
 
-        const transparentColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+        const transparentColor = 'rgba(0, 0, 0, 0)';
         assert.strictEqual($fixedCells.eq(1).html(), '&nbsp;', 'transparent column');
         assert.ok($fixedCells.eq(1).hasClass('dx-pointer-events-none'), 'has class dx-pointer-events-none');
         assert.strictEqual($fixedCells.eq(1).css('background-color'), transparentColor, 'transparent column background color');

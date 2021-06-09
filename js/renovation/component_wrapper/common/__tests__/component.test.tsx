@@ -825,6 +825,37 @@ describe('templates and slots', () => {
 
     expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
   });
+
+  it('should have default templates for jQuery', () => {
+    const instance = $('#component')
+      .dxTemplatedTestWidget()
+      .dxTemplatedTestWidget('instance');
+
+    const templateNames = instance._propsInfo.templates;
+    const defaultTemplates = instance._templatesInfo;
+    const innerOptions = instance._props;
+    const publicOptions = instance.option();
+
+    templateNames.forEach((name) => {
+      expect(innerOptions[name]).toBe(defaultTemplates[name]);
+      expect(publicOptions[name]).toBe(null);
+    });
+  });
+
+  it('should remove content after template removed', () => {
+    const template = () => $('<div>');
+
+    $('#component').dxTemplatedTestWidget({
+      template,
+    });
+
+    expect($('#component').children('.templates-root').length).toBe(1);
+
+    $('#component').dxTemplatedTestWidget({
+      template: null,
+    });
+    expect($('#component').children('.templates-root').length).toBe(0);
+  });
 });
 
 describe('events/actions', () => {
