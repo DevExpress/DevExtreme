@@ -4,7 +4,7 @@ import {
   AppointmentList,
   viewFunction as AppointmentListView,
 } from '../appointment_list';
-import { List } from '../../../editors/list';
+import { List } from '../../../list';
 import { TooltipItemLayout } from '../item_layout';
 import getCurrentAppointment from '../utils/get_current_appointment';
 
@@ -13,7 +13,7 @@ jest.mock('../item_layout', () => ({
   TooltipItemLayout: () => null,
 }));
 
-jest.mock('../../../editors/list', () => ({
+jest.mock('../../../list', () => ({
   __esModule: true,
   List: (props) => {
     // eslint-disable-next-line react/prop-types

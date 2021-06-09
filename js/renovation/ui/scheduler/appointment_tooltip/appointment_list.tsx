@@ -8,7 +8,7 @@ import {
   JSXTemplate,
 } from '@devextreme-generator/declarations';
 import noop from '../../../utils/noop';
-import { List } from '../../editors/list';
+import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
   GetTextAndFormatDateFn,

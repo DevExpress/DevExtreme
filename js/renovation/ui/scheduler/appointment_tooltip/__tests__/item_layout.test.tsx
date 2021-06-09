@@ -8,7 +8,7 @@ import {
   viewFunction as TooltipItemLayoutView,
   TooltipItemLayoutProps,
 } from '../item_layout';
-import { Button as DeleteButton } from '../../../editors/button';
+import { Button as DeleteButton } from '../../../button';
 import { Marker } from '../marker';
 import { TooltipItemContent } from '../item_content';
 import getCurrentAppointment from '../utils/get_current_appointment';
@@ -17,7 +17,7 @@ jest.mock('../utils/get_current_appointment', () => jest.fn(() => ({
   text: 'currentAppointment',
 })));
 
-jest.mock('../../../editors/button', () => ({ __esModule: true, Button: () => null }));
+jest.mock('../../../button', () => ({ __esModule: true, Button: () => null }));
 jest.mock('../marker', () => ({ __esModule: true, Marker: () => null }));
 jest.mock('../item_content', () => ({ __esModule: true, TooltipItemContent: () => null }));
 

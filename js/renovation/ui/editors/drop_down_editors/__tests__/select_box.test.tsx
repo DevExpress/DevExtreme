@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
-import LegacySelectBox from '../../../../ui/select_box';
+import LegacySelectBox from '../../../../../ui/select_box';
 import { viewFunction as SelectBoxView, SelectBoxProps, SelectBox } from '../select_box';
-import { DomComponentWrapper } from '../../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
 
-jest.mock('../../../../ui/select_box', () => jest.fn());
+jest.mock('../../../../../ui/select_box', () => jest.fn());
 
 describe('Selectbox', () => {
   it('View render', () => {
