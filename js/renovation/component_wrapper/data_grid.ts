@@ -1,145 +1,159 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/ban-types */
 import Component from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
-import { updatePropsImmutable } from "./utils/update_props_immutable";
+import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent } from './common/types';
 import type { OptionChangedEvent } from '../../ui/data_grid';
 
 export default class DataGridWrapper extends Component {
-    _onInitialized!: Function;
-    _skipInvalidate = false;
+  static registerModule = gridCore.registerModule.bind(gridCore);
 
-    static registerModule = gridCore.registerModule.bind(gridCore);
+  _onInitialized!: Function;
 
-    beginUpdate() {
-        super.beginUpdate();
-        this._getInternalInstance()?.beginUpdate();
+  _skipInvalidate = false;
+
+  state(state?: Record<string, unknown>): Record<string, unknown> | undefined {
+    const internalInstance = this._getInternalInstance();
+
+    if (internalInstance) {
+      if (state === undefined) {
+        return internalInstance.state();
+      }
+      internalInstance.state(state);
     }
+    return undefined;
+  }
 
-    endUpdate() {
-        super.endUpdate();
-        this._getInternalInstance()?.endUpdate();
+  getController(name: string): unknown {
+    return this._getInternalInstance()?.getController(name);
+  }
+
+  getView(name: string): unknown {
+    return this._getInternalInstance()?.getView(name);
+  }
+
+  beginUpdate(): void {
+    super.beginUpdate();
+    this._getInternalInstance()?.beginUpdate();
+  }
+
+  endUpdate(): void {
+    super.endUpdate();
+    this._getInternalInstance()?.endUpdate();
+  }
+
+  isReady(): boolean {
+    return this._getInternalInstance()?.isReady();
+  }
+
+  _getInternalInstance(): GridInstance {
+    return (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+  }
+
+  _fireContentReady(): void {}
+
+  _wrapKeyDownHandler(handler: Function): Function {
+    return handler;
+  }
+
+  /* istanbul ignore next: TODO Vitik */
+  _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
+    super._optionChanging(fullName, prevValue, value);
+    if (this.viewRef && prevValue !== value) {
+      const name = fullName.split(/[.[]/)[0];
+      const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+      updatePropsImmutable(prevProps, this.option(), name, fullName);
+      (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
     }
+  }
 
-    isReady() {
-        return this._getInternalInstance()?.isReady();
+  /* istanbul ignore next: TODO Vitik */
+  _optionChanged(e): void {
+    const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance?.();
+    if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
+      gridInstance?.option('dataSource', e.value);
     }
+    super._optionChanged(e);
+  }
 
-    getView(name) {
-        return this._getInternalInstance()?.getView(name);
+  _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
+    return templateOption as (TemplateComponent | undefined);
+  }
+
+  _initializeComponent(): void {
+    const options = this.option();
+    this._onInitialized = options.onInitialized as Function;
+    options.onInitialized = null;
+    super._initializeComponent();
+  }
+
+  _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
+    // eslint-disable-next-line no-param-reassign
+    options.onInitialized = this._onInitialized;
+
+    return super._patchOptionValues(options);
+  }
+
+  _renderWrapper(props: Record<string, unknown>): void {
+    const isFirstRender = !this._isNodeReplaced;
+    super._renderWrapper(props);
+    if (isFirstRender) {
+      this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
     }
+  }
 
-    getController(name) {
-        return this._getInternalInstance()?.getController(name);
-    }
+  _internalOptionChangedHandler(e: OptionChangedEvent): void {
+    const isSecondLevelOption = e.name !== e.fullName;
 
-    state(state) {
-        return this._getInternalInstance()?.state(state);
-    }
-
-    _getInternalInstance(): GridInstance {
-        return (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-    }
-
-    _fireContentReady() {}
-
-    _wrapKeyDownHandler(handler) {
-        return handler;
-    }
-
-    _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
-        super._optionChanging(fullName, prevValue, value);
-        if(this.viewRef && prevValue !== value) {
-            const name = fullName.split(/[.[]/)[0];
-            const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
-            updatePropsImmutable(prevProps, this.option(), name, fullName);
-            (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
+    if (isSecondLevelOption && e.value !== e.previousValue) {
+      if (e.fullName.startsWith('columns[')) {
+        if (this.option(e.fullName) !== e.value) {
+          this._skipInvalidate = true;
+          this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
+          this._skipInvalidate = false;
         }
+      } else {
+        this._skipInvalidate = true;
+        this._options.silent(e.fullName, e.previousValue);
+        this.option(e.fullName, e.value);
+        this._skipInvalidate = false;
+      }
     }
+  }
 
-    _optionChanged(e): void {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance?.();
-        if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
-            gridInstance?.option('dataSource', e.value);
-        }
-        super._optionChanged(e);
-    }
+  _invalidate(): void {
+    if (this._skipInvalidate) return;
 
-    _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
-        return templateOption as (TemplateComponent | undefined);
-    }
+    super._invalidate();
+  }
 
-    _initializeComponent(): void {
-        const options = this.option();
-        this._onInitialized = options.onInitialized as Function;
-        options.onInitialized = null;
-        super._initializeComponent();
-    }
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
-    _patchOptionValues(options) {
-        options.onInitialized = this._onInitialized;
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    this._optionsByReference['focusedRowKey'] = true;
+    this._optionsByReference['editing.editRowKey'] = true;
+    this._optionsByReference['editing.changes'] = true;
+  }
 
-        return super._patchOptionValues(options);
-    }
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
 
-    _renderWrapper(props: Record<string, unknown>): void {
-        const isFirstRender = !this._isNodeReplaced;
-        super._renderWrapper(props);
-        if(isFirstRender) {
-            this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
-        }
-    }
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
+  }
 
-    _internalOptionChangedHandler(e: OptionChangedEvent): void {
-        const isSecondLevelOption = e.name !== e.fullName;
-    
-        if (isSecondLevelOption && e.value !== e.previousValue) {
-            if(e.fullName.startsWith('columns[')) {
-                if(this.option(e.fullName) !== e.value) {
-                    this._skipInvalidate = true;
-                    this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
-                    this._skipInvalidate = false;
-                }
-            } else {
-                this._skipInvalidate = true;
-                this._options.silent(e.fullName, e.previousValue);
-                this.option(e.fullName, e.value);
-                this._skipInvalidate = false;
-            }
-        }
-    }
-
-    _invalidate() {
-        if(this._skipInvalidate) return;
-
-        super._invalidate();
-    }
-
-    _setOptionsByReference() {
-        super._setOptionsByReference();
-
-        this._optionsByReference['focusedRowKey'] = true;
-        this._optionsByReference['editing.editRowKey'] = true;
-        this._optionsByReference['editing.changes'] = true;
-    }
-
-    _setDeprecatedOptions() {
-        super._setDeprecatedOptions();
-
-        this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
-    }
-
-    _getAdditionalProps(): string[] {
-        return super._getAdditionalProps().concat([
-            'onInitialized',
-            'onColumnsChanging', // for dashboards
-            'integrationOptions',
-            'adaptColumnWidthByRatio', 
-            'useLegacyKeyboardNavigation',
-            'templatesRenderAsynchronously',
-            'forceApplyBindings',
-            'nestedComponentOptions',
-        ]);
-    }
+  _getAdditionalProps(): string[] {
+    return super._getAdditionalProps().concat([
+      'onInitialized',
+      'onColumnsChanging', // for dashboards
+      'integrationOptions',
+      'adaptColumnWidthByRatio',
+      'useLegacyKeyboardNavigation',
+      'templatesRenderAsynchronously',
+      'forceApplyBindings',
+      'nestedComponentOptions',
+    ]);
+  }
 }

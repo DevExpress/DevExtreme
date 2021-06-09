@@ -703,7 +703,6 @@ declare module DevExpress {
     _optionsByReference: object;
     _setDeprecatedOptions(): void;
     _deprecatedOptions: object;
-    _isUpdateAllowed(): boolean;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
