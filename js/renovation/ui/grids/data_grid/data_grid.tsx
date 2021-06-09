@@ -291,7 +291,8 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async navigateToRow(key: any): DxPromise {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
 
