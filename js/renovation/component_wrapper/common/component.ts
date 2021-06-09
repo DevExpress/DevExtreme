@@ -308,18 +308,32 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   getDefaultTemplates(): Record<string, undefined> {
-    const names = this.getDefaultTemplateNames();
+    const defaultTemplates = Object.values(this._templatesInfo);
     const result = {};
 
-    names.forEach((name) => {
-      result[name] = 'dx-renovation-template-mock';
+    defaultTemplates.forEach((template) => {
+      result[template] = 'dx-renovation-template-mock';
     });
 
     return result;
   }
 
-  getDefaultTemplateNames(): string[] {
-    return [];
+  get _templatesInfo(): Record<string, string> {
+    return {};
+  }
+
+  _optionsWithDefaultTemplates(options: Record<string, unknown>): Record<string, unknown> {
+    const templateOptions = Object.entries(this._templatesInfo)
+      .reduce(
+        (result, [templateName, templateValue]) => ({
+          ...result,
+          [templateName]: options[templateName] ?? templateValue,
+        }), {},
+      );
+    return {
+      ...options,
+      ...templateOptions,
+    };
   }
 
   _init(): void {
@@ -328,7 +342,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     this.customKeyHandlers = {};
     this.defaultKeyHandlers = {};
     this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
-    this._props = { ...this.option() };
+    this._props = this._optionsWithDefaultTemplates(this.option());
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
