@@ -184,12 +184,10 @@ export class Button extends JSXComponent(ButtonProps) {
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
-    let element : any;
+    let element: any = this.contentRef;
 
     if (this.contentRef.current) {
       element = this.contentRef.current;
-    } else {
-      element = this.contentRef;
     }
 
     if (useInkRipple) {
@@ -203,12 +201,10 @@ export class Button extends JSXComponent(ButtonProps) {
 
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
-    let element;
+    let element: any = this.contentRef;
 
     if (this.contentRef.current) {
       element = this.contentRef.current;
-    } else {
-      element = this.contentRef
     }
 
     if (useInkRipple) {
