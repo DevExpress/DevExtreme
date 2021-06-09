@@ -322,4 +322,26 @@ export default class ViewDataProvider {
             lastRowIndex: groupedDataMap[rowsCount - 1][0].position.rowIndex,
         };
     }
+
+    isSameCell(firstCellData, secondCellData) {
+        const {
+            startDate: firstStartDate,
+            groupIndex: firstGroupIndex,
+            allDay: firstAllDay,
+            index: firstIndex,
+        } = firstCellData;
+        const {
+            startDate: secondStartDate,
+            groupIndex: secondGroupIndex,
+            allDay: secondAllDay,
+            index: secondIndex,
+        } = secondCellData;
+
+        return (
+            firstStartDate.getTime() === secondStartDate.getTime()
+            && firstGroupIndex === secondGroupIndex
+            && firstAllDay === secondAllDay
+            && firstIndex === secondIndex
+        );
+    }
 }

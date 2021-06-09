@@ -11,17 +11,17 @@ import {
   ForwardRef,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { createDefaultOptionRules } from '../../core/options/utils';
-import devices from '../../core/devices';
-import Guid from '../../core/guid';
-import { InkRipple, InkRippleConfig } from './common/ink_ripple';
-import { Widget } from './common/widget';
-import { isMaterial, current } from '../../ui/themes';
-import BaseComponent from '../component_wrapper/check_box';
-import { BaseWidgetProps } from './common/base_props';
-import { combineClasses } from '../utils/combine_classes';
-import { EffectReturn } from '../utils/effect_return.d';
-import { ValidationMessage } from './validation_message';
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import Guid from '../../../core/guid';
+import { InkRipple, InkRippleConfig } from '../common/ink_ripple';
+import { Widget } from '../common/widget';
+import { isMaterial, current } from '../../../ui/themes';
+import BaseComponent from '../../component_wrapper/editors/check_box';
+import { BaseWidgetProps } from '../common/base_props';
+import { combineClasses } from '../../utils/combine_classes';
+import { EffectReturn } from '../../utils/effect_return';
+import { ValidationMessage } from '../overlays/validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -178,23 +178,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onActive(event: Event): void {
-    this.wave(event, 'showWave', 1);
+    const waveId = 1;
+    this.wave(event, 'showWave', waveId);
   }
 
   onInactive(event: Event): void {
-    this.wave(event, 'hideWave', 1);
+    const waveId = 1;
+    this.wave(event, 'hideWave', waveId);
   }
 
   onFocusIn(event: Event): void {
+    const waveId = 0;
     const { onFocusIn } = this.props;
-    this.wave(event, 'showWave', 0);
+    this.wave(event, 'showWave', waveId);
 
     // NOTE: pass to jQ wrapper
     onFocusIn?.(event);
   }
 
   onFocusOut(event: Event): void {
-    this.wave(event, 'hideWave', 0);
+    const waveId = 0;
+    this.wave(event, 'hideWave', waveId);
   }
 
   onWidgetClick(event: Event): void {

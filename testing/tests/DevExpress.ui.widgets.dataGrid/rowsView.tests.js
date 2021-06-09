@@ -5693,52 +5693,6 @@ QUnit.module('Virtual scrolling', {
         assert.equal(content.children().eq(0).find('.' + 'dx-datagrid-group-space').length, 0, 'group space class');
     });
 
-    if(browser.msie) {
-    // T377627
-        QUnit.test('Render rows with virtual items count is 200 000 for IE', function(assert) {
-        // arrange
-            const options = {
-                items: [
-                    { values: [1] },
-                    { values: [2] },
-                    { values: [3] }
-                ],
-                virtualItemsCount: {
-                    begin: 150000,
-                    end: 50000
-                }
-            };
-            const dataController = new MockDataController(options);
-            const rowsView = this.createRowsView(options.items, dataController);
-            const testElement = $('#container');
-
-            // act
-            this.options.scrolling = {
-                mode: 'virtual'
-            };
-            rowsView.render(testElement);
-            rowsView.height(90);
-            rowsView.resize();
-
-            const rowHeight = rowsView._rowHeight;
-            const heightRatio = dataController._sizeRatio;
-
-            const content = testElement.find('.dx-scrollable-content').children();
-
-            assert.equal(options.viewportSize, Math.round(90 / rowHeight));
-            assert.ok(heightRatio > 0 && heightRatio < 1, 'heightRatio is defined and in (0, 1)');
-
-            assert.equal(content.length, 1);
-            assert.equal(content.children().length, 1);
-            assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
-            assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
-            assert.roughEqual(content.children().eq(0).find('.dx-virtual-row').eq(0).height(), rowHeight * heightRatio * 150000, 1);
-            assert.roughEqual(content.children().eq(0).find('.dx-virtual-row').eq(1).height(), rowHeight * heightRatio * 50000, 1);
-            assert.ok(content.children().eq(0).height() < 5000000, 'height is less then height limit');
-            assert.equal(content.children().eq(0).find('.dx-datagrid-group-space').length, 0, 'group space class');
-        });
-    }
-
     QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height defined', function(assert) {
     // arrange
         const done = assert.async();
@@ -6882,11 +6836,6 @@ QUnit.module('Scrollbar', {
 
     // T606944
     QUnit.test('The vertical scrollbar should not be shown when there is a horizontal scrollbar', function(assert) {
-        if(browser.msie && parseInt(browser.version) > 11) {
-            assert.ok(true, 'The issue is not fixed for Edge');
-            return;
-        }
-
         // arrange
         const rows = [{ values: ['test1', 'test2', 'test3', 'test4'] }];
         const columns = [{ dataField: 'field1', width: 300 }, { dataField: 'field2', width: 300 }, { dataField: 'field3', width: 300 }, { dataField: 'field4', width: 300 } ];

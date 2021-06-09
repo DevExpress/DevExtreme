@@ -149,7 +149,7 @@ QUnit.module('dateViewRoller', {
         const instance = element.dxDateViewRoller('instance');
         const content = element.find('.dx-scrollable-content');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.equal(content.position().top, -itemHeight);
@@ -164,7 +164,7 @@ QUnit.module('dateViewRoller', {
         const instance = element.dxDateViewRoller('instance');
         const content = element.find('.dx-scrollable-content');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 4).wait(500).up();
         assert.strictEqual(content.position().top, -itemHeight * 4);
@@ -224,7 +224,7 @@ QUnit.module('dateViewRoller', {
         const $content = element.find('.dx-scrollable-content');
         const $container = element.find('.dx-scrollable-container');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.deepEqual(translator.locate($content), { top: 0, left: 0 });
@@ -314,7 +314,7 @@ QUnit.module('dateView', {
         triggerShownEvent('#qunit-fixture');
 
         $.each(this.instance._rollers, function(type) {
-            const pointer = pointerMock(this._$container);
+            const pointer = pointerMock(this.container());
             pointer.start().down().move(0, -20).up();
 
             assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');

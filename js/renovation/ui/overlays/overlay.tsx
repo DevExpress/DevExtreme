@@ -3,13 +3,14 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
-import LegacyOverlay from '../../ui/overlay/ui.overlay';
-import { UserDefinedElement, DxElement } from '../../core/element';
-import { template } from '../../core/templates/template';
-import { animationConfig } from '../../animation/fx';
+import LegacyOverlay from '../../../ui/overlay/ui.overlay';
+import { UserDefinedElement, DxElement } from '../../../core/element';
+import { template } from '../../../core/templates/template';
+import { animationConfig } from '../../../animation/fx';
+import { positionConfig } from '../../../animation/position';
 /* eslint-enable import/named */
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,
@@ -43,7 +44,8 @@ export class OverlayProps extends BaseWidgetProps {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 
-  @OneWay() position?: any;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  @OneWay() position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
 
   @OneWay() visible?: boolean = false;
 

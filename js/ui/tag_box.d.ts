@@ -106,7 +106,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+export interface dxTagBoxOptions extends Omit<dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'> {
     /**
      * @docid
      * @type Enums.EditorApplyValueMode

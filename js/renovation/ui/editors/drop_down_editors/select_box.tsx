@@ -3,13 +3,13 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
-import DataSource, { DataSourceOptions } from '../../data/data_source';
-import Store from '../../data/abstract_store';
+import DataSource, { DataSourceOptions } from '../../../../data/data_source';
+import Store from '../../../../data/abstract_store';
 /* eslint-disable-next-line import/named */
-import LegacySelectBox from '../../ui/select_box';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { EventCallback } from './common/event_callback.d';
-import { BaseWidgetProps } from './common/base_props';
+import LegacySelectBox from '../../../../ui/select_box';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
+import { EventCallback } from '../../common/event_callback';
+import { BaseWidgetProps } from '../../common/base_props';
 
 export const viewFunction = ({
   props,
@@ -29,7 +29,7 @@ export class SelectBoxProps extends BaseWidgetProps {
 
   @OneWay() displayExpr?: string;
 
-  @TwoWay() value: any = null;
+  @TwoWay() value?: any = null;
 
   @OneWay() valueExpr?: string;
 

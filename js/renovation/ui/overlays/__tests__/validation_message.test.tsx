@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
-import LegacyValidationMessage from '../../../ui/validation_message';
+import LegacyValidationMessage from '../../../../ui/validation_message';
 import { viewFunction as ValidationMessageView, ValidationMessageProps, ValidationMessage } from '../validation_message';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 
-jest.mock('../../../ui/validation_message', () => jest.fn());
+jest.mock('../../../../ui/validation_message', () => jest.fn());
 
 describe('ValidationMessage', () => {
   describe('View', () => {

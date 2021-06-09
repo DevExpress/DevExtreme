@@ -1,18 +1,17 @@
-import Component from './component';
+import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';
 import { extend } from '../../../core/utils/extend';
 import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
 import Callbacks from '../../../core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
-import { Option } from './types';
+import { Option } from '../common/types';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
 export default class Editor extends Component {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  showValidationMessageTimeout: any;
+  showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
 
   validationRequest!: ReturnType<typeof Callbacks>;
 
@@ -33,12 +32,15 @@ export default class Editor extends Component {
         const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
-        clearTimeout(this.showValidationMessageTimeout);
+        const timeToWaitBeforeShow = 150;
+        if (this.showValidationMessageTimeout) {
+          clearTimeout(this.showValidationMessageTimeout);
+        }
 
         // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
           $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
-        }, 150);
+        }, timeToWaitBeforeShow);
       }
     };
     props.saveValueChangeEvent = (e: Event): void => {
@@ -53,7 +55,7 @@ export default class Editor extends Component {
 
     data(this.$element()[0], VALIDATION_TARGET, this);
     this.validationRequest = Callbacks();
-    this.showValidationMessageTimeout = null;
+    this.showValidationMessageTimeout = undefined;
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
@@ -117,7 +119,9 @@ export default class Editor extends Component {
     super._dispose();
 
     data(this.element(), VALIDATION_TARGET, null);
-    clearTimeout(this.showValidationMessageTimeout);
+    if (this.showValidationMessageTimeout) {
+      clearTimeout(this.showValidationMessageTimeout);
+    }
   }
 }
 

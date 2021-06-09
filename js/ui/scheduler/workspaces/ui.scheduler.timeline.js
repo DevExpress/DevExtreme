@@ -366,7 +366,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         super._setTableSizes();
 
-        this.virtualScrollingDispatcher?.updateDimensions();
+        this.virtualScrollingDispatcher.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {

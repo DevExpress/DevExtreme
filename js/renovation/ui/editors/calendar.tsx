@@ -1,10 +1,10 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
-import LegacyCalendar from '../../ui/calendar';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { EventCallback } from './common/event_callback.d';
-import { BaseWidgetProps } from './common/base_props';
+import LegacyCalendar from '../../../ui/calendar';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { EventCallback } from '../common/event_callback';
+import { BaseWidgetProps } from '../common/base_props';
 
 function today(): Date { return new Date(); }
 function TruePredicate(): boolean { return true; }

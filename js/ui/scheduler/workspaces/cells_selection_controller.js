@@ -1,9 +1,57 @@
 export class CellsSelectionController {
-    getCellFromNextRowPosition(currentCellPosition, direction, edgeIndices) {
+    handleArrowClick(options) {
+        const {
+            key,
+            focusedCellPosition,
+            edgeIndices,
+            getCellDataByPosition,
+            isAllDayPanelCell,
+        } = options;
+
+        let nextCellIndices;
+
+        switch(key) {
+            case 'down':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    focusedCellPosition, 'next', edgeIndices,
+                );
+                break;
+            case 'up':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    focusedCellPosition, 'prev', edgeIndices,
+                );
+                break;
+            case 'left':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'prev',
+                });
+                break;
+            case 'right':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'next',
+                });
+                break;
+        }
+
+        const currentCellData = getCellDataByPosition(
+            nextCellIndices.rowIndex,
+            nextCellIndices.cellIndex,
+            isAllDayPanelCell,
+        );
+
+        return this.moveToCell({
+            ...options,
+            currentCellData,
+        });
+    }
+
+    getCellFromNextRowPosition(focusedCellPosition, direction, edgeIndices) {
         const {
             cellIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
 
         const deltaPosition = direction === 'next' ? 1 : -1;
         const nextRowIndex = rowIndex + deltaPosition;
@@ -20,18 +68,19 @@ export class CellsSelectionController {
 
     getCellFromNextColumnPosition(options) {
         const {
-            currentCellPosition,
+            focusedCellPosition,
             direction,
             edgeIndices,
             isRTL,
             isGroupedByDate,
             groupCount,
             isMultiSelection,
+            isDateAndTimeView,
         } = options;
         const {
             cellIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
         const {
             firstCellIndex,
             lastCellIndex,
@@ -54,7 +103,7 @@ export class CellsSelectionController {
             };
         }
 
-        return this._processEdgeCell({
+        return isDateAndTimeView ? focusedCellPosition : this._processEdgeCell({
             nextCellIndex,
             rowIndex,
             cellIndex,
@@ -105,5 +154,46 @@ export class CellsSelectionController {
             cellIndex: validCellIndex,
             rowIndex: validRowIndex,
         };
+    }
+
+    moveToCell(options) {
+        const {
+            isMultiSelection,
+            isMultiSelectionAllowed,
+            focusedCellData,
+            currentCellData,
+        } = options;
+
+        const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
+
+        const nextFocusedCellData = isValidMultiSelection
+            ? this._getNextCellData(currentCellData, focusedCellData)
+            : currentCellData;
+
+        return nextFocusedCellData;
+    }
+
+    _getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell) {
+        if(isVirtualCell) {
+            return focusedCellData;
+        }
+
+        const isValidNextFocusedCell = this._isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+
+        return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
+    }
+
+    _isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+        if(!focusedCellData) {
+            return true;
+        }
+
+        const { groupIndex, allDay } = focusedCellData;
+        const {
+            groupIndex: nextGroupIndex,
+            allDay: nextAllDay,
+        } = nextFocusedCellData;
+
+        return groupIndex === nextGroupIndex && allDay === nextAllDay;
     }
 }
