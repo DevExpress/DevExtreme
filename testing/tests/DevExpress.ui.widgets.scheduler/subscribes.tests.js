@@ -126,7 +126,7 @@ module('Subscribes', {
         try {
             this.instance.fire('setCellDataCacheAlias', {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -138,7 +138,7 @@ module('Subscribes', {
             assert.ok(setCacheAliasStub.calledOnce, 'setCellDataCacheAlias workSpace method called once');
             assert.deepEqual(setCacheAliasStub.getCall(0).args[0], {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5

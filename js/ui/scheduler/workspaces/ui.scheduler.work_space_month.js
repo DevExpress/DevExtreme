@@ -53,14 +53,14 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this._formatWeekday;
     }
 
-    _calculateCellIndex(rowIndex, cellIndex) {
+    _calculateCellIndex(rowIndex, columnIndex) {
         if(this._isVerticalGroupedWorkSpace()) {
             rowIndex = rowIndex % this._getRowCount();
         } else {
-            cellIndex = cellIndex % this._getCellCount();
+            columnIndex = columnIndex % this._getCellCount();
         }
 
-        return rowIndex * this._getCellCount() + cellIndex;
+        return rowIndex * this._getCellCount() + columnIndex;
     }
 
     _getInterval() {
@@ -74,8 +74,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    _getDateByCellIndexes(rowIndex, cellIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, cellIndex);
+    _getDateByCellIndexes(rowIndex, columnIndex) {
+        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
         this._setStartDayHour(date);
 
@@ -107,11 +107,11 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
     _getCellCoordinatesByIndex(index) {
         const rowIndex = Math.floor(index / this._getCellCount());
-        const cellIndex = index - this._getCellCount() * rowIndex;
+        const columnIndex = index - this._getCellCount() * rowIndex;
 
         return {
             rowIndex: rowIndex,
-            cellIndex: cellIndex
+            columnIndex,
         };
     }
 
@@ -180,14 +180,14 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         super._renderTableBody(options);
     }
 
-    _getCellText(rowIndex, cellIndex) {
+    _getCellText(rowIndex, columnIndex) {
         if(this.isGroupedByDate()) {
-            cellIndex = Math.floor(cellIndex / this._getGroupCount());
+            columnIndex = Math.floor(columnIndex / this._getGroupCount());
         } else {
-            cellIndex = cellIndex % this._getCellCount();
+            columnIndex = columnIndex % this._getCellCount();
         }
 
-        const date = this._getDate(rowIndex, cellIndex);
+        const date = this._getDate(rowIndex, columnIndex);
 
         if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
             return this._formatMonthAndDay(date);
@@ -212,8 +212,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return index;
     }
 
-    _prepareCellData(rowIndex, cellIndex, cell) {
-        const data = super._prepareCellData(rowIndex, cellIndex, cell);
+    _prepareCellData(rowIndex, columnIndex, cell) {
+        const data = super._prepareCellData(rowIndex, columnIndex, cell);
         const $cell = $(cell);
 
         $cell
@@ -336,15 +336,15 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     generateRenderOptions() {
         const options = super.generateRenderOptions();
-        options.cellDataGetters.push((_, rowIndex, cellIndex) => {
+        options.cellDataGetters.push((_, rowIndex, columnIndex) => {
             return {
                 value: {
-                    text: this._getCellText(rowIndex, cellIndex),
+                    text: this._getCellText(rowIndex, columnIndex),
                 },
             };
         });
 
-        const getCellMetaData = (_, rowIndex, cellIndex, groupIndex, startDate) => {
+        const getCellMetaData = (_, rowIndex, columnIndex, groupIndex, startDate) => {
             return {
                 value: {
                     today: this._isCurrentDate(startDate),

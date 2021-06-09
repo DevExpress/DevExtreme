@@ -140,7 +140,7 @@ module('Renovated Render', {
                             isLastGroupCell: true,
                             key: 0,
                         },
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }],
                     dateTableMap: [
                         [{
@@ -155,7 +155,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -168,7 +168,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -292,7 +292,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29),
@@ -305,7 +305,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }
                     ],
                     dateTableMap: [
@@ -322,7 +322,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -336,7 +336,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -350,7 +350,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 2,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -364,7 +364,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { cellIndex: 1, rowIndex: 1 }
+                            position: { columnIndex: 1, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -652,7 +652,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 0, cellIndex: 0 }
+                            position: { rowIndex: 0, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -666,7 +666,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 1, cellIndex: 0 }
+                            position: { rowIndex: 1, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -680,7 +680,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { rowIndex: 2, cellIndex: 0 }
+                            position: { rowIndex: 2, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 allDay: true,
@@ -693,7 +693,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 3, cellIndex: 0 }
+                            position: { rowIndex: 3, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -707,7 +707,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 4, cellIndex: 0 }
+                            position: { rowIndex: 4, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -721,7 +721,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { rowIndex: 5, cellIndex: 0 }
+                            position: { rowIndex: 5, columnIndex: 0 }
                         }]
                     ]
                 };

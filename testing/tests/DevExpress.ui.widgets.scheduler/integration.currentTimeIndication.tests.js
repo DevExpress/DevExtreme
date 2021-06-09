@@ -264,11 +264,11 @@ module('Current Time Cell Indication Updating', {
 
     [{
         view: 'timelineDay',
-        cellIndex: 0,
+        columnIndex: 0,
         timeDifference: HOUR,
     }, {
         view: 'timelineWeek',
-        cellIndex: 6,
+        columnIndex: 6,
         timeDifference: HOUR,
     }].forEach(({ view, cellIndex, timeDifference }) => {
         test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, function(assert) {

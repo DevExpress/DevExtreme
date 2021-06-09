@@ -104,8 +104,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return 0;
     }
 
-    _getDateByCellIndexes(rowIndex, cellIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, cellIndex);
+    _getDateByCellIndexes(rowIndex, columnIndex) {
+        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
         this._setStartDayHour(date);
 

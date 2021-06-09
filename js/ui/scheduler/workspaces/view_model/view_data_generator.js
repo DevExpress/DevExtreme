@@ -278,12 +278,12 @@ export class ViewDataGenerator {
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
                 .slice(startIndex, startIndex + count)
-                .map((cellData, cellIndex) => (
+                .map((cellData, columnIndex) => (
                     {
                         cellData,
                         position: {
                             rowIndex,
-                            cellIndex
+                            columnIndex
                         }
                     })
                 );

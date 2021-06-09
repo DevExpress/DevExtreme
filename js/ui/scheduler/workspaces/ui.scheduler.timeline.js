@@ -113,15 +113,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return 'shorttime';
     }
 
-    _calculateHiddenInterval(rowIndex, cellIndex) {
-        const dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
+    _calculateHiddenInterval(rowIndex, columnIndex) {
+        const dayIndex = Math.floor(columnIndex / this._getCellCountInDay());
         return dayIndex * this._getHiddenInterval();
     }
 
-    _getMillisecondsOffset(rowIndex, cellIndex) {
-        cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
+    _getMillisecondsOffset(rowIndex, columnIndex) {
+        columnIndex = this._calculateCellIndex(rowIndex, columnIndex);
 
-        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
+        return this._getInterval() * columnIndex + this._calculateHiddenInterval(rowIndex, columnIndex);
     }
 
     _createWorkSpaceElements() {
@@ -414,7 +414,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getCellCoordinatesByIndex(index) {
         return {
-            cellIndex: index % this._getCellCount(),
+            columnIndex: index % this._getCellCount(),
             rowIndex: 0
         };
     }
@@ -426,7 +426,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .find('tr')
             .eq(indexes.rowIndex)
             .find('td')
-            .eq(indexes.cellIndex);
+            .eq(indexes.columnIndex);
     }
 
     _getWorkSpaceWidth() {
@@ -590,9 +590,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const columnCountPerGroup = this._getCellCount();
         const today = this._getToday();
         const index = this.getCellIndexByDate(today);
-        const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
+        const { columnIndex: currentTimeColumnIndex } = this._getCellCoordinatesByIndex(index);
 
-        if(currentTimeCellIndex === undefined) {
+        if(currentTimeColumnIndex === undefined) {
             return [];
         }
 
@@ -601,7 +601,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             : 1;
 
         return [...(new Array(horizontalGroupCount))]
-            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
+            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeColumnIndex);
     }
 
     renderRAllDayPanel() {}
