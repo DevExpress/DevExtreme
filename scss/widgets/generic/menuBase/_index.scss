@@ -74,7 +74,7 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
     padding: $generic-menu-item-padding-reduced $generic-menu-item-padding-base $generic-menu-item-padding-increased;
 
     .dx-menu-item-text {
-      padding: 0 $generic-menu-padding-big $generic-menu-item-padding-base $generic-menu-item-padding-base + $generic-base-icon-size;
+      padding: $generic-menu-item-padding-base $generic-menu-padding-big $generic-menu-item-padding-base $generic-menu-item-padding-base + $generic-base-icon-size;
     }
 
     .dx-menu-item-popout {
@@ -86,7 +86,7 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
   &.dx-rtl {
     .dx-menu-item-content {
       .dx-menu-item-text {
-        padding: 0 $generic-menu-item-padding-base + $generic-base-icon-size $generic-menu-item-padding-base $generic-menu-padding-big;
+        padding: $generic-menu-item-padding-base $generic-menu-item-padding-base + $generic-base-icon-size $generic-menu-item-padding-base $generic-menu-padding-big;
       }
 
       .dx-icon {

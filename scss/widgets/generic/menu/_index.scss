@@ -36,7 +36,7 @@
 
   .dx-menu-item-has-text {
     .dx-menu-item-text {
-      padding: 0 $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base;
+      padding: $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base;
     }
 
     &.dx-menu-item-has-icon {
@@ -47,7 +47,7 @@
 
     &.dx-menu-item-has-submenu {
       .dx-menu-item-text {
-        padding: 0 $generic-menu-padding-small $generic-menu-item-padding-base $generic-menu-item-padding-base;
+        padding: $generic-menu-item-padding-base $generic-menu-padding-small $generic-menu-item-padding-base $generic-menu-item-padding-base;
       }
     }
   }
@@ -75,12 +75,12 @@
 
     .dx-menu-item-has-text {
       .dx-menu-item-text {
-        padding: 0 $generic-menu-item-padding-base $generic-menu-item-padding-base 0;
+        padding: $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base 0;
       }
 
       &.dx-menu-item-has-submenu {
         .dx-menu-item-text {
-          padding: 0 $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-padding-small;
+          padding: $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-item-padding-base $generic-menu-padding-small;
         }
       }
     }
