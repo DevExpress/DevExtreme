@@ -23,7 +23,7 @@ import { Scrollbar, ScrollbarPropsType } from '../scrollbar';
 import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
 import { AnimatedScrollbar } from '../animated_scrollbar';
 
-jest.mock('../../editors/load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
+jest.mock('../../load_indicator', () => ({ LoadIndicator: React.forwardRef(() => null) }));
 jest.mock('../../scroll_view/load_panel', () => ({ ScrollViewLoadPanel: React.forwardRef(() => null) }));
 
 const TOP_POCKET_HEIGHT = 80;
