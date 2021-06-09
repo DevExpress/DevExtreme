@@ -994,10 +994,6 @@ const environment = {
 
         assert.ok(chart._argumentAxes[0].wasDrawn, 'Horizontal axis was drawn');
         assert.ok(chart._valueAxes[0].wasDrawn, 'Vertical axis was drawn');
-        assert.ok(chart._argumentAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
-        assert.ok(chart._argumentAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
-        assert.ok(chart._valueAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
-        assert.ok(chart._valueAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
         assert.ok(chart.series[0].wasDrawn, 'Series was drawn');
         assert.ok(!chart._seriesGroup.stub('linkRemove').called, 'Series group should be detached');
         assert.ok(!chart._seriesGroup.stub('clear').called, 'Series group should be cleared');
@@ -1016,6 +1012,7 @@ const environment = {
         assert.ok(chart._crosshairCursorGroup.stub('clear').called, 'crosshair should be cleared');
         assert.ok(chart._crosshairCursorGroup.linkAppend.called, 'crosshair group should be added to root');
         assert.ok(chart._scaleBreaksGroup.linkAppend.called, 'scalebreaks group should be added to root');
+        assert.ok(chart._elementsAxesGroup.linkAppend.called, 'axes labels group should be added to root');
 
         withNewData && assert.ok(getTrackerStub().stub('update').called, 'Tracker should be initialized');
         options.noTrackerUpdateCheck || assert.ok(getTrackerStub().stub('update').called, 'Tracker should be prepared');
@@ -1523,6 +1520,7 @@ const environment = {
         mockObjectDispose('_scrollGroup');
         mockObjectDispose('_backgroundRect');
         mockObjectDispose('_scaleBreaksGroup');
+        mockObjectDispose('_elementsAxesGroup');
 
         // act
         this.$container.remove();
@@ -1585,6 +1583,8 @@ const environment = {
         assert.strictEqual(chart._crosshairCursorGroup, null, 'crosshair cursor group is null');
         assert.ok(chart._scaleBreaksGroupDisposed, '_scaleBreaksGroup');
         assert.strictEqual(chart._scaleBreaksGroup, null, 'scalebreaks group is null');
+        assert.ok(chart._elementsAxesGroupDisposed, '_elementsAxesGroup');
+        assert.strictEqual(chart._elementsAxesGroup, null, 'elementsAxesGroup is null');
 
         assert.deepEqual(loadIndicator.dispose.lastCall.args, [], 'load indicator dispose args');
         assert.strictEqual(chart._loadingIndicator, null, 'load indicator is null');

@@ -2487,6 +2487,7 @@ const VALIDATE_CHART_GROUPS = [
     'dxc-strips-labels-group',
     'dxc-constant-lines-group',
     'dxc-series-group',
+    'dxc-elements-axes-group',
     'dxc-constant-lines-group',
     'dxc-scale-breaks',
     'dxc-labels-group',

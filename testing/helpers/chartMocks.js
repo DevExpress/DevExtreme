@@ -925,6 +925,7 @@ export const MockAxis = function(renderOptions) {
                 this._translator =
                 this.axesContainerGroup =
                 this.gridGroup =
+                this._axesElementsGroup =
                 this._options = null;
 
             this.disposed = true;
@@ -1040,6 +1041,7 @@ export const MockAxis = function(renderOptions) {
         _incidentOccurred: renderOptions.incidentOccurred,
         _stripsGroup: renderOptions.stripsGroup,
         _labelAxesGroup: renderOptions.labelAxesGroup,
+        _axesElementsGroup: renderOptions.axesElementsGroup,
         _constantLinesGroup: renderOptions.constantLinesGroup,
         _scaleBreaksGroup: renderOptions.scaleBreaksGroup,
         axesContainerGroup: renderOptions.axesContainerGroup,
@@ -1109,9 +1111,7 @@ export const MockAxis = function(renderOptions) {
         getTemplatesDef: sinon.spy(),
         setRenderedState: sinon.spy(),
         isRendered: sinon.spy(),
-        getTemplatesGroups: sinon.stub().returns([]),
-        beforeCleanGroups: sinon.spy(),
-        afterCleanGroups: sinon.spy()
+        getTemplatesGroups: sinon.stub().returns([])
     };
 };
 

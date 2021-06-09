@@ -433,6 +433,7 @@ export const AdvancedChart = BaseChart.inherit({
         that._stripsGroup.linkAppend();
         that._gridGroup.linkAppend();
         that._axesGroup.linkAppend();
+        that._elementsAxesGroup.linkAppend();
         that._constantLinesGroup.linkAppend();
         that._labelAxesGroup.linkAppend();
         that._scaleBreaksGroup.linkAppend();
@@ -590,6 +591,7 @@ export const AdvancedChart = BaseChart.inherit({
             constantLinesGroup: that._constantLinesGroup,
             scaleBreaksGroup: that._scaleBreaksGroup,
             axesContainerGroup: that._axesGroup,
+            axesElementsGroup: that._elementsAxesGroup,
             gridGroup: that._gridGroup,
             isArgumentAxis: isArgumentAxes,
             getTemplate(template) {

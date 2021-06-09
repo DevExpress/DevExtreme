@@ -1049,6 +1049,8 @@ QUnit.test('Axis creation - check axis parameters', function(assert) {
     assert.equal(axisModule.Axis.getCall(0).args[0].axesContainerGroup.attr.firstCall.args[0].class, 'dxrs-scale');
     assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.attr.firstCall.args[0].class, 'dxrs-scale-breaks');
     assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.append.lastCall.args[0], this.renderer.root);
+    assert.equal(axisModule.Axis.getCall(0).args[0].axesElementsGroup.attr.firstCall.args[0].class, 'dxrs-scale-elements');
+    assert.equal(axisModule.Axis.getCall(0).args[0].axesElementsGroup.append.lastCall.args[0], this.renderer.root);
     assert.equal(axisModule.Axis.getCall(0).args[0].isArgumentAxis, true);
 });
 

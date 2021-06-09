@@ -432,6 +432,7 @@ export const BaseChart = BaseWidget.inherit({
         that._labelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ 'class': 'dxc-series-group' }).linkOn(root, 'series');
+        that._elementsAxesGroup = renderer.g().attr({ 'class': 'dxc-elements-axes-group' }).linkOn(root, 'elements');
         that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ 'class': 'dxc-scale-breaks' }).linkOn(root, 'scale-breaks');
         that._labelsGroup = renderer.g().attr({ 'class': 'dxc-labels-group' }).linkOn(root, 'labels');
@@ -482,6 +483,7 @@ export const BaseChart = BaseWidget.inherit({
         unlinkGroup('_stripsGroup');
         unlinkGroup('_gridGroup');
         unlinkGroup('_axesGroup');
+        unlinkGroup('_elementsAxesGroup');
 
         unlinkGroup('_constantLinesGroup');
 
@@ -501,6 +503,7 @@ export const BaseChart = BaseWidget.inherit({
         disposeObject('_stripsGroup');
         disposeObject('_gridGroup');
         disposeObject('_axesGroup');
+        disposeObject('_elementsAxesGroup');
 
         disposeObject('_constantLinesGroup');
 

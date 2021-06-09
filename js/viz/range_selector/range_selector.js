@@ -574,6 +574,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
         const rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
         const slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
         const scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        const axesElementsGroup = renderer.g().attr({ 'class': 'dxrs-scale-elements', 'clip-path': that._clipRect.id }).append(root);
         const scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
         const trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
@@ -581,6 +582,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
+            axesElementsGroup: axesElementsGroup,
             updateSelectedRange: function(range, e) { that.setValue(convertVisualRangeObject(range), e); },
             incidentOccurred: that._incidentOccurred
         });
@@ -1033,6 +1035,7 @@ function AxisWrapper(params) {
         renderer: params.renderer,
         axesContainerGroup: params.root,
         scaleBreaksGroup: params.scaleBreaksGroup,
+        axesElementsGroup: params.axesElementsGroup,
         incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
         axisType: 'xyAxes',
