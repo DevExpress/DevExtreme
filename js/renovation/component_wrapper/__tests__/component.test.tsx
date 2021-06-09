@@ -689,6 +689,21 @@ describe('templates and slots', () => {
 
     expect($(root.firstChild)[0]).toBe(template[0]);
   });
+
+  it('should remove content after template removed', () => {
+    const template = () => $('<div>');
+
+    $('#component').dxTemplatedTestWidget({
+      template,
+    });
+
+    expect($('#component').children('.templates-root').length).toBe(1);
+
+    $('#component').dxTemplatedTestWidget({
+      template: null,
+    });
+    expect($('#component').children('.templates-root').length).toBe(0);
+  });
 });
 
 describe('events/actions', () => {

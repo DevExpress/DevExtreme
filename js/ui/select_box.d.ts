@@ -16,15 +16,12 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
-} from './collection/ui.collection_widget.base';
-
-import {
     DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    SelectionChangedInfo
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
