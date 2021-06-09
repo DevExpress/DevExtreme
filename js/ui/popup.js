@@ -23,7 +23,7 @@ import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
-import { Overlay } from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
 
