@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { Table } from '../table';
@@ -44,15 +43,13 @@ export const viewFunction = ({
     />
   </Table>
 );
-@ComponentBindings()
-export class DateTableLayoutBaseProps extends DateTableLayoutProps {}
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
   jQuery: { register: true },
 })
-export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+export class DateTableLayoutBase extends JSXComponent(DateTableLayoutProps) {
   get classes(): string | undefined {
     const { addDateTableClass } = this.props;
 
