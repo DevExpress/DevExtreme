@@ -8100,6 +8100,8 @@ QUnit.module('Editing with real dataController', {
         const rows = this.getVisibleRows();
         const buttonColumn = this.getVisibleColumns()[5];
 
+        assert.ok(rows.length > 0, 'grid has rows');
+
         rows.forEach((row, i) => {
             const args = disabledSpy.getCall(i).args;
 

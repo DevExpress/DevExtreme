@@ -1327,7 +1327,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default false
@@ -1338,7 +1338,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
+    disabled?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
 }
 
 /**
