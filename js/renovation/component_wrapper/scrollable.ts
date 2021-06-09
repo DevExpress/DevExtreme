@@ -1,13 +1,19 @@
-/* eslint-disable no-underscore-dangle */
+import type { Scrollable } from '../ui/scroll_view/scrollable';
+import { DxMouseEvent } from '../ui/scroll_view/types';
 import Component from './common/component';
-import { Deferred } from '../../core/utils/deferred';
 import { Option } from './common/types';
+import { Deferred } from '../../core/utils/deferred';
+import type { dxElementWrapper } from '../../core/renderer';
 
-// eslint-disable-next-line react/prefer-stateless-function
 export class ScrollableWrapper extends Component {
-  update(): void {
-    (this._viewRef as any).current.update();
+  handleMove(event: DxMouseEvent): void {
+    (this.viewRef as Scrollable).scrollableRef.handleMove(event);
+  }
 
+  update(): unknown {
+    (this.viewRef as Scrollable).update();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new (Deferred as any)().resolve();
   }
 
@@ -15,19 +21,21 @@ export class ScrollableWrapper extends Component {
     super.repaint();
   }
 
-  _container(): any {
-    return $(this.$element).find('.dx-scrollable-container');
+  _container(): dxElementWrapper {
+    return (this.$element() as unknown as dxElementWrapper).find('.dx-scrollable-container').eq(0);
   }
 
-  $content(): any {
-    return $(this.$element).find('.dx-scrollable-content');
+  $content(): dxElementWrapper {
+    return (this.$element() as unknown as dxElementWrapper).find('.dx-scrollable-content').eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // https://trello.com/c/UCUiKGfd/2724-renovation-renovated-components-ignores-children-when-usetemplates-returns-false
-  // _useTemplates(): boolean {
-  //   return false;
-  // }
+  _moveIsAllowed(event: DxMouseEvent): boolean {
+    return (this.viewRef as Scrollable).scrollableRef.moveIsAllowed(event);
+  }
+
+  _prepareDirections(value: boolean): void {
+    (this.viewRef as Scrollable).scrollableRef.prepareDirections(value);
+  }
 
   _optionChanged(option: Option): void {
     const { name } = option;

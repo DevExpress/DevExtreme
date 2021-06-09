@@ -94,6 +94,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation,
     forceUpdateHScrollbarLocation, forceUpdateVScrollbarLocation,
+    onVisibilityChangeHandler,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -122,7 +123,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
       onDimensionChanged={updateHandler}
-      onVisibilityChange={updateHandler}
+      onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -232,7 +233,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   // https://trello.com/c/psOGNvMc/2745-renovation-type-for-timers
-  @Mutable() validateWheelTimer?: ReturnType<typeof setTimeout>;
+  @Mutable() validateWheelTimer?: unknown;
 
   @Mutable() locked = false;
 
@@ -322,6 +323,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
+  container(): HTMLDivElement {
+    return this.containerRef.current!;
+  }
+
+  @Method()
   update(): void {
     this.updateSizes();
     this.onUpdated();
@@ -367,7 +373,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.onStart();
     this.eventHandler(
       (scrollbar) => scrollbar.scrollByHandler(
-        { x: location.left || 0, y: location.top || 0 },
+        { x: location.left ?? 0, y: location.top ?? 0 },
       ),
     );
   }
@@ -568,11 +574,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.update();
 
+    return this.moveIsAllowed(event);
+  }
+
+  @Method()
+  moveIsAllowed(event: DxMouseEvent): boolean {
     if (this.props.disabled
-    || (isDxMouseWheelEvent(event) && isCommandKeyPressed({
-      ctrlKey: event.ctrlKey,
-      metaKey: event.metaKey,
-    }))) {
+      || (isDxMouseWheelEvent(event) && isCommandKeyPressed({
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+      }))) {
       return false;
     }
 
@@ -781,7 +792,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return;
     }
 
-    e.preventDefault();
+    e.preventDefault?.();
 
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
@@ -956,7 +967,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   clearWheelValidationTimer(): void {
-    clearTimeout(this.validateWheelTimer as unknown as number);
+    clearTimeout(this.validateWheelTimer as number);
     this.validateWheelTimer = undefined;
   }
 
@@ -987,10 +998,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  handleKeyDown({ originalEvent }: DxKeyboardEvent): void {
+  handleKeyDown(event: DxKeyboardEvent): void {
     let handled = true;
 
-    switch (normalizeKeyName(originalEvent)) {
+    switch (normalizeKeyName(event)) {
       case KEY_CODES.TAB:
         this.tabWasPressed = true;
         handled = false;
@@ -1025,8 +1036,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     if (handled) {
-      originalEvent.stopPropagation();
-      originalEvent.preventDefault();
+      event.originalEvent.stopPropagation();
+      event.originalEvent.preventDefault();
     }
   }
 
@@ -1037,8 +1048,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
     }
     this.scrollBy({
-      top: (lines.y || 0) * scrollOffset,
-      left: (lines.x || 0) * scrollOffset,
+      top: (lines.y ?? 0) * scrollOffset,
+      left: (lines.x ?? 0) * scrollOffset,
     });
   }
 
@@ -1110,6 +1121,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   updateHandler(): void {
     this.update();
+  }
+
+  onVisibilityChangeHandler(visible: boolean): void {
+    this.updateHandler();
+
+    this.props.onVisibilityChange?.(visible);
   }
 
   updateSizes(): void {

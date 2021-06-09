@@ -40,12 +40,12 @@ class InputEventsMaskStrategy extends BaseMaskStrategy {
 
             this.editorCaret(currentCaret);
 
-            const length = this._prevCaret.end - this._prevCaret.start;
+            const length = this._prevCaret?.end - this._prevCaret?.start;
             const newData = data + (length ? this._getEmptyString(length - data.length) : '');
 
             this.editor.setForwardDirection();
             const hasValidChars = this._updateEditorMask({
-                start: this._prevCaret.start,
+                start: this._prevCaret?.start,
                 length: length || newData.length,
                 text: newData
             });
