@@ -27,10 +27,11 @@ export default class TableResizingModule extends BaseModule {
         super(quill, options);
         this.enabled = !!options.enabled;
         this._tableResizeFrames = [];
+        this._minColumnWidth = options.minColumnWidth || DEFAULT_MIN_COLUMN_WIDTH;
+        this._minRowHeight = options.minRowHeight || DEFAULT_MIN_COLUMN_WIDTH;
+
 
         if(this.enabled) {
-
-
             this.editorInstance.on('contentReady', () => {
                 this._attachResizerTimeout = setTimeout(() => {
 
@@ -245,25 +246,31 @@ export default class TableResizingModule extends BaseModule {
                 // const newPosition = startDragPosition + event.offset[positionCoordinateName];
                 // console.log('move ' + newPosition);
                 // console.log(newPosition);
-                const minSize = DEFAULT_MIN_COLUMN_WIDTH;
 
-                const currentColumnNewSize = startLineSize + event.offset[positionCoordinateName];
+                const currentLineNewSize = startLineSize + event.offset[positionCoordinateName];
 
                 if(currentDirection === 'horizontal') {
 
                     const nextColumnNewSize = nextLineSize && nextLineSize - event.offset[positionCoordinateName];
-                    const isCurrentColumnHasEnoughPlace = currentColumnNewSize >= minSize;
-                    const isNextColumnHasEnoughPlace = !nextLineSize || nextColumnNewSize >= minSize;
+                    const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
+                    const isNextColumnHasEnoughPlace = !nextLineSize || nextColumnNewSize >= this._minColumnWidth;
 
                     if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-                        $determinantElements.eq(index).css(positionStyleProperty, currentColumnNewSize);
+                        $determinantElements.eq(index).css(positionStyleProperty, currentLineNewSize);
 
                         if(nextLineSize) {
                             $determinantElements.eq(index + 1).css(positionStyleProperty, nextColumnNewSize);
                         }
                     }
                 } else {
-                    $determinantElements.eq(index).css(positionStyleProperty, currentColumnNewSize);
+                    // const isCurrentRowHasEnoughPlace = currentLineNewSize >= this._minRowHeight;
+
+                    const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
+                    // console.log(newHeight);
+
+                    // if(isCurrentRowHasEnoughPlace) {
+                    $determinantElements.eq(index).css(positionStyleProperty, newHeight);
+                    // }
                 }
 
 

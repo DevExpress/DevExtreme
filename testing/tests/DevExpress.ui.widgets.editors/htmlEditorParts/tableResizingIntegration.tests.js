@@ -370,6 +370,65 @@ module('Resizing integration', {
         assert.roughEqual($table.outerHeight(), startTableHeight + offset, 3);
     });
 
+    test('Table height is changed to minRowHeight if we try to set value less the limit', function(assert) {
+        this.createWidget({
+            height: 300,
+            tableResizing: { enabled: true, minColumnWidth: 40, minRowHeight: 40 }
+        });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        const offset = 5;
+
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(0, offset)
+            .dragEnd();
+
+        this.clock.tick();
+
+        assert.roughEqual($table.find('tr:first-child').find('td:first-child').outerHeight(), 40, 3);
+    });
+
+    test('Table row height is limited by minRowHeight option', function(assert) {
+        this.createWidget({
+            height: 300,
+            tableResizing: { enabled: true, minColumnWidth: 40, minRowHeight: 30 }
+        });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(0, 40)
+            .drag(0, -10)
+            .drag(0, -10)
+            .drag(0, -10)
+            .drag(0, -10)
+            .drag(0, -10)
+            .drag(0, -10)
+            .dragEnd();
+
+        this.clock.tick();
+
+        assert.roughEqual($table.find('tr:first-child').find('td:first-child').outerHeight(), 30, 3);
+    });
+
     test('Check row resizers elements positions', function(assert) {
         this.createWidget();
         this.clock.tick();
