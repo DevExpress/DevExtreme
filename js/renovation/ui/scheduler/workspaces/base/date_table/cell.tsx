@@ -60,7 +60,7 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
         groups,
         groupIndex: groups ? groupIndex : undefined,
         text: '',
-        allDay: allDay || undefined,
+        allDay: !!allDay || undefined,
         ...contentTemplateProps.data,
       },
       index,

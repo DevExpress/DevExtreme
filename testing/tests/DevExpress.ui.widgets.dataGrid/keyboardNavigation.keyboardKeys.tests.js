@@ -16,7 +16,6 @@ import 'ui/data_grid/ui.data_grid';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
@@ -676,9 +675,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        if(!browser.msie || parseInt(browser.version) > 11) {
-            assert.ok(that.rowsView.element().is(':focus'), 'rowsview element is focused');
-        }
+        assert.ok(that.rowsView.element().is(':focus'), 'rowsview element is focused');
         assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
         assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
@@ -797,26 +794,24 @@ QUnit.module('Keyboard keys', {
         assert.ok(!isPageIndexChanged);
     });
 
-    if(!browser.msie || parseInt(browser.version) > 11) {
-        QUnit.testInActiveWindow('Space', function(assert) {
-            // arrange
-            setupModules(this);
+    QUnit.testInActiveWindow('Space', function(assert) {
+        // arrange
+        setupModules(this);
 
-            // act
-            this.options.selection = { mode: 'single' };
-            this.gridView.render($('#container'));
+        // act
+        this.options.selection = { mode: 'single' };
+        this.gridView.render($('#container'));
 
-            this.focusFirstCell();
+        this.focusFirstCell();
 
-            this.triggerKeyDown('downArrow');
-            this.triggerKeyDown('downArrow');
-            this.triggerKeyDown('space', false, false, $(':focus').get(0));
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('space', false, false, $(':focus').get(0));
 
-            // assert
-            assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
-            assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [3], 'changeItemSelectionArgs');
-        });
-    }
+        // assert
+        assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
+        assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [3], 'changeItemSelectionArgs');
+    });
 
     // T336376
     QUnit.testInActiveWindow('Space in input', function(assert) {
@@ -1433,10 +1428,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok(testElement.find('.test .dx-texteditor.dx-state-focused').length === 0);
-        if(!browser.msie) {
-            // T317003
-            assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
-        }
+        assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
     });
 
     QUnit.testInActiveWindow('Close edit form after esc key', function(assert) {
@@ -1497,10 +1489,7 @@ QUnit.module('Keyboard keys', {
         // assert
         assert.ok(testElement.find('.test .dx-texteditor.dx-state-focused').length === 0);
 
-        if(!browser.msie) {
-            // T317003
-            assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
-        }
+        assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
     });
 
     QUnit.test('Key down event - default key handler is canceled', function(assert) {

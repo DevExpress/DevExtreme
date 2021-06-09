@@ -13,7 +13,8 @@ const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtu
 const scrollingOrientations = {
     vertical: 'vertical',
     horizontal: 'horizontal',
-    both: 'both'
+    both: 'both',
+    none: 'none'
 };
 const DefaultScrollingOrientation = scrollingOrientations.both;
 
@@ -32,8 +33,6 @@ export default class VirtualScrollingDispatcher {
     get isRTL() { return this.workspace._isRTL(); }
 
     get renderer() { return this._renderer; }
-
-    get isVirtualScrolling() { return this.workspace.isVirtualScrolling(); }
 
     get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
     set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
@@ -103,7 +102,13 @@ export default class VirtualScrollingDispatcher {
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
     get scrollingOrientation() {
-        return this.workspace.option('scrolling.orientation') || DefaultScrollingOrientation;
+        const scrolling = this.workspace.option('scrolling');
+
+        if(scrolling.mode === 'standard') {
+            return scrollingOrientations.none;
+        }
+
+        return scrolling.orientation || DefaultScrollingOrientation;
     }
 
     get verticalScrollingAllowed() {

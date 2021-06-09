@@ -3166,7 +3166,7 @@ QUnit.module('datebox with time component', {
         const $monthRollerView = $('.dx-dateviewroller-month');
         const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
         const deltaY = 100;
-        const pointer = pointerMock(monthRollerView._$container);
+        const pointer = pointerMock(monthRollerView.container());
 
         assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
 

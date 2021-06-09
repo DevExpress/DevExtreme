@@ -62,7 +62,7 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   }
 
   get pagesCountText(): string {
-    return this.props.pagesCountText || messageLocalization.getFormatter('dxPager-pagesCountText')();
+    return (this.props.pagesCountText ?? '') || messageLocalization.getFormatter('dxPager-pagesCountText')();
   }
 
   @InternalState() private minWidth = 10;

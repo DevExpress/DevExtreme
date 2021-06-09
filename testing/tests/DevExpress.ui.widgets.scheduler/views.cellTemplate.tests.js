@@ -3,6 +3,7 @@ import fx from 'animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { dateToMilliseconds } from 'core/utils/date';
 
 const {
     module,
@@ -215,16 +216,8 @@ module('CellTemplate tests', moduleConfig, () => {
             currentView: 'day',
             currentDate: new Date(2020, 10, 19),
             resources: [{
-                fieldExpr: 'priority',
-                allowMultiple: false,
-                dataSource: [{
-                    text: 'Low Priority',
-                    id: 1
-                }, {
-                    text: 'High Priority',
-                    id: 2
-                }],
-                label: 'Priority',
+                ...resources[0],
+                allowMultiple: false
             }],
             startDayHour: 10,
             endDayHour: 12,
@@ -390,15 +383,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         currentDate: new Date(2016, 8, 5),
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dataCellTemplate: function(itemData, index, $container) {
                             if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell') && !templateOptions) {
                                 templateOptions = itemData;
@@ -438,6 +423,567 @@ module('CellTemplate tests', moduleConfig, () => {
                         },
                         renovateRender,
                     });
+                });
+            });
+        });
+
+        const hourDurationInMS = dateToMilliseconds('hour');
+        const dayDurationInMS = dateToMilliseconds('day');
+
+        function createVerticalGroupedCells(cells) {
+            return [...cells, ...cells];
+        }
+
+        function createHorizontalGroupedCells(cells, rowLength = 1) {
+            const result = [];
+
+            for(let i = 0; i < cells.length; i += rowLength) {
+                const oneGroupCellLine = cells.slice(i, i + rowLength);
+                result.push(...oneGroupCellLine, ...oneGroupCellLine);
+            }
+
+            return result;
+        }
+
+        const dayCells = [
+            {
+                startDate: new Date(2021, 7, 1, 0),
+                endDate: new Date(2021, 7, 1, 1),
+            }, {
+                startDate: new Date(2021, 7, 1, 1),
+                endDate: new Date(2021, 7, 1, 2),
+            }, {
+                startDate: new Date(2021, 7, 1, 2),
+                endDate: new Date(2021, 7, 1, 3),
+            }, {
+                startDate: new Date(2021, 7, 1, 3),
+                endDate: new Date(2021, 7, 1, 4),
+            }
+        ];
+
+        function getWeekCells(dayCells, duration = 7) {
+            const result = [];
+
+            dayCells.forEach(({ startDate, endDate }) => {
+                for(let i = 0; i < duration; i++) {
+                    result.push(
+                        {
+                            startDate: new Date(startDate.getTime() + i * dayDurationInMS),
+                            endDate: new Date(endDate.getTime() + i * dayDurationInMS),
+                        }
+                    );
+                }
+            });
+
+            return result;
+        }
+
+        function getMonthCells(startDate, endDate, dayStartHour, dayEndHour) {
+            const result = [];
+
+            let currentDate = new Date(startDate);
+            while(currentDate.getTime() <= endDate.getTime()) {
+                result.push(
+                    {
+                        startDate: new Date(currentDate.getTime() + hourDurationInMS * dayStartHour),
+                        endDate: new Date(currentDate.getTime() + hourDurationInMS * dayEndHour),
+                    });
+                currentDate = new Date(currentDate.getTime() + dayDurationInMS);
+            }
+
+            return result;
+        }
+
+        function getTimelineCells(dayCells, duration) {
+            const result = [];
+
+            for(let i = 0; i < duration; i++) {
+                const nextDay = dayCells.map(({ startDate, endDate }) => {
+                    return (
+                        {
+                            startDate: new Date(startDate.getTime() + i * dayDurationInMS),
+                            endDate: new Date(endDate.getTime() + i * dayDurationInMS),
+                        }
+                    );
+                });
+
+                result.push(...nextDay);
+            }
+
+            return result;
+        }
+
+        const weekCells = getWeekCells(dayCells);
+        const monthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 11), 0, 4);
+        const timelineWeekCells = getTimelineCells(dayCells, 7);
+        const timelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 7, 31), 0, 4);
+
+        [
+            {
+                view: 'day',
+                groupOrientation: 'horizontal',
+                expectedDates: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'day',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'week',
+                groupOrientation: 'horizontal',
+                expectedDates: createHorizontalGroupedCells(weekCells, 7),
+            }, {
+                view: 'week',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(weekCells),
+            }, {
+                view: 'month',
+                groupOrientation: 'horizontal',
+                expectedDates: createHorizontalGroupedCells(monthCells, 7),
+            }, {
+                view: 'month',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(monthCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'horizontal',
+                expectedDates: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'timelineDay',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(dayCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'horizontal',
+                expectedDates: createVerticalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineWeek',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'horizontal',
+                expectedDates: createVerticalGroupedCells(timelineMonthCells),
+            }, {
+                view: 'timelineMonth',
+                groupOrientation: 'vertical',
+                expectedDates: createVerticalGroupedCells(timelineMonthCells),
+            }
+        ].forEach(({ view, groupOrientation, expectedDates }) => {
+            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+                    + ` with ${groupOrientation} groupping`, function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        actualDates.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                    groups: ['ownerId'],
+                    resources
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        [
+            {
+                view: 'day',
+                expectedDates: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'week',
+                expectedDates: createHorizontalGroupedCells(weekCells),
+            }, {
+                view: 'month',
+                expectedDates: createHorizontalGroupedCells(monthCells),
+            }, {
+                view: 'timelineDay',
+                expectedDates: createHorizontalGroupedCells(dayCells),
+            }, {
+                view: 'timelineWeek',
+                expectedDates: createHorizontalGroupedCells(timelineWeekCells),
+            }, {
+                view: 'timelineMonth',
+                expectedDates: createHorizontalGroupedCells(timelineMonthCells),
+            }
+        ].forEach(({ view, expectedDates }) => {
+            test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
+                    + ' with groupping by date', function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        actualDates.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                    groups: ['ownerId'],
+                    resources
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        function duplicateWithDateShift(cells, shift) {
+            const result = [...cells];
+
+            dayCells.forEach(({ startDate, endDate }) => {
+                result.push({
+                    startDate: new Date(startDate.getTime() + shift),
+                    endDate: new Date(endDate.getTime() + shift),
+                });
+            });
+
+            return result;
+        }
+
+        const twoDayCells = getWeekCells(dayCells, 2);
+        const twoWeekCells = getWeekCells(dayCells, 14);
+        const twoMonthCells = getMonthCells(new Date(2021, 5, 27), new Date(2021, 8, 4), 0, 4);
+        const twoTimelineDayCells = duplicateWithDateShift(dayCells, dayDurationInMS);
+        const twoTimelineWeekCells = getTimelineCells(dayCells, 14);
+        const twoTimelineMonthCells = getMonthCells(new Date(2021, 7, 1), new Date(2021, 8, 30), 0, 4);
+
+        [
+            {
+                view: 'day',
+                expectedDates: twoDayCells,
+            }, {
+                view: 'week',
+                expectedDates: twoWeekCells,
+            }, {
+                view: 'month',
+                expectedDates: twoMonthCells,
+                currentDate: new Date(2021, 6, 1),
+            }, {
+                view: 'timelineDay',
+                expectedDates: twoTimelineDayCells,
+            }, {
+                view: 'timelineWeek',
+                expectedDates: twoTimelineWeekCells,
+            }, {
+                view: 'timelineMonth',
+                expectedDates: twoTimelineMonthCells,
+            },
+        ].forEach(({ view, expectedDates, currentDate }) => {
+            test(`dataCellTemplate should provide correct options in ${view} view`
+                    + ' with intervalCount: 2', function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    showAllDayPanel: false,
+                    cellDuration: 60,
+                    startDayHour: 0,
+                    endDayHour: 4,
+                    firstDayOfWeek: 0,
+                    currentDate: currentDate || new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        actualDates.push(
+                            {
+                                startDate: data.startDate,
+                                endDate: data.endDate,
+                            }
+                        );
+                    },
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        const twoWeekAllDayCells = [
+            new Date(2021, 7, 1),
+            new Date(2021, 7, 2),
+            new Date(2021, 7, 3),
+            new Date(2021, 7, 4),
+            new Date(2021, 7, 5),
+            new Date(2021, 7, 6),
+            new Date(2021, 7, 7),
+            new Date(2021, 7, 8),
+            new Date(2021, 7, 9),
+            new Date(2021, 7, 10),
+            new Date(2021, 7, 11),
+            new Date(2021, 7, 12),
+            new Date(2021, 7, 13),
+            new Date(2021, 7, 14),
+        ];
+
+        [
+            {
+                view: 'day',
+                expectedDates: [twoWeekAllDayCells[0], twoWeekAllDayCells[1]]
+            }, {
+                view: 'week',
+                expectedDates: twoWeekAllDayCells,
+            }, {
+                view: 'workWeek',
+                expectedDates: [...twoWeekAllDayCells.slice(1, 6), ...twoWeekAllDayCells.slice(8, 13)],
+            },
+        ].forEach(({ view, expectedDates }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + 'with intervalCount: 2', function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            intervalCount: 2,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal'
+                            );
+
+                            actualDates.push(data.startDate);
+                        }
+                    }
+                });
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        const doubledDayAllDayCells = createVerticalGroupedCells([twoWeekAllDayCells[0]]);
+        const doubledWeekAllDayCells = createVerticalGroupedCells(twoWeekAllDayCells.slice(0, 7));
+        const doubledWorkWeekAllDayCells = createVerticalGroupedCells(twoWeekAllDayCells.slice(1, 6));
+
+        [
+            {
+                view: 'day',
+                expectedDates: doubledDayAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'day',
+                expectedDates: doubledDayAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'week',
+                expectedDates: doubledWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'week',
+                expectedDates: doubledWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            }, {
+                view: 'workWeek',
+                expectedDates: doubledWorkWeekAllDayCells,
+                groupOrientation: 'vertical',
+            }, {
+                view: 'workWeek',
+                expectedDates: doubledWorkWeekAllDayCells,
+                groupOrientation: 'horizontal',
+            },
+        ].forEach(({ view, expectedDates, groupOrientation }) => {
+            test(`allDay cells should have correct options in ${view} view`
+                + ` with ${groupOrientation} grouping`, function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal'
+                            );
+
+                            actualDates.push(data.startDate);
+                        }
+                    },
+                    groups: ['ownerId'],
+                    resources,
+                });
+
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        const horizontalDoubledWeekAllDayCells = createHorizontalGroupedCells(twoWeekAllDayCells.slice(0, 7));
+        const horizontalDoubledWorkWeekAllDayCells = createHorizontalGroupedCells(twoWeekAllDayCells.slice(1, 6));
+
+        [
+            {
+                view: 'day',
+                expectedDates: doubledDayAllDayCells,
+            }, {
+                view: 'week',
+                expectedDates: horizontalDoubledWeekAllDayCells,
+            }, {
+                view: 'workWeek',
+                expectedDates: horizontalDoubledWorkWeekAllDayCells,
+            },
+        ].forEach(({ view, expectedDates }) => {
+            test(`allDay cells should have correct options in ${view} view with grouping by date`, function(assert) {
+                const actualDates = [];
+
+                createWrapper({
+                    views: [
+                        {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        }
+                    ],
+                    currentView: view,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    firstDayOfWeek: 0,
+                    currentDate: new Date(2021, 7, 1),
+                    renovateRender: true,
+                    dataCellTemplate: (data) => {
+                        if(data.allDay) {
+                            assert.equal(
+                                data.startDate.getTime(),
+                                data.endDate.getTime(),
+                                'startDate and endDate of allDay cell should be equal'
+                            );
+
+                            actualDates.push(data.startDate);
+                        }
+                    },
+                    groups: ['ownerId'],
+                    resources,
+                });
+
+                assert.deepEqual(actualDates, expectedDates, 'cells options should be correct');
+            });
+        });
+
+        [
+            {
+                type: 'day',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 22),
+                firstCellDate: new Date(2021, 7, 22),
+            }, {
+                type: 'day',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 23),
+            }, {
+                type: 'day',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 24),
+                firstCellDate: new Date(2021, 7, 21),
+            }, {
+                type: 'week',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 7, 19),
+                firstCellDate: new Date(2021, 7, 15),
+            }, {
+                type: 'week',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 22),
+            }, {
+                type: 'week',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 7, 29),
+                firstCellDate: new Date(2021, 7, 8),
+            }, {
+                type: 'month',
+                description: 'startDate is before the currentDate',
+                startDate: new Date(2021, 6, 19),
+                firstCellDate: new Date(2021, 5, 27),
+            }, {
+                type: 'month',
+                description: 'startDate is equal to currentDate',
+                startDate: new Date(2021, 7, 23),
+                firstCellDate: new Date(2021, 7, 1),
+            }, {
+                type: 'month',
+                description: 'startDate is after the currentDate',
+                startDate: new Date(2021, 8, 1),
+                firstCellDate: new Date(2021, 4, 30),
+            }
+        ].forEach(({ type, description, startDate, firstCellDate }) => {
+            test(`dataCellTemplate should have correct firstCell startDate in ${type} view when ${description}`, function(assert) {
+                assert.expect(1);
+
+                createWrapper({
+                    views: [
+                        {
+                            type,
+                            intervalCount: 3,
+                            startDate,
+                        }
+                    ],
+                    currentView: type,
+                    showAllDayPanel: false,
+                    startDayHour: 0,
+                    endDayHour: 1,
+                    cellDuration: 60,
+                    currentDate: new Date(2021, 7, 23),
+                    renovateRender: true,
+                    dataCellTemplate: (data, index) => {
+                        if(index === 0) {
+                            assert.equal(data.startDate.getTime(), firstCellDate.getTime(), 'First cell has correct startDate');
+                        }
+                    },
                 });
             });
         });
@@ -885,19 +1431,19 @@ module('CellTemplate tests', moduleConfig, () => {
         const data = [{
             startDate: new Date(2020, 10, 24, 10),
             endDate: new Date(2020, 10, 24, 11),
-            priorityId: 1,
+            ownerId: 1,
         }, {
             startDate: new Date(2020, 10, 25, 10),
             endDate: new Date(2020, 10, 25, 11),
-            priorityId: 1,
+            ownerId: 1,
         }, {
             startDate: new Date(2020, 10, 24, 10),
             endDate: new Date(2020, 10, 24, 11),
-            priorityId: 2,
+            ownerId: 2,
         }, {
             startDate: new Date(2020, 10, 25, 10),
             endDate: new Date(2020, 10, 25, 11),
-            priorityId: 2,
+            ownerId: 2,
         }];
 
         const basicOptions = {
@@ -906,17 +1452,9 @@ module('CellTemplate tests', moduleConfig, () => {
             currentView: 'agenda',
             currentDate: new Date(2020, 10, 24),
             resources: [{
-                fieldExpr: 'priorityId',
-                allowMultiple: false,
-                dataSource: [{
-                    text: 'Low Priority',
-                    id: 1
-                }, {
-                    text: 'High Priority',
-                    id: 2
-                }],
-                label: 'Priority',
-            }],
+                ...resources[0],
+                allowMultiple: false
+            }]
         };
 
         test('Date cell template should have correct data without grouping', function(assert) {
@@ -948,22 +1486,22 @@ module('CellTemplate tests', moduleConfig, () => {
             const rowsCount = 4;
             const expectedData = [{
                 date: new Date(2020, 10, 24),
-                groups: { priorityId: 1 },
+                groups: { ownerId: 1 },
                 groupIndex: 0,
                 text: '24 Tue',
             }, {
                 date: new Date(2020, 10, 25),
-                groups: { priorityId: 1 },
+                groups: { ownerId: 1 },
                 groupIndex: 0,
                 text: '25 Wed',
             }, {
                 date: new Date(2020, 10, 24),
-                groups: { priorityId: 2 },
+                groups: { ownerId: 2 },
                 groupIndex: 1,
                 text: '24 Tue',
             }, {
                 date: new Date(2020, 10, 25),
-                groups: { priorityId: 2 },
+                groups: { ownerId: 2 },
                 groupIndex: 1,
                 text: '25 Wed',
             }];
@@ -974,7 +1512,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
                     currentTemplateIndex += 1;
                 },
-                groups: ['priorityId'],
+                groups: ['ownerId'],
             });
         });
 
@@ -1045,15 +1583,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         dataSource: [],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, container) {
                             if(index === 0) {
                                 $(container).addClass('custom-group-cell-class');
@@ -1079,15 +1609,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         endDayHour: 11,
                         cellDuration: 60,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(data, index, element) {
                             const d = data;
                             $('<div>').appendTo(element).dxButton({
@@ -1154,15 +1676,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         }],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, container) {
                             if(index === 0) {
                                 $(container).addClass('custom-group-cell-class');
@@ -1215,15 +1729,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         }],
                         firstDayOfWeek: 0,
                         groups: ['ownerId'],
-                        resources: [
-                            {
-                                fieldExpr: 'ownerId',
-                                dataSource: [
-                                    { id: 1, text: 'John' },
-                                    { id: 2, text: 'Mike' }
-                                ]
-                            }
-                        ],
+                        resources,
                         dateCellTemplate: function(itemData, index, $container) {
                             if(index === 0) {
                                 templateOptions = itemData;
@@ -1265,62 +1771,54 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
                 });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCelltTemplate', function(assert) {
-                    assert.expect(totalDateCells * 2);
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
+                [
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate',
+                        expectedAsserts: totalDateCells * 2,
                         views: viewsBase,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                    });
+                    },
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
+                            + 'when vertical grouping is used',
+                        expectedAsserts: totalDateCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'vertical',
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
+                            + 'when grouping by date is used',
+                        expectedAsserts: totalDateCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        })),
+                        groups: ['ownerId']
+                    }
+                ].forEach(({ description, expectedAsserts, views, groups }) => {
+                    test(description, function(assert) {
+                        assert.expect(expectedAsserts);
 
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
+                        const scheduler = createWrapper({
+                            ...baseConfig,
+                            views,
+                            dateCellTemplate: checkIfGroupsAreUndefined(assert),
+                        });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when vertical grouping is used', function(assert) {
-                    assert.expect(totalDateCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'vertical',
-                    }));
+                        if(groups) {
+                            scheduler.groups = groups;
+                        }
 
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('\'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when grouping by date is used', function(assert) {
-                    assert.expect(totalDateCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                        groupByDate: true,
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        dateCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
+                        views.slice(1).forEach(({ type }) => {
+                            scheduler.instance.option('currentView', type);
+                        });
                     });
                 });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when horizontal grouping is used', function(assert) {
+                test('\'"groups" and "groupIndex" shoud be correct in dateCellTemplate when horizontal grouping is used', function(assert) {
                     assert.expect(totalDateCells * 4);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -1336,12 +1834,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         dateCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.forEach(({ type, dateCellCount }) => {
@@ -1628,22 +2126,68 @@ module('CellTemplate tests', moduleConfig, () => {
             const baseConfig = getBaseConfig(renovateRender);
 
             module(description, {}, () => {
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate', function(assert) {
-                    assert.expect(totalTimeCells * 2);
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
+                [
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate',
+                        expectedAsserts: totalTimeCells * 2,
                         views: viewsBase,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                    });
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate '
+                            + 'when vertical grouping is used in timleine views',
+                        expectedAsserts: 72,
+                        views: viewsBase.slice(3, 6).map((view) => ({
+                            ...view,
+                            groupOrientation: 'vertical'
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                            + ' when grouping by date is used',
+                        expectedAsserts: totalTimeCells * 2,
+                        views: viewsBase.map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true
+                        })),
+                        groups: ['ownerId']
+                    },
+                    {
+                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                            + ' when horizontal grouping is used in simple views',
+                        expectedAsserts: 16,
+                        views: viewsBase.slice(0, 3).map((view) => ({
+                            ...view,
+                            groupOrientation: 'horizontal'
+                        })),
+                        groups: ['ownerId']
+                    }
+                ].forEach(({ description, expectedAsserts, views, groups }) => {
+                    test(description, function(assert) {
+                        assert.expect(expectedAsserts);
 
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
+                        const schedulerConfig = {
+                            ...baseConfig,
+                            views,
+                            currentView: views[0].type,
+                            timeCellTemplate: checkIfGroupsAreUndefined(assert),
+                        };
+
+                        if(groups) {
+                            schedulerConfig.groups = groups;
+                        }
+
+                        const scheduler = createWrapper(schedulerConfig);
+
+                        views.slice(1).forEach(({ type }) => {
+                            scheduler.instance.option('currentView', type);
+                        });
                     });
                 });
 
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
-                + 'when vertical grouping is used in simple views', function(assert) {
+                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate '
+                    + 'when vertical grouping is used in simple views', function(assert) {
                     assert.expect(32);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -1659,12 +2203,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         timeCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
@@ -1675,73 +2219,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     });
                 });
 
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
-                + 'when vertical grouping is used in timleine views', function(assert) {
-                    assert.expect(72);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'vertical',
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
-                        currentView: 'timelineDay',
-                    });
-
-                    viewsBase.slice(3, 6).forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
-                + ' when grouping by date is used', function(assert) {
-                    assert.expect(totalTimeCells * 2);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                        groupByDate: true,
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
-                    });
-
-                    viewsBase.forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
-                + ' when horizontal grouping is used in simple views', function(assert) {
-                    assert.expect(16);
-                    const views = viewsBase.map(({ type, intervalCount }) => ({
-                        type,
-                        intervalCount,
-                        groupOrientation: 'horizontal',
-                    }));
-
-                    const scheduler = createWrapper({
-                        ...baseConfig,
-                        views,
-                        timeCellTemplate: checkIfGroupsAreUndefined(assert),
-                        groups: ['priority'],
-                    });
-
-                    viewsBase.slice(0, 3).forEach(({ type }) => {
-                        scheduler.instance.option('currentView', type);
-                    });
-                });
-
-                test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
-                + ' when horizontal grouping is used in timeline views', function(assert) {
+                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                    + ' when horizontal grouping is used in timeline views', function(assert) {
                     assert.expect((totalTimeCells - 8) * 4);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -1758,12 +2237,12 @@ module('CellTemplate tests', moduleConfig, () => {
                         timeCellTemplate: ({ groups, groupIndex }) => {
                             const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
-                            assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                            assert.deepEqual(groups, { ownerId: currentGroupIndex + 1 }, 'Groups property is correct');
                             assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
 
                             currentCellIndex += 1;
                         },
-                        groups: ['priority'],
+                        groups: ['ownerId'],
                     });
 
                     viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {

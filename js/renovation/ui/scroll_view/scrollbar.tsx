@@ -168,7 +168,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   initHandler(event: DxMouseEvent, crossThumbScrolling: boolean): void {
-    this.stopScrolling();
+    this.cancelScrolling();
     this.prepareThumbScrolling(event, crossThumbScrolling);
   }
 
@@ -406,7 +406,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollStep(distance);
   }
 
-  stopScrolling(): void {
+  cancelScrolling(): void {
     this.hide();
     this.onAnimatorCancel();
   }

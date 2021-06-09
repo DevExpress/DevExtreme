@@ -30,7 +30,6 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
 import fx from 'animation/fx';
 import commonUtils from 'core/utils/common';
@@ -68,7 +67,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         this.clock.tick();
 
-        const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+        const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
         assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(92, 149, 197)', 'focused grouped row has correct background color in rtl mode');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
