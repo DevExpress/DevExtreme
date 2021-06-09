@@ -116,7 +116,7 @@ export var dxItem: any;
  * @default undefined
  * @section Common
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use import { Format } from 'devextreme/localization' instead
  * @public
  */
 export type format = Format;
