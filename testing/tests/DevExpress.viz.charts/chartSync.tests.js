@@ -1002,7 +1002,7 @@ const environment = {
         assert.ok(chart._labelsGroup.stub('clear').called, 'Series Labels group should be cleared');
         assert.ok(chart._labelsGroup.linkAppend.called, 'Series labels group should be added to root');
         assert.ok(chart._axesGroup.linkAppend.called, 'Axes group should be added to root');
-        assert.ok(chart._labelAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Label axes group should be added to root');
         assert.ok(chart._panesBorderGroup.linkAppend.called, 'Panes border group should be added to root');
         assert.ok(chart._stripsGroup.linkAppend.called, 'Strips group should be added to root');
         assert.ok(chart._constantLinesGroup.above.linkAppend.called, 'Constant lines group should be added to root');
@@ -1012,7 +1012,9 @@ const environment = {
         assert.ok(chart._crosshairCursorGroup.stub('clear').called, 'crosshair should be cleared');
         assert.ok(chart._crosshairCursorGroup.linkAppend.called, 'crosshair group should be added to root');
         assert.ok(chart._scaleBreaksGroup.linkAppend.called, 'scalebreaks group should be added to root');
-        assert.ok(chart._elementsAxesGroup.linkAppend.called, 'axes labels group should be added to root');
+        assert.ok(chart._labelsAxesGroup.linkRemove.called, 'axes labels group should be detached');
+        assert.ok(chart._labelsAxesGroup.stub('clear').called, 'axes labels group should be cleared');
+        assert.ok(chart._labelsAxesGroup.linkAppend.called, 'axes labels group should be added to root');
 
         withNewData && assert.ok(getTrackerStub().stub('update').called, 'Tracker should be initialized');
         options.noTrackerUpdateCheck || assert.ok(getTrackerStub().stub('update').called, 'Tracker should be prepared');
@@ -1511,7 +1513,7 @@ const environment = {
         mockObjectDispose('_stripsGroup');
         mockObjectDispose('_constantLinesGroup');
         mockObjectDispose('_axesGroup');
-        mockObjectDispose('_labelAxesGroup');
+        mockObjectDispose('_stripLabelAxesGroup');
         mockObjectDispose('_panesBorderGroup');
         mockObjectDispose('_seriesGroup');
         mockObjectDispose('_labelsGroup');
@@ -1520,7 +1522,7 @@ const environment = {
         mockObjectDispose('_scrollGroup');
         mockObjectDispose('_backgroundRect');
         mockObjectDispose('_scaleBreaksGroup');
-        mockObjectDispose('_elementsAxesGroup');
+        mockObjectDispose('_labelsAxesGroup');
 
         // act
         this.$container.remove();
@@ -1571,8 +1573,8 @@ const environment = {
         assert.strictEqual(chart._constantLinesGroup, null, 'constant lines group is null');
         assert.ok(chart._axesGroupDisposed, '_axesGroup');
         assert.strictEqual(chart._axesGroup, null, 'axes group is null');
-        assert.ok(chart._axesGroupDisposed, '_labelAxesGroup');
-        assert.strictEqual(chart._labelAxesGroup, null, 'label axes group is null');
+        assert.ok(chart._axesGroupDisposed, '_stripLabelAxesGroup');
+        assert.strictEqual(chart._stripLabelAxesGroup, null, 'strip label axes group is null');
         assert.ok(chart._panesBorderGroupDisposed, '_panesBorderGroup');
         assert.strictEqual(chart._panesBorderGroup, null, 'panes border group is null');
         assert.ok(chart._seriesGroupDisposed, '_seriesGroup');
@@ -1583,8 +1585,8 @@ const environment = {
         assert.strictEqual(chart._crosshairCursorGroup, null, 'crosshair cursor group is null');
         assert.ok(chart._scaleBreaksGroupDisposed, '_scaleBreaksGroup');
         assert.strictEqual(chart._scaleBreaksGroup, null, 'scalebreaks group is null');
-        assert.ok(chart._elementsAxesGroupDisposed, '_elementsAxesGroup');
-        assert.strictEqual(chart._elementsAxesGroup, null, 'elementsAxesGroup is null');
+        assert.ok(chart._labelsAxesGroupDisposed, '_labelsAxesGroup');
+        assert.strictEqual(chart._labelsAxesGroup, null, 'labelsAxesGroup is null');
 
         assert.deepEqual(loadIndicator.dispose.lastCall.args, [], 'load indicator dispose args');
         assert.strictEqual(chart._loadingIndicator, null, 'load indicator is null');
@@ -1689,9 +1691,9 @@ function resetMocksInChart(chart) {
     chart._axesGroup.stub('linkAppend').reset();
     chart._axesGroup.stub('linkRemove').reset();
     chart._axesGroup.stub('clear').reset();
-    chart._labelAxesGroup.stub('linkAppend').reset();
-    chart._labelAxesGroup.stub('linkRemove').reset();
-    chart._labelAxesGroup.stub('clear').reset();
+    chart._stripLabelAxesGroup.stub('linkAppend').reset();
+    chart._stripLabelAxesGroup.stub('linkRemove').reset();
+    chart._stripLabelAxesGroup.stub('clear').reset();
     validateData.reset();
     chart._crosshairCursorGroup.stub('linkAppend').reset();
     chart._crosshairCursorGroup.stub('linkRemove').reset();

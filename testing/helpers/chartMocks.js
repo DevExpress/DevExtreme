@@ -255,7 +255,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
-        labelAxesGroup: allOptions.labelAxesGroup,
+        stripLabelAxesGroup: allOptions.stripLabelAxesGroup,
         constantLinesGroup: allOptions.constantLinesGroup,
         axesContainerGroup: allOptions.axesContainerGroup,
         gridGroup: allOptions.gridGroup,
@@ -919,13 +919,13 @@ export const MockAxis = function(renderOptions) {
                 this._constantLinesGroup =
                 this._scaleBreaksGroup =
                 this._renderer =
-                this._labelAxesGroup =
+                this._stripLabelAxesGroup =
                 this._orthogonalTranslator =
                 this._stripsGroup =
                 this._translator =
                 this.axesContainerGroup =
                 this.gridGroup =
-                this._axesElementsGroup =
+                this._labelsAxesGroup =
                 this._options = null;
 
             this.disposed = true;
@@ -1040,8 +1040,8 @@ export const MockAxis = function(renderOptions) {
         _isHorizontal: renderOptions.isHorizontal,
         _incidentOccurred: renderOptions.incidentOccurred,
         _stripsGroup: renderOptions.stripsGroup,
-        _labelAxesGroup: renderOptions.labelAxesGroup,
-        _axesElementsGroup: renderOptions.axesElementsGroup,
+        _stripLabelAxesGroup: renderOptions.stripLabelAxesGroup,
+        _labelsAxesGroup: renderOptions.labelsAxesGroup,
         _constantLinesGroup: renderOptions.constantLinesGroup,
         _scaleBreaksGroup: renderOptions.scaleBreaksGroup,
         axesContainerGroup: renderOptions.axesContainerGroup,
