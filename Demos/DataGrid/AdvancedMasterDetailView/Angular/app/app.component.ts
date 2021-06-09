@@ -6,7 +6,7 @@ import { DxDataGridModule, DxFormModule, DxSelectBoxModule, DxTabPanelModule } f
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 import DataSource from 'devextreme/data/data_source';
 
-import { DetailViewComponent } from './detail-view.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
 
 if (!/localhost/.test(document.location.host)) {
     enableProdMode();

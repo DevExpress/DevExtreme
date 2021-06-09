@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DetailGridComponent } from './detail-grid.component';
+import { DetailGridComponent } from './detail-grid/detail-grid.component';
 
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
