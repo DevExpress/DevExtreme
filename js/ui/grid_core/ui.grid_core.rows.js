@@ -32,10 +32,6 @@ const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
-function getMaxHorizontalScrollOffset(scrollable) {
-    return scrollable ? scrollable.scrollWidth() - scrollable.clientWidth() : 0;
-}
-
 export const rowsModule = {
     defaultOptions: function() {
         return {
@@ -258,16 +254,20 @@ export const rowsModule = {
                 },
 
                 _handleScroll: function(e) {
-                    const that = this;
-                    const rtlEnabled = that.option('rtlEnabled');
+                    const rtlEnabled = this.option('rtlEnabled');
 
-                    that._isScrollByEvent = !!e.event;
-                    that._scrollTop = e.scrollOffset.top;
-                    that._scrollLeft = e.scrollOffset.left;
+                    this._isScrollByEvent = !!e.event;
+                    this._scrollTop = e.scrollOffset.top;
+                    this._scrollLeft = e.scrollOffset.left;
+
                     if(rtlEnabled) {
-                        this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+                        this._scrollRight = this._getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+                        if(!this.isScrollbarVisible(true)) {
+                            this._scrollLeft = -1;
+                        }
                     }
-                    that.scrollChanged.fire(e.scrollOffset, that.name);
+
+                    this.scrollChanged.fire(e.scrollOffset, this.name);
                 },
 
                 _renderScrollableCore: function($element) {
@@ -911,7 +911,11 @@ export const rowsModule = {
 
                     if(dxScrollable) {
                         dxScrollable.update();
-                        this._updateHorizontalScrollPosition();
+                        deferRender(() => {
+                            deferUpdate(() => {
+                                this._updateHorizontalScrollPosition();
+                            });
+                        });
                     }
                 },
 
@@ -920,16 +924,23 @@ export const rowsModule = {
                     const scrollLeft = scrollable && scrollable.scrollOffset().left;
                     const rtlEnabled = this.option('rtlEnabled');
 
+
                     if(rtlEnabled) {
-                        const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(scrollable);
+                        const maxHorizontalScrollOffset = this._getMaxHorizontalScrollOffset(scrollable);
                         const scrollRight = maxHorizontalScrollOffset - scrollLeft;
+
                         if(scrollRight !== this._scrollRight) {
                             this._scrollLeft = maxHorizontalScrollOffset - this._scrollRight;
                         }
                     }
 
-                    if(this._scrollLeft >= 0 && scrollLeft !== this._scrollLeft) {
-                        scrollable.scrollTo({ x: this._scrollLeft });
+                    if(this._scrollLeft >= 0) {
+                        if(scrollLeft !== this._scrollLeft) {
+                            scrollable.scrollTo({ x: this._scrollLeft });
+                        }
+                    } else if(rtlEnabled && scrollLeft > 0) {
+                        this._scrollLeft = scrollLeft;
+                        this.scrollChanged.fire({ left: scrollLeft }, this.name);
                     }
                 },
 
@@ -948,6 +959,16 @@ export const rowsModule = {
                         });
                     });
                 },
+
+                _getMaxHorizontalScrollOffset: function(scrollable) {
+                    if(!scrollable) {
+                        return 0;
+                    }
+
+                    const offset = scrollable.scrollWidth() - scrollable.clientWidth() + this.getScrollbarWidth();
+                    return Math.round(offset);
+                },
+
 
                 scrollTo: function(location) {
                     const $element = this.element();
