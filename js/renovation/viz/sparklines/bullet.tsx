@@ -420,7 +420,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
-    const svgElement = this.widgetRef.current?.svg() || undefined;
+    const svgElement = this.widgetRef.current?.svg() ?? undefined;
     this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;
   }
 

@@ -1351,8 +1351,6 @@ class Scheduler extends Widget {
     }
 
     _appointmentsConfig() {
-        const that = this;
-
         const config = {
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
@@ -1367,8 +1365,10 @@ class Scheduler extends Widget {
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
-            onContentReady: function() {
-                that._workSpace && that._workSpace.option('allDayExpanded', that._isAllDayExpanded(getAppointmentDataProvider().filteredItems));
+            groups: this._getCurrentViewOption('groups'),
+            onContentReady: () => {
+                const filteredItems = getAppointmentDataProvider().filteredItems;
+                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             }
         };
 

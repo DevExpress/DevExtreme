@@ -26,7 +26,6 @@ import fx from 'animation/fx';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
-import browser from 'core/utils/browser';
 
 const device = devices.real();
 
@@ -1311,8 +1310,7 @@ QUnit.module('Filter Row', {
 
     // T904124
     [true, false].forEach(rtlEnabled => {
-        const leftTextAlign = browser.msie ? 'left' : 'start';
-        const textAlign = rtlEnabled ? 'right' : leftTextAlign;
+        const textAlign = rtlEnabled ? 'right' : 'start';
         QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
             // arrange
             const $testElement = $('#container');
