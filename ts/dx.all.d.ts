@@ -19324,7 +19324,7 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            row?: RowObject;
+            readonly row?: RowObject;
             readonly column: Column;
           }) => boolean);
       /**
@@ -19334,7 +19334,7 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            row?: RowObject;
+            readonly row?: RowObject;
             readonly column: Column;
           }) => boolean);
     }
