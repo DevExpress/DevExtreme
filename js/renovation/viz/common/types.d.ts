@@ -1,11 +1,5 @@
-type FormatType = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
-export interface FormatObject {
-  type?: FormatType;
-  precision?: number;
-  currency?: string;
-  percentPrecision?: number;
-}
-export type Format = FormatObject | FormatType | string | ((value: number | Date) => string);
+// eslint-disable-next-line import/named
+export { Format, FormatObject } from '../../../localization';
 export interface Point {
   size: number;
   tag: any;

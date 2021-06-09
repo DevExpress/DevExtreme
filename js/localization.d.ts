@@ -1,7 +1,3 @@
-import {
-    format
-} from './ui/widget/ui.widget';
-
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
@@ -14,7 +10,7 @@ import {
  * @namespace DevExpress.localization
  * @public
  */
-export function formatDate(value: Date, format: format): string;
+export function formatDate(value: Date, format: Format): string;
 
 /**
  * @docid localization.formatMessage
@@ -42,7 +38,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @namespace DevExpress.localization
  * @public
  */
-export function formatNumber(value: number, format: format): string;
+export function formatNumber(value: number, format: Format): string;
 
 /**
  * @docid localization.loadMessages
@@ -92,7 +88,7 @@ export function locale(locale: string): void;
  * @namespace DevExpress.localization
  * @public
  */
-export function parseDate(text: string, format: format): Date;
+export function parseDate(text: string, format: Format): Date;
 
 /**
  * @docid localization.parseNumber
@@ -106,6 +102,41 @@ export function parseDate(text: string, format: format): Date;
  * @namespace DevExpress.localization
  * @public
  */
-export function parseNumber(text: string, format: format): number;
+export function parseNumber(text: string, format: Format): number;
 
+declare global {
+    interface NumberFormatterOptions { }
+    interface DateFormatterOptions { }
+    interface CurrencyFormatterOptions { }
+}
 
+type FormatType = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+export interface FormatObject {
+    /**
+     * @docid
+     */
+   currency?: string,
+   /**
+    * @docid
+    * @type_function_param1 value:number|date
+    * @type_function_return string
+    */
+   formatter?: ((value: number | Date) => string),
+   /**
+    * @docid
+    * @type_function_param1 value:string
+    * @type_function_return number|date
+    */
+   parser?: ((value: string) => number | Date),
+   /**
+    * @docid
+    */
+   precision?: number,
+   /**
+    * @docid
+    * @type Enums.Format
+    */
+   type?: FormatType
+}
+type ExternalFormat = {} extends NumberFormatterOptions ? (Intl.NumberFormatOptions | Intl.DateTimeFormatOptions) : (NumberFormatterOptions | DateFormatterOptions | CurrencyFormatterOptions);
+export type Format = FormatObject | FormatType | string | ((value: number | Date) => string) | ExternalFormat;
