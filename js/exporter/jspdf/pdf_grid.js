@@ -14,15 +14,17 @@ export class PdfGrid {
         this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
     }
 
-    startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns) {
+    startNewTable(drawTableBorder, firstTableTopLeft, firstTableOnNewPage, splitByColumns, firstColumnWidth) {
         if(isDefined(splitByColumns)) {
             this._splitByColumns = splitByColumns;
         }
 
         const firstTableEndColumnIndex = this._splitByColumns[0]?.columnIndex ?? this._columnWidths.length;
-        this._currentHorizontalTables = [
-            new PdfTable(drawTableBorder, firstTableTopLeft, this._columnWidths.slice(0, firstTableEndColumnIndex))
-        ];
+        const firstTableColumnWidths = this._columnWidths.slice(0, firstTableEndColumnIndex);
+        if(isDefined(firstColumnWidth)) {
+            firstTableColumnWidths[0] = firstColumnWidth;
+        }
+        this._currentHorizontalTables = [new PdfTable(drawTableBorder, firstTableTopLeft, firstTableColumnWidths)];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();
         }

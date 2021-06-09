@@ -319,11 +319,11 @@ describe('TimePanelLayout', () => {
               } as any,
             });
 
-            let value = topVirtualRowHeight || 0;
+            let value = topVirtualRowHeight ?? 0;
             expect(layout.topVirtualRowHeight)
               .toEqual(value);
 
-            value = bottomVirtualRowHeight || 0;
+            value = bottomVirtualRowHeight ?? 0;
             expect(layout.bottomVirtualRowHeight)
               .toEqual(value);
           });

@@ -244,8 +244,8 @@ export const getElementBBox = (element: Element): SVGRect => {
 };
 
 function maxLengthFontSize(fontSize1?: number, fontSize2?: number): number {
-  const height1 = fontSize1 || DEFAULT_FONT_SIZE;
-  const height2 = fontSize2 || DEFAULT_FONT_SIZE;
+  const height1 = fontSize1 ?? DEFAULT_FONT_SIZE;
+  const height2 = fontSize2 ?? DEFAULT_FONT_SIZE;
 
   return height1 > height2 ? height1 : height2;
 }
@@ -300,7 +300,7 @@ function adjustLineHeights(items: TextItem[]): void {
     if (item.line === currentItem.line) {
       // T177039
       currentItem.height = maxLengthFontSize(currentItem.height, item.height);
-      currentItem.inherits = currentItem.inherits || item.height === 0;
+      currentItem.inherits = !!currentItem.inherits || item.height === 0;
       item.height = NaN;
     } else {
       currentItem = item;
@@ -348,7 +348,7 @@ export const setTextNodeAttribute = (item: TextItem, name: string, value: any): 
 };
 
 export const getItemLineHeight = (item: TextItem, defaultValue: number): number => (
-  item.inherits ? maxLengthFontSize(item.height, defaultValue) : item.height || defaultValue
+  item.inherits ? maxLengthFontSize(item.height, defaultValue) : Number(item.height) || defaultValue
 );
 
 export const getLineHeight = (styles: { [key: string]: any } | undefined): number => (
@@ -381,16 +381,16 @@ function getTransformation(props: SvgGraphicsProps, x?: number, y?: number): str
   } = props;
   const transformations: string[] = [];
   const transDir = sharpDirection === 'backward' ? -1 : 1;
-  const strokeOdd = (strokeWidth || 0) % 2;
+  const strokeOdd = (strokeWidth ?? 0) % 2;
   const correctionX = strokeOdd && (sharp === 'h' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
   const correctionY = strokeOdd && (sharp === 'v' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
 
   if (translateX || translateY || correctionX || correctionY) {
-    transformations.push(`translate(${(translateX || 0) + correctionX},${(translateY || 0) + correctionY})`);
+    transformations.push(`translate(${(translateX ?? 0) + correctionX},${(translateY ?? 0) + correctionY})`);
   }
 
   if (rotate) {
-    transformations.push(`rotate(${rotate},${rotateX || x || 0},${rotateY || y || 0})`);
+    transformations.push(`rotate(${rotate},${(Number(rotateX) || x) ?? 0},${(Number(rotateY) || y) ?? 0})`);
   }
 
   const scaleXDefined = isDefined(scaleX);
@@ -409,7 +409,7 @@ function getDashStyle(props: SvgGraphicsProps): string | undefined {
     return undefined;
   }
 
-  const sw = strokeWidth || 1;
+  const sw = Number(strokeWidth) || 1;
   const value = normalizeEnum(dashStyle);
   let dashArray: unknown[] = [];
   dashArray = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '')
