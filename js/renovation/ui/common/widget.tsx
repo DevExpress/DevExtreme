@@ -191,6 +191,16 @@ export class Widget extends JSXComponent(WidgetProps) {
     focus.trigger(this.widgetRef.current);
   }
 
+  @Method()
+  activate(): void {
+    this.active = true;
+  }
+
+  @Method()
+  deactivate(): void {
+    this.active = false;
+  }
+
   @Effect()
   focusEffect(): EffectReturn {
     const {
