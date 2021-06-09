@@ -100,13 +100,27 @@ export class CompactAppointmentsHelper {
             const workSpace = this.instance.getWorkSpace();
 
             const getItemData = (itemElement) => $(itemElement).data(LIST_ITEM_DATA_KEY)?.appointment;
-            const getItemSettings = (_, event) => event.itemSettings;
+            const getItemSettings = (_, event) => {
+                return event.itemSettings;
+            };
+            const getInitialPosition = (event) => {
+                const settings = event.itemSettings;
+
+                return {
+                    left: settings.left,
+                    top: settings.top,
+                };
+            };
+
             const options = {
                 filter: `.${LIST_ITEM_CLASS}`,
                 isSetCursorOffset: true,
+                getInitialPosition,
+                getItemData,
+                getItemSettings,
             };
 
-            workSpace._createDragBehaviorBase($element, getItemData, getItemSettings, options);
+            workSpace._createDragBehaviorBase($element, options);
         };
     }
 

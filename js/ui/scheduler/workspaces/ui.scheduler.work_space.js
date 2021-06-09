@@ -3208,10 +3208,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
-        this._createDragBehaviorBase($element, getItemData, getItemSettings);
+        const options = {
+            getItemData,
+            getItemSettings,
+        };
+
+        this._createDragBehaviorBase($element, options);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, options = {}) {
+    _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
         const element = this.$element();
@@ -3230,8 +3235,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             () => this._getDroppableCell(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
-            getItemData,
-            getItemSettings,
             options)
         );
     }
@@ -3373,8 +3376,6 @@ const createDragBehaviorConfig = (
     getDroppableCell,
     removeDroppableCellClass,
     getCellWidth,
-    getItemData,
-    getItemSettings,
     options) => {
 
     const state = {
@@ -3406,8 +3407,9 @@ const createDragBehaviorConfig = (
         const $itemElement = $(e.itemElement);
         const appointments = e.component._appointments;
 
-        state.itemData = getItemData(e.itemElement, appointments);
-        const settings = getItemSettings($itemElement, e);
+        state.itemData = options.getItemData(e.itemElement, appointments);
+        const settings = options.getItemSettings($itemElement, e);
+        const initialPosition = options.getInitialPosition?.(e);
 
         if(state.itemData && !state.itemData.disabled) {
             event.data = event.data || {};
@@ -3419,7 +3421,7 @@ const createDragBehaviorConfig = (
                 state.dragElement = createDragAppointment(state.itemData, settings, appointments);
 
                 event.data.itemElement = state.dragElement;
-                event.data.initialPosition = locate($(state.dragElement));
+                event.data.initialPosition = initialPosition ?? locate($(state.dragElement));
                 event.data.itemData = state.itemData;
                 event.data.itemSettings = settings;
 
