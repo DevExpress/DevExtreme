@@ -520,6 +520,7 @@ QUnit.test('applyClipRects', function(assert) {
 
     assert.equal(renderer.g.getCall(1).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForElements', 'axis strip group');
     assert.equal(renderer.g.getCall(0).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForCanvas', 'axis group');
+    assert.equal(renderer.g.getCall(3).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForCanvas', 'axis elements group');
 });
 
 QUnit.test('Disposing', function(assert) {
@@ -532,57 +533,6 @@ QUnit.test('Disposing', function(assert) {
     assert.ok(renderer.g.getCall(0).returnValue.dispose.called, 'axis group was cleared');
     assert.ok(renderer.g.getCall(1).returnValue.dispose.called, 'strips group was cleared');
     assert.ok(renderer.g.getCall(3).returnValue.dispose.called, 'elements group was cleared');
-});
-
-QUnit.test('beforeCleanGroups with templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions({
-        label: {
-            template: ()=>{}
-        }
-    });
-
-    this.axis.beforeCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkRemove.callCount, 1);
-});
-
-QUnit.test('afterCleanGroups with templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions({
-        label: {
-            template: ()=>{}
-        }
-    });
-
-    renderer.g.getCall(3).returnValue.linkAppend.reset();
-    this.axis.afterCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 1);
-});
-
-
-QUnit.test('beforeCleanGroups without templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions();
-
-    this.axis.beforeCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.stub('linkRemove').callCount, 0);
-});
-
-QUnit.test('afterCleanGroups without templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions();
-
-    renderer.g.getCall(3).returnValue.linkAppend.reset();
-    this.axis.afterCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 0);
 });
 
 QUnit.test('calculateInterval - returns absolute difference of two numbers', function(assert) {

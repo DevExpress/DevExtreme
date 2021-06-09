@@ -1028,9 +1028,14 @@ QUnit.test('shift', function(assert) {
     const axis = this.createSimpleAxis(this.renderer);
     axis.shift({ right: 10, bottom: 30 });
 
-    const args = this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0];
-    assert.equal(args.translateX, 10, 'translateX');
-    assert.equal(args.translateY, 30, 'translateY');
+    const argsForMainGroup = this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0];
+    const argsForLabelsGroup = this.renderer.g.getCall(9).returnValue.attr.lastCall.args[0];
+
+    assert.equal(argsForMainGroup.translateX, 10, 'translateX');
+    assert.equal(argsForMainGroup.translateY, 30, 'translateY');
+
+    assert.equal(argsForLabelsGroup.translateX, 10, 'translateX');
+    assert.equal(argsForLabelsGroup.translateY, 30, 'translateY');
 });
 
 QUnit.test('Value margins are not applied for circular axis', function(assert) {

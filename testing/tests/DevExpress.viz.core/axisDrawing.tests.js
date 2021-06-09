@@ -148,13 +148,15 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = this.renderer.g();
     const gridGroup = this.renderer.g();
+    const axesElementsGroup = this.renderer.g();
 
     this.createAxis({
         axesContainerGroup: axesContainerGroup,
         stripsGroup: stripsGroup,
         labelAxesGroup: labelAxesGroup,
         constantLinesGroup: constantLinesGroup,
-        gridGroup: gridGroup
+        gridGroup: gridGroup,
+        axesElementsGroup: axesElementsGroup
     });
     this.updateOptions({
         isHorizontal: true
@@ -168,7 +170,7 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     assert.deepEqual(g.getCall(0).returnValue.append.getCall(0).args[0], axesContainerGroup, '_axisGroup');
     assert.deepEqual(g.getCall(1).returnValue.append.getCall(0).args[0], stripsGroup, '_axisStripGroup');
     assert.deepEqual(g.getCall(2).returnValue.append.getCall(0).args[0], gridGroup, '_axisGridGroup');
-    assert.deepEqual(g.getCall(3).returnValue.linkOn.getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
+    assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], axesElementsGroup, '_axisElementsGroup');
     assert.deepEqual(g.getCall(4).returnValue.linkOn.getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
     assert.deepEqual(g.getCall(5).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, '_axisTitleGroup');
     // above
@@ -207,9 +209,7 @@ QUnit.test('Some groups are not passed - created groups are not appended', funct
     assert.strictEqual(g.getCall(0).returnValue.stub('enableLinks').callCount, 1, 'links on');
     assert.deepEqual(g.getCall(1).returnValue.stub('append').callCount, 0, '_axisStripGroup');
     assert.deepEqual(g.getCall(2).returnValue.stub('append').callCount, 0, '_axisGridGroup');
-    assert.deepEqual(g.getCall(3).returnValue.stub('linkOn').getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
-    assert.deepEqual(g.getCall(3).returnValue.stub('linkOn').getCall(0).args[1], 'axisElements', 'axisElements name');
-    assert.strictEqual(g.getCall(3).returnValue.stub('linkAppend').callCount, 1, 'linkAppend called');
+    assert.deepEqual(g.getCall(3).returnValue.stub('append').callCount, 0, '_axisElementsGroup');
     assert.deepEqual(g.getCall(4).returnValue.stub('linkOn').getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
     assert.deepEqual(g.getCall(4).returnValue.stub('linkOn').getCall(0).args[1], 'axisLine', 'axisLine name');
     assert.strictEqual(g.getCall(4).returnValue.stub('linkAppend').callCount, 1, 'linkAppend called');
