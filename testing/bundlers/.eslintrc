@@ -1,0 +1,26 @@
+{
+    "plugins": [
+        "spellcheck"
+    ],
+    "rules": {
+        "spellcheck/spell-checker": [1,
+            {
+                "skipWords": [
+                    "fs",
+                    "Metadata",
+                    "Cjs",
+                    "Esm",
+                    "dirname",
+                    "src",
+                    "js",
+                    "utils",
+                    "vite",
+                    "const",
+                    "ui",
+                    "devextreme",
+                    "rollup"
+                ]
+            }
+        ]
+    }
+}

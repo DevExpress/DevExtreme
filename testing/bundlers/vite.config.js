@@ -1,5 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import rollupConfig from './rollup.config';
 
 delete rollupConfig.output.file;
