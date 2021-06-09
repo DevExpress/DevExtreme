@@ -13,7 +13,9 @@ const common = {
 
 module.exports = {
     cjs: Object.assign({}, common, {
-        presets: ['@babel/preset-env'],
+        presets: [['@babel/preset-env', {
+            exclude: ['transform-regenerator', 'transform-async-to-generator'],
+        }]],
         plugins: common.plugins.concat([
             ['add-module-exports', { addDefaultProperty: true }],
             ['@babel/plugin-transform-modules-commonjs', { strict: true }],
@@ -22,8 +24,12 @@ module.exports = {
     }),
 
     esm: Object.assign({}, common, {
-        // eslint-disable-next-line spellcheck/spell-checker
-        presets: [['@babel/preset-env', { modules: false, targets: { esmodules: true } }]],
+        presets: [['@babel/preset-env', {
+            modules: false,
+            // eslint-disable-next-line spellcheck/spell-checker
+            targets: { esmodules: true },
+            exclude: ['transform-regenerator', 'transform-async-to-generator'],
+        }]],
         plugins: common.plugins.concat(
             [['@babel/plugin-transform-runtime', {
                 useESModules: true,
