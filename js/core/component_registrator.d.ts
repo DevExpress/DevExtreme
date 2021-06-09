@@ -1,7 +1,7 @@
 import DOMComponent from './dom_component';
 import { UserDefinedElement } from './element';
 
-declare interface IComponentFactory<TComponent> {
+type IComponentFactory<TComponent> = {
     new(): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
 }
