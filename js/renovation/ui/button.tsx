@@ -184,7 +184,7 @@ export class Button extends JSXComponent(ButtonProps) {
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
-    let element : RefObject | HTMLDivElement;
+    let element : any;
 
     if (this.contentRef.current) {
       element = this.contentRef.current;
