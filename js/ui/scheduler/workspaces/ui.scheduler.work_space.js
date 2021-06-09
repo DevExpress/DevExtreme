@@ -1307,9 +1307,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let component = this[componentName];
         if(!component) {
             const container = getPublicElement(parentElement);
-            component = this._createComponent(container, componentClass, {
-                ...viewModel,
-            });
+            component = this._createComponent(container, componentClass, viewModel);
             this[componentName] = component;
         } else {
             component.option(viewModel);
