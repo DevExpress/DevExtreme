@@ -21,7 +21,6 @@ import 'ui/switch';
 import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
@@ -2519,154 +2518,6 @@ QUnit.module('Editing', {
         assert.strictEqual($editCellElement.find('.dx-icon-revert').attr('title'), 'Cancel', 'title of the icon revert');
         assert.strictEqual($editCellElement.find('.dx-icon-revert').text(), '', 'text of the icon revert');
     });
-
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        QUnit.test('Update value for row edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'row'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            const $input = $editor.find('input').first();
-            const keyboard = keyboardMock($input);
-            keyboard.type('new value');
-            keyboard.change();
-
-            // assert
-            assert.equal(resultValue, 'new value');
-        });
-
-        QUnit.test('Update value for form edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'form'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            const $input = $editor.find('input').first();
-            const keyboard = keyboardMock($input);
-            keyboard.type('new value');
-            keyboard.change();
-
-            // assert
-            assert.equal(resultValue, 'new value');
-        });
-
-        QUnit.test('Do not update value on keyup event for row edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'row'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            $editor.find('input').first()
-                .val('new value')
-                .trigger('keyup');
-
-            // assert
-            assert.equal(resultValue, undefined);
-        });
-
-        QUnit.test('Do not update value on keyup event for form edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'form'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            $editor.find('input').first()
-                .val('new value')
-                .trigger('keyup');
-
-            // assert
-            assert.equal(resultValue, undefined);
-        });
-    }
 
     // T620297
     QUnit.test('The text of the colorBox should not be overlaps in a grid cell', function(assert) {
@@ -7917,8 +7768,7 @@ QUnit.module('Editing with real dataController', {
         const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
 
         // assert
-        const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
-        assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+        assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, 'auto', 'dx-svg-icon allows pointer events');
         assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
     });
 
@@ -12093,10 +11943,6 @@ QUnit.module('Editing with validation', {
 
     // T284398
     QUnit.testInActiveWindow('Show invalid message on focus for an invalid cell of the inserted row', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;

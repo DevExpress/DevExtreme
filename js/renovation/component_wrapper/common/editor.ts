@@ -11,8 +11,7 @@ const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
 export default class Editor extends Component {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  showValidationMessageTimeout: any;
+  showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
 
   validationRequest!: ReturnType<typeof Callbacks>;
 
@@ -33,8 +32,11 @@ export default class Editor extends Component {
         const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
         $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
-        clearTimeout(this.showValidationMessageTimeout);
         const timeoutValue = 150;
+        if (this.showValidationMessageTimeout) {
+          clearTimeout(this.showValidationMessageTimeout);
+        }
+
         // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
           $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
@@ -53,7 +55,7 @@ export default class Editor extends Component {
 
     data(this.$element()[0], VALIDATION_TARGET, this);
     this.validationRequest = Callbacks();
-    this.showValidationMessageTimeout = null;
+    this.showValidationMessageTimeout = undefined;
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
@@ -117,7 +119,9 @@ export default class Editor extends Component {
     super._dispose();
 
     data(this.element(), VALIDATION_TARGET, null);
-    clearTimeout(this.showValidationMessageTimeout);
+    if (this.showValidationMessageTimeout) {
+      clearTimeout(this.showValidationMessageTimeout);
+    }
   }
 }
 

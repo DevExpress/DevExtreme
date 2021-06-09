@@ -197,8 +197,8 @@ export function getCanvas(container: HTMLElement): ClientRect {
   const containerBox = container.getBoundingClientRect();
   const html = domAdapter.getDocumentElement();
   const body = domAdapter.getBody();
-  let left = getWindow()?.pageXOffset || html.scrollLeft || 0;
-  let top = getWindow()?.pageYOffset || html.scrollTop || 0;
+  let left = (Number(getWindow()?.pageXOffset) || html.scrollLeft) ?? 0;
+  let top = (Number(getWindow()?.pageYOffset) || html.scrollTop) ?? 0;
 
   const box = {
     left,
@@ -342,11 +342,11 @@ export function prepareData(
     }
   }
   if (!('text' in customize) && !('html' in customize)) {
-    customize.text = data.valueText || data.description || '';
+    customize.text = (data.valueText ?? '') || (data.description ?? '');
   }
-  customize.color = customize.color || color;
-  customize.borderColor = customize.borderColor || border.color;
-  customize.fontColor = customize.fontColor || font.color;
+  customize.color = (customize.color ?? '') || color;
+  customize.borderColor = (customize.borderColor ?? '') || border.color;
+  customize.fontColor = (customize.fontColor ?? '') || font.color;
   return customize;
 }
 

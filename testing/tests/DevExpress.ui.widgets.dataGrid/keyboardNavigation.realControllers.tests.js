@@ -14,7 +14,6 @@ import $ from 'jquery';
 
 import 'ui/data_grid/ui.data_grid';
 
-import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import pointerEvents from 'events/pointer';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -528,10 +527,8 @@ QUnit.module('Real DataController and ColumnsController', {
 
         assert.notOk(keyboardNavigationController._editingController.isEditing(), 'Is editing');
         assert.equal(this.rowsView.element().find('input').length, 0, 'input');
-        if(!browser.msie) {
-            assert.ok(keyboardNavigationController._isHiddenFocus, 'hidden focus');
-            assert.notOk($cell.hasClass('dx-focused'), 'cell has no .dx-focused');
-        }
+        assert.ok(keyboardNavigationController._isHiddenFocus, 'hidden focus');
+        assert.notOk($cell.hasClass('dx-focused'), 'cell has no .dx-focused');
     });
 
     QUnit.testInActiveWindow('DataGrid should preserve fosused overlay after cancel editing (T812546)', function(assert) {
@@ -1128,11 +1125,6 @@ QUnit.module('Real DataController and ColumnsController', {
     });
 
     QUnit.test('Editor\'s input should be focused after mouse click (T650581)', function(assert) {
-        if(browser.msie && browser.version === '18.17763') {
-            assert.ok(true);
-            return;
-        }
-
         // arrange
         const that = this;
 
@@ -1173,11 +1165,6 @@ QUnit.module('Real DataController and ColumnsController', {
     });
 
     QUnit.test('After apply the edit value with the ENTER key do not display the revert button when the save process, if editing mode is cell (T657148)', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it fails on farm');
-            return;
-        }
-
         // arrange
         const that = this;
 
@@ -1210,8 +1197,6 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         that.editCell(0, 0);
         that.clock.tick();
-
-        browser.msie && $(that.getCellElement(0, 0)).focus(); // should be removed after the IE death
 
         const $input = $(that.getCellElement(0, 0)).find('input');
         $input.val('test').trigger('change');
