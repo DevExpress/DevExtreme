@@ -178,27 +178,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onActive(event: Event): void {
-    const waveIndex = 1;
-    this.wave(event, 'showWave', waveIndex);
+    const waveId = 1;
+    this.wave(event, 'showWave', waveId);
   }
 
   onInactive(event: Event): void {
-    const waveIndex = 1;
-    this.wave(event, 'hideWave', waveIndex);
+    const waveId = 1;
+    this.wave(event, 'hideWave', waveId);
   }
 
   onFocusIn(event: Event): void {
-    const waveIndex = 0;
+    const waveId = 0;
     const { onFocusIn } = this.props;
-    this.wave(event, 'showWave', waveIndex);
+    this.wave(event, 'showWave', waveId);
 
     // NOTE: pass to jQ wrapper
     onFocusIn?.(event);
   }
 
   onFocusOut(event: Event): void {
-    const waveIndex = 0;
-    this.wave(event, 'hideWave', waveIndex);
+    const waveId = 0;
+    this.wave(event, 'hideWave', waveId);
   }
 
   onWidgetClick(event: Event): void {
