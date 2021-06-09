@@ -9,7 +9,7 @@ $generic-menu-padding-small: null !default;
 
 @if $size == "default" {
   $generic-menu-item-padding-base: 5px !default;
-  $generic-menu-item-padding-top-base: $generic-menu-item-padding-base;
+  $generic-menu-item-padding-top-base: 3px !default;
   $generic-menu-padding-big: 25px !default;
   $generic-menu-padding-small: 19px !default;
 }
