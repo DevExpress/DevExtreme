@@ -1440,8 +1440,8 @@ QUnit.module('columnWidth auto option', {
     });
 
     QUnit.test('column with width 0 should be applied', function(assert) {
-        if(browser.safari || (browser.msie && parseInt(browser.version) <= 11)) {
-            assert.ok(true, 'IE 11 and Safari works wrong with width 0');
+        if(browser.safari) {
+            assert.ok(true, 'Safari works wrong with width 0');
             return;
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
