@@ -4366,7 +4366,7 @@ declare module DevExpress.ui {
     export type Properties = dxAutocompleteOptions;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxAutocomplete> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxAutocomplete> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -10180,6 +10180,14 @@ declare module DevExpress.ui {
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.data.DataSource;
   }
+  module dxDropDownList {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    export interface SelectionChangedInfo<T = any> {
+      readonly selectedItem: T;
+    }
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -10224,7 +10232,7 @@ declare module DevExpress.ui {
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onValueChanged]
@@ -17434,7 +17442,7 @@ declare module DevExpress.ui {
     export type Properties = dxSelectBoxOptions<dxSelectBox<Properties>>;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxSelectBox> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxSelectBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -18346,7 +18354,8 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+  export interface dxTagBoxOptions
+    extends Omit<dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'> {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
