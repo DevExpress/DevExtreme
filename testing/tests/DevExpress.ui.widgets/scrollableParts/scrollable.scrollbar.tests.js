@@ -611,8 +611,8 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
     const fakeContentAndContainerSizeWhenZoomIs100 = 405;
 
     const scroller = scrollable._strategy._scrollers['vertical'];
-    const scrollableContainerElement = scrollable.container();
-    const scrollableContentElement = scrollable.content();
+    const scrollableContainerElement = $(scrollable.container()).get(0);
+    const scrollableContentElement = $(scrollable.content()).get(0);
 
     sinon.stub(scrollableContainerElement, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
     sinon.stub(scrollableContentElement, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
