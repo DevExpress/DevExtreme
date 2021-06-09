@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import 'renovation/ui/editors/button.j';
+import 'renovation/ui/button.j';
 
 QUnit.testStart(function() {
     const markup =

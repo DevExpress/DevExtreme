@@ -9,7 +9,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 
-import 'renovation/ui/editors/button.j';
+import 'renovation/ui/button.j';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
