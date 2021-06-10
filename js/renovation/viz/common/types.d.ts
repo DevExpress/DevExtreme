@@ -1,5 +1,11 @@
 // eslint-disable-next-line import/named
-export { Format, FormatObject } from '../../../localization';
+import { Format as LocalizationFormat, FormatObject as LocalizationFormatObject } from '../../../localization';
+
+interface ChartFormatObject {
+  percentPrecision?: number;
+}
+export interface FormatObject extends LocalizationFormatObject, ChartFormatObject { }
+export type Format = LocalizationFormat & FormatObject;
 export interface Point {
   size: number;
   tag: any;
