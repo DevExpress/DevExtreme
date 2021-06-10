@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/fileUploader";
 
 // adduse
-
 
 $material-fileuploader-file-wrapper-border-size: 3px;
 
@@ -74,7 +74,7 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-input-label {
-  padding: $material-fileuploader-vertical-padding + ($material-base-font-size / 2 - $material-fileuploader-vertical-padding) / 2 + 1px $material-fileuploader-vertical-padding + 2px;
+  padding: $material-fileuploader-vertical-padding + math.div(math.div($material-base-font-size, 2) - $material-fileuploader-vertical-padding, 2) + 1px $material-fileuploader-vertical-padding + 2px;
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -132,13 +132,13 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: $material-fileuploader-vertical-padding / 2;
+  padding-bottom: math.div($material-fileuploader-vertical-padding, 2);
   color: $fileuploader-filename-color;
   font-weight: 500;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: $material-fileuploader-vertical-padding / 2;
+  padding-bottom: math.div($material-fileuploader-vertical-padding, 2);
 }
 
 .dx-fileuploader-invalid {
