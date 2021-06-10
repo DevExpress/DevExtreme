@@ -1016,7 +1016,7 @@ module('appointmentDragging customization', $.extend({}, {
             text: 'App from Draggable',
             allDay: false,
             startDate: new Date(2018, 4, 21, 9, 30),
-            endDate: new Date(2018, 4, 21, 16, 0)
+            endDate: new Date(2018, 4, 21, 10, 0)
         }, 'added appointment data');
         assert.deepEqual(draggableData, { text: 'App from Draggable' }, 'draggable data is not changed');
     });
