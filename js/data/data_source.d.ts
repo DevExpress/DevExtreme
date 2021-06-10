@@ -10,8 +10,10 @@ import {
     CustomStoreOptions
 } from './custom_store';
 
+type Descriptor = {selector: string, desc: boolean};
+
 /** @namespace DevExpress.data */
-export interface DataSourceOptions {
+export interface DataSourceOptions<TKey = any | string | number, TValueOut = any, TValueIn = TValueOut, TValueMap = TValueOut> {
     /**
      * @docid
      * @public
@@ -33,14 +35,14 @@ export interface DataSourceOptions {
      * @type Group expression
      * @public
      */
-    group?: string | Array<any> | Function;
+    group?: string | Descriptor| Array<Descriptor> | Function;
     /**
      * @docid
      * @type_function_param1 dataItem:object
      * @type_function_return object
      * @public
      */
-    map?: ((dataItem: any) => any);
+    map?: ((dataItem: TValueIn) => TValueMap);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -48,7 +50,7 @@ export interface DataSourceOptions {
      * @action
      * @public
      */
-    onChanged?: ((e: { readonly changes?: Array<any> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<TValueMap> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -82,7 +84,7 @@ export interface DataSourceOptions {
      * @type_function_return Array<any>
      * @public
      */
-    postProcess?: ((data: Array<any>) => Array<any>);
+    postProcess?: ((data: Array<TValueMap>) => Array<TValueOut>);
     /**
      * @docid
      * @default undefined
@@ -123,18 +125,18 @@ export interface DataSourceOptions {
      * @type Select expression
      * @public
      */
-    select?: string | Array<any> | Function;
+    select?: string | Array<string> | Function;
     /**
      * @docid
      * @type Sort expression
      * @public
      */
-    sort?: string | Array<any> | Function;
+    sort?: string | Descriptor | Array<Descriptor> | Function;
     /**
      * @docid
      * @public
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?: Store<TKey, TValueIn> | StoreOptions<TKey, TValueIn> | Array<TValueIn>;
 }
 /**
  * @docid
@@ -144,8 +146,8 @@ export interface DataSourceOptions {
  */
 export default class DataSource<TKey = any | string | number, TValue = any> {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
-    constructor(store: Store);
+    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue>);
+    constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
      * @docid

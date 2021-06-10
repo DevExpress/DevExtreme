@@ -104,7 +104,7 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-declare global {
+declare namespace Globalize {
     interface NumberFormatterOptions { }
     interface DateFormatterOptions { }
     interface CurrencyFormatterOptions { }
@@ -138,5 +138,5 @@ export interface FormatObject {
     */
    type?: FormatType
 }
-type ExternalFormat = {} extends NumberFormatterOptions ? (Intl.NumberFormatOptions | Intl.DateTimeFormatOptions) : (NumberFormatterOptions | DateFormatterOptions | CurrencyFormatterOptions);
+type ExternalFormat = {} extends Globalize.NumberFormatterOptions ? (Intl.NumberFormatOptions | Intl.DateTimeFormatOptions) : (Globalize.NumberFormatterOptions | Globalize.DateFormatterOptions | Globalize.CurrencyFormatterOptions);
 export type Format = FormatObject | FormatType | string | ((value: number | Date) => string) | ExternalFormat;
