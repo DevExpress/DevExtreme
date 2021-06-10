@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -472,7 +473,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
   .dx-tabs-nav-button {
     height: $material-scheduler-navigator-height;
-    margin-top: ($material-scheduler-header-height - $material-scheduler-navigator-height - 2) / 2;
+    margin-top: math.div($material-scheduler-header-height - $material-scheduler-navigator-height - 2, 2);
   }
 }
 
@@ -497,7 +498,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   right: $material-scheduler-switcher-label-offset;
   height: $material-scheduler-navigator-height;
   line-height: 24px;
-  padding: ($material-scheduler-navigator-height - 24px) / 2 14px;
+  padding: math.div($material-scheduler-navigator-height - 24px, 2) 14px;
   padding-right: $material-scheduler-navigator-height + 14;
   z-index: 0;
   background-color: rgba(0, 0, 0, 0.05);

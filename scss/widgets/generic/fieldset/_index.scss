@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -53,7 +54,7 @@ $generic-mobile-field-vertical-margin: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($generic-field-min-height - $size) / 2 0;
+    margin: math.div($generic-field-min-height - $size, 2) 0;
   }
 }
 
