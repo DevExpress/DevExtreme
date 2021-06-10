@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -29,7 +30,7 @@ $scrollview-loading-indicator-size: 42px;
   margin-right: 0;
   height: $scrollview-loading-indicator-size;
   width: $scrollview-loading-indicator-size;
-  border-radius: $scrollview-loading-indicator-size / 2;
+  border-radius: math.div($scrollview-loading-indicator-size, 2);
   display: inline-flex;
   justify-content: center;
   flex-direction: column;
@@ -51,7 +52,7 @@ $scrollview-loading-indicator-size: 42px;
 .dx-scrollview-pull-down-indicator {
   position: relative;
   margin-left: 0;
-  margin-top: -$scrollview-loading-indicator-size / 2;
+  margin-top: math.div(-$scrollview-loading-indicator-size, 2);
 }
 
 .dx-scrollview-pull-down-text {

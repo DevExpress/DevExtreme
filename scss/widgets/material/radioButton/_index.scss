@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -23,8 +24,8 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     height: $material-radiobutton-ripple-size;
     top: 50%;
     left: 50%;
-    margin-top: -$material-radiobutton-ripple-size / 2;
-    margin-left: -$material-radiobutton-ripple-size / 2;
+    margin-top: math.div(-$material-radiobutton-ripple-size, 2);
+    margin-left: math.div(-$material-radiobutton-ripple-size, 2);
     border-radius: 50%;
     display: block;
     position: absolute;
@@ -40,7 +41,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     border: $material-radiobutton-border-width solid $radiogroup-border-color;
     background-color: $radiogroup-bg;
     content: "";
-    border-radius: $material-radiobutton-size / 2;
+    border-radius: math.div($material-radiobutton-size, 2);
     box-sizing: content-box;
   }
 }
@@ -52,13 +53,13 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 
   .dx-radiobutton-icon-dot {
     display: block;
-    margin-top: -$material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
-    margin-left: $material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
+    margin-top: math.div(-$material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
+    margin-left: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
     width: $material-radiobutton-dot-size;
     height: $material-radiobutton-dot-size;
     background: $radiogroup-checked-bg;
     content: "";
-    border-radius: $material-radiobutton-dot-size / 2;
+    border-radius: math.div($material-radiobutton-dot-size, 2);
   }
 }
 
@@ -138,7 +139,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
   &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: $material-radiobutton-size / 2 - $material-radiobutton-dot-size / 2;
+    margin-right: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
     margin-left: 0;
   }
 }
