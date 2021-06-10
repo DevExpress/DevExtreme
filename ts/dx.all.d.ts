@@ -852,6 +852,11 @@ declare module DevExpress {
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
+    _notifyOptionChanged(
+      fullName: string,
+      value: unknown,
+      previousValue: unknown
+    );
     _templateManager: DevExpress.core.TemplateManager;
   }
   module DOMComponent {
@@ -5984,7 +5989,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.editColumnName]
        */
-      editColumnName?: string;
+      editColumnName?: string | null;
       /**
        * [descr:GridBaseOptions.editing.editRowKey]
        */
@@ -21127,7 +21132,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
      */

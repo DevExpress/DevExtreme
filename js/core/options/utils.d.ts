@@ -2,9 +2,13 @@ import {
     Device
 } from '../devices';
 
+export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>;
+};
+
 export declare type Rule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
-    options: Partial<T>;
+    options: RecursivePartial<T>;
 };
 
 export declare function convertRulesToOptions<T>(rules: Rule<T>[]): T;
