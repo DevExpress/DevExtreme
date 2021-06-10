@@ -873,7 +873,6 @@ export const BaseChart = BaseWidget.inherit({
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
         that._scaleBreaksGroup.linkRemove().clear();
-        that._labelsAxesGroup.linkRemove().clear();
     },
 
     _allowLegendInsidePosition() {
