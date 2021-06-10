@@ -16439,7 +16439,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(
+      target: dxSchedulerAppointment,
+      appointment: dxSchedulerAppointment
+    ): void;
   }
   module dxScheduler {
     export type AppointmentAddedEvent =
@@ -17179,7 +17182,7 @@ declare module DevExpress.ui {
           resourceCellTemplate?:
             | DevExpress.core.template
             | ((
-                itemData: dxSchedulerAppointment,
+                itemData: any,
                 itemIndex: number,
                 itemElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
@@ -17197,7 +17200,7 @@ declare module DevExpress.ui {
           timeCellTemplate?:
             | DevExpress.core.template
             | ((
-                itemData: dxSchedulerAppointment,
+                itemData: any,
                 itemIndex: number,
                 itemElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
