@@ -929,7 +929,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @extends ResourceCellTemplate
        */
-      resourceCellTemplate?: template | ((itemData: dxSchedulerAppointment, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
+      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @default undefined
@@ -944,7 +944,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @extends TimeCellTemplate
        */
-      timeCellTemplate?: template | ((itemData: dxSchedulerAppointment, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
+      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @type Enums.SchedulerViewType
@@ -1052,7 +1052,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @param2 appointment:Object
      * @public
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void;
 }
 
 /**

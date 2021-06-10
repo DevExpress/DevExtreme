@@ -49,6 +49,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
+  updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void {
+    this.instance.updateAppointment(target, appointment);
+  }
+
+  @Method()
   getDataSource(): DataSource {
     return this.instance.getDataSource();
   }
@@ -95,11 +100,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     target: string | UserDefinedElement, currentAppointmentData?: dxSchedulerAppointment): void {
     this.instance.showAppointmentTooltip(appointmentData, target,
       currentAppointmentData);
-  }
-
-  @Method()
-  updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void {
-    this.instance.updateAppointment(target, appointment);
   }
 
   @Effect({ run: 'once' })
