@@ -20,7 +20,7 @@ test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async
   currentView: 'week',
   appointmentDragging: {
     group: 'draggableGroup',
-    onAdd(e) {
+    onAdd(e): void {
       e.component.addAppointment(e.itemData);
       e.itemElement.remove();
     },
