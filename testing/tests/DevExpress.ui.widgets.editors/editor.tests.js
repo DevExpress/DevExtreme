@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import DOMComponent from 'core/component';
+import { Component } from 'core/component';
 import Editor from 'ui/editor/editor';
 import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
@@ -45,7 +45,7 @@ QUnit.module('Editor', {
     QUnit.test('isEditor', function(assert) {
         const editor = this.fixture.createEditor();
         assert.ok(Editor.isEditor(editor));
-        assert.ok(!Editor.isEditor(new DOMComponent(this.$element, {})));
+        assert.ok(!Editor.isEditor(new Component(this.$element, {})));
     });
 
     QUnit.test('Editor can be instantiated', function(assert) {

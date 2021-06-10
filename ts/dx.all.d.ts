@@ -690,19 +690,6 @@ declare module DevExpress {
      * [descr:Component.resetOption(optionName)]
      */
     resetOption(optionName: string): void;
-
-    _options: { silent(path: any, value: any): void };
-    _createActionByOption(optionName: string, config: object): Function;
-    _dispose(): void;
-    _getDefaultOptions(): object;
-    _init(): void;
-    _initializeComponent(): void;
-    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-    _optionChanged(args: { name: string; value: unknown }): void;
-    _setOptionsByReference(): void;
-    _optionsByReference: object;
-    _setDeprecatedOptions(): void;
-    _deprecatedOptions: object;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1303,6 +1290,29 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.core {
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  interface Component<TProperties> {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
+    _optionsByReference: Record<string, any>;
+    _deprecatedOptions: Record<string, any>;
+    _options: {
+      silent(path: any, value: any): void;
+    };
+    _createActionByOption(
+      optionName: string,
+      config: Record<string, any>
+    ): (...args: any[]) => any;
+    _dispose(): void;
+    _getDefaultOptions(): Record<string, any>;
+    _init(): void;
+    _initializeComponent(): void;
+    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
+    _optionChanged(args: { name: string; value: unknown }): void;
+    _setOptionsByReference(): void;
+    _setDeprecatedOptions(): void;
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
