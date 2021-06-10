@@ -794,7 +794,7 @@ export default Class.inherit((function() {
                     field.levels = getFieldsByGroup(fields, field);
                 }
 
-                if(!dimension || groupName && isNumeric(field.groupIndex) || (field.visible === false && (field.area !== 'data' && field.area !== 'filter'))) {
+                if(!dimension || groupName && isNumeric(field.groupIndex) || (field.visible === false)) {
                     return;
                 }
 
