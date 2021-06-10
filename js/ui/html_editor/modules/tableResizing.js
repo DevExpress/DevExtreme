@@ -27,8 +27,8 @@ export default class TableResizingModule extends BaseModule {
         super(quill, options);
         this.enabled = !!options.enabled;
         this._tableResizeFrames = [];
-        this._minColumnWidth = options.minColumnWidth || DEFAULT_MIN_COLUMN_WIDTH;
-        this._minRowHeight = options.minRowHeight || DEFAULT_MIN_COLUMN_WIDTH;
+        this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
+        this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
 
 
         if(this.enabled) {
@@ -116,6 +116,10 @@ export default class TableResizingModule extends BaseModule {
                 $table: $($item),
                 index: index
             };
+
+            // $('<div>').addClass('test00000').appendTo($item);
+
+
         });
     }
 
@@ -162,17 +166,19 @@ export default class TableResizingModule extends BaseModule {
                     .get(0);
             }
 
-            if($($lineSeparators[i]).hasClass('dx-draggable')) {
-                const draggable = $($lineSeparators[i]).dxDraggable('instance');
+            const $currentLineSeparator = $($lineSeparators[i]);
+
+            if($currentLineSeparator.hasClass('dx-draggable') && $currentLineSeparator.is(':visible')) {
+                const draggable = $($currentLineSeparator).dxDraggable('instance');
 
                 draggable.dispose();
 
-                $($lineSeparators[i]).addClass(lineResizerClass);
+                $($currentLineSeparator).addClass(lineResizerClass);
             }
 
             styleOptions[positionCoordinate] = currentPosition - DRAGGABLE_ELEMENT_OFFSET;
 
-            $($lineSeparators[i]).css(styleOptions);
+            $($currentLineSeparator).css(styleOptions);
             // console.log(direction);
             // console.log(styleOptions);
 
@@ -256,10 +262,10 @@ export default class TableResizingModule extends BaseModule {
                     const isNextColumnHasEnoughPlace = !nextLineSize || nextColumnNewSize >= this._minColumnWidth;
 
                     if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-                        $determinantElements.eq(index).css(positionStyleProperty, currentLineNewSize);
+                        $determinantElements.eq(index).attr(positionStyleProperty, currentLineNewSize + 'px');
 
                         if(nextLineSize) {
-                            $determinantElements.eq(index + 1).css(positionStyleProperty, nextColumnNewSize);
+                            $determinantElements.eq(index + 1).attr(positionStyleProperty, nextColumnNewSize + 'px');
                         }
                     }
                 } else {
@@ -269,9 +275,11 @@ export default class TableResizingModule extends BaseModule {
                     // console.log(newHeight);
 
                     // if(isCurrentRowHasEnoughPlace) {
-                    $determinantElements.eq(index).css(positionStyleProperty, newHeight);
+                    $determinantElements.eq(index).attr(positionStyleProperty, newHeight + 'px');
                     // }
                 }
+
+                this._updateFramePosition(frame.$table, frame.$frame);
 
 
                 // console.log(event.offset[positionCoordinateName]);
@@ -309,8 +317,8 @@ export default class TableResizingModule extends BaseModule {
         const determinantElements = this._getTableDeterminantElements($table);
 
         each(determinantElements, (index, element) => {
-            const columnWidth = $(element).width();
-            $(element).width(columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
+            const columnWidth = $(element).outerWidth();
+            $(element).attr('width', columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
         });
     }
 
