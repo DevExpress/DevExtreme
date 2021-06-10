@@ -2958,12 +2958,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellData = this.getCellData($(this._getDroppableCell()));
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
-        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
+        const endDate = cellData.endDate;
 
         return {
-            startDate: startDate,
-            endDate: endDate,
-            allDay: allDay,
+            startDate,
+            endDate,
+            allDay,
             groups: cellData.groups
         };
     }

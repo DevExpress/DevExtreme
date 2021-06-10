@@ -933,13 +933,12 @@ module('Renovated Render', {
     test('getDataByDroppableCell should work correctly', function(assert) {
         this.createInstance();
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(1).addClass('dx-scheduler-date-table-droppable-cell');
-
+        this.instance.$element().find('.' + CELL_CLASS).eq(0).addClass('dx-scheduler-date-table-droppable-cell');
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: undefined,
+            startDate: new Date(2020, 6, 29, 0, 0),
+            endDate: new Date(2020, 6, 29, 0, 30),
             groups: undefined,
         }, 'Cell Data is correct');
     });
