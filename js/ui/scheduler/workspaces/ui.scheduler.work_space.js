@@ -3239,13 +3239,25 @@ class SchedulerWorkSpace extends WidgetObserver {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
-        this._createDragBehaviorBase($element, getItemData, getItemSettings);
+        const options = {
+            getItemData,
+            getItemSettings,
+        };
+
+        this._createDragBehaviorBase($element, options);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
+    _createDragBehaviorBase($element, options) {
         let dragElement;
         const dragBehavior = this.dragBehavior;
         let itemData;
+        const {
+            getItemData,
+            getItemSettings,
+            isSetCursorOffset,
+            initialPosition,
+            ...restOptions
+        } = options;
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
@@ -3271,7 +3283,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
 
                         event.data.itemElement = dragElement;
-                        event.data.initialPosition = locate($(dragElement));
+                        event.data.initialPosition = initialPosition || locate($(dragElement));
                         event.data.itemData = itemData;
                         event.data.itemSettings = settings;
 
