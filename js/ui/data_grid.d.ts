@@ -593,7 +593,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @fires GridBase.onOptionChanged
      * @public
      */
-    filterValue?: string | Array<any> | Function | null;
+    filterValue?: string | Array<any> | Function;
     /**
      * @docid
      * @default -1
@@ -1550,7 +1550,7 @@ export interface EditingBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
-    editColumnName?: string | null;
+    editColumnName?: string;
     /**
      * @docid GridBaseOptions.editing.editRowKey
      * @default null

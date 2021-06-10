@@ -5989,7 +5989,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.editColumnName]
        */
-      editColumnName?: string | null;
+      editColumnName?: string;
       /**
        * [descr:GridBaseOptions.editing.editRowKey]
        */
@@ -21132,7 +21132,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.filterValue]
      */
-    filterValue?: string | Array<any> | Function | null;
+    filterValue?: string | Array<any> | Function;
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
      */
