@@ -13,6 +13,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
@@ -36,21 +37,6 @@ const stubInvokeMethod = function(instance, key) {
             return getAppointmentDataProvider(key);
         }
     });
-};
-
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
 };
 
 QUnit.module('Timeline Base', {
