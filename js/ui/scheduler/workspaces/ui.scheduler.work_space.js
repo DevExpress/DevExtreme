@@ -3456,15 +3456,16 @@ const createDragBehaviorConfig = (
             return;
         }
 
-        const mouseIndent = 10;
+        const MOUSE_IDENT = 10;
 
         const appointmentWidth = $(state.dragElement).width();
         const isWideAppointment = appointmentWidth > getCellWidth();
 
-        const draggableElement = locate($(state.dragElement).parent());
+        const dragElementContainer = $(state.dragElement).parent();
+        const boundingRect = getBoundingRect(dragElementContainer.get(0));
 
-        const newX = draggableElement.left + mouseIndent;
-        const newY = draggableElement.top + mouseIndent;
+        const newX = boundingRect.left + MOUSE_IDENT;
+        const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
             getElementsFromPoint(newX, newY) :
