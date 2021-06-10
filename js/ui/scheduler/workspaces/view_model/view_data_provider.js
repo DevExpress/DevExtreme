@@ -15,7 +15,7 @@ export default class ViewDataProvider {
 
     get viewDataGenerator() {
         if(!this._viewDataGenerator) {
-            this._viewDataGenerator = new ViewDataGenerator(this._workspace);
+            this._viewDataGenerator = new ViewDataGenerator();
         }
         return this._viewDataGenerator;
     }
@@ -46,8 +46,8 @@ export default class ViewDataProvider {
     get isVerticalGroupedWorkspace() { return this._workspace._isVerticalGroupedWorkSpace(); }
 
     update(isGenerateNewViewData) {
-        const { viewDataGenerator, _workspace } = this;
-        const renderOptions = _workspace.generateRenderOptions();
+        const viewDataGenerator = this.viewDataGenerator;
+        const renderOptions = this._workspace.generateRenderOptions();
 
         if(isGenerateNewViewData) {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
@@ -63,7 +63,10 @@ export default class ViewDataProvider {
             this.viewDataGenerator,
             this.viewDataMap,
             this.completeViewDataMap,
-            this._workspace,
+            {
+                isVerticalGrouping: renderOptions.isVerticalGrouping,
+                isDateAndTimeView: renderOptions.isDateAndTimeView,
+            },
         );
 
         this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
@@ -318,5 +321,27 @@ export default class ViewDataProvider {
             firstRowIndex: groupedDataMap[0][0].position.rowIndex,
             lastRowIndex: groupedDataMap[rowsCount - 1][0].position.rowIndex,
         };
+    }
+
+    isSameCell(firstCellData, secondCellData) {
+        const {
+            startDate: firstStartDate,
+            groupIndex: firstGroupIndex,
+            allDay: firstAllDay,
+            index: firstIndex,
+        } = firstCellData;
+        const {
+            startDate: secondStartDate,
+            groupIndex: secondGroupIndex,
+            allDay: secondAllDay,
+            index: secondIndex,
+        } = secondCellData;
+
+        return (
+            firstStartDate.getTime() === secondStartDate.getTime()
+            && firstGroupIndex === secondGroupIndex
+            && firstAllDay === secondAllDay
+            && firstIndex === secondIndex
+        );
     }
 }

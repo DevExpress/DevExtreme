@@ -3,17 +3,6 @@ import dateLocalization from '../../../localization/date';
 import timeZoneUtils from '../utils.timeZone';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
-    _getCellFromNextColumn(direction, isMultiSelection) {
-        let $nextCell = super._getCellFromNextColumn(direction, isMultiSelection);
-        const $focusedCell = this._$focusedCell;
-
-        if($focusedCell.parent().index() !== $nextCell.parent().index() && isMultiSelection) {
-            $nextCell = $focusedCell;
-        }
-
-        return $nextCell;
-    }
-
     _getFormat() {
         return this._formatWeekdayAndDay;
     }

@@ -1,15 +1,11 @@
 require('../../helpers/qunitPerformanceExtension.js');
-require('ui/overlay');
+require('ui/overlay/ui.overlay');
 require('ui/popup');
 
 require('generic_light.css!');
 
 const $ = require('jquery');
 const positionUtils = require('animation/position');
-
-// TODO - remove it after update Docker image
-const browser = require('core/utils/browser');
-const isChrome85OrNewer = browser.chrome && parseInt(browser.version) >= 85;
 
 positionUtils.calculateScrollbarWidth();
 
@@ -49,7 +45,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 10);
+        assert.measureStyleRecalculation(measureFunction, 11);
     });
 
     QUnit.performanceTest(`showing dxOverlay with shading=${shading} should be with minimum count of relayouts`, function(assert) {
@@ -63,7 +59,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             overlay.show();
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 9);
     });
 
 
@@ -76,10 +72,6 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        if(isChrome85OrNewer) {
-            assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
-        } else {
-            assert.measureStyleRecalculation(measureFunction, 16);
-        }
+        assert.measureStyleRecalculation(measureFunction, shading ? 17 : 16);
     });
 });

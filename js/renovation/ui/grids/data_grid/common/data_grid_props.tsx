@@ -129,6 +129,7 @@ export class DataGridColumnHeaderFilter {
   @OneWay()
   dataSource?:
   | any[]
+  | Store
   | ((options: { component?: any; dataSource?: DataSourceOptions }) => any)
   | DataSourceOptions;
 
@@ -878,6 +879,9 @@ export class DataGridColumnChooser {
 
   @OneWay()
   width?: number;
+
+  @OneWay()
+  sortOrder?: 'asc' | 'desc';
 }
 
 @ComponentBindings()
@@ -1280,7 +1284,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() columnWidth?: number;
 
-  @OneWay() dataSource?: string | any[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?: string | any[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() dateSerializationFormat?: string;
 

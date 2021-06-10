@@ -13,12 +13,12 @@ const createServer = (echo = true): net.Server => net.createServer((socket) => {
 
 let server: net.Server = null;
 
-const startServer = (echo = true): Promise<void> => new Promise((resolve) => {
+const startServer = async (echo = true): Promise<void> => new Promise((resolve) => {
   server = createServer(echo);
   server.listen(new DartClient().serverPort, '127.0.0.1', () => resolve());
 });
 
-const stopServer = (): Promise<void> => new Promise((resolve) => {
+const stopServer = async (): Promise<void> => new Promise((resolve) => {
   server.close(() => resolve());
 });
 

@@ -217,7 +217,7 @@ export async function compareScreenshot(
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
   const options = {
     ...screenshotComparerDefault,
-    ...comparisonOptions || {},
+    ...comparisonOptions ?? {},
   } as ComparerOptions;
   try {
     ensureArtifactsPath();

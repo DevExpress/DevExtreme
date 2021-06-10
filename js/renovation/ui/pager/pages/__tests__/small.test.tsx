@@ -7,7 +7,7 @@ import messageLocalization from '../../../../../localization/message';
 import { createTestRef } from '../../../../test_utils/create_ref';
 
 jest.mock('../../../../utils/get_computed_style');
-jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
+jest.mock('../../../editors/number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
 jest.mock('../../../../../localization/message', () => ({
   getFormatter: jest.fn(),
 }));
@@ -85,11 +85,16 @@ describe('Small pager pages', () => {
       expect(pageIndexChangeHandler).toBeCalledWith(2);
     });
 
-    it('pagesCountText', () => {
+    it('pagesCountText if appropriate property is not specified', () => {
       (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'of');
       const component = new PagesSmall({ pageCount: 100 });
       expect(component.pagesCountText).toBe('of');
       expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-pagesCountText');
+    });
+
+    it('pagesCountText', () => {
+      const component = new PagesSmall({ pageCount: 100, pagesCountText: 'from' });
+      expect(component.pagesCountText).toBe('from');
     });
 
     it('valueChange', () => {

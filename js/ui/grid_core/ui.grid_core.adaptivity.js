@@ -3,7 +3,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import { isDefined, isString } from '../../core/utils/type';
-import browser from '../../core/utils/browser';
 import Guid from '../../core/guid';
 import modules from './ui.grid_core.modules';
 import Form from '../form';
@@ -1003,19 +1002,8 @@ export const adaptivityModule = {
                     return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
-                _updateScrollableForIE: function() {
-                    const that = this;
-
-                    if(browser.msie && parseInt(browser.version) <= 11) {
-                        this._updateScrollableTimeoutID = setTimeout(function() {
-                            that.getView('rowsView')._updateScrollable();
-                        });
-                    }
-                },
-
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
                     const adaptiveController = this._adaptiveColumnsController;
-                    const columnAutoWidth = this.option('columnAutoWidth');
                     const oldHiddenColumns = adaptiveController.getHiddenColumns();
                     const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
 
@@ -1028,10 +1016,6 @@ export const adaptivityModule = {
                     }
 
                     !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
-
-                    if(columnAutoWidth && hidingColumnsQueue.length && !hiddenColumns.length) {
-                        this._updateScrollableForIE();
-                    }
 
                     return this.callBase.apply(this, arguments);
                 },

@@ -10,7 +10,7 @@ export default class DartClient {
 
   private readonly eventListeners: SocketEventListener[] = [];
 
-  dispose(): Promise<void> {
+  async dispose(): Promise<void> {
     if (this.client.destroyed) return Promise.resolve();
     this.isServerAvailable = false;
 
@@ -21,7 +21,7 @@ export default class DartClient {
     });
   }
 
-  check(): Promise<void> {
+  async check(): Promise<void> {
     this.client.setTimeout(100);
 
     return new Promise((resolve) => {
@@ -38,7 +38,8 @@ export default class DartClient {
     });
   }
 
-  send(message: DartCompilerConfig | DartCompilerKeepAliveConfig): Promise<DartCompilerResult> {
+  async send(message: DartCompilerConfig | DartCompilerKeepAliveConfig):
+  Promise<DartCompilerResult> {
     this.client.setTimeout(0);
     this.removeClientEventListeners();
 

@@ -30,7 +30,6 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
 import fx from 'animation/fx';
 import commonUtils from 'core/utils/common';
@@ -68,7 +67,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         this.clock.tick();
 
-        const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+        const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
         assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(92, 149, 197)', 'focused grouped row has correct background color in rtl mode');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
@@ -480,7 +479,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
@@ -1723,59 +1722,61 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         });
     });
 
-    QUnit.testInActiveWindow('New mode. The modified cell frame should not be rendered for an unmodified cell in a new row in Batch', function(assert) {
-        // arrange
-        const getData = function() {
-            const items = [];
-            for(let i = 0; i < 100; i++) {
-                items.push({
-                    ID: i + 1,
-                    Name: `Name ${i + 1}`,
-                    Description: `Description ${i + 1}`
-                });
-            }
-            return items;
-        };
+    ['virtual', 'infinite'].forEach(mode => {
+        QUnit.testInActiveWindow(`New mode (${mode}). The modified cell frame should not be rendered for an unmodified cell in a new row in Batch`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        ID: i + 1,
+                        Name: `Name ${i + 1}`,
+                        Description: `Description ${i + 1}`
+                    });
+                }
+                return items;
+            };
 
-        const dataGrid = createDataGrid({
-            dataSource: getData(),
-            keyExpr: 'id',
-            remoteOperations: true,
-            height: 300,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                newMode: true
-            },
-            columns: ['Name', 'Description']
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 300,
+                scrolling: {
+                    mode: mode,
+                    rowRenderingMode: 'virtual',
+                    newMode: true
+                },
+                columns: ['Name', 'Description']
+            });
+
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.cellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
+
+            // act
+            $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
         });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.cellValue(0, 0, 'test');
-        this.clock.tick();
-
-        // assert
-        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
-
-        // act
-        $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
-
-        // act
-        $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
     });
 });
 

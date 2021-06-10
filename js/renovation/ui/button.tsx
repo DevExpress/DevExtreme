@@ -23,7 +23,7 @@ import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -35,7 +35,7 @@ const getCssClasses = (model: ButtonProps): string => {
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
-    [`dx-button-${type || 'normal'}`]: true,
+    [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
@@ -122,7 +122,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() type?: string = 'normal';
+  @OneWay() type?: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
   @OneWay() useInkRipple?: boolean = false;
 
@@ -162,6 +162,16 @@ export class Button extends JSXComponent(ButtonProps) {
   @Method()
   focus(): void {
     this.widgetRef.current!.focus();
+  }
+
+  @Method()
+  activate(): void {
+    this.widgetRef.current!.activate();
+  }
+
+  @Method()
+  deactivate(): void {
+    this.widgetRef.current!.deactivate();
   }
 
   @Effect()
@@ -223,7 +233,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = text || icon;
+    let label = (text ?? '') || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
@@ -242,7 +252,11 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return icon || type === 'back' ? icon || 'back' : '';
+    if (icon || type === 'back') {
+      return (icon ?? '') || 'back';
+    }
+
+    return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {

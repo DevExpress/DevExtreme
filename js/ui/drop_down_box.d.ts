@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -122,7 +124,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @default null
      * @public
      */
-    dataSource?: string | Array<any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type_function_param1 value:string|Array<any>

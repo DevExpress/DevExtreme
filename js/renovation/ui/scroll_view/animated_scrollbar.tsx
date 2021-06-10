@@ -7,7 +7,9 @@ import {
   ComponentBindings,
   Method,
   Event,
+  Effect,
 } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
 
@@ -91,7 +93,7 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
 & Pick<ScrollableProps, 'direction' | 'showScrollbar' | 'scrollByThumb' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'>
-& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'bounceEnabled' | 'pocketStateChange' | 'scrollLocationChange' | 'contentTranslateOffsetChange'>;
 
 @Component({
   defaultOptionRules: null,
@@ -176,6 +178,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.releaseHandler();
   }
 
+  @Effect({ run: 'once' })
+  disposeAnimationFrame(): DisposeEffectReturn {
+    return (): void => { this.cancel(); };
+  }
+
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
     this.animator = animatorName;
 
@@ -186,7 +193,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       if (!thumbScrolling && crossThumbScrolling) {
         this.velocity = 0;
       } else {
-        this.velocity = receivedVelocity || 0;
+        this.velocity = receivedVelocity ?? 0;
       }
 
       this.suppressInertia(thumbScrolling);

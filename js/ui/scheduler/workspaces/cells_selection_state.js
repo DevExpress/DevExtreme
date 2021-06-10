@@ -8,21 +8,16 @@ export default class CellsSelectionState {
         this._selectedCells = null;
 
         this._firstSelectedCell = null;
+
+        this._prevFocusedCell = null;
+        this._prevSelectedCells = null;
     }
 
     get viewDataProvider() { return this._viewDataProvider; }
 
-    get focusedCell() { return this._focusedCell; }
+    get focusedCell() {
+        const focusedCell = this._focusedCell || this._prevFocusedCell;
 
-    setFocusedCell(rowIndex, columnIndex, isAllDay) {
-        if(rowIndex >= 0) {
-            const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
-            this._focusedCell = cell;
-        }
-    }
-
-    getFocusedCell() {
-        const { focusedCell } = this;
         if(!focusedCell) {
             return undefined;
         }
@@ -32,6 +27,13 @@ export default class CellsSelectionState {
         const cellPosition = this.viewDataProvider.findCellPositionInMap(cellInfo);
 
         return { coordinates: cellPosition, cellData: focusedCell };
+    }
+
+    setFocusedCell(rowIndex, columnIndex, isAllDay) {
+        if(rowIndex >= 0) {
+            const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
+            this._focusedCell = cell;
+        }
     }
 
     setSelectedCells(lastCellCoordinates, firstCellCoordinates = undefined) {
@@ -84,8 +86,12 @@ export default class CellsSelectionState {
         );
     }
 
+    setSelectedCellsByData(selectedCellsData) {
+        this._selectedCells = selectedCellsData;
+    }
+
     getSelectedCells() {
-        return this._selectedCells;
+        return this._selectedCells || this._prevSelectedCells;
     }
 
     releaseSelectedAndFocusedCells() {
@@ -94,28 +100,22 @@ export default class CellsSelectionState {
     }
 
     releaseSelectedCells() {
+        this._prevSelectedCells = this._selectedCells;
         this._selectedCells = null;
         this._firstSelectedCell = null;
     }
 
     releaseFocusedCell() {
+        this._prevFocusedCell = this._focusedCell;
         this._focusedCell = null;
     }
 
-    isValidFocusedCell(nextFocusedCellData) {
-        const focusedCell = this._focusedCell;
+    clearSelectedAndFocusedCells() {
+        this._prevSelectedCells = null;
+        this._selectedCells = null;
 
-        if(!focusedCell) {
-            return true;
-        }
-
-        const { groupIndex, allDay } = focusedCell;
-        const {
-            groupIndex: nextGroupIndex,
-            allDay: nextAllDay,
-        } = nextFocusedCellData;
-
-        return groupIndex === nextGroupIndex && allDay === nextAllDay;
+        this._prevFocusedCell = null;
+        this._focusedCell = null;
     }
 
     _filterCellsByDateAndIndex(cellsRow, filterData) {

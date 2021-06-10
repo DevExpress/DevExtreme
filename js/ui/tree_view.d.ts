@@ -10,6 +10,8 @@ import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
 
+import Store from '../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -128,7 +130,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxTreeViewItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

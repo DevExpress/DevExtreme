@@ -77,8 +77,6 @@ export class TopPocketProps {
 
   @OneWay() pocketState: number = TopPocketState.STATE_RELEASED;
 
-  @OneWay() pullDownTop = 0;
-
   @OneWay() pullDownTranslateTop = 0;
 
   @OneWay() pullDownIconAngle = 0;
@@ -183,7 +181,7 @@ export class TopPocket extends JSXComponent<TopPocketPropsType>() {
   get topPocketStyles(): { [key: string]: string | number } | undefined {
     if (this.props.refreshStrategy === 'pullDown') {
       return {
-        top: `${this.props.pocketTop}px`,
+        top: `${-this.props.pocketTop}px`,
         transform: `translate(0px, ${this.props.topPocketTranslateTop}px)`,
       };
     }

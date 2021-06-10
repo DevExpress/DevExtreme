@@ -535,7 +535,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @default null
      * @public
      */
-    dataSource?: string | Array<any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @public
@@ -1085,7 +1085,13 @@ export interface ColumnChooser {
      * @docid GridBaseOptions.columnChooser.width
      * @default 250
      */
-    width?: number
+    width?: number,
+    /**
+     * @docid GridBaseOptions.columnChooser.sortOrder
+     * @type Enums.SortOrder
+     * @default undefined
+     */
+    sortOrder?: 'asc' | 'desc'
 }
 
 export interface ColumnFixing {
@@ -2667,7 +2673,7 @@ export interface ColumnHeaderFilter {
    * @type_function_param1_field2 dataSource:DataSourceOptions
    * @default undefined
    */
-  dataSource?: Array<any> | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
+  dataSource?: Array<any> | Store | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -3067,7 +3073,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 /** @public */
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
-/** @public */ 
+/** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;

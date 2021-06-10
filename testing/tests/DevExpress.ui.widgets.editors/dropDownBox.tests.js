@@ -177,6 +177,21 @@ QUnit.module('common', moduleConfig, () => {
         assert.equal($(instance.content()).text(), 'Test content', 'content template has been rendered');
     });
 
+    QUnit.test('click on inner DropDownEditor should not close parent DropDownEditor (T998926)', function(assert) {
+        const $contentTemplateEditor = $('<div>').dxDropDownBox({});
+        const onClosed = sinon.stub();
+        const dropDownBox = new DropDownBox(this.$element, {
+            onClosed,
+            deferRendering: false,
+            contentTemplate: () => $contentTemplateEditor,
+        });
+
+        dropDownBox.open();
+        $contentTemplateEditor.find(TEXTEDITOR_INPUT_CLASS).trigger('click');
+
+        assert.ok(onClosed.notCalled);
+    });
+
     QUnit.test('anonymous content template should work', function(assert) {
         const $inner = $('#dropDownBoxAnonymous #inner');
         const instance = new DropDownBox($('#dropDownBoxAnonymous'), { opened: true });
