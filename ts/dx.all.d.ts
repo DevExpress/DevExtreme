@@ -18370,7 +18370,10 @@ declare module DevExpress.ui {
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTagBoxOptions
-    extends Omit<dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'> {
+    extends Pick<
+      dxSelectBoxOptions<dxTagBox>,
+      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
+    > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
