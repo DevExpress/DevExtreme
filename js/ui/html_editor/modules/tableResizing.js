@@ -54,10 +54,10 @@ export default class TableResizingModule extends BaseModule {
 
             _windowResizeCallbacks.add(() => {
                 setTimeout(() => {
-                    this._fixColumnsWidth(this._tableResizeFrames[0].$table);
+                    // this._fixColumnsWidth(this._tableResizeFrames[0].$table);
                     this._updateFramesPositions();
                     this._updateFramesSeparators();
-                });
+                }, 100);
 
             });
         }
@@ -229,11 +229,6 @@ export default class TableResizingModule extends BaseModule {
 
         // console.log(direction);
 
-        if(direction === 'horizontal' && !$determinantElements[index + 1]) {
-            this._fixColumnsWidth(frame.$table);
-            frame.$table.css('width', 'auto');
-        }
-
         const getSizeFunction = direction === 'vertical' ? 'outerHeight' : 'outerWidth';
         const positionStyleProperty = direction === 'vertical' ? 'height' : 'width';
         // const positionCoordinate = direction === 'vertical' ? 'top' : 'left';
@@ -291,6 +286,8 @@ export default class TableResizingModule extends BaseModule {
             },
             onDragStart: () => {
                 // startDragPosition = parseInt($(lineSeparator).css(positionCoordinate).replace('px', ''));
+                this._fixColumnsWidth(frame.$table);
+                frame.$table.css('width', 'auto');
                 startLineSize = parseInt($($determinantElements[index])[getSizeFunction]());
                 nextLineSize = 0;
                 if($determinantElements[index + 1]) {

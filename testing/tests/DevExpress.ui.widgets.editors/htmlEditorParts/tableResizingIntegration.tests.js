@@ -92,7 +92,7 @@ module('Resizing integration', {
 
     });
 
-    test('Draggable element should be one', function(assert) {
+    test('Draggable element should be disposed after drag', function(assert) {
         this.createWidget();
         this.clock.tick();
 
@@ -103,9 +103,17 @@ module('Resizing integration', {
         $columnResizerElements.eq(1)
             .trigger('dxpointerdown');
 
-        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+        let $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
 
-        assert.strictEqual($draggableElements.length, 1, 'Column resizers draggable elements are created after the pointerDown event');
+        PointerMock($draggableElements.eq(1))
+            .start()
+            .dragStart()
+            .drag(50, 10)
+            .dragEnd();
+
+        $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        assert.strictEqual($draggableElements.length, 0);
     });
 
     test('Frame is not created for table by default if the tableResizing option is disabled', function(assert) {
@@ -296,12 +304,12 @@ module('Resizing integration', {
             .dragStart()
             .drag(-30, 0)
             .drag(-25, 0)
-            .drag(-20, 0)
+            .drag(-10, 0)
             .dragEnd();
 
         this.clock.tick();
 
-        assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 25, 3);
+        assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 35, 3);
     });
 
     test('Frame should change height if the table height is changed by horizontal drag', function(assert) {
@@ -368,8 +376,8 @@ module('Resizing integration', {
         const $columns = $table.find('tr').eq(0).find('td');
 
         each($columns, (_, element) => {
-            const styleAttr = $(element).attr('style') || '';
-            assert.ok(styleAttr.indexOf('width') >= 0);
+            const styleAttr = $(element).attr('width') || '';
+            assert.ok(styleAttr.length >= 0);
         });
     });
 
@@ -514,12 +522,10 @@ module('Resizing integration', {
         const columnBorderOffsets = [];
 
         const $table = this.$element.find('table').width(400);
-        this.clock.tick(500);
-        // window.flag1 = true;
+        this.clock.tick();
         resizeCallbacks.fire();
 
-        // this.clock.tick(500);
-        // window.flag1 = false;
+        this.clock.tick(500);
 
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
 
@@ -531,7 +537,6 @@ module('Resizing integration', {
                 columnBorderOffsets[i] = columnWidth;
             }
         });
-
 
         $columnResizerElements.each((i, column) => {
             const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
