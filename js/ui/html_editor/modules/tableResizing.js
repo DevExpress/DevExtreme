@@ -188,44 +188,52 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _createDraggableElement({ lineSeparator, $determinantElements, index, frame, direction }) {
+    _dragStartHandler({ $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
-        const currentDirection = direction;
 
-        this._currentDraggableElement = this.editorInstance._createComponent(lineSeparator, Draggable, {
+        this._fixColumnsWidth(frame);
+        this._startLineSize = parseInt($($determinantElements[index])[directionInfo.getSizeFunction]());
+        this._nextLineSize = 0;
+        if($determinantElements[index + 1]) {
+            this._nextLineSize = parseInt($($determinantElements[index + 1])[directionInfo.getSizeFunction]());
+        }
+    }
+
+    _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
+        const directionInfo = this._getDirectionInfo(direction);
+        const currentLineNewSize = this._startLineSize + event.offset[directionInfo.positionCoordinateName];
+
+        if(direction === 'horizontal') {
+            const nextColumnNewSize = this._nextLineSize && this._nextLineSize - event.offset[directionInfo.positionCoordinateName];
+            const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
+            const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
+
+            if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
+                $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
+
+                if(this._nextLineSize) {
+                    $determinantElements.eq(index + 1).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
+                }
+            }
+        } else {
+            const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
+            $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
+        }
+
+        this._updateFramePosition(frame.$table, frame.$frame);
+    }
+
+    _createDraggableElement(options) {
+        this._currentDraggableElement = this.editorInstance._createComponent(options.lineSeparator, Draggable, {
             contentTemplate: null,
             boundary: this.editorInstance._getQuillContainer(),
             allowMoveByClick: false,
-            dragDirection: direction,
+            dragDirection: options.direction,
             onDragMove: ({ component, event }) => {
-                const currentLineNewSize = this._startLineSize + event.offset[directionInfo.positionCoordinateName];
-
-                if(currentDirection === 'horizontal') {
-                    const nextColumnNewSize = this._nextLineSize && this._nextLineSize - event.offset[directionInfo.positionCoordinateName];
-                    const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
-                    const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
-
-                    if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-                        $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
-
-                        if(this._nextLineSize) {
-                            $determinantElements.eq(index + 1).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
-                        }
-                    }
-                } else {
-                    const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
-                    $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
-                }
-
-                this._updateFramePosition(frame.$table, frame.$frame);
+                this._dragMoveHandler(event, options);
             },
             onDragStart: () => {
-                this._fixColumnsWidth(frame);
-                this._startLineSize = parseInt($($determinantElements[index])[directionInfo.getSizeFunction]());
-                this._nextLineSize = 0;
-                if($determinantElements[index + 1]) {
-                    this._nextLineSize = parseInt($($determinantElements[index + 1])[directionInfo.getSizeFunction]());
-                }
+                this._dragStartHandler(options);
             },
             onDragEnd: () => {
                 this._updateFramesPositions();
