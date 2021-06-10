@@ -1012,9 +1012,6 @@ const environment = {
         assert.ok(chart._crosshairCursorGroup.stub('clear').called, 'crosshair should be cleared');
         assert.ok(chart._crosshairCursorGroup.linkAppend.called, 'crosshair group should be added to root');
         assert.ok(chart._scaleBreaksGroup.linkAppend.called, 'scalebreaks group should be added to root');
-        assert.ok(chart._labelsAxesGroup.linkRemove.called, 'axes labels group should be detached');
-        assert.ok(chart._labelsAxesGroup.stub('clear').called, 'axes labels group should be cleared');
-        assert.ok(chart._labelsAxesGroup.linkAppend.called, 'axes labels group should be added to root');
 
         withNewData && assert.ok(getTrackerStub().stub('update').called, 'Tracker should be initialized');
         options.noTrackerUpdateCheck || assert.ok(getTrackerStub().stub('update').called, 'Tracker should be prepared');
