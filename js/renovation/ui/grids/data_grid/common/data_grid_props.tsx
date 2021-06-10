@@ -9,7 +9,6 @@ import {
 } from '@devextreme-generator/declarations';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
-  Options,
   Column,
   RowObject,
   ColumnButtonClickEvent,
@@ -1125,7 +1124,7 @@ export class DataGridCommonColumnSettings {
 }
 
 @ComponentBindings()
-export class DataGridProps extends BaseWidgetProps implements Options {
+export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing = {
@@ -1143,7 +1142,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     popup: {},
     startEditAction: 'click',
     editRowKey: null,
-    editColumnName: undefined,
+    editColumnName: null,
     changes: [],
   };
 
