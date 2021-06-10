@@ -1,7 +1,6 @@
 import {
   DxElement
 } from './element';
-import { ChangedOptionInfo, InitializedEventInfo } from '../events/index';
 
 /** @namespace DevExpress */
 export interface ComponentOptions<TComponent> {
