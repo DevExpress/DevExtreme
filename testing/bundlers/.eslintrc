@@ -1,40 +1,5 @@
 {
-    "globals": {
-        "__dirname": "writable"
-    },
-    "plugins": [
-        "spellcheck"
-    ],
-    "rules": {
-        "spellcheck/spell-checker": [1,
-            {
-                "skipWords": [
-                    "cjs",
-                    "const",
-                    "devextreme",
-                    "devexpress",
-                    "dirname",
-                    "esm",
-                    "filename",
-                    "fs",
-                    "js",
-                    "jszip",
-                    "gantt",
-                    "luxon",                    
-                    "metadata",
-                    "rollup",
-                    "rrule",
-                    "rxjs",
-                    "src",
-                    "utils",
-                    "vite",
-                    "webpack",
-                    "ui"
-                ],
-                "skipWordIfMatch": [
-                    "^cldr.*$"
-                ]
-            }
-        ]
+    "env": {
+        "node": true
     }
 }

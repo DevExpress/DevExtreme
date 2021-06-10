@@ -22,10 +22,38 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Install packages in test directory
+    - name: Install bundlers
       working-directory: ./testing/bundlers  
       run: npm install
 
-    - name: Run module bundler tests
+    - name: Install DevExtreme package 
       working-directory: ./testing/bundlers
-      run: npm run test:bundlers
+      run: npm run install:devextreme  
+
+    - name: Generate entry files 
+      working-directory: ./testing/bundlers
+      run: npm run generate-entry-files  
+
+    - name: Build webpack cjs
+      working-directory: ./testing/bundlers
+      run: npm run build:webpack-cjs
+
+    - name: Build browserify cjs
+      working-directory: ./testing/bundlers
+      run: npm run build:browserify-cjs
+
+    - name: Build webpack
+      working-directory: ./testing/bundlers
+      run: npm run build:webpack
+
+    - name: Build rollup
+      working-directory: ./testing/bundlers
+      run: npm run build:rollup
+      
+    - name: Build parcel
+      working-directory: ./testing/bundlers
+      run: npm run build:parcel
+      
+    - name: Build vite
+      working-directory: ./testing/bundlers
+      run: npm run build:vite      

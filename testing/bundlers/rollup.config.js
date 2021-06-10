@@ -4,12 +4,12 @@ import commonJs from '@rollup/plugin-commonjs';
 import alias from '@rollup/plugin-alias';
 
 export default {
-    input: './src/modules_esm.js',
+    input: './entry/modules_esm.js',
     output: {
         file: './dist/dist_rollup/bundle_esm.js',
         format: 'es'
     },
-    external: [ 'rrule' ],
+    external: [ 'rrule', /* '@devextreme/vdom',*/ './pager', './layout', './title', './group_panel'],
     plugins: [
         alias({
             jszip: path.join(__dirname, './node_modules/jszip/dist/jszip.min.js'), /* eslint-disable-line spellcheck/spell-checker */
@@ -29,11 +29,11 @@ export default {
                 './node_modules/devextreme-quill/**',
                 './node_modules/globalize/**',
                 './node_modules/luxon/**',
-                '../../node_modules/jquery/dist/jquery.js'
+                '../../node_modules/jquery/dist/jquery.js',
             ],
             dynamicRequireTargets: [
                 './node_modules/jszip/lib/utils.js'
             ]
-        }),
+        })
     ]
 };

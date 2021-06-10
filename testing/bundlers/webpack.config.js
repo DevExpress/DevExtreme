@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'development',
-    entry: path.resolve(__dirname, './src/modules_esm.js'),
+    entry: path.resolve(__dirname, './entry/modules_esm.js'),
     output: {
         filename: 'bundle_esm.js',
         path: path.resolve(__dirname, './dist/dist_webpack/'),
