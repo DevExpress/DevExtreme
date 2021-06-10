@@ -422,7 +422,7 @@ export default Class.inherit((function() {
 
     function isAreaField(field, area) {
         const canAddFieldInArea = area === 'data' || field.visible !== false;
-        return field.visible !== false && field.area === area && !isDefined(field.groupIndex) && canAddFieldInArea;
+        return field.area === area && !isDefined(field.groupIndex) && canAddFieldInArea;
     }
 
     function getFieldId(field, retrieveFieldsOptionValue) {
