@@ -128,8 +128,8 @@ export class ViewDataGenerator {
                 ? allDayPanelsCount + 1
                 : allDayPanelsCount;
 
-            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
-                cell.key = keyBase + cellIndex;
+            currentViewDataMap[rowIndex].forEach((cell, columnIndex) => {
+                cell.key = keyBase + columnIndex;
             });
 
             return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
