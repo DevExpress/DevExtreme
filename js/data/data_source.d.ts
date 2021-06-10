@@ -146,7 +146,7 @@ export interface DataSourceOptions<TKey = any | string | number, TValueOut = any
  */
 export default class DataSource<TKey = any | string | number, TValue = any> {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue>);
+    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue, any, any>);
     constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
