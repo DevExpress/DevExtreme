@@ -6,7 +6,7 @@ export declare function isDate(object: any): object is Date;
 
 export declare function isString(object: any): object is string;
 
-export declare function type(object: any): 'object' | 'array' | 'string' | 'date' | 'null' | string;
+export declare function type(object: any): 'object' | 'array' | 'string' | 'date' | 'null';
 
 export declare function isNumeric(object: any): object is number;
 
@@ -20,7 +20,7 @@ export declare function isObject<T = {}>(object: unknown): object is object;
 
 export declare function isEmptyObject<T = {}>(object: T): boolean;
 
-export declare function isPlainObject(object: any): object is object;
+export declare function isPlainObject(object: any): object is { [key: string]: any };
 
 export declare function isPrimitive<T>(value: T): value is Exclude<T, Function>&Exclude<T, object>&Exclude<T, any[]>;
 
