@@ -18,7 +18,7 @@ export class AppointmentDataProvider {
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
-        this.initStrategy();
+        this.initFilterStrategy();
     }
 
     get filterMaker() { return this.getFilterStrategy().filterMaker; }
@@ -31,13 +31,13 @@ export class AppointmentDataProvider {
 
     getFilterStrategy() {
         if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
-            this.initStrategy();
+            this.initFilterStrategy();
         }
 
         return this.filterStrategy;
     }
 
-    initStrategy() {
+    initFilterStrategy() {
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
             ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
             : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
@@ -45,13 +45,13 @@ export class AppointmentDataProvider {
 
     setDataSource(dataSource) {
         this.dataSource = dataSource;
-        this.initStrategy();
+        this.initFilterStrategy();
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
     updateDataAccessors(appointmentDataAccessors) {
         this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
-        this.initStrategy();
+        this.initFilterStrategy();
     }
 
     combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
