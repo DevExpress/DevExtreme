@@ -647,8 +647,77 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         dependencies = getDependencyElements(this.$element, 0);
         assert.equal(dependencies.length, 0, 'dependency has been deleted');
         this.instance.updateTask('1', data);
-        this.clock.tick();
+        this.clock.tick(500);
         dependencies = getDependencyElements(this.$element, 0);
         assert.equal(dependencies.length, 0, 'dependency is still deleted');
+    });
+    test('update task with only custom field shouldnt restore dependencies', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 0, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': '1', 'predecessorId': '1', 'successorId': '1', 'type': '0' } ] },
+            validation: { autoUpdateParentTasks: true }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            'CustomText': 'new'
+        };
+        let dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 6);
+        getGanttViewCore(this.instance).commandManager.removeDependencyCommand.execute('1', false);
+
+        this.clock.tick();
+        dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 0, 'dependency has been deleted');
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        dependencies = getDependencyElements(this.$element, '1');
+        assert.equal(dependencies.length, 0, 'dependency is still deleted');
+    });
+    test('update task with only custom field should update treelist', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: true },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task' },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+        let treeListTaskCustomText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
+        const treeListDataSourceOld = this.instance._treeList.option('dataSource');
+        assert.equal(treeListTaskCustomText, 'c1');
+        assert.equal(treeListDataSourceOld[0].CustomText, 'c1');
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        treeListTaskCustomText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(0).text();
+        const treeListDataSourceNew = this.instance._treeList.option('dataSource');
+        assert.equal(treeListTaskCustomText, customText);
+        assert.equal(treeListDataSourceNew[0].CustomText, customText);
+        assert.equal(treeListDataSourceOld[0].start, treeListDataSourceNew[0].start);
+        assert.equal(treeListDataSourceOld[0].end, treeListDataSourceNew[0].end);
     });
 });
