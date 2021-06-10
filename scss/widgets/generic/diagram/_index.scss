@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -15,13 +16,11 @@
 
 // adduse
 
-
 $generic-diagram-toolbar-icon-size: $generic-base-icon-size;
 $diagram-toolbar-colorbutton-border-width: 3px;
 $diagram-touchbar-item-padding: 5px;
 
 $diagram-toolbox-title-size: 12px;
-
 
 .dx-diagram {
   border-color: $diagram-border-color;
@@ -319,7 +318,7 @@ $diagram-toolbox-title-size: 12px;
     padding: 0 $diagram-properties-panel-spacing $diagram-properties-panel-spacing;
 
     .dx-toolbar-item {
-      margin-bottom: $diagram-properties-panel-spacing / 2;
+      margin-bottom: math.div($diagram-properties-panel-spacing, 2);
 
       &.dx-diagram-lg-icon-item .dx-diagram-i {
         background-size: $diagram-properties-layout-icon-size $diagram-properties-layout-icon-size;
