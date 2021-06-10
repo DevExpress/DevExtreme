@@ -197,7 +197,6 @@
             ],
             "no-undef-init": 0,
             "@typescript-eslint/no-extraneous-class": "error",
-           "@typescript-eslint/promise-function-async": "error",
             "@typescript-eslint/no-dynamic-delete": "error",
             "@typescript-eslint/no-base-to-string": "error",
             "@typescript-eslint/no-unused-vars-experimental": "error",
