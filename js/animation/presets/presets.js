@@ -1,4 +1,4 @@
-import Component from '../../core/component';
+import { Component } from '../../core/component';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
