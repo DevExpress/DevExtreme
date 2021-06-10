@@ -208,9 +208,14 @@
             "@typescript-eslint/no-invalid-this": "error",
             "@typescript-eslint/prefer-includes": "error",
             "@typescript-eslint/no-unnecessary-type-assertion": "error",
-            "@typescript-eslint/prefer-nullish-coalescing": "error"
+            "@typescript-eslint/prefer-nullish-coalescing": "error",
+            "@typescript-eslint/require-array-sort-compare": ["error",
+                { "ignoreStringArrays": true }
+            ],
+            "@typescript-eslint/restrict-plus-operands": ["error",
+                { "checkCompoundAssignments": true }
+            ]
             /*
-            "@typescript-eslint/require-array-sort-compare": "error",
             "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
             "@typescript-eslint/no-explicit-any": "error",
@@ -226,7 +231,6 @@
             "@typescript-eslint/no-unnecessary-condition": "error",
             "@typescript-eslint/strict-boolean-expressions": "error",
             "@typescript-eslint/unbound-method": "error",
-            "@typescript-eslint/restrict-plus-operands": "error",
             "@typescript-eslint/require-await": "error",
             "@typescript-eslint/no-unsafe-member-access": "error",
             "@typescript-eslint/prefer-readonly-parameter-types": "error",

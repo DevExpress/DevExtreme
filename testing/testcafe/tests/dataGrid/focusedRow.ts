@@ -30,7 +30,7 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
     enabled: false,
   },
   onFocusedRowChanged: () => {
-    const global = window as any;
+    const global = window as Window & typeof globalThis & { onFocusedRowChangedCounter: number };
     if (!global.onFocusedRowChangedCounter) {
       global.onFocusedRowChangedCounter = 0;
     }
@@ -555,7 +555,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
   await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
 }).before(async () => createWidget('dxDataGrid', () => {
   const data = ((): Record<string, unknown>[] => {
-    const result = [];
+    const result: { id: number; c0: string; c1: string }[] = [];
 
     for (let i = 0; i < 200; i += 1) {
       result.push({ id: i, c0: 'c0', c1: `c1_${i % 20}` });
@@ -606,16 +606,18 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
       rowRenderingMode: 'virtual',
     },
     onFocusedRowChanging: (): void => {
-      if (!(window as any).focusedRowChanging_Counter) {
-        (window as any).focusedRowChanging_Counter = 0;
+      const global = window as Window & typeof globalThis & { focusedRowChanging_Counter: number };
+      if (!global.focusedRowChanging_Counter) {
+        global.focusedRowChanging_Counter = 0;
       }
-      (window as any).focusedRowChanging_Counter += 1;
+      global.focusedRowChanging_Counter += 1;
     },
     onFocusedRowChanged: (): void => {
-      if (!(window as any).focusedRowChanged_Counter) {
-        (window as any).focusedRowChanged_Counter = 0;
+      const global = window as Window & typeof globalThis & { focusedRowChanged_Counter: number };
+      if (!global.focusedRowChanged_Counter) {
+        global.focusedRowChanged_Counter = 0;
       }
-      (window as any).focusedRowChanged_Counter += 1;
+      global.focusedRowChanged_Counter += 1;
     },
   };
 }));
@@ -630,7 +632,7 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
     .notOk();
 }).before(async () => createWidget('dxDataGrid', () => {
   const data = ((): Record<string, unknown>[] => {
-    const result = [];
+    const result: { id: number }[] = [];
     for (let i = 0; i < 100; i += 1) {
       result.push({ id: i + 1 });
     }
@@ -679,7 +681,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
   })();
   await createWidget('dxDataGrid', () => {
     const data = ((): Record<string, unknown>[] => {
-      const result = [];
+      const result: { id: number }[] = [];
       for (let i = 0; i < 20; i += 1) {
         result.push({ id: i + 1 });
       }
