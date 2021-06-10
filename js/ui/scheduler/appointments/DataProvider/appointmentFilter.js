@@ -162,7 +162,7 @@ export class AppointmentFilterBaseStrategy {
     // TODO - Use DI to get appropriate services
     get workspace() { return this.scheduler.getWorkSpace(); }
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourceManager() { return getResourceManager(); }
+    get resourceManager() { return getResourceManager(this.scheduler.key); }
     get timeZoneCalculator() { return this.scheduler.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.scheduler._getCurrentViewOption('startDayHour'); }

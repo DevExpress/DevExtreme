@@ -50,7 +50,6 @@ import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/bas
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { getResourceManager } from '../resources/resourceManager';
 
 import CellsSelectionState from './cells_selection_state';
 
@@ -1345,7 +1344,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexByResourceId(id) {
         const groups = this.option('groups');
-        const resourceTree = getResourceManager().createResourcesTree(groups);
+        const resourceManager = this.invoke('getResourceManager');
+        const resourceTree = resourceManager.createResourcesTree(groups);
 
         if(!resourceTree.length) return 0;
 
@@ -1702,7 +1702,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const groupsArray = getResourceManager().getCellGroups(
+            const resourceManager = this.invoke('getResourceManager');
+            const groupsArray = resourceManager.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1776,7 +1777,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const groupsArray = getResourceManager().getCellGroups(
+        const resourceManager = this.invoke('getResourceManager');
+        const groupsArray = resourceManager.getCellGroups(
             cellGroupIndex,
             this.option('groups')
         );
@@ -1832,7 +1834,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
 
-            const groupsArray = getResourceManager().getCellGroups(
+            const resourceManager = this.invoke('getResourceManager');
+            const groupsArray = resourceManager.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1946,7 +1949,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const groupsArray = getResourceManager().getCellGroups(
+        const resourceManager = this.invoke('getResourceManager');
+        const groupsArray = resourceManager.getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -1989,9 +1993,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllGroups() {
         const groupCount = this._getGroupCount();
+        const resourceManager = this.invoke('getResourceManager');
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = getResourceManager().getCellGroups(
+            const groupsArray = resourceManager.getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -2307,7 +2312,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getGroupIndexes(appointmentResources) {
         let result = [];
         if(this._isGroupsSpecified(appointmentResources)) {
-            const resourceManager = getResourceManager();
+            const resourceManager = this.invoke('getResourceManager');
             const tree = resourceManager.createResourcesTree(this.option('groups'));
 
             result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);

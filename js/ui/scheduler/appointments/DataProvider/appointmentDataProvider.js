@@ -9,13 +9,12 @@ const FilterStrategies = {
     standard: 'standard'
 };
 
-let appointmentDataProvider;
-
 export class AppointmentDataProvider {
-    constructor(scheduler, dataSource, appointmentDataAccessors) {
-        this.scheduler = scheduler;
-        this.dataSource = dataSource;
-        this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
+    constructor(options) {
+        this.key = options.key;
+        this.scheduler = options.scheduler;
+        this.dataSource = options.dataSource;
+        this.dataAccessors = this.combineDataAccessors(options.appointmentDataAccessors);
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
@@ -57,7 +56,7 @@ export class AppointmentDataProvider {
 
     combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
         const result = extend(true, {}, appointmentDataAccessors);
-        const resourceManager = getResourceManager();
+        const resourceManager = getResourceManager(this.key);
 
         if(appointmentDataAccessors && resourceManager) {
             each(resourceManager._dataAccessors, (type, accessor) => {
@@ -120,12 +119,15 @@ export class AppointmentDataProvider {
     }
 }
 
-export const createAppointmentDataProvider = (options) => {
-    appointmentDataProvider = new AppointmentDataProvider(
-        options.scheduler,
-        options.dataSource,
-        options.appointmentDataAccessors
-    );
+const appointmentDataProviders = { };
+
+export const createAppointmentDataProvider = (key, options) => {
+    const validKey = key || 0;
+    appointmentDataProviders[validKey] = new AppointmentDataProvider({
+        key,
+        ...options
+    });
 };
 
-export const getAppointmentDataProvider = () => appointmentDataProvider;
+export const getAppointmentDataProvider = (key = 0) => appointmentDataProviders[key];
+export const removeAppointmentDataProvider = (key) => appointmentDataProviders[key] = null;

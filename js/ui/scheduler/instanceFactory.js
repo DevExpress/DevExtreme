@@ -1,7 +1,17 @@
-import { createResourceManager } from './resources/resourceManager';
-import { createAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { createResourceManager, removeResourceManager } from './resources/resourceManager';
+import { createAppointmentDataProvider, removeAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 
-export const createInstances = (options) => {
-    createResourceManager(options.resources);
-    createAppointmentDataProvider(options);
+let tailIndex = -1;
+export const createFactoryInstances = (options) => {
+    ++tailIndex;
+
+    createResourceManager(tailIndex, options.resources);
+    createAppointmentDataProvider(tailIndex, options);
+
+    return tailIndex;
+};
+
+export const disposeFactoryInstances = (key) => {
+    removeResourceManager(key);
+    removeAppointmentDataProvider(key);
 };
