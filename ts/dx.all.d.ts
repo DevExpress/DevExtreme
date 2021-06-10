@@ -16389,11 +16389,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: any): void;
+    addAppointment(appointment: dxSchedulerAppointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: any): void;
+    deleteAppointment(appointment: dxSchedulerAppointment): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]
@@ -16424,17 +16424,17 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: any,
+      appointmentData?: dxSchedulerAppointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: any,
+      appointmentData: dxSchedulerAppointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
@@ -16564,8 +16564,8 @@ declare module DevExpress.ui {
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: any;
-      readonly targetedAppointmentData?: any;
+      readonly appointmentData: dxSchedulerAppointment;
+      readonly targetedAppointmentData?: dxSchedulerAppointment;
     }
   }
   /**
@@ -17179,7 +17179,7 @@ declare module DevExpress.ui {
           resourceCellTemplate?:
             | DevExpress.core.template
             | ((
-                itemData: any,
+                itemData: dxSchedulerAppointment,
                 itemIndex: number,
                 itemElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
@@ -17197,7 +17197,7 @@ declare module DevExpress.ui {
           timeCellTemplate?:
             | DevExpress.core.template
             | ((
-                itemData: any,
+                itemData: dxSchedulerAppointment,
                 itemIndex: number,
                 itemElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
