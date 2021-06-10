@@ -1127,8 +1127,8 @@ module('Grouping By Date', {
         fx.off = false;
     },
 
-    checkNeedCoordinatesResult: (assert, result, cellIndex, rowIndex, top, left, epsilon) => {
-        assert.equal(result.cellIndex, cellIndex, 'cellIndex is correct');
+    checkNeedCoordinatesResult: (assert, result, columnIndex, rowIndex, top, left, epsilon) => {
+        assert.equal(result.columnIndex, columnIndex, 'columnIndex is correct');
         assert.equal(result.rowIndex, rowIndex, 'rowIndex is correct');
         assert.equal(result.top, top, 'top is correct');
         assert.roughEqual(result.left, left, epsilon, 'left is correct');

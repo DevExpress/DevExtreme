@@ -485,7 +485,7 @@ class BaseRenderingStrategy {
             for(let k = 1; k < compactCount; k++) {
                 const compactPart = extend(true, {}, item);
                 compactPart.left = this._getCompactLeftCoordinate(item.left, k);
-                compactPart.cellIndex = compactPart.cellIndex + k;
+                compactPart.columnIndex = compactPart.columnIndex + k;
                 compactPart.sortedIndex = null;
                 result.push(compactPart);
             }
@@ -550,9 +550,9 @@ class BaseRenderingStrategy {
     }
 
     _generateAppointmentCollectorIndex({
-        groupIndex, rowIndex, cellIndex,
+        groupIndex, rowIndex, columnIndex,
     }, isAllDay) {
-        return `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`;
+        return `${groupIndex}-${rowIndex}-${columnIndex}-${isAllDay}`;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

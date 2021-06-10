@@ -44,7 +44,7 @@ module('Work Space cellData Cache', {
 
             cache = this.instance.cache;
 
-            assert.deepEqual(cache.get('{"rowIndex":1,"cellIndex":0,"groupIndex":0}'), {
+            assert.deepEqual(cache.get('{"rowIndex":1,"columnIndex":0,"groupIndex":0}'), {
                 startDate: 2015,
                 endDate: 2016
             }, 'Cache is OK');
