@@ -48,7 +48,26 @@ function exportDataGrid(doc, dataGrid, options) {
                             pdfCell.colSpan = cellMerging.colspan;
                         }
                     } else if(rowType === 'group') {
-                        pdfCell.colSpan = columns.length - 1;
+                        if(cellData.cellSourceData.groupSummaryItems?.length > 0) {
+                            pdfCell._summaryItem = true;
+                        }
+
+                        if(cellIndex > 0) {
+                            const prevCellsHaveSummaryItems = currentRow.slice(1).filter(pdfCell => pdfCell._summaryItem).length > 0;
+                            if(!pdfCell._summaryItem && !prevCellsHaveSummaryItems) {
+                                currentRow.forEach(pdfCell => pdfCell.colSpan = currentRow.length);
+                                pdfCell.colSpan = currentRow.length;
+                            } else {
+                                const isPrevCellMerged = isDefined(currentRow[currentRow.length - 1].colSpan);
+                                if(isPrevCellMerged) {
+                                    const mergedCells = currentRow.slice(1).filter((cell) => { return isDefined(cell.colSpan) && cell.drawLeftBorder !== false; });
+                                    if(mergedCells.length > 0) {
+                                        mergedCells.forEach(pdfCell => pdfCell.drawLeftBorder = false);
+                                    }
+                                }
+                                pdfCell.drawLeftBorder = false;
+                            }
+                        }
                     }
 
                     if(options.onCellExporting) {
