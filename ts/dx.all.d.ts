@@ -5153,7 +5153,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -19193,7 +19193,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -20939,7 +20939,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.navigateToRow(key)]
      */
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:GridBase.pageCount()]
      */
