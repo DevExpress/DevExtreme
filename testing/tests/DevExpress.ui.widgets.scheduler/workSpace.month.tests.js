@@ -5,7 +5,9 @@ import $ from 'jquery';
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -15,6 +17,21 @@ const {
     testStart
 } = QUnit;
 
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+};
+
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
@@ -22,14 +39,15 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
-            createInstances({
+            const key = createFactoryInstances({
                 scheduler: {
                     isVirtualScrolling: () => false
                 }
             });
+            const observer = getObserver(key);
 
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
-            stubInvokeMethod(this.instance);
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ observer }).dxSchedulerWorkSpaceMonth('instance');
+            stubInvokeMethod(this.instance, { key });
         }
     }, () => {
         [true, false].forEach((renovateRender) => {
@@ -284,13 +302,21 @@ module('Work Space Month', () => {
 
     module('it with grouping by date', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                observer
             }).dxSchedulerWorkSpaceMonth('instance');
 
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
 
             this.instance.option('groups', [{
                 name: 'one',
@@ -319,13 +345,21 @@ module('Work Space Month', () => {
 
     module('it with horizontal grouping', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
-                crossScrollingEnabled: true
+                crossScrollingEnabled: true,
+                observer
             }).dxSchedulerWorkSpaceMonth('instance');
 
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
 
             this.instance.option('groups', [{
                 name: 'one',
@@ -359,9 +393,16 @@ module('Work Space Month', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false
+                }
+            });
+            const observer = getObserver(key);
+
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth(options).dxSchedulerWorkSpaceMonth('instance');
-                stubInvokeMethod(this.instance);
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ ...options, observer }).dxSchedulerWorkSpaceMonth('instance');
+                stubInvokeMethod(this.instance, { key });
             };
         }
     }, () => {

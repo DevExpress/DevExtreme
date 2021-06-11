@@ -9,7 +9,6 @@ import {
 } from '@devextreme-generator/declarations';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
-  Options,
   Column,
   RowObject,
   ColumnButtonClickEvent,
@@ -456,53 +455,53 @@ export class DataGridEditingTexts {
 @ComponentBindings()
 export class DataGridEditing {
   @OneWay()
-  allowAdding?: boolean;
+  allowAdding? = false;
 
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
 
   @OneWay()
-  confirmDelete?: boolean;
+  confirmDelete? = true;
 
   @OneWay()
-  form?: dxFormOptions;
+  form?: dxFormOptions = { colCount: 2 };
 
   @OneWay()
-  mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+  mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup' = 'row';
 
   @OneWay()
-  popup?: PopupProperties;
+  popup?: PopupProperties = {};
 
   @OneWay()
-  refreshMode?: 'full' | 'reshape' | 'repaint';
+  refreshMode?: 'full' | 'reshape' | 'repaint' = 'full';
 
   @OneWay()
-  selectTextOnEditStart?: boolean;
+  selectTextOnEditStart? = false;
 
   @OneWay()
-  startEditAction?: 'click' | 'dblClick';
+  startEditAction?: 'click' | 'dblClick' = 'click';
 
   @Nested()
   texts?: DataGridEditingTexts;
 
   @OneWay()
-  useIcons?: boolean;
+  useIcons? = false;
 
   @TwoWay()
-  changes?: [];
+  changes?: [] = [];
 
   @TwoWay()
-  editRowKey?: any;
+  editRowKey?: any = null;
 
   @TwoWay()
-  editColumnName?: string; // TODO null
+  editColumnName?: string | null = null;
 }
 
 @ComponentBindings()
@@ -1125,7 +1124,7 @@ export class DataGridCommonColumnSettings {
 }
 
 @ComponentBindings()
-export class DataGridProps extends BaseWidgetProps implements Options {
+export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing = {
@@ -1143,7 +1142,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     popup: {},
     startEditAction: 'click',
     editRowKey: null,
-    editColumnName: undefined,
+    editColumnName: null,
     changes: [],
   };
 
@@ -1333,14 +1332,13 @@ export class DataGridProps extends BaseWidgetProps implements Options {
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
-  // TODO Vitik: Default should be null, but declaration doesnt support it
-  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];
+  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
   @TwoWay() focusedColumnIndex = -1;
 
   @TwoWay() focusedRowIndex = -1;
 
-  @TwoWay() focusedRowKey: any | null = null;
+  @TwoWay() focusedRowKey: any = null;
 
   @TwoWay() selectedRowKeys: any[] = [];
 
