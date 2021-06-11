@@ -367,7 +367,6 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
         setScaleProperty(currentElement, scale, transform, style, true);
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
         setScaleProperty(currentElement, scale, transform, style, false);
-
     } else {
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
     }
