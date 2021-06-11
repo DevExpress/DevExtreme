@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from '../../../../helpers/screenshot-compar
 import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Layout:IntervalCount with StartDate`
+fixture`Layout:IntervalCount with StartDate`
   .page(url(__dirname, '../../../container.html'))
   .afterEach(async () => disposeWidgets());
 
