@@ -474,7 +474,7 @@ export const DataController = Class.inherit((function() {
                 const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
                 const dataField = dataFields[dataIndex];
 
-                if(columnInfo.isLast && dataField) {
+                if(columnInfo.isLast && dataField && dataField.visible !== false) {
                     let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
 
                     if(!Array.isArray(cell)) {
