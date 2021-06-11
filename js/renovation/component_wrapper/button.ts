@@ -3,7 +3,7 @@ import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
-import { isDefined } from '../../core/utils/type'
+import { isDefined } from '../../core/utils/type';
 
 export default class ButtonWrapper extends Component {
   get _validationGroupConfig(): any {

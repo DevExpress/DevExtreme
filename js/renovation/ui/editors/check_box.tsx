@@ -246,7 +246,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
-      readonly: (readOnly ?? false) ? 'true' : 'false',
+      readonly: readOnly ?? false ? 'true' : 'false',
       invalid: !(isValid ?? false) ? 'true' : 'false',
     };
 
