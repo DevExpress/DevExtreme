@@ -345,10 +345,11 @@ const calculatePosition = function(what, options) {
 };
 
 const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
-    if(isDefined(transformProp)) {
+    const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style); // T941581
+    if(stylePropIsValid) {
         element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
     } else {
-        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr); // T941581
+        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr);
     }
 };
 
