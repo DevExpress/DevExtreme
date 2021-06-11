@@ -1326,6 +1326,28 @@ QUnit.test('Text', function(assert) {
     });
 });
 
+QUnit.test('Defaults of text', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-weight:bold; opacity: 0.3;">Test</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(4);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
+
+            const { style } = that.drawnElements[1];
+
+            assert.equal(style.font, 'sans-serif', 'Style font');
+            assert.equal(style.size, '10px', 'Style size');
+            assert.equal(style.fillStyle, '#000000', 'Style fill');
+        } finally {
+            done();
+        }
+    });
+});
+
 // T849504
 QUnit.test('Text with zero opacity in parent group', function(assert) {
     const that = this;

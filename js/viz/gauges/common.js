@@ -194,7 +194,7 @@ export const dxGauge = BaseGauge.inherit({
         const startValue = bounds[0];
         const endValue = bounds[1];
         const angles = that._translator.getCodomain();
-        const invert = !!(startValue > endValue ^ scaleOptions.inverted);
+        const invert = !!((startValue > endValue) ^ scaleOptions.inverted);
         const min = _min(startValue, endValue);
         const max = _max(startValue, endValue);
 
