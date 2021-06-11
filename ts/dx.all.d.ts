@@ -13139,6 +13139,10 @@ declare module DevExpress.ui {
      */
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
+     * [descr:dxHtmlEditorOptions.tableResizing]
+     */
+    tableResizing?: dxHtmlEditorTableResizing;
+    /**
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
@@ -13174,6 +13178,24 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
+  }
+  /**
+   * [descr:dxHtmlEditorTableResizing]
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface dxHtmlEditorTableResizing {
+    /**
+     * [descr:dxHtmlEditorTableResizing.minColumnWidth]
+     */
+    minColumnWidth?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.minRowHeight]
+     */
+    minRowHeight?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.enabled]
+     */
+    enabled?: boolean;
   }
   /**
    * [descr:dxHtmlEditorToolbar]

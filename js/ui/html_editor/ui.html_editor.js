@@ -45,7 +45,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: null,
             variables: null,
             mediaResizing: null,
-            tableResizing: false,
+            tableResizing: null,
             mentions: null,
             customizeModules: null,
 
