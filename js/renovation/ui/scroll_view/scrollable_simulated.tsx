@@ -257,6 +257,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Mutable() tabWasPressed = false;
 
+  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
+
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
@@ -947,9 +949,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const contentGreaterThanContainer = !reachedMin || !reachedMax;
     const locatedNotAtBound = !reachedMin && !reachedMax;
 
-    const { delta } = event;
-    const scrollFromMin = reachedMin && delta > 0;
-    const scrollFromMax = reachedMax && delta < 0;
+    const scrollFromMin = reachedMin && event.delta > 0;
+    const scrollFromMax = reachedMax && event.delta < 0;
 
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
@@ -1124,7 +1125,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   onVisibilityChangeHandler(visible: boolean): void {
-    this.updateHandler();
+    if (visible) {
+      this.updateHandler();
+
+      if (this.savedScrollOffset) {
+        this.containerElement.scrollTop = this.savedScrollOffset.top;
+        this.containerElement.scrollLeft = this.savedScrollOffset.left;
+      }
+
+      this.savedScrollOffset = undefined;
+    } else {
+      this.savedScrollOffset = this.scrollOffset();
+    }
 
     this.props.onVisibilityChange?.(visible);
   }
