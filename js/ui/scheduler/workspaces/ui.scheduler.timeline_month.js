@@ -69,7 +69,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = dateUtils.getFirstMonthDate(this.option('currentDate'));
+        this._firstViewDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._setStartDayHour(this._firstViewDate);
     }
 
@@ -118,6 +118,34 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             left: 0,
             cellPosition: 0
         };
+    }
+
+    _getStartViewDate() {
+        const firstMonthDate = dateUtils.getFirstMonthDate(this.option('startDate'));
+        return firstMonthDate;
+    }
+
+    _getViewStartByOptions() {
+        if(!this.option('startDate')) {
+            return new Date(this.option('currentDate').getTime());
+        } else {
+            let startDate = this._getStartViewDate();
+            const currentDate = this.option('currentDate');
+            const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
+            let endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option('intervalCount'))));
+
+            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+                startDate = new Date(endDate);
+
+                if(diff > 0) {
+                    startDate.setDate(1);
+                }
+
+                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option('intervalCount'))));
+            }
+
+            return diff > 0 ? startDate : endDate;
+        }
     }
 }
 

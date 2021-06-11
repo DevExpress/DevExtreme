@@ -43,7 +43,7 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = workWeekUtils.getFirstViewDate(this.option('currentDate'), this._firstDayOfWeek());
+        this._firstViewDate = workWeekUtils.getFirstViewDate(this._getViewStartByOptions(), this._firstDayOfWeek());
         this._setStartDayHour(this._firstViewDate);
     }
 }
