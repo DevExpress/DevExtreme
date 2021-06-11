@@ -9,8 +9,6 @@ import { BaseWidgetProps } from '../common/base_props';
 
 const DEFAULT_VALUE = 0;
 
-const DEFAULT_VALUE = 0;
-
 export const viewFunction = ({
   props,
   restAttributes,
