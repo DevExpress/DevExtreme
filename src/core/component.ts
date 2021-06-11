@@ -35,6 +35,20 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
     $_getTemplates: () => object;
 }
 
+const includeAttrs = ["id", "class", "style"];
+
+function getAttrs(attrs) {
+    const attributes = {};
+    includeAttrs.forEach((attr) => {
+        const attrValue = attrs[attr];
+        if (attrValue) {
+            attributes[attr] = attrValue;
+        }
+    });
+
+    return attributes;
+}
+
 function initBaseComponent() {
     return defineComponent({
         inheritAttrs: false,
@@ -62,7 +76,7 @@ function initBaseComponent() {
             this.$_processChildren(children);
             return h("div",
             {
-                attrs: { id: this.$attrs.id }
+                ...getAttrs(this.$attrs)
             },
             children);
         },

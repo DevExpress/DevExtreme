@@ -92,7 +92,7 @@ describe("component rendering", () => {
 
     it("correctly renders", () => {
         const wrapper = mount(TestComponent);
-        expect(wrapper.html()).toBe("<div attrs=\"[object Object]\"></div>");
+        expect(wrapper.html()).toBe("<div></div>");
     });
 
     it("calls widget creation", () => {
@@ -111,6 +111,28 @@ describe("component rendering", () => {
         });
         const wrapper = mount(vm);
         expect(wrapper.element.id).toBe("my-id");
+    });
+
+    it("passes class to element", () => {
+        const vm = defineComponent({
+            template: "<test-component class='my-class my-class2'/>",
+            components: {
+                TestComponent
+            }
+        });
+        const wrapper = mount(vm);
+        expect(wrapper.element.className).toBe("my-class my-class2");
+    });
+
+    it("passes styles to element", () => {
+        const vm = defineComponent({
+            template: "<test-component style='height: 10px; width: 20px;'/>",
+            components: {
+                TestComponent
+            }
+        });
+        const wrapper = mount(vm);
+        expect(wrapper.element.outerHTML).toBe("<div style=\"height: 10px; width: 20px;\"></div>");
     });
 
     it("creates nested component", () => {
