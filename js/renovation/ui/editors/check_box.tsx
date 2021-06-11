@@ -33,10 +33,10 @@ const getCssClasses = (model: CheckBoxProps): string => {
 
   const classesMap = {
     'dx-checkbox': true,
-    'dx-state-readonly': !!readOnly,
-    'dx-checkbox-checked': !!checked,
-    'dx-checkbox-has-text': !!text,
-    'dx-invalid': !isValid,
+    'dx-state-readonly': Boolean(readOnly),
+    'dx-checkbox-checked': Boolean(checked),
+    'dx-checkbox-has-text': Boolean(text),
+    'dx-invalid': !(isValid ?? false),
     'dx-checkbox-indeterminate': indeterminate,
   };
   return combineClasses(classesMap);
@@ -79,12 +79,12 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
+      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...Boolean(name) && { name }} />
       <div className="dx-checkbox-container">
         <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
-        {text && (<span className="dx-checkbox-text">{text}</span>)}
+        {Boolean(text) && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
-      {viewModel.props.useInkRipple
+      {Boolean(viewModel.props.useInkRipple)
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
       {viewModel.showValidationMessage
                 && (
@@ -204,9 +204,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   onWidgetClick(event: Event): void {
     const { readOnly, value, saveValueChangeEvent } = this.props;
 
-    if (!readOnly) {
+    if (!(readOnly ?? false)) {
       saveValueChangeEvent?.(event);
-      this.props.value = !value;
+      this.props.value = !(value ?? false);
     }
   }
 
@@ -214,7 +214,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
-    const result = onKeyDown?.(options);
+    const result: Event & { cancel: boolean } = onKeyDown?.(options);
     if (result?.cancel) {
       return result;
     }
@@ -233,21 +233,21 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get shouldShowValidationMessage(): boolean {
     const { isValid, validationStatus } = this.props;
-    return !isValid
+    return !(isValid ?? false)
       && validationStatus === 'invalid'
-      && !!this.validationErrors?.length;
+      && Boolean(this.validationErrors?.length);
   }
 
   get aria(): Record<string, string> {
     const { readOnly, isValid } = this.props;
-    const checked = !!this.props.value;
+    const checked = Boolean(this.props.value);
     const indeterminate = this.props.value === null;
 
     const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
-      readonly: readOnly ? 'true' : 'false',
-      invalid: !isValid ? 'true' : 'false',
+      readonly: (readOnly ?? false) ? 'true' : 'false',
+      invalid: !(isValid ?? false) ? 'true' : 'false',
     };
 
     if (this.shouldShowValidationMessage) {
@@ -273,7 +273,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef.current![type]({
+    Boolean(useInkRipple) && this.inkRippleRef.current![type]({
       element: this.iconRef.current!, event, wave: waveId,
     });
   }

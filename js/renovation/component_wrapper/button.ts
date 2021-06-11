@@ -3,6 +3,7 @@ import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
+import { isDefined } from '../../core/utils/type'
 
 export default class ButtonWrapper extends Component {
   get _validationGroupConfig(): any {
@@ -36,7 +37,7 @@ export default class ButtonWrapper extends Component {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
-        if (validationGroup) {
+        if (isDefined(validationGroup)) {
           const { status, complete } = validationGroup.validate();
 
           validationStatus = status;
@@ -88,6 +89,6 @@ export default class ButtonWrapper extends Component {
 
   _findGroup(): any {
     const $element = this.$element();
-    return this.option('validationGroup') || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+    return Boolean(this.option('validationGroup')) || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
