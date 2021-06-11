@@ -293,12 +293,25 @@ module('Resizing integration', {
         assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 35, 3);
     });
 
+    // test1('Boundary should be the table element if we use vertical drag for the non-last row', function(assert) {
+    //     this.createWidget({ width: 430, tableResizing: { enabled: true } });
+    //     this.clock.tick();
+
+    //     const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+    //     $rowResizerElements.eq(0)
+    //         .trigger('dxpointerdown');
+    //     const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+    //     const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
+    //     assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
+    // });
+
     test('Boundary should be all Quill element if we use vertical drag', function(assert) {
         this.createWidget({ width: 430, tableResizing: { enabled: true } });
         this.clock.tick();
 
         const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
-        $rowResizerElements.eq(0)
+        $rowResizerElements.eq(2)
             .trigger('dxpointerdown');
         const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
@@ -555,4 +568,56 @@ module('Resizing integration', {
             assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
         });
     });
+
+    test('Window resize callback should be cleaned after the widget dispose', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
+    test('All frame elements and subscriptions should be removed ater the table removing', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
+    test('Second frame should be added if we add the second table', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
+    test('Second frame should be removed if we remove the second table', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+    });
+
+    test('Column resizers should be updated on the table structure update', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+    });
+
+    test('Column resizers should be updated on the table structure update after resize', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+    });
+
+    test('Columns should be resized correctly at the rtl mode', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
+    test('Resizing should works correctly after widgets content vertical scrolling', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
+    test('Resizing should works correctly if the table has thead elements', function(assert) {
+        this.createWidget();
+        this.clock.tick();
+
+    });
+
 });

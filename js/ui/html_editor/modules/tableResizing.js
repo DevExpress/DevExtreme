@@ -28,7 +28,6 @@ export default class TableResizingModule extends BaseModule {
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
         this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
 
-
         if(this.enabled) {
             this.editorInstance.on('contentReady', () => {
                 this._attachResizerTimeout = setTimeout(() => {
