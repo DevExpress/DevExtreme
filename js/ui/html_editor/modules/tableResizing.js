@@ -83,11 +83,10 @@ export default class TableResizingModule extends BaseModule {
 
     _isTableChanges(delta) {
         const $tables = this._findTables();
-        return $tables.length !== this._tableResizeFrames.length;
+        return $tables.length !== this._tableResizeFrames.length || delta.ops[1]?.attributes?.table;
     }
 
     _removeResizeFrames() {
-        // console.log('_removeResizeFrames');
         each(this._tableResizeFrames, (index, $item) => {
             this._detachEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
             $item.$frame.remove();
