@@ -393,11 +393,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this._contextMenuHandled) {
             this.cellsSelectionState.releaseSelectedAndFocusedCells();
 
-            this.viewDataProvider.updateViewData({
-                ...this.generateRenderOptions(),
-                selectedCells: null,
-                focusedCell: null,
-            });
+            this.viewDataProvider.updateViewData(this.generateRenderOptions());
             this.updateCellsSelection();
         }
     }

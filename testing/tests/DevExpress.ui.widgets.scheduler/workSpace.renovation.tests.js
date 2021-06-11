@@ -957,8 +957,8 @@ module('Renovated Render', {
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(invokeSpy.getCall(0).args[1], {
+        assert.equal(invokeSpy.getCall(2).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
+        assert.deepEqual(invokeSpy.getCall(2).args[1], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),

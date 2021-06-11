@@ -1186,9 +1186,9 @@ class Scheduler extends Widget {
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        disposeFactoryInstances(this.key);
-
         super._dispose();
+
+        disposeFactoryInstances(this.key);
     }
 
     _initActions() {
