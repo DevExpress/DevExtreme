@@ -52,7 +52,9 @@ export class ToolbarProps extends BaseWidgetProps {
     rtlEnabled
     visible
     width
-    Methods
+
+    Methods:
+
     beginUpdate()
     defaultOptions(rule)
     dispose()
@@ -71,7 +73,8 @@ export class ToolbarProps extends BaseWidgetProps {
     option(options)
     repaint()
     resetOption(optionName)
-    Events
+
+    Events:
     contentReady
     disposing
     initialized
