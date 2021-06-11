@@ -7,6 +7,7 @@ import { extend } from '../../core/utils/extend';
 import uiDateUtils from './ui.date_utils';
 import registerComponent from '../../core/component_registrator';
 import dateLocalization from '../../localization/date';
+import devices from '../../core/devices';
 
 const DATEVIEW_CLASS = 'dx-dateview';
 const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';
@@ -114,7 +115,8 @@ const DateView = Editor.inherit({
             that._rollers[that._rollerConfigs[name].type] = that._createComponent($roller, DateViewRoller, {
                 items: that._rollerConfigs[name].displayItems,
                 selectedIndex: that._rollerConfigs[name].selectedIndex,
-                showScrollbar: false,
+                showScrollbar: 'never',
+                scrollByContent: devices.real().platform === 'generic',
                 onStart: function(e) {
                     const roller = e.component;
                     roller._toggleActive(true);

@@ -9,6 +9,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
 import { resetPosition } from '../../animation/translator';
+import { restoreLocation } from '../../renovation/ui/scroll_view/utils/restore_location';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';
@@ -20,36 +21,32 @@ const DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS = 'dx-dateview-item-selected-fra
 const DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS = 'dx-dateview-item-selected-border';
 
 class DateViewRoller extends Scrollable {
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            showScrollbar: false,
+            showScrollbar: 'never',
             useNative: false,
             selectedIndex: 0,
             bounceEnabled: false,
             items: [],
             showOnClick: false,
             onClick: null,
-            onSelectedIndexChanged: null
+            onSelectedIndexChanged: null,
+            scrollByContent: devices.real().platform === 'generic',
         });
-    }
-
-    _defaultOptionsRules() {
-        return super._defaultOptionsRules().concat([{
-            device: { platform: 'generic' },
-            options: {
-                scrollByContent: true
-            }
-        }]);
     }
 
     _init() {
         super._init();
 
-        this._renderSelectedItemFrame();
+        this.option('onVisibilityChange', this._visibilityChangedHandler.bind(this));
+        this.option('onEnd', this._endActionHandler.bind(this));
     }
 
     _render() {
         super._render();
+
+        this._renderSelectedItemFrame();
 
         this.$element().addClass(DATEVIEW_ROLLER_CLASS);
 
@@ -58,7 +55,7 @@ class DateViewRoller extends Scrollable {
         this._renderSelectedValue();
         this._renderItemsClick();
         this._renderWheelEvent();
-        this._wrapAction('_endAction', this._endActionHandler.bind(this));
+
         this._renderSelectedIndexChanged();
     }
 
@@ -81,21 +78,10 @@ class DateViewRoller extends Scrollable {
 
         const clickAction = this._createActionByOption('onClick');
 
-
         eventsEngine.off($(this.container()), eventName);
         eventsEngine.on($(this.container()), eventName, function(e) {
             clickAction({ event: e });
         });
-    }
-
-    _wrapAction(actionName, callback) {
-        const strategy = this._strategy;
-        const originalAction = strategy[actionName];
-
-        strategy[actionName] = function() {
-            callback.apply(this, arguments);
-            return originalAction.apply(this, arguments);
-        };
     }
 
     _renderItems() {
@@ -176,7 +162,6 @@ class DateViewRoller extends Scrollable {
 
     _renderActiveStateItem() {
         const selectedIndex = this.option('selectedIndex');
-
         each(this._$items, function(index) {
             $(this).toggleClass(DATEVIEW_ROLLER_ITEM_SELECTED_CLASS, selectedIndex === index);
         });
@@ -188,15 +173,15 @@ class DateViewRoller extends Scrollable {
     }
 
     _moveTo(targetLocation) {
-        targetLocation = this._normalizeLocation(targetLocation);
-        const location = this._location();
+        targetLocation = restoreLocation(targetLocation);
+        const location = this.scrollOffset();
         const delta = {
-            x: -(location.left - targetLocation.left),
-            y: -(location.top - targetLocation.top)
+            x: location.left + targetLocation.left,
+            y: location.top + targetLocation.top
         };
 
         if(this._isVisible() && (delta.x || delta.y)) {
-            this._strategy._prepareDirections(true);
+            this._prepareDirections(true);
 
             if(this._animation && !this._shouldScrollToNeighborItem()) {
                 const that = this;
@@ -208,18 +193,18 @@ class DateViewRoller extends Scrollable {
                     to: { top: Math.floor(delta.y) },
                     complete() {
                         resetPosition($(that.content()));
-                        that._strategy.handleMove({ delta });
+                        that.handleMove({ delta });
                     }
                 });
                 delete this._animation;
             } else {
-                this._strategy.handleMove({ delta });
+                this.handleMove({ delta });
             }
         }
     }
 
     _validate(e) {
-        return this._strategy.validate(e);
+        return this._moveIsAllowed(e);
     }
 
     _fitSelectedIndexInRange(index) {
@@ -233,7 +218,7 @@ class DateViewRoller extends Scrollable {
     }
 
     _getSelectedIndexAfterScroll(currentSelectedIndex) {
-        const locationTop = -this._location().top;
+        const locationTop = this.scrollOffset().top;
 
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
@@ -254,7 +239,7 @@ class DateViewRoller extends Scrollable {
         }
 
         this._animation = true;
-        const ratio = -this._location().top / this._itemHeight();
+        const ratio = this.scrollOffset().top / this._itemHeight();
         return Math.round(ratio);
     }
 
@@ -295,9 +280,15 @@ class DateViewRoller extends Scrollable {
 
     _visibilityChanged(visible) {
         super._visibilityChanged(visible);
+        this._visibilityChangedHandler(visible);
+    }
 
+    _visibilityChangedHandler(visible) {
         if(visible) {
-            this._renderSelectedValue(this.option('selectedIndex'));
+            // TODO: for renovated code, avoid async
+            this._visibilityTimer = setTimeout(() => {
+                this._renderSelectedValue(this.option('selectedIndex'));
+            });
         }
         this.toggleActiveState(false);
     }
@@ -337,6 +328,11 @@ class DateViewRoller extends Scrollable {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _dispose() {
+        clearTimeout(this._visibilityTimer);
+        super._dispose();
     }
 }
 

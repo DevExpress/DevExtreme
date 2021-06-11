@@ -1037,6 +1037,7 @@ QUnit.module('dateView integration', {
         };
 
         this.instance.open();
+        this.clock.tick();
 
         this.dateView = function() {
             return getInstanceWidget(this.instance);
@@ -2966,6 +2967,7 @@ QUnit.module('datebox with time component', {
             phone: true
         });
 
+        const clock = sinon.useFakeTimers();
         try {
             const instance = $('#dateBox').dxDateBox({
                 type: 'date',
@@ -2976,6 +2978,7 @@ QUnit.module('datebox with time component', {
             assert.equal(instance._popup.option('maxWidth'), '100%', 'popup width should be correct on 320px screens');
             assert.equal(instance._popup.option('maxHeight'), '100%', 'popup height should be correct on 320px screens');
         } finally {
+            clock.restore();
             currentDevice.restore();
         }
     });
@@ -3156,34 +3159,39 @@ QUnit.module('datebox with time component', {
             return;
         }
 
-        const date = new Date(2015, 0, 1);
-        $('#dateBox').dxDateBox({
-            pickerType: 'rollers',
-            value: date,
-            opened: true
-        });
+        const clock = sinon.useFakeTimers();
+        try {
+            const date = new Date(2015, 0, 1);
+            $('#dateBox').dxDateBox({
+                pickerType: 'rollers',
+                value: date,
+                opened: true
+            });
 
-        const $monthRollerView = $('.dx-dateviewroller-month');
-        const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
-        const deltaY = 100;
-        const pointer = pointerMock(monthRollerView.container());
+            const $monthRollerView = $('.dx-dateviewroller-month');
+            const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
+            const deltaY = 100;
+            const pointer = pointerMock(monthRollerView.container());
 
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
 
-        pointer.start().wheel(deltaY).wait(500);
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+            pointer.start().wheel(deltaY).wait(500);
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
 
-        pointer.start().wheel(-deltaY).wait(500);
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+            pointer.start().wheel(-deltaY).wait(500);
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
 
-        pointer.start().wheel(-deltaY * 3).wait(500);
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+            pointer.start().wheel(-deltaY * 3).wait(500);
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
 
-        pointer.start().wheel(deltaY * 5).wait(500);
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+            pointer.start().wheel(deltaY * 5).wait(500);
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
 
-        pointer.start().wheel(-deltaY * 10).wait(500);
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+            pointer.start().wheel(-deltaY * 10).wait(500);
+            assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+        } finally {
+            clock.restore();
+        }
     });
 
 
@@ -3195,25 +3203,31 @@ QUnit.module('datebox with time component', {
 
         assert.expect(0);
 
-        const date = new Date(2015, 3, 3);
-        const dateBox = $('#dateBox').dxDateBox({
-            pickerType: 'rollers',
-            value: date,
-            opened: true
-        }).dxDateBox('instance');
-        const selectedIndexChangedHandler = (args) => {
-            assert.ok(false, 'selectedIndex has been changed');
-        };
+        const clock = sinon.useFakeTimers();
+        try {
+            const date = new Date(2015, 3, 3);
+            const dateBox = $('#dateBox').dxDateBox({
+                pickerType: 'rollers',
+                value: date,
+                opened: true
+            }).dxDateBox('instance');
 
-        const monthRollerView = $('.dx-dateviewroller-month').dxDateViewRoller('instance');
-        const dayRollerView = $('.dx-dateviewroller-day').dxDateViewRoller('instance');
-        const yearRollerView = $('.dx-dateviewroller-year').dxDateViewRoller('instance');
-        monthRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
-        dayRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
-        yearRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+            const selectedIndexChangedHandler = (args) => {
+                assert.ok(false, 'selectedIndex has been changed');
+            };
 
-        dateBox.close();
-        dateBox.open();
+            const monthRollerView = $('.dx-dateviewroller-month').dxDateViewRoller('instance');
+            const dayRollerView = $('.dx-dateviewroller-day').dxDateViewRoller('instance');
+            const yearRollerView = $('.dx-dateviewroller-year').dxDateViewRoller('instance');
+            monthRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+            dayRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+            yearRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+
+            dateBox.close();
+            dateBox.open();
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('DateBox with time should be rendered correctly when templatesRenderAsynchronously=true', function(assert) {
