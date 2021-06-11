@@ -1,6 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
-    const Component = require('core/component');
+    const Component = require('core/component').Component;
     const devices = require('core/devices');
     const GoogleStaticProvider = require('ui/map/provider.google_static');
     const fx = require('animation/fx');
