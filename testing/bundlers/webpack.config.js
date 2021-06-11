@@ -8,7 +8,6 @@ module.exports = {
         path: path.resolve(__dirname, './dist/dist_webpack/'),
     },
     resolve: {
-        modules: ['node_modules'],
         alias: {
             globalize$: path.resolve(__dirname, 'node_modules/globalize/dist/globalize.js'),
             globalize: path.resolve(__dirname, 'node_modules/globalize/dist/globalize'),

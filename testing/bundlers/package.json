@@ -9,6 +9,7 @@
     "cross-env": "^7.0.3",
     "devextreme-cldr-data": "^1.0.3",
     "globalize": "^1.6.0",
+    "jquery": "^3.6.0",
     "parcel": "^2.0.0-beta.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.51.2",
