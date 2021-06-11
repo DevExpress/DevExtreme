@@ -22,6 +22,8 @@ interface TemplateWrapperProps {
 }
 
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
+  newTemplateArrived = true;
+
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
@@ -53,12 +55,17 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
 
-        replaceWith($(node), $result);
+        if (this.newTemplateArrived) {
+          replaceWith($(node), $result);
+          this.newTemplateArrived = false;
+        }
 
         return (): void => {
           // NOTE: order is important
           removeDifferentElements($children, $parent.contents());
-          parentNode.appendChild(node);
+          if (this.newTemplateArrived) {
+            parentNode.appendChild(node);
+          }
         };
       }
     }
@@ -74,9 +81,11 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     this._effects[0].update([this.props.template, this.props.model]);
   }
 
-  // NOTE: Prevent nodes clearing on unmount.
-  //       Nodes will be destroyed by inferno on markup update
-  componentWillUnmount(): void { }
+  componentWillReceiveProps(nextProps: TemplateWrapperProps): void {
+    if (nextProps.template !== this.props.template) {
+      this.newTemplateArrived = true;
+    }
+  }
 
   render(): JSX.Element | null {
     return null;
