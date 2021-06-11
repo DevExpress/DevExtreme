@@ -135,12 +135,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   reachedMin(): boolean {
-    return this.scrollbar.reachedMin();
+    return this.props.scrollLocation <= this.getMinOffset();
   }
 
   @Method()
   reachedMax(): boolean {
-    return this.scrollbar.reachedMax();
+    return this.props.scrollLocation >= this.getMaxOffset();
   }
 
   @Method()
@@ -230,8 +230,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   step(): void {
-    if (!this.props.bounceEnabled
-      && !inRange(this.props.scrollLocation, this.getMinOffset(), this.getMaxOffset())) {
+    if (!this.props.bounceEnabled && (this.reachedMin() || this.reachedMax())) {
       this.velocity = 0;
     }
 
