@@ -235,8 +235,8 @@ export class Button extends JSXComponent(ButtonProps) {
 
     let label = (text ?? '') || icon;
 
-    if (!(text ?? '') && Boolean(icon) && getImageSourceType(icon) === 'image') {
-      label = !(icon ?? '').includes('base64') ? (icon ?? '').replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    if (!(text ?? '') && typeof icon === 'string' && getImageSourceType(icon) === 'image') {
+      label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
     return {
