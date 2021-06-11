@@ -8,7 +8,7 @@ const modulesEsmFilePath = path.join(__dirname, './entry/modules_esm.js');
 const globalizeCjs = 'const Globalize = require("globalize");';
 const globalizeEsm = 'import Globalize from "globalize";';
 
-const excludedModules = new Set(['ui/set_template_engine', 'data/utils', 'viz/export', 'ui/overlay', 'ui/diagram']);
+const excludedModules = new Set(['core/set_template_engine', 'data/utils', 'viz/export', 'ui/overlay']);
 
 const pathToName = (path) => {
     return path.replace(/(\/|_)+(\w)/g, (...args) => args[2].toUpperCase());

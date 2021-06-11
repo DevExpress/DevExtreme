@@ -9,10 +9,9 @@ export default {
         file: './dist/dist_rollup/bundle_esm.js',
         format: 'es'
     },
-    external: [ 'rrule', /* '@devextreme/vdom',*/ './pager', './layout', './title', './group_panel'],
+    external: [ 'rrule', /* 'devexpress-diagram', '@devextreme/vdom', './pager', './layout', './title', './group_panel'*/],
     plugins: [
         alias({
-            jszip: path.join(__dirname, './node_modules/jszip/dist/jszip.min.js'), /* eslint-disable-line spellcheck/spell-checker */
             globalize$: path.join(__dirname, './node_modules/globalize/dist/globalize.js'),
             globalize: path.join(__dirname, './node_modules/globalize/dist/globalize'),
             cldr$: path.join(__dirname, './node_modules/cldrjs/dist/cldr.js'),
@@ -30,6 +29,7 @@ export default {
                 './node_modules/globalize/**',
                 './node_modules/luxon/**',
                 '../../node_modules/jquery/dist/jquery.js',
+                './node_modules/devexpress-diagram/**'
             ],
             dynamicRequireTargets: [
                 './node_modules/jszip/lib/utils.js'

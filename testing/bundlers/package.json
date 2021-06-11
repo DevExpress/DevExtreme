@@ -11,10 +11,10 @@
     "globalize": "^1.6.0",
     "parcel": "^2.0.0-beta.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.50.0",
-    "vite": "^2.3.4",
-    "webpack": "^5.37.1",
-    "webpack-cli": "^4.7.0"
+    "rollup": "^2.51.2",
+    "vite": "^2.3.7",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2"
   },
   "scripts": {
     "test:bundlers": "npm run install:devextreme && npm run generate-entry-files && npm run build:all && npm run clean",

@@ -1,10 +1,12 @@
-import rollupConfig from './rollup.config'; /* eslint-disable-line spellcheck/spell-checker */
+/* eslint-disable */
 
-delete rollupConfig.output.file; /* eslint-disable-line spellcheck/spell-checker */
+import rollupConfig from './rollup.config'; 
+
+delete rollupConfig.output.file;
 
 module.exports = {
     build: {
         output: './dist/dist_vite/bundle_esm.js',
-        rollupOptions: rollupConfig /* eslint-disable-line spellcheck/spell-checker */
+        rollupOptions: rollupConfig
     }
 };
