@@ -5,7 +5,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
-import { isWindow } from '../core/utils/type';
+import { isWindow, isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
@@ -16,7 +16,7 @@ import devices from '../core/devices';
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
-const scaleRe = /scale(.+)/;
+const scaleRe = /scale\(.+?\)/;
 const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function(raw) {
@@ -344,6 +344,14 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
+const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
+    if(isDefined(transformProp)) {
+        element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
+    } else {
+        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr); // T941581
+    }
+};
+
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
     const currentElement = $currentElement.get(0);
     if(!currentElement) {
@@ -351,13 +359,15 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
     }
 
     const style = currentElement.getAttribute?.('style') || '';
+    const transform = currentElement.style?.transform;
     const scale = style.match(scaleRe)?.[0];
     let offset;
 
     if(scale) {
-        currentElement.setAttribute('style', style.replace(scale, ''));
+        setScaleProperty(currentElement, scale, transform, style, true);
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-        currentElement.setAttribute('style', style);
+        setScaleProperty(currentElement, scale, transform, style, false);
+
     } else {
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
     }
