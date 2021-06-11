@@ -38,6 +38,20 @@ const tableMarkup = '\
         </tr>\
     </table>';
 
+function getColumnBordersOffset($table) {
+    const columnBorderOffsets = [];
+    $table.find('tr').eq(0).find('td').each((i, element) => {
+        const columnWidth = $(element).outerWidth();
+        if(i > 0) {
+            columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
+        } else {
+            columnBorderOffsets[i] = columnWidth;
+        }
+    });
+
+    return columnBorderOffsets;
+}
+
 
 module('Resizing integration', {
     beforeEach: function() {
@@ -88,8 +102,6 @@ module('Resizing integration', {
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
 
         assert.strictEqual($draggableElements.length, 1, 'Column resizers draggable elements are created after the pointerDown event');
-
-
     });
 
     test('Draggable element should be disposed after drag', function(assert) {
@@ -134,10 +146,6 @@ module('Resizing integration', {
             value: ''
         });
         this.clock.tick();
-
-        // this.$element
-        //     .find('img')
-        //     .trigger(clickEvent);
 
         const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
@@ -194,17 +202,7 @@ module('Resizing integration', {
 
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
         const $table = this.$element.find('table');
-        // const tablePosition = getBoundingRect($table.get(0));
-        const columnBorderOffsets = [];
-
-        $table.find('tr').eq(0).find('td').each((i, element) => {
-            const columnWidth = $(element).outerWidth();
-            if(i > 0) {
-                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
-            } else {
-                columnBorderOffsets[i] = columnWidth;
-            }
-        });
+        const columnBorderOffsets = getColumnBordersOffset($table);
 
         $columnResizerElements.each((i, column) => {
             const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
@@ -218,8 +216,6 @@ module('Resizing integration', {
 
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
         const $table = this.$element.find('table').width(400);
-        // const tablePosition = getBoundingRect($table.get(0));
-        const columnBorderOffsets = [];
 
         $columnResizerElements.eq(0)
             .trigger('dxpointerdown');
@@ -234,14 +230,7 @@ module('Resizing integration', {
 
         this.clock.tick();
 
-        $table.find('tr').eq(0).find('td').each((i, element) => {
-            const columnWidth = $(element).outerWidth();
-            if(i > 0) {
-                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
-            } else {
-                columnBorderOffsets[i] = columnWidth;
-            }
-        });
+        const columnBorderOffsets = getColumnBordersOffset($table);
 
         $columnResizerElements.each((i, column) => {
             const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
@@ -258,7 +247,6 @@ module('Resizing integration', {
 
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
         const $table = this.$element.find('table').width(400);
-        const columnBorderOffsets = [];
 
         $columnResizerElements.eq(0)
             .trigger('dxpointerdown');
@@ -274,14 +262,7 @@ module('Resizing integration', {
 
         this.clock.tick();
 
-        $table.find('tr').eq(0).find('td').each((i, element) => {
-            const columnWidth = $(element).outerWidth();
-            if(i > 0) {
-                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
-            } else {
-                columnBorderOffsets[i] = columnWidth;
-            }
-        });
+        const columnBorderOffsets = getColumnBordersOffset($table);
 
         assert.roughEqual(columnBorderOffsets[0], 140, 3);
         assert.roughEqual(columnBorderOffsets[1], 200, 3);
@@ -329,7 +310,6 @@ module('Resizing integration', {
             .start()
             .dragStart()
             .drag(-70, 0);
-
 
         assert.roughEqual($resizeFrame.outerHeight(), $table.outerHeight(), 3);
         assert.roughEqual($columnResizerElements.eq(0).outerHeight(), $table.outerHeight(), 3);
@@ -519,30 +499,20 @@ module('Resizing integration', {
         this.createWidget();
         this.clock.tick();
 
-        const columnBorderOffsets = [];
-
         const $table = this.$element.find('table').width(400);
         this.clock.tick();
+
         resizeCallbacks.fire();
 
         this.clock.tick(500);
 
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
 
-        $table.find('tr').eq(0).find('td').each((i, element) => {
-            const columnWidth = $(element).outerWidth();
-            if(i > 0) {
-                columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
-            } else {
-                columnBorderOffsets[i] = columnWidth;
-            }
-        });
+        const columnBorderOffsets = getColumnBordersOffset($table);
 
         $columnResizerElements.each((i, column) => {
             const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
             assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
         });
     });
-
-
 });
