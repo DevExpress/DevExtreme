@@ -251,10 +251,6 @@ export default class TableResizingModule extends BaseModule {
         this._updateFramePosition(frame.$table, frame.$frame);
     }
 
-    _canChangeTableSizes(options) {
-        return options.direction === 'vertical' || this._isLastColumnResizing(options);
-    }
-
     _isLastColumnResizing({ $determinantElements, index }) {
         return !isDefined($determinantElements[index + 1]);
     }
@@ -262,7 +258,8 @@ export default class TableResizingModule extends BaseModule {
     _createDraggableElement(options) {
         this._currentDraggableElement = this.editorInstance._createComponent(options.lineSeparator, Draggable, {
             contentTemplate: null,
-            boundary: this._canChangeTableSizes(options) ? this.editorInstance._getQuillContainer() : options.frame.$table,
+            boundary: this._isLastColumnResizing(options) ? this.editorInstance._getQuillContainer() : options.frame.$table,
+            boundOffset: { bottom: -300, top: 0, left: 0, right: 0 },
             allowMoveByClick: false,
             dragDirection: options.direction,
             onDragMove: ({ component, event }) => {
