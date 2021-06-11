@@ -19,6 +19,8 @@ export const viewFunction = ({
     index,
     isLastGroupCell,
     isFirstGroupCell,
+    isSelected,
+    isFocused,
     text,
   },
   contentTemplateProps,
@@ -35,6 +37,8 @@ export const viewFunction = ({
     index={index}
     isFirstGroupCell={isFirstGroupCell}
     isLastGroupCell={isLastGroupCell}
+    isSelected={isSelected}
+    isFocused={isFocused}
     contentTemplateProps={contentTemplateProps}
   >
     <div className="dx-scheduler-date-table-cell-text">

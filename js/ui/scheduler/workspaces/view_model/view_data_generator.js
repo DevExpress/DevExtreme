@@ -544,7 +544,7 @@ export class ViewDataGenerator {
             const correctedColumnIndex = step * columnIndex;
             const cellDataValue = cellDataGetters.reduce((data, getter) => ({
                 ...data,
-                ...getter(undefined, rowIndex, correctedColumnIndex, 0, data.startDate).value
+                ...getter(undefined, rowIndex, correctedColumnIndex, 0, data.startDate).value,
             }), {});
 
             cellDataValue.index = rowIndex * columnCount + columnIndex;
@@ -674,5 +674,67 @@ export class ViewDataGenerator {
         }
 
         return (rowIndex + 1) % rowCountInGroup === 0;
+    }
+
+    markSelectedAndFocusedCells(viewDataMap, renderOptions) {
+        const {
+            selectedCells,
+            focusedCell,
+        } = renderOptions;
+
+        if(!selectedCells && !focusedCell) {
+            return viewDataMap;
+        }
+
+        const {
+            allDayPanelMap,
+            dateTableMap
+        } = viewDataMap;
+
+        const nextDateTableMap = dateTableMap.map((row) => {
+            return this._markSelectedAndFocusedCellsInRow(row, selectedCells, focusedCell);
+        });
+        const nextAllDayMap = this._markSelectedAndFocusedCellsInRow(allDayPanelMap, selectedCells, focusedCell);
+
+        return {
+            allDayPanelMap: nextAllDayMap,
+            dateTableMap: nextDateTableMap,
+        };
+    }
+
+    _markSelectedAndFocusedCellsInRow(dataRow, selectedCells, focusedCell) {
+        return dataRow.map((cell) => {
+            const {
+                index,
+                groupIndex,
+                allDay,
+            } = cell.cellData;
+
+            const indexInSelectedCells = selectedCells.findIndex(({
+                index: selectedCellIndex,
+                groupIndex: selectedCellGroupIndex,
+                allDay: selectedCellAllDay,
+            }) => (
+                groupIndex === selectedCellGroupIndex
+                && index === selectedCellIndex
+                && allDay === selectedCellAllDay
+            ));
+            const isFocused = index === focusedCell.cellData.index
+                && groupIndex === focusedCell.cellData.groupIndex
+                && allDay === focusedCell.cellData.allDay;
+
+            if(!isFocused && indexInSelectedCells === -1) {
+                return cell;
+            }
+
+            return {
+                ...cell,
+                cellData: {
+                    ...cell.cellData,
+                    isSelected: indexInSelectedCells > -1,
+                    isFocused,
+                },
+            };
+        });
     }
 }

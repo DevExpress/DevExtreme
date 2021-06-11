@@ -16,6 +16,7 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
   return (
     <td
       className={viewModel.classes}
+      aria-label={viewModel.props.ariaLabel}
     >
       {!ContentTemplate && viewModel.props.children}
       {ContentTemplate && (
@@ -54,6 +55,8 @@ export class CellBaseProps {
     data: {},
     index: 0,
   };
+
+  @OneWay() ariaLabel?: string;
 
   @Template() contentTemplate?: JSXTemplate;
 

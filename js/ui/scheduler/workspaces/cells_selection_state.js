@@ -16,7 +16,7 @@ export default class CellsSelectionState {
     get viewDataProvider() { return this._viewDataProvider; }
 
     get focusedCell() {
-        const focusedCell = this._focusedCell || this._prevFocusedCell;
+        const focusedCell = this._focusedCell;
 
         if(!focusedCell) {
             return undefined;
@@ -91,7 +91,7 @@ export default class CellsSelectionState {
     }
 
     getSelectedCells() {
-        return this._selectedCells || this._prevSelectedCells;
+        return this._selectedCells;
     }
 
     releaseSelectedAndFocusedCells() {
@@ -101,6 +101,8 @@ export default class CellsSelectionState {
 
     releaseSelectedCells() {
         this._prevSelectedCells = this._selectedCells;
+        this._prevFirstSelectedCell = this._firstSelectedCell;
+
         this._selectedCells = null;
         this._firstSelectedCell = null;
     }
@@ -108,6 +110,16 @@ export default class CellsSelectionState {
     releaseFocusedCell() {
         this._prevFocusedCell = this._focusedCell;
         this._focusedCell = null;
+    }
+
+    restoreSelectedAndFocusedCells() {
+        this._selectedCells = this._prevSelectedCells;
+        this._focusedCell = this._prevFocusedCell;
+        this._firstSelectedCell = this._prevFirstSelectedCell;
+
+        this._prevSelectedCells = null;
+        this._prevFirstSelectedCell = null;
+        this._prevFocusedCell = null;
     }
 
     clearSelectedAndFocusedCells() {

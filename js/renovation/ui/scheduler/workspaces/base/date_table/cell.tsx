@@ -10,15 +10,28 @@ import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';
 
-export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
+const ADD_APPOINTMENT_LABEL = 'Add appointment';
+
+export const viewFunction = ({
+  props: {
+    isFirstGroupCell,
+    isLastGroupCell,
+    dataCellTemplate,
+    children,
+  },
+  classes,
+  dataCellTemplateProps,
+  ariaLabel,
+}: DateTableCellBase): JSX.Element => (
   <Cell
-    isFirstGroupCell={viewModel.props.isFirstGroupCell}
-    isLastGroupCell={viewModel.props.isLastGroupCell}
-    contentTemplate={viewModel.props.dataCellTemplate}
-    contentTemplateProps={viewModel.dataCellTemplateProps}
-    className={viewModel.classes}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    contentTemplate={dataCellTemplate}
+    contentTemplateProps={dataCellTemplateProps}
+    className={classes}
+    ariaLabel={ariaLabel}
   >
-    {viewModel.props.children}
+    {children}
   </Cell>
 );
 
@@ -31,6 +44,10 @@ export class DateTableCellBaseProps extends CellBaseProps {
   @OneWay() today?: boolean = false;
 
   @OneWay() firstDayOfMonth?: boolean = false;
+
+  @OneWay() isSelected = false;
+
+  @OneWay() isFocused = false;
 }
 
 @Component({
@@ -39,11 +56,18 @@ export class DateTableCellBaseProps extends CellBaseProps {
 })
 export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
   get classes(): string {
-    const { className = '', allDay } = this.props;
+    const {
+      className = '',
+      allDay,
+      isSelected,
+      isFocused,
+    } = this.props;
     return combineClasses({
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-cell-sizes-vertical': !allDay,
       'dx-scheduler-date-table-cell': !allDay,
+      'dx-state-focused': isSelected,
+      'dx-scheduler-focused-cell': isFocused,
       [className]: true,
     });
   }
@@ -65,5 +89,9 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
       },
       index,
     };
+  }
+
+  get ariaLabel(): string | undefined {
+    return this.props.isSelected ? ADD_APPOINTMENT_LABEL : undefined;
   }
 }
