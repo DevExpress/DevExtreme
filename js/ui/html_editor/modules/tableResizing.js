@@ -39,8 +39,20 @@ export default class TableResizingModule extends BaseModule {
                         this._updateFramesPositions();
                         this._updateFramesSeparators();
 
-                        quill.on('text-change', () => {
-                            this._updateFramesPositions();
+                        quill.on('text-change', (delta) => {
+                            if(this._isTableChanges(delta)) {
+                                this._removeResizeFrames();
+
+                                clearTimeout(this._attachResizerTimeout);
+                                this._attachResizerTimeout = setTimeout(() => {
+                                    this._createResizeFrames(this._findTables());
+                                    this._updateFramesPositions();
+                                    this._updateFramesSeparators();
+                                });
+                            } else {
+                                this._updateFramesPositions();
+                            }
+
                         });
                     }
                 });
@@ -69,11 +81,29 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
+    _isTableChanges(delta) {
+        const $tables = this._findTables();
+        return $tables.length !== this._tableResizeFrames.length;
+    }
+
+    _removeResizeFrames() {
+        // console.log('_removeResizeFrames');
+        each(this._tableResizeFrames, (index, $item) => {
+            this._detachEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
+            $item.$frame.remove();
+        });
+    }
+
+    _detachEvents($lineSeparators) {
+        $lineSeparators.each((i, $lineSeparator) => {
+            eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
+        });
+    }
+
     _createTableResizeFrame() {
         return $('<div>')
             .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
             .appendTo(this.editorInstance._getQuillContainer());
-
     }
 
     _updateFramesPositions() {
@@ -262,6 +292,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     clean() {
+        this._removeResizeFrames();
         clearTimeout(this._attachResizerTimeout);
         clearTimeout(this._windowResizeTimeout);
     }
