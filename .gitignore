@@ -1,7 +1,6 @@
 .idea
 /artifacts
 /testing/testcafe/artifacts
-/testing/bundlers/parcel-cache
 /testing/bundlers/dist
 /testing/bundlers/entry
 /testing/bundlers/devextreme*

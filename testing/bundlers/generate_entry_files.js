@@ -14,16 +14,16 @@ const pathToName = (path) => {
     return path.replace(/(\/|_)+(\w)/g, (...args) => args[2].toUpperCase());
 };
 
-const template = {
+const importTemplate = {
     cjs: {
-        default: (modulePath) => `require('devextreme/${modulePath}');`,
-        named: (modulePath, moduleExport) => `require('devextreme/${modulePath}').${moduleExport};`,
         empty: (modulePath) => `require('devextreme/${modulePath}');`,
+        default: (modulePath) => `require('devextreme/${modulePath}');`,
+        named: (modulePath, moduleExport) => `require('devextreme/${modulePath}').${moduleExport};`
     },
     esm: {
+        empty: (modulePath) => `import 'devextreme/${modulePath}';`,
         default: (modulePath) => `import ${pathToName(modulePath)} from 'devextreme/${modulePath}';`,
         named: (modulePath, moduleExport) => `import { ${moduleExport} } from 'devextreme/${modulePath}';`,
-        empty: (modulePath) => `import 'devextreme/${modulePath}';`
     }
 };
 
@@ -36,14 +36,14 @@ const addModule = (module) => {
         for(const moduleExport in exports) {
             const type = exports[moduleExport].exportAs === 'type';
             if(!type) {
-                const templateMethod = moduleExport === 'default' ? moduleExport : 'named';
-                cjsImportsBag.push(template.cjs[templateMethod](module.name, moduleExport));
-                esmImportsBag.push(template.esm[templateMethod](module.name, moduleExport));
+                const importType = moduleExport === 'default' ? moduleExport : 'named';
+                cjsImportsBag.push(importTemplate.cjs[importType](module.name, moduleExport));
+                esmImportsBag.push(importTemplate.esm[importType](module.name, moduleExport));
             }
         }
     } else {
-        cjsImportsBag.push(template.cjs.empty(module.name));
-        esmImportsBag.push(template.esm.empty(module.name));
+        cjsImportsBag.push(importTemplate.cjs.empty(module.name));
+        esmImportsBag.push(importTemplate.esm.empty(module.name));
     }
 };
 
