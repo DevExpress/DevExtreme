@@ -41,13 +41,6 @@ const addModule = (module) => {
                 esmImportsBag.push(template.esm[templateMethod](module.name, moduleExport));
             }
         }
-        // Object.entries(module.exports).forEach(([moduleExport, exportOptions]) => {
-        //     const templateMethod = moduleExport === 'default' ? moduleExport : 'named';
-        //     if(exportOptions.exportAs !== 'type') {
-        //         cjsImportsBag.push(template.cjs[templateMethod](module.name, moduleExport));
-        //         esmImportsBag.push(template.esm[templateMethod](module.name, moduleExport));
-        //     }
-        // });
     } else {
         cjsImportsBag.push(template.cjs.empty(module.name));
         esmImportsBag.push(template.esm.empty(module.name));
