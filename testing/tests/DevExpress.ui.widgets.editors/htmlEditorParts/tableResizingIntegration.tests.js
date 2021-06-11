@@ -293,6 +293,46 @@ module('Resizing integration', {
         assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 35, 3);
     });
 
+    test('Boundary should be all Quill element if we use vertical drag', function(assert) {
+        this.createWidget({ width: 430, tableResizing: { enabled: true } });
+        this.clock.tick();
+
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        $rowResizerElements.eq(0)
+            .trigger('dxpointerdown');
+        const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+        const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
+        assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
+    });
+
+    test('Boundary should be the Table element if we drag column', function(assert) {
+        this.createWidget({ width: 430, tableResizing: { enabled: true } });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+        const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+        const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
+        assert.strictEqual(boundaryElement, $table.get(0));
+    });
+
+    test('Boundary should be all Quill element if we drag last column', function(assert) {
+        this.createWidget({ width: 430, tableResizing: { enabled: true } });
+        this.clock.tick();
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+        const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+        const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
+        assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
+    });
+
     test('Frame should change height if the table height is changed by horizontal drag', function(assert) {
         this.createWidget({ width: 430, tableResizing: { enabled: true, minColumnWidth: 0 } });
         this.clock.tick();
@@ -304,9 +344,9 @@ module('Resizing integration', {
         $columnResizerElements.eq(0)
             .trigger('dxpointerdown');
 
-        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+        const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-        PointerMock($draggableElements.eq(0))
+        PointerMock($draggableElement)
             .start()
             .dragStart()
             .drag(-70, 0);
@@ -314,7 +354,7 @@ module('Resizing integration', {
         assert.roughEqual($resizeFrame.outerHeight(), $table.outerHeight(), 3);
         assert.roughEqual($columnResizerElements.eq(0).outerHeight(), $table.outerHeight(), 3);
 
-        PointerMock($draggableElements.eq(0)).dragEnd();
+        PointerMock($draggableElement).dragEnd();
         this.clock.tick();
     });
 
@@ -391,12 +431,12 @@ module('Resizing integration', {
         this.createWidget({ height: 300 });
         this.clock.tick();
 
-        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
         const $table = this.$element.find('table');
         const startTableHeight = $table.outerHeight();
         const offset = 20;
 
-        $columnResizerElements.eq(1)
+        $rowResizerElements.eq(1)
             .trigger('dxpointerdown');
 
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
@@ -419,11 +459,11 @@ module('Resizing integration', {
         });
         this.clock.tick();
 
-        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
         const $table = this.$element.find('table');
         const offset = 5;
 
-        $columnResizerElements.eq(0)
+        $rowResizerElements.eq(0)
             .trigger('dxpointerdown');
 
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
@@ -446,10 +486,10 @@ module('Resizing integration', {
         });
         this.clock.tick();
 
-        const $columnResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
         const $table = this.$element.find('table');
 
-        $columnResizerElements.eq(0)
+        $rowResizerElements.eq(0)
             .trigger('dxpointerdown');
 
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
