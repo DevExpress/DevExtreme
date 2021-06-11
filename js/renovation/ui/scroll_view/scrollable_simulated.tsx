@@ -57,7 +57,7 @@ import {
 } from './types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
-import { getElementStyle } from './utils/get_element_style';
+import getElementComputedStyle from '../../utils/get_computed_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -1204,7 +1204,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
-    const isOverflowHidden = getElementStyle('overflowX', this.contentRef.current) === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowX === 'hidden';
 
     /* istanbul ignore next */
     if (!isOverflowHidden) {
@@ -1220,7 +1220,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
-    const isOverflowHidden = getElementStyle('overflowY', this.contentRef.current) === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowY === 'hidden';
 
     /* istanbul ignore next */
     if (!isOverflowHidden) {
