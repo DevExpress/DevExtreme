@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { extend } from 'jquery';
 import Toolbar from '../toolbar';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
@@ -42,30 +41,9 @@ const HeaderPanel = ColumnsView.inherit({
             }
         };
 
-        let defaultButtonsByNames = {};
-        options.toolbarOptions.items.forEach(button => {
-            defaultButtonsByNames[button.name] = button;
-        });
-
-        const items = this.option('toolbar.items');
-        if(isDefined(items)) {
-            options.toolbarOptions.items = items;
-        }
+        options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items);
 
         this.executeAction('onToolbarPreparing', options);
-
-        options.toolbarOptions.items = options.toolbarOptions.items.map(button => {
-            if (isString(button))
-                button = {name: button};
-
-            if (!isDefined(button.name))
-                return button;
-
-            if (!isDefined(defaultButtonsByNames[button.name]))
-                return button;
-
-            return extend(defaultButtonsByNames[button.name], button);
-        });
 
         if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
             const toolbarItems = options.toolbarOptions.items;
@@ -73,6 +51,31 @@ const HeaderPanel = ColumnsView.inherit({
         }
 
         return options.toolbarOptions;
+    },
+
+    _normalizeToolbarItems(items) {
+        const userItems = this.option('toolbar.items');
+
+        if(!isDefined(userItems)) {
+            return items;
+        }
+
+        const defaultButtonsByNames = {};
+        items.forEach(button => {
+            defaultButtonsByNames[button.name] = button;
+        });
+
+        return userItems.map(button => {
+            if(isString(button)) {
+                button = { name: button };
+            }
+
+            if(!isDefined(button.name) || !isDefined(defaultButtonsByNames[button.name])) {
+                return button;
+            }
+
+            return { ...button, ...defaultButtonsByNames[button.name] };
+        });
     },
 
     _renderCore: function() {
@@ -140,7 +143,7 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     optionChanged: function(args) {
-        if(args.name === 'onToolbarPreparing' || args.name === 'toolbar') {
+        if(args.name === 'onToolbarPreparing') {
             this._invalidate();
             args.handled = true;
         }
