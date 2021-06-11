@@ -21,6 +21,66 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class ToolbarProps extends BaseWidgetProps {
+
+  /*
+  TODO: old API
+
+    dataSource
+    disabled
+    elementAttr
+    height
+    hint
+    hoverStateEnabled
+    itemComponent
+    itemHoldTimeout
+    itemRender
+    items[]
+    itemTemplate
+    menuItemComponent
+    menuItemRender
+    menuItemTemplate
+    noDataText
+    onContentReady
+    onDisposing
+    onInitialized
+    onItemClick
+    onItemContextMenu
+    onItemHold
+    onItemRendered
+    onOptionChanged
+    renderAs
+    rtlEnabled
+    visible
+    width
+    Methods
+    beginUpdate()
+    defaultOptions(rule)
+    dispose()
+    element()
+    endUpdate()
+    getDataSource()
+    getInstance(element)
+    instance()
+    off(eventName)
+    off(eventName, eventHandler)
+    on(eventName, eventHandler)
+    on(events)
+    option()
+    option(optionName)
+    option(optionName, optionValue)
+    option(options)
+    repaint()
+    resetOption(optionName)
+    Events
+    contentReady
+    disposing
+    initialized
+    itemClick
+    itemContextMenu
+    itemHold
+    itemRendered
+    optionChanged
+  */
 }
 
 @Component({
