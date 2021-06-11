@@ -35,7 +35,7 @@ export const viewFunction = ({
   styles, textAnchor, isStroked,
   computedProps,
 }: TextSvgElement): JSX.Element => {
-  const texts = textItems || [];
+  const texts = textItems ?? [];
   const {
     text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
   } = computedProps;
@@ -60,7 +60,7 @@ export const viewFunction = ({
       {texts.length ? texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
       )) : null}
-      {!(texts.length) && text}
+      {!texts.length && text}
     </text>
   );
 };
@@ -94,7 +94,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   config?: ConfigContextValue;
 
   get styles(): { [key: string]: any } {
-    const style = this.props.styles || {};
+    const style = this.props.styles ?? {};
 
     return {
       whiteSpace: 'pre',
@@ -103,13 +103,13 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textItems(): TextItem[] | undefined {
-    let items;
-    let parsedHtml;
+    let items: TextItem[] | undefined = undefined;
+    let parsedHtml = '';
     const { text } = this.props;
 
     if (!text) return;
 
-    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
+    if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.includes('&'))) {
       parsedHtml = removeExtraAttrs(text);
       items = parseHTML(parsedHtml);
     } else if (/\n/g.test(text)) {
@@ -187,7 +187,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
   locateTextNodes(items: TextItem[]): void {
     const { x, y, styles } = this.props;
-    const lineHeight = getLineHeight(styles || {});
+    const lineHeight = getLineHeight(styles ?? {});
     let item = items[0];
     setTextNodeAttribute(item, 'x', x);
     setTextNodeAttribute(item, 'y', y);
@@ -205,11 +205,10 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     if (!this.isStroked) return;
 
     const { stroke, strokeWidth } = this.props;
-    const strokeOpacity = this.props.strokeOpacity || 1;
-    let tspan: SVGTSpanElement;
+    const strokeOpacity = Number(this.props.strokeOpacity) || 1;
 
     for (let i = 0, ii = items.length; i < ii; ++i) {
-      tspan = items[i].stroke!;
+      const tspan: SVGTSpanElement = items[i].stroke!;
       tspan.setAttribute(KEY_STROKE, stroke!);
       tspan.setAttribute('stroke-width', strokeWidth!.toString());
       tspan.setAttribute('stroke-opacity', strokeOpacity.toString());

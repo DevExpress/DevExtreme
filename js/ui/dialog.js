@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import Component from '../core/component';
+import { Component } from '../core/component';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';

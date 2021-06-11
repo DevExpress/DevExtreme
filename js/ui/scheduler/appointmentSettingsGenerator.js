@@ -35,7 +35,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     create(rawAppointment) {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
-        const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
+        const resourceManager = this.scheduler.fire('getResourceManager');
+        const itemResources = resourceManager.getResourcesFromItem(rawAppointment);
+
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 
         let appointmentList = this._createAppointments(appointment, itemResources);

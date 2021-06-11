@@ -71,6 +71,9 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
 
         $.each(forcedDevices, function(_, device) {
             devices._currentDevice = device;
+            if(componentClass.IS_RENOVATED_WIDGET) {
+                componentClass.defaultOptions({});
+            }
             const component = new componentClass('#cmp');
             options = $.isFunction(options) ? options.call(component) : options;
 
@@ -989,7 +992,8 @@ testComponentDefaults(DataGrid,
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: 'ios'
+            platform: 'ios',
+            deviceType: 'tablet'
         });
     },
     function() {

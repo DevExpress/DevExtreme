@@ -9,6 +9,7 @@ import {
   TwoWay,
 } from '@devextreme-generator/declarations';
 
+import { createDefaultOptionRules } from '../../../../../../core/options/utils';
 import BaseTestComponent from './component_wrapper/base';
 
 export const view = ({ restAttributes }: OptionsTestWidget): JSX.Element => (
@@ -30,9 +31,15 @@ export class OptionsTestWidgetProps {
 
   @OneWay() oneWayNullWithValue: number | null = 20;
 
+  @OneWay() oneWayWithValueDefaultRule?: number = 10;
+
+  @OneWay() oneWayWithDefaultRule?: number;
+
   @TwoWay() twoWayWithValue = '10';
 
   @TwoWay() twoWayNullWithValue: string | null = '20';
+
+  @TwoWay() twoWayWithDefaultRule?: number = 10;
 
   @OneWay() propWithElement?: HTMLDivElement | number;
 
@@ -43,7 +50,17 @@ export class OptionsTestWidgetProps {
   @Template() contentTemplate = (): JSX.Element => <div />;
 }
 
+export const defaultOptionRules = createDefaultOptionRules<OptionsTestWidgetProps>([{
+  device: (): boolean => true,
+  options: {
+    oneWayWithValueDefaultRule: 15,
+    oneWayWithDefaultRule: 15,
+    twoWayWithDefaultRule: 15,
+  },
+}]);
+
 @Component({
+  defaultOptionRules,
   jQuery: {
     register: true,
     component: BaseTestComponent,

@@ -15,12 +15,17 @@ module.exports = {
         './js/renovation/**/*.ts?(x)',
         '!**/*.j.tsx',
         '!**/test_utils/**/*',
-        '!**/component_wrapper/*',
         '!**/__tests__/**/*',
     ],
     coveragePathIgnorePatterns: [
         './js/renovation/component_wrapper/common/editor.ts',
         './js/renovation/component_wrapper/utils/utils.ts',
+        './js/renovation/component_wrapper/button.ts',
+        './js/renovation/component_wrapper/check_box.ts',
+        './js/renovation/component_wrapper/grid_pager.ts',
+        './js/renovation/component_wrapper/scheduler_header_panel.ts',
+        './js/renovation/component_wrapper/scroll_view.ts',
+        './js/renovation/component_wrapper/scrollable.ts',
         './js/renovation/ui/grids/data_grid/datagrid_component.ts',
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/ui/scroll_view/utils/get_element_offset.ts',
@@ -39,6 +44,12 @@ module.exports = {
         './js/renovation/**/*.tsx': {
             functions: 100, // Should set code coverage to 100%
             statements: 100, // (after start testing declarations)
+            lines: 100,
+            branches: 100
+        },
+        './js/renovation/component_wrapper/*.ts': {
+            functions: 100,
+            statements: 100,
             lines: 100,
             branches: 100
         },

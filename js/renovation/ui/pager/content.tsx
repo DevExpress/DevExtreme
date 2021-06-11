@@ -111,6 +111,13 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      rootElementRef.current = this.widgetRootElementRef.current;
+    }
+  }
+
   private createFakeInstance(): {
     option: () => boolean;
     element: () => HTMLElement | null;
@@ -137,13 +144,6 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
     };
   }
 
-  @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
-    if (rootElementRef) {
-      rootElementRef.current = this.widgetRootElementRef.current;
-    }
-  }
-
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props;
     return showInfo && infoTextVisible && this.isLargeDisplayMode;
@@ -162,7 +162,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible && (this.props.pageCount as number) > 0;
+    return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {

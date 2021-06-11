@@ -4,6 +4,9 @@ import typeUtils from 'core/utils/type';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const { module, test, testStart } = QUnit;
 
@@ -33,33 +36,45 @@ const dataAccessors = {
     }
 };
 
-const observer = {
-    fire: (command, field, obj, value) => {
-        switch(command) {
-            case 'getField':
-                if(!typeUtils.isDefined(dataAccessors.getter[field])) {
-                    return;
-                }
-                return dataAccessors.getter[field](obj);
-            case 'setField':
-                return dataAccessors.setter[field](obj, value);
-            case 'getAppointmentColor':
-                return $.Deferred().resolve('red').promise();
-            case 'getAppointmentGeometry':
-                return {
-                    width: field.width || 0,
-                    height: field.height || 0,
-                    left: field.left || 0,
-                    top: field.top || 0,
-                    empty: field.empty || false
-                };
-            default:
-                break;
-        }
-    }
+const schedulerMock = {
+    isVirtualScrolling: () => false
 };
 
 const createInstance = (options) => {
+    const key = createFactoryInstances({
+        scheduler: schedulerMock
+    });
+
+    const observer = {
+        fire: (command, field, obj, value) => {
+            switch(command) {
+                case 'getField':
+                    if(!typeUtils.isDefined(dataAccessors.getter[field])) {
+                        return;
+                    }
+                    return dataAccessors.getter[field](obj);
+                case 'setField':
+                    return dataAccessors.setter[field](obj, value);
+                case 'getAppointmentColor':
+                    return $.Deferred().resolve('red').promise();
+                case 'getAppointmentGeometry':
+                    return {
+                        width: field.width || 0,
+                        height: field.height || 0,
+                        left: field.left || 0,
+                        top: field.top || 0,
+                        empty: field.empty || false
+                    };
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer,
         ...options,

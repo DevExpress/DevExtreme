@@ -31,7 +31,7 @@ const addToStyle = (
   value: string,
   style?: CSSAttributes,
 ): CSSAttributes => {
-  const nextStyle = style || {};
+  const nextStyle = style ?? {};
   const result = { ...nextStyle };
 
   result[attr] = value || nextStyle[attr];
@@ -70,8 +70,8 @@ export const getIsGroupedAllDayPanel = (
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel);
-  const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
+  const isAllDayPanel = !!groupData?.allDayPanel;
+  const isGroupedAllDayPanel = !!groupData?.isGroupedAllDayPanel;
 
   return isAllDayPanel && isGroupedAllDayPanel;
 };

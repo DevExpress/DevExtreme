@@ -34,7 +34,7 @@ describe('TextSvgElement', () => {
         computedProps: props,
       };
 
-      const svgText = shallow(<TextSvgComponent {...viewModel as any} /> as JSX.Element);
+      const svgText = shallow(<TextSvgComponent {...viewModel as any} />);
 
       return {
         props: svgText.props(),
@@ -101,7 +101,7 @@ describe('TextSvgElement', () => {
     it('should pass transform and dash style', () => {
       jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
       const computedProps = getProps('some text');
-      const rect = shallow(<TextSvgComponent {...{ computedProps } as any} /> as JSX.Element);
+      const rect = shallow(<TextSvgComponent {...{ computedProps } as any} />);
 
       expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
       expect(utilsModule.getGraphicExtraProps)
@@ -130,8 +130,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();
@@ -149,8 +149,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();
@@ -169,8 +169,8 @@ describe('TextSvgElement', () => {
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn(), getSubStringLength: () => (100) },
-            { setAttribute: jest.fn(), getSubStringLength: () => (40) },
+            { setAttribute: jest.fn(), getSubStringLength: () => 100 },
+            { setAttribute: jest.fn(), getSubStringLength: () => 40 },
           ],
         } as any;
         text.effectUpdateText();
@@ -201,6 +201,27 @@ describe('TextSvgElement', () => {
         expect(text.textRef.current?.children[0].setAttribute).lastCalledWith('y', 100);
         expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(1, 'x', 50);
         expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 12);
+      });
+
+      it('"dy" attribute value should be calculated considering font size specified in "styles" property', () => {
+        const text = new TextSvgElement({
+          styles: { 'font-size': 15 },
+          text: 'Multiline\ntext',
+          x: 50,
+          y: 100,
+        });
+
+        text.textRef = React.createRef() as any;
+        text.textRef.current = {
+          setAttribute: jest.fn(),
+          children: [
+            { setAttribute: jest.fn() }, { setAttribute: jest.fn() },
+          ],
+        } as any;
+        text.effectUpdateText();
+
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 15);
       });
 
       it('should locate text nodes with style', () => {

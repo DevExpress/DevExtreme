@@ -178,10 +178,10 @@ async function tryGetValidScreenshot({
   etalonFileName: string;
   maskFileName: string;
   options: ComparerOptions;
-}): Promise<{ equal: boolean; screenshotBuffer: Buffer }> {
+}): Promise<{ equal: boolean; screenshotBuffer: Buffer | null }> {
   let equal = false;
   let attempt = 0;
-  let screenshotBuffer;
+  let screenshotBuffer: Buffer | null = null;
   while (!equal && attempt < options.attempts) {
     attempt += 1;
     if (attempt > 1) {
@@ -217,7 +217,7 @@ export async function compareScreenshot(
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
   const options = {
     ...screenshotComparerDefault,
-    ...(comparisonOptions || {}),
+    ...comparisonOptions ?? {},
   } as ComparerOptions;
   try {
     ensureArtifactsPath();
@@ -243,8 +243,18 @@ export async function compareScreenshot(
   }
 }
 
+export interface ScreenshotsComparer {
+  takeScreenshot: (screenshotName: string,
+    element?: SelectorType, comparisonOptions?:
+    Partial<ComparerOptions> | undefined) => Promise<boolean>;
+  compareResults: {
+    isValid: () => boolean;
+    errorMessages: () => string;
+  };
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createScreenshotsComparer(t: TestController) {
+export function createScreenshotsComparer(t: TestController): ScreenshotsComparer {
   const errorMessages: string[] = [];
   const takeScreenshot = async (
     screenshotName: string,

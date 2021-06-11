@@ -106,33 +106,29 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
      * @type Enums.EditorApplyValueMode
      * @default "instantly"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideSelectedItems?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxDisplayedTags?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiline?: boolean;
@@ -148,7 +144,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
@@ -161,7 +156,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
@@ -175,7 +169,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
@@ -183,35 +176,30 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @docid
      * @type Enums.SelectAllMode
      * @default 'page'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAllMode?: 'allPages' | 'page';
     /**
      * @docid
      * @readonly
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default 1500
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxFilterQueryLength?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showMultiTagOnly?: boolean;
@@ -221,14 +209,12 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default []
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: Array<string | number | any>;
@@ -239,7 +225,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
  * @inherits dxSelectBox
  * @module ui/tag_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */

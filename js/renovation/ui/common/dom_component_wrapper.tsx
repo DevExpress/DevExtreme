@@ -55,6 +55,9 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Mutable()
   instance!: DomComponent | null;
 
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Method()
   getInstance(): DomComponent | null {
     return this.instance;
@@ -86,9 +89,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     this.getInstance()?.option(this.properties);
   }
 
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
-
   get properties(): Record<string, unknown> {
     const {
       itemTemplate,
@@ -97,7 +97,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     } = this.props.componentProps;
 
     const properties = ({
-      rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
+      rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {

@@ -2,13 +2,21 @@ import { isDefined } from '../../core/utils/type';
 import { drawPdfTable } from './draw_pdf_table';
 
 export class PdfTable {
-    constructor(drawTableBorder, rect, columnWidths) {
+    constructor(drawTableBorder, topLeft, columnWidths) {
         if(!isDefined(columnWidths)) {
             throw 'columnWidths is required';
         }
+        if(!isDefined(topLeft)) {
+            throw 'topLeft is required';
+        }
 
         this.drawTableBorder = drawTableBorder;
-        this.rect = rect;
+        this.rect = {
+            x: topLeft.x,
+            y: topLeft.y,
+            w: columnWidths.reduce((a, b) => a + b, 0),
+            h: 0
+        };
         this.columnWidths = columnWidths; // TODO
         this.rowHeights = [];
         this.rows = [];
@@ -61,13 +69,14 @@ export class PdfTable {
                 throw 'column width is required'; // TODO
             }
 
-            cells[i]._rect = {
+            currentCell._rect = {
                 x: this.getCellX(i),
                 y: this.getCellY(this.rows.length - 1),
                 w: columnWidth,
                 h: rowHeight
             };
         }
+        this.rect.h = this.rowHeights.reduce((a, b) => a + b, 0);
     }
 
     drawTo(doc) {
