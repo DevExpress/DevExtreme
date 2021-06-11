@@ -1186,15 +1186,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this.supportAllDayRow() && !this._isVerticalGroupedWorkSpace()) {
             this._toggleAllDayVisibility(false);
 
-            const groupCount = this._getGroupCount();
-            const cellCount = this._getTotalCellCount(groupCount);
-
             const options = {
                 viewData: this.viewDataProvider.viewData,
                 visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
                 startCellIndex: 0,
-                cellCount,
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
@@ -1238,7 +1234,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
                 resourceCellTemplate: this.option('resourceCellTemplate'),
-                className: this.verticalGroupTableClass,
                 groupPanelCellBaseColSpan: this.isGroupedByDate()
                     ? 1
                     : this._getCellCount(),
@@ -1252,10 +1247,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let component = this[componentName];
         if(!component) {
             const container = getPublicElement(parentElement);
-            component = this._createComponent(container, componentClass, {
-                ...viewModel,
-                groupOrientation: this.option('groupOrientation'),
-            });
+            component = this._createComponent(container, componentClass, viewModel);
             this[componentName] = component;
         } else {
             component.option(viewModel);
