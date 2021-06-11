@@ -32,7 +32,7 @@ class DateViewRoller extends Scrollable {
             showOnClick: false,
             onClick: null,
             onSelectedIndexChanged: null,
-            scrollByContent: devices.real().platform === 'generic',
+            scrollByContent: true
         });
     }
 
