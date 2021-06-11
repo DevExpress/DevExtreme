@@ -11,7 +11,7 @@ export default abstract class Widget {
 
   abstract name: string;
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
   }
@@ -20,7 +20,7 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  option(option: string, value?: any): Promise<any> {
+  option(option: string, value?: unknown): Promise<any> {
     const { element, name } = this;
     const get = (): any => $(element())[name]('instance').option(option);
     const set = (): any => $(element())[name]('instance').option(option, value);

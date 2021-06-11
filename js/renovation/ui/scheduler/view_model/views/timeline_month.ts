@@ -2,7 +2,7 @@ import dateUtils from '../../../../../core/utils/date';
 
 export const getStartViewDate = (
   startDayHour: number,
-  firstDayOfWeek: number,
+  _firstDayOfWeek: number,
   currentDate: Date,
 ): Date => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

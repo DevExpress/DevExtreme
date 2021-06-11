@@ -3,7 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import AppointmentDataProvider from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider, AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -39,10 +39,10 @@ QUnit.module('Initialization', {
             store: this.tasks
         });
 
-        const scheduler = createWrapper({ dataSource: data });
+        const { instance } = createWrapper({ dataSource: data });
 
-        assert.ok(scheduler.instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(scheduler.instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(getAppointmentDataProvider(instance.key) instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(getAppointmentDataProvider(instance.key).dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should work correctly when wrong timeZone was set', function(assert) {
@@ -51,9 +51,9 @@ QUnit.module('Initialization', {
     });
 
     QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', function(assert) {
-        const scheduler = createWrapper({ dataSource: this.tasks });
+        const { instance } = createWrapper({ dataSource: this.tasks });
 
-        assert.notOk(scheduler.instance.appointmentDataProvider.dataSource.paginate(), 'Paginate is false');
+        assert.notOk(getAppointmentDataProvider(instance.key).dataSource.paginate(), 'Paginate is false');
     });
 
     QUnit.test('Rendering inside invisible element', function(assert) {

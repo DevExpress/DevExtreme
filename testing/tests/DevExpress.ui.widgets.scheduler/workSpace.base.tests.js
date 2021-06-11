@@ -11,11 +11,29 @@ import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const {
     test,
     module
 } = QUnit;
+
+const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+};
 
 module('Work Space Base', {
     beforeEach: function() {
@@ -30,11 +48,18 @@ module('Work Space Base', {
     test('Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2017, 4, 25),
-            firstDayOfWeek: 0
+            firstDayOfWeek: 0,
+            observer: getObserver(key)
         }).dxSchedulerWorkSpaceWeek('instance');
 
         assert.notOk(dateLocalizationSpy.called, 'dateLocalization.firstDayOfWeekIndex wasn\'t called');
@@ -61,8 +86,16 @@ module('Work Space Base', {
     }].forEach(({ viewName, view }) => {
         QUnit.module(viewName, {
             beforeEach: function() {
-                this.instance = $('#scheduler-work-space')[view]()[view]('instance');
-                stubInvokeMethod(this.instance);
+                const key = createFactoryInstances({
+                    scheduler: {
+                        isVirtualScrolling: () => false
+                    }
+                });
+                const observer = getObserver(key);
+
+                this.instance = $('#scheduler-work-space')[view]({ observer })[view]('instance');
+
+                stubInvokeMethod(this.instance, { key });
             }
         }, () => {
             test('Scheduler workspace should have a right default intervalCount and startDate', function(assert) {
@@ -112,20 +145,6 @@ module('Work Space Base', {
 
                     this.instance.option('width', 900);
                     assert.equal(this.instance.getWorkSpaceMinWidth(), 800, 'minWidth is ok');
-                });
-
-                test('Workspace should throw an error if target index is incorrect in getCoordinatesByDate method ', function(assert) {
-                    const instance = this.instance;
-
-                    assert.throws(
-                        function() {
-                            instance.getCoordinatesByDate(new Date(), 100, 0);
-                        },
-                        function(e) {
-                            return /E1039/.test(e.message);
-                        },
-                        'Exception messages should be correct'
-                    );
                 });
             }
 

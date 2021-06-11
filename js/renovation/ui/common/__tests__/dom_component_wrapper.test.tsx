@@ -2,7 +2,6 @@
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 import { renderTemplate } from '../../../utils/render_template';
 
@@ -160,7 +159,7 @@ describe('DomComponentWrapper', () => {
 
         const component = createWidget();
         component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
-        const dispose = component.setupWidget() as DisposeEffectReturn;
+        const dispose = component.setupWidget();
         dispose();
 
         expect((disposeDom as any).mock.instances[0].dispose).toBeCalledTimes(1);

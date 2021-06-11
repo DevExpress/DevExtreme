@@ -85,14 +85,14 @@ async function getMaskedScreenshotBuffer({
   function applyMask(etalonImg: Image, screenshotImg: Image, maskImg: Image): Buffer {
     for (let y = 0; y < screenshotImg.height; y += 1) {
       for (let x = 0; x < screenshotImg.width; x += 1) {
-        const idx = (screenshotImg.width * y + x) << 2;
-        if (maskImg.data[idx + 0] < 255
-          && maskImg.data[idx + 1] < 255
-          && maskImg.data[idx + 2] < 255) {
-          screenshotImg.data[idx + 0] = etalonImg.data[idx + 0];
-          screenshotImg.data[idx + 1] = etalonImg.data[idx + 1];
-          screenshotImg.data[idx + 2] = etalonImg.data[idx + 2];
-          screenshotImg.data[idx + 3] = etalonImg.data[idx + 3];
+        const index = (screenshotImg.width * y + x) << 2;
+        if (maskImg.data[index + 0] < 255
+          && maskImg.data[index + 1] < 255
+          && maskImg.data[index + 2] < 255) {
+          screenshotImg.data[index + 0] = etalonImg.data[index + 0];
+          screenshotImg.data[index + 1] = etalonImg.data[index + 1];
+          screenshotImg.data[index + 2] = etalonImg.data[index + 2];
+          screenshotImg.data[index + 3] = etalonImg.data[index + 3];
         }
       }
     }
@@ -143,23 +143,26 @@ async function getDiff({
   });
 }
 
-function getMask(diffBuffer: Buffer, options: ComparerOptions): Buffer {
-  function makeTransparentExceptColor(image: Image, { r, g, b }: ComparerOptions['highlightColor']): void {
+function getMask(diffBuffer: Buffer, maskFileName: string, options: ComparerOptions): Buffer {
+  function makeTransparentExceptColor(image: Image, maskImage: Image, { r, g, b }: ComparerOptions['highlightColor']): void {
     for (let y = 0; y < image.height; y++) {
       for (let x = 0; x < image.width; x++) {
-        const idx = (image.width * y + x) << 2;
+        const index = (image.width * y + x) << 2;
         const isHighlighted = (
-          image.data[idx + 0] === r
-          && image.data[idx + 1] === g
-          && image.data[idx + 2] === b);
-        Array.from({ length: 3 }).forEach((_, i) => {
-          image.data[idx + i] = isHighlighted ? 0 : 255;
-        });
+          image.data[index + 0] === r
+          && image.data[index + 1] === g
+          && image.data[index + 2] === b) || (maskImage && maskImage.data[index] === 0);
+        for (let i = 0; i < 3; i++) {
+          image.data[index + i] = isHighlighted ? 0 : 255;
+        }
       }
     }
   }
   const image = PNG.sync.read(diffBuffer);
-  makeTransparentExceptColor(image, options.highlightColor);
+  const maskBuffer = fs.existsSync(maskFileName) && fs.readFileSync(maskFileName);
+  const maskImage = maskBuffer && PNG.sync.read(maskBuffer);
+
+  makeTransparentExceptColor(image, maskImage, options.highlightColor);
   return PNG.sync.write(image);
 }
 
@@ -175,10 +178,10 @@ async function tryGetValidScreenshot({
   etalonFileName: string;
   maskFileName: string;
   options: ComparerOptions;
-}): Promise<{ equal: boolean; screenshotBuffer: Buffer }> {
+}): Promise<{ equal: boolean; screenshotBuffer: Buffer | null }> {
   let equal = false;
   let attempt = 0;
-  let screenshotBuffer;
+  let screenshotBuffer: Buffer | null = null;
   while (!equal && attempt < options.attempts) {
     attempt += 1;
     if (attempt > 1) {
@@ -214,7 +217,7 @@ export async function compareScreenshot(
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
   const options = {
     ...screenshotComparerDefault,
-    ...(comparisonOptions || {}),
+    ...comparisonOptions ?? {},
   } as ComparerOptions;
   try {
     ensureArtifactsPath();
@@ -227,7 +230,7 @@ export async function compareScreenshot(
       const diffBuffer = await getDiff({
         etalonFileName, screenshotBuffer, options,
       });
-      const maskBuffer = getMask(diffBuffer, options);
+      const maskBuffer = getMask(diffBuffer, maskFileName, options);
       fs.writeFileSync(diffFileName, diffBuffer);
       fs.writeFileSync(diffMaskFileName, maskBuffer);
       saveArtifacts({ screenshotFileName, etalonFileName });
@@ -240,8 +243,18 @@ export async function compareScreenshot(
   }
 }
 
+export interface ScreenshotsComparer {
+  takeScreenshot: (screenshotName: string,
+    element?: SelectorType, comparisonOptions?:
+    Partial<ComparerOptions> | undefined) => Promise<boolean>;
+  compareResults: {
+    isValid: () => boolean;
+    errorMessages: () => string;
+  };
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function createScreenshotsComparer(t: TestController) {
+export function createScreenshotsComparer(t: TestController): ScreenshotsComparer {
   const errorMessages: string[] = [];
   const takeScreenshot = async (
     screenshotName: string,

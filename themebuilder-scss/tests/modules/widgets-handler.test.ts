@@ -5,7 +5,7 @@ import WidgetsHandler from '../../src/modules/widgets-handler';
 const mockError = new Error('File not found');
 jest.mock('fs', () => ({
   promises: {
-    readFile: jest.fn().mockImplementation((path: string) => {
+    readFile: jest.fn().mockImplementation(async (path: string) => {
       if (path.includes('reject')) return Promise.reject(mockError);
       return Promise.resolve('');
     }),

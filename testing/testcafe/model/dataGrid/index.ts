@@ -93,7 +93,7 @@ export default class DataGrid extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
-  scrollTo(options): Promise<void> {
+  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -109,6 +109,15 @@ export default class DataGrid extends Widget {
       () => (getGridInstance() as any).getScrollable().scrollLeft(),
       { dependencies: { getGridInstance } },
     )();
+  }
+
+  getScrollRight(): Promise<number> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      const scrollable = dataGrid.getScrollable();
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
+    }, { dependencies: { getGridInstance } })();
   }
 
   getScrollWidth(): Promise<number> {
@@ -161,7 +170,7 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.revertButton}`);
   }
 
-  apiOption(name: any, value = 'undefined'): Promise<any> {
+  apiOption(name: string, value = 'undefined'): Promise<any> {
     const { getGridInstance } = this;
 
     return ClientFunction(
@@ -170,6 +179,22 @@ export default class DataGrid extends Widget {
         return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
       },
       { dependencies: { getGridInstance, name, value } },
+    )();
+  }
+
+  apiColumnOption(id: any, name: any, value: any = 'empty'): Promise<any> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const dataGrid = getGridInstance() as any;
+        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
+      },
+      {
+        dependencies: {
+          getGridInstance, id, name, value,
+        },
+      },
     )();
   }
 

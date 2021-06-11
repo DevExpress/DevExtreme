@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -69,11 +65,10 @@ export type ValueChangedEvent = NativeEventInfo<dxTextBox> & ValueChangedInfo;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
+export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TComponent> {
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxLength?: string | number;
@@ -81,14 +76,12 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
      * @docid
      * @type Enums.TextBoxMode
      * @default "text"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
@@ -99,19 +92,16 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @inherits dxTextEditor
  * @module ui/text_box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTextBox extends dxTextEditor {
-    constructor(element: UserDefinedElement, options?: dxTextBoxOptions)
-}
+export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> { }
 
 /** @public */
-export type Properties = dxTextBoxOptions;
+export type Properties = dxTextBoxOptions<dxTextBox<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTextBoxOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxTextBoxOptions;
+export type IOptions = Properties;

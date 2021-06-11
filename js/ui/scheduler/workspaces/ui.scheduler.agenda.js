@@ -8,6 +8,14 @@ import WorkSpace from './ui.scheduler.work_space';
 import { extend } from '../../../core/utils/extend';
 import dateLocalization from '../../../localization/date';
 import tableCreatorModule from '../table_creator';
+import {
+    TIME_PANEL_CLASS,
+    DATE_TABLE_CLASS,
+    DATE_TABLE_ROW_CLASS,
+    GROUP_ROW_CLASS,
+    GROUP_HEADER_CONTENT_CLASS,
+} from '../classes';
+
 const { tableCreator } = tableCreatorModule;
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
@@ -118,8 +126,8 @@ class SchedulerAgenda extends WorkSpace {
 
     _initWorkSpaceUnits() {
         this._initGroupTable();
-        this._$timePanel = $('<table>').addClass(this._getTimePanelClass());
-        this._$dateTable = $('<table>').addClass(this._getDateTableClass());
+        this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
+        this._$dateTable = $('<table>').addClass(DATE_TABLE_CLASS);
     }
 
     _initGroupTable() {
@@ -230,15 +238,17 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const tree = this.invoke('createReducedResourcesTree');
+        const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
+        const resourceManager = this.invoke('getResourceManager');
+        const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
-        const getGroupHeaderContentClass = this._getGroupHeaderContentClass();
+        const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];
 
         const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, tree, {
             cellTag: 'th',
             groupTableClass: GROUP_TABLE_CLASS,
-            groupRowClass: this._getGroupRowClass(),
+            groupRowClass: GROUP_ROW_CLASS,
             groupCellClass: this._getGroupHeaderClass(),
             groupCellCustomContent(cell, cellText, index, data) {
                 const container = domAdapter.createElement('div');
@@ -272,7 +282,7 @@ class SchedulerAgenda extends WorkSpace {
         });
 
         return {
-            elements: $(table).find('.' + this._getGroupRowClass()),
+            elements: $(table).find(`.${GROUP_ROW_CLASS}`),
             cellTemplates: cellTemplates
         };
     }
@@ -309,7 +319,7 @@ class SchedulerAgenda extends WorkSpace {
     _renderDateTable() {
         this._renderTableBody({
             container: getPublicElement(this._$dateTable),
-            rowClass: this._getDateTableRowClass(),
+            rowClass: DATE_TABLE_ROW_CLASS,
             cellClass: this._getDateTableCellClass()
         });
     }
@@ -326,7 +336,8 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const path = isGroupedView && this._getPathToLeaf(rowIndex) || [];
+        const resourceManager = this.invoke('getResourceManager');
+        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
@@ -539,6 +550,8 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     renovatedRenderSupported() { return false; }
+
+    _setSelectedCellsByCellData() {}
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

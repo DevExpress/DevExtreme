@@ -11,7 +11,7 @@ export default class ScrollView extends Widget {
 
   name = 'dxScrollView';
 
-  constructor(id: string|Selector, direction: string) {
+  constructor(id: string | Selector, direction: string) {
     super(id);
 
     this.element = Selector(`.${CLASS.scrollView}`);

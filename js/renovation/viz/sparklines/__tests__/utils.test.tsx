@@ -39,7 +39,7 @@ describe('generateCustomizeTooltipCallback', () => {
     };
 
     it('should return default table if no html and text props exist', () => {
-      const customizeTooltip = () => (commonCustomProps);
+      const customizeTooltip = () => commonCustomProps;
       const customizeFn = generateCustomizeTooltipCallback(customizeTooltip, fontOptions, false);
       const customOptions = customizeFn({});
 

@@ -59,12 +59,8 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.leftVirtualCellsCount
-            : 0;
-        const virtualRowCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.topVirtualRowsCount
-            : 0;
+        const virtualCellCount = virtualScrollingDispatcher.leftVirtualCellsCount;
+        const virtualRowCount = virtualScrollingDispatcher.topVirtualRowsCount;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -88,8 +84,10 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const updatedData = this.instance.getUpdatedAppointment();
-        return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
+        const appointmentDataProvider = this.instance.fire('getAppointmentDataProvider');
+
+        const updatedData = appointmentDataProvider.getUpdatedAppointment();
+        return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
     }
 
     _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {

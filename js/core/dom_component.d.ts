@@ -1,4 +1,5 @@
-import Component, {
+import {
+    Component,
     ComponentOptions
 } from './component';
 
@@ -15,18 +16,16 @@ import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 
 /** @namespace DevExpress */
-export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
+export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     bindingOptions?: any;
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     elementAttr?: any;
@@ -34,7 +33,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     height?: number | string | (() => number | string);
@@ -42,22 +40,21 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @action
      * @default null
-     * @prevFileNamespace DevExpress.core
+     * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
     /**
      * @docid
      * @action
      * @default null
-     * @prevFileNamespace DevExpress.core
+     * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     rtlEnabled?: boolean;
@@ -65,7 +62,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @docid
      * @default undefined
      * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     width?: number | string | (() => number | string);
@@ -78,10 +74,9 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @module core/dom_component
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
-export default class DOMComponent extends Component {
-    constructor(element: UserDefinedElement, options?: DOMComponentOptions);
+export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
+    constructor(element: UserDefinedElement, options?: TProperties);
     /**
      * @docid
      * @static
@@ -90,14 +85,12 @@ export default class DOMComponent extends Component {
      * @param1 rule:Object
      * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
     /**
      * @docid
      * @publicName dispose()
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     dispose(): void;
@@ -105,7 +98,6 @@ export default class DOMComponent extends Component {
      * @docid
      * @publicName element()
      * @return DxElement
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     element(): DxElement;
@@ -116,17 +108,27 @@ export default class DOMComponent extends Component {
      * @publicName getInstance(element)
      * @param1 element:Element|JQuery
      * @return DOMComponent
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: UserDefinedElement): DOMComponent;
+    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
+    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown);
     _templateManager: TemplateManager;
 }
 
-export type Options = DOMComponentOptions;
-export type IOptions = DOMComponentOptions;
+export type ComponentClass<TProperties> = {
+    new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
+    getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
+}
+
+type Properties = DOMComponentOptions<DOMComponent<Properties>>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;
+
+/** @deprecated use Properties instead */
+export type IOptions = Properties;

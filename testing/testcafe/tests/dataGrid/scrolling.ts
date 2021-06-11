@@ -1,6 +1,9 @@
+import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+
+const groupRow = Selector('.dx-group-row');
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -53,7 +56,7 @@ test('DataGrid should set the scrollbar position to the left on resize (T934842)
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(0);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
 }));
@@ -84,7 +87,7 @@ test('DataGrid should set the scrollbar position to the right on resize when RTL
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(maxRightOffset);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   rtlEnabled: true,
   columnWidth: 100,
@@ -114,7 +117,7 @@ test('DataGrid should not reset its left scroll position on window resize when c
   // assert
   await t
     .expect(dataGrid.getScrollLeft()).eql(100);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
   scrolling: {
@@ -156,7 +159,7 @@ test('DataGrid should not reset its right scroll position on window resize when 
   // assert
   await t
     .expect(await getRightScrollOffset(dataGrid)).eql(100);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(1, 50),
   columnWidth: 100,
   rtlEnabled: true,
@@ -189,7 +192,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   // assert
   const newScrollTop = await dataGrid.getScrollTop();
   await t.expect(Math.abs(scrollTop - newScrollTop) < 2).ok(`ScrollTop ${scrollTop} changes after editing to ${newScrollTop}`);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   height: 300,
   dataSource: [{ FirstName: 'A', LastName: 'B' }, { FirstName: 'C', LastName: 'D' }],
   editing: {
@@ -204,6 +207,123 @@ test('DataGrid should not reset its top scroll position after cell modification 
         .appendTo(container);
     },
   },
+}));
+
+test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await dataGrid.scrollTo({ top: 500 });
+  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(8)
+    .expect(visibleRows[0].rowType)
+    .eql('group')
+    .expect(visibleRows[0].key)
+    .eql(['group1'])
+    .expect(visibleRows[7].rowType)
+    .eql('group')
+    .expect(visibleRows[7].key)
+    .eql(['group8']);
+
+  // act
+  await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
+
+  // assert
+  await t
+    .expect(groupRow.exists)
+    .notOk();
+
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('data')
+    .expect(visibleRows[0].key)
+    .eql(1);
+}).before(async () => {
+  const getItems = function (): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 1; i <= 25; i += 1) {
+      const groupIndex = (i % 8) + 1;
+      items.push({
+        id: i,
+        group: `group${groupIndex}`,
+      });
+    }
+    return items;
+  };
+  return createWidget('dxDataGrid', {
+    height: 400,
+    loadingTimeout: null,
+    keyExpr: 'id',
+    dataSource: getItems(),
+    scrolling: {
+      mode: 'virtual',
+      rowRenderingMode: 'virtual',
+      updateTimeout: 0,
+      useNative: false,
+    },
+    grouping: {
+      autoExpandAll: false,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    paging: {
+      pageSize: 10,
+    },
+  });
+});
+
+test('Scroll position after grouping when RTL (T388508)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(300);
+
+  // act
+  await dataGrid.scrollTo({ x: 100 });
+  const scrollRight = await dataGrid.getScrollRight();
+  await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
+
+  // assert
+  await t
+    .expect(groupRow.exists)
+    .ok();
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const scrollRightAfterGrouping = await dataGrid.getScrollRight();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('group')
+    .expect(Math.floor(scrollRightAfterGrouping))
+    .eql(Math.floor(scrollRight));
+}).before(async () => createWidget('dxDataGrid', {
+  width: 200,
+  rtlEnabled: true,
+  columns: [
+    { dataField: 'field1', width: 100 },
+    { dataField: 'field2', width: 100 },
+    { dataField: 'field3', width: 100 },
+    { dataField: 'field4', width: 100 },
+    { dataField: 'field5', width: 100 },
+  ],
+  dataSource: [{
+    field1: '1',
+    field2: '2',
+    field3: '3',
+    field4: '4',
+  }],
 }));
 
 test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
@@ -230,8 +350,8 @@ test('New virtual mode. A detail row should be rendered when the last master row
     .eql('detail')
     .expect(lastRow.key)
     .eql(100);
-}).before(() => {
-  const getItems = function (): Record<string, unknown>[] {
+}).before(async () => {
+  const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({
@@ -281,8 +401,8 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     .eql('detailAdaptive')
     .expect(lastRow.key)
     .eql(100);
-}).before(() => {
-  const getItems = function (): Record<string, unknown>[] {
+}).before(async () => {
+  const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({

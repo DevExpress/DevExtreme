@@ -8,6 +8,7 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
+import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 
 import 'generic_light.css!';
 
@@ -102,7 +103,7 @@ QUnit.module('Table', moduleConfig, () => {
         const dataGrid = createDataGrid({});
 
         const expectedLog = [
-            'setLineWidth,1', 'rect,10,15,100,20',
+            'setLineWidth,1', 'rect,10,15,0,0',
         ];
 
         const onCellExporting = () => {
@@ -112,7 +113,7 @@ QUnit.module('Table', moduleConfig, () => {
             assert.fail('onRowExporting should not be called');
         };
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 20 }, onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -135,7 +136,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 20 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -164,7 +165,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,f1,10,25,{baseline:middle}'
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 20 }, columnWidths: [ 100 ], onCellExporting, onRowExporting, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onCellExporting, onRowExporting, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -192,7 +193,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1,10,47,{baseline:middle}', 'setLineWidth,1', 'rect,10,35,100,24',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 44 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -223,7 +224,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -246,7 +247,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,f1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
             'text,f2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 16 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -275,7 +276,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
             'text,v2,50,41,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 36 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -308,7 +309,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -341,7 +342,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,0,24',
             'text,v2_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, columnWidths: [ 0, 100 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 0, 100 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -383,7 +384,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -425,7 +426,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -466,7 +467,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -507,7 +508,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -551,7 +552,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -593,7 +594,7 @@ QUnit.module('Table', moduleConfig, () => {
             'text,v2_2,50,63,{baseline:middle}',
             'text,v3_2,100,63,{baseline:middle}',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -620,7 +621,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             } else if(e.rowCells[0].text === 'v2_1') {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 60, y: 15 };
             } else if(e.rowCells[0].text === 'v3_1') {
                 e.rowHeight = 30;
             }
@@ -632,7 +633,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v2_1,60,27,{baseline:middle}', 'setLineWidth,1', 'rect,60,15,40,24',
             'text,v3_1,60,54,{baseline:middle}', 'setLineWidth,1', 'rect,60,39,40,30',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 40, h: 36 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -655,7 +656,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             } else if(e.rowCells[0].text === 'v2_1') {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 60, y: 15 };
             } else if(e.rowCells[0].text === 'v3_1') {
                 e.rowHeight = 30;
             }
@@ -676,7 +677,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'setLineWidth,1', 'rect,60,15,40,54'
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 40, h: 36 }, columnWidths: [ 40 ], onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40 ], onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -700,7 +701,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 10 };
             } else if(e.rowCells[0].text === 'v3_1') {
                 e.rowHeight = 30;
             }
@@ -713,7 +714,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v2_1,10,22,{baseline:middle}', 'setLineWidth,1', 'rect,10,10,40,24',
             'text,v3_1,10,49,{baseline:middle}', 'setLineWidth,1', 'rect,10,34,40,30',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 800, w: 40, h: 36 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 800 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -737,7 +738,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 10 };
             } else if(e.rowCells[0].text === 'v3_1') {
                 e.rowHeight = 30;
             }
@@ -759,7 +760,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'setLineWidth,1', 'rect,10,10,40,54'
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 800, w: 40, h: 36 }, columnWidths: [ 40 ], onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 800 }, columnWidths: [ 40 ], onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -777,7 +778,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 15, y: 20, w: 50, h: 16 }
+            tableTopLeft: { x: 15, y: 20 }
         }];
 
         const onCellExporting = ({ pdfCell }) => {
@@ -796,7 +797,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,F2,15,28,{baseline:middle}',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 40, h: 16 }, columnWidths: [ 40, 50 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -814,11 +815,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 20 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 24 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onCellExporting = ({ pdfCell }) => {
@@ -850,7 +851,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_1,12,48,{baseline:middle}',
             'text,v3_2,12,70,{baseline:middle}',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -868,11 +869,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 60 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 60 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onRowExporting = (e) => {
@@ -898,7 +899,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24'
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -916,11 +917,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 60 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 60 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onCellExporting = ({ pdfCell }) => {
@@ -955,7 +956,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_2,12,70,{baseline:middle}',
             'setLineWidth,1', 'rect,12,22,60,60'
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -973,11 +974,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 60 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 60 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onRowExporting = (e) => {
@@ -1006,7 +1007,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
             'setLineWidth,1', 'rect,12,22,60,60'
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1024,11 +1025,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 60 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 60 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onCellExporting = ({ gridCell, pdfCell }) => {
@@ -1059,7 +1060,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1077,11 +1078,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 60 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 60 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onCellExporting = ({ gridCell, pdfCell }) => {
@@ -1112,7 +1113,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
         ];
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 60 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1130,11 +1131,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 36 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 36 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onRowExporting = (e) => {
@@ -1147,15 +1148,15 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 10, y: 56, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 10, y: 56 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 11, y: 57, w: 50, h: 54 }
+                    tableTopLeft: { x: 11, y: 57 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 12, y: 58, w: 60, h: 54 }
+                    tableTopLeft: { x: 12, y: 58 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
                 e.rowHeight = 30;
@@ -1188,7 +1189,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'setLineWidth,1', 'rect,12,58,60,54',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 36 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1206,11 +1207,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 36 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 36 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onRowExporting = (e) => {
@@ -1222,15 +1223,15 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 12, y: 22, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 13, y: 23, w: 50, h: 54 }
+                    tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 14, y: 24, w: 60, h: 54 }
+                    tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
                 e.rowHeight = 30;
@@ -1262,7 +1263,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 36 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1280,11 +1281,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         const splitToTablesByColumns = [{
             columnIndex: 1,
             drawOnNewPage: true,
-            tableRect: { x: 11, y: 21, w: 50, h: 36 }
+            tableTopLeft: { x: 11, y: 21 }
         }, {
             columnIndex: 2,
             drawOnNewPage: true,
-            tableRect: { x: 12, y: 22, w: 60, h: 36 }
+            tableTopLeft: { x: 12, y: 22 }
         }];
 
         const onRowExporting = (e) => {
@@ -1296,15 +1297,15 @@ QUnit.module('Table splitting', moduleConfig, () => {
                 e.rowHeight = 24;
                 e.drawNewTableFromThisRow.startNewTable = true;
                 e.drawNewTableFromThisRow.addPage = true;
-                e.drawNewTableFromThisRow.tableRect = { x: 12, y: 22, w: 40, h: 54 };
+                e.drawNewTableFromThisRow.tableTopLeft = { x: 12, y: 22 };
                 e.drawNewTableFromThisRow.splitToTablesByColumns = [{
                     columnIndex: 1,
                     drawOnNewPage: true,
-                    tableRect: { x: 13, y: 23, w: 50, h: 54 }
+                    tableTopLeft: { x: 13, y: 23 }
                 }, {
                     columnIndex: 2,
                     drawOnNewPage: true,
-                    tableRect: { x: 14, y: 24, w: 60, h: 54 }
+                    tableTopLeft: { x: 14, y: 24 }
                 }];
             } else if(e.rowCells[0].text === 'v1_3') {
                 e.rowHeight = 30;
@@ -1336,7 +1337,7 @@ QUnit.module('Table splitting', moduleConfig, () => {
             'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
         ];
 
-        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 20, w: 40, h: 36 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -1346,3 +1347,4 @@ QUnit.module('Table splitting', moduleConfig, () => {
 });
 
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

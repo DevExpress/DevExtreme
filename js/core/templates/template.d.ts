@@ -5,7 +5,6 @@ import {
 export interface dxTemplateOptions {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     name?: string;
@@ -14,7 +13,6 @@ export interface dxTemplateOptions {
  * @docid
  * @section uiWidgetMarkupComponents
  * @type object
- * @prevFileNamespace DevExpress.core
  * @public
  */
 export type dxTemplate = Template;
@@ -25,7 +23,6 @@ export class Template {
 /**
  * @docid
  * @section Common
- * @prevFileNamespace DevExpress.core
  * @public
  */
 export type template = string | Function | UserDefinedElement;

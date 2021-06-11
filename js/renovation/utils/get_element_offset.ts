@@ -1,4 +1,4 @@
-export default function getElementOffset(elem?: Element):
+export function getElementOffset(elem?: Element):
 { top: number; left: number } | null {
   if (!elem) return null;
 

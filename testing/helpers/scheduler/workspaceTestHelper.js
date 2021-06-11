@@ -1,16 +1,49 @@
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+
+export const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        },
+        key
+    };
+};
+
+export const initFactoryInstance = (resourceGetter) => {
+    const key = createFactoryInstances({
+        scheduler: {
+            isVirtualScrolling: () => false
+        }
+    });
+
+    getResourceManager(key).createResourcesTree = (groups) => {
+        return new ResourceManager({}).createResourcesTree(groups);
+    };
+
+    getResourceManager(key).getResourceTreeLeaves = (tree, appointmentResources) => {
+        const resources = typeof resourceGetter === 'function'
+            ? resourceGetter()
+            : resourceGetter;
+        const resultResources = resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+        return new ResourceManager(resultResources).getResourceTreeLeaves(tree, appointmentResources);
+    };
+
+    return getObserver(key);
+};
 
 export const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
         if(subscribe === 'getTimezone') {
             return options.tz || 3;
         }
@@ -36,6 +69,12 @@ export const stubInvokeMethod = function(instance, options) {
             }
 
             return date;
+        }
+        if(subscribe === 'getResourceManager') {
+            return getResourceManager(options.key || 0);
+        }
+        if(subscribe === 'getAppointmentDataProvider') {
+            return getAppointmentDataProvider(options.key || 0);
         }
     });
 };

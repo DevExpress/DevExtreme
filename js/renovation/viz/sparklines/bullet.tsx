@@ -15,7 +15,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
-import getElementOffset from '../../utils/get_element_offset';
+import { getElementOffset } from '../../utils/get_element_offset';
 import { BaseWidgetProps } from '../common/base_props';
 import { BaseWidget } from '../common/base_widget';
 import {
@@ -399,8 +399,8 @@ export class Bullet extends JSXComponent(BulletProps) {
     const translatorY = this.valueAxis.getTranslator();
     const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
     const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
-    let x1;
-    let x2;
+    let x1 = Number.NaN;
+    let x2 = Number.NaN;
 
     if (this.scaleProps.value > 0) {
       x1 = Math.max(0, this.scaleProps.startScaleValue);
@@ -420,7 +420,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
-    const svgElement = this.widgetRef.current?.svg() || undefined;
+    const svgElement = this.widgetRef.current?.svg() ?? undefined;
     this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;
   }
 

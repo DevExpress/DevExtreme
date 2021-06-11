@@ -1,4 +1,4 @@
-import { updatePropsImmutable } from '../update-props-immutable';
+import { updatePropsImmutable } from '../update_props_immutable';
 
 class Dummy {
   nestedProp: string;
@@ -28,6 +28,16 @@ it('change nested object option to plain object value', () => {
   updatePropsImmutable(props, option, 'nestedObject', 'nestedObject.nestedProp');
   expect(props.nestedObject).not.toBe(option.nestedObject);
   expect(props.nestedObject.nestedProp).toBe('new value');
+});
+
+it('change second level nested object option to plain object value', () => {
+  const option = { nestedObject1: { nestedObject2: { nestedProp: 'new value' } } };
+  const props = { nestedObject1: option.nestedObject1 };
+
+  updatePropsImmutable(props, option, 'nestedObject1', 'nestedObject1.nestedObject2.nestedProp');
+  expect(props.nestedObject1).not.toBe(option.nestedObject1);
+  expect(props.nestedObject1.nestedObject2).not.toBe(option.nestedObject1.nestedObject2);
+  expect(props.nestedObject1.nestedObject2.nestedProp).toBe('new value');
 });
 
 it('change nested object option to plain object value 1', () => {

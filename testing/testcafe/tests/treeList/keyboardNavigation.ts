@@ -13,7 +13,7 @@ test('The row should be selected on click if less than half of a row is visible'
   await t
     .click(dataRow.getSelectCheckBox(), { offsetX: 0, offsetY: 0 })
     .expect(dataRow.isSelected).ok();
-}).before(() => createWidget('dxTreeList', {
+}).before(async () => createWidget('dxTreeList', {
   dataSource: [
     {
       id: 1, parentId: 0, name: 'Name 1', age: 19,

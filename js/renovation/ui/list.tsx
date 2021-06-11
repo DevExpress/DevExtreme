@@ -3,28 +3,28 @@ import {
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
-import { WidgetProps } from './common/widget';
+import Store from '../../data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';
 import { EventExtension, DxEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
-  props: { rootElementRef, ...componentProps },
+  props,
   restAttributes,
 }: List): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
     componentType={LegacyList}
-    componentProps={componentProps}
+    componentProps={props}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
 @ComponentBindings()
-export class ListProps extends WidgetProps {
+export class ListProps extends BaseWidgetProps {
   // Properties have been copied from ../ui/list.d.ts
 
   @OneWay() activeStateEnabled?: boolean;
@@ -37,7 +37,12 @@ export class ListProps extends WidgetProps {
 
   //   @OneWay() collapsibleGroups?: boolean;
 
-  @OneWay() dataSource?: string | (string | dxListItem | any)[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?:
+  | string
+  | (string | dxListItem | any)[]
+  | Store
+  | DataSource
+  | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
 
@@ -168,4 +173,4 @@ export class ListProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent(ListProps) {}
+export class List extends JSXComponent<ListProps>() {}

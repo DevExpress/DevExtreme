@@ -556,7 +556,7 @@ QUnit.test('Get appointments by certain resources', function(assert) {
         { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 1), ownerId: [1, 2], roomId: [1, 2] }
     ];
 
-    const result = this.instance.groupAppointmentsByResources(appointments, [
+    const result = this.instance.groupAppointmentsByResourcesCore(appointments, [
         {
             name: 'ownerId',
             items: [{ id: 1 }, { id: 2 }]

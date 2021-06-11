@@ -4,6 +4,8 @@ import {
 
 @ComponentBindings()
 export class BaseWidgetProps {
+  @OneWay() className?: string = '';
+
   @OneWay() accessKey?: string;
 
   @OneWay() activeStateEnabled?: boolean = false;

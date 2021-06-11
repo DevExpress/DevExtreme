@@ -14,6 +14,8 @@ import {
   ScrollViewLoadPanel,
 } from '../load_panel';
 import { ScrollableProps } from '../scrollable_props';
+import { ScrollableNative } from '../scrollable_native';
+import { ScrollableSimulated } from '../scrollable_simulated';
 
 jest.mock('../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
@@ -55,21 +57,49 @@ describe('Scrollable', () => {
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
+      { name: 'container', calledWith: [] },
       { name: 'update', calledWith: [] },
       { name: 'release', calledWith: [] },
       { name: 'refresh', calledWith: [] },
+      { name: 'startLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [] },
       { name: 'validate', calledWith: ['arg1'] },
       { name: 'getScrollElementPosition', aliasName: 'getElementLocation', calledWith: ['arg1', 'arg2'] },
     ]).describe('Method: %o', (methodInfo) => {
       each([false, true]).describe('useNative: %o', (useNative) => {
         it(`${methodInfo.name}() method should call according strategy method`, () => {
           const viewModel = new Scrollable({ useNative });
+
+          const scrollable = mount(viewFunction(viewModel));
+
           const handlerMock = jest.fn();
 
           if (useNative) {
-            (viewModel as any).scrollableNativeRef = { current: { [`${methodInfo.aliasName || methodInfo.name}`]: handlerMock } };
+            Object.defineProperties(viewModel, {
+              scrollableNativeRef: {
+                get() {
+                  return { current: scrollable.find(ScrollableNative).instance() };
+                },
+              },
+              scrollableSimulatedRef: { get() { return { current: null }; } },
+            });
+
+            expect(viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+
+            viewModel.scrollableNativeRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
           } else {
-            (viewModel as any).scrollableSimulatedRef = { current: { [`${methodInfo.aliasName || methodInfo.name}`]: handlerMock } };
+            Object.defineProperties(viewModel, {
+              scrollableNativeRef: { get() { return { current: null }; } },
+              scrollableSimulatedRef: {
+                get() {
+                  return { current: scrollable.find(ScrollableSimulated).instance() };
+                },
+              },
+            });
+
+            expect(viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`]).not.toEqual(undefined);
+
+            viewModel.scrollableSimulatedRef.current![`${methodInfo.aliasName || methodInfo.name}`] = handlerMock;
           }
 
           viewModel[methodInfo.name](...methodInfo.calledWith);
@@ -85,7 +115,7 @@ describe('Scrollable', () => {
     describe('cssClasses', () => {
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('Check strategy branch', () => {
-          const scrollable = mount(viewFunction({ props: { useNative } } as any) as JSX.Element);
+          const scrollable = mount(viewFunction({ props: { useNative } } as any));
 
           if (useNative) {
             expect(scrollable.find('.dx-scrollable-native').exists()).toBe(true);
@@ -101,7 +131,7 @@ describe('Scrollable', () => {
     describe('Integration with form', () => {
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('aria property', () => {
-          const scrollable = mount(viewFunction({ props: { useNative, aria: { role: 'form' } } } as any) as JSX.Element);
+          const scrollable = mount(viewFunction({ props: { useNative, aria: { role: 'form' } } } as any));
 
           expect(scrollable.find('.dx-scrollable').prop('role')).toEqual('form');
         });

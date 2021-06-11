@@ -6,6 +6,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -101,13 +102,13 @@ QUnit.module('Options', {
     });
 
     QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', function(assert) {
-        const scheduler = createWrapper();
-        const repaintStub = sinon.stub(scheduler.instance, 'repaint');
+        const { instance } = createWrapper();
+        const repaintStub = sinon.stub(instance, 'repaint');
 
         try {
-            const appointmentDataProvider = scheduler.instance.getAppointmentDataProvider();
+            const appointmentDataProvider = getAppointmentDataProvider(instance.key);
 
-            scheduler.instance.option({
+            instance.option({
                 'startDateExpr': '_startDate',
                 'endDateExpr': '_endDate',
                 'startDateTimeZoneExpr': '_startDateTimeZone',
@@ -119,7 +120,7 @@ QUnit.module('Options', {
                 'recurrenceExceptionExpr': '_recurrenceException'
             });
 
-            const dataAccessors = scheduler.instance._dataAccessors;
+            const dataAccessors = instance._dataAccessors;
 
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
@@ -721,7 +722,6 @@ QUnit.module('Options', {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
-            allowEditingTimeZones: false
         };
 
         if(devices.real().platform !== 'generic') {
@@ -892,7 +892,7 @@ QUnit.module('Options', {
         }));
         assert.equal(counter, 1, 'Data source was reloaded after dataSource option changing');
         scheduler.instance.repaint();
-        assert.equal(counter, 1, 'Data source wasn\'t reloaded after repaint');
+        assert.equal(counter, 1, 'Data source was not reloaded after repaint');
     });
 
     QUnit.test('Multiple reloading should be avoided after some currentView options changing (T656320)', function(assert) {

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -6,6 +7,7 @@
 @use "../../base/scrollable";
 
 // adduse
+
 $scrollbar-size-thin: 6px;
 $scrollbar-size: 13px;
 
@@ -171,7 +173,7 @@ $scrollbar-size: 13px;
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
   margin-left: 10px;
-  top: (50px - $material-base-font-size) / 2;
+  top: math.div(50px - $material-base-font-size, 2);
   display: inline-block;
 
   .dx-rtl & {
