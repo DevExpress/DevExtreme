@@ -2,7 +2,7 @@ import { isDateInRange } from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
     if(!startDate) {
-        return new Date(currentDate).getTime();
+        return new Date(currentDate);
     } else {
         let startDate = new Date(startViewDate);
         const validStartViewDate = new Date(startViewDate);
