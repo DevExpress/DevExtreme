@@ -1,17 +1,19 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
 import {
   createDataSetForScreenShotTests,
   resourceDataSource,
   views,
   verticalViews,
   horizontalViews,
-} from './utils';
+} from '../../utils';
+import { changeTheme } from '../../../../../helpers/changeTheme';
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
-fixture`Scheduler: Adaptive Generic theme layout`
-  .page(url(__dirname, '../../container.html'));
+fixture`Scheduler: Adaptive material theme layout`
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -25,7 +27,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
@@ -33,10 +35,11 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
+        await compareScreenshot(t, `adaptive-material-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}).png`),
       ).ok();
     }
   }).before(async (t) => {
+    await changeTheme('material.blue.light');
     await t.resizeWindow(400, 600);
 
     await createScheduler({
@@ -45,10 +48,10 @@ const createScheduler = async (
       crossScrollingEnabled,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
@@ -56,10 +59,11 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
+        await compareScreenshot(t, `adaptive-material-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping).png`),
       ).ok();
     }
   }).before(async (t) => {
+    await changeTheme('material.blue.light');
     await t.resizeWindow(400, 600);
 
     await createScheduler({
@@ -70,10 +74,10 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
@@ -81,10 +85,11 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
+        await compareScreenshot(t, `adaptive-material-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping).png`),
       ).ok();
     }
   }).before(async (t) => {
+    await changeTheme('material.blue.light');
     await t.resizeWindow(400, 600);
 
     await createScheduler({
@@ -95,6 +100,6 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 });
