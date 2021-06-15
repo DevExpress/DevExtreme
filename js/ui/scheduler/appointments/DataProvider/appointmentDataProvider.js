@@ -11,13 +11,15 @@ const FilterStrategies = {
 
 export class AppointmentDataProvider {
     constructor(options) {
-        this.key = options.key;
-        this.scheduler = options.scheduler;
-        this.dataSource = options.dataSource;
-        this.dataAccessors = this.combineDataAccessors(options.appointmentDataAccessors);
+        this.options = options;
+        this.key = this.options.key;
+        this.scheduler = this.options.scheduler;
+        this.dataSource = this.options.dataSource;
+        this.dataAccessors = this.combineDataAccessors(this.options.appointmentDataAccessors);
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
+
         this.initFilterStrategy();
     }
 
@@ -38,9 +40,18 @@ export class AppointmentDataProvider {
     }
 
     initFilterStrategy() {
+        const filterOptions = {
+            scheduler: this.scheduler,
+            dataSource: this.dataSource,
+            dataAccessors: this.dataAccessors,
+            startDayHour: this.options.startDayHour,
+            endDayHour: this.options.endDayHour,
+            appointmentDuration: this.options.endDayHour,
+        };
+
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
-            ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
-            : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
+            ? new AppointmentFilterVirtualStrategy(filterOptions)
+            : new AppointmentFilterBaseStrategy(filterOptions);
     }
 
     setDataSource(dataSource) {
