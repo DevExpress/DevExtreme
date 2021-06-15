@@ -7,6 +7,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
+import { dxToolbarItem } from 'js/ui/toolbar';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Column,
@@ -1124,6 +1125,11 @@ export class DataGridCommonColumnSettings {
 }
 
 @ComponentBindings()
+export class DataGridToolbar {
+  @OneWay() items?: (string | dxToolbarItem)[];
+}
+
+@ComponentBindings()
 export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
 
@@ -1331,6 +1337,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     trueText: messageLocalization.format('dxDataGrid-trueText'),
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
+
+  @OneWay() toolbar?: DataGridToolbar;
 
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
