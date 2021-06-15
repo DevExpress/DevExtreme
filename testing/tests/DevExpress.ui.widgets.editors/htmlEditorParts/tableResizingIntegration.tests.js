@@ -6,6 +6,7 @@ import { each } from 'core/utils/iterator';
 
 import PointerMock from '../../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { getWindow } from 'core/utils/window.js';
 
 const { test, module } = QUnit;
 
@@ -293,20 +294,7 @@ module('Resizing integration', {
         assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 35, 3);
     });
 
-    // test1('Boundary should be the table element if we use vertical drag for the non-last row', function(assert) {
-    //     this.createWidget({ width: 430, tableResizing: { enabled: true } });
-    //     this.clock.tick();
-
-    //     const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
-    //     $rowResizerElements.eq(0)
-    //         .trigger('dxpointerdown');
-    //     const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
-
-    //     const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
-    //     assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
-    // });
-
-    test('Boundary should be all Quill element if we use vertical drag', function(assert) {
+    test('Boundary should has bottom boundary offset we use vertical drag', function(assert) {
         this.createWidget({ width: 430, tableResizing: { enabled: true } });
         this.clock.tick();
 
@@ -315,8 +303,8 @@ module('Resizing integration', {
             .trigger('dxpointerdown');
         const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-        const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
-        assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
+        const boundaryOffset = $draggableElement.dxDraggable('instance').option('boundOffset');
+        assert.roughEqual(boundaryOffset.bottom, -$(getWindow()).height(), 2);
     });
 
     test('Boundary should be the Table element if we drag column', function(assert) {
@@ -584,7 +572,6 @@ module('Resizing integration', {
     test('Second frame should be added if we add the second table', function(assert) {
         this.createWidget();
         this.clock.tick();
-
     });
 
     test('Second frame should be removed if we remove the second table', function(assert) {

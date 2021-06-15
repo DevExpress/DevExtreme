@@ -8,6 +8,8 @@ import { getBoundingRect } from '../../../core/utils/position';
 import BaseModule from './base';
 import Draggable from '../../draggable';
 import { each } from '../../../core/utils/iterator';
+import { getWindow, hasWindow } from '../../../core/utils/window';
+import { extend } from '../../../core/utils/extend';
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
@@ -27,6 +29,7 @@ export default class TableResizingModule extends BaseModule {
         this._tableResizeFrames = [];
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
         this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
+        this._quillContainer = this.editorInstance._getQuillContainer();
 
         if(this.enabled) {
             this.editorInstance.on('contentReady', () => {
@@ -51,19 +54,20 @@ export default class TableResizingModule extends BaseModule {
                             } else {
                                 this._updateFramesPositions();
                             }
-
                         });
                     }
                 });
             });
 
-            _windowResizeCallbacks.add(() => {
-                this._windowResizeTimeout = setTimeout(() => {
-                    this._updateFramesPositions();
-                    this._updateFramesSeparators();
-                });
-            });
+            this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler);
         }
+    }
+
+    _resizeHandler() {
+        this._windowResizeTimeout = setTimeout(() => {
+            this._updateFramesPositions();
+            this._updateFramesSeparators();
+        });
     }
 
     _findTables() {
@@ -255,11 +259,33 @@ export default class TableResizingModule extends BaseModule {
         return !isDefined($determinantElements[index + 1]);
     }
 
+    _getBoundaryConfig(options) {
+        const result = {};
+
+        if(options.direction === 'vertical') {
+            result.boundary = options.frame.$table;
+            result.boundOffset = {
+                bottom: hasWindow() ? -$(getWindow()).height() : -$(this._quillContainer).outerHeight,
+                top: 0,
+                left: 0,
+                right: 0
+            };
+        } else {
+            if(!this._isLastColumnResizing(options)) {
+                result.boundary = options.frame.$table;
+            } else {
+                result.boundary = $(this._quillContainer);
+            }
+        }
+
+        return result;
+    }
+
     _createDraggableElement(options) {
-        this._currentDraggableElement = this.editorInstance._createComponent(options.lineSeparator, Draggable, {
+        const boundaryConfig = this._getBoundaryConfig(options);
+
+        const config = {
             contentTemplate: null,
-            boundary: this._isLastColumnResizing(options) ? this.editorInstance._getQuillContainer() : options.frame.$table,
-            boundOffset: { bottom: -300, top: 0, left: 0, right: 0 },
             allowMoveByClick: false,
             dragDirection: options.direction,
             onDragMove: ({ component, event }) => {
@@ -272,7 +298,11 @@ export default class TableResizingModule extends BaseModule {
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
-        });
+        };
+
+        extend(config, boundaryConfig);
+
+        this._currentDraggableElement = this.editorInstance._createComponent(options.lineSeparator, Draggable, config);
     }
 
     _fixColumnsWidth(frame) {
@@ -288,7 +318,11 @@ export default class TableResizingModule extends BaseModule {
 
     clean() {
         this._removeResizeFrames();
-        clearTimeout(this._attachResizerTimeout);
+
+        _windowResizeCallbacks.remove(this._resizeHandler);
         clearTimeout(this._windowResizeTimeout);
+        this._resizeHandler = null;
+
+        clearTimeout(this._attachResizerTimeout);
     }
 }
