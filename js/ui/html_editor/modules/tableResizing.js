@@ -50,13 +50,13 @@ export default class TableResizingModule extends BaseModule {
                                     this._createResizeFrames(this._findTables());
                                     this._updateFramesPositions();
                                     this._updateFramesSeparators();
-                                });
+                                }, 100);
                             } else {
                                 this._updateFramesPositions();
                             }
                         });
                     }
-                });
+                }, 100);
             });
 
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler);
