@@ -55,14 +55,16 @@ function exportDataGrid(doc, dataGrid, options) {
                         if(cellIndex > 0) {
                             const prevCellsHaveSummaryItems = currentRow.slice(1).filter(pdfCell => pdfCell._summaryItem).length > 0;
                             if(!pdfCell._summaryItem && !prevCellsHaveSummaryItems) {
-                                currentRow.forEach(pdfCell => pdfCell.colSpan = currentRow.length);
+                                for(let i = 0; i < currentRow.length; i++) {
+                                    currentRow[i].colSpan = currentRow.length;
+                                }
                                 pdfCell.colSpan = currentRow.length;
                             } else {
                                 const isPrevCellMerged = isDefined(currentRow[currentRow.length - 1].colSpan);
                                 if(isPrevCellMerged) {
-                                    const mergedCells = currentRow.slice(1).filter((cell) => { return isDefined(cell.colSpan) && cell.drawLeftBorder !== false; });
-                                    if(mergedCells.length > 0) {
-                                        mergedCells.forEach(pdfCell => pdfCell.drawLeftBorder = false);
+                                    const mergedCells = currentRow.slice(1).filter(cell => isDefined(cell.colSpan) && cell.drawLeftBorder !== false);
+                                    for(let i = 0; i < mergedCells.length; i++) {
+                                        mergedCells[i].drawLeftBorder = false;
                                     }
                                 }
                                 pdfCell.drawLeftBorder = false;
