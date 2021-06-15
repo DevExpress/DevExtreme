@@ -101,7 +101,7 @@ const environment = {
         this.incidentOccurred = sinon.spy();
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
@@ -520,7 +520,11 @@ QUnit.module('Axis shift', environment2DTranslator);
 QUnit.test('axis without shifting', function(assert) {
     this.options.isHorizontal = false;
     const axis = this.createDrawnAxis({ position: 'left' });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 0);
+
+    assert.equal(labelsGroup.returnValue.attr.callCount, 1);
 });
 
 QUnit.test('axis shifted', function(assert) {
@@ -528,7 +532,13 @@ QUnit.test('axis shifted', function(assert) {
     const axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 40);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: 40
+    });
 });
 
 QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
@@ -537,7 +547,12 @@ QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
     const axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 20);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: -20
+    });
 });
 
 QUnit.module('API methods', environment2DTranslator);

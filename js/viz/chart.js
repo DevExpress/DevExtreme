@@ -560,13 +560,6 @@ const dxChart = AdvancedChart.inherit({
         axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
-    // for async templates. Should be fixed
-    _cleanGroups() {
-        this._getAllAxes().forEach(a => a.beforeCleanGroups());
-        this.callBase();
-        this._getAllAxes().forEach(a => a.afterCleanGroups());
-    },
-
     _axesBoundaryPositioning() {
         const that = this;
         const allAxes = that._getAllAxes();
