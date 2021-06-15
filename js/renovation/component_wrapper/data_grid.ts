@@ -1,10 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import Component from './common/component';
+import Component, { ComponentWrapperProps } from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent } from './common/types';
 import type { OptionChangedEvent } from '../../ui/data_grid';
+
+import { themeReadyCallback } from '../../ui/themes_callback';
+import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
+
+let dataGridClass: {
+  defaultOptions: (options: unknown) => void;
+} | undefined = undefined;
+
+/* istanbul ignore next */
+componentRegistratorCallbacks.add((name, componentClass) => {
+  if (name === 'dxDataGrid') {
+    dataGridClass = componentClass;
+  }
+});
 
 export default class DataGridWrapper extends Component {
   static registerModule = gridCore.registerModule.bind(gridCore);
@@ -12,6 +26,11 @@ export default class DataGridWrapper extends Component {
   _onInitialized!: Function;
 
   _skipInvalidate = false;
+
+  constructor(element: Element, options: ComponentWrapperProps) {
+    /* istanbul ignore next */
+    super(element, (dataGridClass?.defaultOptions({}), options));
+  }
 
   state(state?: Record<string, unknown>): Record<string, unknown> | undefined {
     const internalInstance = this._getInternalInstance();
@@ -157,3 +176,5 @@ export default class DataGridWrapper extends Component {
     ]);
   }
 }
+
+themeReadyCallback.add();
