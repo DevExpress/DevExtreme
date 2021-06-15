@@ -20,8 +20,8 @@ module.exports = {
     coveragePathIgnorePatterns: [
         './js/renovation/component_wrapper/common/editor.ts',
         './js/renovation/component_wrapper/utils/utils.ts',
-        './js/renovation/component_wrapper/button.ts',
-        './js/renovation/component_wrapper/check_box.ts',
+        './js/renovation/component_wrapper/editors/button.ts',
+        './js/renovation/component_wrapper/editors/check_box.ts',
         './js/renovation/component_wrapper/grid_pager.ts',
         './js/renovation/component_wrapper/scheduler_header_panel.ts',
         './js/renovation/component_wrapper/scroll_view.ts',
