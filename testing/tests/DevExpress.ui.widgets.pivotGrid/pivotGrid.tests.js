@@ -7355,7 +7355,7 @@ QUnit.module('Data area', () => {
             assert.equal(pivot.getDataSource().isEmpty(), true, 'data source is empty');
         });
 
-        QUnit.test('field.visible:false -> field1.visible:true]', function(assert) {
+        QUnit.test('field.visible:false -> field.visible:true]', function(assert) {
             let dataAreaCellPreparedCallCount = 0;
             const pivot = $('#pivotGrid').dxPivotGrid({
                 onCellPrepared: function(e) {
