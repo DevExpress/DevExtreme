@@ -36,4 +36,27 @@ describe("two-way binding", () => {
             done();
         });
     });
+
+    it("v-model with argument works correctly", async (done) => {
+        const vm = defineComponent({
+            template:
+                `<dx-text-box id="component1" v-model:value="testValue"></dx-text-box>
+                 <dx-text-box id="component2" v-model:value="testValue"></dx-text-box>
+                `,
+            components: {
+                DxTextBox
+            },
+            props: {
+                testValue: String
+            }
+        });
+        const wrapper = mount(vm);
+        const component = wrapper.getComponent("#component2").vm as any as IConfigurable;
+        component.$_config.updateValue = jest.fn();
+        wrapper.setProps({ testValue: "test" });
+        nextTick(() => {
+            expect(component.$_config.updateValue).toBeCalled();
+            done();
+        });
+    });
 });
