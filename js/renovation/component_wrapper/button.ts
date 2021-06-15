@@ -89,9 +89,9 @@ export default class ButtonWrapper extends Component {
 
   _findGroup(): any {
     const $element = this.$element();
-    const validationGroup = this.option('validationGroup')
+    const validationGroup = this.option('validationGroup');
     return isDefined(validationGroup) && validationGroup !== ''
-    ? validationGroup
-    : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+      ? validationGroup
+      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
