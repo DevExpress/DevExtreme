@@ -1,14 +1,17 @@
+import { isDefined } from '../../core/utils/type';
 import { createResourceManager, removeResourceManager } from './resources/resourceManager';
 import { createAppointmentDataProvider, removeAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 
 let tailIndex = -1;
 export const createFactoryInstances = (options) => {
-    ++tailIndex;
+    const key = isDefined(options.key)
+        ? options.key
+        : ++tailIndex;
 
-    createResourceManager(tailIndex, options.resources);
-    createAppointmentDataProvider(tailIndex, options);
+    createResourceManager(key, options.resources);
+    createAppointmentDataProvider(key, options);
 
-    return tailIndex;
+    return key;
 };
 
 export const disposeFactoryInstances = (key) => {

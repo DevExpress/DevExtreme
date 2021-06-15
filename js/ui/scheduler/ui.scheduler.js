@@ -581,9 +581,7 @@ class Scheduler extends Widget {
                 break;
             case 'resources':
 
-                getResourceManager(this.key).setResources(this.option('resources'));
-
-                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+                this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
                     this._appointments.option('items', []);
@@ -594,6 +592,9 @@ class Scheduler extends Widget {
             case 'startDayHour':
             case 'endDayHour':
                 this.fire('validateDayHours');
+
+                this.updateFactoryInstances();
+
                 this._appointments.option('items', []);
                 this._updateOption('workSpace', name, value);
                 this._appointments.repaint();
@@ -944,15 +945,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this.key = createFactoryInstances({
-            scheduler: this,
-            resources: this.option('resources'),
-            dataSource: this._dataSource,
-            appointmentDataAccessors: this._dataAccessors,
-            startDayHour: this._getCurrentViewOption('startDayHour'),
-            endDayHour: this._getCurrentViewOption('endDayHour'),
-            appointmentDuration: this._getCurrentViewOption('cellDuration')
-        });
+        this.updateFactoryInstances();
 
         this._initActions();
 
@@ -968,6 +961,19 @@ class Scheduler extends Widget {
             getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
             getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || this.option('timeZone'), date),
             getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
+    }
+
+    updateFactoryInstances() {
+        this.key = createFactoryInstances({
+            key: this.key,
+            scheduler: this,
+            resources: this.option('resources'),
+            dataSource: this._dataSource,
+            appointmentDataAccessors: this._dataAccessors,
+            startDayHour: this._getCurrentViewOption('startDayHour'),
+            endDayHour: this._getCurrentViewOption('endDayHour'),
+            appointmentDuration: this._getCurrentViewOption('cellDuration')
         });
     }
 

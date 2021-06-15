@@ -46,7 +46,7 @@ export class AppointmentDataProvider {
             dataAccessors: this.dataAccessors,
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
-            appointmentDuration: this.options.endDayHour,
+            appointmentDuration: this.options.appointmentDuration,
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
@@ -135,8 +135,8 @@ const appointmentDataProviders = { };
 export const createAppointmentDataProvider = (key, options) => {
     const validKey = key || 0;
     appointmentDataProviders[validKey] = new AppointmentDataProvider({
-        key,
-        ...options
+        ...options,
+        key
     });
 };
 
