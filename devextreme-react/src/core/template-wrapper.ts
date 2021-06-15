@@ -24,6 +24,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
   private readonly _removalListenerRef = React.createRef<HTMLElement>();
 
   private element: HTMLElement | undefined | null;
+
   private hiddenElement: HTMLElement | undefined | null;
 
   constructor(props: ITemplateWrapperProps) {
@@ -53,7 +54,7 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
     if (node) {
       container.appendChild(node);
     }
-    if(hiddenNode) {
+    if (hiddenNode) {
       container.appendChild(hiddenNode);
     }
     if (this._listenerElement) {

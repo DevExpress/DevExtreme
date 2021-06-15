@@ -33,6 +33,7 @@ class NestedComponent extends ConfigurationComponent<{
   a?: number;
   b?: string;
   c?: string;
+  arrayValue?: Array<unknown> | null;
   defaultC?: string;
   complexValue?: Record<string, unknown>;
   value?: number;
@@ -902,6 +903,34 @@ describe('onXXXChange', () => {
       fireOptionChange('items[1].nestedOption.value', '4');
       expect(onSubNestedPropChange).toHaveBeenCalledTimes(1);
       expect(onSubNestedPropChange).toBeCalledWith('4');
+    });
+
+    it('is called on nested array option changed', () => {
+      render(
+        <TestComponent>
+          <NestedComponent
+            arrayValue={[1, 2]}
+          />
+        </TestComponent>,
+      );
+      fireOptionChange('nestedOption.arrayValue', [3, 4]);
+      jest.runAllTimers();
+      expect(Widget.option.mock.calls.length).toEqual(1);
+      expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.arrayValue', [1, 2]]);
+    });
+
+    it('is called on nested null array option changed', () => {
+      render(
+        <TestComponent>
+          <NestedComponent
+            arrayValue={null}
+          />
+        </TestComponent>,
+      );
+      fireOptionChange('nestedOption.arrayValue', [1, 2]);
+      jest.runAllTimers();
+      expect(Widget.option.mock.calls.length).toEqual(1);
+      expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.arrayValue', null]);
     });
 
     it('throws an error if handler is not a function', () => {

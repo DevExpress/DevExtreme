@@ -44,7 +44,7 @@ enum BaseTypes {
   String = 'string',
   Number = 'number',
   Boolean = 'boolean',
-  Object = 'object'
+  Object = 'object',
 }
 
 export function mapSubscribableOption(prop: IProp): ISubscribableOption {
