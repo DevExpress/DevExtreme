@@ -14,7 +14,7 @@ export const getFirstDayOfWeek = (
   firstDayOfWeek: number,
 ): number => {
   const isFirstDayOfWeekInIncludedDays = includedDays.includes(firstDayOfWeek);
-  const sortedIncludedDays = includedDays.slice().sort();
+  const sortedIncludedDays = includedDays.slice().sort((a, b) => a - b);
 
   return isFirstDayOfWeekInIncludedDays
     ? firstDayOfWeek
