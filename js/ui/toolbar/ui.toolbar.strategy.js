@@ -3,21 +3,16 @@ import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
 import Class from '../../core/class';
-import Button from '../button';
+
 const abstract = Class.abstract;
 
 const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
-const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
+
 
 const ToolbarStrategy = Class.inherit({
 
     ctor: function(toolbar) {
         this._toolbar = toolbar;
-    },
-
-    render: function() {
-        this._renderMenuButton();
-        this._renderWidget();
     },
 
     _widgetOptions: function() {
@@ -26,7 +21,7 @@ const ToolbarStrategy = Class.inherit({
         return {
             itemTemplate: this._getMenuItemTemplate.bind(this),
             onItemClick: (function(e) {
-                this._toggleMenu(false, true);
+                this._toolbar.option('overflowMenuVisible', false); // TODO: for actionSheet only
                 itemClickAction(e);
             }).bind(this)
         };
@@ -39,13 +34,13 @@ const ToolbarStrategy = Class.inherit({
     _renderWidget: function() {
         const $menu = $('<div>').appendTo(this._menuContainer());
 
-        this._menu = this._toolbar._createComponent($menu, this._menuWidgetClass(), this._widgetOptions());
+        this._menu = this._toolbar._createComponent($menu, this._menuWidget(), this._widgetOptions());
         this.renderMenuItems();
     },
 
     _menuContainer: abstract,
 
-    _menuWidgetClass: abstract,
+    _menuWidget: abstract,
 
     _hasVisibleMenuItems: function(items) {
         const menuItems = items || this._toolbar.option('items');
@@ -72,25 +67,6 @@ const ToolbarStrategy = Class.inherit({
 
     _updateMenuVisibility: noop,
 
-    _renderMenuButton: function() {
-        const buttonOptions = this._menuButtonOptions();
-
-        this._renderMenuButtonContainer();
-        this._$button = $('<div>').appendTo(this._$menuButtonContainer)
-            .addClass(TOOLBAR_MENU_BUTTON_CLASS);
-        this._toolbar._createComponent(this._$button, Button, buttonOptions);
-    },
-
-    _menuButtonOptions: function() {
-        return {
-            onClick: this._menuButtonClickHandler.bind(this)
-        };
-    },
-
-    _menuButtonClickHandler: function() {
-        this._toggleMenu(!this._menuShown, true);
-    },
-
     _renderMenuButtonContainer: function() {
         const $afterSection = this._toolbar._$afterSection;
 
@@ -101,18 +77,6 @@ const ToolbarStrategy = Class.inherit({
 
     renderMenuItems: function() {
         this._menu && this._menu.option('items', this._getMenuItems());
-    },
-
-    toggleMenuVisibility: function(visible, animate) {
-        this._menu && this._toggleMenu(visible, animate);
-    },
-
-    _toggleMenu: function(visible) {
-        this._menuShown = visible;
-    },
-
-    getMenuWidget: function() {
-        return this._menu;
     },
 
     widgetOption: function(name, value) {

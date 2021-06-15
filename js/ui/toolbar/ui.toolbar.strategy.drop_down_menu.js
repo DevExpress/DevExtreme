@@ -29,19 +29,21 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         }
     },
 
-    _menuWidgetClass: function() {
+    _menuWidget: function() {
         return DropDownMenu;
     },
 
     _widgetOptions: function() {
-        const that = this;
         return extend(this.callBase(), {
             deferRendering: true,
-            container: that._toolbar.option('menuContainer'),
+            container: this._toolbar.option('menuContainer'),
             menuWidget: ToolbarMenu,
-            onOptionChanged: function(e) {
-                if(e.name === 'items') {
-                    that._updateMenuVisibility(e.value);
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'opened') {
+                    this._toolbar.option('overflowMenuVisible', value);
+                }
+                if(name === 'items') {
+                    this._updateMenuVisibility(value);
                 }
             },
             popupPosition: {
@@ -63,16 +65,6 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         }
 
         this._menuContainer().toggleClass(MENU_INVISIBLE_CLASS, !value);
-    },
-
-    _toggleMenu: function() {
-        this.callBase.apply(this, arguments);
-
-        if(this._menuShown) {
-            this._menu.open();
-        } else {
-            this._menu.close();
-        }
     },
 
     _menuContainer: function() {
