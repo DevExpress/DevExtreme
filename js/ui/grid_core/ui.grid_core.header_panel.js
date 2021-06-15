@@ -75,7 +75,7 @@ const HeaderPanel = ColumnsView.inherit({
                 return button;
             }
 
-            return extend(button, defaultButtonsByNames[button.name]);
+            return extend(defaultButtonsByNames[button.name], button);
         }));
     },
 
