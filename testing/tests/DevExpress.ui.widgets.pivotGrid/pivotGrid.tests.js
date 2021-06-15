@@ -7404,7 +7404,7 @@ QUnit.module('Data area', () => {
             this.clock.tick();
 
             assert.equal(dataAreaCellPreparedCallCount, 4, 'cellPreparedCallback call count');
-            assert.equal(getDataAreaVisibleText(pivot), '5555', 'No data message is rendered');
+            assert.equal(getDataAreaVisibleText(pivot), '5555', 'Valid message is rendered');
             assert.equal(pivot.getDataSource().getAreaFields('data').length, 2, 'field still exists in dataArea fields');
             assert.equal(pivot.getDataSource().isEmpty(), false, 'data source is empty');
         });
