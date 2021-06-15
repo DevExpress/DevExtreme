@@ -29,9 +29,10 @@ const stylingModes = ['outlined', 'text', 'contained'];
 
 const getCssClasses = (model: ButtonProps): string => {
   const {
-    text, icon, stylingMode, type, iconPosition,
+    text, icon, type, iconPosition,
   } = model;
-  const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
+  const stylingMode = model.stylingMode ?? 'contained';
+  const isValidStylingMode = stylingModes.includes(stylingMode);
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,

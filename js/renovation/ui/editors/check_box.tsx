@@ -79,7 +79,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
+      <input ref={viewModel.inputRef} type="hidden" value={`${String(viewModel.props.value)}`} {...name && { name }} />
       <div className="dx-checkbox-container">
         <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
@@ -245,14 +245,14 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
     const result: Record<string, string> = {
       role: 'checkbox',
-      checked: indeterminate ? 'mixed' : `${checked}`,
+      checked: indeterminate ? 'mixed' : `${String(checked)}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
     };
 
     if (this.shouldShowValidationMessage) {
       // eslint-disable-next-line spellcheck/spell-checker
-      result.describedby = `dx-${new Guid()}`;
+      result.describedby = `dx-${String(new Guid())}`;
     }
 
     return result;
