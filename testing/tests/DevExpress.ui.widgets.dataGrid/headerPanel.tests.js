@@ -752,5 +752,72 @@ QUnit.module('Draw buttons in header panel', {
         // assert
         assert.equal(callCountClick, 1, 'call count click');
     });
-});
 
+    QUnit.test('Add custom button via toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [
+                {
+                    widget: 'dxButton',
+                    options: {
+                        text: 'Custom button',
+                        icon: 'back',
+                        width: 50
+                    },
+                    location: 'after',
+                    locateInMenu: 'auto'
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button count');
+        assert.equal($button.text(), 'Custom button', 'text of the custom button');
+    });
+
+    QUnit.test('Change default button settings via toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.columnChooser = {
+            enabled: true,
+            title: 'Column chooser'
+        };
+
+        this.options.editing = {
+            allowAdding: true
+        };
+
+        this.options.toolbar = {
+            items: [
+                {
+                    name: 'columnChooserButton',
+                    location: 'before'
+                },
+                {
+                    name: 'addRowButton',
+                    location: 'before'
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $buttonsBefore = $testElement.find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+});

@@ -2204,6 +2204,55 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
     });
+
+    QUnit.test('Change button settings via toolbar.items option in runtime', function(assert) {
+        // arrange
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1].location', 'after');
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
