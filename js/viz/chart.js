@@ -701,6 +701,10 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
+    _executeAppendAfterSeries(append) {
+        append();
+    },
+
     _prepareToRender(drawOptions) {
         const panesBorderOptions = this._createPanesBorderOptions();
 
