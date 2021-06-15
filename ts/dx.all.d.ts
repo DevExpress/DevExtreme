@@ -18901,12 +18901,7 @@ declare module DevExpress.ui {
   /**
    * [descr:dxToolbar]
    */
-  export class dxToolbar extends CollectionWidget<dxToolbarOptions> {
-    /**
-     * [descr:dxToolbar.toggleMenuVisibility(showing)]
-     */
-    toggleMenuVisibility(showing: boolean): void;
-  }
+  export class dxToolbar extends CollectionWidget<dxToolbarOptions> {}
   module dxToolbar {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxToolbar>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxToolbar>;
