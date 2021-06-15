@@ -94,7 +94,15 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxToolbar extends CollectionWidget<dxToolbarOptions> { }
+export default class dxToolbar extends CollectionWidget<dxToolbarOptions> {
+    /**
+     * @docid
+     * @publicName toggleMenuVisibility(showing)
+     * @param1 showing:boolean
+     * @public
+     */
+    toggleMenuVisibility(showing: boolean): void;
+}
 
 /**
  * @docid

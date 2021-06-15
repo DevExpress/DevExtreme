@@ -415,6 +415,54 @@ QUnit.module('toolbar with menu', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('dropDownMenu not exist, items: { locateInMenu: always, text: item2 }, call toggleMenuVisibility(true) does not fire any errors', function(assert) {
+        this.element.dxToolbar({
+            items: [
+                { locateInMenu: 'never', text: 'item2' }
+            ],
+            submenuType: 'dropDownMenu'
+        });
+
+        this.instance.toggleMenuVisibility(true);
+
+        assert.ok(true);
+    });
+
+    QUnit.test('dropDownMenu.opened = false, items: { locateInMenu: always, text: item2 }, open dropDownMenu after call toggleMenuVisibility(true), ', function(assert) {
+        this.element.dxToolbar({
+            items: [
+                { locateInMenu: 'always', text: 'item2' }
+            ],
+            submenuType: 'dropDownMenu'
+        });
+
+        this.instance.toggleMenuVisibility(true);
+
+        const $button = this.element.find('.' + DROP_DOWN_MENU_CLASS);
+        const ddMenu = $button.dxDropDownMenu('instance');
+
+        assert.equal(ddMenu.option('opened'), true, 'menu is opened');
+    });
+
+    QUnit.test('dropDownMenu.opened = true, items: { locateInMenu: always, text: item2 }, close dropDownMenu after call toggleMenuVisibility(false),', function(assert) {
+        this.element.dxToolbar({
+            items: [
+                { locateInMenu: 'always', text: 'item2' }
+            ],
+            submenuType: 'dropDownMenu'
+        });
+
+        const $button = this.element.find('.' + DROP_DOWN_MENU_CLASS);
+        $button.trigger('dxclick');
+
+        const ddMenu = $button.dxDropDownMenu('instance');
+        assert.equal(ddMenu.option('opened'), true, 'menu is opened');
+
+        this.instance.toggleMenuVisibility(false);
+
+        assert.equal(ddMenu.option('opened'), false, 'menu is closed');
+    });
+
     QUnit.test('menu button click doesn\'t dispatch action', function(assert) {
         let count = 0;
         this.element.dxToolbar({

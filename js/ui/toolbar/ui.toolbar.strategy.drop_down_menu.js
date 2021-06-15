@@ -65,6 +65,16 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         this._menuContainer().toggleClass(MENU_INVISIBLE_CLASS, !value);
     },
 
+    _toggleMenu: function() {
+        this.callBase.apply(this, arguments);
+
+        if(this._menuShown) {
+            this._menu.open();
+        } else {
+            this._menu.close();
+        }
+    },
+
     _menuContainer: function() {
         return this._$menuButtonContainer;
     }

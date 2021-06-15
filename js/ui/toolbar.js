@@ -316,6 +316,17 @@ const Toolbar = ToolbarBase.inherit({
     },
 
     /**
+     * @docid
+     * @publicName toggleMenuVisibility(showing)
+     * @param1 showing:boolean
+     * @public
+     */
+
+    toggleMenuVisibility: function(showing) {
+        this._menuStrategy.toggleMenuVisibility(showing, true);
+    }
+
+    /**
      * @name dxToolbar.registerKeyHandler
      * @publicName registerKeyHandler(key, handler)
      * @hidden
