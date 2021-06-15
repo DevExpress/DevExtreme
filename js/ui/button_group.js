@@ -33,7 +33,7 @@ const ButtonCollection = CollectionWidget.inherit({
             item: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                    _templateData: model,
+                    _templateData: data,
                     template: model.template || this.option('buttonTemplate')
                 }));
             }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'))
