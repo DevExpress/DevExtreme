@@ -13,7 +13,8 @@ let dataGridClass: {
   defaultOptions: (options: unknown) => void;
 } | undefined = undefined;
 
-/* istanbul ignore next */
+/* istanbul ignore next: temporary workaround */
+// TODO remove when defaultOptionRules initialization problem will be fixed
 componentRegistratorCallbacks.add((name, componentClass) => {
   if (name === 'dxDataGrid') {
     dataGridClass = componentClass;
@@ -27,8 +28,9 @@ export default class DataGridWrapper extends Component {
 
   _skipInvalidate = false;
 
+  // TODO remove when defaultOptionRules initialization problem will be fixed
   constructor(element: Element, options: ComponentWrapperProps) {
-    /* istanbul ignore next */
+    /* istanbul ignore next: temporary workaround */
     super(element, (dataGridClass?.defaultOptions({}), options));
   }
 
