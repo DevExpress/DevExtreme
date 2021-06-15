@@ -7313,5 +7313,101 @@ QUnit.module('Data area', () => {
 
         clock.restore();
     });
+
+    QUnit.module('T1003928', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        function getDataAreaVisibleText(pivotGrid) {
+            return pivotGrid._dataArea
+                .element()
+                .children(':visible')
+                .text()
+                .trim();
+        }
+
+        QUnit.test('field.visible:false]', function(assert) {
+            let dataAreaCellPreparedCallCount = 0;
+            const pivot = $('#pivotGrid').dxPivotGrid({
+                onCellPrepared: function(e) {
+                    if(e.area === 'data') {
+                        dataAreaCellPreparedCallCount++;
+                    }
+                },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum', visible: false }
+                    ],
+                    store: [ { row1: 'r1', col1: 'c1', amount: 5 } ]
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+
+            assert.equal(dataAreaCellPreparedCallCount, 0, 'cellPreparedCallback call count');
+            assert.equal(getDataAreaVisibleText(pivot), 'No data', 'No data message is rendered');
+            assert.equal(pivot.getDataSource().getAreaFields('data').length, 1, 'field still exists in dataArea fields');
+            assert.equal(pivot.getDataSource().isEmpty(), true, 'data source is empty');
+        });
+
+        QUnit.test('field.visible:false -> field1.visible:true]', function(assert) {
+            let dataAreaCellPreparedCallCount = 0;
+            const pivot = $('#pivotGrid').dxPivotGrid({
+                onCellPrepared: function(e) {
+                    if(e.area === 'data') {
+                        dataAreaCellPreparedCallCount++;
+                    }
+                },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum', visible: false }
+                    ],
+                    store: [ { row1: 'r1', col1: 'c1', amount: 5 } ]
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+
+            pivot.getDataSource().field('amount', { visible: true });
+            pivot.getDataSource().load();
+            this.clock.tick();
+
+            assert.equal(dataAreaCellPreparedCallCount, 4, 'cellPreparedCallback call count');
+            assert.equal(getDataAreaVisibleText(pivot), '5555', 'Valid message is rendered');
+            assert.equal(pivot.getDataSource().isEmpty(), false, 'data source is empty');
+        });
+
+        QUnit.test('field1.visible:false,field2.visible=true, field2 refers to data in field1]', function(assert) {
+            let dataAreaCellPreparedCallCount = 0;
+            const pivot = $('#pivotGrid').dxPivotGrid({
+                onCellPrepared: function(e) {
+                    if(e.area === 'data') {
+                        dataAreaCellPreparedCallCount++;
+                    }
+                },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum', visible: false },
+                        { area: 'data', summaryType: 'sum', calculateSummaryValue: (e) => e.value('amount') }
+                    ],
+                    store: [ { row1: 'r1', col1: 'c1', amount: 5 } ]
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+
+            assert.equal(dataAreaCellPreparedCallCount, 4, 'cellPreparedCallback call count');
+            assert.equal(getDataAreaVisibleText(pivot), '5555', 'No data message is rendered');
+            assert.equal(pivot.getDataSource().getAreaFields('data').length, 2, 'field still exists in dataArea fields');
+            assert.equal(pivot.getDataSource().isEmpty(), false, 'data source is empty');
+        });
+    });
 });
 
