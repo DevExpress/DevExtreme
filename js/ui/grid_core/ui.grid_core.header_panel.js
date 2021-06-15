@@ -7,6 +7,7 @@ import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 
 import '../drop_down_menu';
+import { extend } from '../../core/utils/extend';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
@@ -65,7 +66,7 @@ const HeaderPanel = ColumnsView.inherit({
             defaultButtonsByNames[button.name] = button;
         });
 
-        return userItems.map(button => {
+        return extend(true, [], userItems.map(button => {
             if(isString(button)) {
                 button = { name: button };
             }
@@ -74,8 +75,8 @@ const HeaderPanel = ColumnsView.inherit({
                 return button;
             }
 
-            return { ...button, ...defaultButtonsByNames[button.name] };
-        });
+            return extend(button, defaultButtonsByNames[button.name]);
+        }));
     },
 
     _renderCore: function() {
@@ -146,6 +147,10 @@ const HeaderPanel = ColumnsView.inherit({
         if(args.name === 'onToolbarPreparing') {
             this._invalidate();
             args.handled = true;
+        }
+        if(args.name === 'toolbar') {
+            const toolbarOptionName = args.fullName.split('.').slice(1).join('.');
+            this._toolbar.option(toolbarOptionName, args.value);
         }
         this.callBase(args);
     },
