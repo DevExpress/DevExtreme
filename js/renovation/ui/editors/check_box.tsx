@@ -36,7 +36,7 @@ const getCssClasses = (model: CheckBoxProps): string => {
     'dx-state-readonly': Boolean(readOnly),
     'dx-checkbox-checked': Boolean(checked),
     'dx-checkbox-has-text': Boolean(text),
-    'dx-invalid': !(isValid ?? false),
+    'dx-invalid': isValid !== true,
     'dx-checkbox-indeterminate': indeterminate,
   };
   return combineClasses(classesMap);
