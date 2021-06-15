@@ -16,8 +16,6 @@
 <script>
 import 'devextreme/localization/globalize/date';
 
-import Globalize from 'globalize';
-
 import Query from 'devextreme/data/query';
 
 import { moviesData } from './data.js';
@@ -44,12 +42,8 @@ export default {
   data() {
     return {
       dayOfWeekNames: dayOfWeekNames,
-      Globalize: Globalize,
       movieData: getMovieById(this.templateTooltipModel.appointmentData.movieId)
     };
-  },
-  mounted() {
-    Globalize.locale('en');
   },
 };
 </script>
