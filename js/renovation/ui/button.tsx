@@ -31,10 +31,10 @@ const getCssClasses = (model: ButtonProps): string => {
   const {
     text, icon, stylingMode, type, iconPosition,
   } = model;
-  const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
+  const isValidStylingMode = (stylingMode && stylingModes.includes(stylingMode)) ?? false;
   const classesMap = {
     'dx-button': true,
-    [`dx-button-mode-${isValidStylingMode ?? false ? stylingMode : 'contained'}`]: true,
+    [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
     [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': Boolean(text),
     'dx-button-has-icon': Boolean(icon),

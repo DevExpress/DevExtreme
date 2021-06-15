@@ -125,6 +125,7 @@ export default class Editor extends Component {
   }
 }
 
-const prevIsEditor = (OldEditor as unknown as { isEditor }).isEditor;
-(OldEditor as unknown as { isEditor })
-  .isEditor = (instance): boolean => Boolean(prevIsEditor(instance)) || instance instanceof Editor;
+const prevIsEditor = (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
+  .isEditor;
+(OldEditor as unknown as { isEditor: (instance: Component) => boolean })
+  .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
