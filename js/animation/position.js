@@ -344,8 +344,10 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
-// NOTE: Hack for setting 'element.style.transform.scale' by inline style
-//       For case naming an input on a form that has a dx-validator as "style" (T941581)
+// NOTE: Setting the 'element.style.transform.scale' requires the inline style when both of the conditions met:
+//       - a form contains an input with the name property set to "style";
+//       - a form contains a dx-validator (or other popup widget).
+//       T941581
 const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
     const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
     if(stylePropIsValid) {
