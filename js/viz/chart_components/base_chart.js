@@ -421,6 +421,11 @@ export const BaseChart = BaseWidget.inherit({
                 this.above.linkAppend();
             }
         };
+        that._labelsAxesGroup = renderer.g().attr({ 'class': 'dxc-elements-axes-group' });
+
+        const appendLabelsAxesGroup = () => {
+            that._labelsAxesGroup.linkOn(root, 'elements');
+        };
 
         that._backgroundRect = renderer.rect().attr({ fill: 'gray', opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ 'class': 'dxc-background' }).append(root);
@@ -429,10 +434,11 @@ export const BaseChart = BaseWidget.inherit({
         that._gridGroup = renderer.g().attr({ 'class': 'dxc-grids-group' }).linkOn(root, 'grids'); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ 'class': 'dxc-border' }).linkOn(root, 'border'); // TODO: Must be created in the same place where used (chart)
         that._axesGroup = renderer.g().attr({ 'class': 'dxc-axes-group' }).linkOn(root, 'axes'); // TODO: Must be created in the same place where used (advanced chart)
+        that._executeAppendBeforeSeries(appendLabelsAxesGroup);
         that._stripLabelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ 'class': 'dxc-series-group' }).linkOn(root, 'series');
-        that._labelsAxesGroup = renderer.g().attr({ 'class': 'dxc-elements-axes-group' }).linkOn(root, 'elements');
+        that._executeAppendAfterSeries(appendLabelsAxesGroup);
         that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ 'class': 'dxc-scale-breaks' }).linkOn(root, 'scale-breaks');
         that._labelsGroup = renderer.g().attr({ 'class': 'dxc-labels-group' }).linkOn(root, 'labels');
@@ -440,6 +446,10 @@ export const BaseChart = BaseWidget.inherit({
         that._legendGroup = renderer.g().attr({ 'class': 'dxc-legend', 'clip-path': that._getCanvasClipRectID() }).linkOn(root, 'legend').linkAppend(root).enableLinks();
         that._scrollBarGroup = renderer.g().attr({ 'class': 'dxc-scroll-bar' }).linkOn(root, 'scroll-bar');
     },
+
+    _executeAppendBeforeSeries() {},
+
+    _executeAppendAfterSeries() {},
 
     _disposeObjectsInArray: function(propName, fieldNames) {
         _each(this[propName] || [], function(_, item) {
@@ -483,7 +493,6 @@ export const BaseChart = BaseWidget.inherit({
         unlinkGroup('_stripsGroup');
         unlinkGroup('_gridGroup');
         unlinkGroup('_axesGroup');
-        unlinkGroup('_labelsAxesGroup');
 
         unlinkGroup('_constantLinesGroup');
 
@@ -503,7 +512,6 @@ export const BaseChart = BaseWidget.inherit({
         disposeObject('_stripsGroup');
         disposeObject('_gridGroup');
         disposeObject('_axesGroup');
-        disposeObject('_labelsAxesGroup');
 
         disposeObject('_constantLinesGroup');
 
