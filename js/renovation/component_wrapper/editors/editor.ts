@@ -83,7 +83,7 @@ export default class Editor extends Component {
   _optionChanged(option: Option): void {
     const { name, value, previousValue } = option;
 
-    if (name && this._getActionConfigs()[name]) {
+    if (name && this._getActionConfigs()[name] !== undefined) {
       this._addAction(name);
     }
 
@@ -127,4 +127,4 @@ export default class Editor extends Component {
 
 const prevIsEditor = (OldEditor as unknown as { isEditor }).isEditor;
 (OldEditor as unknown as { isEditor })
-  .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;
+  .isEditor = (instance): boolean => Boolean(prevIsEditor(instance)) || instance instanceof Editor;
