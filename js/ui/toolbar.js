@@ -283,10 +283,6 @@ const Toolbar = ToolbarBase.inherit({
         return itemData.location === undefined || itemData.locateInMenu === 'never';
     },
 
-    _isDropDownStrategy: function() {
-        return this._menuStrategy.NAME === 'dropDownMenu';
-    },
-
     _optionChanged: function(args) {
         const { name, value } = args;
 
@@ -309,7 +305,7 @@ const Toolbar = ToolbarBase.inherit({
                 this._changeMenuOption('container', value);
                 break;
             case 'overflowMenuVisible':
-                this._changeMenuOption(this._isDropDownStrategy() ? 'opened' : 'visible', value);
+                this._changeMenuOption(this._menuStrategy.NAME === 'dropDownMenu' ? 'opened' : 'visible', value);
                 break;
             default:
                 this.callBase.apply(this, arguments);

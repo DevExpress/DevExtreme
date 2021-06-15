@@ -94,7 +94,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxToolbar extends CollectionWidget<dxToolbarOptions> {}
+export default class dxToolbar extends CollectionWidget<dxToolbarOptions> { }
 
 /**
  * @docid
