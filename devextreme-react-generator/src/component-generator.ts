@@ -87,6 +87,10 @@ const PORTAL_COMPONENTS: Set<string> = new Set([
   'dxValidationMessage',
 ]);
 
+const USE_DEFER_UPDATE_FOR_TEMPLATE: Set<string> = new Set([
+  'dxDataGrid',
+]);
+
 function getIndent(indent: number) {
   return Array(indent * 2 + 1).join(' ');
 }
@@ -322,6 +326,7 @@ const renderComponent: (model: {
   renderedTemplateProps?: string[];
   renderedPropTypings?: string[];
   isPortalComponent?: boolean;
+  useDeferUpdateFlag?: boolean;
 }) => string = createTempate(
   `class <#= it.className #> extends BaseComponent<<#= it.optionsName #>> {
 
@@ -330,6 +335,10 @@ const renderComponent: (model: {
   }
 
   protected _WidgetClass = <#= it.widgetName #>;\n`
+
++ `<#? it.useDeferUpdateFlag #>${
+  L1}protected useDeferUpdateFlag = true;\n`
++ '<#?#>'
 
 + `<#? it.isPortalComponent #>${
   L1}protected isPortalComponent = true;\n`
@@ -552,6 +561,7 @@ function generate(component: IComponent): string {
       })),
       renderedPropTypings,
       expectedChildren: component.expectedChildren,
+      useDeferUpdateFlag: USE_DEFER_UPDATE_FOR_TEMPLATE.has(widgetName),
       isPortalComponent: PORTAL_COMPONENTS.has(widgetName),
     }),
 

@@ -15,6 +15,8 @@ import { TemplateWrapperRenderer } from '../template-wrapper';
 
 jest.useFakeTimers();
 
+const waitForceUpdateFromTemplateRenderer = () => new Promise((ok) => requestAnimationFrame(ok));
+
 const templateProps = [{
   tmplOption: 'item',
   render: 'itemRender',
@@ -42,7 +44,6 @@ function renderTemplate(
   model = model || {};
   container = container || document.createElement('div');
   const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates[name];
-
   return render({
     container, model, ...(index && { index }), onRendered,
   });
@@ -209,6 +210,7 @@ function testTemplateOption(testedOption: string) {
     );
 
     renderItemTemplate({ text: 'with data' }, ref.current);
+
     expect((container.firstChild?.firstChild as HTMLDivElement).outerHTML)
       .toContain('<div>Template with data<div style=\"display: none;\"></div><span style=\"display: none;\"></span></div>');
   });
@@ -296,7 +298,8 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    const componentInstance = ref.current as unknown as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+    const componentInstance = ref.current as unknown as {
+      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
     renderItemTemplate({ text: 1 });
     renderItemTemplate({ text: 2 });
@@ -371,6 +374,7 @@ function testTemplateOption(testedOption: string) {
     );
 
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(0);
+
     expect(screen.queryByText('Template')).toBeNull();
   });
 
@@ -963,9 +967,9 @@ describe('component/render in nested options', () => {
     rerender(
       <TestContainer value="test2" />,
     );
-    jest.runAllTimers();
 
     renderTemplate('collection[0].option.item', undefined, ref.current);
+
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">test2</div>');
   });
 
@@ -1089,8 +1093,6 @@ describe('async template', () => {
     cleanup();
   });
 
-  const waitForceUpdateFromTemplateRenderer = () => new Promise((ok) => requestAnimationFrame(ok));
-
   it('renders', async () => {
     const elementOptions: Record<string, any> = {};
     elementOptions.itemRender = (data: any) => (
@@ -1108,6 +1110,7 @@ describe('async template', () => {
         <div ref={ref} />
       </ComponentWithAsyncTemplates>,
     );
+
     renderItemTemplate({ text: 'with data' }, ref.current);
 
     expect(container.querySelector('.template')).toBeNull();

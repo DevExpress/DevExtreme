@@ -15,6 +15,7 @@ import FormExample from './form-example';
 import ListExample from './list-example';
 import MapExample from './map-example';
 import PopupExample from './popup-example';
+import RerenderedChartExample from './rerendered-chart-example';
 import SchedulerExample from './scheduler-example';
 import ScrollViewExample from './scroll-view-example';
 import SelectBoxExample from './selectbox-example';
@@ -23,6 +24,7 @@ import StandaloneValidatorExample from './standalone-validator';
 import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
+import DateBoxExample from './date-box-example';
 
 ReactDOM.render(
   <div>
@@ -41,6 +43,8 @@ ReactDOM.render(
     <ChartExample />
 
     <DataGridExample />
+
+    <DateBoxExample />
 
     <DrawerExample />
 
@@ -62,11 +66,13 @@ ReactDOM.render(
       />
     </Example>
 
+    <PopupExample />
+
+    <RerenderedChartExample />
+
     <SlideOutViewExample />
 
     <ScrollViewExample />
-
-    <PopupExample />
 
     <TextBoxExample />
 

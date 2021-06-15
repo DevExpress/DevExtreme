@@ -19,6 +19,8 @@ const WidgetClass = jest.fn(() => Widget);
 class TestComponent<P = any> extends Component<P> {
   protected _WidgetClass = WidgetClass;
 
+  protected useDeferUpdateFlag = true;
+
   _createWidget(element?: Element): void {
     Widget.option.mockImplementation((name: string) => name === 'integrationOptions.useDeferUpdateForTemplates');
 
