@@ -3900,7 +3900,6 @@
               {
                 "Title": "Hierarchical Data Structure",
                 "Name": "HierarchicalDataStructure",
-                "DocUrl": "Guide/UI_Components/TreeView/Use_Hierarchical_Data/",
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/Product.cs",
