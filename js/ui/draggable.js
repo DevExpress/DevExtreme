@@ -82,7 +82,7 @@ class ScrollHelper {
     updateScrollable(elements, mousePosition) {
         const needResetScrollable = !elements.some((element) => {
             const $element = $(element);
-            const isTargetOverOverlayWrapper = $element.hasClass(OVERLAY_WRAPPER_CLASS);
+            const isTargetOverOverlayWrapper = $element.hasClass(OVERLAY_WRAPPER_CLASS) && $element.css('pointerEvents') !== 'none';
             const isTargetOverOverlayContent = $element.hasClass(OVERLAY_CONTENT_CLASS);
 
             return isTargetOverOverlayWrapper || isTargetOverOverlayContent || this._trySetScrollable(element, mousePosition);
