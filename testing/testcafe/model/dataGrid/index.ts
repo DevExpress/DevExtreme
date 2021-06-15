@@ -182,7 +182,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiColumnOption(id: any, name: any, value: any = 'empty'): Promise<any> {
+  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
     const { getGridInstance } = this;
 
     return ClientFunction(

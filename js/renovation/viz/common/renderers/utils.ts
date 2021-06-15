@@ -23,7 +23,7 @@ export interface TextItem {
   height?: number;
   line?: number;
   inherits?: boolean;
-  style?: { [key: string]: any };
+  style?: Record<string, string>;
   className?: string;
   tspan?: SVGTSpanElement;
   stroke?: SVGTSpanElement;
@@ -168,8 +168,8 @@ export const combinePathParam = (segments: Segment[]): string => {
 };
 
 function prepareConstSegment(constSeg: Segment, type: PathType): void {
-  const x: any = constSeg[constSeg.length - 2];
-  const y: any = constSeg[constSeg.length - 1];
+  const x = constSeg[constSeg.length - 2] as number | undefined;
+  const y = constSeg[constSeg.length - 1] as number | undefined;
 
   if (type === 'line' || type === 'area') {
     constSeg[0] = 'L';
@@ -250,7 +250,7 @@ function maxLengthFontSize(fontSize1?: number, fontSize2?: number): number {
   return height1 > height2 ? height1 : height2;
 }
 
-function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: any, parentClassName: string): number {
+function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: Record<string, string>, parentClassName: string): number {
   const realStyle = (node as HTMLElement).style;
 
   if (isDefined((node as Text).wholeText)) {
@@ -264,7 +264,7 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
   } else if ((node as Element).tagName === 'BR') {
     ++line;
   } else if (domAdapter.isElementNode(node)) {
-    const style = extend({}, parentStyle);
+    const style = extend({}, parentStyle) as Record<string, string>;
     switch ((node as Element).tagName) {
       case 'B':
       case 'STRONG':
@@ -342,7 +342,7 @@ export const getTextWidth = (text: TextItem): number => {
   return value.length && tspan ? tspan.getSubStringLength(0, value.length) : 0;
 };
 
-export const setTextNodeAttribute = (item: TextItem, name: string, value: any): void => {
+export const setTextNodeAttribute = (item: TextItem, name: string, value: string): void => {
   item.tspan?.setAttribute(name, value);
   item.stroke?.setAttribute(name, value);
 };
@@ -351,7 +351,7 @@ export const getItemLineHeight = (item: TextItem, defaultValue: number): number 
   item.inherits ? maxLengthFontSize(item.height, defaultValue) : Number(item.height) || defaultValue
 );
 
-export const getLineHeight = (styles: { [key: string]: any } | undefined): number => (
+export const getLineHeight = (styles: Record<string, string>): number => (
   // eslint-disable-next-line no-restricted-globals
   styles && !isNaN(parseFloat(styles[KEY_FONT_SIZE])) ? parseFloat(styles[KEY_FONT_SIZE]) : DEFAULT_FONT_SIZE
 );

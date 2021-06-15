@@ -55,7 +55,7 @@ export class RootSvgElementProps {
 
   @OneWay() filter?: string;
 
-  @OneWay() styles?: { [key: string]: any };
+  @OneWay() styles?: Record<string, string>;
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
@@ -80,7 +80,7 @@ export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
   }
 
   // https://trello.com/c/rc9RQJ2y
-  get styles(): any {
+  get styles(): Record<string, string> {
     return {
       display: 'block',
       overflow: 'hidden',
