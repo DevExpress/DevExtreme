@@ -7,7 +7,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
-import { dxToolbarItem } from 'js/ui/toolbar';
+import type { dxToolbarItem } from '../../../../../ui/toolbar';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Column,
