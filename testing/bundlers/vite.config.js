@@ -1,6 +1,4 @@
-/* eslint-disable */
-
-import rollupConfig from './rollup.config'; 
+import rollupConfig from './rollup.config';
 
 delete rollupConfig.output.file;
 
