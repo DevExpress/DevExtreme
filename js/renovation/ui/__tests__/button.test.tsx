@@ -453,7 +453,7 @@ describe('Button', () => {
         });
 
         it('should add "contained" button styling mode class when stylingMode has wrong value', () => {
-          // @ts-ignore
+          // @ts-expect-error
           expect(new Button({ stylingMode: 'textt' }).cssClasses)
             .toEqual(expect.stringMatching('dx-button-mode-contained'));
         });
