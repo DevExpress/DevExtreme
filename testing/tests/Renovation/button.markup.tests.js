@@ -25,7 +25,6 @@ const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const BUTTON_BACK_CLASS = 'dx-button-back';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
-const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 
 const moduleConfig = {
     Button(options = {}) {
@@ -83,14 +82,6 @@ QUnit.module('Button markup', moduleConfig, () => {
         });
 
         assert.ok(element.hasClass(BUTTON_TEXT_STYLE_CLASS), 'class was added');
-    });
-
-    QUnit.test('Default value should be used if stylingMode has wrong value', function(assert) {
-        const element = this.Button({
-            stylingMode: 'someWrongValue'
-        });
-
-        assert.ok(element.hasClass(BUTTON_CONTAINED_STYLE_CLASS), 'class was added');
     });
 
     QUnit.test('icon must rendered after change type of button on \'back\'', function(assert) {
