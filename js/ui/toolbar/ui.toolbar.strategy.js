@@ -118,9 +118,6 @@ const ToolbarStrategy = Class.inherit({
     widgetOption: function(name, value) {
         this._menu && this._menu.option(name, value);
     },
-
-    handleToolbarVisibilityChange: noop
-
 });
 
 export default ToolbarStrategy;
