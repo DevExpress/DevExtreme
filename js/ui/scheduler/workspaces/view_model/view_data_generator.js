@@ -719,7 +719,8 @@ export class ViewDataGenerator {
                 && index === selectedCellIndex
                 && allDay === selectedCellAllDay
             ));
-            const isFocused = index === focusedCell.cellData.index
+            const isFocused = !!focusedCell
+                && index === focusedCell.cellData.index
                 && groupIndex === focusedCell.cellData.groupIndex
                 && allDay === focusedCell.cellData.allDay;
 

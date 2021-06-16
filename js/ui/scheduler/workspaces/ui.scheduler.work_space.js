@@ -165,6 +165,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     get cellsSelectionState() {
         if(!this._cellsSelectionState) {
             this._cellsSelectionState = new CellsSelectionState(this.viewDataProvider);
+
+            const selectedCellsOption = this.option('selectedCellData');
+
+            selectedCellsOption && this._cellsSelectionState.setSelectedCellsByData(selectedCellsOption);
         }
 
         return this._cellsSelectionState;
