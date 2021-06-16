@@ -12,6 +12,7 @@ const getNestedOptionValue = require('core/options/utils').getNestedOptionValue;
 const ActionSheet = require('ui/action_sheet');
 const Accordion = require('ui/accordion');
 const Box = require('ui/box');
+const Button = require('ui/button');
 const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
 const DateBox = require('ui/date_box');
@@ -39,6 +40,7 @@ const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
 const SelectBox = require('ui/select_box');
+const SpeedDialAction = require('ui/speed_dial_action');
 const Tabs = require('ui/tabs');
 const TabPanel = require('ui/tab_panel');
 const TagBox = require('ui/tag_box');
@@ -107,6 +109,36 @@ testComponentDefaults(ActionSheet,
         { platform: 'ios', tablet: true }
     ],
     { usePopover: true }
+);
+
+testComponentDefaults(Button, {},
+    {
+        useInkRipple: true
+    },
+    function() {
+        this._originalIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => true;
+    },
+    function() {
+        themes.isMaterial = this._originalIsMaterial;
+    }
+);
+
+testComponentDefaults(Button, {},
+    {
+        focusStateEnabled: true
+    },
+    function() {
+        this._originalRealDevice = devices.real();
+        this._originalIsSimulator = devices.isSimulator;
+
+        devices.real({ deviceType: 'desktop' });
+        devices.isSimulator = () => false;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        devices.isSimulator = this._originalIsSimulator;
+    }
 );
 
 testComponentDefaults(NumberBox,
@@ -860,6 +892,19 @@ testComponentDefaults(TreeView,
 testComponentDefaults(SelectBox, {},
     {
         allowClearing: true
+    }
+);
+
+testComponentDefaults(SpeedDialAction, {},
+    {
+        useInkRipple: true
+    },
+    function() {
+        this._originalIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => true;
+    },
+    function() {
+        themes.isMaterial = this._originalIsMaterial;
     }
 );
 
