@@ -5,7 +5,7 @@ import {
   DateTableCellBase,
   DateTableCellBaseProps,
 } from '../cell';
-import { CellBase } from '../../cell';
+import { CellBase, CellBaseProps } from '../../cell';
 import * as combineClassesModule from '../../../../../../utils/combine_classes';
 
 const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
@@ -24,6 +24,7 @@ describe('DateTableCellBase', () => {
       const cell = render({
         classes: 'test-class',
         dataCellTemplateProps,
+        ariaLabel: 'Custom label',
         props: {
           isFirstGroupCell: true,
           isLastGroupCell: false,
@@ -36,11 +37,16 @@ describe('DateTableCellBase', () => {
       expect(cell.hasClass('test-class'))
         .toBe(true);
       expect(cell.props())
-        .toMatchObject({
+        .toEqual({
+          ...new CellBaseProps(),
           isFirstGroupCell: true,
           isLastGroupCell: false,
           contentTemplate: dataCellTemplate,
           contentTemplateProps: dataCellTemplateProps,
+          ariaLabel: 'Custom label',
+          className: 'test-class',
+          startDate: expect.any(Date),
+          endDate: expect.any(Date),
         });
     });
 
@@ -58,7 +64,7 @@ describe('DateTableCellBase', () => {
         afterEach(jest.resetAllMocks);
 
         it('should call combineClasses with correct parameters', () => {
-          const cell = new DateTableCellBase({ index: 0 });
+          const cell = new DateTableCellBase({ index: 0, isSelected: true, isFocused: true });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           cell.classes;
@@ -68,6 +74,8 @@ describe('DateTableCellBase', () => {
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
               'dx-scheduler-date-table-cell': true,
+              'dx-state-focused': true,
+              'dx-scheduler-focused-cell': true,
               '': true,
             });
         });
@@ -211,6 +219,27 @@ describe('DateTableCellBase', () => {
                 text: 'test text',
               },
             });
+        });
+      });
+
+      describe('aria-label', () => {
+        it('should return correct aria-label when a cell is selected', () => {
+          const cell = new DateTableCellBase({ isSelected: true });
+
+          expect(cell.ariaLabel)
+            .toBe('Add appointment');
+        });
+
+        it('should return undefined when a cell is not selected', () => {
+          const cell = new DateTableCellBase({});
+
+          expect(cell.ariaLabel)
+            .toBe(undefined);
+
+          cell.props.isSelected = false;
+
+          expect(cell.ariaLabel)
+            .toBe(undefined);
         });
       });
     });

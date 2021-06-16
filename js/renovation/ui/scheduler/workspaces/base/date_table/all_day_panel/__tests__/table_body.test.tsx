@@ -18,6 +18,8 @@ describe('AllDayPanelTableBody', () => {
       isFirstGroupCell: true,
       isLastGroupCell: false,
       key: '0',
+      isSelected: true,
+      isFocused: false,
     }, {
       startDate: new Date(2020, 7, 29),
       endDate: new Date(2020, 7, 30),
@@ -27,6 +29,8 @@ describe('AllDayPanelTableBody', () => {
       isFirstGroupCell: false,
       isLastGroupCell: true,
       key: '1',
+      isSelected: true,
+      isFocused: true,
     }];
 
     const render = (viewModel): ReactWrapper<AllDayPanelTableBody> => mount(
@@ -83,6 +87,8 @@ describe('AllDayPanelTableBody', () => {
           groups: viewData[0].groups,
           groupIndex: viewData[0].groupIndex,
           index: viewData[0].index,
+          isSelected: viewData[0].isSelected,
+          isFocused: viewData[0].isFocused,
         });
       expect(firstCell.key())
         .toBe(viewData[0].key);
@@ -97,6 +103,8 @@ describe('AllDayPanelTableBody', () => {
           groups: viewData[1].groups,
           groupIndex: viewData[1].groupIndex,
           index: viewData[1].index,
+          isSelected: viewData[1].isSelected,
+          isFocused: viewData[1].isFocused,
         });
       expect(secondCell.key())
         .toBe(viewData[1].key);

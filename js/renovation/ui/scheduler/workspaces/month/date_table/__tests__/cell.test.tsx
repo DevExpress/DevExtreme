@@ -62,12 +62,14 @@ describe('MonthDateTableCell', () => {
           isFirstGroupCell,
           isLastGroupCell,
           dataCellTemplate,
+          isFocused: true,
+          isSelected: true,
         },
         contentTemplateProps,
       });
 
       expect(cell.props())
-        .toMatchObject({
+        .toEqual({
           groups,
           groupIndex,
           index,
@@ -78,6 +80,10 @@ describe('MonthDateTableCell', () => {
           endDate,
           text,
           contentTemplateProps,
+          isFocused: true,
+          isSelected: true,
+          children: expect.anything(),
+          className: undefined,
         });
     });
   });
