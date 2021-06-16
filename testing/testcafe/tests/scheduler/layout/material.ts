@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
 
 fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, './material.html'));
+  .page(url(__dirname, '../../containerMaterial.html'));
 
 test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
