@@ -5865,6 +5865,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.lookup.valueExpr]
        */
       valueExpr?: string;
+      /**
+       * [descr:GridBaseColumn.lookup.calculateCellValue]
+       */
+      calculateCellValue?: (rowData: any) => any;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDataGrid>;
     export type ContextMenuPreparingEvent =
