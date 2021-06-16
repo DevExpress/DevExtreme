@@ -7390,6 +7390,12 @@ declare module DevExpress.ui {
        */
       valueFormat?: format;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    export interface Toolbar {
+      items?: (string | dxToolbarItem)[];
+    }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
     /**
@@ -21389,6 +21395,10 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.stateStoring]
      */
     stateStoring?: DevExpress.ui.dxDataGrid.StateStoring;
+    /**
+     * [descr:GridBaseOptions.toolbar]
+     */
+    toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
      */

@@ -55,7 +55,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import dxSortable from './sortable';
 
 import {
-    dxToolbarOptions
+    dxToolbarOptions, dxToolbarItem
 } from './toolbar';
 
 import {
@@ -1030,6 +1030,12 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @public
      */
     stateStoring?: StateStoring;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: Toolbar;
     /**
      * @docid
      * @default true
@@ -4106,6 +4112,10 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string
+}
+
+export interface Toolbar {
+  items?: (string | dxToolbarItem)[];
 }
 
 /**
