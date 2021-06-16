@@ -365,4 +365,79 @@ module('Cells Selection State', () => {
             'Correct selected cells',
         );
     });
+
+    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was saved', function(assert) {
+        const cellsSelectionState = new CellsSelectionState({
+            ...horizontalGroupingViewDataProviderMock,
+            getCellsByGroupIndexAndAllDay: () => [[
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ]],
+        });
+
+        cellsSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setSelectedCells({
+            rowIndex: 1,
+            columnIndex: 0,
+            allDay: false,
+        }, {
+            rowIndex: 1,
+            columnIndex: 1,
+            allDay: false,
+        });
+
+        cellsSelectionState.releaseSelectedAndFocusedCells();
+        cellsSelectionState.restoreSelectedAndFocusedCells();
+
+        assert.deepEqual(
+            cellsSelectionState.focusedCell.cellData,
+            testViewDataMap.horizontalGrouping[1][1].cellData,
+            'Correct focused cell data',
+        );
+        assert.deepEqual(
+            cellsSelectionState.getSelectedCells(),
+            [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
+            'Correct selected cells',
+        );
+    });
+
+    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was not saved', function(assert) {
+        const cellsSelectionState = new CellsSelectionState({
+            ...horizontalGroupingViewDataProviderMock,
+            getCellsByGroupIndexAndAllDay: () => [[
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ]],
+        });
+
+        cellsSelectionState.setFocusedCell(1, 1, false);
+        cellsSelectionState.setSelectedCells({
+            rowIndex: 1,
+            columnIndex: 0,
+            allDay: false,
+        }, {
+            rowIndex: 1,
+            columnIndex: 1,
+            allDay: false,
+        });
+
+        cellsSelectionState.restoreSelectedAndFocusedCells();
+
+        assert.deepEqual(
+            cellsSelectionState.focusedCell.cellData,
+            testViewDataMap.horizontalGrouping[1][1].cellData,
+            'Correct focused cell data',
+        );
+        assert.deepEqual(
+            cellsSelectionState.getSelectedCells(),
+            [
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ],
+            'Correct selected cells',
+        );
+    });
 });
