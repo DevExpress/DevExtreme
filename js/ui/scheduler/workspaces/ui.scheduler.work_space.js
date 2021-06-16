@@ -956,7 +956,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleGroupedClass();
         this._toggleFixedScrollableClass();
 
-        // TODO: set selected cells
         this._renderView();
         this._attachEvents();
     }
