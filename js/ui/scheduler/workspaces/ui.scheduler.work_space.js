@@ -1250,6 +1250,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             component = this._createComponent(container, componentClass, viewModel);
             this[componentName] = component;
         } else {
+            // TODO: this is a workaround for setTablesSizes. Remove after CSS refactoring
             const $element = component.$element();
             const elementStyle = $element.get(0).style;
             const height = elementStyle.height;
