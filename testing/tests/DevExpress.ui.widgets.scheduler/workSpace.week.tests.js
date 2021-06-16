@@ -3,7 +3,8 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { initFactoryInstance, stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { initFactoryInstance, stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
@@ -26,12 +27,14 @@ module('Work Space Week', () => {
     module('Default', {
         beforeEach: function() {
 
-            initFactoryInstance(() => this.instance.resources);
+            const observer = initFactoryInstance(() => this.instance.resources);
 
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                observer
             }).dxSchedulerWorkSpaceWeek('instance');
-            stubInvokeMethod(this.instance);
+
+            stubInvokeMethod(this.instance, { key: observer.key });
         }
     }, () => {
         test('Work space should find cell coordinates by date', function(assert) {
@@ -436,13 +439,22 @@ module('Work Space Week', () => {
 
     module('Group by date', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                observer
             }).dxSchedulerWorkSpaceWeek('instance');
 
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key: observer.key });
 
             this.instance.option('groups', [{
                 name: 'one',
@@ -494,9 +506,18 @@ module('Work Space Week', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+            const observer = getObserver(key);
+
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek(options).dxSchedulerWorkSpaceWeek('instance');
-                stubInvokeMethod(this.instance);
+
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ ...options, observer }).dxSchedulerWorkSpaceWeek('instance');
+                stubInvokeMethod(this.instance, { key: observer.key });
             };
         }
     }, () => {
@@ -582,8 +603,16 @@ module('Work Space Week', () => {
 module('Work Space Work Week', () => {
     module('Default', {
         beforeEach: function() {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek('instance');
-            stubInvokeMethod(this.instance);
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+            const observer = getObserver(key);
+
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ observer }).dxSchedulerWorkSpaceWorkWeek('instance');
+            stubInvokeMethod(this.instance, { key: observer.key });
         }
     }, () => {
         test('Work space should find cell coordinates by date', function(assert) {
@@ -638,9 +667,17 @@ module('Work Space Work Week', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+            const observer = getObserver(key);
+
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek(options).dxSchedulerWorkSpaceWorkWeek('instance');
-                stubInvokeMethod(this.instance);
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ ...options, observer }).dxSchedulerWorkSpaceWorkWeek('instance');
+                stubInvokeMethod(this.instance, { key: observer.key });
             };
         }
     }, () => {

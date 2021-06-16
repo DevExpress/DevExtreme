@@ -3,7 +3,6 @@ import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
-import { getResourceManager } from './resources/resourceManager';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -36,8 +35,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     create(rawAppointment) {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
-
-        const itemResources = getResourceManager().getResourcesFromItem(rawAppointment);
+        const resourceManager = this.scheduler.fire('getResourceManager');
+        const itemResources = resourceManager.getResourcesFromItem(rawAppointment);
 
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 

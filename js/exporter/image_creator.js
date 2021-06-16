@@ -242,7 +242,7 @@ function setFontStyle(context, options) {
     const fontParams = [];
 
     options.fontSize = options.fontSize || DEFAULT_FONT_SIZE;
-    options.fontFamily || DEFAULT_FONT_FAMILY;
+    options.fontFamily = options.fontFamily || DEFAULT_FONT_FAMILY;
     options.fill = options.fill || DEFAULT_TEXT_COLOR;
 
     options.fontStyle && fontParams.push(options.fontStyle);

@@ -11,7 +11,6 @@ import messageLocalization from '../../localization/message';
 import Popup from '../popup';
 import { AppointmentForm } from './appointment_form';
 import { hide as hideLoading, show as showLoading } from './loading';
-import { getResourceManager } from './resources/resourceManager';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -146,8 +145,9 @@ export default class AppointmentPopup {
     _createAppointmentFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
+        const resourceManager = this.scheduler.fire('getResourceManager');
 
-        each(getResourceManager().getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
+        each(resourceManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
     }
@@ -171,7 +171,8 @@ export default class AppointmentPopup {
         );
 
         if(resources && resources.length) {
-            AppointmentForm.concatResources(getResourceManager().getEditors());
+            const resourceManager = this.scheduler.fire('getResourceManager');
+            AppointmentForm.concatResources(resourceManager.getEditors());
         }
 
         return AppointmentForm.create(
@@ -382,10 +383,11 @@ export default class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
+                    const resourceManager = this.scheduler.fire('getResourceManager');
 
                     this.scheduler._workSpace.updateScrollPosition(
                         startDate,
-                        getResourceManager().getResourcesFromItem(this.state.lastEditData, true),
+                        resourceManager.getResourcesFromItem(this.state.lastEditData, true),
                         inAllDayRow,
                     );
                     this.state.lastEditData = null;

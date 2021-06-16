@@ -122,7 +122,7 @@ function checkAxisGroup(assert, createAxisArguments, chart) {
     $.each({
         axesContainerGroup: chart._axesGroup,
         constantLinesGroup: chart._constantLinesGroup,
-        labelAxesGroup: chart._labelAxesGroup,
+        stripLabelAxesGroup: chart._stripLabelAxesGroup,
         stripsGroup: chart._stripsGroup
     }, function(name, value) {
         assert.equal(renderOptions[name], value, name);

@@ -1,5 +1,5 @@
-import Component from './common/component';
-import { Option } from './common/types';
+import Component from '../common/component';
+import { Option } from '../common/types';
 
 export class ScrollViewWrapper extends Component {
   _optionChanged(option: Option): void {

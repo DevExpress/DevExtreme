@@ -13,8 +13,8 @@ import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
-import { updatePropsImmutable } from '../utils/update-props-immutable';
-import { Option, TemplateComponent } from './types';
+import { updatePropsImmutable } from '../utils/update_props_immutable';
+import type { Option, TemplateComponent } from './types';
 
 const setDefaultOptionValue = (
   options: Record<string, unknown>,
@@ -30,7 +30,7 @@ interface ElementAttributes extends Record<string, unknown> {
   class: string;
 }
 
-interface ComponentWrapperProps extends Record<string, unknown> {
+export interface ComponentWrapperProps extends Record<string, unknown> {
   onContentReady?: (e: Record<string, unknown>) => void;
   elementAttr?: ElementAttributes;
 }
@@ -104,7 +104,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _fireContentReady(): void {
-    this.option('onContentReady')?.({ component: this, element: this.$element() });
+    this._actionsMap.onContentReady({});
   }
 
   _getDefaultOptions(): Record<string, unknown> {
@@ -160,8 +160,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }
-      InfernoEffectHost.callEffects();
       this._isNodeReplaced = true;
+      InfernoEffectHost.callEffects();
       this._shouldRaiseContentReady = true;
     } else {
       render(
@@ -227,6 +227,18 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return this._elementAttr;
   }
 
+  _getAdditionalActionConfigs(): Record<string, Record<string, unknown>> {
+    return {
+      onContentReady: {
+        excludeValidators: ['disabled', 'readOnly'],
+      },
+    };
+  }
+
+  _getAdditionalProps(): string[] {
+    return [];
+  }
+
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     const {
       allowNull, twoWay, elements, props,
@@ -243,7 +255,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       children,
       onKeyDown,
     };
-    [...props, 'onContentReady'].forEach((propName) => {
+    [...props, ...this._getAdditionalProps()].forEach((propName) => {
       if (Object.prototype.hasOwnProperty.call(options, propName)) {
         widgetProps[propName] = options[propName];
       }
@@ -307,6 +319,13 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     return {};
   }
 
+  _getActionConfigsFull(): Record<string, Record<string, unknown>> {
+    return {
+      ...this._getActionConfigs(),
+      ...this._getAdditionalActionConfigs(),
+    };
+  }
+
   getDefaultTemplates(): Record<string, undefined> {
     const defaultTemplates = Object.values(this._templatesInfo);
     const result = {};
@@ -351,7 +370,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
     });
 
-    Object.keys(this._getActionConfigs()).forEach((name) => this._addAction(name));
+    Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
   }
@@ -361,10 +380,12 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     if (!action) {
       const actionByOption = this._createActionByOption(
         event,
-        this._getActionConfigs()[event],
+        this._getActionConfigsFull()[event],
       );
 
-      action = (actArgs: Record<string, string | Element | dxElementWrapper>): void => {
+      action = (
+        actArgs: Record<string, string | Element | dxElementWrapper>,
+      ): void => {
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
             // eslint-disable-next-line no-param-reassign
@@ -385,7 +406,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       this._componentTemplates[name] = this._createTemplateComponent(value);
     }
 
-    if (name && this._getActionConfigs()[name]) {
+    if (name && this._getActionConfigsFull()[name]) {
       this._addAction(name);
     }
 

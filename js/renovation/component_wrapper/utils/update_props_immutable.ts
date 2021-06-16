@@ -1,5 +1,17 @@
 import { isPlainObject } from '../../../core/utils/type';
 
+function cloneObjectProp(
+  value: Record<string, unknown>,
+  fullNameParts: string[],
+): Record<string, unknown> {
+  const result = { ...value };
+  if (fullNameParts.length > 1) {
+    const name = fullNameParts[0];
+    result[name] = cloneObjectProp(value[name] as Record<string, unknown>, fullNameParts.slice(1));
+  }
+  return result;
+}
+
 export function updatePropsImmutable(
   props: Record<string, unknown>,
   option: Record<string, unknown>,
@@ -23,7 +35,7 @@ export function updatePropsImmutable(
     }
   }
   if (isPlainObject(currentPropsValue)) {
-    result[name] = { ...currentPropsValue as Record<string, unknown> };
+    result[name] = cloneObjectProp(currentPropsValue, fullName.split('.').slice(1));
   } else {
     result[name] = currentPropsValue;
   }

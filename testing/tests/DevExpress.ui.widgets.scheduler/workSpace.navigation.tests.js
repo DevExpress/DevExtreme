@@ -4,12 +4,12 @@ import { isRenderer } from 'core/utils/type';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -41,20 +41,23 @@ module('Workspace navigation', () => {
         ['standard', 'virtual'].forEach((scrollingMode) => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
-                    this.createInstance = (options, workSpaceName) => {
-                        createInstances({
-                            scheduler: {
-                                isVirtualScrolling: () => false
-                            }
-                        });
+                    const key = createFactoryInstances({
+                        scheduler: {
+                            isVirtualScrolling: () => false
+                        }
+                    });
+                    const observer = getObserver(key);
 
+                    this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
+                            observer,
                             ...options,
                         });
                     };
+
                 },
             }, () => {
                 test('Month workspace navigation by arrows', function(assert) {
@@ -532,7 +535,7 @@ module('Workspace navigation', () => {
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
 
-                    stubInvokeMethod(instance),
+                    stubInvokeMethod(instance);
                     instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -566,7 +569,7 @@ module('Workspace navigation', () => {
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
 
-                    stubInvokeMethod(instance),
+                    stubInvokeMethod(instance);
                     instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -662,7 +665,7 @@ module('Workspace navigation', () => {
                     const instance = $element.dxSchedulerWorkSpaceDay('instance');
                     const keyboard = keyboardMock($element);
 
-                    stubInvokeMethod(instance),
+                    stubInvokeMethod(instance);
                     instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -957,11 +960,19 @@ module('Workspace navigation', () => {
         ['standard', 'virtual'].forEach((scrollingMode) => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
+                    const key = createFactoryInstances({
+                        scheduler: {
+                            isVirtualScrolling: () => false
+                        }
+                    });
+                    const observer = getObserver(key);
+
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
                             currentDate: new Date(2021, 0, 10),
+                            observer,
                             ...options,
                         });
                     };
@@ -1138,7 +1149,7 @@ module('Workspace navigation', () => {
                     }, 'dxSchedulerWorkSpaceMonth');
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
 
-                    stubInvokeMethod(instance),
+                    stubInvokeMethod(instance);
                     instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);

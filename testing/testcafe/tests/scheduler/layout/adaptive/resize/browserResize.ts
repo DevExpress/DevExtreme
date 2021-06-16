@@ -1,10 +1,11 @@
-import { createScreenshotsComparer } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import { createScreenshotsComparer } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
 fixture`Layout:BrowserResize`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const data = [{
   text: 'Website Re-Design Plan',
@@ -143,6 +144,6 @@ const resourceDataSource = [{
       height: 600,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 });

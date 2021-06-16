@@ -20,7 +20,7 @@ const isInnerOption = (optionName) => {
     return optionName.indexOf('_', 0) === 0;
 };
 
-const Component = Class.inherit({
+export const Component = Class.inherit({
     _setDeprecatedOptions() {
         this._deprecatedOptions = {};
     },
@@ -381,4 +381,11 @@ const Component = Class.inherit({
     }
 });
 
-export default Component;
+/**
+ * @name Component
+ * @module core/component
+ * @export Component
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ */

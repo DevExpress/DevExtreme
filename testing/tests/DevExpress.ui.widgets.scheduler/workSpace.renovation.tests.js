@@ -2,7 +2,7 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -15,7 +15,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -46,12 +46,13 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            createInstances({
+            const key = createFactoryInstances({
                 scheduler: {
                     isVirtualScrolling: () => false,
                     getAppointmentDurationInMinutes: () => 60
                 }
             });
+            const observer = getObserver(key);
 
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
@@ -59,13 +60,14 @@ module('Renovated Render', {
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
+                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {
