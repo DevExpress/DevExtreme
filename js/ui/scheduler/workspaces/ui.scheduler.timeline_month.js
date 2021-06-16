@@ -2,6 +2,8 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
+import { getViewStartByOptions } from './utils/month';
+
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
 
@@ -59,7 +61,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = dateUtils.getFirstMonthDate(this.option('currentDate'));
+        this._firstViewDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._setStartDayHour(this._firstViewDate);
     }
 
@@ -110,6 +112,19 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         };
     }
 
+    _getStartViewDate() {
+        const firstMonthDate = dateUtils.getFirstMonthDate(this.option('startDate'));
+        return firstMonthDate;
+    }
+
+    _getViewStartByOptions() {
+        return getViewStartByOptions(
+            this.option('startDate'),
+            this.option('currentDate'),
+            this.option('intervalCount'),
+            this._getStartViewDate(),
+        );
+    }
 }
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
