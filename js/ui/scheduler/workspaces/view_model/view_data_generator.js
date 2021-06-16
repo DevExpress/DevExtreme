@@ -708,17 +708,22 @@ export class ViewDataGenerator {
                 index,
                 groupIndex,
                 allDay,
+                startDate,
             } = cell.cellData;
 
             const indexInSelectedCells = selectedCells.findIndex(({
                 index: selectedCellIndex,
                 groupIndex: selectedCellGroupIndex,
                 allDay: selectedCellAllDay,
+                startDate: selectedCellStartDate,
             }) => (
                 groupIndex === selectedCellGroupIndex
-                && index === selectedCellIndex
-                && allDay === selectedCellAllDay
+                && (index === selectedCellIndex
+                    || (selectedCellIndex === undefined
+                        && startDate.getTime() === selectedCellStartDate.getTime()))
+                && !!allDay === !!selectedCellAllDay
             ));
+
             const isFocused = !!focusedCell
                 && index === focusedCell.cellData.index
                 && groupIndex === focusedCell.cellData.groupIndex

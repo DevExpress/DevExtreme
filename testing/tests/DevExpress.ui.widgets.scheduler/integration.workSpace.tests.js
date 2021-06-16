@@ -1088,7 +1088,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                     startDate: new Date(2018, 3, 8),
                     endDate: new Date(2018, 3, 8, 0, 30),
                     allDay: false,
-                    groups: undefined,
                     groupIndex: 0,
                 },
                 'Cashed cells is correct',

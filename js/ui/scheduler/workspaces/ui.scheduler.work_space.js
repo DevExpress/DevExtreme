@@ -168,7 +168,27 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const selectedCellsOption = this.option('selectedCellData');
 
-            selectedCellsOption && this._cellsSelectionState.setSelectedCellsByData(selectedCellsOption);
+            if(selectedCellsOption?.length > 0) {
+                const validSelectedCells = selectedCellsOption.map((selectedCell) => {
+                    const groups = selectedCell.groups;
+
+                    if(!groups || this._getGroupCount() === 0) {
+                        return {
+                            ...selectedCell,
+                            groupIndex: 0,
+                        };
+                    }
+
+                    const groupIndex = this._getGroupIndexByResourceId(groups);
+
+                    return {
+                        ...selectedCell,
+                        groupIndex,
+                    };
+                });
+
+                this._cellsSelectionState.setSelectedCellsByData(validSelectedCells);
+            }
         }
 
         return this._cellsSelectionState;
