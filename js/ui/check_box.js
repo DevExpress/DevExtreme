@@ -181,10 +181,6 @@ const CheckBox = Editor.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _clean: function() {
-        this.callBase();
     }
 });
 

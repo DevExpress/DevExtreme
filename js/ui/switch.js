@@ -2,7 +2,6 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import { extend } from '../core/utils/extend';
-import { render } from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import Editor from './editor/editor';
 import { addNamespace } from '../events/utils/index';
@@ -63,9 +62,7 @@ const Switch = Editor.inherit({
 
             switchedOffText: messageLocalization.format('dxSwitch-switchedOffText'),
 
-            value: false,
-
-            useInkRipple: false
+            value: false
         });
     },
 
@@ -87,7 +84,6 @@ const Switch = Editor.inherit({
 
     _initMarkup: function() {
         this._renderContainers();
-        this.option('useInkRipple') && this._renderInkRipple();
 
         this.$element()
             .addClass(SWITCH_CLASS)
@@ -180,33 +176,6 @@ const Switch = Editor.inherit({
 
     _getSubmitElement: function() {
         return this._$submitElement;
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render({
-            waveSizeCoefficient: 1.7,
-            isCentered: true,
-            useHoldAnimation: false,
-            wavesNumber: 2
-        });
-    },
-
-    _renderInkWave: function(element, dxEvent, doRender, waveIndex) {
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: element,
-            event: dxEvent,
-            wave: waveIndex
-        };
-
-        if(doRender) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
     },
 
     _updateFocusState: function(e, value) {
@@ -383,9 +352,6 @@ const Switch = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'useInkRipple':
-                this._invalidate();
-                break;
             case 'width':
                 delete this._marginBound;
                 this._refresh();
@@ -401,11 +367,6 @@ const Switch = Editor.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
     }
 });
 
