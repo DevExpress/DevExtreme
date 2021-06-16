@@ -17532,7 +17532,7 @@ declare module DevExpress.ui {
      * [descr:dxSlideOut.toggleMenuVisibility(showing)]
      */
     toggleMenuVisibility(
-      showing: boolean
+      showing?: boolean
     ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOut {
@@ -17677,9 +17677,11 @@ declare module DevExpress.ui {
      */
     showMenu(): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:dxSlideOutView.toggleMenuVisibility()]
+     * [descr:dxSlideOutView.toggleMenuVisibility(showing)]
      */
-    toggleMenuVisibility(): DevExpress.core.utils.DxPromise<void>;
+    toggleMenuVisibility(
+      showing?: boolean
+    ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOutView {
     export type DisposingEvent = DevExpress.events.EventInfo<dxSlideOutView>;
