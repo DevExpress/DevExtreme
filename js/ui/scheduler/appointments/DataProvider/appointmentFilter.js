@@ -80,42 +80,6 @@ class AppointmentFilterHelper {
 
         return result;
     }
-
-    // TODO: Get rid of it after rework filtering
-    getRecurrenceException(scheduler, rawAppointment) {
-        const appointment = scheduler.createAppointmentAdapter(rawAppointment);
-        const recurrenceException = appointment.recurrenceException;
-
-        if(recurrenceException) {
-            const exceptions = recurrenceException.split(',');
-
-            for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
-            }
-
-            return exceptions.join();
-        }
-
-        return recurrenceException;
-    }
-    _convertRecurrenceException(exceptionString, startDate) {
-        exceptionString = exceptionString.replace(/\s/g, '');
-
-        const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, {
-                path: 'toGrid'
-            });
-        };
-
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = getConvertedToTimeZone(startDate);
-        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
-
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
-        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
-
-        return exceptionString;
-    }
 }
 
 class FilterMaker {
@@ -208,6 +172,7 @@ export class AppointmentFilterBaseStrategy {
     get viewStartDayHour() { return this.options.startDayHour; }
     get viewEndDayHour() { return this.options.endDayHour; }
     get appointmentDuration() { return this.options.appointmentDuration; }
+    get timezone() { return this.options.timezone; }
     get firstDayOfWeek() { return this.scheduler.getFirstDayOfWeek(); }
 
     _init() {
@@ -235,8 +200,49 @@ export class AppointmentFilterBaseStrategy {
             resources: resources,
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
-            recurrenceException: this.filterHelper.getRecurrenceException,
+            recurrenceException: this.getRecurrenceException.bind(this),
         }, this.timeZoneCalculator);
+    }
+
+    // TODO: Get rid of it after rework filtering
+    getRecurrenceException(rawAppointment) {
+        const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
+        const recurrenceException = appointment.recurrenceException;
+
+        if(recurrenceException) {
+            const exceptions = recurrenceException.split(',');
+
+            for(let i = 0; i < exceptions.length; i++) {
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
+            }
+
+            return exceptions.join();
+        }
+
+        return recurrenceException;
+    }
+    _convertRecurrenceException(exceptionString, startDate) {
+        exceptionString = exceptionString.replace(/\s/g, '');
+
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, {
+                path: 'toGrid'
+            });
+        };
+
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+        const convertedStartDate = getConvertedToTimeZone(startDate);
+        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
+
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(
+            convertedExceptionDate,
+            convertedStartDate,
+            this.timeZone
+        );
+
+        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
+
+        return exceptionString;
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
@@ -415,7 +421,7 @@ export class AppointmentFilterBaseStrategy {
 
             if(result && useRecurrence) {
                 const recurrenceException = getRecurrenceException
-                    ? getRecurrenceException(this.scheduler, appointment)
+                    ? getRecurrenceException(appointment)
                     : dataAccessors.getter.recurrenceException(appointment);
 
                 result = that._filterAppointmentByRRule({
@@ -727,7 +733,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,
-                recurrenceException: this.filterHelper.getRecurrenceException,
+                recurrenceException: this.getRecurrenceException.bind(this),
                 checkIntersectViewport
             });
         });

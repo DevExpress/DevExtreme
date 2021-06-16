@@ -973,7 +973,8 @@ class Scheduler extends Widget {
             appointmentDataAccessors: this._dataAccessors,
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
-            appointmentDuration: this._getCurrentViewOption('cellDuration')
+            appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            timezone: this.option('timezone')
         });
     }
 
