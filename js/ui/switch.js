@@ -178,16 +178,6 @@ const Switch = Editor.inherit({
         return this._$submitElement;
     },
 
-    _updateFocusState: function(e, value) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$handle, e, value, 0);
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$handle, e, value, 1);
-    },
-
     _offsetDirection: function() {
         return this.option('rtlEnabled') ? -1 : 1;
     },

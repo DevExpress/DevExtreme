@@ -70,16 +70,6 @@ const RadioButton = Editor.inherit({
         this.setAria('role', 'radio');
     },
 
-    _updateFocusState: function(e, value) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$icon, e, value, 0);
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$icon, e, value, 1);
-    },
-
     _renderIcon: function() {
         this._$icon = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 

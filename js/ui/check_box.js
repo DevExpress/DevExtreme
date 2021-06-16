@@ -100,16 +100,6 @@ const CheckBox = Editor.inherit({
         return this._$submitElement;
     },
 
-    _updateFocusState: function(e, value) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$icon, e, value, 0);
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$icon, e, value, 1);
-    },
-
     _renderIcon: function() {
         this._$icon = $('<span>')
             .addClass(CHECKBOX_ICON_CLASS)
