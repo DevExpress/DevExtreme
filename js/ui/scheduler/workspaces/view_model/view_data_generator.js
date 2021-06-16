@@ -128,8 +128,8 @@ export class ViewDataGenerator {
                 ? allDayPanelsCount + 1
                 : allDayPanelsCount;
 
-            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
-                cell.key = keyBase + cellIndex;
+            currentViewDataMap[rowIndex].forEach((cell, columnIndex) => {
+                cell.key = keyBase + columnIndex;
             });
 
             return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
@@ -278,12 +278,12 @@ export class ViewDataGenerator {
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
                 .slice(startIndex, startIndex + count)
-                .map((cellData, cellIndex) => (
+                .map((cellData, columnIndex) => (
                     {
                         cellData,
                         position: {
                             rowIndex,
-                            cellIndex
+                            columnIndex
                         }
                     })
                 );
