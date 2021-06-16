@@ -40,7 +40,6 @@ const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
 const SelectBox = require('ui/select_box');
-const SpeedDialAction = require('ui/speed_dial_action');
 const Tabs = require('ui/tabs');
 const TabPanel = require('ui/tab_panel');
 const TagBox = require('ui/tag_box');
@@ -892,19 +891,6 @@ testComponentDefaults(TreeView,
 testComponentDefaults(SelectBox, {},
     {
         allowClearing: true
-    }
-);
-
-testComponentDefaults(SpeedDialAction, {},
-    {
-        useInkRipple: true
-    },
-    function() {
-        this._originalIsMaterial = themes.isMaterial;
-        themes.isMaterial = () => true;
-    },
-    function() {
-        themes.isMaterial = this._originalIsMaterial;
     }
 );
 
