@@ -21086,7 +21086,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * [descr:GridBaseOptions.columns]
      */
