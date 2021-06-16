@@ -25,19 +25,17 @@ import { BaseWidgetProps } from './common/base_props';
 import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return';
 
-const stylingModes = ['outlined', 'text', 'contained'];
-
 const getCssClasses = (model: ButtonProps): string => {
   const {
-    text, icon, stylingMode, type, iconPosition,
+    text, icon, type, iconPosition,
   } = model;
-  const isValidStylingMode = (stylingMode && stylingModes.includes(stylingMode)) ?? false;
+  const stylingMode = model.stylingMode ?? 'contained';
   const classesMap = {
     'dx-button': true,
-    [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
+    [`dx-button-mode-${stylingMode}`]: true,
     [`dx-button-${type ?? 'normal'}`]: true,
-    'dx-button-has-text': Boolean(text),
-    'dx-button-has-icon': Boolean(icon),
+    'dx-button-has-text': text !== undefined && !!text,
+    'dx-button-has-icon': icon !== undefined && !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
   };
 
@@ -79,11 +77,11 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
         {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
-        {Boolean(renderText) && (<span className="dx-button-text">{text}</span>)}
+        {typeof renderText === 'string' && renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
-        {Boolean(viewModel.props.useSubmitBehavior)
+        {viewModel.props.useSubmitBehavior === true
                 && <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
-        {Boolean(viewModel.props.useInkRipple)
+        {viewModel.props.useInkRipple === true
                 && (
                 <InkRipple
                   config={viewModel.inkRippleConfig}
@@ -179,7 +177,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const namespace = 'UIFeedback';
     const { useSubmitBehavior, onSubmit } = this.props;
 
-    if (Boolean(useSubmitBehavior) && onSubmit) {
+    if (useSubmitBehavior === true && onSubmit) {
       click.on(this.submitInputRef.current,
         (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
         { namespace });
@@ -193,7 +191,7 @@ export class Button extends JSXComponent(ButtonProps) {
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    Boolean(useInkRipple) && this.inkRippleRef.current!.showWave({
+    useInkRipple === true && this.inkRippleRef.current!.showWave({
       element: this.contentRef.current!, event,
     });
   }
@@ -201,7 +199,7 @@ export class Button extends JSXComponent(ButtonProps) {
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    Boolean(useInkRipple) && this.inkRippleRef.current!.hideWave({
+    useInkRipple === true && this.inkRippleRef.current!.hideWave({
       element: this.contentRef.current!, event,
     });
   }
@@ -210,7 +208,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
     onClick?.({ event, validationGroup });
-    Boolean(useSubmitBehavior) && this.submitInputRef.current!.click();
+    useSubmitBehavior === true && this.submitInputRef.current!.click();
   }
 
   onWidgetKeyDown(options): Event | undefined {
@@ -231,11 +229,12 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   get aria(): Record<string, string> {
-    const { text, icon } = this.props;
+    const text = this.props.text ?? '';
+    const icon = this.props.icon ?? '';
 
     let label = (text ?? '') || icon;
 
-    if (!(text ?? '') && typeof icon === 'string' && getImageSourceType(icon) === 'image') {
+    if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
@@ -250,18 +249,21 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   get iconSource(): string {
-    const { icon, type } = this.props;
+    const { type } = this.props;
+    const icon = this.props.icon ?? '';
 
-    if (Boolean(icon) || type === 'back') {
-      return (icon ?? '') || 'back';
+    if (icon || type === 'back') {
+      return icon || 'back';
     }
 
     return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
-    const { text, icon, type } = this.props;
-    return (!(text ?? '') && Boolean(icon)) || (type === 'back') ? {
+    const { type } = this.props;
+    const text = this.props.text ?? '';
+    const icon = this.props.icon ?? '';
+    return (!text && icon) || (type === 'back') ? {
       isCentered: true,
       useHoldAnimation: false,
       waveSizeCoefficient: 1,

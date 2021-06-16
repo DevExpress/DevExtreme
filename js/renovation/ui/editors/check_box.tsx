@@ -33,9 +33,9 @@ const getCssClasses = (model: CheckBoxProps): string => {
 
   const classesMap = {
     'dx-checkbox': true,
-    'dx-state-readonly': Boolean(readOnly),
-    'dx-checkbox-checked': Boolean(checked),
-    'dx-checkbox-has-text': Boolean(text),
+    'dx-state-readonly': readOnly === true,
+    'dx-checkbox-checked': checked === true,
+    'dx-checkbox-has-text': text !== undefined && !!text,
     'dx-invalid': isValid !== true,
     'dx-checkbox-indeterminate': indeterminate,
   };
@@ -79,12 +79,12 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...Boolean(name) && { name }} />
+      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name !== undefined && name && { name }} />
       <div className="dx-checkbox-container">
         <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
-        {Boolean(text) && (<span className="dx-checkbox-text">{text}</span>)}
+        {text !== undefined && text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
-      {Boolean(viewModel.props.useInkRipple)
+      {viewModel.props.useInkRipple === true
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
       {viewModel.showValidationMessage
                 && (
@@ -202,9 +202,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { readOnly, value, saveValueChangeEvent } = this.props;
+    const { value, saveValueChangeEvent } = this.props;
+    const readOnly = this.props.readOnly ?? false;
 
-    if (!(readOnly ?? false)) {
+    if (!readOnly) {
       saveValueChangeEvent?.(event);
       this.props.value = !(value ?? false);
     }
@@ -232,22 +233,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get shouldShowValidationMessage(): boolean {
-    const { isValid, validationStatus } = this.props;
-    return !(isValid ?? false)
+    const { validationStatus } = this.props;
+    const isValid = this.props.isValid ?? true;
+
+    return !isValid
       && validationStatus === 'invalid'
-      && Boolean(this.validationErrors?.length);
+      && this.validationErrors !== undefined
+      && this.validationErrors?.length !== undefined
+      && this.validationErrors?.length > 0
   }
 
   get aria(): Record<string, string> {
-    const { readOnly, isValid } = this.props;
-    const checked = Boolean(this.props.value);
+    const readOnly = this.props.readOnly ?? false;
+    const isValid = this.props.isValid ?? true;
+    const checked = this.props.value === true;
     const indeterminate = this.props.value === null;
 
     const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
-      readonly: readOnly ?? false ? 'true' : 'false',
-      invalid: !(isValid ?? false) ? 'true' : 'false',
+      readonly: readOnly ? 'true' : 'false',
+      invalid: !isValid ? 'true' : 'false',
     };
 
     if (this.shouldShowValidationMessage) {
@@ -273,7 +279,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    Boolean(useInkRipple) && this.inkRippleRef.current![type]({
+    useInkRipple === true && this.inkRippleRef.current![type]({
       element: this.iconRef.current!, event, wave: waveId,
     });
   }
