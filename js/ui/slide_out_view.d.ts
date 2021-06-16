@@ -102,12 +102,13 @@ export default class dxSlideOutView extends Widget {
     showMenu(): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxSlideOutViewMethods.toggleMenuVisibility
-     * @publicName toggleMenuVisibility()
+     * @publicName toggleMenuVisibility(showing)
+     * @param1 showing:boolean|undefined
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
 }
 
 declare global {
