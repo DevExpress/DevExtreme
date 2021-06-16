@@ -232,7 +232,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const text = this.props.text ?? '';
     const icon = this.props.icon ?? '';
 
-    let label = (text ?? '') || icon;
+    let label = text || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
@@ -240,7 +240,7 @@ export class Button extends JSXComponent(ButtonProps) {
 
     return {
       role: 'button',
-      ...label ?? '' ? { label } : {},
+      ...label ? { label } : {},
     };
   }
 
