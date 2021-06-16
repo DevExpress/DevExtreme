@@ -113,9 +113,9 @@ export default class CellsSelectionState {
     }
 
     restoreSelectedAndFocusedCells() {
-        this._selectedCells = this._prevSelectedCells;
-        this._focusedCell = this._prevFocusedCell;
-        this._firstSelectedCell = this._prevFirstSelectedCell;
+        this._selectedCells = this._selectedCells || this._prevSelectedCells;
+        this._focusedCell = this._focusedCell || this._prevFocusedCell;
+        this._firstSelectedCell = this._firstSelectedCell || this._prevFirstSelectedCell;
 
         this._prevSelectedCells = null;
         this._prevFirstSelectedCell = null;
