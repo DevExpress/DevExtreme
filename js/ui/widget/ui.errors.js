@@ -104,11 +104,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1026: 'The "calculateCustomSummary" function is missing from a field whose "summaryType" option is set to "custom"',
 
     /**
-    * @name ErrorsUIWidgets.E1030
-    */
-    E1030: 'Unknown ScrollView refresh strategy: \'{0}\'',
-
-    /**
     * @name ErrorsUIWidgets.E1031
     */
     E1031: 'Unknown subscription in the Scheduler widget: \'{0}\'',
@@ -335,4 +330,14 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsUIWidgets.W1018
     */
     W1018: 'Infinite scrolling may not work properly with multiple selection. To use these features together, set \'selection.deferred\' to true or set \'selection.selectAllMode\' to \'page\'.',
+
+    /**
+    * @name ErrorsUIWidgets.W1019
+    */
+    W1019: 'Filter query string exceeds maximum length limit of {0} characters.',
+
+    /**
+    * @name ErrorsUIWidgets.W1020
+    */
+    W1020: 'hideEvent is ignored when the shading property is true'
 });

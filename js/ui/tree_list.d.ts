@@ -389,11 +389,14 @@ export type ColumnHeaderCellTemplateData = {
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoExpandAll?: boolean;
@@ -401,14 +404,12 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type Array<dxTreeListColumn|string>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     columns?: Array<Column | string>;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     customizeColumns?: ((columns: Array<Column>) => void);
@@ -416,13 +417,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type Enums.TreeListDataStructure
      * @default "plain"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataStructure?: 'plain' | 'tree';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
@@ -430,7 +429,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandNodesOnFiltering?: boolean;
@@ -438,7 +436,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @default []
      * @fires dxTreeListOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandedRowKeys?: Array<any>;
@@ -446,27 +443,23 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type Enums.TreeListFilterMode
      * @default "withAncestors"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItemsExpr?: string | Function;
     /**
      * @docid
      * @default "items"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemsExpr?: string | Function;
     /**
      * @docid
      * @default "id"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
@@ -490,7 +483,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCellClick?: ((e: CellClickEvent) => void);
@@ -514,7 +506,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCellDblClick?: ((e: CellDblClickEvent) => void);
@@ -538,7 +529,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
@@ -566,7 +556,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field19 oldValue:any
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onCellPrepared?: ((e: CellPreparedEvent) => void);
@@ -585,7 +574,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field10 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
@@ -601,7 +589,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field7 column:object
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onEditingStart?: ((e: EditingStartEvent) => void);
@@ -624,7 +611,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field14 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onEditorPrepared?: ((options: EditorPreparedEvent) => void);
@@ -650,7 +636,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field17 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onEditorPreparing?: ((e: EditorPreparingEvent) => void);
@@ -667,7 +652,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field8 column:dxTreeListColumn
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
@@ -689,7 +673,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field13 isHighlighted:boolean
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
@@ -704,7 +687,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field6 row:dxTreeListRowObject
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
@@ -722,7 +704,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field9 cancel:boolean
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
@@ -735,7 +716,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field4 root:dxTreeListNode
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onNodesInitialized?: ((e: NodesInitializedEvent) => void);
@@ -761,7 +741,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field17 level:number
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onRowClick?: ((e: RowClickEvent) => void);
@@ -784,7 +763,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field14 rowElement:DxElement
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onRowDblClick?: ((e: RowDblClickEvent) => void);
@@ -808,13 +786,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type_function_param1_field15 level:number
      * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onRowPrepared?: ((e: RowPreparedEvent) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
@@ -822,7 +798,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
      * @default "parentId"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     parentIdExpr?: string | Function;
@@ -830,25 +805,21 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @type object|Enums.Mode
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     remoteOperations?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default false
        */
       filtering?: boolean,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default false
        */
       grouping?: boolean,
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default false
        */
       sorting?: boolean
@@ -856,26 +827,28 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     rootValue?: any;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
     scrolling?: Scrolling;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
     selection?: Selection;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListEditing = Editing;
 
 export interface Editing extends EditingBase {
@@ -886,7 +859,6 @@ export interface Editing extends EditingBase {
      * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowAdding?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
@@ -897,7 +869,6 @@ export interface Editing extends EditingBase {
      * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowDeleting?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
@@ -908,43 +879,54 @@ export interface Editing extends EditingBase {
      * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowUpdating?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     texts?: EditingTexts;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListEditingTexts = EditingTexts;
 
 export interface EditingTexts extends EditingTextsBase {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
      * @default "Add"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     addRowToNode?: string;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListPaging = Paging;
 
 export interface Paging extends PagingBase {
     /**
      * @docid dxTreeListOptions.paging.enabled
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     enabled?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListScrolling = Scrolling;
 
 export interface Scrolling extends ScrollingBase {
@@ -952,19 +934,22 @@ export interface Scrolling extends ScrollingBase {
      * @docid dxTreeListOptions.scrolling.mode
      * @type Enums.TreeListScrollingMode
      * @default "virtual"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     mode?: 'standard' | 'virtual';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListSelection = Selection;
 
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     recursive?: boolean;
@@ -974,16 +959,14 @@ export interface Selection extends SelectionBase {
  * @inherits GridBase
  * @module ui/tree_list
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: UserDefinedElement, options?: dxTreeListOptions)
+export default class dxTreeList extends Widget<dxTreeListOptions> implements GridBase {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     addColumn(columnOptions: any | string): void;
@@ -991,7 +974,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName addRow()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     addRow(): DxPromise<void>;
@@ -1000,7 +982,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName addRow(parentId)
      * @param1 parentId:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     addRow(parentId: any): DxPromise<void>;
@@ -1009,7 +990,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName collapseRow(key)
      * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapseRow(key: any): DxPromise<void>;
@@ -1018,7 +998,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName expandRow(key)
      * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandRow(key: any): DxPromise<void>;
@@ -1026,7 +1005,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName forEachNode(callback)
      * @param1 callback:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1035,7 +1013,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
      * @param2 callback:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     forEachNode(nodes: Array<Node>, callback: Function): void;
@@ -1044,7 +1021,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName getNodeByKey(key)
      * @param1 key:object|string|number
      * @return dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getNodeByKey(key: any | string | number): Node;
@@ -1052,7 +1028,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName getRootNode()
      * @return dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getRootNode(): Node;
@@ -1060,7 +1035,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName getSelectedRowKeys()
      * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getSelectedRowKeys(): Array<any>;
@@ -1069,7 +1043,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName getSelectedRowKeys(mode)
      * @param1 mode:string
      * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getSelectedRowKeys(mode: string): Array<any>;
@@ -1077,7 +1050,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName getSelectedRowsData()
      * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getSelectedRowsData(): Array<any>;
@@ -1086,7 +1058,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName getSelectedRowsData(mode)
      * @param1 mode:string
      * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getSelectedRowsData(mode: string): Array<any>;
@@ -1094,7 +1065,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName getVisibleColumns()
      * @return Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getVisibleColumns(): Array<Column>;
@@ -1103,7 +1073,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName getVisibleColumns(headerLevel)
      * @param1 headerLevel:number
      * @return Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getVisibleColumns(headerLevel: number): Array<Column>;
@@ -1111,7 +1080,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName getVisibleRows()
      * @return Array<dxTreeListRowObject>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getVisibleRows(): Array<RowObject>;
@@ -1120,7 +1088,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName isRowExpanded(key)
      * @param1 key:any
      * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isRowExpanded(key: any): boolean;
@@ -1128,7 +1095,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName loadDescendants()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loadDescendants(): DxPromise<void>;
@@ -1137,7 +1103,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @publicName loadDescendants(keys)
      * @param1 keys:Array<any>
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loadDescendants(keys: Array<any>): DxPromise<void>;
@@ -1147,7 +1112,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @param1 keys:Array<any>
      * @param2 childrenOnly:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loadDescendants(keys: Array<any>, childrenOnly: boolean): DxPromise<void>;
@@ -1199,7 +1163,7 @@ export default class dxTreeList extends Widget implements GridBase {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
@@ -1220,18 +1184,23 @@ export default class dxTreeList extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListColumn = Column;
 
 /**
  * @docid dxTreeListColumn
  * @inherits GridBaseColumn
+ * @prevFileNamespace DevExpress.ui
  * @type object
  */
 export interface Column extends ColumnBase {
     /**
      * @docid dxTreeListColumn.buttons
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton>;
@@ -1251,7 +1220,6 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field10 row:dxTreeListRowObject
      * @type_function_param2_field11 rowType:string
      * @type_function_param2_field12 watch:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
@@ -1259,7 +1227,6 @@ export interface Column extends ColumnBase {
      * @docid dxTreeListColumn.columns
      * @type Array<dxTreeListColumn|string>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     columns?: Array<Column | string>;
@@ -1279,7 +1246,6 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field10 row:dxTreeListRowObject
      * @type_function_param2_field11 rowType:string
      * @type_function_param2_field12 watch:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
@@ -1290,7 +1256,6 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field1 component:dxTreeList
      * @type_function_param2_field2 columnIndex:number
      * @type_function_param2_field3 column:dxTreeListColumn
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
@@ -1298,25 +1263,29 @@ export interface Column extends ColumnBase {
      * @docid dxTreeListColumn.type
      * @publicName type
      * @type Enums.TreeListCommandColumnType
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'adaptive' | 'buttons';
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListColumnButton = ColumnButton;
 
 
 /**
  * @docid dxTreeListColumnButton
  * @inherits GridBaseColumnButton
+ * @prevFileNamespace DevExpress.ui
  * @type object
  */
 export interface ColumnButton extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
      * @type Enums.TreeListColumnButtonName|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
@@ -1329,7 +1298,6 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 row:dxTreeListRowObject
      * @type_function_param1_field6 column:dxTreeListColumn
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent) => void);
@@ -1346,7 +1314,6 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_param2_field7 rowType:string
      * @type_function_param2_field8 row:dxTreeListRowObject
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData) => string | UserDefinedElement);
@@ -1358,12 +1325,16 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListNode = Node;
 
 /**
@@ -1374,49 +1345,47 @@ export interface Node {
     /**
      * @docid dxTreeListNode.children
      * @type  Array<dxTreeListNode>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     children?: Array<Node>;
     /**
      * @docid dxTreeListNode.data
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     data?: any;
     /**
      * @docid dxTreeListNode.hasChildren
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasChildren?: boolean;
     /**
      * @docid dxTreeListNode.key
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     key: any;
     /**
      * @docid dxTreeListNode.level
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     level: number;
     /**
      * @docid dxTreeListNode.parent
      * @type dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     parent?: Node;
     /**
      * @docid dxTreeListNode.visible
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
 export type dxTreeListRowObject = RowObject;
 
 /**
@@ -1426,62 +1395,52 @@ export type dxTreeListRowObject = RowObject;
 export interface RowObject {
     /**
      * @docid dxTreeListRowObject.isEditing
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly isEditing?: boolean;
     /**
      * @docid dxTreeListRowObject.isExpanded
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly isExpanded?: boolean;
     /**
      * @docid dxTreeListRowObject.isNewRow
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly isNewRow?: boolean;
     /**
      * @docid dxTreeListRowObject.isSelected
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly isSelected?: boolean;
     /**
      * @docid dxTreeListRowObject.key
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly key: any;
     /**
      * @docid dxTreeListRowObject.level
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly level: number;
     /**
      * @docid dxTreeListRowObject.node
      * @type dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly node: Node;
     /**
      * @docid dxTreeListRowObject.rowIndex
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly rowIndex: number;
     /**
      * @docid dxTreeListRowObject.rowType
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly rowType: string;
     /**
      * @docid dxTreeListRowObject.values
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readonly values: Array<any>;

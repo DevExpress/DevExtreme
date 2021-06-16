@@ -202,7 +202,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
+        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER).first();
     },
 
     _init: function() {
@@ -606,7 +606,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: noop,
@@ -678,11 +678,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-done.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-done.dx-button');
     },
 
     _getLastPopupElement: function() {
-        return this._popup._wrapper().find('.dx-popup-cancel.dx-button');
+        return this._popup.$wrapper().find('.dx-popup-cancel.dx-button');
     },
 
     _popupElementTabHandler: function(e) {

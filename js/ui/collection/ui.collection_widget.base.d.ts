@@ -11,6 +11,8 @@ import DataSource, {
     DataSourceOptions
 } from '../../data/data_source';
 
+import Store from '../../data/abstract_store';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -26,18 +28,17 @@ export interface SelectionChangedInfo<T = any> {
     readonly removedItems: Array<T>;
 }
 
-export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
+/** @namespace DevExpress.ui */
+export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | CollectionWidgetItem> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | CollectionWidgetItem> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default 750
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemHoldTimeout?: number;
@@ -48,28 +49,24 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | CollectionWidgetItem | any>;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
      * @docid
      * @default "No data to display"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
@@ -85,10 +82,9 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -101,10 +97,9 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -117,10 +112,9 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -132,10 +126,9 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemRendered?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -146,15 +139,13 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<T> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
     /**
      * @docid
      * @default -1
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
@@ -163,21 +154,18 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @default null
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItem?: any;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItemKeys?: Array<any>;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<any>;
@@ -188,10 +176,9 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @module ui/collection/ui.collection_widget.base
  * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
-export default class CollectionWidget extends Widget {
-    constructor(element: UserDefinedElement, options?: CollectionWidgetOptions)
+export default class CollectionWidget<TProperties> extends Widget<TProperties> {
     getDataSource(): DataSource;
 }
 
@@ -199,38 +186,34 @@ export default class CollectionWidget extends Widget {
 /**
  * @docid
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface CollectionWidgetItem {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     html?: string;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     template?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;

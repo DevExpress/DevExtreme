@@ -1,10 +1,8 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -47,39 +45,38 @@ export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 
-export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
+export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @fires dxTabsOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxTabsItem | any>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
@@ -87,20 +84,17 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @docid
      * @default true
      * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
@@ -108,7 +102,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @docid
      * @type Enums.NavSelectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectionMode?: 'multiple' | 'single';
@@ -116,7 +109,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      * @docid
      * @default true
      * @default false [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
@@ -126,38 +118,35 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
  * @inherits CollectionWidget
  * @module ui/tabs
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTabs extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxTabsOptions)
-}
+export default class dxTabs<TProperties = Properties> extends CollectionWidget<TProperties> { }
 
 /**
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
+ * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
 }
 
 /** @public */
-export type Properties = dxTabsOptions;
+export type Properties = dxTabsOptions<dxTabs<Properties>>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTabsOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxTabsOptions;
+export type IOptions = Properties;

@@ -2,21 +2,30 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
+import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
+
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
 
-const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' };
-const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
+const WORKSPACE_DAY = { class: 'dxSchedulerWorkSpaceDay', name: 'Day View' };
+const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'Week View' };
+const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'Month View' };
+const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'Timeline Day View' };
+const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'Timeline Week View' };
+const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'Timeline Month View' };
 
 QUnit.dump.maxDepth = 10;
 
@@ -37,19 +46,28 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
+            const key = createFactoryInstances({
+                scheduler: {
+                    isVirtualScrolling: () => false,
+                    getAppointmentDurationInMinutes: () => 60
+                }
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
+                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {
@@ -933,13 +951,12 @@ module('Renovated Render', {
     test('getDataByDroppableCell should work correctly', function(assert) {
         this.createInstance();
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(1).addClass('dx-scheduler-date-table-droppable-cell');
-
+        this.instance.$element().find('.' + CELL_CLASS).eq(0).addClass('dx-scheduler-date-table-droppable-cell');
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: undefined,
+            startDate: new Date(2020, 6, 29, 0, 0),
+            endDate: new Date(2020, 6, 29, 0, 30),
             groups: undefined,
         }, 'Cell Data is correct');
     });
@@ -1036,5 +1053,27 @@ module('Renovated Render', {
         }, 'dxSchedulerWorkSpaceWeek');
 
         assert.ok(this.instance._$allDayTable, 'All-day panel has been initialized');
+    });
+
+    // Remove after complete workspace renovation
+    [
+        WORKSPACE_DAY,
+        WORKSPACE_WEEK,
+        WORKSPACE_MONTH,
+        TIMELINE_DAY,
+        TIMELINE_WEEK,
+        TIMELINE_MONTH,
+    ].forEach(({ class: component, name }) => {
+        test(`Cache should be cleared on rerender in ${name}`, function(assert) {
+            this.createInstance({}, component);
+
+            const cacheClearSpy = sinon.spy(this.instance.cache, 'clear');
+
+            this.instance.renderWorkSpace();
+
+            assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+
+            cacheClearSpy.restore();
+        });
     });
 });

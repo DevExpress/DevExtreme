@@ -17,7 +17,7 @@ export default class ContextMenu extends Widget {
 
   name = 'dxContextMenu';
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);

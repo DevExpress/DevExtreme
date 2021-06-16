@@ -1,6 +1,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+import { replaceWith } from '../../../core/utils/dom';
 import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import { getPublicElement } from '../../../core/element';
@@ -9,9 +10,14 @@ import Number from '../../../core/polyfills/number';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { EffectReturn } from '../../utils/effect_return';
 
+export interface TemplateModel {
+  data: Record<string, unknown>;
+  index: number;
+}
+
 interface TemplateWrapperProps {
   template: FunctionTemplate;
-  model?: { data: Record<string, unknown>; index: number };
+  model?: TemplateModel;
   transclude?: boolean;
 }
 
@@ -27,11 +33,12 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     if (node) {
       const { parentNode } = node;
       if (parentNode) {
-        parentNode.removeChild(node);
         const $parent = $(parentNode as Element);
         const $children = $parent.contents();
 
-        const { data, index } = this.props.model ?? { data: {} };
+        const {
+          data, index,
+        } = this.props.model ?? { data: {} };
 
         Object.keys(data).forEach((name) => {
           if (data[name] && domAdapter.isNode(data[name])) {
@@ -39,12 +46,14 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           }
         });
 
-        this.props.template.render({
+        const $result = $(this.props.template.render({
           container: getPublicElement($parent),
           transclude: this.props.transclude,
-          ...(!this.props.transclude ? { model: data } : {}),
-          ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
-        });
+          ...!this.props.transclude ? { model: data } : {},
+          ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
+        }));
+
+        replaceWith($(node), $result);
 
         return (): void => {
           // NOTE: order is important
@@ -58,13 +67,16 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   createEffects(): InfernoEffect[] {
-    return [new InfernoEffect(this.renderTemplate, [this.props.template])];
+    return [new InfernoEffect(this.renderTemplate, [this.props.template, this.props.model])];
   }
 
   updateEffects(): void {
-    // eslint-disable-next-line no-underscore-dangle
-    this._effects[0].update([this.props.template]);
+    this._effects[0].update([this.props.template, this.props.model]);
   }
+
+  // NOTE: Prevent nodes clearing on unmount.
+  //       Nodes will be destroyed by inferno on markup update
+  componentWillUnmount(): void { }
 
   render(): JSX.Element | null {
     return null;

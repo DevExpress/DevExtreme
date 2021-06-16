@@ -145,7 +145,9 @@ export default class AppointmentPopup {
     _createAppointmentFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
-        each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
+        const resourceManager = this.scheduler.fire('getResourceManager');
+
+        each(resourceManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
     }
@@ -169,7 +171,8 @@ export default class AppointmentPopup {
         );
 
         if(resources && resources.length) {
-            AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
+            const resourceManager = this.scheduler.fire('getResourceManager');
+            AppointmentForm.concatResources(resourceManager.getEditors());
         }
 
         return AppointmentForm.create(
@@ -182,7 +185,7 @@ export default class AppointmentPopup {
 
     _getAllowTimeZoneEditing() {
         const scheduler = this.scheduler;
-        return scheduler.option('editing.allowTimeZoneEditing') || scheduler.option('editing.allowEditingTimeZones');
+        return scheduler.option('editing.allowTimeZoneEditing');
     }
 
     _isReadOnly(rawAppointment) {
@@ -380,10 +383,11 @@ export default class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
+                    const resourceManager = this.scheduler.fire('getResourceManager');
 
                     this.scheduler._workSpace.updateScrollPosition(
                         startDate,
-                        this.scheduler._resourcesManager.getResourcesFromItem(this.state.lastEditData, true),
+                        resourceManager.getResourcesFromItem(this.state.lastEditData, true),
                         inAllDayRow,
                     );
                     this.state.lastEditData = null;
@@ -403,7 +407,7 @@ export default class AppointmentPopup {
     }
 
     _showLoadPanel() {
-        const $overlayContent = this._popup.overlayContent();
+        const $overlayContent = this._popup.$overlayContent();
 
         showLoading({
             container: $overlayContent,

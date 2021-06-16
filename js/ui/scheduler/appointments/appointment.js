@@ -21,7 +21,7 @@ import {
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
     APPOINTMENT_CONTENT_CLASSES
-} from '../constants';
+} from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
@@ -43,6 +43,7 @@ export class Appointment extends DOMComponent {
         return extend(super._getDefaultOptions(), {
             data: {},
             groupIndex: -1,
+            groups: [],
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -143,9 +144,11 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const deferredColor = this.invoke('getAppointmentColor', {
+        const resourceManager = this.invoke('getResourceManager');
+        const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
+            groups: this.option('groups'),
         });
 
         deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));

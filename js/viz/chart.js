@@ -560,13 +560,6 @@ const dxChart = AdvancedChart.inherit({
         axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
-    // for async templates. Should be fixed
-    _cleanGroups() {
-        this._getAllAxes().forEach(a => a.beforeCleanGroups());
-        this.callBase();
-        this._getAllAxes().forEach(a => a.afterCleanGroups());
-    },
-
     _axesBoundaryPositioning() {
         const that = this;
         const allAxes = that._getAllAxes();
@@ -708,6 +701,10 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
+    _executeAppendAfterSeries(append) {
+        append();
+    },
+
     _prepareToRender(drawOptions) {
         const panesBorderOptions = this._createPanesBorderOptions();
 
@@ -721,17 +718,13 @@ const dxChart = AdvancedChart.inherit({
 
     _adjustViewport() {
         const that = this;
-        const series = that._getVisibleSeries();
-        const argumentAxis = that.getArgumentAxis();
-        const useAggregation = series.some(s => s.useAggregation());
         const adjustOnZoom = that._themeManager.getOptions('adjustOnZoom');
-        const alignToBounds = !argumentAxis.dataVisualRangeIsReduced();
 
-        if(!useAggregation && !adjustOnZoom) {
+        if(!adjustOnZoom) {
             return;
         }
 
-        that._valueAxes.forEach(axis => axis.adjust(alignToBounds));
+        that._valueAxes.forEach(axis => axis.adjust());
     },
 
     _recreateSizeDependentObjects(isCanvasChanged) {

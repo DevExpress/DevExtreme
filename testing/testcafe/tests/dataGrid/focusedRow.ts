@@ -5,7 +5,7 @@ import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Focused row`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -17,7 +17,7 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
   await t
     .expect(dataGrid.getFocusedRow().exists).ok()
     .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(2);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { name: 'Alex', phone: '111111', room: 6 },
     { name: 'Dan', phone: '2222222', room: 5 },
@@ -30,7 +30,7 @@ test('onFocusedRowChanged event should fire once after changing focusedRowKey if
     enabled: false,
   },
   onFocusedRowChanged: () => {
-    const global = window as any;
+    const global = window as Window & typeof globalThis & { onFocusedRowChangedCounter: number };
     if (!global.onFocusedRowChangedCounter) {
       global.onFocusedRowChangedCounter = 0;
     }
@@ -89,7 +89,7 @@ test('Form - Focused row should not be reset after editing a row (T851400)', asy
     .ok()
     .expect(dataGrid.option('focusedRowKey'))
     .eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -154,7 +154,7 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     .ok()
     .expect(dataGrid.option('focusedRowKey'))
     .eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -195,7 +195,7 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     await dataGrid.apiSaveEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 5, c0: 'c0_0' },
       { id: 6, c0: 'c0_1' },
@@ -264,7 +264,7 @@ test('Row - Focused row should not be reset after editing a row (T879627)', asyn
     .ok()
     .expect(dataGrid.option('focusedRowKey'))
     .eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -301,7 +301,7 @@ test('Row - Focused row should be reset after editing a row by API (T879627)', a
   await dataGrid.apiSaveEditData();
 
   await t.expect(dataGrid.option('focusedRowKey')).eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -382,7 +382,7 @@ test('Cell - Focused row should not be reset after editing a cell (T879627)', as
     .ok()
     .expect(dataGrid.option('focusedRowKey'))
     .eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -474,7 +474,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
     .ok()
     .expect(dataGrid.option('focusedRowKey'))
     .eql(5);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 5, c0: 'c0_0' },
     { id: 6, c0: 'c0_1' },
@@ -514,7 +514,7 @@ test('Batch - Focused row should not be reset after editing a cell (T879627)', a
     await dataGrid.apiSaveEditData();
 
     await t.expect(dataGrid.option('focusedRowKey')).eql(6);
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 5, c0: 'c0_0' },
       { id: 6, c0: 'c0_1' },
@@ -553,16 +553,16 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
 
   await t.expect(ClientFunction(() => (window as any).focusedRowChanging_Counter)()).eql(undefined);
   await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
-}).before(() => createWidget('dxDataGrid', () => {
-  const data = (function (): Record<string, unknown>[] {
-    const result = [];
+}).before(async () => createWidget('dxDataGrid', () => {
+  const data = ((): Record<string, unknown>[] => {
+    const result: { id: number; c0: string; c1: string }[] = [];
 
     for (let i = 0; i < 200; i += 1) {
       result.push({ id: i, c0: 'c0', c1: `c1_${i % 20}` });
     }
 
     return result;
-  }());
+  })();
 
   return {
     height: 300,
@@ -578,7 +578,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        (container.append($('<div>') as any).dxDataGrid({
+        container.append($('<div>') as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,
@@ -587,7 +587,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
             allowUpdating: true,
             mode: 'batch',
           },
-        }));
+        });
       },
     },
     columns: [
@@ -606,16 +606,18 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
       rowRenderingMode: 'virtual',
     },
     onFocusedRowChanging: (): void => {
-      if (!(window as any).focusedRowChanging_Counter) {
-        (window as any).focusedRowChanging_Counter = 0;
+      const global = window as Window & typeof globalThis & { focusedRowChanging_Counter: number };
+      if (!global.focusedRowChanging_Counter) {
+        global.focusedRowChanging_Counter = 0;
       }
-      (window as any).focusedRowChanging_Counter += 1;
+      global.focusedRowChanging_Counter += 1;
     },
     onFocusedRowChanged: (): void => {
-      if (!(window as any).focusedRowChanged_Counter) {
-        (window as any).focusedRowChanged_Counter = 0;
+      const global = window as Window & typeof globalThis & { focusedRowChanged_Counter: number };
+      if (!global.focusedRowChanged_Counter) {
+        global.focusedRowChanged_Counter = 0;
       }
-      (window as any).focusedRowChanged_Counter += 1;
+      global.focusedRowChanged_Counter += 1;
     },
   };
 }));
@@ -628,14 +630,14 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
     .click(dataGrid.element, { offsetX: 195, offsetY: 180 })
     .expect(dataGrid.getFocusedRow().exists)
     .notOk();
-}).before(() => createWidget('dxDataGrid', () => {
-  const data = (function (): Record<string, unknown>[] {
-    const result = [];
+}).before(async () => createWidget('dxDataGrid', () => {
+  const data = ((): Record<string, unknown>[] => {
+    const result: { id: number }[] = [];
     for (let i = 0; i < 100; i += 1) {
       result.push({ id: i + 1 });
     }
     return result;
-  }());
+  })();
 
   return {
     height: 200,
@@ -678,13 +680,13 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
     }).prependTo('body');
   })();
   await createWidget('dxDataGrid', () => {
-    const data = (function (): Record<string, unknown>[] {
-      const result = [];
+    const data = ((): Record<string, unknown>[] => {
+      const result: { id: number }[] = [];
       for (let i = 0; i < 20; i += 1) {
         result.push({ id: i + 1 });
       }
       return result;
-    }());
+    })();
 
     return {
       height: 200,

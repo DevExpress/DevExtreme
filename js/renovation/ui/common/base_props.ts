@@ -4,6 +4,8 @@ import {
 
 @ComponentBindings()
 export class BaseWidgetProps {
+  @OneWay() className?: string = '';
+
   @OneWay() accessKey?: string;
 
   @OneWay() activeStateEnabled?: boolean = false;
@@ -19,10 +21,6 @@ export class BaseWidgetProps {
   @OneWay() hoverStateEnabled?: boolean = false;
 
   @Event() onClick?: (e: any) => void;
-
-  @Event({
-    actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
-  }) onContentReady?: (e: any) => any;
 
   @Event() onKeyDown?: (e: any) => any;
 

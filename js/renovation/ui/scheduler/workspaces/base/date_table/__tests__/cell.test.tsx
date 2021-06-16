@@ -113,7 +113,7 @@ describe('DateTableCellBase', () => {
             allDay: true,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };
@@ -140,7 +140,7 @@ describe('DateTableCellBase', () => {
             allDay: false,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };
@@ -167,7 +167,7 @@ describe('DateTableCellBase', () => {
             groupIndex: 3,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };

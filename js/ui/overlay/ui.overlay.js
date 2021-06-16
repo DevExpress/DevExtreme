@@ -8,7 +8,6 @@ import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
-import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { contains, resetActiveElement } from '../../core/utils/dom';
@@ -33,6 +32,7 @@ import Resizable from '../resizable';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
+import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 const ready = readyCallbacks.add;
 const window = getWindow();
@@ -70,18 +70,6 @@ const POSITION_ALIASES = {
     'right top': { my: 'right top', at: 'right top' },
     'left bottom': { my: 'left bottom', at: 'left bottom' },
     'left top': { my: 'left top', at: 'left top' }
-};
-
-const realDevice = devices.real();
-const firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop';
-const iOS = realDevice.platform === 'ios';
-const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
-
-const forceRepaint = $element => {
-    // NOTE: force layout recalculation on FF desktop (T581681)
-    if(firefoxDesktop) {
-        $element.width();
-    }
 };
 
 const getElement = value => {
@@ -221,7 +209,7 @@ const Overlay = Widget.inherit({
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
-            _fixedPosition: false
+            _fixWrapperPosition: false
         });
     },
 
@@ -247,12 +235,8 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _wrapper: function() {
+    $wrapper: function() {
         return this._$wrapper;
-    },
-
-    _container: function() {
-        return this._$content;
     },
 
     _eventBindingTarget: function() {
@@ -282,8 +266,6 @@ const Overlay = Widget.inherit({
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
-        // NOTE: hack to fix B251087
-        eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
         // NOTE: bootstrap integration T342292
         eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
@@ -451,7 +433,7 @@ const Overlay = Widget.inherit({
 
     _renderWrapperAttributes() {
         const { wrapperAttr } = this.option();
-        this._wrapper().attr(wrapperAttr ?? {});
+        this._$wrapper.attr(wrapperAttr ?? {});
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -520,7 +502,7 @@ const Overlay = Widget.inherit({
                     that._showAnimationProcessing = false;
                     that._isShown = true;
                     that._actions.onShown();
-                    that._toggleSafariScrolling(false);
+                    that._toggleSafariScrolling();
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -574,7 +556,7 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
-            that._toggleSafariScrolling(true);
+            that._toggleSafariScrolling();
 
             if(hidingArgs.cancel) {
                 this._isHidingActionCanceled = true;
@@ -963,7 +945,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderScrollTerminator: function() {
-        const $scrollTerminator = this._wrapper();
+        const $scrollTerminator = this._$wrapper;
         const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
@@ -1070,7 +1052,7 @@ const Overlay = Widget.inherit({
         const position = locate(this._$content);
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this._$wrapper) : { top: 0, left: 0 };
+        const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
         const boundaryOffset = this.option('boundaryOffset');
 
         return {
@@ -1109,12 +1091,6 @@ const Overlay = Widget.inherit({
         this._$wrapper.appendTo(renderContainer);
     },
 
-    _fixHeightAfterSafariAddressBarResizing: function() {
-        if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
-            this._$wrapper.css('minHeight', window.innerHeight);
-        }
-    },
-
     _renderGeometry: function(isDimensionChanged) {
         if(this.option('visible') && hasWindow()) {
             this._renderGeometryImpl(isDimensionChanged);
@@ -1125,44 +1101,54 @@ const Overlay = Widget.inherit({
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
-        this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _fixWrapperPosition: function() {
-        this._$wrapper.css('position', this._useFixedPosition() ? 'fixed' : 'absolute');
+    _styleWrapperPosition: function() {
+        const useFixed = this._isContainerWindow() || this.option('_fixWrapperPosition');
+        const positionStyle = useFixed ? 'fixed' : 'absolute';
+        this._$wrapper.css('position', positionStyle);
     },
 
-    _useFixedPosition: function() {
-        return this._shouldFixBodyPosition()
-            || this.option('_fixedPosition');
-    },
-
-    _shouldFixBodyPosition: function() {
+    _isContainerWindow: function() {
         const $container = this._getContainer();
-        return this._isWindow($container)
-            && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container) || !$container?.get(0);
     },
 
-    _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._shouldFixBodyPosition()) {
-            const body = domAdapter.getBody();
-            if(scrollingEnabled) {
-                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-                window.scrollTo(0, this._bodyScrollTop);
-                this._bodyScrollTop = undefined;
-            } else if(this.option('visible')) {
-                this._bodyScrollTop = window.pageYOffset;
-                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+    _isAllWindowCovered: function() {
+        return this._isContainerWindow() && this.option('shading');
+    },
+
+    _toggleSafariScrolling: function() {
+        const visible = this.option('visible');
+        const $body = $(domAdapter.getBody());
+        const isIosSafari = devices.real().platform === 'ios' && browser.safari;
+        const isAllWindowCovered = this._isAllWindowCovered();
+        const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
+
+        const shouldPreventScrolling = !isScrollingPrevented
+            && visible
+            && isAllWindowCovered;
+        const shouldEnableScrolling = isScrollingPrevented
+            && (!visible || !isAllWindowCovered || this._disposed);
+
+        if(isIosSafari) {
+            if(shouldEnableScrolling) {
+                $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._cachedBodyScrollTop);
+                this._cachedBodyScrollTop = undefined;
+            } else if(shouldPreventScrolling) {
+                this._cachedBodyScrollTop = window.pageYOffset;
+                $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
         }
     },
 
     _renderWrapper: function() {
-        this._fixWrapperPosition();
+        this._styleWrapperPosition();
         this._renderWrapperDimensions();
         this._renderWrapperPosition();
     },
@@ -1176,9 +1162,9 @@ const Overlay = Widget.inherit({
         }
 
         const isWindow = this._isWindow($container);
-
-        wrapperWidth = isWindow ? '' : $container.outerWidth(),
-        wrapperHeight = isWindow ? '' : $container.outerHeight();
+        const documentElement = domAdapter.getDocumentElement();
+        wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
+        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
 
         this._$wrapper.css({
             width: wrapperWidth,
@@ -1238,8 +1224,6 @@ const Overlay = Widget.inherit({
 
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
-
-            forceRepaint(this._$content);
 
             return resultPosition;
         }
@@ -1325,12 +1309,12 @@ const Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
-        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
         this.callBase();
 
+        this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
@@ -1363,6 +1347,9 @@ const Overlay = Widget.inherit({
                 this._renderGeometry();
                 break;
             case 'shading':
+                this._toggleShading(this.option('visible'));
+                this._toggleSafariScrolling();
+                break;
             case 'shadingColor':
                 this._toggleShading(this.option('visible'));
                 break;
@@ -1378,6 +1365,7 @@ const Overlay = Widget.inherit({
             case 'position':
                 this._positionChangeHandled = false;
                 this._renderGeometry();
+                this._toggleSafariScrolling();
                 break;
             case 'visible':
                 this._renderVisibilityAnimate(value).done(() => {
@@ -1395,6 +1383,7 @@ const Overlay = Widget.inherit({
             case 'container':
                 this._initContainer(value);
                 this._invalidate();
+                this._toggleSafariScrolling();
                 break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();
@@ -1421,8 +1410,8 @@ const Overlay = Widget.inherit({
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
                 break;
-            case '_fixedPosition':
-                this._fixWrapperPosition();
+            case '_fixWrapperPosition':
+                this._styleWrapperPosition();
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();

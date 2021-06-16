@@ -16,7 +16,6 @@ import 'ui/data_grid/ui.data_grid';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
@@ -676,9 +675,7 @@ QUnit.module('Keyboard keys', {
         this.clock.tick();
 
         // assert
-        if(!browser.msie || parseInt(browser.version) > 11) {
-            assert.ok(that.rowsView.element().is(':focus'), 'rowsview element is focused');
-        }
+        assert.ok(that.rowsView.element().is(':focus'), 'rowsview element is focused');
         assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
         assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
@@ -797,26 +794,24 @@ QUnit.module('Keyboard keys', {
         assert.ok(!isPageIndexChanged);
     });
 
-    if(!browser.msie || parseInt(browser.version) > 11) {
-        QUnit.testInActiveWindow('Space', function(assert) {
-            // arrange
-            setupModules(this);
+    QUnit.testInActiveWindow('Space', function(assert) {
+        // arrange
+        setupModules(this);
 
-            // act
-            this.options.selection = { mode: 'single' };
-            this.gridView.render($('#container'));
+        // act
+        this.options.selection = { mode: 'single' };
+        this.gridView.render($('#container'));
 
-            this.focusFirstCell();
+        this.focusFirstCell();
 
-            this.triggerKeyDown('downArrow');
-            this.triggerKeyDown('downArrow');
-            this.triggerKeyDown('space', false, false, $(':focus').get(0));
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('space', false, false, $(':focus').get(0));
 
-            // assert
-            assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
-            assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [3], 'changeItemSelectionArgs');
-        });
-    }
+        // assert
+        assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1, 'selection rows count');
+        assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [3], 'changeItemSelectionArgs');
+    });
 
     // T336376
     QUnit.testInActiveWindow('Space in input', function(assert) {
@@ -1433,10 +1428,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.ok(testElement.find('.test .dx-texteditor.dx-state-focused').length === 0);
-        if(!browser.msie) {
-            // T317003
-            assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
-        }
+        assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
     });
 
     QUnit.testInActiveWindow('Close edit form after esc key', function(assert) {
@@ -1497,10 +1489,7 @@ QUnit.module('Keyboard keys', {
         // assert
         assert.ok(testElement.find('.test .dx-texteditor.dx-state-focused').length === 0);
 
-        if(!browser.msie) {
-            // T317003
-            assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
-        }
+        assert.equal(testElement.find('td.dx-focused').length, 1, 'focused cell exists');
     });
 
     QUnit.test('Key down event - default key handler is canceled', function(assert) {
@@ -3465,94 +3454,102 @@ QUnit.module('Keyboard keys', {
         assert.equal($('#container .dx-group-row').first().attr('tabIndex'), '0', 'first group row has tabIndex');
     });
 
-    QUnit.testInActiveWindow('Ctrl + F', function(assert) {
-        // arrange
-        setupModules(this);
+    [{
+        meta: true,
+    }, {
+        ctrl: true
+    }].forEach((keyConfig) => {
+        const keyName = keyConfig.meta ? 'Command' : 'Ctrl';
 
-        // act
-        this.options.searchPanel = {
-            visible: true
-        };
+        QUnit.testInActiveWindow(`${keyName} + F`, function(assert) {
+            // arrange
+            setupModules(this);
 
-        this.gridView.render($('#container'));
+            // act
+            this.options.searchPanel = {
+                visible: true
+            };
 
-        $(this.rowsView.element()).click();
+            this.gridView.render($('#container'));
 
-        const isPreventDefaultCalled = this.triggerKeyDown('F', true).preventDefault;
-        const $searchPanelElement = $('.dx-datagrid-search-panel');
+            $(this.rowsView.element()).click();
 
-        // assert
-        assert.ok($searchPanelElement.hasClass('dx-state-focused'), 'search panel has focus class');
-        assert.ok($searchPanelElement.find(':focus').hasClass('dx-texteditor-input'), 'search panel\'s editor is focused');
-        assert.ok(isPreventDefaultCalled, 'preventDefault is called');
-    });
+            const isPreventDefaultCalled = this.triggerKeyDown('F', keyConfig).preventDefault;
+            const $searchPanelElement = $('.dx-datagrid-search-panel');
 
-    QUnit.testInActiveWindow('Select all rows by Ctrl + A do not work when allowSelectAll is false', function(assert) {
-        // arrange
-        setupModules(this);
+            // assert
+            assert.ok($searchPanelElement.hasClass('dx-state-focused'), 'search panel has focus class');
+            assert.ok($searchPanelElement.find(':focus').hasClass('dx-texteditor-input'), 'search panel\'s editor is focused');
+            assert.ok(isPreventDefaultCalled, 'preventDefault is called');
+        });
 
-        // arrange, act
-        this.options.selection = { mode: 'multiple' };
-        this.gridView.render($('#container'));
+        QUnit.testInActiveWindow(`Select all rows by ${keyName} + A do not work when allowSelectAll is false`, function(assert) {
+            // arrange
+            setupModules(this);
 
-        this.focusFirstCell();
+            // arrange, act
+            this.options.selection = { mode: 'multiple' };
+            this.gridView.render($('#container'));
 
-        this.triggerKeyDown('A', true);
+            this.focusFirstCell();
 
-        // assert
-        assert.ok(!this.selectionOptions.isSelectAllCalled, 'selectAll is not called');
-    });
+            this.triggerKeyDown('A', keyConfig);
 
-    QUnit.testInActiveWindow('Select all rows by Ctrl + A when allowSelectAll is true', function(assert) {
-        // arrange, act
-        setupModules(this);
+            // assert
+            assert.ok(!this.selectionOptions.isSelectAllCalled, 'selectAll is not called');
+        });
 
-        this.options.selection = { mode: 'multiple', allowSelectAll: true };
-        this.gridView.render($('#container'));
+        QUnit.testInActiveWindow(`Select all rows by ${keyName} + A when allowSelectAll is true`, function(assert) {
+            // arrange, act
+            setupModules(this);
 
-        this.focusFirstCell();
+            this.options.selection = { mode: 'multiple', allowSelectAll: true };
+            this.gridView.render($('#container'));
 
-        const isPreventDefaultCalled = this.triggerKeyDown('A', true).preventDefault;
+            this.focusFirstCell();
 
-        // assert
-        assert.ok(this.selectionOptions.isSelectAllCalled, 'selection rows count');
-        assert.ok(isPreventDefaultCalled, 'preventDefault is called');
-    });
+            const isPreventDefaultCalled = this.triggerKeyDown('A', keyConfig).preventDefault;
 
-    // T518574
-    QUnit.testInActiveWindow('Select all should not work on AltGr + A when allowSelectAll is true', function(assert) {
-        // arrange, act
-        setupModules(this);
+            // assert
+            assert.ok(this.selectionOptions.isSelectAllCalled, 'selection rows count');
+            assert.ok(isPreventDefaultCalled, 'preventDefault is called');
+        });
 
-        this.options.selection = { mode: 'multiple', allowSelectAll: true };
-        this.gridView.render($('#container'));
+        // T518574
+        QUnit.testInActiveWindow(`Select all should not work on ${keyName} + AltGr + A when allowSelectAll is true`, function(assert) {
+            // arrange, act
+            setupModules(this);
 
-        this.focusFirstCell();
+            this.options.selection = { mode: 'multiple', allowSelectAll: true };
+            this.gridView.render($('#container'));
 
-        const isPreventDefaultCalled = this.triggerKeyDown('A', { ctrl: true, alt: true }).preventDefault;
+            this.focusFirstCell();
 
-        // assert
-        assert.notOk(this.selectionOptions.isSelectAllCalled, 'selectAll is not called');
-        assert.notOk(isPreventDefaultCalled, 'preventDefault is not called');
-    });
+            const isPreventDefaultCalled = this.triggerKeyDown('A', { ...keyConfig, alt: true }).preventDefault;
 
-    QUnit.testInActiveWindow('Ctrl + A when cell is editing does not prevent default handler', function(assert) {
-        // arrange, act
-        setupModules(this);
+            // assert
+            assert.notOk(this.selectionOptions.isSelectAllCalled, 'selectAll is not called');
+            assert.notOk(isPreventDefaultCalled, 'preventDefault is not called');
+        });
 
-        $.extend(this.options.editing, { mode: 'batch' });
-        this.options.selection = { mode: 'multiple', allowSelectAll: true };
-        this.gridView.render($('#container'));
+        QUnit.testInActiveWindow(`${keyName} + A when cell is editing does not prevent default handler`, function(assert) {
+            // arrange, act
+            setupModules(this);
 
-        this.editingController.editCell(0, 0);
-        this.clock.tick();
-        this.focusFirstCell();
+            $.extend(this.options.editing, { mode: 'batch' });
+            this.options.selection = { mode: 'multiple', allowSelectAll: true };
+            this.gridView.render($('#container'));
 
-        const isPreventDefaultCalled = this.triggerKeyDown('A', true).preventDefault;
+            this.editingController.editCell(0, 0);
+            this.clock.tick();
+            this.focusFirstCell();
 
-        // assert
-        assert.ok(!this.selectionOptions.isSelectAllCalled, 'The select all is not called');
-        assert.ok(!isPreventDefaultCalled, 'preventDefault is not called');
+            const isPreventDefaultCalled = this.triggerKeyDown('A', keyConfig).preventDefault;
+
+            // assert
+            assert.ok(!this.selectionOptions.isSelectAllCalled, 'The select all is not called');
+            assert.ok(!isPreventDefaultCalled, 'preventDefault is not called');
+        });
     });
 
     QUnit.testInActiveWindow('key A_T103450 ', function(assert) {

@@ -421,6 +421,11 @@ export const BaseChart = BaseWidget.inherit({
                 this.above.linkAppend();
             }
         };
+        that._labelsAxesGroup = renderer.g().attr({ 'class': 'dxc-elements-axes-group' });
+
+        const appendLabelsAxesGroup = () => {
+            that._labelsAxesGroup.linkOn(root, 'elements');
+        };
 
         that._backgroundRect = renderer.rect().attr({ fill: 'gray', opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ 'class': 'dxc-background' }).append(root);
@@ -429,9 +434,11 @@ export const BaseChart = BaseWidget.inherit({
         that._gridGroup = renderer.g().attr({ 'class': 'dxc-grids-group' }).linkOn(root, 'grids'); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ 'class': 'dxc-border' }).linkOn(root, 'border'); // TODO: Must be created in the same place where used (chart)
         that._axesGroup = renderer.g().attr({ 'class': 'dxc-axes-group' }).linkOn(root, 'axes'); // TODO: Must be created in the same place where used (advanced chart)
-        that._labelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
+        that._executeAppendBeforeSeries(appendLabelsAxesGroup);
+        that._stripLabelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ 'class': 'dxc-series-group' }).linkOn(root, 'series');
+        that._executeAppendAfterSeries(appendLabelsAxesGroup);
         that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ 'class': 'dxc-scale-breaks' }).linkOn(root, 'scale-breaks');
         that._labelsGroup = renderer.g().attr({ 'class': 'dxc-labels-group' }).linkOn(root, 'labels');
@@ -439,6 +446,10 @@ export const BaseChart = BaseWidget.inherit({
         that._legendGroup = renderer.g().attr({ 'class': 'dxc-legend', 'clip-path': that._getCanvasClipRectID() }).linkOn(root, 'legend').linkAppend(root).enableLinks();
         that._scrollBarGroup = renderer.g().attr({ 'class': 'dxc-scroll-bar' }).linkOn(root, 'scroll-bar');
     },
+
+    _executeAppendBeforeSeries() {},
+
+    _executeAppendAfterSeries() {},
 
     _disposeObjectsInArray: function(propName, fieldNames) {
         _each(this[propName] || [], function(_, item) {
@@ -485,7 +496,7 @@ export const BaseChart = BaseWidget.inherit({
 
         unlinkGroup('_constantLinesGroup');
 
-        unlinkGroup('_labelAxesGroup');
+        unlinkGroup('_stripLabelAxesGroup');
         unlinkGroup('_panesBorderGroup');
         unlinkGroup('_seriesGroup');
         unlinkGroup('_labelsGroup');
@@ -504,7 +515,7 @@ export const BaseChart = BaseWidget.inherit({
 
         disposeObject('_constantLinesGroup');
 
-        disposeObject('_labelAxesGroup');
+        disposeObject('_stripLabelAxesGroup');
         disposeObject('_panesBorderGroup');
         disposeObject('_seriesGroup');
         disposeObject('_labelsGroup');
@@ -865,7 +876,7 @@ export const BaseChart = BaseWidget.inherit({
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._constantLinesGroup.above.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._labelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._stripLabelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
@@ -1330,9 +1341,10 @@ export const BaseChart = BaseWidget.inherit({
 
         _each(seriesBasis, (_, basis) => {
             const seriesTheme = basis.options;
+            const argumentAxis = that._argumentAxes?.filter(a => a.pane === seriesTheme.pane)[0] ?? that.getArgumentAxis();
             const renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
-                argumentAxis: that.getArgumentAxis(),
+                argumentAxis,
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             };
             if(basis.series) {

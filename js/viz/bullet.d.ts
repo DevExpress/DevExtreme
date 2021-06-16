@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -49,12 +45,14 @@ export type TooltipHiddenEvent = EventInfo<dxBullet>;
 /** @public */
 export type TooltipShownEvent = EventInfo<dxBullet>;
 
-
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
      * @docid
      * @default '#e8c267'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
@@ -62,21 +60,18 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     endScaleValue?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTarget?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showZeroLevel?: boolean;
@@ -84,7 +79,6 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     startScaleValue?: number;
@@ -92,21 +86,18 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     target?: number;
     /**
      * @docid
      * @default '#666666'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetColor?: string;
     /**
      * @docid
      * @default 4
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetWidth?: number;
@@ -114,7 +105,6 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     value?: number;
@@ -124,12 +114,10 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @inherits BaseSparkline
  * @module viz/bullet
  * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxBullet extends BaseSparkline {
-    constructor(element: UserDefinedElement, options?: dxBulletOptions)
-}
+export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 
 /** @public */
 export type Properties = dxBulletOptions;

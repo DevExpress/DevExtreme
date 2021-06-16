@@ -291,7 +291,8 @@ export const Axis = function(renderSettings) {
     that._eventTrigger = renderSettings.eventTrigger;
 
     that._stripsGroup = renderSettings.stripsGroup;
-    that._labelAxesGroup = renderSettings.labelAxesGroup;
+    that._stripLabelAxesGroup = renderSettings.stripLabelAxesGroup;
+    that._labelsAxesGroup = renderSettings.labelsAxesGroup;
     that._constantLinesGroup = renderSettings.constantLinesGroup;
     that._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
     that._axesContainerGroup = renderSettings.axesContainerGroup;
@@ -693,7 +694,7 @@ Axis.prototype = {
         that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' }).enableLinks();
         that._axisStripGroup = renderer.g().attr({ 'class': classSelector + 'strips' });
         that._axisGridGroup = renderer.g().attr({ 'class': classSelector + 'grid' });
-        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).linkOn(that._axisGroup, 'axisElements').linkAppend();
+        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' });
         that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).linkOn(that._axisGroup, 'axisLine').linkAppend();
         that._axisTitleGroup = renderer.g().attr({ 'class': classSelector + 'title' }).append(that._axisGroup);
 
@@ -716,7 +717,10 @@ Axis.prototype = {
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
-        (!that._options.label.template || !that.isRendered()) && that._axisElementsGroup.clear(); // for react async templates
+        if((!that._options.label.template || !that.isRendered())) { // for react async templates
+            that._axisElementsGroup.remove();
+            that._axisElementsGroup.clear();
+        }
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
@@ -895,7 +899,7 @@ Axis.prototype = {
         that._axisStripGroup = that._axisConstantLineGroups = that._axisStripLabelGroup = that._axisBreaksGroup = null;
         that._axisLineGroup = that._axisElementsGroup = that._axisGridGroup = null;
         that._axisGroup = that._axisTitleGroup = null;
-        that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
+        that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = that._labelsAxesGroup = null;
 
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
@@ -1670,7 +1674,7 @@ Axis.prototype = {
             const weekend = dateIntervals.week - workWeek;
             if(workWeek !== businessInterval && weekend < businessInterval) {
                 const weekendsCount = Math.ceil(businessInterval / dateIntervals.week);
-                businessInterval = weekend >= businessInterval ? dateIntervals.day : businessInterval - (weekend * weekendsCount);
+                businessInterval = businessInterval - (weekend * weekendsCount);
             } else if(weekend >= businessInterval && businessInterval > dateIntervals.day) {
                 businessInterval = dateIntervals.day;
             }
@@ -1935,7 +1939,7 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
 
-        callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate());
+        callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate(options.label.template));
 
         that._templatesRendered && that._templatesRendered.reject();
         that._templatesRendered = new Deferred();
@@ -1955,9 +1959,10 @@ Axis.prototype = {
 
         that._dateMarkers = that._drawDateMarkers() || [];
 
-        that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
+        that._stripLabelAxesGroup && that._axisStripLabelGroup.append(that._stripLabelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
+        that._labelsAxesGroup && that._axisElementsGroup.append(that._labelsAxesGroup);
 
         if(that._constantLinesGroup) {
             that._axisConstantLineGroups.above.inside.append(that._constantLinesGroup.above);
@@ -2142,6 +2147,7 @@ Axis.prototype = {
     applyClipRects: function(elementsClipID, canvasClipID) {
         this._axisGroup.attr({ 'clip-path': canvasClipID });
         this._axisStripGroup.attr({ 'clip-path': elementsClipID });
+        this._axisElementsGroup.attr({ 'clip-path': canvasClipID });
     },
 
     _validateVisualRange(optionValue) {
@@ -2164,14 +2170,6 @@ Axis.prototype = {
         options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
 
         that._setVisualRange(options._customVisualRange);
-    },
-
-    beforeCleanGroups() {
-        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkRemove();
-    },
-
-    afterCleanGroups() {
-        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkAppend();
     },
 
     validate() {
@@ -2432,37 +2430,6 @@ Axis.prototype = {
         }
 
         return { stopInteraction: !!isOvercoming, correctedRange: correctedRange };
-    },
-
-    dataVisualRangeIsReduced() {
-        let minDataValue;
-        let maxDataValue;
-        const translator = this.getTranslator();
-
-        if(this._options.type === 'discrete') {
-            const categories = translator.getBusinessRange().categories;
-            minDataValue = categories[0];
-            maxDataValue = categories[categories.length - 1];
-        } else {
-            const seriesData = this._seriesData;
-            minDataValue = seriesData.min;
-            maxDataValue = seriesData.max;
-        }
-
-        if(!isDefined(minDataValue) || !isDefined(maxDataValue)) {
-            return false;
-        }
-
-        const startPoint = translator.translate(minDataValue);
-        const endPoint = translator.translate(maxDataValue);
-        const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
-        const visualRange = this.visualRange();
-        const visualRangeStartPoint = translator.translate(visualRange.startValue);
-        const visualRangeEndPoint = translator.translate(visualRange.endValue);
-
-        return (visualRangeStartPoint > edges[0] && visualRangeStartPoint < edges[1]) ||
-            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]) ||
-            visualRangeStartPoint === visualRangeEndPoint && edges[0] !== edges[1];
     },
 
     isExtremePosition(isMax) {

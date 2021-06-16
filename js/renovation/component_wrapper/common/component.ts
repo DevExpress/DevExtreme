@@ -1,47 +1,76 @@
-/* eslint-disable */
-import { render, createRef, RefObject } from "inferno";
+/* eslint-disable @typescript-eslint/ban-types */
+import {
+  render, createRef, RefObject, VNode, Component,
+} from 'inferno';
 import { createElement } from 'inferno-create-element';
-import $ from '../../../core/renderer';
+import { InfernoEffectHost, hydrate } from '@devextreme/vdom';
+// eslint-disable-next-line import/named
+import $, { dxElementWrapper } from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
-import { isDefined, isRenderer } from '../../../core/utils/type';
+import { isDefined, isRenderer, isString } from '../../../core/utils/type';
 
-import { InfernoEffectHost, hydrate } from "@devextreme/vdom";
-import { TemplateWrapper } from "./template_wrapper";
-import { updatePropsImmutable } from '../utils/update-props-immutable';
+import { TemplateModel, TemplateWrapper } from './template_wrapper';
+import { updatePropsImmutable } from '../utils/update_props_immutable';
+import type { Option, TemplateComponent } from './types';
 
-
-const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
-  if (options.hasOwnProperty(name) && options[name] === undefined) {
+const setDefaultOptionValue = (
+  options: Record<string, unknown>,
+  defaultValueGetter: (name: string) => unknown,
+) => (name: string): void => {
+  if (Object.prototype.hasOwnProperty.call(options, name) && options[name] === undefined) {
+    // eslint-disable-next-line no-param-reassign
     options[name] = defaultValueGetter(name);
   }
 };
 
-export default class ComponentWrapper extends DOMComponent {
+interface ElementAttributes extends Record<string, unknown> {
+  class: string;
+}
+
+export interface ComponentWrapperProps extends Record<string, unknown> {
+  onContentReady?: (e: Record<string, unknown>) => void;
+  elementAttr?: ElementAttributes;
+}
+
+export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
+  static IS_RENOVATED_WIDGET = false;
+
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
     [name: string]: Function;
   };
+
+  customKeyHandlers!: Record<string, Function>;
+
+  defaultKeyHandlers!: Record<string, Function>;
+
   _documentFragment!: DocumentFragment;
+
   _elementAttr!: {
-    class?: string;
     [name: string]: unknown;
+    class?: string;
   };
+
   _isNodeReplaced!: boolean;
-  _props: any;
+
+  _props!: Record<string, unknown>;
+
   _storedClasses?: string;
-  _supportedKeys!: () => {
-    [name: string]: Function,
-  };
+
   _viewRef!: RefObject<unknown>;
-  _viewComponent!: any;
-  _disposeMethodCalled = false;
+
+  _viewComponent!: typeof Component;
+
+  _shouldRaiseContentReady = false;
+
+  _componentTemplates!: Record<string, TemplateComponent | undefined>;
 
   get _propsInfo(): {
     allowNull: string[];
-    twoWay: any[];
+    twoWay: [string, string, string][];
     elements: string[];
     templates: string[];
     props: string[];
@@ -55,10 +84,30 @@ export default class ComponentWrapper extends DOMComponent {
     };
   }
 
-  get viewRef() {
+  public get viewRef(): unknown {
     return this._viewRef?.current;
   }
-  _getDefaultOptions() {
+
+  _checkContentReadyOption(fullName: string): boolean {
+    const contentReadyOptions = this._getContentReadyOptions().reduce((options, name) => {
+      // eslint-disable-next-line no-param-reassign
+      options[name] = true;
+      return options;
+    }, {});
+
+    this._checkContentReadyOption = (optionName): boolean => !!contentReadyOptions[optionName];
+    return this._checkContentReadyOption(fullName);
+  }
+
+  _getContentReadyOptions(): string[] {
+    return ['rtlEnabled'];
+  }
+
+  _fireContentReady(): void {
+    this._actionsMap.onContentReady({});
+  }
+
+  _getDefaultOptions(): Record<string, unknown> {
     return extend(
       true,
       super._getDefaultOptions(),
@@ -66,35 +115,35 @@ export default class ComponentWrapper extends DOMComponent {
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
-          [name, defaultValue, eventName]
+          [name, defaultName, eventName],
         ) => ({
           ...options,
-          [name]: defaultValue,
-          [eventName]: (value) => this.option(name, value),
+          [name]: this._viewComponent.defaultProps[defaultName],
+          [eventName]: (value: unknown): void => this.option(name, value),
         }),
-        {}
+        {},
       ),
       this._propsInfo.templates.reduce(
         (
           options: { [name: string]: unknown },
-          name
+          name,
         ) => ({
           ...options,
-          [name]: null
+          [name]: null,
         }),
-        {}
-      )
+        {},
+      ),
     );
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     const props = this.getProps();
     this._renderWrapper(props);
   }
 
-  _renderWrapper(props): void {
+  _renderWrapper(props: Record<string, unknown>): void {
     const containerNode = this.$element()[0];
-    const parentNode = containerNode.parentNode;
+    const { parentNode } = containerNode;
 
     if (!this._isNodeReplaced) {
       const nextNode = containerNode?.nextSibling;
@@ -105,41 +154,44 @@ export default class ComponentWrapper extends DOMComponent {
       InfernoEffectHost.lock();
       hydrate(
         createElement(this._viewComponent, props),
-        mountNode
+        mountNode,
       );
       containerNode.$V = mountNode.$V;
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }
-      InfernoEffectHost.callEffects();
       this._isNodeReplaced = true;
+      InfernoEffectHost.callEffects();
+      this._shouldRaiseContentReady = true;
     } else {
       render(
         createElement(this._viewComponent, props),
-        containerNode
+        containerNode,
       );
+    }
+
+    if (this._shouldRaiseContentReady) {
+      this._fireContentReady();
+      this._shouldRaiseContentReady = false;
     }
   }
 
-  _render() { } // NOTE: Inherited from DOM_Component
-
-  dispose() {
-    this._disposeMethodCalled = true;
-    super.dispose();
+  _silent(name: string, value: unknown): void {
+    this._options.silent(name, value);
   }
 
-  _dispose() {
+  _render(): void { } // NOTE: Inherited from DOM_Component
+
+  _dispose(): void {
     const containerNode = this.$element()[0];
-    const parentNode = containerNode.parentNode;
+    const { parentNode } = containerNode;
 
     if (parentNode) {
       parentNode.$V = containerNode.$V;
-      render(
-        this._disposeMethodCalled ? createElement(
-          containerNode.tagName, 
-          this.elementAttr
-        ) : null,
-        parentNode);
+      render(null, parentNode);
+      parentNode.appendChild(containerNode);
+      containerNode.innerHTML = '';
+
       delete parentNode.$V;
     }
     delete containerNode.$V;
@@ -147,23 +199,25 @@ export default class ComponentWrapper extends DOMComponent {
     super._dispose();
   }
 
-  get elementAttr() {
+  get elementAttr(): HTMLAttributes<unknown> {
     if (!this._elementAttr) {
       const { attributes } = this.$element()[0];
       this._elementAttr = {
-        ...Object.keys(attributes).reduce((a, key) => {
+        ...Object.keys(attributes).reduce((result, key) => {
+          const updatedAttributes = result;
           if (attributes[key].specified) {
-            a[attributes[key].name] = attributes[key].value;
+            updatedAttributes[attributes[key].name] = attributes[key].value;
           }
-          return a;
+          return updatedAttributes;
         }, {}),
       };
       this._storedClasses = this.$element()[0].getAttribute('class') || '';
     }
-    const elemStyle = this.$element()[0].style;
+    const elemStyle: CSSStyleDeclaration = this.$element()[0].style;
 
     const style = {};
-    for (let i = 0; i < elemStyle.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < elemStyle.length; i += 1) {
       style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
     }
     this._elementAttr.style = style;
@@ -173,34 +227,53 @@ export default class ComponentWrapper extends DOMComponent {
     return this._elementAttr;
   }
 
-  _patchOptionValues(options: Record<string, unknown>) {
-    const { allowNull, twoWay, elements, props } = this._propsInfo;
-    const defaultProps = this._viewComponent.defaultProps;
+  _getAdditionalActionConfigs(): Record<string, Record<string, unknown>> {
+    return {
+      onContentReady: {
+        excludeValidators: ['disabled', 'readOnly'],
+      },
+    };
+  }
 
-    const widgetProps = props.reduce((acc, propName) => {
-      if (options.hasOwnProperty(propName)) {
-        acc[propName] = options[propName];
+  _getAdditionalProps(): string[] {
+    return [];
+  }
+
+  _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
+    const {
+      allowNull, twoWay, elements, props,
+    } = this._propsInfo;
+    const { defaultProps } = this._viewComponent;
+    const { ref, children, onKeyboardHandled } = options;
+    const onKeyDown = onKeyboardHandled
+      ? (_: never, event_options: unknown[]): void => {
+        (onKeyboardHandled as (args: unknown[]) => void)(event_options);
       }
-      return acc;
-    }, {
-      ref: options.ref,
-      children: options.children,
+      : undefined;
+    const widgetProps = {
+      ref,
+      children,
+      onKeyDown,
+    };
+    [...props, ...this._getAdditionalProps()].forEach((propName) => {
+      if (Object.prototype.hasOwnProperty.call(options, propName)) {
+        widgetProps[propName] = options[propName];
+      }
     });
 
     allowNull.forEach(
-      setDefaultOptionValue(widgetProps, () => null)
+      setDefaultOptionValue(widgetProps, () => null),
     );
 
     Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         widgetProps,
-        (name: string) => defaultProps[name]
-      )
+        (name: string) => defaultProps[name],
+      ),
     );
-
-    twoWay.forEach(([name, defaultValue]) =>
-      setDefaultOptionValue(widgetProps, () => defaultValue)(name)
-    );
+    twoWay.forEach(([name, defaultName]) => {
+      setDefaultOptionValue(widgetProps, () => defaultProps[defaultName])(name);
+    });
 
     elements.forEach((name: string) => {
       if (name in widgetProps) {
@@ -214,13 +287,16 @@ export default class ComponentWrapper extends DOMComponent {
     return widgetProps;
   }
 
-  getProps() {
+  getProps(): Record<string, unknown> {
     const { elementAttr } = this.option();
-    
+
     const options = this._patchOptionValues({
       ...this._props,
       ref: this._viewRef,
       children: this._extractDefaultSlot(),
+    });
+    this._propsInfo.templates.forEach((template) => {
+      options[template] = this._componentTemplates[template];
     });
 
     return {
@@ -228,8 +304,8 @@ export default class ComponentWrapper extends DOMComponent {
       ...this.elementAttr,
       ...elementAttr,
       className: [
-        ...(this.elementAttr.class || '').split(' '),
-        ...(elementAttr.class || '').split(' '),
+        ...(this.elementAttr.class ?? '').split(' '),
+        ...(elementAttr?.class ?? '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
         .join(' ')
@@ -239,34 +315,80 @@ export default class ComponentWrapper extends DOMComponent {
     };
   }
 
-  _getActionConfigs() {
+  _getActionConfigs(): Record<string, Record<string, unknown>> {
     return {};
   }
 
-  _init() {
+  _getActionConfigsFull(): Record<string, Record<string, unknown>> {
+    return {
+      ...this._getActionConfigs(),
+      ...this._getAdditionalActionConfigs(),
+    };
+  }
+
+  getDefaultTemplates(): Record<string, undefined> {
+    const defaultTemplates = Object.values(this._templatesInfo);
+    const result = {};
+
+    defaultTemplates.forEach((template) => {
+      result[template] = 'dx-renovation-template-mock';
+    });
+
+    return result;
+  }
+
+  get _templatesInfo(): Record<string, string> {
+    return {};
+  }
+
+  _optionsWithDefaultTemplates(options: Record<string, unknown>): Record<string, unknown> {
+    const templateOptions = Object.entries(this._templatesInfo)
+      .reduce(
+        (result, [templateName, templateValue]) => ({
+          ...result,
+          [templateName]: options[templateName] ?? templateValue,
+        }), {},
+      );
+    return {
+      ...options,
+      ...templateOptions,
+    };
+  }
+
+  _init(): void {
     super._init();
-    this._props = { ...this.option() };
+
+    this.customKeyHandlers = {};
+    this.defaultKeyHandlers = {};
+    this._templateManager?.addDefaultTemplates(this.getDefaultTemplates());
+    this._props = this._optionsWithDefaultTemplates(this.option());
     this._documentFragment = domAdapter.createDocumentFragment();
     this._actionsMap = {};
 
-    Object.keys(this._getActionConfigs()).forEach((name) =>
-      this._addAction(name)
-    );
+    this._componentTemplates = {};
+    this._propsInfo.templates.forEach((template) => {
+      this._componentTemplates[template] = this._createTemplateComponent(this._props[template]);
+    });
+
+    Object.keys(this._getActionConfigsFull()).forEach((name) => this._addAction(name));
 
     this._viewRef = createRef();
-    this._supportedKeys = () => ({});
   }
 
-  _addAction(event: string, action?: Function) {
+  _addAction(event: string, actionToAdd?: Function): void {
+    let action = actionToAdd;
     if (!action) {
       const actionByOption = this._createActionByOption(
         event,
-        this._getActionConfigs()[event]
+        this._getActionConfigsFull()[event],
       );
 
-      action = function(actArgs: { [name: string]: any }) {
+      action = (
+        actArgs: Record<string, string | Element | dxElementWrapper>,
+      ): void => {
         Object.keys(actArgs).forEach((name) => {
           if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
+            // eslint-disable-next-line no-param-reassign
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
@@ -275,18 +397,26 @@ export default class ComponentWrapper extends DOMComponent {
     }
     this._actionsMap[event] = action;
   }
-  
-  _optionChanged(option) {
-    const { name, fullName } = option;
+
+  _optionChanged(option: Option): void {
+    const { name, fullName, value } = option;
     updatePropsImmutable(this._props, this.option(), name, fullName);
-    if (name && this._getActionConfigs()[name]) {
+
+    if (this._propsInfo.templates.includes(name)) {
+      this._componentTemplates[name] = this._createTemplateComponent(value);
+    }
+
+    if (name && this._getActionConfigsFull()[name]) {
       this._addAction(name);
     }
+
+    this._shouldRaiseContentReady = this._shouldRaiseContentReady
+      || this._checkContentReadyOption(fullName);
     super._optionChanged(option);
     this._invalidate();
   }
 
-  _extractDefaultSlot() {
+  _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
       return createElement(TemplateWrapper, {
         template: this._getTemplate(this._templateManager.anonymousTemplateName),
@@ -296,30 +426,35 @@ export default class ComponentWrapper extends DOMComponent {
     return null;
   }
 
-  _createTemplateComponent(props, templateOption) {
+  _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
     if (!templateOption) {
-      return;
+      return undefined;
     }
 
     const template = this._getTemplate(templateOption);
 
-    const templateWrapper = (model: any) => {
-      return createElement(
-        TemplateWrapper,
-        {
-          template,
-          model
-        }
-      )
-    };
+    if (isString(template) && template === 'dx-renovation-template-mock') {
+      return undefined;
+    }
+    const templateWrapper = (model: TemplateModel): VNode => createElement(
+      TemplateWrapper,
+      {
+        template,
+        model,
+      },
+    );
 
-    return templateWrapper
+    return templateWrapper;
   }
 
-  _wrapKeyDownHandler(handler) {
-    return (options) => {
+  _wrapKeyDownHandler(initialHandler: Function): Function {
+    return (options: {
+      originalEvent: Event & { cancel: boolean };
+      keyName: string;
+      which: string;
+    }): Event => {
       const { originalEvent, keyName, which } = options;
-      const keys = this._supportedKeys();
+      const keys = this.customKeyHandlers;
       const func = keys[keyName] || keys[which];
 
       // NOTE: registered handler has more priority
@@ -334,46 +469,50 @@ export default class ComponentWrapper extends DOMComponent {
       }
 
       // NOTE: make it possible to pass onKeyDown property
-      return handler?.(originalEvent, options);
+      return initialHandler?.(originalEvent, options);
     };
   }
 
-  _toPublicElement(element: any) {
+  _toPublicElement(element: string | Element | dxElementWrapper): Element {
     return getPublicElement($(element));
   }
 
-  _patchElementParam(value: any) {
-    let result: any;
-
+  _patchElementParam(value: Element): Element {
     try {
-      result = $(value);
+      const result: dxElementWrapper = $(value);
+      const element = result?.get(0);
+      return element?.nodeType ? element : value;
     } catch (error) {
       return value;
     }
-    result = result?.get(0);
-    return result?.nodeType ? result : value
   }
 
   // Public API
-  repaint() {
+  repaint(): void {
     this._isNodeReplaced = false;
+    this._shouldRaiseContentReady = true;
     this._refresh();
   }
 
-  registerKeyHandler(key, handler) {
-    const currentKeys = this._supportedKeys();
-    this._supportedKeys = () => ({ ...currentKeys, [key]: handler });
+  _supportedKeys(): Record<string, Function> {
+    return {
+      ...this.defaultKeyHandlers,
+      ...this.customKeyHandlers,
+    };
+  }
+
+  registerKeyHandler(key: string, handler: Function): void {
+    this.customKeyHandlers[key] = handler;
   }
 
   // NOTE: this method will be deprecated
   //       aria changes should be defined in declaration or passed through property
-  setAria(name: string, value: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setAria(_name: string, _value: string): void {
     throw new Error(
-      '"setAria" method is deprecated, use "aria" property instead'
+      '"setAria" method is deprecated, use "aria" property instead',
     );
   }
-
-  static IS_RENOVATED_WIDGET = false;
 }
 
 /// #DEBUG

@@ -15,9 +15,11 @@ import fx from '../../animation/fx';
 import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
 import { addNamespace } from '../../events/utils/index';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
+import { name as contextMenuEventName } from '../../events/contextmenu';
+import holdEvent from '../../events/hold';
 
 // STYLE contextMenu
 
@@ -353,6 +355,18 @@ class ContextMenu extends MenuBase {
         this._attachContextMenuEvent();
     }
 
+    preventShowingDefaultContextMenuAboveOverlay() {
+        const $itemContainer = this._itemContainer();
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
+
+        eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        eventsEngine.on($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`, ((e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        }).bind(this));
+    }
+
     _itemContextMenuHandler(e) {
         super._itemContextMenuHandler(e);
         e.stopPropagation();
@@ -535,7 +549,7 @@ class ContextMenu extends MenuBase {
     }
 
     _getItemsContainers() {
-        return this._overlay._$content.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        return this._overlay.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     }
 
     _searchActiveItem(target) {
@@ -828,6 +842,11 @@ class ContextMenu extends MenuBase {
             event && event.stopPropagation();
 
             this._setAriaAttributes();
+
+            // T983617. Prevent the browser's context menu appears on desktop touch screens.
+            if(event?.originalEvent?.type === holdEvent.name) {
+                this.preventShowingDefaultContextMenuAboveOverlay();
+            }
         }
 
         return promise;

@@ -410,15 +410,12 @@ SlidersController.prototype = {
                     }
                 }
                 if(compareMax(position + moveOffset, staticPosition)) {
-                    isValid = true;
                     slider = sliders[index];
                     value = sliders[1 - index].getValue();
                     pos = Math.max(Math.min(position + moveOffset, maxPosition), minPosition);
                     // TODO: Write it as single operation (isValid = ... && ... && ...) when code is stable.
                     // Check - if moving slider is closer to static slider than a span of a single category.
-                    if(isValid && translator.isValueProlonged) {
-                        isValid = !compareMin(pos, translator.to(value, dir));
-                    }
+                    isValid = translator.isValueProlonged ? !compareMin(pos, translator.to(value, dir)) : true;
                     let invalidStateValue;
                     // Check - if moving slider is closer to static slider than it is allowed "minRange".
                     if(isValid && that._minRange) {

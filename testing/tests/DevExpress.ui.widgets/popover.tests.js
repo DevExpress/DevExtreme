@@ -3,7 +3,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
-import errors from 'core/errors';
+import errors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
@@ -1523,8 +1523,7 @@ QUnit.module('behavior', () => {
             fixtures.simple.create();
             this.$target = $('#where');
             this.$popover = $('#what');
-            this.stub = sinon.stub();
-            errors.log = this.stub;
+            this.stub = sinon.stub(errors, 'log');
             this.popover = new Popover(this.$popover, {
                 target: this.$target,
                 hideEvent: 'mouseleave',
@@ -1533,19 +1532,26 @@ QUnit.module('behavior', () => {
         },
         afterEach: function() {
             fixtures.simple.drop();
-            this.stub.reset();
+            this.stub.restore();
         }
     }, () => {
         QUnit.test('on init', function(assert) {
             assert.ok(this.stub.calledOnce, 'the log method is called once');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
 
         QUnit.test('at runtime', function(assert) {
             this.popover.option('hideEvent', 'click');
 
             assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
-            assert.strictEqual(this.stub.lastCall.args[0], 'W0018');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
+        });
+
+        QUnit.test('at runtime to null', function(assert) {
+            this.popover.option('hideEvent', null);
+
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
     });
 });

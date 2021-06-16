@@ -14,7 +14,7 @@ test('The tooltip of collector should not scroll page and immediately hide', asy
     .click(scheduler.getAppointmentCollector('7').element, { speed: 0.2 })
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'week',
     name: 'week',
@@ -52,7 +52,9 @@ test('The tooltip of collector should not scroll page and immediately hide', asy
     startDate: new Date(2017, 4, 22, 9, 30),
     endDate: new Date(2017, 4, 22, 11, 30),
   }],
-}));
+})).after(async (t) => {
+  await t.resizeWindow(1200, 800);
+});
 
 test('The tooltip should not hide after automatic scrolling during an appointment click', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -63,11 +65,13 @@ test('The tooltip should not hide after automatic scrolling during an appointmen
     .click(appointment.element, { speed: 0.2 })
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource,
-}));
+})).after(async (t) => {
+  await t.resizeWindow(1200, 800);
+});
 
 test('The tooltip should hide after manually scrolling in the browser', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -82,8 +86,10 @@ test('The tooltip should hide after manually scrolling in the browser', async (t
   await t
     .wait(500)
     .expect(scheduler.appointmentTooltip.isVisible()).notOk();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource,
-}));
+})).after(async (t) => {
+  await t.resizeWindow(1200, 800);
+});

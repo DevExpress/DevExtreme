@@ -21,8 +21,9 @@ import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
+// eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -30,11 +31,11 @@ const getCssClasses = (model: ButtonProps): string => {
   const {
     text, icon, stylingMode, type, iconPosition,
   } = model;
-  const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
+  const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
-    [`dx-button-${type || 'normal'}`]: true,
+    [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
@@ -44,7 +45,7 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template: ButtonTemplate, text,
+    children, icon, iconPosition, template: ButtonTemplate, text, templateData,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text;
   const isIconLeft = iconPosition === 'left';
@@ -57,6 +58,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       aria={viewModel.aria}
+      className={viewModel.props.className}
       classes={viewModel.cssClasses}
       disabled={viewModel.props.disabled}
       focusStateEnabled={viewModel.props.focusStateEnabled}
@@ -64,7 +66,6 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
       onActive={viewModel.onActive}
-      onContentReady={viewModel.props.onContentReady}
       onClick={viewModel.onWidgetClick}
       onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
@@ -75,7 +76,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className="dx-button-content" ref={viewModel.contentRef}>
-        {ButtonTemplate && (<ButtonTemplate data={{ icon, text }} />)}
+        {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
@@ -121,13 +122,15 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() type?: string;
+  @OneWay() type?: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
   @OneWay() useInkRipple?: boolean = false;
 
   @OneWay() useSubmitBehavior?: boolean = false;
 
   @OneWay() validationGroup?: string = undefined;
+
+  @OneWay() templateData?: Record<string, unknown> = {};
 }
 
 export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
@@ -156,26 +159,42 @@ export class Button extends JSXComponent(ButtonProps) {
 
   @Ref() widgetRef!: RefObject<Widget>;
 
-  @Effect()
-  contentReadyEffect(): EffectReturn {
-    // NOTE: we should trigger this effect on change each
-    //       property upon which onContentReady depends
-    //       (for example, text, icon, etc)
-    const { onContentReady } = this.props;
-
-    onContentReady?.({ element: this.contentRef.current!.parentNode });
-  }
-
   @Method()
   focus(): void {
     this.widgetRef.current!.focus();
+  }
+
+  @Method()
+  activate(): void {
+    this.widgetRef.current!.activate();
+  }
+
+  @Method()
+  deactivate(): void {
+    this.widgetRef.current!.deactivate();
+  }
+
+  @Effect()
+  submitEffect(): EffectReturn {
+    const namespace = 'UIFeedback';
+    const { useSubmitBehavior, onSubmit } = this.props;
+
+    if (useSubmitBehavior && onSubmit) {
+      click.on(this.submitInputRef.current,
+        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
+        { namespace });
+
+      return (): void => click.off(this.submitInputRef.current, { namespace });
+    }
+
+    return undefined;
   }
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
     useInkRipple && this.inkRippleRef.current!.showWave({
-      element: this.contentRef.current, event,
+      element: this.contentRef.current!, event,
     });
   }
 
@@ -183,7 +202,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { useInkRipple } = this.props;
 
     useInkRipple && this.inkRippleRef.current!.hideWave({
-      element: this.contentRef.current, event,
+      element: this.contentRef.current!, event,
     });
   }
 
@@ -211,34 +230,18 @@ export class Button extends JSXComponent(ButtonProps) {
     return undefined;
   }
 
-  @Effect()
-  submitEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { useSubmitBehavior, onSubmit } = this.props;
-
-    if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef.current,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
-        { namespace });
-
-      return (): void => click.off(this.submitInputRef.current, { namespace });
-    }
-
-    return undefined;
-  }
-
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = text || icon;
+    let label = (text ?? '') || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
-      label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+      label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
     return {
       role: 'button',
-      ...(label ? { label } : {}),
+      ...label ? { label } : {},
     };
   }
 
@@ -249,12 +252,16 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return (icon || type === 'back') ? (icon || 'back') : '';
+    if (icon || type === 'back') {
+      return (icon ?? '') || 'back';
+    }
+
+    return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
     const { text, icon, type } = this.props;
-    return ((!text && icon) || (type === 'back')) ? {
+    return (!text && icon) || (type === 'back') ? {
       isCentered: true,
       useHoldAnimation: false,
       waveSizeCoefficient: 1,

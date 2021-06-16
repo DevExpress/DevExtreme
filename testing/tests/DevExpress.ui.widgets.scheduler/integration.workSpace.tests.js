@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment, isIE11 } from '../../helpers/scheduler/helpers.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 import eventsEngine from 'events/core/events_engine';
@@ -1068,6 +1068,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             assert.ok($($cells.eq(0)).hasClass('dx-state-focused', 'correct cell is focused'));
         });
 
+        // It will work differently in renovated scheduler, but we need to take it into account
         test(`Focused cells cash should be correct (T640466) when scrolling is ${scrollingMode}`, function(assert) {
             const scheduler = createWrapper({
                 dataSource: [],
@@ -1079,10 +1080,19 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 height: 600,
                 scrolling: { mode: scrollingMode },
             });
-            const $cells = scheduler.instance.$element().find('.dx-scheduler-date-table-cell');
             const workSpace = scheduler.instance.getWorkSpace();
 
-            assert.deepEqual(workSpace._selectedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+            assert.deepEqual(
+                workSpace.cellsSelectionState.getSelectedCells()[0],
+                {
+                    startDate: new Date(2018, 3, 8),
+                    endDate: new Date(2018, 3, 8, 0, 30),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
+                'Cashed cells is correct',
+            );
         });
     });
 
@@ -2052,7 +2062,13 @@ module('Resource Cell Template', () => {
 
 module('Markup', () => {
     test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
+        if(isIE11) {
+            assert.ok(true, 'This test is not for IE11');
+            return;
+        }
+
         const scheduler = createWrapper({
+            width: 600,
             views: [{
                 type: 'month',
                 intervalCount: 30,
@@ -2070,6 +2086,6 @@ module('Markup', () => {
             return currentWidth + cells.eq(index).outerWidth();
         }, 0);
 
-        assert.roughEqual(rowWidth, rowWidthByCells, 3.1, 'Correct row width');
+        assert.roughEqual(rowWidth, rowWidthByCells, 1.1, 'Correct row width');
     });
 });

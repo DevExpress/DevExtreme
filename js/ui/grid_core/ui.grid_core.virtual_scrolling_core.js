@@ -25,9 +25,7 @@ export function _setPixelRatioFn(value) {
 ///#ENDDEBUG
 
 export function getContentHeightLimit(browser) {
-    if(browser.msie) {
-        return 4000000;
-    } else if(browser.mozilla) {
+    if(browser.mozilla) {
         return 8000000;
     }
 
@@ -335,9 +333,15 @@ export const VirtualScrollController = Class.inherit((function() {
 
         // new mode
         getViewportParams: function() {
-            const skip = Math.floor(this._viewportItemIndex);
-            let take = this._viewportSize + 1;
-            if(isVirtualMode(this)) {
+            const topIndex = this._viewportItemIndex;
+            const bottomIndex = this._viewportSize + topIndex;
+            const maxGap = this.pageSize();
+            const minGap = this.option('scrolling.minGap');
+            const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
+            const skip = Math.floor(Math.max(0, topIndex - minGap) / maxGap) * maxGap;
+            let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
+
+            if(virtualMode) {
                 const remainedItems = this._dataOptions.totalItemsCount() - skip;
                 take = Math.min(take, remainedItems);
             }

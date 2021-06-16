@@ -1,8 +1,6 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  OneWay,
 } from '@devextreme-generator/declarations';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
@@ -30,6 +28,8 @@ export const viewFunction = ({
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
+    leftVirtualCellCount={viewData.leftVirtualCellCount}
+    rightVirtualCellCount={viewData.rightVirtualCellCount}
     virtualCellsCount={virtualCellsCount}
     className={classes}
   >
@@ -43,17 +43,13 @@ export const viewFunction = ({
     />
   </Table>
 );
-@ComponentBindings()
-export class DateTableLayoutBaseProps extends DateTableLayoutProps {
-  @OneWay() className?: string;
-}
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
   jQuery: { register: true },
 })
-export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+export class DateTableLayoutBase extends JSXComponent(DateTableLayoutProps) {
   get classes(): string | undefined {
     const { addDateTableClass } = this.props;
 
@@ -61,19 +57,19 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) 
   }
 
   get topVirtualRowHeight(): number {
-    return this.props.viewData.topVirtualRowHeight || 0;
+    return this.props.viewData.topVirtualRowHeight ?? 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.viewData.bottomVirtualRowHeight || 0;
+    return this.props.viewData.bottomVirtualRowHeight ?? 0;
   }
 
   get leftVirtualCellWidth(): number {
-    return this.props.viewData.leftVirtualCellWidth || 0;
+    return this.props.viewData.leftVirtualCellWidth ?? 0;
   }
 
   get rightVirtualCellWidth(): number {
-    return this.props.viewData.rightVirtualCellWidth || 0;
+    return this.props.viewData.rightVirtualCellWidth ?? 0;
   }
 
   get virtualCellsCount(): number {

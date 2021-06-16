@@ -248,7 +248,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const columnIndex = $cell.index();
                 const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
                 const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
-                const msieCorrection = browser.msie ? 1 : 0;
 
                 if(!isMasterDetailRow && !isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
@@ -258,7 +257,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    const difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
+                    const difference = $element[0].scrollWidth - $element[0].clientWidth; // T598499
                     if(difference > 0 && !isDefined($element.attr('title'))) {
                         $element.attr('title', $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
@@ -802,6 +801,15 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     callbackNames: function() {
         return ['scrollChanged'];
+    },
+
+    _updateScrollLeftPosition: function() {
+        const scrollLeft = this._scrollLeft;
+
+        if(scrollLeft >= 0) {
+            this._scrollLeft = 0;
+            this.scrollTo({ left: scrollLeft });
+        }
     },
 
     scrollTo: function(pos) {

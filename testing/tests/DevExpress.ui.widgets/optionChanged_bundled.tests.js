@@ -1,6 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
-    const Component = require('core/component');
+    const Component = require('core/component').Component;
     const devices = require('core/devices');
     const GoogleStaticProvider = require('ui/map/provider.google_static');
     const fx = require('animation/fx');
@@ -45,7 +45,11 @@ define(function(require) {
                     name === '_checkParentVisibility') {
                     return;
                 }
-                this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                // NOTE: workaround for inferno
+                // Internal renovated component call _optionChanged before QUnitAssert initialized
+                if(this.QUnitAssert) {
+                    this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                }
             };
 
             executeAsyncMock.setup();

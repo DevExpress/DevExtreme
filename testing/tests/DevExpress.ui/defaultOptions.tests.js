@@ -71,6 +71,9 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
 
         $.each(forcedDevices, function(_, device) {
             devices._currentDevice = device;
+            if(componentClass.IS_RENOVATED_WIDGET) {
+                componentClass.defaultOptions({});
+            }
             const component = new componentClass('#cmp');
             options = $.isFunction(options) ? options.call(component) : options;
 
@@ -912,8 +915,6 @@ testComponentDefaults(Tabs,
 [
     { name: 'chrome', version: '65.9', mode: 'number' },
     { name: 'chrome', version: '66.0', mode: 'text' },
-    { name: 'msie', version: '74.9', mode: 'number' },
-    { name: 'msie', version: '75.0', mode: 'text' },
     { name: 'safari', version: '11.9', mode: 'number' },
     { name: 'safari', version: '12.0', mode: 'text' }
 ].forEach(function(item) {
@@ -926,7 +927,6 @@ testComponentDefaults(Tabs,
 
             delete browser.chrome;
             delete browser.safari;
-            delete browser.msie;
             browser.version = item.version;
             browser[item.name] = true;
 
@@ -992,7 +992,8 @@ testComponentDefaults(DataGrid,
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: 'ios'
+            platform: 'ios',
+            deviceType: 'tablet'
         });
     },
     function() {

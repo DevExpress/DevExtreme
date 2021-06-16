@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -29,11 +25,14 @@ export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
@@ -43,12 +42,10 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
  * @inherits CollectionWidget
  * @module ui/validation_summary
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxValidationSummary extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxValidationSummaryOptions)
-}
+export default class dxValidationSummary extends CollectionWidget<dxValidationSummaryOptions> { }
 
 /** @public */
 export type Properties = dxValidationSummaryOptions;

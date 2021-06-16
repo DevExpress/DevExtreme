@@ -2,9 +2,10 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -18,8 +19,16 @@ testStart(function() {
 
 module('Work Space cellData Cache', {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
+
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ observer }).dxSchedulerWorkSpaceWeek('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 }, () => {
     test('Workspace should be able to cache cellData', function(assert) {

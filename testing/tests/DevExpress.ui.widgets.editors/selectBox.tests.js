@@ -1426,7 +1426,7 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         }).dxSelectBox('instance');
 
-        assert.strictEqual(instance._popup.overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
+        assert.strictEqual(instance._popup.$overlayContent().attr('tabindex'), '-1', 'tabindex is correct in the markup');
     });
 
     QUnit.testInActiveWindow('don\'t rise valueChange event on focusout in readonly state with searchEnabled', function(assert) {
@@ -4304,8 +4304,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     [
         { key: 'ArrowDown', delta: 1 },
         { key: 'ArrowUp', delta: -1 },
-        { key: 'Down', delta: 1 }, // IE11 (T945185)
-        { key: 'Up', delta: -1 } // IE11 (T945185)
     ].forEach(({ key, delta }) => {
         QUnit.test(`${key} should change value if drop down is closed (T844170)`, function(assert) {
             const initialValue = 1;
@@ -5171,7 +5169,7 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
             opened: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $applyButton = instance._popup._wrapper().find('.dx-popup-done.dx-button');
+        const $applyButton = instance._popup.$wrapper().find('.dx-popup-done.dx-button');
 
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()

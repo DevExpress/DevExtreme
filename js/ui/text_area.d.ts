@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -65,32 +61,32 @@ export type PasteEvent = NativeEventInfo<dxTextArea>;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxTextArea> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoResizeEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minHeight?: number | string;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     spellcheck?: boolean;
@@ -101,12 +97,10 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @inherits dxTextBox
  * @module ui/text_area
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTextArea extends dxTextBox {
-    constructor(element: UserDefinedElement, options?: dxTextAreaOptions)
-}
+export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 
 /** @public */
 export type Properties = dxTextAreaOptions;

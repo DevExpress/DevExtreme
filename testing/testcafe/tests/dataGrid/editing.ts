@@ -6,7 +6,7 @@ import SelectBox from '../../model/selectBox';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
@@ -19,10 +19,11 @@ const getGridConfig = (config): Record<string, unknown> => {
     legacyRendering: false,
   };
 
-  return config ? ({ ...defaultConfig, ...config }) : defaultConfig;
+  return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
-const getElementCount = (gridInstance: DataGrid, elementSelector: string): Promise<number> => {
+const getElementCount = async (gridInstance: DataGrid, elementSelector: string):
+Promise<number> => {
   const { getGridInstance } = gridInstance;
   return ClientFunction(
     () => (getGridInstance() as any).element().find(elementSelector).length,
@@ -37,7 +38,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
     .click(dataGrid.getDataCell(0, 1).element)
     .pressKey('1 tab')
     .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }],
   editing: {
     mode: 'cell',
@@ -50,7 +51,7 @@ test('Click should work if a column button set using svg icon (T863635)', async 
   await t
     .click('#svg-icon')
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   columns: [{
     type: 'buttons',
@@ -60,7 +61,7 @@ test('Click should work if a column button set using svg icon (T863635)', async 
         hint: 'svg icon',
         icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
         onClick: (): void => {
-          const global = window as any;
+          const global = window as Window & typeof globalThis & { onSvgClickCounter: number };
           if (!global.onSvgClickCounter) {
             global.onSvgClickCounter = 0;
           }
@@ -80,7 +81,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
     .click(selectBox.dropDownButton)
     .expect(dataGrid.getDataCell(0, 0).element.textContent)
     .eql('new_value');
-}).before(() => Promise.all([
+}).before(async () => Promise.all([
   createWidget('dxDataGrid', {
     dataSource: [{ name: 'old_value', value: 1 }],
     editing: {
@@ -126,7 +127,7 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowAdding: true,
@@ -178,7 +179,7 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -240,7 +241,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
     .eql('valid')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -289,7 +290,7 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     .notOk()
     .expect(cell2.isFocused)
     .ok('the third cell should be focused');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -342,7 +343,7 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowAdding: true,
@@ -399,7 +400,7 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
     .notOk()
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -469,7 +470,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
     .ok('the first cell is invalid')
     .expect(dataGrid.apiGetCellValidationStatus(0, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -511,7 +512,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('testb');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -550,7 +551,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('testb');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -589,7 +590,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('123b');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -599,7 +600,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
@@ -625,7 +626,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('15123b');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -635,7 +636,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
@@ -691,7 +692,7 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowAdding: true,
@@ -756,7 +757,7 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
     .notOk()
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowUpdating: true,
@@ -841,7 +842,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
     .ok('the first cell is invalid')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowUpdating: true,
@@ -903,7 +904,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
     .ok()
     .expect(dataRow.isInserted)
     .ok('row is in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowAdding: true,
@@ -975,7 +976,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     .ok('the second cell is marked as invalid')
     .expect(dataRow.isEdited)
     .ok('row is still in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -1029,7 +1030,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     .notOk('cell is not marked as invalid')
     .expect(dataRow.isEdited)
     .notOk('row is not in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -1079,7 +1080,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     .ok('the second cell is still invalid')
     .expect(cell0.isEditCell)
     .ok('the first cell is still in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -1128,7 +1129,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     .notOk('the second cell is notmarked as invalid')
     .expect(cell0.isEditCell)
     .notOk('the first cell is not in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -1201,7 +1202,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
       .notOk('the first cell is not marked as modified')
       .expect(cell0.isEditCell)
       .notOk('the first cell is not in editing mode');
-  }).before(() => createWidget('dxDataGrid', getGridConfig({
+  }).before(async () => createWidget('dxDataGrid', getGridConfig({
     editing: {
       mode: 'batch',
       allowUpdating: true,
@@ -1275,7 +1276,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
     .ok()
     .expect(cell10.isModified)
     .ok();
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   keyExpr: 'id',
   dataSource: [
     { id: 1, name: '', lastName: '' },
@@ -1372,7 +1373,7 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
     .ok()
     .expect(cell1.isInvalid)
     .notOk();
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   dataSource: [{ id: 1, name: '', lastName: '' }],
   keyExpr: 'id',
   repaintChangesOnly: true,
@@ -1420,7 +1421,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
     .notOk()
     .expect(dataGrid.apiGetCellValue(0, 1))
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ name: 'test', test: false }],
   editing: {
     mode: 'cell',
@@ -1466,7 +1467,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
   // assert
   await t
     .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
   loadingTimeout: undefined,
@@ -1532,7 +1533,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
   await t
     .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
     .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
   loadingTimeout: undefined,
@@ -1596,7 +1597,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   // assert
   await t
     .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
   loadingTimeout: undefined,
@@ -1660,7 +1661,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   // assert
   await t
     .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
   loadingTimeout: undefined,
@@ -1723,12 +1724,11 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
 ['Cell', 'Batch'].forEach((editMode) => {
   test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
     const dataGrid = new DataGrid('#container');
-    let currentCell;
 
     // direct order
     for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
       for (let colIndex = 0; colIndex < 2; colIndex += 1) {
-        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
         // act
         await t
           .click(currentCell.getEditor().element);
@@ -1743,7 +1743,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     // reverse order
     for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
       for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
-        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
         // act
         await t
           .click(currentCell.getEditor().element);
@@ -1754,7 +1754,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
           .expect(currentCell.getEditor().element.focused).ok();
       }
     }
-  }).before(() => createWidget('dxDataGrid', {
+  }).before(async () => createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, field: 'field' },
       { id: 2, field: 'field' },

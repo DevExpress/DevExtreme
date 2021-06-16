@@ -2,7 +2,7 @@ const $ = require('jquery');
 const fx = require('animation/fx');
 const ko = require('knockout');
 
-require('ui/overlay');
+require('ui/overlay/ui.overlay');
 require('ui/slider');
 require('integration/knockout');
 

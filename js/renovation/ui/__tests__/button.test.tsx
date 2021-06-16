@@ -127,6 +127,32 @@ describe('Button', () => {
       });
     });
 
+    it('should pass template data to the template function', () => {
+      const template = jest.fn(() => <div />);
+
+      mount(viewFunction({
+        props: {
+          template,
+          text: 'button',
+          icon: 'icon',
+          templateData: {
+            templateField1: 'field1',
+            templateField2: 'field2',
+          },
+        },
+      } as any) as any);
+
+      expect(template).toHaveBeenCalledTimes(1);
+      expect(template).toHaveBeenCalledWith({
+        data: {
+          icon: 'icon',
+          templateField1: 'field1',
+          templateField2: 'field2',
+          text: 'button',
+        },
+      }, {});
+    });
+
     it('should render template', () => {
       const template = ({ data: { text } }: {
         data: {
@@ -160,7 +186,6 @@ describe('Button', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: () => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -192,23 +217,6 @@ describe('Button', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
-
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the content node\'s parent', () => {
-          const onContentReady = jest.fn();
-          const button = new Button({ onContentReady });
-          const parentNode = {};
-          button.contentRef = { current: { parentNode } } as any;
-          button.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
-        });
-
-        it('should not raise any error if "onContentReady" is not defined', () => {
-          const button = new Button({ onContentReady: undefined });
-          expect(button.contentReadyEffect.bind(button)).not.toThrow();
-        });
-      });
 
       describe('submitEffect', () => {
         it('should be ignored if the "useSubmitBehavior" is false', () => {
@@ -256,6 +264,30 @@ describe('Button', () => {
 
           expect(button.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
           expect(button.widgetRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('Methods', () => {
+        describe('activate', () => {
+          it('should call widget\'s activate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { activate: jest.fn() } } as any;
+            button.activate();
+
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledWith();
+          });
+        });
+
+        describe('deactivate', () => {
+          it('should call widget\'s deactivate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { deactivate: jest.fn() } } as any;
+            button.deactivate();
+
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledWith();
+          });
         });
       });
     });
@@ -403,6 +435,10 @@ describe('Button', () => {
           expect(new Button({ icon: 'icon' }).aria)
             .toEqual({ label: 'icon', role: 'button' });
         });
+
+        it('should return text value if it is specified', () => {
+          expect(new Button({ text: 'text' }).aria).toEqual({ label: 'text', role: 'button' });
+        });
       });
 
       describe('cssClasses', () => {
@@ -479,7 +515,7 @@ describe('Button', () => {
           expect(new Button({ type: 'back' }).iconSource).toBe('back');
         });
 
-        it('should return empty string if the icon property value is empty', () => {
+        it('should return "back" if icon property is empty and type is "back"', () => {
           expect(new Button({}).iconSource).toBe('');
         });
 
@@ -517,8 +553,7 @@ describe('Button', () => {
 
       beforeEach(() => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => false);
+        (devices.isSimulator as Mock).mockImplementation(() => false);
         (current as Mock).mockImplementation(() => 'generic');
       });
 
@@ -547,7 +582,7 @@ describe('Button', () => {
         });
 
         it('should be false on simulator', () => {
-          (devices as any).isSimulator.mockImplementation(() => true);
+          (devices.isSimulator as Mock).mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });

@@ -40,6 +40,7 @@ import themes from 'ui/themes';
 import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
+import SelectBox from 'ui/select_box';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2219,7 +2220,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const errorMessageTopOffset = errorMessageTopPosition - bottomCellPosition;
 
         // assert
-        assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
+        assert.roughEqual(errorMessageTopOffset, 0, 1.1, 'error message offset');
     });
 
     ['close edit cell', 'cancel editing'].forEach(action => {
@@ -2518,6 +2519,40 @@ QUnit.module('Editing', baseModuleConfig, () => {
                 assert.ok(visibleRows[1].removed, 'the second row is a removed row');
             }
         });
+    });
+
+    QUnit.testInActiveWindow('DropDownEditor Overlay should be closed on dropdown button click in ios (T998455)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test1' }
+            ],
+            keyExpr: 'id',
+            columns: [{
+                dataField: 'field1',
+                lookup: {
+                    valueExpr: 'this',
+                    displayExpr: 'this',
+                    dataSource: ['test1', 'test2']
+                }
+            }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            loadingTimeout: null
+        });
+
+
+        // act
+        dataGrid.editRow(0);
+        const $dropDownEditor = $(dataGrid.getRowElement(0)).find('.dx-dropdowneditor');
+        const $dropDownEditorIcon = $dropDownEditor.find('.dx-dropdowneditor-icon');
+
+        $dropDownEditorIcon.trigger('dxclick');
+
+        // assert
+        const selectBox = SelectBox.getInstance($dropDownEditor);
+        assert.ok(selectBox.option('opened'), 'dropdowneditor is opened');
     });
 });
 

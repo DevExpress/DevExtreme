@@ -245,10 +245,10 @@ const baseFixedColumns = {
     _getCellElementsCore: function(rowIndex) {
         const cellElements = this.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
-        const index = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
         if(this._fixedTableElement && cellElements) {
-            const fixedColumns = this.getFixedColumns(index);
+            const fixedColumns = this.getFixedColumns(headerRowIndex);
             const fixedCellElements = this._getRowElements(this._fixedTableElement).eq(rowIndex).children('td');
 
             each(fixedCellElements, (columnIndex, cell) => {
@@ -265,7 +265,7 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, rowIndex);
+                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, headerRowIndex);
                             cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
                         }
                     }

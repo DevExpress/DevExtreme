@@ -7,10 +7,6 @@ import {
 } from '../animation/position';
 
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -47,12 +43,15 @@ export type ShowingEvent = EventInfo<dxToast>;
 /** @public */
 export type ShownEvent = EventInfo<dxToast>;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
      * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} [for](Android)
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
@@ -60,7 +59,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnClick?: boolean;
@@ -69,14 +67,12 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true [for](Android)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnSwipe?: boolean;
@@ -84,7 +80,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @default 2000
      * @default 4000 [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     displayTime?: number;
@@ -92,7 +87,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type_function_return number|string
      * @default 'auto'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
@@ -100,14 +94,12 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type_function_return number|string
      * @default 568 [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
@@ -115,7 +107,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type_function_return number|string
      * @default 344 [for](Material)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minWidth?: number | string | (() => number | string);
@@ -124,14 +115,12 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default "bottom center"
      * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} [for](Android)
      * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: positionConfig | string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
@@ -139,7 +128,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type Enums.ToastType
      * @default 'info'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
@@ -149,23 +137,21 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default function() {return $(window).width() * 0.8 }
      * @default 'auto' [for](Android)
      * @default function() { return $(window).width(); } [for](phones_on_Android)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
 }
+/** @namespace DevExpress.ui */
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
      * @docid dxToastOptions.animation.hide
      * @default { type: "fade", duration: 400, to: 0 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hide?: animationConfig;
     /**
      * @docid dxToastOptions.animation.show
      * @default { type: "fade", duration: 400, from: 0, to: 1 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     show?: animationConfig;
@@ -175,12 +161,10 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @inherits dxOverlay
  * @module ui/toast
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxToast extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxToastOptions)
-}
+export default class dxToast extends dxOverlay<dxToastOptions> { }
 
 /** @public */
 export type Properties = dxToastOptions;

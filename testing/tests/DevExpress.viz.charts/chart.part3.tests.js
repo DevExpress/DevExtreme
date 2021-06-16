@@ -77,6 +77,8 @@ QUnit.test('Create Horizontal Category Axis, Vertical Continuous axis', function
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
+    assert.ok(chart._argumentAxes[0]._labelsAxesGroup);
+    assert.ok(chart.getValueAxis()._labelsAxesGroup);
     const argumentAxis = chart._argumentAxes[0];
 
     assert.ok(argumentAxis.getOptions().categories, 'Categories should be assigned');
@@ -1925,10 +1927,10 @@ QUnit.test('Argument and value axes are passed to series in defferent panes', fu
     assert.strictEqual(incidentOccurred.callCount, 0, 'no incidentOccurred');
     assert.strictEqual(chart._valueAxes.length, 2, 'chart has two value axes');
 
-    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series1');
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], 'argument axis is passed to series1');
     assert.strictEqual(seriesOptions1.valueAxis.pane, 'pane1', 'correct value axis is passed to series1');
 
-    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series1');
+    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series2');
     assert.strictEqual(seriesOptions2.valueAxis.pane, 'pane2', 'correct value axis is passed to series2');
 });
 

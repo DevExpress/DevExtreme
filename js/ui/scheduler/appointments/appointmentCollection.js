@@ -18,9 +18,9 @@ import { addNamespace, isFakeClickEvent } from '../../../events/utils/index';
 import { name as dblclickEvent } from '../../../events/double_click';
 import CollectionWidget from '../../collection/ui.collection_widget.edit';
 import timeZoneUtils from '../utils.timeZone.js';
-import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -35,10 +35,6 @@ class SchedulerAppointments extends CollectionWidget {
 
     get isVirtualScrolling() {
         return this.invoke('isVirtualScrolling');
-    }
-
-    get resourceManager() {
-        return this.option('observer')._resourcesManager;
     }
 
     constructor(element, options) {
@@ -155,7 +151,8 @@ class SchedulerAppointments extends CollectionWidget {
             allowResize: true,
             allowAllDayResize: true,
             onAppointmentDblClick: null,
-            _collectorOffset: 0
+            _collectorOffset: 0,
+            groups: []
         });
     }
 
@@ -512,9 +509,11 @@ class SchedulerAppointments extends CollectionWidget {
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         if(settings.virtual) {
-            const deferredColor = this.invoke('getAppointmentColor', {
+            const deferredColor = this.invoke('getResourceManager').getAppointmentColor({
                 itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
+                groups: this.option('groups'),
+                workspaceGroups: this.invoke('getWorkspaceOption', 'groups')
             });
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
@@ -534,10 +533,12 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
+                groups: this.option('groups')
             };
 
             if(this.isAgendaView) {
-                config.createPlainResourceListAsync = rawAppointment => this.resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+                const resourceManager = this.invoke('getResourceManager');
+                config.createPlainResourceListAsync = rawAppointment => resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
             }
             this._createComponent(
                 element,
@@ -548,7 +549,8 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
-        const resources = this.invoke('getResourcesFromItem', this._getItemData($appointment));
+        const resourceManager = this.invoke('getResourceManager');
+        const resources = resourceManager.getResourcesFromItem(this._getItemData($appointment));
         if(resources) {
             each(resources, function(name, values) {
                 const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';
@@ -723,10 +725,6 @@ class SchedulerAppointments extends CollectionWidget {
             result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);
         }
         return result;
-    }
-
-    _calculateBoundOffset() {
-        return this.invoke('getBoundOffset');
     }
 
     _processVirtualAppointment(appointmentSetting, $appointment, appointmentData, color) {
@@ -960,7 +958,7 @@ class SchedulerAppointments extends CollectionWidget {
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const appointmentIsLong = this.invoke('appointmentTakesSeveralDays', appointment);
+        const appointmentIsLong = this.invoke('getAppointmentDataProvider').appointmentTakesSeveralDays(appointment);
         const result = [];
 
         const timeZoneCalculator = this.invoke('getTimeZoneCalculator');

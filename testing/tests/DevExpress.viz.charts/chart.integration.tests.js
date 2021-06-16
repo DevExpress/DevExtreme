@@ -8,9 +8,11 @@ import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
 import baseChartModule from 'viz/chart_components/base_chart';
+import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
+const seriesFamilyNativeConstructor = { ...seriesFamilyModule }.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
@@ -2475,7 +2477,7 @@ function checkOrder(assert, groups, order) {
     }
 }
 
-const VALIDATE_GROUPS = [
+const VALIDATE_CHART_GROUPS = [
     'dxc-background',
     'dxc-title',
     'dxc-strips-group',
@@ -2485,6 +2487,7 @@ const VALIDATE_GROUPS = [
     'dxc-strips-labels-group',
     'dxc-constant-lines-group',
     'dxc-series-group',
+    'dxc-elements-axes-group',
     'dxc-constant-lines-group',
     'dxc-scale-breaks',
     'dxc-labels-group',
@@ -2492,6 +2495,32 @@ const VALIDATE_GROUPS = [
     'dxc-legend',
     'dxc-annotations',
     'dx-export-menu'
+];
+
+const VALIDATE_PIECHART_GROUPS = [
+    'dxc-background',
+    'dxc-series-group',
+    'dxc-labels-group',
+    'dxc-legend',
+    'dxc-hole-template',
+    'dxc-annotations'
+];
+
+const VALIDATE_POLARCHART_GROUPS = [
+    'dxc-background',
+    'dxc-strips-group',
+    'dxc-grids-group',
+    'dxc-axes-group',
+    'dxc-elements-axes-group',
+    'dxc-strips-labels-group',
+    'dxc-constant-lines-group',
+    'dxc-series-group',
+    'dxc-constant-lines-group',
+    'dxc-scale-breaks',
+    'dxc-labels-group',
+    'dxc-crosshair-cursor',
+    'dxc-legend',
+    'dxc-annotations',
 ];
 
 QUnit.test('Legend inside position', function(assert) {
@@ -2516,7 +2545,7 @@ QUnit.test('Legend inside position', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend inside position. Zooming', function(assert) {
@@ -2547,7 +2576,7 @@ QUnit.test('Legend inside position. Zooming', function(assert) {
     groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
     groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend outside position', function(assert) {
@@ -2572,7 +2601,7 @@ QUnit.test('Legend outside position', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('Legend outside position. Zooming', function(assert) {
@@ -2603,7 +2632,7 @@ QUnit.test('Legend outside position. Zooming', function(assert) {
     groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
     groups = root.find('>' + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS);
+    checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
 QUnit.test('ScrollBar', function(assert) {
@@ -2631,7 +2660,7 @@ QUnit.test('ScrollBar', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
     const groups = root.find('>' + groupTag);
 
-    const expectedGroups = VALIDATE_GROUPS.slice();
+    const expectedGroups = VALIDATE_CHART_GROUPS.slice();
     expectedGroups.splice(-2, 0, 'dxc-scroll-bar');
     checkOrder(assert, groups, expectedGroups);
 });
@@ -2658,7 +2687,7 @@ QUnit.test('Loading indicator should be the last', function(assert) {
     const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
 
     chart.showLoadingIndicator();
-    const expectedGroups = VALIDATE_GROUPS.slice();
+    const expectedGroups = VALIDATE_CHART_GROUPS.slice();
     expectedGroups.push('dx-loading-indicator');
     checkOrder(assert, root.find('>' + groupTag), expectedGroups);
 });
@@ -3001,6 +3030,20 @@ QUnit.test('Pie chart groups and classes', function(assert) {
     assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
 });
 
+// T997232
+QUnit.test('pie chart groups order', function(assert) {
+    const chart = this.createPieChart({
+        series: {},
+        dataSource: [{ arg: 0, val: 2 }]
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    checkOrder(assert, groups, VALIDATE_PIECHART_GROUPS);
+});
+
 // T412270
 QUnit.test('select point after dataSource updating', function(assert) {
     // arrange
@@ -3295,6 +3338,37 @@ QUnit.test('Correct canvas for inverted value axis', function(assert) {
 
     assert.roughEqual(canvas.endPadding, 0, 0.5);
     assert.roughEqual(canvas.startPadding, 10.5, 0.5);
+});
+
+QUnit.test('groups order', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 0,
+        val: 4
+    }, {
+        arg: 90,
+        val: 5
+    }, {
+        arg: 180,
+        val: 7
+    }, {
+        arg: 270,
+        val: 0
+    }, {
+        arg: 360,
+        val: 10
+    }];
+
+    const chart = this.createPolarChart({
+        dataSource: dataSource,
+        series: { type: 'line' },
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    checkOrder(assert, groups, VALIDATE_POLARCHART_GROUPS);
 });
 
 QUnit.module('T576725', $.extend({}, moduleSetup, {
@@ -3625,6 +3699,26 @@ QUnit.test('Rotated labels', function(assert) {
     assert.roughEqual(Math.ceil(settings.translateX), 256, 1.5);
     assert.roughEqual(Math.round(settings.translateY), 390, 1.5);
     assert.strictEqual(settings.rotate, 90);
+});
+
+QUnit.test('axis.label.template option changing', function(assert) {
+    const template = sinon.spy();
+
+    const chart = this.createChart({
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    chart.option({
+        argumentAxis: {
+            label: {
+                template
+            }
+        }
+    });
+
+    assert.strictEqual(template.callCount, 1);
+
 });
 
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
@@ -4335,4 +4429,84 @@ QUnit.test('Reset axes animation before adjusting position of vertical axes (fix
     assert.strictEqual(tickAnimationSegments.from[0][1], tickAnimationSegments.to[0][1]);
     assert.strictEqual(axis._majorTicks[0].mark.getBBox().x, tickAnimationSegments.to[0][1]);
     assert.strictEqual(tickAnimationSegments.to[1][1] - axis._axisPosition, 1);
+});
+
+QUnit.module('SeriesFamily', $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+    }
+}));
+
+QUnit.test('Set bar width (via interval) for each pane (T1000672)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+
+    const chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        defaultPane: 'bottomPane',
+        dataSource: [
+            { timestamp: '2021-05-15T13:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T14:00:00-0500', name_one: 80, name_two: 40 },
+            { timestamp: '2021-05-15T17:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T21:00:00-0500', name_one: 100, name_two: 20 },
+            { timestamp: '2021-05-15T22:00:00-0500', name_one: 80, name_two: 40 },
+            { timestamp: '2021-05-15T23:00:00-0500', name_one: 60, name_two: 20 },
+
+            { timestamp: '2021-05-15T12:05:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:10:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:15:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:20:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T12:25:00-0500', 'f-name_one': 60 },
+            { timestamp: '2021-05-15T13:30:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:35:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:40:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T13:45:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T15:00:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:05:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:10:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T15:15:00-0500', 'f-name_one': 40 },
+            { timestamp: '2021-05-15T16:10:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:15:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:20:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:25:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:30:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T16:35:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T17:55:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T18:00:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:10:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:15:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T19:20:00-0500', 'f-name_one': 0 },
+            { timestamp: '2021-05-15T20:10:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:15:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:20:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:25:00-0500', 'f-name_one': 20 },
+            { timestamp: '2021-05-15T20:30:00-0500', 'f-name_one': 20 },
+        ],
+        panes: [{
+            name: 'topPane'
+        }, {
+            name: 'bottomPane'
+        }],
+        commonSeriesSettings: {
+            argumentField: 'timestamp',
+            type: 'stackedbar'
+        },
+        argumentAxis: {
+            argumentType: 'datetime',
+            argumentField: 'timestamp',
+        },
+        series: [
+            { valueField: 'name_one', name: 'name_one', pane: 'topPane' },
+            { valueField: 'name_two', name: 'name_two', pane: 'topPane' },
+            { valueField: 'f-name_one' }
+        ]
+    });
+
+    assert.ok(chart);
+
+    assert.ok(chart.series[0].getPoints()[0].width > 30);
+    assert.ok(chart.series[2].getPoints()[0].width < 10);
 });

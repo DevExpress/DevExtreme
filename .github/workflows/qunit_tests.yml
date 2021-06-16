@@ -7,21 +7,23 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        NORENOVATION: [ true ]
-        BROWSER: [ google-chrome ]
-        CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
-        JQUERY: [ jquery=3 ]
+        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
 
     runs-on: ubuntu-latest
+    name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
 
     steps:
-    - name: Setup utils
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Get sources
       uses: actions/checkout@v2
+
+    - run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Setup utils
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Use Node.js
       uses: actions/setup-node@v2
@@ -49,9 +51,7 @@ jobs:
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
-        JQUERY: ${{ matrix.JQUERY }}
-        BROWSER: ${{ matrix.BROWSER }}
-        NORENOVATION: ${{ matrix.NORENOVATION }}
+        NORENOVATION: "true"
         GITHUBACTION: "true"
         TARGET: "test"
       run: |

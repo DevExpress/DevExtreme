@@ -153,13 +153,13 @@ const FocusController = core.ViewController.inherit((function() {
             const keyboardController = this.getController('keyboardNavigation');
 
             if(isFocusedRowKeyDefined) {
-                this.option('focusedRowKey', undefined);
+                this.option('focusedRowKey', null);
             }
             keyboardController.setFocusedRowIndex(-1);
             this.option('focusedRowIndex', -1);
             this.getController('data').updateItems({
                 changeType: 'updateFocusedRow',
-                focusedRowKey: undefined
+                focusedRowKey: null
             });
 
             keyboardController._fireFocusedRowChanged(undefined, -1);
@@ -180,7 +180,7 @@ const FocusController = core.ViewController.inherit((function() {
             if(!this.isAutoNavigateToFocusedRow()) {
                 this.option('focusedRowIndex', -1);
             }
-            this._navigateToRow(key);
+            return this._navigateToRow(key);
         },
         _navigateToRow: function(key, needFocusRow) {
             const that = this;
@@ -235,7 +235,10 @@ const FocusController = core.ViewController.inherit((function() {
             if(needFocusRow) {
                 this._triggerUpdateFocusedRow(key, deferred);
             } else {
-                this.getView('rowsView').scrollToRowElement(key);
+                const focusedRowIndex = this.getFocusedRowIndexByKey(key);
+                this.getView('rowsView').scrollToRowElement(key, deferred).done(function() {
+                    deferred.resolve(focusedRowIndex);
+                });
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
@@ -249,15 +252,20 @@ const FocusController = core.ViewController.inherit((function() {
                 const focusedRowIndex = rowIndex + dataController.getRowIndexOffset(true);
                 const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
-                if(needFocusRow) {
-                    const triggerUpdateFocusedRow = function() {
-                        that.component.off('contentReady', triggerUpdateFocusedRow);
+                const triggerUpdateFocusedRow = function() {
+                    that.component.off('contentReady', triggerUpdateFocusedRow);
+
+                    if(needFocusRow) {
                         that._triggerUpdateFocusedRow(key, deferred);
-                    };
-                    that.component.on('contentReady', triggerUpdateFocusedRow);
-                }
+                    } else {
+                        deferred.resolve(focusedRowIndex);
+                    }
+                };
+                that.component.on('contentReady', triggerUpdateFocusedRow);
 
                 scrollable.scrollTo({ y: offset });
+            } else {
+                deferred.resolve(-1);
             }
         },
 
@@ -266,18 +274,22 @@ const FocusController = core.ViewController.inherit((function() {
             const focusedRowIndex = this.getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
+                let d;
+
                 if(this.option('focusedRowEnabled')) {
                     dataController.updateItems({
                         changeType: 'updateFocusedRow',
                         focusedRowKey: key
                     });
                 } else {
-                    this.getView('rowsView').scrollToRowElement(key);
+                    d = this.getView('rowsView').scrollToRowElement(key);
                 }
 
-                this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
+                when(d).done(() => {
+                    this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
 
-                deferred && deferred.resolve(focusedRowIndex);
+                    deferred && deferred.resolve(focusedRowIndex);
+                });
             } else {
                 deferred && deferred.resolve(-1);
             }
@@ -307,6 +319,8 @@ const FocusController = core.ViewController.inherit((function() {
                     this._navigateToRow(focusedRowKey, true).done(focusedRowIndex => {
                         if(currentFocusedRowIndex >= 0 && focusedRowIndex < 0) {
                             this._focusRowByIndex();
+                        } else if(currentFocusedRowIndex < 0 && focusedRowIndex >= 0) {
+                            keyboardController.setFocusedRowIndex(focusedRowIndex);
                         }
                     });
                 }
@@ -394,7 +408,7 @@ export const focusModule = {
 
             autoNavigateToFocusedRow: true,
 
-            focusedRowKey: undefined,
+            focusedRowKey: null,
 
             focusedRowIndex: -1,
 
@@ -830,16 +844,43 @@ export const focusModule = {
                 scrollToRowElement: function(key) {
                     const rowIndex = this.getController('data').getRowIndexByKey(key);
                     const $row = $(this.getRow(rowIndex));
-                    this.scrollToElementVertically($row);
+
+                    return this.scrollToElementVertically($row);
                 },
 
                 scrollToElementVertically: function($row) {
                     const scrollable = this.getScrollable();
+
                     if(scrollable) {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
-                        scrollable.scrollTo({ top: position });
+
+                        return this._scrollTopPosition(position);
                     }
-                }
+
+                    return (new Deferred()).resolve();
+                },
+
+                _scrollTopPosition: function(scrollTop) {
+                    const d = new Deferred();
+                    const scrollable = this.getScrollable();
+
+                    if(scrollable) {
+                        const currentScrollTop = scrollable.scrollTop();
+                        const scrollHandler = () => {
+                            scrollable.off('scroll', scrollHandler);
+                            d.resolve();
+                        };
+
+                        if(scrollTop !== currentScrollTop) {
+                            scrollable.on('scroll', scrollHandler);
+                            scrollable.scrollTo({ top: scrollTop });
+
+                            return d.promise();
+                        }
+                    }
+
+                    return d.resolve();
+                },
             }
         }
     }

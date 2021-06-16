@@ -4,6 +4,7 @@ import publicWidgets from 'renovation/components';
 import Button from 'ui/button';
 import 'ui/check_box';
 import 'ui/pager';
+import 'ui/data_grid';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
@@ -12,7 +13,7 @@ const PRIVATE_JQUERY_WIDGETS = [
     'Widget',
     'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
     'DateTableLayoutBase', 'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
-    'GridPager', 'Scrollable'
+    'GridPager', 'Scrollable', 'DraggableContainer'
 ];
 const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager', 'ResponsiveBox', 'Box'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
@@ -58,19 +59,6 @@ QUnit.module('Mandatory component setup', {
             const className = CUSTOM_ROOT_WIDGET_CLASS[`dx${meta.name}`] || meta.name.toLowerCase();
             message = 'Use `dx-` followed by lowercase Component name as css class name';
             assert.equal($('#component').get(0), $(`.dx-${className}`).get(0), message);
-        });
-    });
-
-    widgets.forEach((meta) => {
-        QUnit.test(`${`dx${meta.name}`} - pass restAttributes to component's root`, function(assert) {
-            const message = 'You should pass restAttributes to the component\'s root\n'
-            + '<root {...viewModel.restAttributes} />';
-
-            $('#component')[`dx${meta.name}`]({
-                'data-custom-option': 'custom-value',
-            });
-
-            assert.equal($('#component').attr('data-custom-option'), 'custom-value', message);
         });
     });
 

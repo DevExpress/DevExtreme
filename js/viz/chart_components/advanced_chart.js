@@ -109,6 +109,9 @@ export const AdvancedChart = BaseChart.inherit({
         disposeObjectsInArray.call(panesClipRects, 'base');
         disposeObjectsInArray.call(panesClipRects, 'wide');
         this._panesClipRects = null;
+        this._labelsAxesGroup.linkOff();
+        this._labelsAxesGroup.dispose();
+        this._labelsAxesGroup = null;
     },
 
     _dispose: function() {
@@ -433,8 +436,9 @@ export const AdvancedChart = BaseChart.inherit({
         that._stripsGroup.linkAppend();
         that._gridGroup.linkAppend();
         that._axesGroup.linkAppend();
+        that._labelsAxesGroup.linkAppend();
         that._constantLinesGroup.linkAppend();
-        that._labelAxesGroup.linkAppend();
+        that._stripLabelAxesGroup.linkAppend();
         that._scaleBreaksGroup.linkAppend();
     },
 
@@ -586,14 +590,15 @@ export const AdvancedChart = BaseChart.inherit({
             axisClass: isArgumentAxes ? 'arg' : 'val',
             widgetClass: 'dxc',
             stripsGroup: that._stripsGroup,
-            labelAxesGroup: that._labelAxesGroup,
+            stripLabelAxesGroup: that._stripLabelAxesGroup,
             constantLinesGroup: that._constantLinesGroup,
             scaleBreaksGroup: that._scaleBreaksGroup,
             axesContainerGroup: that._axesGroup,
+            labelsAxesGroup: that._labelsAxesGroup,
             gridGroup: that._gridGroup,
             isArgumentAxis: isArgumentAxes,
-            getTemplate() {
-                return that._getTemplate(options.label.template);
+            getTemplate(template) {
+                return that._getTemplate(template);
             }
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new Axis(renderingSettings);

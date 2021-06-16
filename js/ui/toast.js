@@ -10,7 +10,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import pointerEvents from '../events/pointer';
 import registerComponent from '../core/component_registrator';
-import Overlay from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { isMaterial } from './themes';
 
 const ready = readyCallbacks.add;
@@ -211,8 +211,8 @@ const Toast = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(TOAST_CLASS);
-        this._wrapper().addClass(TOAST_WRAPPER_CLASS);
-        this._$content.addClass(TOAST_CLASS_PREFIX + String(this.option('type')).toLowerCase());
+        this.$wrapper().addClass(TOAST_WRAPPER_CLASS);
+        this.$content().addClass(TOAST_CLASS_PREFIX + String(this.option('type')).toLowerCase());
         this.$content().addClass(TOAST_CONTENT_CLASS);
 
         this._toggleCloseEvents('Swipe');
@@ -224,8 +224,8 @@ const Toast = Overlay.inherit({
     _toggleCloseEvents: function(event) {
         const dxEvent = 'dx' + event.toLowerCase();
 
-        eventsEngine.off(this._$content, dxEvent);
-        this.option('closeOn' + event) && eventsEngine.on(this._$content, dxEvent, this.hide.bind(this));
+        eventsEngine.off(this.$content(), dxEvent);
+        this.option('closeOn' + event) && eventsEngine.on(this.$content(), dxEvent, this.hide.bind(this));
     },
 
     _posStringToObject: function() {
@@ -283,8 +283,8 @@ const Toast = Overlay.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'type':
-                this._$content.removeClass(TOAST_CLASS_PREFIX + args.previousValue);
-                this._$content.addClass(TOAST_CLASS_PREFIX + String(args.value).toLowerCase());
+                this.$content().removeClass(TOAST_CLASS_PREFIX + args.previousValue);
+                this.$content().addClass(TOAST_CLASS_PREFIX + String(args.value).toLowerCase());
                 break;
             case 'message':
                 if(this._message) {

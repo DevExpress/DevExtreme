@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -10,12 +6,9 @@ import {
     ItemInfo
 } from '../events/index';
 
-import {
-    SelectionChangedInfo,
-} from './collection/ui.collection_widget.base';
-
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    SelectionChangedInfo
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -25,6 +18,10 @@ import {
 import {
     ValueChangedInfo
 } from './editor/editor';
+
+import {
+    Properties as PopupProperties
+} from './popup';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxAutocomplete>;
@@ -89,35 +86,41 @@ export type ValueChangedEvent = NativeEventInfo<dxAutocomplete> & ValueChangedIn
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**
      * @docid
      * @default 10
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxItemCount?: number;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSearchLength?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
  * @docid
@@ -125,12 +128,10 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @inherits dxDropDownList
  * @module ui/autocomplete
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: UserDefinedElement, options?: dxAutocompleteOptions)
-}
+export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> { }
 
 /** @public */
 export type Properties = dxAutocompleteOptions;

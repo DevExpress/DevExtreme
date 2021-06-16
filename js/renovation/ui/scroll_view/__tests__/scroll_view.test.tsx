@@ -16,6 +16,7 @@ import devices from '../../../../core/devices';
 import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
+import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 interface Mock extends jest.Mock {}
 
@@ -53,7 +54,6 @@ describe('ScrollView', () => {
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
-      updateManually: false,
       useNative: true,
     });
   });
@@ -68,11 +68,14 @@ describe('ScrollView', () => {
       { name: 'scrollWidth', calledWith: [] },
       { name: 'scrollHeight', calledWith: [] },
       { name: 'scrollToElement', calledWith: ['arg1'] },
+      { name: 'scrollToElementTopLeft', calledWith: ['arg1'] },
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
       { name: 'update', calledWith: [] },
       { name: 'release', calledWith: [] },
+      { name: 'startLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [] },
     ]).describe('Method: %o', (methodInfo) => {
       it(`${methodInfo.name}() method should call according scrollable method`, () => {
         const viewModel = new ScrollView({ });
@@ -93,7 +96,7 @@ describe('ScrollView', () => {
         const funcHandler = jest.fn();
         Object.defineProperties(viewModel, {
           scrollable: {
-            get() { return ({ refresh: funcHandler }); },
+            get() { return { refresh: funcHandler }; },
           },
         });
 
@@ -105,44 +108,107 @@ describe('ScrollView', () => {
         }
       });
     });
+
+    each([true, false, undefined]).describe('preventScrollBottom: %o', (preventScrollBottom) => {
+      it('release(preventScrollBottom)', () => {
+        const viewModel = new ScrollView({ });
+        const funcHandler = jest.fn();
+        Object.defineProperties(viewModel, {
+          scrollable: {
+            get() { return { release: funcHandler }; },
+          },
+        });
+
+        viewModel.toggleLoading = jest.fn();
+
+        viewModel.release(preventScrollBottom);
+
+        if (preventScrollBottom !== undefined) {
+          expect(viewModel.toggleLoading).toHaveBeenCalledTimes(1);
+          expect(viewModel.toggleLoading).toHaveBeenCalledWith(!preventScrollBottom);
+          expect(funcHandler).toHaveBeenCalledTimes(1);
+        } else {
+          expect(viewModel.toggleLoading).toHaveBeenCalledTimes(0);
+          expect(funcHandler).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
+
+    each([true, false]).describe('showOrHide: %o', (showOrHide) => {
+      it('toggleLoading()', () => {
+        const viewModel = new ScrollView({ });
+
+        viewModel.toggleLoading(showOrHide);
+
+        expect(viewModel.forceReachBottom).toEqual(showOrHide);
+      });
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
+      each([undefined, null, true, false]).describe('forceReachBottom: %o', (forceReachBottom) => {
+        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+          it('reachBottomEnabled()', () => {
+            const viewModel = new ScrollView({ reachBottomEnabled });
+
+            viewModel.forceReachBottom = forceReachBottom;
+
+            if (forceReachBottom !== undefined && forceReachBottom !== null) {
+              expect(viewModel.reachBottomEnabled).toEqual(forceReachBottom);
+            } else {
+              expect(viewModel.reachBottomEnabled).toEqual(reachBottomEnabled);
+            }
+          });
+        });
+      });
+
       describe('cssClasses', () => {
         each([false, true]).describe('useNative: %o', (useNative) => {
-          it('strategy classes', () => {
-            const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical' } } as any) as JSX.Element);
+          each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
+            it('strategy classes', () => {
+              const viewModel = mount(viewFunction({ props: { useNative, direction: 'vertical', showScrollbar } } as any));
 
-            const rootClasses = viewModel.getDOMNode().className;
+              const rootClasses = viewModel.getDOMNode().className;
 
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
-            expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
-            expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
+              expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
+              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
-            if (useNative) {
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
-            } else {
-              expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
-            }
+              if (useNative) {
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-simulated'));
+
+                if (showScrollbar === 'never') {
+                  expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbars-hidden'));
+                } else {
+                  expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                }
+              } else {
+                expect(rootClasses).toEqual(showScrollbar === 'always'
+                  ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                  : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
+                expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
+              }
+            });
           });
         });
 
         it('should render scrollView content', () => {
-          const scrollView = mount(viewFunction({ props: {} } as any) as JSX.Element);
+          const scrollView = mount(viewFunction({ props: {} } as any));
 
           const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(true);
         });
 
         it('should not render top & bottom pockets', () => {
-          const scrollView = mount(viewFunction({ props: { } } as any) as JSX.Element);
+          const scrollView = mount(viewFunction({ props: { } } as any));
           const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
           expect(topPocket.exists()).toBe(true);
           const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
@@ -177,7 +243,7 @@ describe('ScrollView', () => {
       it('theme: material, texts options: undefined', () => {
         (current as Mock).mockImplementation(() => 'material');
 
-        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollView = mount(viewFunction(new ScrollView({})));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -199,7 +265,7 @@ describe('ScrollView', () => {
           pulledDownText: 'value_2',
           refreshingText: 'value_3',
           reachBottomText: 'value_4',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -221,7 +287,7 @@ describe('ScrollView', () => {
           pulledDownText: 'value_2',
           refreshingText: 'value_3',
           reachBottomText: 'value_4',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 
@@ -238,7 +304,7 @@ describe('ScrollView', () => {
       it('theme: generic, texts options: undefined', () => {
         (current as Mock).mockImplementation(() => 'generic');
 
-        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollView = mount(viewFunction(new ScrollView({})));
 
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
@@ -261,7 +327,7 @@ describe('ScrollView', () => {
           pulledDownText: '',
           refreshingText: '',
           reachBottomText: '',
-        })) as JSX.Element);
+        })));
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 

@@ -4747,7 +4747,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -4771,15 +4772,15 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const loadedItems = this.dataController.dataSource().items();
 
         // assert
-        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 5 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
         assert.equal(loadedItems.length, 30, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
         assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
-        assert.equal(visibleItems.length, 16, 'visible items count');
-        assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
-        assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
+        assert.equal(visibleItems.length, 25, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
+        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
     });
 
     QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
@@ -4800,7 +4801,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -4820,10 +4822,10 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
 
         // assert
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], 'initially rendered item IDs');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
 
         // act
-        this.dataController.setViewportPosition(50);
+        this.dataController.setViewportPosition(100);
         this.clock.tick();
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
@@ -4833,10 +4835,68 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // assert
         assert.equal(changedSpy.callCount, 1, 'changed called');
         assert.ok(change.repaintChangesOnly, 'repaint changes only');
-        assert.strictEqual(change.items.length, 4, 'items count');
-        assert.deepEqual(changedItemIds, [1, 2, 17, 18], 'change item IDs');
-        assert.deepEqual(change.changeTypes, ['remove', 'remove', 'insert', 'insert'], 'change types');
-        assert.deepEqual(renderedItemIds, [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 'finally rendered item IDs');
+        assert.strictEqual(change.items.length, 5, 'items count');
+        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+    });
+
+    QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(20);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 0, 'items count');
+        assert.deepEqual(changedItemIds, [], 'change item IDs');
+        assert.deepEqual(change.changeTypes, [], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
     });
 
     QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
@@ -4845,7 +4905,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -4872,7 +4933,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -4899,7 +4961,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -4926,7 +4989,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             scrolling: {
                 newMode: true,
                 rowRenderingMode: 'virtual',
-                rowPageSize: 5
+                rowPageSize: 5,
+                minGap: 1
             }
         });
 
@@ -5335,6 +5399,174 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.equal(dataController.pageIndex(), 0, 'pageIndex reset to 0');
         assert.equal(dataController.pageSize(), 3);
         assert.ok(dataController.isLoaded());
+    });
+
+    QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(200),
+            pageSize: 10
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+
+        // assert
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
+
+        // act
+        this.dataController.setViewportPosition(500);
+        this.clock.tick();
+        const visibleItems = this.dataController.items();
+        const loadedItems = this.dataController.dataSource().items();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
+        assert.equal(loadedItems.length, 30, 'loaded items count');
+        assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(loadedItems[29], { id: 50, name: 'Name 50' }, 'last loaded item');
+        assert.equal(visibleItems.length, 25, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
+        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
+    });
+
+    QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(100);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 5, 'items count');
+        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+    });
+
+    QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const changedSpy = sinon.spy();
+
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(100),
+            pageSize: 10
+        });
+
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(50);
+        this.clock.tick();
+        this.dataController.setViewportPosition(0);
+        this.clock.tick();
+        this.dataController.changed.add(changedSpy);
+
+        let renderedItemIds = this.dataController.items().map(i => i.data.id);
+
+        // assert
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+
+        // act
+        this.dataController.setViewportPosition(20);
+        this.clock.tick();
+
+        renderedItemIds = this.dataController.items().map(i => i.data.id);
+        const change = changedSpy.args[0][0];
+        const changedItemIds = change.items.map(i => i.data.id);
+
+        // assert
+        assert.equal(changedSpy.callCount, 1, 'changed called');
+        assert.ok(change.repaintChangesOnly, 'repaint changes only');
+        assert.strictEqual(change.items.length, 0, 'items count');
+        assert.deepEqual(changedItemIds, [], 'change item IDs');
+        assert.deepEqual(change.changeTypes, [], 'change types');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
     });
 });
 

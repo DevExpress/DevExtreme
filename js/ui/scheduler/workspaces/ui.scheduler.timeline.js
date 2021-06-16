@@ -8,7 +8,12 @@ import dateUtils from '../../../core/utils/date';
 import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
+import {
+    HEADER_CURRENT_TIME_CELL_CLASS,
+    DATE_TABLE_ROW_CLASS,
+    GROUP_ROW_CLASS,
+    GROUP_HEADER_CONTENT_CLASS,
+} from '../classes';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -41,13 +46,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this.$element().addClass(TIMELINE_CLASS);
         this._$sidebarTable = $('<div>')
             .addClass(GROUP_TABLE_CLASS);
-    }
-    _getCellFromNextRow(direction, isMultiSelection) {
-        if(!isMultiSelection) {
-            return super._getCellFromNextRow(direction, isMultiSelection);
-        }
-
-        return this._$focusedCell;
     }
 
     _getDefaultGroupStrategy() {
@@ -86,7 +84,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+        const firstViewDate = this._getFirstViewDateWithoutDST();
 
         return this._getDateByIndexCore(firstViewDate, index);
     }
@@ -100,7 +98,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = this._getValidFirstViewDateWithoutDST();
+        const firstViewDate = this._getFirstViewDateWithoutDST();
 
         const result = this._getDateByIndexCore(firstViewDate, index);
 
@@ -111,19 +109,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return result;
     }
 
-    _getValidFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
-        newFirstViewDate.setHours(this.option('startDayHour'));
-
-        return newFirstViewDate;
-    }
-
     _getFormat() {
         return 'shorttime';
-    }
-
-    _needApplyLastGroupCellClass() {
-        return true;
     }
 
     _calculateHiddenInterval(rowIndex, cellIndex) {
@@ -172,9 +159,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderTimePanel() { return noop(); }
     _renderAllDayPanel() { return noop(); }
-    _getTableAllDay() {
-        return false;
-    }
+
     _getDateHeaderTemplate() {
         return this.option('timeCellTemplate');
     }
@@ -277,14 +262,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             groupCellTemplates = this._renderGroupHeader();
         }
 
-        if(this.isRenovatedRender()) {
-            this.renderRWorkspace();
-        } else {
-            this._renderDateHeader();
-            this._renderTimePanel();
-            this._renderDateTable();
-            this._renderAllDayPanel();
-        }
+        this.renderWorkSpace();
 
         this._shader = new HorizontalShader(this);
 
@@ -388,7 +366,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         super._setTableSizes();
 
-        this.virtualScrollingDispatcher?.updateDimensions();
+        this.virtualScrollingDispatcher.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
@@ -407,10 +385,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
-                groupRowClass: this._getGroupRowClass(),
-                groupHeaderRowClass: this._getGroupRowClass(),
+                groupRowClass: GROUP_ROW_CLASS,
+                groupHeaderRowClass: GROUP_ROW_CLASS,
                 groupHeaderClass: this._getGroupHeaderClass.bind(this),
-                groupHeaderContentClass: this._getGroupHeaderContentClass()
+                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
             },
             this._getCellCount() || 1,
             this.option('resourceCellTemplate'),
@@ -429,7 +407,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _calculateMinCellHeight() {
         const dateTable = this._getDateTable();
-        const dateTableRowSelector = '.' + this._getDateTableRowClass();
+        const dateTableRowSelector = `.${DATE_TABLE_ROW_CLASS}`;
 
         return (getBoundingRect(dateTable).height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     }
@@ -626,14 +604,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
     }
 
-    renovatedRenderSupported() { return true; }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
 
+    _renderGroupAllDayPanel() {}
+
     generateRenderOptions() {
-        const options = super.generateRenderOptions();
+        const options = super.generateRenderOptions(true);
 
         const groupCount = this._getGroupCount();
         const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()

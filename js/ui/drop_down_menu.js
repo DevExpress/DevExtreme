@@ -245,6 +245,7 @@ const DropDownMenu = Widget.inherit({
             height: this.option('buttonHeight'),
             useInkRipple: this.option('useInkRipple'),
             template: this.option('buttonTemplate'),
+            hoverStateEnabled: false,
             focusStateEnabled: false,
             onClick: (function(e) {
                 this.option('opened', !this.option('opened'));
@@ -280,7 +281,7 @@ const DropDownMenu = Widget.inherit({
 
         return {
             onInitialized: function(args) {
-                args.component._wrapper()
+                args.component.$wrapper()
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
             },

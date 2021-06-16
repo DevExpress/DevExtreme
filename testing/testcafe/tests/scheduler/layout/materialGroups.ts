@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
 
 fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, './material.html'));
+  .page(url(__dirname, '../../containerMaterial.html'));
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {
@@ -30,7 +30,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Base views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `materialGroups-base-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });
 
@@ -39,6 +39,6 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
     test(`Timeline views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `materialGroups-timeline-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });

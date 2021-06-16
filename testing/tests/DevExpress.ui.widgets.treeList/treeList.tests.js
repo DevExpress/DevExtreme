@@ -1546,40 +1546,54 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList navigateTo', function(assert) {
-        // arrange, act
+        // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
             }
         });
+        const callback = sinon.spy();
 
-        this.clock.tick();
+        // act
+        const d = treeList.navigateToRow(12);
+        d.done(callback);
 
-        treeList.navigateToRow(12);
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 6, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 1, 'page is changed');
         assert.ok(treeList.getRowIndexByKey(12) >= 0, 'key is visible');
     });
 
     QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
-        // arrange, act
+        // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
             }
         });
+        const callback = sinon.spy();
 
+        // act
         this.clock.tick();
 
-        treeList.navigateToRow(2);
+        const d = treeList.navigateToRow(2);
+        d.done(callback);
+
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 1, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 0, 'page is not changed');
         assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
@@ -1589,6 +1603,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
         // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             height: 100,
             dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
                 id: 5,
@@ -1597,17 +1612,25 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             scrolling: {
                 mode: 'standard',
             },
+            paging: {
+                enabled: true
+            },
             keyExpr: 'id',
             parentIdExpr: 'parent_id',
             columns: ['id']
         });
+        const callback = sinon.spy();
 
-        this.clock.tick();
+        const d = treeList.navigateToRow(5);
+        d.done(callback);
 
-        treeList.navigateToRow(5);
+        $(treeList.getScrollable()._container()).trigger('scroll');
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 4, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [4], 'parent node is expanded');
         assert.ok(treeList.getRowIndexByKey(5) >= 0, 'key is visible');
     });
@@ -1688,41 +1711,95 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.ok(true, 'No exceptions');
     });
 
-    // T993300
-    QUnit.test('The focused row should not be changed after filtering', function(assert) {
-        // arrange
-        const treeList = createTreeList({
-            height: 100,
-            keyExpr: 'id',
-            dataSource: generateData(6),
-            paging: {
-                pageSize: 4
-            },
-            focusedRowEnabled: true,
-            focusedRowKey: 12,
-            columns: ['id']
+    ['virtual', 'standard'].forEach((scrollingMode) => {
+        // T993300
+        QUnit.test(`The focused row should not be changed after filtering when scrolling.mode = ${scrollingMode}`, function(assert) {
+            // arrange
+            const treeList = createTreeList({
+                height: 100,
+                keyExpr: 'id',
+                dataSource: generateData(6),
+                paging: {
+                    enabled: scrollingMode === 'standard',
+                    pageSize: 4
+                },
+                scrolling: {
+                    mode: scrollingMode
+                },
+                focusedRowEnabled: true,
+                focusedRowKey: 12,
+                columns: ['id']
+            });
+
+            this.clock.tick(200);
+
+            // act
+            treeList.searchByText(3);
+            this.clock.tick(200);
+
+            // assert
+            const visibleRows = treeList.getVisibleRows();
+            assert.strictEqual(visibleRows.length, 1, 'count node');
+            assert.strictEqual(visibleRows[0].key, 3, 'key node');
+            assert.strictEqual(treeList.option('focusedRowKey'), 12, 'focused row key');
+
+            // act
+            treeList.searchByText('');
+            this.clock.tick(200);
+
+            // assert
+            assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
+            assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
+            assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
         });
 
-        this.clock.tick(100);
+        // T996500
+        QUnit.test(`The focused row should be restored after cleaning the filter when scrolling.mode = ${scrollingMode}`, function(assert) {
+            // arrange
+            const treeList = createTreeList({
+                height: 100,
+                keyExpr: 'id',
+                dataSource: generateData(10),
+                paging: {
+                    enabled: scrollingMode === 'standard',
+                    pageSize: 5
+                },
+                scrolling: {
+                    mode: scrollingMode
+                },
+                focusedRowEnabled: true,
+                focusedRowKey: 2,
+                columns: ['id']
+            });
 
-        // act
-        treeList.searchByText(3);
-        this.clock.tick(100);
+            this.clock.tick(200);
 
-        // assert
-        const visibleRows = treeList.getVisibleRows();
-        assert.strictEqual(visibleRows.length, 1, 'count node');
-        assert.strictEqual(visibleRows[0].key, 3, 'key node');
-        assert.strictEqual(treeList.option('focusedRowKey'), 12, 'focused row key');
+            // assert
+            assert.strictEqual(treeList.option('focusedRowKey'), 2, 'focused row key');
+            assert.strictEqual(treeList.option('focusedRowIndex'), 1, 'focused row index');
 
-        // act
-        treeList.searchByText('');
-        this.clock.tick(100);
+            // act
+            treeList.searchByText(3);
+            this.clock.tick(200);
 
-        // assert
-        assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
-        assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'focus parent is expanded');
-        assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass('dx-row-focused'), 'focused row is visible');
+            // assert
+            const visibleRows = treeList.getVisibleRows();
+            assert.strictEqual(visibleRows.length, 1, 'count node');
+            assert.strictEqual(visibleRows[0].key, 3, 'key node');
+            assert.strictEqual(treeList.option('focusedRowKey'), 2, 'focused row key');
+            assert.strictEqual(treeList.option('focusedRowIndex'), 1, 'focused row index');
+
+            // act
+            treeList.searchByText('');
+            this.clock.tick(200);
+
+            // assert
+            assert.strictEqual(treeList.pageIndex(), 0, 'page is changed');
+            assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'focus parent is expanded');
+            assert.strictEqual(treeList.option('focusedRowKey'), 2, 'focused row key');
+            assert.strictEqual(treeList.option('focusedRowIndex'), 1, 'focused row index');
+            assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(2))).hasClass('dx-row-focused'), 'focused row is visible');
+        });
     });
 });
 

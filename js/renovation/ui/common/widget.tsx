@@ -30,12 +30,15 @@ import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
+const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
+const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
+
 const getAria = (args: Record<string, unknown>):
 { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
     return {
       ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
+      [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
     };
   }
   return r;
@@ -70,9 +73,9 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 export class WidgetProps extends BaseWidgetProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() _feedbackHideTimeout?: number = 400;
+  @OneWay() _feedbackHideTimeout?: number = DEFAULT_FEEDBACK_HIDE_TIMEOUT;
 
-  @OneWay() _feedbackShowTimeout?: number = 30;
+  @OneWay() _feedbackShowTimeout?: number = DEFAULT_FEEDBACK_SHOW_TIMEOUT;
 
   @OneWay() activeStateUnit?: string;
 
@@ -82,19 +85,15 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 
   @Event() onDimensionChanged?: () => void;
 
   @Event() onInactive?: (e: Event) => void;
-
-  @Event() onKeyboardHandled?: (args: Record<string, unknown>) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
@@ -195,6 +194,16 @@ export class Widget extends JSXComponent(WidgetProps) {
     focus.trigger(this.widgetRef.current);
   }
 
+  @Method()
+  activate(): void {
+    this.active = true;
+  }
+
+  @Method()
+  deactivate(): void {
+    this.active = false;
+  }
+
   @Effect()
   focusEffect(): EffectReturn {
     const {
@@ -254,9 +263,9 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   keyboardEffect(): EffectReturn {
-    const { onKeyDown } = this.props;
+    const { onKeyDown, focusStateEnabled } = this.props;
 
-    if (onKeyDown) {
+    if (focusStateEnabled && onKeyDown) {
       const id = keyboard.on(
         this.widgetRef.current,
         this.widgetRef.current,
@@ -357,7 +366,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

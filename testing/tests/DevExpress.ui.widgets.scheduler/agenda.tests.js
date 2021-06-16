@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -34,20 +36,31 @@ module('Agenda', {}, () => {
                 e.component.onDataSourceChanged(rows);
             },
             observer: {
-                fire: (functionName, args) => {
+                fire: (functionName) => {
                     if(functionName === 'getLayoutManager') {
                         return {
                             getRenderingStrategyInstance: () => {
                                 return { calculateRows: () => rows };
                             }
                         };
-                    }
-                    if(functionName === 'createReducedResourcesTree') {
-                        return new ResourceManager().createResourcesTree(options.groups);
+                    } else if(functionName === 'getResourceManager') {
+                        return getResourceManager(key);
+                    } else if(functionName === 'getAppointmentDataProvider') {
+                        return getAppointmentDataProvider(key);
                     }
                 }
             }
         };
+
+        const schedulerMock = { isVirtualScrolling: () => false };
+        const resources = options && options.groups || { };
+        const key = createFactoryInstances({
+            scheduler: schedulerMock,
+            resources
+        });
+
+        const resourceManager = getResourceManager(key);
+        resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });
         return $element.dxSchedulerAgenda('instance');

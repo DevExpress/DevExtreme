@@ -3,10 +3,9 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
-import { setupRenovation } from '../../helpers/renovationHelper.js';
 
 import 'generic_light.css!';
-import ActionSheet from 'ui/action_sheet';
+import 'ui/action_sheet';
 
 QUnit.testStart(function() {
     const markup =
@@ -20,8 +19,6 @@ QUnit.testStart(function() {
 });
 
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
-
-setupRenovation(ActionSheet);
 
 QUnit.module('action sheet', {
     beforeEach: function() {
@@ -559,7 +556,7 @@ QUnit.module('widget sizing render', () => {
 
         instance.show();
 
-        assert.ok(instance._popup._container().outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(instance._popup.$overlayContent().outerWidth() > 0, 'outer width of the element must be more than zero');
     });
 
     QUnit.test('constructor', function(assert) {
@@ -568,7 +565,7 @@ QUnit.module('widget sizing render', () => {
         instance.show();
 
         assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance._popup._container().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
@@ -577,6 +574,6 @@ QUnit.module('widget sizing render', () => {
         instance.option('width', customWidth);
 
         instance.show();
-        assert.strictEqual(instance._popup._container().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(instance._popup.$overlayContent().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 });

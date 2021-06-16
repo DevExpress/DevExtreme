@@ -1,4 +1,5 @@
 import 'generic_light.css!';
+import $ from 'jquery';
 
 import {
     createWrapper,
@@ -210,6 +211,57 @@ module('Renovated Views', () => {
             const cellHeightAfterCurrentDateChange = scheduler.workSpace.getCellHeight();
 
             assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell hieght');
+        });
+    });
+
+
+    [{
+        groupOrientation: 'horizontal',
+        groupByDate: true,
+        cellCount: 7,
+        testDescription: 'Header cells in timeline\'s week row should have correct texts when grouping by date is used',
+    }, {
+        groupOrientation: 'horizontal',
+        groupByDate: false,
+        cellCount: 14,
+        testDescription: 'Header cells in timeline\'s week row should have correct texts when horizontal grouping is used',
+    }, {
+        groupOrientation: 'vertical',
+        groupByDate: false,
+        cellCount: 7,
+        testDescription: 'Header cells in timeline\'s week row should have correct texts when vertical grouping is used',
+    }].forEach(({ groupByDate, groupOrientation, cellCount, testDescription }) => {
+        test(testDescription, function(assert) {
+            const scheduler = createWrapper({
+                height: 500,
+                views: [{
+                    type: 'timelineWeek',
+                    groupOrientation,
+
+                }],
+                currentView: 'timelineWeek',
+                currentDate: new Date(2021, 6, 21),
+                startDayHour: 9,
+                endDayHour: 10,
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }],
+                }],
+                groupByDate,
+            });
+
+            const dateHeaderCells = scheduler.workSpace.getWeekDayHeaderPanelCells();
+
+            assert.equal(dateHeaderCells.length, cellCount, 'Correct number of cells');
+
+            const texts = ['Sun 18', 'Mon 19', 'Tue 20', 'Wed 21', 'Thu 22', 'Fri 23', 'Sat 24'];
+
+            dateHeaderCells.each(function(index) {
+                const text = texts[index % 7];
+
+                assert.equal($(this).text(), text, 'Correct text');
+            });
         });
     });
 });

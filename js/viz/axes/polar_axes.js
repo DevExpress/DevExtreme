@@ -428,6 +428,7 @@ const circularAxes = {
 
     shift: function(margins) {
         this._axisGroup.attr({ translateX: margins.right, translateY: margins.bottom });
+        this._axisElementsGroup.attr({ translateX: margins.right, translateY: margins.bottom });
     },
 
     getTranslatedAngle(angle) {

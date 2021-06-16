@@ -17,9 +17,9 @@ import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
 
-const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 themes.setDefaultTimeout(0);
 
@@ -93,7 +93,6 @@ const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -245,9 +244,16 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('close button is shown when title changes', function(assert) {
-        const popup = $('#popup').dxPopup({ visible: true, showTitle: true, showCloseButton: true }).dxPopup('instance');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            showCloseButton: true
+        }).dxPopup('instance');
+
         popup.option('title', 'new title');
-        assert.ok($('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, popup._$title).length);
+
+        const $titleToolbar = popup.$wrapper().find(`.${POPUP_TITLE_CLASS}`);
+        assert.ok($(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, $titleToolbar).length);
     });
 
     QUnit.test('popup top toolbar rendering', function(assert) {
@@ -657,11 +663,11 @@ QUnit.module('options changed callbacks', {
             minHeight: minHeight
         }).dxPopup('instance');
 
-        const $popup = $(popup.content()).parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
+        const $popup = popup.$content().parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
         const popupHeight = $popup.height();
 
         $('<div>').height(50).appendTo($content);
-        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed (except IE11)');
+        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed');
 
         $('<div>').height(450).appendTo($content);
         assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed, it is equal to the maxHeight');
@@ -679,7 +685,7 @@ QUnit.module('options changed callbacks', {
         popup.option('width', 'auto');
         $content.empty();
 
-        assert.strictEqual($popup.outerHeight(), (IS_IE11 ? 400 : minHeight), 'popup with auto width can change height (except IE11)');
+        assert.strictEqual($popup.outerHeight(), minHeight, 'popup with auto width can change height');
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
@@ -772,13 +778,7 @@ QUnit.module('options changed callbacks', {
 
         popup.option('width', 'auto');
 
-        if(IS_IE11) {
-            assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11');
-            assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11');
-        } else {
-            assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
-        }
-
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
     });
 
 
@@ -877,34 +877,6 @@ QUnit.module('options changed callbacks', {
         assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), 'wrapper has correct height');
     });
 
-    QUnit.test('has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)', function(assert) {
-        this.instance.option({
-            fullScreen: true,
-            visible: true
-        });
-
-        const $body = $('body');
-        const $wrapper = this.instance.$content().parent().parent();
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct');
-
-        this.instance.hide();
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-
-        this.instance.show();
-        this.instance.option('fullScreen', false);
-
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body if fullScreen is changed to \'false\' at runtime');
-        assert.strictEqual($wrapper.css('position') === 'fixed', !IS_SAFARI, 'popup wrapper position type is correct if fullScreen is changed to \'false\' at runtime');
-
-        this.instance.option('fullScreen', true);
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, 'class added to the body if fullScreen is changed to \'true\' at runtime');
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct if fullScreen is changed to \'true\' at runtime');
-        this.instance.hide();
-    });
-
     QUnit.test('start scroll position is saved after full screen popup hiding', function(assert) {
         let $additionalElement;
 
@@ -921,43 +893,6 @@ QUnit.module('options changed callbacks', {
             this.instance.hide();
 
             assert.strictEqual(window.pageYOffset, 100);
-        } finally {
-            window.scrollTo(0, 0);
-            $additionalElement.remove();
-        }
-    });
-
-    QUnit.test('works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScreen option is changed on showing event in safari (T825004)', function(assert) {
-        if(!IS_SAFARI) {
-            assert.expect(0);
-            return;
-        }
-        let $additionalElement;
-
-        try {
-            const $body = $('body');
-            $additionalElement = $('<div>').height(2000).appendTo($body);
-
-            this.instance.option({
-                fullScreen: false,
-                visible: false,
-                onShowing(e) {
-                    e.component.option('fullScreen', true);
-                }
-            });
-
-            const $wrapper = this.instance.$content().parent();
-
-            window.scrollTo(0, 200);
-            this.instance.show();
-            this.clock.tick(500);
-
-            assert.ok($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
-            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
-            this.instance.hide();
-
-            assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-            assert.strictEqual(window.pageYOffset, 200, 'scroll position is saved');
         } finally {
             window.scrollTo(0, 0);
             $additionalElement.remove();
@@ -1002,11 +937,10 @@ QUnit.module('options changed callbacks', {
             visible: true
         });
 
-        const $overlayContent = this.instance.$content().parent();
-        const $wrapper = $overlayContent.parent().get(0);
+        const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), $(window).width(), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), $(window).height(), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
@@ -1269,6 +1203,115 @@ QUnit.module('options changed callbacks', {
             resizeEventSpy.restore();
         }
     });
+
+    QUnit.module('prevent safari scrolling on ios devices', {
+        beforeEach: function() {
+            this.originalDevice = {
+                platform: devices.real().platform,
+                deviceType: devices.real().deviceType
+            };
+            devices.real({ platform: 'ios', deviceType: 'phone' });
+            this.$body = $('body');
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            devices.real(this.originalDevice);
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+        }
+    }, () => {
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for is popup is in fullScreen mode on init', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.dispose();
+            $('#popup').dxPopup({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for fullScreen popup in safari (T714801)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "fullScreen" option change', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                visible: true
+            });
+            this.instance.option('fullScreen', true);
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "fullScreen" is enabled');
+
+            this.instance.option('fullScreen', false);
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "fullScreen" is disabled');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be added to the body if fullScreen option is set to "true" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', true);
+                }
+            });
+            const $wrapper = this.instance.$wrapper();
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be removed from body if fullScreen option is set to "false" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', false);
+                }
+            });
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed from body on fullScreen disable');
+            assert.strictEqual(window.pageYOffset, 200, 'scroll position is correct');
+        });
+    });
 });
 
 QUnit.module('resize', {
@@ -1329,7 +1372,7 @@ QUnit.module('resize', {
             onResizeEnd: onResizeEndStub
         }).dxPopup('instance');
 
-        const $content = instance.overlayContent();
+        const $content = instance.$overlayContent();
         const $handle = $content.find('.dx-resizable-handle-top');
         const pointer = pointerMock($handle);
 
@@ -1354,7 +1397,7 @@ QUnit.module('resize', {
         instance.on('resizeEnd', onResizeEndStub);
         instance.show();
 
-        const $content = instance.overlayContent();
+        const $content = instance.$overlayContent();
         const $handle = $content.find('.dx-resizable-handle-top');
         const pointer = pointerMock($handle);
 
@@ -1517,10 +1560,10 @@ QUnit.module('rendering', {
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
         this.instance.option('width', function() { return $(window).width(); });
         this.instance.show();
-        assert.ok(this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
+        assert.ok(this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
 
         this.instance.option('width', function() { return $(window).width() - 1; });
-        assert.ok(!this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
+        assert.ok(!this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
     });
 
     QUnit.test('popup with toolbar should have compactMode option for the bottom toolbar', function(assert) {

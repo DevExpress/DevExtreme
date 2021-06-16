@@ -9,19 +9,26 @@ import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../
 import { GroupPanel } from '../../group_panel/group_panel';
 import { DateHeaderLayout } from '../date_header/layout';
 import { TimelineDateHeaderLayout } from '../../../timeline/header_panel/date_header/layout';
+import { DateHeaderData } from '../../../types';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
 describe('HeaderPanelLayoutLayout', () => {
-  describe('Render', () => {
-    const dateHeaderMap = [[]];
+  const dateHeaderData: DateHeaderData = {
+    dataMap: [[]],
+    leftVirtualCellCount: 0,
+    rightVirtualCellCount: 0,
+    leftVirtualCellWidth: 0,
+    rightVirtualCellWidth: 0,
+  };
 
+  describe('Render', () => {
     const render = (viewModel) => shallow(LayoutView({
       isHorizontalGrouping: false,
       ...viewModel,
       props: {
-        ...(new HeaderPanelLayoutProps()),
-        dateHeaderMap,
+        ...new HeaderPanelLayoutProps(),
+        dateHeaderData,
         groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
         groups: [],
         ...viewModel.props,
@@ -48,7 +55,7 @@ describe('HeaderPanelLayoutLayout', () => {
 
       expect(dateHeader.props())
         .toEqual({
-          dateHeaderMap,
+          dateHeaderData,
           dateCellTemplate,
           timeCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
@@ -131,6 +138,7 @@ describe('HeaderPanelLayoutLayout', () => {
           const layout = new HeaderPanelLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)

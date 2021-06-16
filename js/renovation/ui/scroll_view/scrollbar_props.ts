@@ -2,7 +2,6 @@ import {
   ComponentBindings,
   OneWay,
   Event,
-  TwoWay,
 } from '@devextreme-generator/declarations';
 
 import noop from '../../utils/noop';
@@ -32,17 +31,19 @@ export class ScrollbarProps {
 
   @OneWay() scrollLocation = 0;
 
-  @TwoWay() pocketState = TopPocketState.STATE_RELEASED; // TODO: avoid twoWay
+  @OneWay() pocketState = TopPocketState.STATE_RELEASED;
 
-  @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
+  @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
   @Event() onAnimatorCancel?: () => void = noop;
-
-  @Event() pocketStateChange?: (state: number) => void;
 
   @Event() onPullDown?: () => void = noop;
 
   @Event() onReachBottom?: () => void = noop;
 
   @Event() onRelease?: () => void = noop;
+
+  @Event() onScroll?: () => void = noop;
+
+  @Event() onEnd?: (direction: string) => void = noop;
 }

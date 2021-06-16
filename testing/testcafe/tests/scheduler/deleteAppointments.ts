@@ -62,7 +62,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
 
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createRecurrenceData()));
+}).before(async () => createScheduler(createRecurrenceData()));
 
 test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   await t
@@ -84,7 +84,7 @@ test('Recurrence appointments should be deleted by press \'delete\' key', async 
 
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createRecurrenceData()));
+}).before(async () => createScheduler(createRecurrenceData()));
 
 test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
   await t
@@ -100,4 +100,4 @@ test('Common appointments should be deleted by click on \'delete\' button and pr
     .pressKey('delete')
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createSimpleData()));
+}).before(async () => createScheduler(createSimpleData()));

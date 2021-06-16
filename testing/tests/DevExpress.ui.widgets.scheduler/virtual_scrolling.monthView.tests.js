@@ -1,4 +1,5 @@
 import 'generic_light.css!';
+import $ from 'jquery';
 
 import dateUtils from 'core/utils/date';
 import {
@@ -1128,6 +1129,65 @@ module('Virtual scrolling Month View', () => {
 
                 return promise;
             });
+        });
+
+        test('Long appointments should be rendered correctly when style is custom', function(assert) {
+            const $style = $('<style>');
+            const styleBefore = $style.text();
+
+            $style
+                .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 150px } ')
+                .appendTo('head');
+
+            const scheduler = createWrapper({
+                height: 600,
+                currentDate: new Date(2021, 1, 2),
+                dataSource: [{
+                    startDate: new Date(2021, 1, 7, 8),
+                    endDate: new Date(2021, 1, 20, 20),
+                    priority: 1
+                }],
+                views: [
+                    {
+                        type: 'timelineWorkWeek',
+                        name: 'Timeline',
+                        groupOrientation: 'vertical'
+                    },
+                    {
+                        type: 'workWeek',
+                        groupOrientation: 'vertical'
+                    },
+                    {
+                        type: 'month',
+                        groupOrientation: 'horizontal'
+                    }
+                ],
+                currentView: 'month',
+                startDayHour: 8,
+                endDayHour: 20,
+                scrolling: {
+                    mode: 'virtual'
+                },
+                showAllDayPanel: false,
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: [
+                        { id: 1, text: 'rc_001' },
+                        { id: 2, text: 'rc_002' },
+                        { id: 3, text: 'rc_003' },
+                        { id: 4, text: 'rc_004' }
+                    ]
+                }],
+                width: 400,
+            });
+
+            const appointmentCount = scheduler.appointmentList.length;
+
+            assert.equal(appointmentCount, 2, 'Correct number of long appointment parts');
+
+            $style.text(styleBefore);
         });
     });
 });
