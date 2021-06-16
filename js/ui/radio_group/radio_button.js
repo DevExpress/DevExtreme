@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';
 import { extend } from '../../core/utils/extend';
-import { render } from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import Editor from '../editor/editor';
 import { addNamespace } from '../../events/utils/index';
@@ -35,8 +34,7 @@ const RadioButton = Editor.inherit({
         return extend(this.callBase(), {
             hoverStateEnabled: true,
             activeStateEnabled: true,
-            value: false,
-            useInkRipple: false
+            value: false
         });
     },
 
@@ -67,37 +65,9 @@ const RadioButton = Editor.inherit({
         this.callBase();
 
         this._renderIcon();
-        this.option('useInkRipple') && this._renderInkRipple();
         this._renderCheckedState(this.option('value'));
         this._renderClick();
         this.setAria('role', 'radio');
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render({
-            waveSizeCoefficient: 3.3,
-            useHoldAnimation: false,
-            wavesNumber: 2,
-            isCentered: true
-        });
-    },
-
-    _renderInkWave: function(element, dxEvent, doRender, waveIndex) {
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: element,
-            event: dxEvent,
-            wave: waveIndex
-        };
-
-        if(doRender) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
     },
 
     _updateFocusState: function(e, value) {
@@ -146,9 +116,6 @@ const RadioButton = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'useInkRipple':
-                this._invalidate();
-                break;
             case 'value':
                 this._renderCheckedState(args.value);
                 this.callBase(args);
@@ -156,11 +123,6 @@ const RadioButton = Editor.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
     }
 });
 
