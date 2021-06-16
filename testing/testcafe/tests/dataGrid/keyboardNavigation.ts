@@ -2501,3 +2501,40 @@ test('Grid should get focus when the focus method is called (T955678)', async (t
     $('#mycontainer').remove();
   })();
 });
+
+test('Focus next cell using tab after adding row if some another row is focused and repaintChangesOnly is enabled (T1004913)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+  const cell00 = dataGrid.getDataCell(0, 0);
+  const editor00 = cell00.getEditor();
+  const cell01 = dataGrid.getDataCell(0, 1);
+  const editor01 = cell01.getEditor();
+
+  await t
+    .click(addRowButton)
+
+    .expect(cell00.isFocused)
+    .ok()
+    .expect(editor00.element.focused)
+    .ok()
+
+    .pressKey('tab')
+
+    .expect(cell01.isFocused)
+    .ok()
+    .expect(editor01.element.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ ID: 1, FirstName: 'John' }],
+  keyExpr: 'ID',
+  repaintChangesOnly: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+  },
+  focusedRowEnabled: true,
+  focusedRowKey: 1,
+  columns: ['ID', 'FirstName'],
+}));
