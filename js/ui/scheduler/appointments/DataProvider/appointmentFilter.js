@@ -166,14 +166,15 @@ export class AppointmentFilterBaseStrategy {
     get scheduler() { return this.options.scheduler; } // TODO get rid
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourceManager() { return getResourceManager(this.scheduler.key); }
+    get resourceManager() { return getResourceManager(this.options.key); }
     get timeZoneCalculator() { return this.scheduler.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
     get viewEndDayHour() { return this.options.endDayHour; }
     get appointmentDuration() { return this.options.appointmentDuration; }
     get timezone() { return this.options.timezone; }
-    get firstDayOfWeek() { return this.scheduler.getFirstDayOfWeek(); }
+    get firstDayOfWeek() { return this.options.firstDayOfWeek; }
+    get showAllDayPanel() { return this.options.showAllDayPanel; }
 
     _init() {
         this.setDataAccessors(this.dataAccessors);
@@ -186,7 +187,7 @@ export class AppointmentFilterBaseStrategy {
 
         let allDay;
 
-        if(!this.scheduler.option('showAllDayPanel') && this.workspace.supportAllDayRow()) {
+        if(!this.showAllDayPanel && this.workspace.supportAllDayRow()) {
             allDay = false;
         }
 
@@ -698,7 +699,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const checkIntersectViewport = this.workspace.isDateAndTimeView && this.workspace.viewDirection === 'horizontal';
 
         const isAllDayWorkspace = !this.workspace.supportAllDayRow();
-        const showAllDayAppointments = this.scheduler.option('showAllDayPanel') || isAllDayWorkspace;
+        const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
 
         const endViewDate = this.workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];

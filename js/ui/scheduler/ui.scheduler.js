@@ -681,6 +681,8 @@ class Scheduler extends Widget {
                 break;
             }
             case 'showAllDayPanel':
+                this.updateFactoryInstances();
+
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption('workSpace', 'allDayExpanded', value);
@@ -974,6 +976,8 @@ class Scheduler extends Widget {
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
+            showAllDayPanel: this.option('showAllDayPanel'),
             timezone: this.option('timezone')
         });
     }
