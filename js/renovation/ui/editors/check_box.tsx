@@ -236,11 +236,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get shouldShowValidationMessage(): boolean {
     const { validationStatus } = this.props;
     const isValid = this.props.isValid ?? true;
-    const validationErrors = this.validationErrors ?? []
+    const validationErrors = this.validationErrors ?? [];
 
     return !isValid
       && validationStatus === 'invalid'
-      && validationErrors.length > 0
+      && validationErrors.length > 0;
   }
 
   get aria(): Record<string, string> {
