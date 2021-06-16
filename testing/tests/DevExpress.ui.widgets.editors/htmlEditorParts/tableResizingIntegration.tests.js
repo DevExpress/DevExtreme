@@ -862,7 +862,60 @@ module('Resizing integration', {
         });
     });
 
-    test('Columns should be resized correctly at the rtl mode', function(assert) {
+    test('Columns resizers should be positioned correctly if the rtl mode is enabled at runtime', function(assert) {
+        this.createWidget({ width: 430, rtlEnabled: true });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+
+        const columnBorderOffsets = getColumnBordersOffset($table);
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+    });
+
+    test('Columns should be resized correctly after drag at the rtl mode', function(assert) {
+        this.createWidget({ width: 430, rtlEnabled: true });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(50, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const columnBorderOffsets = getColumnBordersOffset($table);
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+
+        assert.roughEqual(columnBorderOffsets[0], 150, 3);
+        assert.roughEqual(columnBorderOffsets[1], 200, 3);
+
+    });
+
+    test('Columns resizers should be positioned correctly if the rtl mode is enabled at runtime', function(assert) {
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+    });
+
+    test('Columns resizers should works correctly if the rtl mode is enabled at runtime', function(assert) {
         this.createWidget();
         this.clock.tick(TIME_TO_WAIT);
 

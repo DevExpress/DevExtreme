@@ -187,7 +187,7 @@ export default class TableResizingModule extends BaseModule {
             return {
                 lineResizerClass: DX_COLUMN_RESIZER_CLASS,
                 getSizeFunction: 'outerWidth',
-                positionCoordinate: 'left',
+                positionCoordinate: this.editorInstance.option('rtlEnabled') ? 'right' : 'left',
                 positionStyleProperty: 'width',
                 positionCoordinateName: 'x'
             };
