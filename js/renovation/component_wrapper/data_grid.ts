@@ -78,7 +78,7 @@ export default class DataGridWrapper extends Component {
 
   _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
     super._optionChanging(fullName, prevValue, value);
-    if (this.viewRef && prevValue !== value) {
+    if (this.viewRef) {
       const name = fullName.split(/[.[]/)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
       updatePropsImmutable(prevProps, this.option(), name, fullName);
@@ -87,11 +87,11 @@ export default class DataGridWrapper extends Component {
   }
 
   _optionChanged(e: Option): void {
-    const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance?.();
-    if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
-      gridInstance?.option('dataSource', e.value as string);
+    const internalInstance = this._getInternalInstance();
+    if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
+      internalInstance.option('dataSource', e.value as string);
     }
-    super._optionChanged(e);
+    super._optionChanged(e); // todo
   }
 
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
