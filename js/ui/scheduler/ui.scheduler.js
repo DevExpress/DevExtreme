@@ -58,11 +58,13 @@ import AppointmentAdapter from './appointmentAdapter';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
-import utils from './utils';
-
-import { createFactoryInstances, disposeFactoryInstances } from './instanceFactory';
-import { getResourceManager } from './resources/resourceManager';
-import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { utils } from './utils';
+import {
+    createFactoryInstances,
+    disposeFactoryInstances,
+    getResourceManager,
+    getAppointmentDataProvider
+} from './instanceFactory';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -729,7 +731,9 @@ class Scheduler extends Widget {
             case 'disabledExpr':
                 this._updateExpression(name, value);
 
-                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+                getAppointmentDataProvider(this.key).updateDataAccessors(
+                    utils.dataAccessors.combine(this.key, this._dataAccessors)
+                );
 
                 this._initAppointmentTemplate();
                 this.repaint();
@@ -967,12 +971,13 @@ class Scheduler extends Widget {
     }
 
     updateFactoryInstances() {
+        const dataAccessors = utils.dataAccessors.combine(this.key, this._dataAccessors);
         this.key = createFactoryInstances({
             key: this.key,
             scheduler: this,
             resources: this.option('resources'),
             dataSource: this._dataSource,
-            appointmentDataAccessors: this._dataAccessors,
+            dataAccessors,
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),

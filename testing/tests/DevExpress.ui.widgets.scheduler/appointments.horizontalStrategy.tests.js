@@ -3,9 +3,7 @@ import dataCoreUtils from 'core/utils/data';
 import typeUtils from 'core/utils/type';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const { testStart, module, test } = QUnit;
 

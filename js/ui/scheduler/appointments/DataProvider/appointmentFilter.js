@@ -8,7 +8,7 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
-import { getResourceManager } from '../../resources/resourceManager';
+import { getResourceManager } from '../../instanceFactory';
 import timeZoneUtils from '../../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;

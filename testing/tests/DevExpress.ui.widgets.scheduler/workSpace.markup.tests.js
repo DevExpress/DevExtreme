@@ -2,13 +2,11 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import { ResourceManager, getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(() => {

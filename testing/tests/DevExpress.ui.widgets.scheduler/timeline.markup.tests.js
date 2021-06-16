@@ -9,8 +9,7 @@ import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {

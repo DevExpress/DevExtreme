@@ -10,9 +10,8 @@ import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
-import utils from './utils';
-import { getResourceManager } from './resources/resourceManager';
-import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { utils } from './utils';
+import { getResourceManager, getAppointmentDataProvider } from './instanceFactory';
 
 
 const toMs = dateUtils.dateToMilliseconds;
