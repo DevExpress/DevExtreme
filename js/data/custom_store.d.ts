@@ -7,7 +7,7 @@ import {
 } from './load_options';
 
 /** @namespace DevExpress.data */
-export interface CustomStoreOptions<TKey = any | string | number, TValue = any, TStore extends CustomStore = CustomStore<TKey, TValue>> extends StoreOptions<TKey, TValue, TStore> {
+export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -81,7 +81,7 @@ export interface CustomStoreOptions<TKey = any | string | number, TValue = any, 
  * @export default
  * @public
  */
-export default class CustomStore<TKey = any | string | number, TValue = any> extends Store<TKey, TValue> {
+export default class CustomStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
     constructor(options?: CustomStoreOptions<TKey, TValue>)
     /**
      * @docid

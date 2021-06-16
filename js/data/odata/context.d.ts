@@ -5,7 +5,7 @@ import {
 export interface ODataRequestOptions {
     accepts: any;
     async: boolean;
-    contentType: string | false;
+    contentType: string | boolean;
     data: any;
     dataType: string;
     headers: any;

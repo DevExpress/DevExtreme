@@ -7,7 +7,7 @@ import {
 } from './load_options';
 
 /** @namespace DevExpress.data */
-export interface StoreOptions<TKey = any | string | number, TValue = any, TStore extends Store<TKey, TValue> = Store<TKey, TValue>> {
+export interface StoreOptions<TKey = any, TValue = any> {
     /**
      * @docid
      * @public
@@ -108,7 +108,7 @@ type EventNames = 'loaded'|'loading'|'inserted'|'inserting'|'updated'|'updating'
  * @export default
  * @namespace DevExpress.data
  */
-export default class Store<TKey = any | string | number, TValue = any> {
+export default class Store<TKey = any, TValue = any> {
     constructor(options?: StoreOptions<TKey, TValue>)
     /**
      * @docid

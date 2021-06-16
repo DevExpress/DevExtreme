@@ -20,7 +20,7 @@ interface PromiseExtension<T> {
 }
 
 /** @namespace DevExpress.data */
-export interface ODataStoreOptions<TKey = any | string | number, TValue = any, TStore extends ODataStore<TKey, TValue> = ODataStore<TKey, TValue>> extends StoreOptions<TKey, TValue, TStore> {
+export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
      * @type_function_param1 options:object
@@ -105,7 +105,7 @@ export interface ODataStoreOptions<TKey = any | string | number, TValue = any, T
  * @export default
  * @public
  */
-export default class ODataStore<TKey = any | string | number, TValue = any> extends Store<TKey, TValue> {
+export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
     constructor(options?: ODataStoreOptions<TKey, TValue>)
     byKey(key: TKey): DxPromise<TValue>;
     /**

@@ -13,7 +13,7 @@ import {
 type Descriptor = {selector: string, desc: boolean};
 
 /** @namespace DevExpress.data */
-export interface DataSourceOptions<TKey = any | string | number, TValueOut = any, TValueIn = TValueOut, TValueMap = TValueOut> {
+export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValueOut, TValueMap = TValueOut> {
     /**
      * @docid
      * @public
@@ -144,7 +144,7 @@ export interface DataSourceOptions<TKey = any | string | number, TValueOut = any
  * @export default
  * @public
  */
-export default class DataSource<TKey = any | string | number, TValue = any> {
+export default class DataSource<TKey = any, TValue = any> {
     constructor(data: Array<TValue>);
     constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue, any, any>);
     constructor(store: Store<TKey, TValue>);
