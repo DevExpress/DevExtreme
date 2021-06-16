@@ -3,10 +3,10 @@ import {
 } from '../../core/utils/deferred';
 
 export interface ODataRequestOptions {
-    accepts: any,
-    async: boolean,
+    accepts: any;
+    async: boolean;
     contentType: string | false;
-    data: any,
+    data: any;
     dataType: string;
     headers: any;
     jsonp?: boolean;
