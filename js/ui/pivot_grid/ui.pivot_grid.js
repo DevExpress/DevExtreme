@@ -220,7 +220,7 @@ const PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions.fieldChooser.searchTimeout
                  * @type number
-                 * @default searchTimeout
+                 * @default 500
                  */
                 searchTimeout: 500,
                 /**
@@ -604,7 +604,7 @@ const PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions.headerFilter.searchTimeout
                  * @type number
-                 * @default searchTimeout
+                 * @default 500
                  */
                 searchTimeout: 500,
                 /**
