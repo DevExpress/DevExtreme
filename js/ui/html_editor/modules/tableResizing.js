@@ -59,7 +59,7 @@ export default class TableResizingModule extends BaseModule {
                 }, 100);
             });
 
-            this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler);
+            this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
         }
     }
 
