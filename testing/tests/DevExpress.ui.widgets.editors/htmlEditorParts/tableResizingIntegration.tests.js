@@ -667,6 +667,29 @@ module('Resizing integration', {
         });
     });
 
+    test('Row resizers should be updated after a row delete', function(assert) {
+        this.createWidget({
+            value: tableMarkup
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.deleteRow();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrames = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
+        const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
+
+        $rowResizerElements.each((i, row) => {
+            const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
+        });
+    });
+
     test('Column resizers should be updated after a column insert', function(assert) {
         this.createWidget({
             value: tableMarkup
@@ -712,7 +735,6 @@ module('Resizing integration', {
         assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
         assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
         assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
-
     });
 
     test('Row resizers should be updated on the table structure update after resize', function(assert) {

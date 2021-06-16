@@ -41,8 +41,8 @@ export default class TableResizingModule extends BaseModule {
                         this._updateFramesPositions();
                         this._updateFramesSeparators();
 
-                        quill.on('text-change', (delta) => {
-                            if(this._isTableChanges(delta)) {
+                        quill.on('text-change', (delta, oldContent) => {
+                            if(this._isTableChanges(delta, oldContent)) {
                                 this._removeResizeFrames();
 
                                 clearTimeout(this._attachResizerTimeout);
@@ -84,12 +84,12 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _isTableChanges(delta) {
+    _isTableChanges(delta, oldContent) {
         const $tables = this._findTables();
-        return $tables.length !== this._tableResizeFrames.length || this._isTableChangesInDelta(delta);
+        return $tables.length !== this._tableResizeFrames.length || this._isTableChangesInDelta(delta, oldContent);
     }
 
-    _isTableChangesInDelta(delta) {
+    _findTableChangesInDelta(delta) {
         let result = false;
         each(delta.ops, (_, data) => {
             if(data?.attributes?.table) {
@@ -99,6 +99,21 @@ export default class TableResizingModule extends BaseModule {
         });
 
         return result;
+    }
+
+    _isTableChangesInDelta(delta, oldContent) {
+        if(delta?.ops[0]?.delete || delta?.ops[1]?.delete) {
+            const quill = this.editorInstance.getQuillInstance();
+            const currentContent = quill.getContents();
+
+            return this._findTableChangesInDelta(currentContent.diff(oldContent));
+        }
+
+        if(delta.ops[0].insert || delta.ops[1].insert) {
+            return this._findTableChangesInDelta(delta);
+        }
+
+        return false;
     }
 
     _removeResizeFrames() {
