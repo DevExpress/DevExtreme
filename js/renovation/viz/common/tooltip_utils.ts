@@ -197,8 +197,8 @@ export function getCanvas(container: HTMLElement): ClientRect {
   const containerBox = container.getBoundingClientRect();
   const html = domAdapter.getDocumentElement();
   const body = domAdapter.getBody();
-  let left = (Number(getWindow()?.pageXOffset) || html.scrollLeft) ?? 0;
-  let top = (Number(getWindow()?.pageYOffset) || html.scrollTop) ?? 0;
+  let left: number = (Number(getWindow()?.pageXOffset) || html.scrollLeft) ?? 0;
+  let top: number = (Number(getWindow()?.pageYOffset) || html.scrollTop) ?? 0;
 
   const box = {
     left,

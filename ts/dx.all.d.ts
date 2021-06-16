@@ -690,19 +690,6 @@ declare module DevExpress {
      * [descr:Component.resetOption(optionName)]
      */
     resetOption(optionName: string): void;
-
-    _options: { silent(path: any, value: any): void };
-    _createActionByOption(optionName: string, config: object): Function;
-    _dispose(): void;
-    _getDefaultOptions(): object;
-    _init(): void;
-    _initializeComponent(): void;
-    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-    _optionChanged(args: { name: string; value: unknown }): void;
-    _setOptionsByReference(): void;
-    _optionsByReference: object;
-    _setDeprecatedOptions(): void;
-    _deprecatedOptions: object;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -865,6 +852,11 @@ declare module DevExpress {
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
+    _notifyOptionChanged(
+      fullName: string,
+      value: unknown,
+      previousValue: unknown
+    );
     _templateManager: DevExpress.core.TemplateManager;
   }
   module DOMComponent {
@@ -1303,6 +1295,29 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.core {
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  interface Component<TProperties> {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
+    _optionsByReference: Record<string, any>;
+    _deprecatedOptions: Record<string, any>;
+    _options: {
+      silent(path: any, value: any): void;
+    };
+    _createActionByOption(
+      optionName: string,
+      config: Record<string, any>
+    ): (...args: any[]) => any;
+    _dispose(): void;
+    _getDefaultOptions(): Record<string, any>;
+    _init(): void;
+    _initializeComponent(): void;
+    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
+    _optionChanged(args: { name: string; value: unknown }): void;
+    _setOptionsByReference(): void;
+    _setDeprecatedOptions(): void;
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -5138,7 +5153,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -16379,11 +16394,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: any): void;
+    addAppointment(appointment: dxSchedulerAppointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: any): void;
+    deleteAppointment(appointment: dxSchedulerAppointment): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]
@@ -16414,22 +16429,25 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: any,
+      appointmentData?: dxSchedulerAppointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: any,
+      appointmentData: dxSchedulerAppointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(
+      target: dxSchedulerAppointment,
+      appointment: dxSchedulerAppointment
+    ): void;
   }
   module dxScheduler {
     export type AppointmentAddedEvent =
@@ -16554,8 +16572,8 @@ declare module DevExpress.ui {
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: any;
-      readonly targetedAppointmentData?: any;
+      readonly appointmentData: dxSchedulerAppointment;
+      readonly targetedAppointmentData?: dxSchedulerAppointment;
     }
   }
   /**
@@ -18355,7 +18373,10 @@ declare module DevExpress.ui {
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   export interface dxTagBoxOptions
-    extends Omit<dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'> {
+    extends Pick<
+      dxSelectBoxOptions<dxTagBox>,
+      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
+    > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
@@ -19175,7 +19196,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -20921,7 +20942,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.navigateToRow(key)]
      */
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:GridBase.pageCount()]
      */

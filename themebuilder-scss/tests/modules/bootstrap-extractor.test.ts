@@ -51,11 +51,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions
-        + testSassString
-        + variables
-        + setterServiceCode
-        + collectorServiceCode);
+      .toBe(functions.toString()
+      + testSassString
+      + variables.toString()
+      + setterServiceCode
+      + collectorServiceCode);
   });
 
   test('lessProcessor', async () => {

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/accordion";
 
 // adduse
-
 
 $material-accordion-disabled-opacity: 0.5;
 
@@ -66,12 +66,12 @@ $material-accordion-disabled-opacity: 0.5;
     height: $material-accordion-opened-title-height;
 
     .dx-accordion-item-title-caption {
-      top: floor(($material-accordion-opened-title-height - $material-accordion-title-font-size) / 2);
+      top: floor(math.div($material-accordion-opened-title-height - $material-accordion-title-font-size, 2));
     }
 
     &::before {
       content: "\f014";
-      top: floor(($material-accordion-opened-title-height - $material-base-icon-size) / 2) - 2;
+      top: floor(math.div($material-accordion-opened-title-height - $material-base-icon-size, 2)) - 2;
     }
   }
 
@@ -96,7 +96,7 @@ $material-accordion-disabled-opacity: 0.5;
   .dx-accordion-item-title-caption {
     color: $accordion-title-color;
     font-size: $material-accordion-title-font-size;
-    top: floor(($material-accordion-title-height - $material-accordion-title-font-size) / 2);
+    top: floor(math.div($material-accordion-title-height - $material-accordion-title-font-size, 2));
     left: $material-accordion-title-padding;
     right: $material-accordion-title-padding * 2 + $material-base-icon-size;
     text-overflow: ellipsis;
@@ -105,7 +105,7 @@ $material-accordion-disabled-opacity: 0.5;
   }
 
   &::before {
-    top: floor(($material-accordion-title-height - $material-base-icon-size) / 2) - 1;
+    top: floor(math.div($material-accordion-title-height - $material-base-icon-size, 2)) - 1;
     right: $material-accordion-title-padding;
     font-weight: normal;
     color: $accordion-icon-color;

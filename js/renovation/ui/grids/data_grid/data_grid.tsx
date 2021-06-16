@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   JSXComponent, Component, Method, Effect, Mutable, RefObject, Ref, InternalState,
@@ -14,10 +15,14 @@ import { DataGridViews } from './data_grid_views';
 import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-line import/named
+import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../../utils/effect_return';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
+import { createDefaultOptionRules } from '../../../../core/options/utils';
+import devices from '../../../../core/devices';
+import { isMaterial, current } from '../../../../ui/themes';
 
 const aria = { role: 'presentation' };
 
@@ -63,6 +68,7 @@ export const viewFunction = ({
     visible,
     width,
     showBorders,
+    className,
   },
   restAttributes,
 }: DataGrid): JSX.Element => (
@@ -72,6 +78,7 @@ export const viewFunction = ({
     activeStateEnabled={activeStateEnabled}
     activeStateUnit={rowSelector}
     aria={aria}
+    className={className}
     disabled={disabled}
     focusStateEnabled={focusStateEnabled}
     height={height}
@@ -91,8 +98,32 @@ export const viewFunction = ({
   </Widget>
 );
 
+export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
+  device: (): boolean => devices.real().platform === 'ios',
+  options: { showRowLines: true },
+}, {
+  device: (): boolean => devices.real().deviceType !== 'desktop',
+  options: {
+    grouping: {
+      expandMode: 'rowClick',
+    },
+  },
+}, {
+  device: (): boolean => isMaterial(current()),
+  options: {
+    showRowLines: true,
+    showColumnLines: false,
+    headerFilter: {
+      height: 315,
+    },
+    editing: {
+      useIcons: true,
+    },
+  },
+}]);
+
 @Component({
-  defaultOptionRules: null,
+  defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
@@ -117,7 +148,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async byKey(key: any | string | number): DxPromise<any> {
+  byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
 
@@ -162,10 +193,16 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  columnOption(_id: number | string, _optionName: any, _optionValue?: any): void {
-    // eslint-disable-next-line prefer-rest-params
-    return this.callMethod('columnOption', arguments);
+  columnOption(id: number | string, optionName?: string, optionValue?: unknown): any {
+    if (this.instance) {
+      if (arguments.length === 1 || optionName === undefined) {
+        return this.instance.columnOption(id);
+      } if (arguments.length === 2) {
+        return this.instance.columnOption(id, optionName);
+      }
+      return this.instance.columnOption(id, optionName, optionValue);
+    }
+    return null;
   }
 
   @Method()
@@ -179,12 +216,12 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async deselectAll(): DxPromise {
+  deselectAll(): DxPromise {
     return this.instance?.deselectAll();
   }
 
   @Method()
-  async deselectRows(keys: any[]): DxPromise<any> {
+  deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
 
@@ -291,7 +328,8 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  navigateToRow(key: any): void {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
 
@@ -313,7 +351,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async refresh(
+  refresh(
     changesOnly?: boolean,
   ): DxPromise {
     return this.instance?.refresh(changesOnly as boolean);
@@ -325,7 +363,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async saveEditData(): DxPromise {
+  saveEditData(): DxPromise {
     return this.instance?.saveEditData();
   }
 
@@ -335,19 +373,19 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async selectAll(): DxPromise {
+  selectAll(): DxPromise {
     return this.instance?.selectAll();
   }
 
   @Method()
-  async selectRows(
+  selectRows(
     keys: any[], preserve: boolean,
   ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
-  async selectRowsByIndexes(indexes: number[]): DxPromise<any> {
+  selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
 
@@ -383,7 +421,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async addRow(): DxPromise {
+  addRow(): DxPromise {
     return this.instance?.addRow();
   }
 
@@ -398,7 +436,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async collapseRow(key: any): DxPromise {
+  collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
 
@@ -408,7 +446,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  async expandRow(key: any): DxPromise {
+  expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
 
@@ -503,7 +541,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
       element,
       normalizeProps(restProps),
     ) as unknown as GridInstance;
-    instance.getController('resizing').updateSize(element);
+    if (hasWindow()) {
+      instance.getController('resizing').updateSize(element);
+    }
     instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
     this.instance = instance;
   }
@@ -517,16 +557,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     }
   }
 
-  // TODO remove this after fix https://trello.com/c/I8ManehQ/2674-renovation-generated-jquery-methods-pass-all-aguments-even-it-is-optional
-  callMethod(funcName: string, args: unknown): void {
-    const normalizedArgs = [...args as unknown[]].filter((arg) => arg !== undefined);
-
-    return this.instance?.[funcName](...normalizedArgs);
-  }
-
   updateTwoWayValue(e: OptionChangedEvent): void {
     // T867777
-    const isValueCorrect = e.value === e.component.option(e.fullName);
+    const optionValue = e.component.option(e.fullName);
+    const isValueCorrect = e.value === optionValue;
+
     if (e.value !== e.previousValue && isValueCorrect) {
       if (e.name === 'editing' && this.props.editing) {
         if (e.fullName === 'editing.changes') {

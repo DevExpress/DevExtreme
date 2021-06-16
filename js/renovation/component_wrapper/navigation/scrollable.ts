@@ -1,9 +1,9 @@
-import type { Scrollable } from '../ui/scroll_view/scrollable';
-import { DxMouseEvent } from '../ui/scroll_view/types';
-import Component from './common/component';
-import { Option } from './common/types';
-import { Deferred } from '../../core/utils/deferred';
-import type { dxElementWrapper } from '../../core/renderer';
+import type { Scrollable } from '../../ui/scroll_view/scrollable';
+import { DxMouseEvent } from '../../ui/scroll_view/types';
+import Component from '../common/component';
+import { Option } from '../common/types';
+import { Deferred } from '../../../core/utils/deferred';
+import type { dxElementWrapper } from '../../../core/renderer';
 
 export class ScrollableWrapper extends Component {
   handleMove(event: DxMouseEvent): void {

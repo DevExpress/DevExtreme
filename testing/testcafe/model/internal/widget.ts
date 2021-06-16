@@ -2,18 +2,22 @@ import { Selector, ClientFunction } from 'testcafe';
 
 const CLASS = {
   focused: 'dx-state-focused',
+  hovered: 'dx-state-hover',
 };
 
 export default abstract class Widget {
-  element: Selector;
+  public element: Selector;
 
-  isFocused: Promise<boolean>;
+  public isFocused: Promise<boolean>;
+
+  public isHovered: Promise<boolean>;
 
   abstract name: string;
 
   constructor(id: string | Selector) {
     this.element = typeof id === 'string' ? Selector(id) : id;
     this.isFocused = this.element.hasClass(CLASS.focused);
+    this.isHovered = this.element.hasClass(CLASS.hovered);
   }
 
   static addClassPrefix(widgetName: string, className: string): string {

@@ -3,12 +3,20 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
-import { DataGrid, viewFunction as DataGridView } from '../data_grid';
-import { DataGridProps } from '../common/data_grid_props';
+import { DataGrid, viewFunction as DataGridView, defaultOptionRules } from '../data_grid';
+import { DataGridEditing, DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
 import { getUpdatedOptions } from '../utils/get_updated_options';
+import { convertRulesToOptions } from '../../../../../core/options/utils';
+import devices from '../../../../../core/devices';
+import { current } from '../../../../../ui/themes';
+import { hasWindow } from '../../../../../core/utils/window';
+
+interface Mock extends jest.Mock {}
+
+const mockUpdateSize = jest.fn();
 
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
@@ -24,14 +32,34 @@ jest.mock('../datagrid_component', () => ({
     on: jest.fn(),
     element: () => element,
     getController: jest.fn().mockImplementation(() => ({
-      updateSize: jest.fn(),
+      updateSize: mockUpdateSize,
     })),
     updateDimensions: jest.fn(),
   })),
 }));
 jest.mock('../utils/get_updated_options');
+jest.mock('../../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../../core/devices').default;
+  const real = actualDevices.real.bind(actualDevices);
+
+  actualDevices.real = jest.fn(real);
+
+  return actualDevices;
+});
+jest.mock('../../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../../ui/themes'),
+  current: jest.fn(() => 'generic'),
+}));
+jest.mock('../../../../../core/utils/window', () => ({
+  ...jest.requireActual('../../../../../core/utils/window'),
+  hasWindow: jest.fn(),
+}));
 
 describe('DataGrid', () => {
+  beforeEach(() => {
+    (hasWindow as jest.Mock).mockReturnValue(true);
+  });
+
   describe('View', () => {
     it('default render', () => {
       const instance = {} as any;
@@ -115,6 +143,26 @@ describe('DataGrid', () => {
       expect(component.instance.element()).toBe(component.widgetElementRef.current);
     });
 
+    it('updateSize should be called if not server side', () => {
+      (hasWindow as jest.Mock).mockReturnValue(true);
+
+      const component = new DataGrid({});
+
+      component.setupInstance();
+
+      expect(mockUpdateSize).toBeCalled();
+    });
+
+    it('updateSize should not be called if server side', () => {
+      (hasWindow as jest.Mock).mockReturnValue(false);
+
+      const component = new DataGrid({});
+
+      component.setupInstance();
+
+      expect(mockUpdateSize).not.toBeCalled();
+    });
+
     // Related to
     // QUnit.test('The onOptionChanged event should be called once when changing column option'
     it('internal component shouldnt raise optionChanged', () => {
@@ -143,22 +191,23 @@ describe('DataGrid', () => {
         expect(component.getComponentInstance()).toMatchObject(mockDataGridMethods);
       });
 
-      it('callMethod with diff args', () => {
-        (mockDataGridMethods as any).columnOption = jest.fn();
+      it('columnOption with diff args', () => {
+        const columnOption = jest.fn();
+        (mockDataGridMethods as any).columnOption = columnOption;
         const component = new DataGrid({});
         component.instance = mockDataGridMethods as any;
 
-        component.callMethod('columnOption', [0, 'visible', false]);
+        component.columnOption(0, 'visible', false);
 
-        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
-        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible', false]);
+        expect(columnOption).toBeCalledTimes(1);
+        expect(columnOption).toBeCalledWith(0, 'visible', false);
 
         (mockDataGridMethods as any).columnOption.mockClear();
 
-        component.callMethod('columnOption', [0, 'visible', undefined]);
+        component.columnOption(0, 'visible');
 
-        expect((mockDataGridMethods as any).columnOption).toBeCalledTimes(1);
-        expect((mockDataGridMethods as any).columnOption.mock.calls[0]).toEqual([0, 'visible']);
+        expect(columnOption).toBeCalledTimes(1);
+        expect(columnOption).toBeCalledWith(0, 'visible');
       });
 
       each`
@@ -473,6 +522,86 @@ describe('DataGrid', () => {
       component.updateTwoWayValue = () => { component.updateOptions(); };
       component.instanceOptionChangedHandler({ } as any);
       expect(component.instance.option).not.toBeCalled();
+    });
+  });
+
+  describe('Default options', () => {
+    const getDefaultOptions = (): DataGridProps => Object.assign(new DataGridProps(),
+      convertRulesToOptions(defaultOptionRules));
+
+    beforeEach(() => {
+      (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+      (current as Mock).mockImplementation(() => 'generic');
+    });
+
+    afterEach(() => jest.resetAllMocks());
+
+    describe('editing', () => {
+      it('defaults should be defined for nested editing props', () => {
+        const editing = new DataGridEditing();
+        expect(editing.changes).toEqual([]);
+      });
+    });
+
+    describe('showRowLines', () => {
+      it('should be false by default', () => {
+        expect(getDefaultOptions().showRowLines).toBe(false);
+      });
+
+      it('should be true if ios', () => {
+        (devices.real as Mock).mockImplementation(() => ({ platform: 'ios' }));
+        expect(getDefaultOptions().showRowLines).toBe(true);
+      });
+
+      it('should be true if material', () => {
+        (current as Mock).mockImplementation(() => 'material');
+        expect(getDefaultOptions().showRowLines).toBe(true);
+      });
+    });
+
+    describe('showColumnLines', () => {
+      it('should be true by default', () => {
+        expect(getDefaultOptions().showColumnLines).toBe(true);
+      });
+
+      it('should be true if material', () => {
+        (current as Mock).mockImplementation(() => 'material');
+        expect(getDefaultOptions().showColumnLines).toBe(false);
+      });
+    });
+
+    describe('headerFilter.height', () => {
+      it('should be undefined by default', () => {
+        expect(getDefaultOptions().headerFilter?.height).toBe(undefined);
+      });
+
+      it('should be 315 if material', () => {
+        (current as Mock).mockImplementation(() => 'material');
+        expect(getDefaultOptions().headerFilter?.height).toBe(315);
+      });
+    });
+
+    describe('editing.useIcons', () => {
+      it('should be false by default', () => {
+        expect(getDefaultOptions().editing?.useIcons).toBe(false);
+      });
+
+      it('should be true if material', () => {
+        (current as Mock).mockImplementation(() => 'material');
+        expect(getDefaultOptions().editing?.useIcons).toBe(true);
+      });
+    });
+
+    describe('grouping.expandMode', () => {
+      it('should be buttonClick if desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+        expect(getDefaultOptions().grouping?.expandMode).toBe('buttonClick');
+      });
+
+      it('should be rowClick if not desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'tablet' }));
+        expect(getDefaultOptions().grouping?.expandMode).toBe('rowClick');
+      });
     });
   });
 });
