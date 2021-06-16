@@ -46,6 +46,7 @@ import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/head
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
+import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1567,7 +1568,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
             let endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
 
-            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+            while(!isDateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = endDate;
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
             }
@@ -1582,10 +1583,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getStartViewDate() {
         return this.option('startDate');
-    }
-
-    _dateInRange(date, startDate, endDate, diff) {
-        return diff > 0 ? dateUtils.dateInRange(date, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(date, endDate, startDate, 'date');
     }
 
     _getIntervalDuration() {
