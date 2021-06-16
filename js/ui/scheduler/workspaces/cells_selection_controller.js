@@ -37,7 +37,7 @@ export class CellsSelectionController {
 
         const currentCellData = getCellDataByPosition(
             nextCellIndices.rowIndex,
-            nextCellIndices.cellIndex,
+            nextCellIndices.columnIndex,
             isAllDayPanelCell,
         );
 
@@ -49,7 +49,7 @@ export class CellsSelectionController {
 
     getCellFromNextRowPosition(focusedCellPosition, direction, edgeIndices) {
         const {
-            cellIndex,
+            columnIndex,
             rowIndex,
         } = focusedCellPosition;
 
@@ -61,7 +61,7 @@ export class CellsSelectionController {
             : rowIndex;
 
         return {
-            cellIndex,
+            columnIndex,
             rowIndex: validRowIndex,
         };
     }
@@ -78,37 +78,37 @@ export class CellsSelectionController {
             isDateAndTimeView,
         } = options;
         const {
-            cellIndex,
+            columnIndex,
             rowIndex,
         } = focusedCellPosition;
         const {
-            firstCellIndex,
-            lastCellIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
         } = edgeIndices;
 
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
         const sign = isRTL ? -1 : 1;
-        const deltaCellIndex = direction === 'next' ? sign * step : -1 * sign * step;
-        const nextCellIndex = cellIndex + deltaCellIndex;
+        const deltaColumnIndex = direction === 'next' ? sign * step : -1 * sign * step;
+        const nextColumnIndex = columnIndex + deltaColumnIndex;
 
-        const isValidCellIndex = nextCellIndex >= firstCellIndex
-            && nextCellIndex <= lastCellIndex;
+        const isValidColumnIndex = nextColumnIndex >= firstColumnIndex
+            && nextColumnIndex <= lastColumnIndex;
 
-        if(isValidCellIndex) {
+        if(isValidColumnIndex) {
             return {
-                cellIndex: nextCellIndex,
+                columnIndex: nextColumnIndex,
                 rowIndex,
             };
         }
 
         return isDateAndTimeView ? focusedCellPosition : this._processEdgeCell({
-            nextCellIndex,
+            nextColumnIndex,
             rowIndex,
-            cellIndex,
-            firstCellIndex,
-            lastCellIndex,
+            columnIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
             step,
@@ -117,41 +117,41 @@ export class CellsSelectionController {
 
     _processEdgeCell(options) {
         const {
-            nextCellIndex,
+            nextColumnIndex,
             rowIndex,
-            cellIndex,
-            firstCellIndex,
-            lastCellIndex,
+            columnIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
             step,
         } = options;
 
-        let validCellIndex = nextCellIndex;
+        let validColumnIndex = nextColumnIndex;
         let validRowIndex = rowIndex;
-        const isLeftEdgeCell = nextCellIndex < firstCellIndex;
-        const isRightEdgeCell = nextCellIndex > lastCellIndex;
+        const isLeftEdgeCell = nextColumnIndex < firstColumnIndex;
+        const isRightEdgeCell = nextColumnIndex > lastColumnIndex;
 
         if(isLeftEdgeCell) {
-            const cellIndexInNextRow = lastCellIndex - (step - cellIndex % step - 1);
+            const columnIndexInNextRow = lastColumnIndex - (step - columnIndex % step - 1);
             const nextRowIndex = rowIndex - 1;
             const isValidRowIndex = nextRowIndex >= firstRowIndex;
 
             validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
+            validColumnIndex = isValidRowIndex ? columnIndexInNextRow : columnIndex;
         }
 
         if(isRightEdgeCell) {
-            const cellIndexInNextRow = firstCellIndex + cellIndex % step;
+            const columnIndexInNextRow = firstColumnIndex + columnIndex % step;
             const nextRowIndex = rowIndex + 1;
             const isValidRowIndex = nextRowIndex <= lastRowIndex;
 
             validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
+            validColumnIndex = isValidRowIndex ? columnIndexInNextRow : columnIndex;
         }
 
         return {
-            cellIndex: validCellIndex,
+            columnIndex: validColumnIndex,
             rowIndex: validRowIndex,
         };
     }

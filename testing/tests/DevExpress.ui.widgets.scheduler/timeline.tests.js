@@ -1310,10 +1310,10 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: cellsBase[0],
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }, {
                         cellData: cellsBase[1],
-                        position: { cellIndex: 1, rowIndex: 0 }
+                        position: { columnIndex: 1, rowIndex: 0 }
                     }]
                 ]
             };
@@ -1382,16 +1382,16 @@ QUnit.module('Renovated Render', {
                 allDayPanelMap: [],
                 dateTableMap: [[{
                     cellData: expectedDateTable[0],
-                    position: { cellIndex: 0, rowIndex: 0 }
+                    position: { columnIndex: 0, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[1],
-                    position: { cellIndex: 1, rowIndex: 0 }
+                    position: { columnIndex: 1, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[2],
-                    position: { cellIndex: 2, rowIndex: 0 }
+                    position: { columnIndex: 2, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[3],
-                    position: { cellIndex: 3, rowIndex: 0 }
+                    position: { columnIndex: 3, rowIndex: 0 }
                 }]]
             };
 
@@ -1458,16 +1458,16 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: expectedViewData.groupedData[0].dateTable[0][0],
-                        position: { rowIndex: 0, cellIndex: 0 }
+                        position: { rowIndex: 0, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[0].dateTable[0][1],
-                        position: { rowIndex: 0, cellIndex: 1 }
+                        position: { rowIndex: 0, columnIndex: 1 }
                     }], [{
                         cellData: expectedViewData.groupedData[1].dateTable[0][0],
-                        position: { rowIndex: 1, cellIndex: 0 }
+                        position: { rowIndex: 1, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[1].dateTable[0][1],
-                        position: { rowIndex: 1, cellIndex: 1 }
+                        position: { rowIndex: 1, columnIndex: 1 }
                     }]
                 ]
             };

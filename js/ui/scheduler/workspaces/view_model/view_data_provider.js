@@ -132,13 +132,13 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
     }
 
-    getCellData(rowIndex, cellIndex, isAllDay) {
+    getCellData(rowIndex, columnIndex, isAllDay) {
         if(isAllDay && !this.isVerticalGroupedWorkspace) {
-            return this._viewData.groupedData[0].allDayPanel[cellIndex];
+            return this._viewData.groupedData[0].allDayPanel[columnIndex];
         }
 
         const { dateTableMap } = this.viewDataMap;
-        const { cellData } = dateTableMap[rowIndex][cellIndex];
+        const { cellData } = dateTableMap[rowIndex][columnIndex];
 
         return cellData;
     }
@@ -292,16 +292,16 @@ export default class ViewDataProvider {
     getViewEdgeIndices(isAllDayPanel) {
         if(isAllDayPanel) {
             return {
-                firstCellIndex: 0,
-                lastCellIndex: this.viewDataMap.allDayPanelMap.length - 1,
+                firstColumnIndex: 0,
+                lastColumnIndex: this.viewDataMap.allDayPanelMap.length - 1,
                 firstRowIndex: 0,
                 lastRowIndex: 0,
             };
         }
 
         return {
-            firstCellIndex: 0,
-            lastCellIndex: this.viewDataMap.dateTableMap[0].length - 1,
+            firstColumnIndex: 0,
+            lastColumnIndex: this.viewDataMap.dateTableMap[0].length - 1,
             firstRowIndex: 0,
             lastRowIndex: this.viewDataMap.dateTableMap.length - 1,
         };
@@ -312,21 +312,21 @@ export default class ViewDataProvider {
         const cellsCount = groupedDataMap[0].length;
         const rowsCount = groupedDataMap.length;
 
-        const firstCellIndex = groupedDataMap[0][0].position.cellIndex;
-        const lastCellIndex = groupedDataMap[0][cellsCount - 1].position.cellIndex;
+        const firstColumnIndex = groupedDataMap[0][0].position.columnIndex;
+        const lastColumnIndex = groupedDataMap[0][cellsCount - 1].position.columnIndex;
 
         if(isAllDay) {
             return {
-                firstCellIndex,
-                lastCellIndex,
+                firstColumnIndex,
+                lastColumnIndex,
                 firstRowIndex: 0,
                 lastRowIndex: 0,
             };
         }
 
         return {
-            firstCellIndex,
-            lastCellIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex: groupedDataMap[0][0].position.rowIndex,
             lastRowIndex: groupedDataMap[rowsCount - 1][0].position.rowIndex,
         };

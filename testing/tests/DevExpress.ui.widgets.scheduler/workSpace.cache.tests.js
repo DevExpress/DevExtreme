@@ -37,7 +37,7 @@ module('Work Space cellData Cache', {
         const getCellDataStub = sinon.stub(this.instance, 'getCellData').returns($cell);
         const cellCoordinates = {
             rowIndex: 1,
-            cellIndex: 0
+            columnIndex: 0
         };
 
         try {
@@ -45,7 +45,7 @@ module('Work Space cellData Cache', {
 
             cache = this.instance.cache;
 
-            assert.deepEqual(cache.get('{"rowIndex":1,"cellIndex":0,"groupIndex":0}'), {
+            assert.deepEqual(cache.get('{"rowIndex":1,"columnIndex":0,"groupIndex":0}'), {
                 startDate: 2015,
                 endDate: 2016
             }, 'Cache is OK');
@@ -62,7 +62,7 @@ module('Work Space cellData Cache', {
         try {
             const appointment = {
                 rowIndex: 1,
-                cellIndex: 0,
+                columnIndex: 0,
                 groupIndex: 0
             };
             const geometry = {
@@ -92,7 +92,7 @@ module('Work Space cellData Cache', {
     test('getCellDataByCoordinates return cached cell data', function(assert) {
         const appointment = {
             rowIndex: 1,
-            cellIndex: 0,
+            columnIndex: 0,
             groupIndex: 0
         };
         const geometry = {
@@ -137,7 +137,7 @@ module('Work Space cellData Cache', {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {
-            cellIndex: 0,
+            columnIndex: 0,
             rowIndex: 0,
             groupIndex: 0
         };
@@ -226,7 +226,7 @@ module('Work Space cellData Cache', {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {
-            cellIndex: 0,
+            columnIndex: 0,
             rowIndex: 0,
             groupIndex: 0
         };

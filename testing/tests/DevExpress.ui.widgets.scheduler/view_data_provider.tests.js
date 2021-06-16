@@ -280,13 +280,13 @@ module('View Data Provider', {
             test('getLastGroupCellPosition', function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getLastGroupCellPosition(2),
-                    { rowIndex: 1, cellIndex: 1 },
+                    { rowIndex: 1, columnIndex: 1 },
                     'Last position for the group 2 is correct'
                 );
 
                 assert.deepEqual(
                     this.viewDataProvider.getLastGroupCellPosition(3),
-                    { rowIndex: 3, cellIndex: 1 },
+                    { rowIndex: 3, columnIndex: 1 },
                     'Last position for the group 3 is correct'
                 );
             });
@@ -781,11 +781,11 @@ module('View Data Provider', {
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
                         let position = viewDataProvider.findCellPositionInMap(firstCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 0 }, '1st allDayPanel cell position is correct');
 
                         const secondCellInfo = createCellInfo(3, new Date(2020, 7, 24), true);
                         position = viewDataProvider.findCellPositionInMap(secondCellInfo);
-                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 2, columnIndex: 0 }, '2nd allDayPanel cell position is correct');
                     });
 
                     test('Should return correct cell position for the not allDay cell date', function(assert) {
@@ -794,28 +794,28 @@ module('View Data Provider', {
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 1, cellIndex: 0 },
+                            { rowIndex: 1, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 1, cellIndex: 0 },
+                            { rowIndex: 1, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 3, cellIndex: 0 },
+                            { rowIndex: 3, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1, 29));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 3, cellIndex: 0 },
+                            { rowIndex: 3, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
                     });
@@ -826,28 +826,28 @@ module('View Data Provider', {
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29), false, 0);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 1, cellIndex: 0 },
+                            { rowIndex: 1, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1, 29), false, 0);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 3, cellIndex: 0 },
+                            { rowIndex: 3, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
 
                         cellInfo = createCellInfo(2, new Date(2020, 7, 24), true, 0);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 0 },
+                            { rowIndex: 0, columnIndex: 0 },
                             '1st allDayPanel cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24), true, 0);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 2, cellIndex: 0 },
+                            { rowIndex: 2, columnIndex: 0 },
                             '2st allDayPanel cell position is correct'
                         );
                     });
@@ -863,11 +863,11 @@ module('View Data Provider', {
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
                         let position = viewDataProvider.findCellPositionInMap(firstCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 0 }, '1st allDayPanel cell position is correct');
 
                         const secondCellInfo = createCellInfo(3, new Date(2020, 7, 24), true);
                         position = viewDataProvider.findCellPositionInMap(secondCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 2 }, '2nd allDayPanel cell position is correct');
                     });
 
                     test('Should return correct cell position for the not allDay cell date', function(assert) {
@@ -876,28 +876,28 @@ module('View Data Provider', {
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 0 },
+                            { rowIndex: 0, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 0 },
+                            { rowIndex: 0, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 2 },
+                            { rowIndex: 0, columnIndex: 2 },
                             '2nd cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1, 29), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 2 },
+                            { rowIndex: 0, columnIndex: 2 },
                             '2nd cell position is correct'
                         );
                     });
@@ -923,11 +923,11 @@ module('View Data Provider', {
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
                         let position = viewDataProvider.findCellPositionInMap(firstCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 0 }, '1st allDayPanel cell position is correct');
 
                         const secondCellInfo = createCellInfo(3, new Date(2020, 7, 24), true);
                         position = viewDataProvider.findCellPositionInMap(secondCellInfo);
-                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 2, columnIndex: 0 }, '2nd allDayPanel cell position is correct');
                     });
 
                     test('Should return correct cell position for the not allDay cell date', function(assert) {
@@ -940,28 +940,28 @@ module('View Data Provider', {
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 0 },
+                            { rowIndex: 0, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 0, cellIndex: 0 },
+                            { rowIndex: 0, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 2, cellIndex: 0 },
+                            { rowIndex: 2, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1, 29));
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 2, cellIndex: 0 },
+                            { rowIndex: 2, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
                     });
@@ -985,11 +985,11 @@ module('View Data Provider', {
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
                         let position = viewDataProvider.findCellPositionInMap(firstCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 0 }, '1st allDayPanel cell position is correct');
 
                         const secondCellInfo = createCellInfo(3, new Date(2020, 7, 24), true);
                         position = viewDataProvider.findCellPositionInMap(secondCellInfo);
-                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                        assert.deepEqual(position, { rowIndex: 0, columnIndex: 2 }, '2nd allDayPanel cell position is correct');
                     });
 
                     test('Should return correct cell position for the not allDay cell date', function(assert) {
@@ -998,28 +998,28 @@ module('View Data Provider', {
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 1, cellIndex: 0 },
+                            { rowIndex: 1, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 1, cellIndex: 0 },
+                            { rowIndex: 1, columnIndex: 0 },
                             '1st cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 3, cellIndex: 0 },
+                            { rowIndex: 3, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
 
                         cellInfo = createCellInfo(3, new Date(2020, 7, 24, 1, 29), false);
                         assert.deepEqual(
                             viewDataProvider.findCellPositionInMap(cellInfo),
-                            { rowIndex: 3, cellIndex: 0 },
+                            { rowIndex: 3, columnIndex: 0 },
                             '2nd cell position is correct'
                         );
                     });
@@ -1103,14 +1103,14 @@ module('View Data Provider', {
                                         cellData: viewDataMap[0][0],
                                         position: {
                                             rowIndex: 0,
-                                            cellIndex: 0
+                                            columnIndex: 0
                                         }
                                     },
                                     {
                                         cellData: viewDataMap[0][1],
                                         position: {
                                             rowIndex: 0,
-                                            cellIndex: 1
+                                            columnIndex: 1
                                         }
                                     }
                                 ],
@@ -1118,14 +1118,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[1][0],
                                     position: {
                                         rowIndex: 1,
-                                        cellIndex: 0
+                                        columnIndex: 0
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[1][1],
                                     position: {
                                         rowIndex: 1,
-                                        cellIndex: 1
+                                        columnIndex: 1
                                     }
                                 }]
                             ],
@@ -1135,14 +1135,14 @@ module('View Data Provider', {
                                         cellData: viewDataMap[2][0],
                                         position: {
                                             rowIndex: 2,
-                                            cellIndex: 0
+                                            columnIndex: 0
                                         }
                                     },
                                     {
                                         cellData: viewDataMap[2][1],
                                         position: {
                                             rowIndex: 2,
-                                            cellIndex: 1
+                                            columnIndex: 1
                                         }
                                     }
                                 ],
@@ -1150,14 +1150,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[3][0],
                                     position: {
                                         rowIndex: 3,
-                                        cellIndex: 0
+                                        columnIndex: 0
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[3][1],
                                     position: {
                                         rowIndex: 3,
-                                        cellIndex: 1
+                                        columnIndex: 1
                                     }
                                 }]
                             ]
@@ -1187,14 +1187,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[0][0],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 0
+                                        columnIndex: 0
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[0][1],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 1
+                                        columnIndex: 1
                                     }
                                 }
                             ],
@@ -1203,14 +1203,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[0][2],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 2
+                                        columnIndex: 2
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[0][3],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 3
+                                        columnIndex: 3
                                     }
                                 }
                             ]
@@ -1223,14 +1223,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[1][0],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 0
+                                        columnIndex: 0
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[1][1],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 1
+                                        columnIndex: 1
                                     }
                                 }]
                             ],
@@ -1239,14 +1239,14 @@ module('View Data Provider', {
                                     cellData: viewDataMap[1][2],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 2
+                                        columnIndex: 2
                                     }
                                 },
                                 {
                                     cellData: viewDataMap[1][3],
                                     position: {
                                         rowIndex: 0,
-                                        cellIndex: 3
+                                        columnIndex: 3
                                     }
                                 }]
                             ]
@@ -2023,16 +2023,16 @@ module('View Data Provider', {
                         allDayPanelMap: [],
                         dateTableMap: [[{
                             cellData: completeViewDataMap[1][0],
-                            position: { rowIndex: 0, cellIndex: 0 },
+                            position: { rowIndex: 0, columnIndex: 0 },
                         }, {
                             cellData: completeViewDataMap[1][1],
-                            position: { rowIndex: 0, cellIndex: 1 },
+                            position: { rowIndex: 0, columnIndex: 1 },
                         }], [{
                             cellData: completeViewDataMap[2][0],
-                            position: { rowIndex: 1, cellIndex: 0 },
+                            position: { rowIndex: 1, columnIndex: 0 },
                         }, {
                             cellData: completeViewDataMap[2][1],
-                            position: { rowIndex: 1, cellIndex: 1 },
+                            position: { rowIndex: 1, columnIndex: 1 },
                         }]]
                     };
 
@@ -2057,17 +2057,17 @@ module('View Data Provider', {
                     const expectedViewDataMap = {
                         allDayPanelMap: [{
                             cellData: completeViewDataMap[0][0],
-                            position: { rowIndex: 0, cellIndex: 0 },
+                            position: { rowIndex: 0, columnIndex: 0 },
                         }, {
                             cellData: completeViewDataMap[0][1],
-                            position: { rowIndex: 0, cellIndex: 1 },
+                            position: { rowIndex: 0, columnIndex: 1 },
                         }],
                         dateTableMap: [[{
                             cellData: completeViewDataMap[2][0],
-                            position: { rowIndex: 0, cellIndex: 0 },
+                            position: { rowIndex: 0, columnIndex: 0 },
                         }, {
                             cellData: completeViewDataMap[2][1],
-                            position: { rowIndex: 0, cellIndex: 1 },
+                            position: { rowIndex: 0, columnIndex: 1 },
                         }]]
                     };
 
@@ -2098,16 +2098,16 @@ module('View Data Provider', {
                             undefined,
                             [[{
                                 cellData: completeViewDataMap[1][0],
-                                position: { rowIndex: 0, cellIndex: 0 },
+                                position: { rowIndex: 0, columnIndex: 0 },
                             }, {
                                 cellData: completeViewDataMap[1][1],
-                                position: { rowIndex: 0, cellIndex: 1 },
+                                position: { rowIndex: 0, columnIndex: 1 },
                             }]], [[{
                                 cellData: completeViewDataMap[2][0],
-                                position: { rowIndex: 1, cellIndex: 0 },
+                                position: { rowIndex: 1, columnIndex: 0 },
                             }, {
                                 cellData: completeViewDataMap[2][1],
-                                position: { rowIndex: 1, cellIndex: 1 },
+                                position: { rowIndex: 1, columnIndex: 1 },
                             }]]]
                     };
 
@@ -2135,11 +2135,11 @@ module('View Data Provider', {
                             undefined,
                             [{
                                 cellData: completeViewDataMap[0][0],
-                                position: { rowIndex: 0, cellIndex: 0 },
+                                position: { rowIndex: 0, columnIndex: 0 },
                             }],
                             [{
                                 cellData: completeViewDataMap[0][1],
-                                position: { rowIndex: 0, cellIndex: 1 },
+                                position: { rowIndex: 0, columnIndex: 1 },
                             }]
                         ],
                         dateTableGroupedMap: [
@@ -2148,12 +2148,12 @@ module('View Data Provider', {
                             [
                                 [{
                                     cellData: completeViewDataMap[2][0],
-                                    position: { rowIndex: 0, cellIndex: 0 },
+                                    position: { rowIndex: 0, columnIndex: 0 },
                                 }]
                             ], [
                                 [{
                                     cellData: completeViewDataMap[2][1],
-                                    position: { rowIndex: 0, cellIndex: 1 },
+                                    position: { rowIndex: 0, columnIndex: 1 },
                                 }]
                             ]
                         ]
@@ -2482,10 +2482,10 @@ module('View Data Provider', {
                         dateTableMap: [
                             [{
                                 cellData: completeViewDataMap[0][1],
-                                position: { rowIndex: 0, cellIndex: 0 },
+                                position: { rowIndex: 0, columnIndex: 0 },
                             }], [{
                                 cellData: completeViewDataMap[1][1],
-                                position: { rowIndex: 1, cellIndex: 0 },
+                                position: { rowIndex: 1, columnIndex: 0 },
                             }]
                         ]
                     };
@@ -2511,16 +2511,16 @@ module('View Data Provider', {
                         allDayPanelMap: [
                             {
                                 cellData: completeViewDataMap[0][1],
-                                position: { rowIndex: 0, cellIndex: 0 },
+                                position: { rowIndex: 0, columnIndex: 0 },
                             }
                         ],
                         dateTableMap: [
                             [{
                                 cellData: completeViewDataMap[1][1],
-                                position: { rowIndex: 0, cellIndex: 0 },
+                                position: { rowIndex: 0, columnIndex: 0 },
                             }], [{
                                 cellData: completeViewDataMap[2][1],
-                                position: { rowIndex: 1, cellIndex: 0 },
+                                position: { rowIndex: 1, columnIndex: 0 },
                             }]
                         ]
                     };
@@ -2551,11 +2551,11 @@ module('View Data Provider', {
                             [
                                 [{
                                     cellData: completeViewDataMap[0][1],
-                                    position: { rowIndex: 0, cellIndex: 0 },
+                                    position: { rowIndex: 0, columnIndex: 0 },
                                 }],
                                 [{
                                     cellData: completeViewDataMap[1][1],
-                                    position: { rowIndex: 1, cellIndex: 0 },
+                                    position: { rowIndex: 1, columnIndex: 0 },
                                 }]
                             ]
                         ]
@@ -2587,7 +2587,7 @@ module('View Data Provider', {
                             [
                                 {
                                     cellData: completeViewDataMap[0][1],
-                                    position: { rowIndex: 0, cellIndex: 0 },
+                                    position: { rowIndex: 0, columnIndex: 0 },
                                 }
                             ]
                         ],
@@ -2598,11 +2598,11 @@ module('View Data Provider', {
                             [
                                 [{
                                     cellData: completeViewDataMap[1][1],
-                                    position: { rowIndex: 0, cellIndex: 0 },
+                                    position: { rowIndex: 0, columnIndex: 0 },
                                 }],
                                 [{
                                     cellData: completeViewDataMap[2][1],
-                                    position: { rowIndex: 1, cellIndex: 0 },
+                                    position: { rowIndex: 1, columnIndex: 0 },
                                 }]
                             ]
                         ]

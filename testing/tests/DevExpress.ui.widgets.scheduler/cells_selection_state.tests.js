@@ -181,7 +181,7 @@ const horizontalGroupingViewDataProviderMock = {
     getCellData: (rowIndex, columnIndex) => testViewDataMap
         .horizontalGrouping[rowIndex][columnIndex].cellData,
     viewDataMap: testViewDataMap.horizontalGrouping,
-    findCellPositionInMap: () => ({ cellIndex: 1, rowIndex: 1 }),
+    findCellPositionInMap: () => ({ columnIndex: 1, rowIndex: 1 }),
 };
 
 module('Cells Selection State', () => {
@@ -210,7 +210,7 @@ module('Cells Selection State', () => {
             focusedCell,
             {
                 cellData: testViewDataMap.horizontalGrouping[1][1].cellData,
-                coordinates: { cellIndex: 1, rowIndex: 1 },
+                coordinates: { columnIndex: 1, rowIndex: 1 },
             },
             'Correct focused cell',
         );
