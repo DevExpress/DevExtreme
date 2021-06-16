@@ -46,7 +46,7 @@ export class AppComponent {
     onReorder(e) {
         let visibleRows =  e.component.getVisibleRows(),
             sourceData = e.itemData,
-            targetData = visibleRows[e.toIndex].data;
+            targetData = visibleRows[e.toIndex].node.data;
 
         if (e.dropInsideItem) {
             e.itemData.Head_ID = targetData.ID;

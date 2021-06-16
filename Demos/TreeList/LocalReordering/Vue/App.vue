@@ -93,7 +93,7 @@ export default {
     onReorder(e) {
       let visibleRows = e.component.getVisibleRows(),
         sourceData = e.itemData,
-        targetData = visibleRows[e.toIndex].data,
+        targetData = visibleRows[e.toIndex].node.data,
         employees = [...this.employees];
 
       if (e.dropInsideItem) {
