@@ -349,6 +349,13 @@ describe('CheckBox', () => {
 
         expect(onFocusIn).toHaveBeenCalledTimes(1);
       });
+
+      it('should not raise any error if onFocusIn prop is not passed', () => {
+        const checkBox = new CheckBox({});
+        const event = {} as Event;
+
+        expect(() => { checkBox.onFocusIn(event); }).not.toThrow();
+      });
     });
   });
 
