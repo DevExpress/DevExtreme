@@ -518,10 +518,11 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnResizingMode?: 'nextColumn' | 'widget';
     /**
      * @docid
+     * @type boolean|Enums.Mode
      * @default undefined
      * @public
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * @docid
      * @type Array<GridBaseColumn|string>
