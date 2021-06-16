@@ -1,17 +1,18 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
 import {
   createDataSetForScreenShotTests,
   resourceDataSource,
   views,
   verticalViews,
   horizontalViews,
-} from './utils';
+} from '../../utils';
+import { restoreBrowserSize } from '../../../../../helpers/restoreBrowserSize';
 
-fixture`Scheduler: Adaptive Material theme layout in RTL`
-  .page(url(__dirname, './material.html'));
+fixture`Scheduler: Adaptive Generic theme layout in RTL`
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -32,7 +33,7 @@ const createScheduler = async (
 
   const verticalViewsForRTL = verticalViews.slice(0, lastVerticalView);
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
@@ -40,7 +41,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-material-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-rtl).png`),
+        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-rtl).png`),
       ).ok();
     }
   }).before(async (t) => {
@@ -52,10 +53,10 @@ const createScheduler = async (
       crossScrollingEnabled,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
@@ -63,7 +64,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-material-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
+        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
       ).ok();
     }
   }).before(async (t) => {
@@ -77,22 +78,19 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of verticalViewsForRTL) {
       await scheduler.option('currentView', view.type);
 
-      // Another bug in RTL in month view
-      if (crossScrollingEnabled || view.type !== 'month') {
-        await t.expect(
-          await compareScreenshot(t, `adaptive-material-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
-        ).ok();
-      }
+      await t.expect(
+        await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
+      ).ok();
     }
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
@@ -105,6 +103,6 @@ const createScheduler = async (
       resources: resourceDataSource,
     });
   }).after(async (t) => {
-    await t.resizeWindow(1200, 800);
+    await restoreBrowserSize(t);
   });
 });
