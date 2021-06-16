@@ -41,8 +41,7 @@ export const resize = {
 
 export const hover = {
     on: ($el, start, end, { selector, namespace }) => {
-        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector,
-            event => executeAction(end, { element: event.target, event }));
+        eventsEngine.on($el, addNamespace('dxhoverend', namespace), selector, event => end(event));
         eventsEngine.on($el, addNamespace('dxhoverstart', namespace), selector,
             event => executeAction(start, { element: event.target, event }));
     },
