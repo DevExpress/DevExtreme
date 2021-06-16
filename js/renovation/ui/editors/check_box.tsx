@@ -202,12 +202,13 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { value, saveValueChangeEvent } = this.props;
+    const { saveValueChangeEvent } = this.props;
     const readOnly = this.props.readOnly ?? false;
+    const value = this.props.value ?? false;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
-      this.props.value = !(value ?? false);
+      this.props.value = !value;
     }
   }
 
