@@ -51,12 +51,12 @@ fixture`Layout:IntervalCount with StartDate`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`start-date-in-${view}.png`, scheduler.element))
+      .expect(await takeScreenshot(`start-date-in-${view}.png`))
       .ok()
 
       .doubleClick(scheduler.getDateTableCell(0, 0))
 
-      .expect(await takeScreenshot(`start-date-in-${view}-with-appointment-form.png`, scheduler.element))
+      .expect(await takeScreenshot(`start-date-in-${view}-with-appointment-form.png`))
       .ok()
 
       .expect(compareResults.isValid())
