@@ -1,11 +1,10 @@
-import Scheduler from '../../../../model/scheduler';
-import { createScreenshotsComparer } from '../../../../helpers/screenshot-comparer';
-import createWidget, { disposeWidgets } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
+import { createScreenshotsComparer } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
 
-fixture`Layout:IntervalCount with StartDate`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => disposeWidgets());
+fixture`Layout: Views: IntervalCount with StartDate`
+  .page(url(__dirname, '../../../container.html'));
 
 [{
   view: 'timelineDay',
