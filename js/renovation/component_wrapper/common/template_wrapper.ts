@@ -9,6 +9,17 @@ import { removeDifferentElements } from '../utils/utils';
 import Number from '../../../core/polyfills/number';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { EffectReturn } from '../../utils/effect_return';
+import { isDefined } from '../../../core/utils/type';
+
+const shallowEquals = (
+  firstObject: Record<string, any>,
+  secondObject: Record<string, any>,
+): boolean => {
+  if (Object.keys(firstObject).length !== Object.keys(secondObject).length) {
+    return false;
+  }
+  return Object.keys(firstObject).every((key) => firstObject[key] === secondObject[key]);
+};
 
 export interface TemplateModel {
   data: Record<string, unknown>;
@@ -22,8 +33,6 @@ interface TemplateWrapperProps {
 }
 
 export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
-  newTemplateArrived = true;
-
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
@@ -55,22 +64,41 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
           ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         }));
 
-        if (this.newTemplateArrived) {
-          replaceWith($(node), $result);
-          this.newTemplateArrived = false;
-        }
+        replaceWith($(node), $result);
 
         return (): void => {
           // NOTE: order is important
           removeDifferentElements($children, $parent.contents());
-          if (this.newTemplateArrived) {
-            parentNode.appendChild(node);
-          }
+          parentNode.appendChild(node);
         };
       }
     }
 
     return undefined;
+  }
+
+  shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
+    const { template, model } = this.props;
+    const { template: nextTemplate, model: nextModel } = nextProps;
+
+    const sameTemplate = template === nextTemplate;
+
+    if (!sameTemplate) {
+      return true;
+    }
+
+    const sameModel = model === nextModel;
+
+    if (sameModel) {
+      return false;
+    }
+
+    if (isDefined(model) && isDefined(nextModel)) {
+      const { data, index } = model;
+      const { data: nextData, index: nextIndex } = nextModel;
+      return index !== nextIndex || !shallowEquals(data, nextData);
+    }
+    return false;
   }
 
   createEffects(): InfernoEffect[] {
@@ -81,11 +109,9 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     this._effects[0].update([this.props.template, this.props.model]);
   }
 
-  componentWillReceiveProps(nextProps: TemplateWrapperProps): void {
-    if (nextProps.template !== this.props.template) {
-      this.newTemplateArrived = true;
-    }
-  }
+  // NOTE: Prevent nodes clearing on unmount.
+  //       Nodes will be destroyed by inferno on markup update
+  componentWillUnmount(): void { }
 
   render(): JSX.Element | null {
     return null;
