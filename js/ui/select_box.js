@@ -8,7 +8,6 @@ import { Deferred, fromPromise } from '../core/utils/deferred';
 import { getPublicElement } from '../core/element';
 import errors from '../core/errors';
 import domAdapter from '../core/dom_adapter';
-import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
@@ -177,7 +176,6 @@ const SelectBox = DropDownList.inherit({
 
             displayCustomValue: false,
 
-            useInkRipple: false,
             useHiddenSubmitElement: true
         });
     },
@@ -190,33 +188,9 @@ const SelectBox = DropDownList.inherit({
     _initMarkup: function() {
         this.$element().addClass(SELECTBOX_CLASS);
         this._renderTooltip();
-        this.option('useInkRipple') && this._renderInkRipple();
 
         this.callBase();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render();
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-
-        if(!this._inkRipple || this._isEditable()) {
-            return;
-        }
-
-        const config = {
-            element: this._inputWrapper(),
-            event: e
-        };
-
-        if(value) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
     },
 
     _createPopup: function() {
@@ -852,19 +826,11 @@ const SelectBox = DropDownList.inherit({
             case 'displayCustomValue':
             case 'acceptCustomValue':
             case 'showSelectionControls':
-            case 'useInkRipple':
-                this._invalidate();
-                break;
             case 'allowClearing':
                 break;
             default:
                 this.callBase(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
     }
 });
 
