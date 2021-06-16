@@ -84,17 +84,9 @@ enum ValueType {
 function findValueInObject(obj: unknown, path: string[]): undefined | IValueDescriptor {
   const key = path.shift();
   if (!key) {
-    let type: ValueType;
-    if (obj instanceof Array) {
-      type = ValueType.Array;
-    } else if (obj instanceof Object) {
-      type = ValueType.Complex;
-    } else {
-      type = ValueType.Simple;
-    }
     return {
       value: obj,
-      type,
+      type: ValueType.Simple,
     };
   }
 

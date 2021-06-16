@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { findValueInObject, ValueType } from '../tree';
+import { findValueInObject } from '../tree';
 
 describe('check findValueInObject', () => {
   it('get underfined by string', () => {
@@ -8,15 +8,6 @@ describe('check findValueInObject', () => {
     const valueInObject = findValueInObject(obj, path);
     expect(() => findValueInObject(obj, path)).not.toThrow();
     expect(valueInObject).toEqual(undefined);
-  });
-
-  it('should return different ValueType', () => {
-    const valueInArray = findValueInObject(['ArrayValue'], []);
-    expect(valueInArray?.type).toEqual(ValueType.Array);
-    const valueInObject = findValueInObject({ value: 'ObjectValue' }, []);
-    expect(valueInObject?.type).toEqual(ValueType.Complex);
-    const valueInSimple = findValueInObject('SimpleValue', []);
-    expect(valueInSimple?.type).toEqual(ValueType.Simple);
   });
 
   it('get value by object', () => {

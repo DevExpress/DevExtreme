@@ -77,13 +77,11 @@ let handleClick = (): void => {
     const dataSource = chartDataSource;
 
     setTimeout(() => {
-      const dataFrame = data.map((item) => {
-        return {
-          date: new Date(item["date"]),
-          minTemp: item["minTemp"],
-          maxTemp: item["maxTemp"]
-        };
-      });
+      const dataFrame = data.map((item) => ({
+        date: new Date(item.date),
+        minTemp: item.minTemp,
+        maxTemp: item.maxTemp,
+      }));
 
       const componentStorage = dataSource.store();
       dataFrame.forEach((item) => componentStorage.insert(item));
@@ -105,7 +103,7 @@ class NewChartExample extends React.Component {
         <Chart id="chart" dataSource={chartDataSource}>
           <Series argumentField="date" valueField="minTemp" />
           <ArgumentAxis argumentType="datetime">
-            <Label render={LabelTemplate}></Label>
+            <Label render={LabelTemplate} />
           </ArgumentAxis>
         </Chart>
         <button onClick={handleClick}>Click Me</button>

@@ -3,7 +3,7 @@ import TemplatesManager from './templates-manager';
 import { getChanges } from './configuration/comparer';
 import { IConfigNode } from './configuration/config-node';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
-import { mergeNameParts } from './configuration/utils';
+import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
 
 class OptionsManager {
@@ -128,9 +128,16 @@ class OptionsManager {
         this.setGuard(mergeNameParts(e.fullName, key), value[key]);
       });
     } else {
-      if (value === e.value) {
+      const valuesAreEqual = value === e.value;
+      const valuesAreEqualObjects = !valuesAreEqual
+        && value instanceof Object
+        && e.value instanceof Object
+        && shallowEquals(value as Record<string, unknown>, e.value as Record<string, unknown>);
+
+      if (valuesAreEqual || valuesAreEqualObjects) {
         return;
       }
+
       this.setGuard(e.fullName, value);
     }
   }
