@@ -264,6 +264,17 @@ describe('CheckBox', () => {
 
           expect(checkBox.showValidationMessage).toBe(false);
         });
+
+        it('should not set showValidationMessage to true if validationErrors are undefined', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+          });
+
+          checkBox.updateValidationMessageVisibility();
+
+          expect(checkBox.showValidationMessage).toBe(false);
+        });
       });
 
       describe('Methods', () => {
