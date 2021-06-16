@@ -594,14 +594,13 @@ module('Resizing integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         this.quillInstance.setSelection(this.quillInstance.getLength(), 0);
-        const table = this.quillInstance.getModule('table');
-        table.insertTable(2, 2);
+        const tableModule = this.quillInstance.getModule('table');
+        tableModule.insertTable(2, 2);
 
         this.clock.tick(TIME_TO_WAIT);
         const $resizeFrames = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
-        const $tables = this.$element.find('table').eq(0);
-        let rowBorderOffsets = getRowBordersOffset($tables.eq(0));
+        let rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
         let $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
 
         $rowResizerElements.each((i, row) => {
@@ -609,7 +608,7 @@ module('Resizing integration', {
             assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the first table, index = ' + i);
         });
 
-        rowBorderOffsets = getRowBordersOffset($tables.eq(1));
+        rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(1));
         $rowResizerElements = $resizeFrames.eq(1).find(`.${DX_ROW_RESIZER_CLASS}`);
 
         $rowResizerElements.each((i, row) => {
@@ -621,23 +620,224 @@ module('Resizing integration', {
     });
 
     test('First frame should be removed if we remove the first table', function(assert) {
-        this.createWidget();
+        this.createWidget({
+            value: tableMarkup + '<br>' + tableMarkup
+        });
         this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.deleteTable();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrames = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
+        const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
+
+        $rowResizerElements.each((i, row) => {
+            const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
+        });
+
+        assert.strictEqual($resizeFrames.length, 1);
     });
 
-    test('Second frame should be removed if we remove the second table', function(assert) {
-        this.createWidget();
+    test('Row resizers should be updated after a row insert', function(assert) {
+        this.createWidget({
+            value: tableMarkup
+        });
         this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertRow();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrames = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
+        const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
+
+        $rowResizerElements.each((i, row) => {
+            const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
+        });
     });
 
-    test('Column resizers should be updated on the table structure update', function(assert) {
-        this.createWidget();
+    test('Column resizers should be updated after a column insert', function(assert) {
+        this.createWidget({
+            value: tableMarkup
+        });
         this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $tables = this.$element.find('table');
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+    });
+
+    test('Second table frame should update position after the insert row to the first table', function(assert) {
+        this.createWidget({
+            value: tableMarkup + '<br>' + tableMarkup
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertRow();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const tablePosition = getBoundingRect(this.$element.find('table').get(1));
+        const framePosition = getBoundingRect($resizeFrame.get(1));
+
+        assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
+        assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
+        assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
+        assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+
+    });
+
+    test('Row resizers should be updated on the table structure update after resize', function(assert) {
+        this.createWidget({
+            width: 430,
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        let $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+        $rowResizerElements.eq(1)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(0, 40)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertRow();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrames = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
+        $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
+
+        $rowResizerElements.each((i, row) => {
+            const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
+        });
     });
 
     test('Column resizers should be updated on the table structure update after resize', function(assert) {
-        this.createWidget();
+        this.createWidget({
+            width: 430,
+        });
         this.clock.tick(TIME_TO_WAIT);
+
+        let $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        $columnResizerElements.eq(1)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(40, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $tables = this.$element.find('table');
+        $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+    });
+
+    test('Column resizers should works correctly after the table structure update after resize', function(assert) {
+        this.createWidget({
+            width: 830,
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        let $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        $columnResizerElements.eq(1)
+            .trigger('dxpointerdown');
+
+        let $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(40, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $tables = this.$element.find('table');
+        $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        $columnResizerElements.eq(0)
+            .trigger('dxpointerdown');
+
+        $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(40, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
     });
 
     test('Columns should be resized correctly at the rtl mode', function(assert) {

@@ -86,7 +86,19 @@ export default class TableResizingModule extends BaseModule {
 
     _isTableChanges(delta) {
         const $tables = this._findTables();
-        return $tables.length !== this._tableResizeFrames.length || delta.ops[1]?.attributes?.table;
+        return $tables.length !== this._tableResizeFrames.length || this._isTableChangesInDelta(delta);
+    }
+
+    _isTableChangesInDelta(delta) {
+        let result = false;
+        each(delta.ops, (_, data) => {
+            if(data?.attributes?.table) {
+                result = true;
+                return false;
+            }
+        });
+
+        return result;
     }
 
     _removeResizeFrames() {
