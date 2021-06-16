@@ -826,6 +826,8 @@ const SelectBox = DropDownList.inherit({
             case 'displayCustomValue':
             case 'acceptCustomValue':
             case 'showSelectionControls':
+                this._invalidate();
+                break;
             case 'allowClearing':
                 break;
             default:
