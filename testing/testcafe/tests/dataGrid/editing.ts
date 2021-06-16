@@ -1646,7 +1646,6 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
   await t
     .expect(await takeScreenshot('grid-popup-editing-checkbox.png', '.dx-overlay-content'))
     .ok()
-    .debug()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
