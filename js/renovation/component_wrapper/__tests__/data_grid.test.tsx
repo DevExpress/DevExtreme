@@ -9,6 +9,7 @@ const mockInternalComponent = {
   getController: jest.fn(),
   state: jest.fn(),
   on: jest.fn(),
+  option: jest.fn(),
 };
 
 const mockComponent = {
@@ -73,6 +74,14 @@ jest.mock('../common/component', () => class {
 
   repaint() {
     this._initMarkup();
+  }
+
+  _optionChanging() {
+
+  }
+
+  _optionChanged() {
+
   }
 
   _initializeComponent() {
@@ -204,7 +213,7 @@ describe('DataGrid Wrapper', () => {
 
   it('onInitialized option should not be defined in _initializeComponent', () => {
     const onInitialized = () => {};
-    let onInitializedInInitializeComponent: unknown = undefined;
+    let onInitializedInInitializeComponent: unknown = {};
 
     mockComponent.beforeInitialization = (component) => {
       onInitializedInInitializeComponent = component.option().onInitialized;
@@ -251,6 +260,29 @@ describe('DataGrid Wrapper', () => {
     const wrappedHandler = component._wrapKeyDownHandler(handler);
 
     expect(wrappedHandler).toBe(handler);
+  });
+
+  it('_optionChanging', () => {
+    const component: any = createDataGrid();
+    const prevProps = { pager: { pageSize: 5 } };
+    component.__options = prevProps;
+    component.viewRef.prevProps = prevProps;
+    component._optionChanging('pager.pageSize', 5, 10);
+    // emulate base component mutable option change
+    component.__options.pager.pageSize = 10;
+    // value in prev props shouldn't change for future getUpdatedOptions
+    expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
+    expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
+  });
+
+  it('_optionChanged, If dataSource not changed update it directly for refresh data', () => {
+    const dataSource = {};
+    const component: any = createDataGrid();
+    component.__options = { dataSource };
+    mockInternalComponent.option.mockReturnValueOnce(dataSource);
+    component._optionChanged({ fullName: 'dataSource', value: dataSource });
+    expect(mockInternalComponent.option).toBeCalledTimes(2);
+    expect(mockInternalComponent.option).toBeCalledWith('dataSource', dataSource);
   });
 
   describe('_internalOptionChangedHandler and _invalidate', () => {
