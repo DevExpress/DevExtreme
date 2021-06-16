@@ -159,7 +159,7 @@ describe('Button', () => {
           text?: any;
           icon?: any;
         };
-      }) => <div className="custom-content">{`${text}_text`}</div>;
+      }) => <div className="custom-content">{`${String(text)}_text`}</div>;
       const button = mount(viewFunction({
         props: { template, text: 'button', icon: 'icon' },
       } as any) as any);
@@ -449,6 +449,11 @@ describe('Button', () => {
 
         it('should add "contained" button styling mode class by default', () => {
           expect(new Button({}).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-mode-contained'));
+        });
+
+        it('should add "contained" button styling mode class when stylingMode has wrong value', () => {
+          expect(new Button({ stylingMode: 'textt' }).cssClasses)
             .toEqual(expect.stringMatching('dx-button-mode-contained'));
         });
 

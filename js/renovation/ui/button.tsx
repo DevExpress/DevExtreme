@@ -25,14 +25,17 @@ import { BaseWidgetProps } from './common/base_props';
 import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return';
 
+const stylingModes = ['outlined', 'text', 'contained'];
+
 const getCssClasses = (model: ButtonProps): string => {
   const {
     text, icon, type, iconPosition,
   } = model;
   const stylingMode = model.stylingMode ?? 'contained';
+  const isValidStylingMode = stylingModes.includes(stylingMode);
   const classesMap = {
     'dx-button': true,
-    [`dx-button-mode-${stylingMode}`]: true,
+    [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
     [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,

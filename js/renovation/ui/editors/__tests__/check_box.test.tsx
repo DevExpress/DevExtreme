@@ -52,7 +52,7 @@ describe('CheckBox', () => {
         const checkBox = shallow(viewFunction({ props: { value } } as CheckBox));
         const input = checkBox.find('input');
         expect(input.props()).toMatchObject({
-          value: `${value}`,
+          value: `${String(value)}`,
         });
       });
 
@@ -475,7 +475,7 @@ describe('CheckBox', () => {
 
         each([true, false, null])
           .it('should have "checked=%s" if value=%s', (value) => {
-            let expectedValue = `${value}`;
+            let expectedValue = `${String(value)}`;
             if (value === null) {
               expectedValue = 'mixed';
             }
@@ -486,13 +486,13 @@ describe('CheckBox', () => {
         each([true, false])
           .it('should have "readonly=%s if readOnly=%s', (readOnly) => {
             expect(new CheckBox({ readOnly }).aria)
-              .toMatchObject({ readonly: `${readOnly}` });
+              .toMatchObject({ readonly: `${String(readOnly)}` });
           });
 
         each([true, false])
           .it('should have "invalid=%s" if isValid=%s', (isValid) => {
             expect(new CheckBox({ isValid }).aria)
-              .toMatchObject({ invalid: `${!isValid}` });
+              .toMatchObject({ invalid: `${String(!isValid)}` });
           });
 
         /* eslint-disable spellcheck/spell-checker */
