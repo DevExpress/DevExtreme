@@ -48,13 +48,39 @@ function exportDataGrid(doc, dataGrid, options) {
                             pdfCell.colSpan = cellMerging.colspan;
                         }
                     } else if(rowType === 'group') {
-                        pdfCell.colSpan = columns.length - 1;
+                        pdfCell.drawLeftBorder = false;
+                        pdfCell.drawRightBorder = false;
+
+                        if(cellIndex > 0) {
+                            const isEmptyCellsExceptFirst = currentRow.slice(1).reduce(
+                                (accumulate, pdfCell) => { return accumulate && !isDefined(pdfCell.text); },
+                                true);
+                            if(!isDefined(pdfCell.text) && isEmptyCellsExceptFirst) {
+                                for(let i = 0; i < currentRow.length; i++) {
+                                    currentRow[i].colSpan = currentRow.length;
+                                }
+                                pdfCell.colSpan = currentRow.length;
+                            }
+                        }
                     }
 
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
                     currentRow.push(pdfCell);
+                }
+
+                if(rowType === 'group') {
+                    currentRow[0].drawLeftBorder = true;
+
+                    if(currentRow[0].colSpan === currentRow.length - 1) {
+                        currentRow[0].drawRightBorder = true;
+                    }
+
+                    const lastCell = currentRow[currentRow.length - 1];
+                    if(!isDefined(lastCell.colSpan)) {
+                        lastCell.drawRightBorder = true;
+                    }
                 }
 
                 rowsIndents.push(groupLevel * options.indent);
