@@ -89,6 +89,7 @@ const PORTAL_COMPONENTS: Set<string> = new Set([
 
 const USE_DEFER_UPDATE_FOR_TEMPLATE: Set<string> = new Set([
   'dxDataGrid',
+  'dxSelectBox',
 ]);
 
 function getIndent(indent: number) {
