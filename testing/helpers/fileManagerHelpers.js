@@ -151,9 +151,9 @@ export class FileManagerWrapper {
         return this.getFolderToggles(inDialog).eq(index);
     }
 
-    isFolderNodeToggleOpened(text) {
+    isFolderNodeToggleOpened(text, inDialog) {
         let result = null;
-        const targetNode = this.getFolderNodes().filter(function() { return $(this).text() === text; }).eq(0).parent();
+        const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
         if(targetNode.length) {
             const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
             if(itemToggle.length) {
