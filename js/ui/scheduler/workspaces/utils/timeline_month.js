@@ -3,12 +3,12 @@ import { setStartDayHour } from './base';
 import { getViewStartByOptions } from './month';
 
 export const getFirstViewDate = (currentDate, startDayHour, startDate, intervalCount) => {
-    const firstViewDate = getViewStartByOptions(
+    const firstViewDate = dateUtils.getFirstMonthDate(getViewStartByOptions(
         startDate,
         currentDate,
         intervalCount,
         dateUtils.getFirstMonthDate(startDate),
-    );
+    ));
 
     return setStartDayHour(firstViewDate, startDayHour);
 };

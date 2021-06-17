@@ -145,6 +145,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             this.option('startDayHour'),
             this.option('startDate'),
             this.option('intervalCount'),
+            this.option('firstDayOfWeek'),
         );
     }
 

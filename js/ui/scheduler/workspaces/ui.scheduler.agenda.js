@@ -138,7 +138,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _renderView() {
-        this._firstViewDate = this.getFirstViewDate();
+        this._firstViewDate = this._getFirstViewDate();
         this._rows = [];
     }
 
