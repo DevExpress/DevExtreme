@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { isDefined } from '../../../../core/utils/type';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -7,7 +8,7 @@ export const isDateInRange = (date, startDate, endDate, diff) => {
 };
 
 export const setStartDayHour = (date, startDayHour) => {
-    if(!startDayHour) {
+    if(!isDefined(startDayHour)) {
         return date;
     }
 
