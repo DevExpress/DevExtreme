@@ -77,7 +77,7 @@ export class TextSvgElementProps extends SvgGraphicsProps {
 
   @OneWay() textsAlignment?: LabelAlignment;
 
-  @OneWay() styles?: Record<string, string>;
+  @OneWay() styles?: Record<string, unknown>;
 
   @OneWay() encodeHtml = true;
 }
@@ -93,7 +93,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  get styles(): Record<string, string> {
+  get styles(): Record<string, unknown> {
     const style = this.props.styles ?? {};
 
     return {

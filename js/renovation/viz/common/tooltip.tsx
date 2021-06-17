@@ -87,7 +87,7 @@ export const viewFunction = ({
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
-  let styles: Record<string, string> = interactive ? {
+  let styles: Record<string, unknown> = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',

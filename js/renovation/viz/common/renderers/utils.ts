@@ -351,9 +351,8 @@ export const getItemLineHeight = (item: TextItem, defaultValue: number): number 
   item.inherits ? maxLengthFontSize(item.height, defaultValue) : Number(item.height) || defaultValue
 );
 
-export const getLineHeight = (styles: Record<string, string>): number => (
-  // eslint-disable-next-line no-restricted-globals
-  styles && !isNaN(parseFloat(styles[KEY_FONT_SIZE])) ? parseFloat(styles[KEY_FONT_SIZE]) : DEFAULT_FONT_SIZE
+export const getLineHeight = (styles: Record<string, unknown>): number => (
+  styles && !Number.isNaN(parseFloat(styles[KEY_FONT_SIZE] as string)) ? parseFloat(styles[KEY_FONT_SIZE] as string) : DEFAULT_FONT_SIZE
 );
 
 export const textsAreEqual = (newItems: TextItem[], renderedItems?: TextItem[]): boolean => {
