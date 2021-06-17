@@ -14,10 +14,6 @@ testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
 });
 
-const schedulerMock = {
-    isVirtualScrolling: () => false
-};
-
 const createInstance = () => {
     const observer = {
         fire: (command, field, obj, value) => {
@@ -43,7 +39,8 @@ const createInstance = () => {
     };
 
     const key = createFactoryInstances({
-        scheduler: schedulerMock
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
     return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
 };

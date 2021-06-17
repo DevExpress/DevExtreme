@@ -50,11 +50,11 @@ module('Agenda', {}, () => {
             }
         };
 
-        const schedulerMock = { isVirtualScrolling: () => false };
         const resources = options && options.groups || { };
         const key = createFactoryInstances({
-            scheduler: schedulerMock,
-            resources
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
+            resources,
         });
 
         const resourceManager = getResourceManager(key);

@@ -8,7 +8,7 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
-import { getResourceManager } from '../../instanceFactory';
+import { getResourceManager, getTimeZoneCalculator } from '../../instanceFactory';
 import timeZoneUtils from '../../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -167,7 +167,6 @@ export class AppointmentFilterBaseStrategy {
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
     get viewDataProvider() { return this.workspace.viewDataProvider; }
     get resourceManager() { return getResourceManager(this.options.key); }
-    get timeZoneCalculator() { return this.scheduler.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
     get viewEndDayHour() { return this.options.endDayHour; }
@@ -202,7 +201,7 @@ export class AppointmentFilterBaseStrategy {
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
             recurrenceException: this.getRecurrenceException.bind(this),
-        }, this.timeZoneCalculator);
+        });
     }
 
     // TODO: Get rid of it after rework filtering
@@ -226,7 +225,7 @@ export class AppointmentFilterBaseStrategy {
         exceptionString = exceptionString.replace(/\s/g, '');
 
         const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, {
+            return getTimeZoneCalculator(this.options.key).createDate(date, {
                 path: 'toGrid'
             });
         };
@@ -369,7 +368,7 @@ export class AppointmentFilterBaseStrategy {
         ]];
     }
 
-    _createCombinedFilter(filterOptions, timeZoneCalculator) {
+    _createCombinedFilter(filterOptions) {
         const dataAccessors = this.dataAccessors;
         const min = new Date(filterOptions.min);
         const max = new Date(filterOptions.max);
@@ -384,6 +383,7 @@ export class AppointmentFilterBaseStrategy {
             checkIntersectViewport
         } = filterOptions;
         const that = this;
+        const timeZoneCalculator = getTimeZoneCalculator(this.options.key);
 
         return [[(appointment) => {
             let result = true;
@@ -469,8 +469,9 @@ export class AppointmentFilterBaseStrategy {
         }]];
     }
 
-    customizeDateFilter(dateFilter, timeZoneCalculator) {
+    customizeDateFilter(dateFilter) {
         const currentFilter = extend(true, [], dateFilter);
+        const timeZoneCalculator = getTimeZoneCalculator(this.options.key);
 
         return ((appointment) => {
             const startDate = new Date(this.dataAccessors.getter.startDate(appointment));
@@ -497,8 +498,8 @@ export class AppointmentFilterBaseStrategy {
         }).bind(this);
     }
 
-    _createAppointmentFilter(filterOptions, timeZoneCalculator) {
-        const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneCalculator);
+    _createAppointmentFilter(filterOptions) {
+        const combinedFilter = this._createCombinedFilter(filterOptions);
 
         if(this.filterMaker.isRegistered()) {
             this.filterMaker.make('user', undefined);
@@ -507,7 +508,7 @@ export class AppointmentFilterBaseStrategy {
 
             this.filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
 
-            const dateFilter = this.customizeDateFilter(this.filterMaker.combine(), timeZoneCalculator);
+            const dateFilter = this.customizeDateFilter(this.filterMaker.combine());
 
             combinedFilter.push([dateFilter]);
         }
@@ -675,8 +676,8 @@ export class AppointmentFilterBaseStrategy {
         });
     }
 
-    filterLoadedAppointments(filterOption, timeZoneCalculator) {
-        const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
+    filterLoadedAppointments(filterOption) {
+        const combinedFilter = this._createAppointmentFilter(filterOption);
         return query(this.getPreparedDataItems())
             .filter(combinedFilter)
             .toArray();
@@ -741,12 +742,11 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
         return this.filterLoadedAppointments(
             filterOptions,
-            this.timeZoneCalculator,
             this.workspace._getGroupCount()
         );
     }
 
-    filterLoadedAppointments(filterOptions, timeZoneCalculator, groupCount) {
+    filterLoadedAppointments(filterOptions, groupCount) {
         const combinedFilters = [];
 
         let itemsToFilter = this.getPreparedDataItems();
@@ -765,7 +765,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         filterOptions.forEach(filterOption => {
             combinedFilters.length && combinedFilters.push('or');
 
-            const filter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
+            const filter = this._createAppointmentFilter(filterOption);
 
             combinedFilters.push(filter);
         });

@@ -19,9 +19,8 @@ export const getObserver = (key) => {
 
 export const initFactoryInstance = (resourceGetter) => {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => false
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     getResourceManager(key).createResourcesTree = (groups) => {

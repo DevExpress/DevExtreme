@@ -24,9 +24,8 @@ module('API', () => {
                 const workSpace = 'dxSchedulerWorkSpace' + type;
 
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => false
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {}
                 });
 
                 if(!skipInvokeStub) {

@@ -34,13 +34,10 @@ const dataAccessors = {
     }
 };
 
-const schedulerMock = {
-    isVirtualScrolling: () => false
-};
-
 const createInstance = (options) => {
     const key = createFactoryInstances({
-        scheduler: schedulerMock
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     const observer = {

@@ -11,7 +11,11 @@ import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
-import { getResourceManager, getAppointmentDataProvider } from './instanceFactory';
+import {
+    getResourceManager,
+    getAppointmentDataProvider,
+    getTimeZoneCalculator
+} from './instanceFactory';
 
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -25,9 +29,6 @@ const subscribes = {
         return getAppointmentDataProvider(this.key);
     },
 
-    getTimeZoneCalculator: function() {
-        return this.timeZoneCalculator;
-    },
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -74,10 +75,11 @@ const subscribes = {
 
     showAddAppointmentPopup: function(cellData, cellGroups) {
         const appointmentAdapter = this.createAppointmentAdapter({});
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         appointmentAdapter.allDay = cellData.allDay;
-        appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-        appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+        appointmentAdapter.startDate = timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        appointmentAdapter.endDate = timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
         const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
         this.showAppointmentPopup(resultAppointment, true);
@@ -145,10 +147,11 @@ const subscribes = {
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
         const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
         const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         // TODO pull out time zone converting from appointment adapter for knockout(T947938)
-        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
-        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+        const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 

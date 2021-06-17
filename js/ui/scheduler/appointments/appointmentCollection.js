@@ -21,6 +21,7 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
+import { getTimeZoneCalculator } from '../instanceFactory';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -39,6 +40,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     constructor(element, options) {
         super(element, options);
+        this.key = options.key;
         this._virtualAppointments = {};
     }
 
@@ -867,7 +869,7 @@ class SchedulerAppointments extends CollectionWidget {
         const endViewDate = this.invoke('getEndViewDate').getTime();
         const startViewDate = this.invoke('getStartViewDate').getTime();
 
-        const timeZoneCalculator = this.invoke('getTimeZoneCalculator');
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         result = result || {
             parts: []
@@ -961,7 +963,7 @@ class SchedulerAppointments extends CollectionWidget {
         const appointmentIsLong = this.invoke('getAppointmentDataProvider').appointmentTakesSeveralDays(appointment);
         const result = [];
 
-        const timeZoneCalculator = this.invoke('getTimeZoneCalculator');
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
         endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });

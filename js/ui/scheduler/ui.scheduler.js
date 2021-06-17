@@ -55,7 +55,6 @@ import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month'
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import AppointmentAdapter from './appointmentAdapter';
-import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import { utils } from './utils';
@@ -63,7 +62,8 @@ import {
     createFactoryInstances,
     disposeFactoryInstances,
     getResourceManager,
-    getAppointmentDataProvider
+    getAppointmentDataProvider,
+    getTimeZoneCalculator
 } from './instanceFactory';
 
 // STYLE scheduler
@@ -705,6 +705,9 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
+                this.updateFactoryInstances();
+                this.repaint();
+                break;
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
@@ -834,9 +837,10 @@ class Scheduler extends Widget {
 
     _filterAppointmentsByDate() {
         const dateRange = this._workSpace.getDateRange();
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
-        const startDate = this.timeZoneCalculator.createDate(dateRange[0], { path: 'fromGrid' });
-        const endDate = this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' });
+        const startDate = timeZoneCalculator.createDate(dateRange[0], { path: 'fromGrid' });
+        const endDate = timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' });
 
         getAppointmentDataProvider(this.key).filterByDate(startDate, endDate, this.option('remoteFiltering'), this.option('dateSerializationFormat'));
     }
@@ -962,12 +966,6 @@ class Scheduler extends Widget {
         this._dataSourceLoadedCallback = Callbacks();
 
         this._subscribes = subscribes;
-
-        this.timeZoneCalculator = new TimeZoneCalculator({
-            getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
-            getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || this.option('timeZone'), date),
-            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
-        });
     }
 
     updateFactoryInstances() {
@@ -1366,7 +1364,7 @@ class Scheduler extends Widget {
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
 
         result.todayDate = () => {
-            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            const result = getTimeZoneCalculator(this.key).createDate(new Date(), { path: 'toGrid' });
             return result;
         };
 
@@ -1375,6 +1373,7 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
+            key: this.key,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
             onItemClick: this._createActionByOption('onAppointmentClick'),
@@ -1521,6 +1520,7 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),
@@ -1782,7 +1782,11 @@ class Scheduler extends Widget {
     }
 
     _getUpdatedData(rawAppointment) {
-        const getConvertedFromGrid = date => date ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' }) : undefined;
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const getConvertedFromGrid = date => date
+            ? timeZoneCalculator.createDate(date, { path: 'fromGrid' })
+            : undefined;
+
         const isValidDate = date => !isNaN(new Date(date).getTime());
 
         const targetCell = this.getTargetCellData();
@@ -1812,11 +1816,11 @@ class Scheduler extends Widget {
         if(isKeepAppointmentHours) {
             const { trimTime } = dateUtils;
 
-            const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
+            const startDate = timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
             const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
 
             resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
-            resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
+            resultedStartDate = timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
         const result = this.createAppointmentAdapter({});
@@ -2026,7 +2030,7 @@ class Scheduler extends Widget {
 
     dayHasAppointment(day, rawAppointment, trimTime) {
         const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+            return getTimeZoneCalculator(this.key).createDate(date, { path: 'toGrid' });
         };
 
         const appointment = this.createAppointmentAdapter(rawAppointment);
@@ -2235,9 +2239,9 @@ class Scheduler extends Widget {
 
     createAppointmentAdapter(rawAppointment) {
         const options = {
+            key: this.key,
             getField: (rawAppointment, property) => this.fire('getField', property, rawAppointment),
             setField: (rawAppointment, property, value) => this.fire('setField', property, rawAppointment, value),
-            getTimeZoneCalculator: () => this.timeZoneCalculator
         };
         return new AppointmentAdapter(rawAppointment, options);
     }

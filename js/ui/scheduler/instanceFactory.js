@@ -1,6 +1,8 @@
 import { isDefined } from '../../core/utils/type';
 import { ResourceManager } from './resources/resourceManager';
 import { AppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { TimeZoneCalculator } from './timeZoneCalculator';
+import timeZoneUtils from './utils.timeZone';
 
 const Names = {
     resourceManager: 'resourceManager',
@@ -18,6 +20,7 @@ export const createFactoryInstances = (options) => {
 
     createResourceManager(key, options.resources);
     createAppointmentDataProvider(key, options);
+    createTimeZoneCalculator(key, options.timeZone);
 
     return key;
 };
@@ -63,6 +66,16 @@ const createAppointmentDataProvider = (key, options) => {
     });
 };
 
+const createTimeZoneCalculator = (key, currentTimeZone) => {
+    createInstance(Names.timeZoneCalculator, key, () => {
+        return new TimeZoneCalculator({
+            getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
+            getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || currentTimeZone, date),
+            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
+    });
+};
+
 export const disposeFactoryInstances = (key) => {
     Object.getOwnPropertyNames(Names).forEach((name) => {
         removeInstance(name, key);
@@ -70,7 +83,5 @@ export const disposeFactoryInstances = (key) => {
 };
 
 export const getResourceManager = (key) => getInstance(Names.resourceManager, key);
-export const removeResourceManager = (key) => removeInstance(Names.resourceManager, key);
-
 export const getAppointmentDataProvider = (key = 0) => getInstance(Names.appointmentDataProvider, key);
-export const removeAppointmentDataProvider = (key) => removeInstance(Names.appointmentDataProvider, key);
+export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
