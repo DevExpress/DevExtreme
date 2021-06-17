@@ -3,6 +3,7 @@ import { Navigator } from 'ui/scheduler/header/navigator';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import noop from 'core/utils/common';
+import dateUtils from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -70,13 +71,13 @@ QUnit.module('Navigator markup', moduleConfig, () => {
 
     QUnit.test('customizeDateNavigatorText shoulde be applied correctly', function(assert) {
         const $element = this.instance.$element();
-        const date = new Date(2018, 11, 14, 9, 20);
+        const date = new Date(2018, 11, 14);
         const caption = [dateLocalization.format(date, 'day'), dateLocalization.format(date, 'monthAndYear')].join(' ');
 
         this.instance.option('date', date);
         this.instance.option('customizeDateNavigatorText', function(args) {
-            assert.deepEqual(args.startDate, date, 'passed date is ok');
-            assert.deepEqual(args.endDate, date, 'passed date is ok');
+            assert.deepEqual(dateUtils.trimTime(args.startDate), date, 'passed date is ok');
+            assert.deepEqual(dateUtils.trimTime(args.endDate), date, 'passed date is ok');
             assert.equal(args.text, caption, 'passed text is ok');
 
             return 'Custom text is ' + args.text;
