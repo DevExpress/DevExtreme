@@ -91,7 +91,7 @@ export default class DataGridWrapper extends Component {
     if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
       internalInstance.option('dataSource', e.value as string);
     }
-    super._optionChanged(e); // todo
+    super._optionChanged(e);
   }
 
   _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
