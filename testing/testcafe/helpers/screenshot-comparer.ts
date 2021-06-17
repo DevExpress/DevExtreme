@@ -60,7 +60,7 @@ export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOp
   Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     (LooksSame as any)(etalonFileName, screenshotBuffer, comparisonOptions,
-      async (_error, result) => {
+      (_error, result) => {
         if (_error) {
           reject(_error);
         } else {
@@ -72,9 +72,9 @@ export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOp
 
 interface Image { width: number; height: number; data: number[] }
 
-async function getMaskedScreenshotBuffer({
+function getMaskedScreenshotBuffer({
   screenshotName, screenshotFileName, etalonFileName, maskFileName,
-}: Record<'screenshotName' | 'screenshotFileName' | 'etalonFileName' | 'maskFileName', string>): Promise<Buffer> {
+}: Record<'screenshotName' | 'screenshotFileName' | 'etalonFileName' | 'maskFileName', string>): Buffer {
   function isSizeEqual(image1: Image, image2: Image): boolean {
     return image1.height === image2.height && image1.width === image2.width;
   }
@@ -190,7 +190,7 @@ async function tryGetValidScreenshot({
     await (element
       ? t.takeElementScreenshot(element, screenshotFileName)
       : t.takeScreenshot(screenshotFileName));
-    screenshotBuffer = await getMaskedScreenshotBuffer({
+    screenshotBuffer = getMaskedScreenshotBuffer({
       screenshotName, screenshotFileName, etalonFileName, maskFileName,
     });
     equal = await looksSame({

@@ -67,11 +67,11 @@ describe('MetadataCollector', () => {
     const expectedDestinationPath = resolve(join(destinationPath, relativePath));
     const expectedDestinationDir = dirname(expectedDestinationPath);
 
-    async function getTestFiles(): Promise<FileInfo[]> {
+    function getTestFiles(): FileInfo[] {
       return [{ path: relativePath, content: fileContent }];
     }
 
-    await MetadataCollector.saveScssFiles(getTestFiles(), destinationPath);
+    await MetadataCollector.saveScssFiles(Promise.resolve(getTestFiles()), destinationPath);
 
     expect(promises.mkdir).toHaveBeenCalledTimes(1);
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });

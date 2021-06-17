@@ -15,7 +15,7 @@ const createRecurrenceData = (): Record<string, unknown>[] => [{
 }];
 
 const createScheduler = async (data): Promise<void> => {
-  createWidget('dxScheduler', {
+  await createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
     currentView: 'week',
