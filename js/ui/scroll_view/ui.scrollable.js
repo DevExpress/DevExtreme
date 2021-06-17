@@ -447,9 +447,9 @@ const Scrollable = DOMComponent.inherit({
             location = this._strategy._applyScaleRatio(location);
         }
 
-        // if(this._isScrollInverted()) {
-        //     location.left = this._getScrollSign() * location.left - this._getMaxOffset().left;
-        // }
+        if(this._isScrollInverted()) {
+            location.left = this._getScrollSign() * location.left - this._getMaxOffset().left;
+        }
 
         const distance = this._normalizeLocation({
             left: location.left - ensureDefined(targetLocation.left, location.left),

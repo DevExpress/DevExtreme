@@ -267,6 +267,9 @@ export const rowsModule = {
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
                         e.scrollOffset.left = -this._scrollRight;
+                        if(!this.isScrollbarVisible(true)) {
+                            this._scrollLeft = -1;
+                        }
                     }
                     that.scrollChanged.fire(e.scrollOffset, that.name);
                 },
@@ -922,7 +925,6 @@ export const rowsModule = {
                     const scrollLeft = scrollable && scrollable.scrollOffset().left;
                     const rtlEnabled = this.option('rtlEnabled');
 
-                    debugger;
                     if(rtlEnabled) {
                         const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(scrollable);
                         const scrollRight = maxHorizontalScrollOffset - scrollLeft;
