@@ -156,7 +156,7 @@ const formatWeekday = function(date) {
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
-            this._viewDataProvider = new ViewDataProvider(this);
+            this._viewDataProvider = new ViewDataProvider();
         }
         return this._viewDataProvider;
     }
