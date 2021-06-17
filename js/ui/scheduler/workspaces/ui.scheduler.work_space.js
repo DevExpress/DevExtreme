@@ -1390,7 +1390,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this.option('startDate'),
             this.option('currentDate'),
             this._getIntervalDuration(),
-            this._getStartViewDate(),
+            this.option('startDate') ? this._getStartViewDate() : undefined,
         );
     }
 
