@@ -5,9 +5,9 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import timeZoneUtils from './utils.timeZone';
 
 const Names = {
+    timeZoneCalculator: 'timeZoneCalculator',
     resourceManager: 'resourceManager',
-    appointmentDataProvider: 'appointmentDataProvider',
-    timeZoneCalculator: 'timeZoneCalculator'
+    appointmentDataProvider: 'appointmentDataProvider'
 };
 
 const factoryInstances = { };
@@ -18,14 +18,14 @@ export const createFactoryInstances = (options) => {
         ? options.key
         : ++tailIndex;
 
+    createTimeZoneCalculator(key, options.timeZone);
     createResourceManager(key, options.resources);
     createAppointmentDataProvider(key, options);
-    createTimeZoneCalculator(key, options.timeZone);
 
     return key;
 };
 
-const createInstance = (name, key, callback) => {
+export const createInstance = (name, key, callback) => {
     if(!isDefined(factoryInstances[name])) {
         factoryInstances[name] = { };
     }

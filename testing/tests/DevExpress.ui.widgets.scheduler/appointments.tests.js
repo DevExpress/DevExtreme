@@ -137,6 +137,7 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
+        key,
         observer,
         ...options,
     }).dxSchedulerAppointments('instance');

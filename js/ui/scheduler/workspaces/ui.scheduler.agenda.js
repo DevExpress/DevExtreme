@@ -15,6 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getTimeZoneCalculator } from '../instanceFactory';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -519,8 +520,8 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     updateScrollPosition(date) {
-        const scheduler = this.option('observer');
-        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
         const startDateHour = newDate.getHours();

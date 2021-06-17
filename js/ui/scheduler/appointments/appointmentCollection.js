@@ -638,7 +638,7 @@ class SchedulerAppointments extends CollectionWidget {
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
-            startDate = scheduler.timeZoneCalculator.createDate(
+            startDate = getTimeZoneCalculator(this.key).createDate(
                 appointmentAdapter.startDate,
                 {
                     appointmentTimeZone: startDateTimeZone,

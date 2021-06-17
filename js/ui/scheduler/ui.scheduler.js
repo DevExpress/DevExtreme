@@ -980,7 +980,7 @@ class Scheduler extends Widget {
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
-            timezone: this.option('timezone'),
+            timeZone: this.option('timeZone'),
             getDataAccessors: function(key) {
                 return utils.dataAccessors.combine(key, this._dataAccessors);
             }.bind(this),
