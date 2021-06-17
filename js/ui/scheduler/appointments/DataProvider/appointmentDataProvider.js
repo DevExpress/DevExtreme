@@ -12,7 +12,7 @@ export class AppointmentDataProvider {
         this.key = this.options.key;
         this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
-        this.dataAccessors = this.options.dataAccessors;
+        this.dataAccessors = this.options.getDataAccessors(this.key);
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
@@ -23,7 +23,7 @@ export class AppointmentDataProvider {
     get filterMaker() { return this.getFilterStrategy().filterMaker; }
     get keyName() { return this.appointmentDataSource.keyName; }
     get filterStrategyName() {
-        return this.scheduler.isVirtualScrolling()
+        return this.options.getIsVirtualScrolling()
             ? FilterStrategies.virtual
             : FilterStrategies.standard;
     }

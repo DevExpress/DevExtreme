@@ -971,19 +971,21 @@ class Scheduler extends Widget {
     }
 
     updateFactoryInstances() {
-        const dataAccessors = utils.dataAccessors.combine(this.key, this._dataAccessors);
         this.key = createFactoryInstances({
             key: this.key,
             scheduler: this,
+            getIsVirtualScrolling: this.isVirtualScrolling.bind(this),
             resources: this.option('resources'),
             dataSource: this._dataSource,
-            dataAccessors,
             startDayHour: this._getCurrentViewOption('startDayHour'),
             endDayHour: this._getCurrentViewOption('endDayHour'),
             appointmentDuration: this._getCurrentViewOption('cellDuration'),
             firstDayOfWeek: this.getFirstDayOfWeek(),
             showAllDayPanel: this.option('showAllDayPanel'),
-            timezone: this.option('timezone')
+            timezone: this.option('timezone'),
+            getDataAccessors: function(key) {
+                return utils.dataAccessors.combine(key, this._dataAccessors);
+            }.bind(this),
         });
     }
 

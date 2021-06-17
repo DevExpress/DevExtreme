@@ -14,14 +14,6 @@ const {
 
 const schedulerMock = {
     isVirtualScrolling: () => false,
-    option: (name) => {
-
-    },
-    _options: {
-        scrolling: {
-            mode: 'standard'
-        }
-    }
 };
 
 module('Server side filtering', () => {
@@ -46,7 +38,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
@@ -82,7 +74,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
@@ -136,7 +128,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -201,7 +193,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
@@ -242,7 +234,7 @@ module('Server side filtering', () => {
                 key: 0,
                 scheduler: schedulerMock,
                 dataSource,
-                appointmentDataAccessors: {
+                dataAccessors: {
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
@@ -292,7 +284,7 @@ module('Server side filtering', () => {
                 key: 0,
                 scheduler: schedulerMock,
                 dataSource,
-                appointmentDataAccessors: {
+                dataAccessors: {
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
@@ -340,7 +332,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
@@ -367,7 +359,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
@@ -397,7 +389,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -427,7 +419,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -463,7 +455,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -500,7 +492,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -538,7 +530,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -569,7 +561,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
@@ -599,7 +591,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -657,7 +649,7 @@ module('Server side filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -699,7 +691,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -741,7 +733,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -782,7 +774,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -824,7 +816,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -873,7 +865,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -919,7 +911,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -965,7 +957,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1012,7 +1004,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1059,7 +1051,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1117,7 +1109,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1157,7 +1149,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1199,7 +1191,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1241,7 +1233,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1283,7 +1275,7 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1327,7 +1319,7 @@ module('Client side after filtering', () => {
                 ...schedulerMock,
             },
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1387,7 +1379,7 @@ module('Virtual Scrolling', () => {
             key: 0,
             scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),

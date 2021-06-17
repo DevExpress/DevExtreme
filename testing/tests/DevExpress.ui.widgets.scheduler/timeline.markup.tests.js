@@ -8,8 +8,8 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
-import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getResourceManager, createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -66,9 +66,8 @@ const stubInvokeMethod = (instance, options) => {
 
 const initFactoryInstances = () => {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => false
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     const observer = {

@@ -128,10 +128,8 @@ const createInstance = (options, subscribesConfig) => {
 
     const key = createFactoryInstances({
         resources: options.resources,
-        scheduler: {
-            isVirtualScrolling: () => false
-        },
-        appointmentDataAccessors: dataAccessors
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => dataAccessors
     });
 
     getResourceManager(key).getResourcesFromItem = () => {
