@@ -1584,32 +1584,25 @@ QUnit.module('Synchronize columns', {
     // T389309
     QUnit.test('Scroll position headers when rtl mode is enabled', function(assert) {
         // arrange
-        const done = assert.async();
         const defaultOptions = {
             columnsController: new MockColumnsController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]),
             dataController: new MockDataController({
                 items: [{ values: [''] }]
-            })
+            }),
         };
-        const gridView = this.createGridView(defaultOptions);
-        let $scrollContainer;
+        const gridView = this.createGridView(defaultOptions, { rtlEnabled: true, scrolling: { useNative: false } });
         const $testElement = $('<div />').width(300).addClass('dx-rtl').appendTo($('#container'));
 
         // act
         gridView.render($testElement);
 
-        $testElement.find('.dx-scrollable-container').scroll(function() {
-            // assert
-            assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
+        // assert
+        assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-            $scrollContainer = $testElement.find('.dx-datagrid-scroll-container').first();
-            assert.equal($scrollContainer.scrollLeft(), 250);
-            assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
-            assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -250, 'left position of the table');
-            done();
-        });
-
-        $testElement.find('.dx-scrollable-container').scrollLeft(250);
+        const $scrollContainer = $testElement.find('.dx-datagrid-scroll-container').first();
+        assert.equal($scrollContainer.scrollLeft(), 0);
+        assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
+        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -700, 'left position of the table');
     });
 
     QUnit.test('Scroll position summary footer and container with columnWidth auto', function(assert) {
@@ -1652,7 +1645,6 @@ QUnit.module('Synchronize columns', {
     // T389309
     QUnit.test('Scroll position summary footer when rtl mode is enabled', function(assert) {
         // arrange
-        const done = assert.async();
         const defaultOptions = {
             columnsController: new MockColumnsController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]),
             dataController: new MockDataController({
@@ -1667,24 +1659,18 @@ QUnit.module('Synchronize columns', {
             })
         };
         const gridView = this.createGridView(defaultOptions);
-        let $scrollContainer;
         const $testElement = $('<div />').width(300).addClass('dx-rtl').appendTo($('#container'));
 
         // act
         gridView.render($testElement);
 
-        $testElement.find('.dx-scrollable-container').scroll(function() {
-            // assert
-            assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
+        // assert
+        assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-            $scrollContainer = $testElement.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
-            assert.equal($scrollContainer.scrollLeft(), 0);
-            assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
-            assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -250, 'left position of the table');
-            done();
-        });
-
-        $testElement.find('.dx-scrollable-container').scrollLeft(250);
+        const $scrollContainer = $testElement.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
+        assert.equal($scrollContainer.scrollLeft(), 0);
+        assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
+        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -700, 'left position of the table');
     });
 
     // B254644
