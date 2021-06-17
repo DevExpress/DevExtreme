@@ -18,9 +18,13 @@ export const createFactoryInstances = (options) => {
         ? options.key
         : ++tailIndex;
 
-    createTimeZoneCalculator(key, options.timeZone);
-    createResourceManager(key, options.resources);
-    createAppointmentDataProvider(key, options);
+    const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
+    const resourceManager = createResourceManager(key, options.resources);
+    createAppointmentDataProvider(key, {
+        ...options,
+        timeZoneCalculator,
+        resourceManager
+    });
 
     return key;
 };
@@ -29,7 +33,12 @@ export const createInstance = (name, key, callback) => {
     if(!isDefined(factoryInstances[name])) {
         factoryInstances[name] = { };
     }
-    factoryInstances[name][key] = callback();
+
+    const result = callback();
+
+    factoryInstances[name][key] = result;
+
+    return result;
 };
 
 const getInstance = (name, key) => {
@@ -45,7 +54,7 @@ const removeInstance = (name, key) => {
 };
 
 const createResourceManager = (key, resources) => {
-    createInstance(Names.resourceManager, key, () => {
+    return createInstance(Names.resourceManager, key, () => {
         const resourceManager = getInstance(Names.resourceManager, key);
 
         if(isDefined(resourceManager)) {
@@ -58,7 +67,7 @@ const createResourceManager = (key, resources) => {
 };
 
 const createAppointmentDataProvider = (key, options) => {
-    createInstance(Names.appointmentDataProvider, key, () => {
+    return createInstance(Names.appointmentDataProvider, key, () => {
         return new AppointmentDataProvider({
             ...options,
             key
@@ -67,7 +76,7 @@ const createAppointmentDataProvider = (key, options) => {
 };
 
 const createTimeZoneCalculator = (key, currentTimeZone) => {
-    createInstance(Names.timeZoneCalculator, key, () => {
+    return createInstance(Names.timeZoneCalculator, key, () => {
         return new TimeZoneCalculator({
             getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
             getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || currentTimeZone, date),

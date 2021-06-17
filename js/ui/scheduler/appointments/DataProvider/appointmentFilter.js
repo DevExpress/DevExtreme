@@ -8,7 +8,6 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
-import { getResourceManager, getTimeZoneCalculator } from '../../instanceFactory';
 import timeZoneUtils from '../../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -166,7 +165,8 @@ export class AppointmentFilterBaseStrategy {
     get scheduler() { return this.options.scheduler; } // TODO get rid
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
     get viewDataProvider() { return this.workspace.viewDataProvider; }
-    get resourceManager() { return getResourceManager(this.options.key); }
+    get resourceManager() { return this.options.resourceManager; }
+    get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
     get viewEndDayHour() { return this.options.endDayHour; }
@@ -225,7 +225,7 @@ export class AppointmentFilterBaseStrategy {
         exceptionString = exceptionString.replace(/\s/g, '');
 
         const getConvertedToTimeZone = date => {
-            return getTimeZoneCalculator(this.options.key).createDate(date, {
+            return this.timeZoneCalculator.createDate(date, {
                 path: 'toGrid'
             });
         };
@@ -383,7 +383,6 @@ export class AppointmentFilterBaseStrategy {
             checkIntersectViewport
         } = filterOptions;
         const that = this;
-        const timeZoneCalculator = getTimeZoneCalculator(this.options.key);
 
         return [[(appointment) => {
             let result = true;
@@ -411,11 +410,11 @@ export class AppointmentFilterBaseStrategy {
             const startDateTimeZone = dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = dataAccessors.getter.endDateTimeZone(appointment);
 
-            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+            const comparableStartDate = this.timeZoneCalculator.createDate(startDate, {
                 appointmentTimeZone: startDateTimeZone,
                 path: 'toGrid'
             });
-            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+            const comparableEndDate = this.timeZoneCalculator.createDate(endDate, {
                 appointmentTimeZone: endDateTimeZone,
                 path: 'toGrid'
             });
@@ -471,7 +470,6 @@ export class AppointmentFilterBaseStrategy {
 
     customizeDateFilter(dateFilter) {
         const currentFilter = extend(true, [], dateFilter);
-        const timeZoneCalculator = getTimeZoneCalculator(this.options.key);
 
         return ((appointment) => {
             const startDate = new Date(this.dataAccessors.getter.startDate(appointment));
@@ -482,11 +480,11 @@ export class AppointmentFilterBaseStrategy {
             const startDateTimeZone = this.dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this.dataAccessors.getter.endDateTimeZone(appointment);
 
-            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+            const comparableStartDate = this.timeZoneCalculator.createDate(startDate, {
                 appointmentTimeZone: startDateTimeZone,
                 path: 'toGrid'
             });
-            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+            const comparableEndDate = this.timeZoneCalculator.createDate(endDate, {
                 appointmentTimeZone: endDateTimeZone,
                 path: 'toGrid'
             });

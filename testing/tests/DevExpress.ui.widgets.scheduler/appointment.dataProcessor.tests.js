@@ -2,18 +2,20 @@ import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
-import { createInstance } from 'ui/scheduler/instanceFactory';
-
-createInstance('timeZoneCalculator', 0, () => {
-    return {
-        createDate: date => date
-    };
-});
 
 const {
     module,
     test
 } = QUnit;
+
+const createAppointmentDataProvider = (options) => {
+    return new AppointmentDataProvider({
+        ...options,
+        timeZoneCalculator: ({
+            createDate: date => date
+        })
+    });
+};
 
 module('Server side filtering', () => {
     test('Appointment filterByDate should filter dataSource', function(assert) {
@@ -33,7 +35,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -42,7 +44,7 @@ module('Server side filtering', () => {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 },
-            })
+            }),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
@@ -69,7 +71,7 @@ module('Server side filtering', () => {
             store: data,
             filter: ['text', '=', 'Appointment 2']
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -123,7 +125,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -188,7 +190,7 @@ module('Server side filtering', () => {
             filter: [dateFilter, ['text', '=', 'Appointment 2']]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -229,7 +231,7 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = new AppointmentDataProvider({
+            const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
                 getIsVirtualScrolling: () => false,
@@ -279,7 +281,7 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = new AppointmentDataProvider({
+            const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
                 getIsVirtualScrolling: () => false,
@@ -327,7 +329,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -354,7 +356,7 @@ module('Server side filtering', () => {
             }]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -384,7 +386,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -414,7 +416,7 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -450,7 +452,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: recurrentAppts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -487,7 +489,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -525,7 +527,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -556,7 +558,7 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -586,7 +588,7 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -644,7 +646,7 @@ module('Server side filtering', () => {
             filter: ['priorityId', '=', 1]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -686,7 +688,7 @@ module('Server side filtering', () => {
 module('Client side after filtering', () => {
     test('Loaded appointments should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -728,7 +730,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments on the borders should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -769,7 +771,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by decimal start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -811,7 +813,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -860,7 +862,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -906,7 +908,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly for day interval', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -952,7 +954,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -999,7 +1001,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1046,7 +1048,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by resources', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1104,7 +1106,7 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by allDay field', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1144,7 +1146,7 @@ module('Client side after filtering', () => {
 
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1186,7 +1188,7 @@ module('Client side after filtering', () => {
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1228,7 +1230,7 @@ module('Client side after filtering', () => {
 
     test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1270,7 +1272,7 @@ module('Client side after filtering', () => {
 
     test('Appointment between days should be filtered by start/endDayHour (T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1312,7 +1314,7 @@ module('Client side after filtering', () => {
 
     test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,
@@ -1372,7 +1374,7 @@ module('Virtual Scrolling', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
             getIsVirtualScrolling: () => false,

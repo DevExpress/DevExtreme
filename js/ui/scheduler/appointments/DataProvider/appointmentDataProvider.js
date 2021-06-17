@@ -45,7 +45,9 @@ export class AppointmentDataProvider {
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
             appointmentDuration: this.options.appointmentDuration,
-            showAllDayPanel: this.options.showAllDayPanel
+            showAllDayPanel: this.options.showAllDayPanel,
+            timeZoneCalculator: this.options.timeZoneCalculator,
+            resourceManager: this.options.resourceManager
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
