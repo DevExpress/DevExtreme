@@ -29,7 +29,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `materialGroups-base-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+        .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
     }).before(async () => createScheduler(view, groupOrientation));
   });
 });
@@ -38,7 +38,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `materialGroups-timeline-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+        .expect(await compareScreenshot(t, `material-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
     }).before(async () => createScheduler(view, groupOrientation));
   });
 });
