@@ -1,8 +1,6 @@
 import registerComponent from '../../../core/component_registrator';
-import dateUtils from '../../../core/utils/date';
-import dateLocalization from '../../../localization/date';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
-import { getIntervalDuration } from './utils/week';
+import { getIntervalDuration, getStartViewDate } from './utils/week';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
@@ -25,7 +23,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
     }
 
     _getStartViewDate() {
-        return dateUtils.getFirstWeekDate(this.option('startDate'), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+        return getStartViewDate(this.option('startDate'), this._firstDayOfWeek());
     }
 
     _getIntervalDuration() {

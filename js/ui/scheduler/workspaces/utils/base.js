@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
+import dateLocalization from '../../../../localization/date';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -34,3 +35,12 @@ export const getViewStartByOptions = (startDate, currentDate, intervalDuration, 
         return diff > 0 ? startDate : endDate;
     }
 };
+
+export const getCalculatedFirstDayOfWeek = (firstDayOfWeekOption) => {
+    return isDefined(firstDayOfWeekOption)
+        ? firstDayOfWeekOption
+        : dateLocalization.firstDayOfWeekIndex();
+};
+
+export const getFirstDayOfWeek = (firstDayOfWeekOption) => firstDayOfWeekOption;
+export const getStartViewDate = (startDateOption) => startDateOption;

@@ -55,7 +55,7 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { getViewStartByOptions } from './utils/base';
+import { getFirstDayOfWeek, getStartViewDate, getViewStartByOptions } from './utils/base';
 import { getFirstViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
@@ -1372,16 +1372,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
-    _getCalculatedFirstDayOfWeek() {
-        const firstDayOfWeekOption = this._firstDayOfWeek();
-
-        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
-            ? firstDayOfWeekOption
-            : dateLocalization.firstDayOfWeekIndex();
-
-        return firstDayOfWeek;
-    }
-
     _getFirstViewDate() {
         return getFirstViewDate(
             this.option('currentDate'),
@@ -1406,7 +1396,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getStartViewDate() {
-        return this.option('startDate');
+        return getStartViewDate(this.option('startDate'));
     }
 
     _getIntervalDuration() {
@@ -1414,7 +1404,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _firstDayOfWeek() {
-        return this.option('firstDayOfWeek');
+        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _attachEvents() {
