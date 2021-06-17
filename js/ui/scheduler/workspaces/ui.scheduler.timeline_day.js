@@ -9,7 +9,7 @@ class SchedulerTimelineDay extends SchedulerTimeline {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = this.option('currentDate');
+        this._firstViewDate = this._getViewStartByOptions();
         this._setStartDayHour(this._firstViewDate);
     }
 
