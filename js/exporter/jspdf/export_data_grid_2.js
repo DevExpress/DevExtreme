@@ -48,22 +48,18 @@ function exportDataGrid(doc, dataGrid, options) {
                             pdfCell.colSpan = cellMerging.colspan;
                         }
                     } else if(rowType === 'group') {
+                        pdfCell.drawLeftBorder = false;
+                        pdfCell.drawRightBorder = false;
+
                         if(cellIndex > 0) {
-                            const prevCellsHaveSummaryItems = currentRow.slice(1).filter(pdfCell => isDefined(pdfCell.text)).length > 0;
-                            if(!isDefined(pdfCell.text) && !prevCellsHaveSummaryItems) {
+                            const isEmptyCellsExceptFirst = currentRow.slice(1).reduce(
+                                (accumulate, pdfCell) => { return accumulate && !isDefined(pdfCell.text); },
+                                true);
+                            if(!isDefined(pdfCell.text) && isEmptyCellsExceptFirst) {
                                 for(let i = 0; i < currentRow.length; i++) {
                                     currentRow[i].colSpan = currentRow.length;
                                 }
                                 pdfCell.colSpan = currentRow.length;
-                            } else {
-                                const isPrevCellMerged = isDefined(currentRow[currentRow.length - 1].colSpan);
-                                if(isPrevCellMerged) {
-                                    const mergedCells = currentRow.slice(1).filter(cell => isDefined(cell.colSpan) && cell.drawLeftBorder !== false);
-                                    for(let i = 0; i < mergedCells.length; i++) {
-                                        mergedCells[i].drawLeftBorder = false;
-                                    }
-                                }
-                                pdfCell.drawLeftBorder = false;
                             }
                         }
                     }
@@ -72,6 +68,19 @@ function exportDataGrid(doc, dataGrid, options) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
                     currentRow.push(pdfCell);
+                }
+
+                if(rowType === 'group') {
+                    currentRow[0].drawLeftBorder = true;
+
+                    if(currentRow[0].colSpan === currentRow.length - 1) {
+                        currentRow[0].drawRightBorder = true;
+                    }
+
+                    const lastCell = currentRow[currentRow.length - 1];
+                    if(!isDefined(lastCell.colSpan)) {
+                        lastCell.drawRightBorder = true;
+                    }
                 }
 
                 rowsIndents.push(groupLevel * options.indent);
