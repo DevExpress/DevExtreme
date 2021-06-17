@@ -1,6 +1,6 @@
 import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
-import { isNumeric, isDefined, isFunction } from '../../../core/utils/type';
+import { isFunction } from '../../../core/utils/type';
 import errors from '../../widget/ui.errors';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
@@ -14,6 +14,7 @@ import Popup from '../../popup';
 import publisherMixin from '../publisher_mixin';
 import dateLocalization from '../../../localization/date';
 import Scrollable from '../../scroll_view/ui.scrollable';
+import { getInterval, getNextDate, getDuration } from './utils';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -22,11 +23,7 @@ const CAPTION_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
 const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
-const MONDAY_INDEX = 1;
-
-const getDefaultFirstDayOfWeekIndex = function(shift) {
-    return shift ? MONDAY_INDEX : dateLocalization.firstDayOfWeekIndex();
-};
+const ACCEPRED_STEPS = ['day', 'week', 'workWeek', 'month', 'agenda'];
 
 const getDateMonthFormat = function(short) {
     return function(date) {
@@ -59,41 +56,6 @@ const getCaptionFormat = function(short, intervalCount, duration) {
     };
 };
 
-const getWeekCaption = function(date, shift, rejectWeekend) {
-    const firstDayOfWeek = this.option('firstDayOfWeek');
-    let firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
-
-    if(firstDayOfWeekIndex === 0 && rejectWeekend) firstDayOfWeekIndex = MONDAY_INDEX;
-
-    let firstWeekDate = dateUtils.getFirstWeekDate(date, firstDayOfWeekIndex);
-    const weekendDuration = 2;
-
-    if(rejectWeekend) {
-        firstWeekDate = dateUtils.normalizeDateByWeek(firstWeekDate, date);
-    }
-
-    if(firstDayOfWeek >= 6 && rejectWeekend) {
-        firstWeekDate.setDate(firstWeekDate.getDate() + (7 - firstDayOfWeek + 1));
-    }
-
-    let lastWeekDate = new Date(firstWeekDate);
-    const intervalCount = this.option('intervalCount');
-
-    shift = shift || 6;
-
-    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (intervalCount > 1 ? 7 * (intervalCount - 1) + shift : shift)));
-
-    if(lastWeekDate.getDay() % 6 === 0 && rejectWeekend) {
-        lastWeekDate.setDate(lastWeekDate.getDate() + weekendDuration);
-    }
-
-    return {
-        text: formatCaptionByMonths.call(this, lastWeekDate, firstWeekDate),
-        startDate: firstWeekDate,
-        endDate: lastWeekDate
-    };
-};
-
 const formatCaptionByMonths = function(lastDate, firstDate) {
     const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
     const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
@@ -110,124 +72,6 @@ const formatCaptionByMonths = function(lastDate, firstDate) {
     }
 
     return firstDateText + '-' + lastDateText;
-};
-
-const getMonthCaption = function(date) {
-    const firstDate = new Date(dateUtils.getFirstMonthDate(date));
-    let lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
-    let text;
-
-    if(this.option('intervalCount') > 1) {
-        lastDate = new Date(firstDate);
-        lastDate.setMonth(firstDate.getMonth() + this.option('intervalCount') - 1);
-        lastDate = new Date(dateUtils.getLastMonthDate(lastDate));
-
-        const isSameYear = firstDate.getYear() === lastDate.getYear();
-        const lastDateText = getMonthYearFormat(lastDate);
-        const firstDateText = isSameYear ? dateLocalization.getMonthNames('abbreviated')[firstDate.getMonth()] : getMonthYearFormat(firstDate);
-
-        text = firstDateText + '-' + lastDateText;
-    } else {
-        text = dateLocalization.format(date, 'monthandyear');
-    }
-
-    return {
-        text: text,
-        startDate: firstDate,
-        endDate: lastDate
-    };
-};
-
-const dateGetter = function(date, offset) {
-    return new Date(date[this.setter](date[this.getter]() + offset));
-};
-
-const getConfig = function(step) {
-    let agendaDuration;
-
-    switch(step) {
-        case 'day':
-            return {
-                duration: 1 * this.option('intervalCount'),
-                setter: 'setDate',
-                getter: 'getDate',
-                getDate: dateGetter,
-                getCaption: function(date) {
-                    const format = getCaptionFormat(false, this.option('intervalCount'), this._getConfig().duration);
-
-                    return {
-                        text: dateLocalization.format(date, format),
-                        startDate: date,
-                        endDate: date
-                    };
-                }
-            };
-        case 'week':
-            return {
-                duration: 7 * this.option('intervalCount'),
-                setter: 'setDate',
-                getter: 'getDate',
-                getDate: dateGetter,
-                getCaption: getWeekCaption
-            };
-        case 'workWeek':
-            return {
-                duration: 7 * this.option('intervalCount'),
-                setter: 'setDate',
-                getter: 'getDate',
-                getDate: dateGetter,
-                getCaption: function(date) {
-                    return getWeekCaption.call(this, date, 4, true);
-                }
-            };
-        case 'month':
-            return {
-                duration: 1 * this.option('intervalCount'),
-                setter: 'setMonth',
-                getter: 'getMonth',
-                getDate: function(date, offset) {
-                    const currentDate = date.getDate();
-
-                    date.setDate(1);
-
-                    date = dateGetter.call(this, date, offset);
-
-                    const lastDate = dateUtils.getLastMonthDay(date);
-                    date.setDate(currentDate < lastDate ? currentDate : lastDate);
-                    return date;
-                },
-                getCaption: getMonthCaption
-            };
-        case 'agenda':
-            agendaDuration = this.invoke('getAgendaDuration');
-            agendaDuration = isNumeric(agendaDuration) && agendaDuration > 0 ? agendaDuration : 7;
-
-            return {
-                duration: agendaDuration,
-                setter: 'setDate',
-                getter: 'getDate',
-                getDate: dateGetter,
-                getCaption: function(date) {
-                    const format = getCaptionFormat(this.option('_useShortDateFormat'));
-                    const firstDate = new Date(date);
-                    const lastDate = new Date(date);
-                    let text;
-
-                    if(agendaDuration > 1) {
-                        lastDate.setDate(lastDate.getDate() + agendaDuration - 1);
-                        text = formatCaptionByMonths.call(this, lastDate, date);
-                    } else {
-                        text = dateLocalization.format(date, format);
-                    }
-
-                    return {
-                        text: text,
-                        startDate: firstDate,
-                        endDate: lastDate
-                    };
-                }
-            };
-    }
 };
 
 export const Navigator = Widget.inherit({
@@ -265,6 +109,7 @@ export const Navigator = Widget.inherit({
             case 'date':
             case 'intervalCount':
             case 'displayedDate':
+                this._validateStep();
                 this._updateButtonsState();
                 this._renderCaption();
                 this._setCalendarOption('value', this.option('date'));
@@ -338,7 +183,9 @@ export const Navigator = Widget.inherit({
     _updateButtonsState: function() {
         let min = this.option('min');
         let max = this.option('max');
-        const caption = this._getConfig().getCaption.call(this, this.option('displayedDate') || this.option('date'));
+
+        const date = this.option('displayedDate') || this.option('date');
+        const caption = this._getCaption(date);
 
         min = min ? dateUtils.trimTime(min) : min;
         max = max ? dateUtils.trimTime(max) : max;
@@ -357,11 +204,10 @@ export const Navigator = Widget.inherit({
     },
 
     _getNextDate: function(direction, initialDate = null) {
-        const stepConfig = this._getConfig();
-        const offset = stepConfig.duration * direction;
-        const date = stepConfig.getDate(new Date(initialDate || this.option('date')), offset);
+        const date = initialDate || this.option('date');
+        const options = { ...this._getIntervalOptions(), date };
 
-        return date;
+        return getNextDate(options, direction);
     },
 
     _renderFocusTarget: noop,
@@ -452,12 +298,61 @@ export const Navigator = Widget.inherit({
         };
     },
 
-    _renderCaption: function() {
-        const date = this.option('displayedDate') || this.option('date');
-        const captionConfig = this._getConfig().getCaption.call(this, date);
+    _getIntervalOptions: function() {
+        const step = this.option('step');
+        const intervalCount = this.option('intervalCount');
+        const firstDayOfWeek = this.option('firstDayOfWeek') || 0; // иногда бывает undefined
+        let agendaDuration = this.invoke('getAgendaDuration');
+        agendaDuration = agendaDuration ? agendaDuration : 7;
+        agendaDuration = agendaDuration === '0' ? 7 : agendaDuration;
+
+        return { step, intervalCount, firstDayOfWeek, agendaDuration };
+    },
+
+    _getCaptionFormatter: function(startDate, endDate) {
+        if(dateUtils.sameDate(startDate, endDate)) {
+            return getCaptionFormat(false, this.option('intervalCount'), getDuration(this._getIntervalOptions()));
+        } else {
+            return formatCaptionByMonths.bind(this);
+        }
+    },
+
+    _getCaptionText: function(captionFormatter, startDate, endDate) {
+        if(this.option('step') === 'month') {
+            if(dateUtils.sameMonth(startDate, endDate)) {
+                return dateLocalization.format(startDate, 'monthandyear');
+            } else {
+                const isSameYear = dateUtils.sameYear(startDate, endDate);
+                const lastDateText = getMonthYearFormat(endDate);
+                const firstDateText = isSameYear
+                    ? dateLocalization.getMonthNames('abbreviated')[startDate.getMonth()]
+                    : getMonthYearFormat(startDate);
+
+                return firstDateText + '-' + lastDateText;
+            }
+        } else {
+            return captionFormatter(endDate, startDate);
+        }
+    },
+
+    _getCaption: function(date) {
+        const options = { ...this._getIntervalOptions(), date };
+        const { startDate, endDate } = getInterval(options);
+
+        const captionFormatter = this._getCaptionFormatter(startDate, endDate);
+        const text = this._getCaptionText(captionFormatter, startDate, endDate);
+
         const customizationFunction = this.option('customizeDateNavigatorText');
 
-        const caption = isFunction(customizationFunction) ? customizationFunction(captionConfig) : captionConfig.text;
+        return isFunction(customizationFunction)
+            ? customizationFunction({ startDate, endDate, text })
+            : text;
+    },
+
+    _renderCaption: function() {
+        const date = this.option('displayedDate') || this.option('date');
+
+        const caption = this._getCaption(date);
 
         this._caption.option({
             text: caption,
@@ -498,17 +393,13 @@ export const Navigator = Widget.inherit({
         }
     },
 
-    _getConfig: function() {
+    _validateStep: function() {
         const step = this.option('step');
-        const config = getConfig.call(this, step);
 
-        if(!config) {
+        if(!ACCEPRED_STEPS.includes(step)) {
             throw errors.Error('E1033', step);
         }
-
-        return config;
     }
-
 }).include(publisherMixin);
 
 registerComponent('dxSchedulerNavigator', Navigator);
