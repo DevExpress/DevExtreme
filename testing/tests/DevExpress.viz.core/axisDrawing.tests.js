@@ -11774,6 +11774,55 @@ QUnit.test('Animate ticks to the new position after updating, resetApplyingAnima
     });
 });
 
+QUnit.test('Animate ticks to the new position after resetApplyingAnimation and change generated ticks', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.translator.stub('translate').withArgs(1).returns(40);
+
+    this.generatedTicks = [1];
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    this.axis.resetApplyingAnimation();
+
+    this.generatedTicks = [1, 2];
+    this.translator.stub('translate').withArgs(1).returns(50);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // assert
+    const firstTick = renderer.path.getCall(0).returnValue;
+    const secondTick = renderer.path.getCall(1).returnValue;
+    assert.equal(firstTick.stub('animate').callCount, 1);
+    assert.deepEqual(firstTick.attr.lastCall.args[0], {
+        opacity: 0,
+        points: [50, 66, 50, 72],
+    });
+    assert.deepEqual(firstTick.animate.lastCall.args[0], {
+        opacity: 1
+    });
+
+    assert.equal(secondTick.stub('animate').callCount, 1);
+    assert.deepEqual(secondTick.attr.lastCall.args[0], {
+        opacity: 0,
+        points: [60, 66, 60, 72],
+    });
+    assert.deepEqual(secondTick.animate.lastCall.args[0], {
+        opacity: 1
+    });
+});
+
 QUnit.test('Fade in new tick on second drawing', function(assert) {
     // arrange
     const renderer = this.renderer;
