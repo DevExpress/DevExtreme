@@ -55,7 +55,7 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { isDateInRange } from './utils/base';
+import { isDateInRange, setStartDayHour } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1381,8 +1381,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setFirstViewDate() {
         const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
-        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
-        this._setStartDayHour(this._firstViewDate);
+        const firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
+        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
     }
 
     _getViewStartByOptions() {
@@ -1413,13 +1413,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getIntervalDuration() {
         return toMs('day') * this.option('intervalCount');
-    }
-
-    _setStartDayHour(date) {
-        const startDayHour = this.option('startDayHour');
-        if(isDefined(startDayHour)) {
-            date.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
-        }
     }
 
     _firstDayOfWeek() {

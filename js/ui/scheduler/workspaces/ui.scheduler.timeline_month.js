@@ -4,6 +4,7 @@ import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { getViewStartByOptions } from './utils/month';
+import { setStartDayHour } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
@@ -70,8 +71,9 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
-        this._setStartDayHour(this._firstViewDate);
+        const firstViewDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
+
+        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
     }
 
     _getFormat() {
@@ -108,9 +110,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     _getDateByCellIndexes(rowIndex, columnIndex) {
         const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
-        this._setStartDayHour(date);
-
-        return date;
+        return setStartDayHour(date, this.option('startDayHour'));
     }
 
     getPositionShift() {

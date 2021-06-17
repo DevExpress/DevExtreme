@@ -8,6 +8,7 @@ import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import { getViewStartByOptions } from './utils/month';
+import { setStartDayHour } from './utils/base';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -78,9 +79,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _getDateByCellIndexes(rowIndex, columnIndex) {
         const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
-        this._setStartDayHour(date);
-
-        return date;
+        return setStartDayHour(date, this.option('startDayHour'));
     }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
@@ -139,8 +138,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
         const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
 
-        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
-        this._setStartDayHour(this._firstViewDate);
+        const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
+        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
 
         const date = this._getViewStartByOptions();
         this._minVisibleDate = new Date(date.setDate(1));
