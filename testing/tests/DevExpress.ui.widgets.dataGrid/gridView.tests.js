@@ -1678,7 +1678,7 @@ QUnit.module('Synchronize columns', {
             assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
             $scrollContainer = $testElement.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
-            assert.equal($scrollContainer.scrollLeft(), 250);
+            assert.equal($scrollContainer.scrollLeft(), 0);
             assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
             assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -250, 'left position of the table');
             done();

@@ -62,12 +62,12 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
             this.clock.tick(100);
 
-            const scrollLeft = $('.dx-scrollable').dxScrollable('instance').scrollLeft();
+            const scrollLeft = $('.dx-scrollable').scrollLeft();
             const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
 
             // assert
-            assert.equal(scrollLeft, 100);
-            assert.equal($headerScrollContainer.scrollLeft(), 100);
+            assert.equal(scrollLeft, 0);
+            assert.equal($headerScrollContainer.scrollLeft(), 0);
         });
 
         QUnit.test(`Correct start scroll position when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -93,13 +93,12 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
             this.clock.tick(100);
 
-            const scrollLeft = $('.dx-scrollable').dxScrollable('instance').scrollLeft();
+            const scrollLeft = $('.dx-scrollable').scrollLeft();
             const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
-            const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth();
 
             // assert
-            assert.equal(scrollLeft, 100 + scrollbarWidth);
-            assert.equal($headerScrollContainer.scrollLeft(), 100 + scrollbarWidth);
+            assert.equal(scrollLeft, 0);
+            assert.equal($headerScrollContainer.scrollLeft(), 0);
         });
 
         QUnit.test(`Correct scroll position after resizing when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -148,11 +147,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             this.clock.tick(500);
 
             // assert
-            const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth();
-            assert.equal(scrollable.scrollLeft(), 100 + scrollbarWidth, 'scrollable');
+            assert.equal($scrollable.scrollLeft(), 0, 'scrollable');
 
             const $headerScrollContainer = dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container');
-            assert.equal($headerScrollContainer.scrollLeft(), 100 + scrollbarWidth, 'headers');
+            assert.equal($headerScrollContainer.scrollLeft(), 0, 'headers');
         });
     });
 
