@@ -126,8 +126,7 @@ QUnit.module('render', moduleOptions, () => {
             max: 100,
             min: 0,
             start: 0,
-            end: 100,
-            useInkRipple: false
+            end: 100
         }).dxRangeSlider('instance');
 
         isRangeSliderDimensionsMatchOptions('#slider', assert);
@@ -146,8 +145,7 @@ QUnit.module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             start: 0,
-            end: 500,
-            useInkRipple: false
+            end: 500
         }).css('width', 500);
 
         const instance = el.dxRangeSlider('instance');
@@ -178,8 +176,7 @@ QUnit.module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
         const $tooltips = $handle.find('.' + TOOLTIP_CLASS);
@@ -203,8 +200,7 @@ QUnit.module('slider with tooltip', () => {
                 format: function(value) {
                     formatLog.push(value);
                 }
-            },
-            useInkRipple: false
+            }
         });
 
         assert.equal($.inArray(300, formatLog), -1);
@@ -219,8 +215,7 @@ QUnit.module('user interaction', () => {
             min: 0,
             start: 40,
             end: 60,
-            width: 100 + CONTAINER_MARGIN * 2,
-            useInkRipple: false
+            width: 100 + CONTAINER_MARGIN * 2
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -248,8 +243,7 @@ QUnit.module('user interaction', () => {
             min: 60,
             start: 120,
             end: 140,
-            width: 100 + CONTAINER_MARGIN * 2,
-            useInkRipple: false
+            width: 100 + CONTAINER_MARGIN * 2
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -271,8 +265,7 @@ QUnit.module('user interaction', () => {
             start: 40,
             end: 60,
             width: 100 + CONTAINER_MARGIN * 2,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -303,8 +296,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 0,
             end: 500,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).css('width', 500);
 
         pointerMock(el).start().move(250 + el.offset().left).down();
@@ -321,8 +313,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 20,
             end: 60,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).dxRangeSlider('instance');
 
         slider.option('start', 30);
@@ -339,8 +330,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 20,
             end: 60,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).dxRangeSlider('instance');
 
         slider.option('start', 30);
@@ -359,8 +349,7 @@ QUnit.module('focus policy', moduleOptions, () => {
             start: 40,
             end: 60,
             width: 100,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
         const $leftHandle = $handles.eq(0);
@@ -385,8 +374,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -436,8 +424,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -483,8 +470,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -535,8 +521,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -575,8 +560,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         const $rangeSlider = $('#slider').dxRangeSlider({
             start: 29,
             end: 30,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -603,8 +587,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             rtlEnabled: true,
             start: 30,
             end: 31,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -631,8 +614,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             rtlEnabled: true,
             start: 29,
             end: 30,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -659,8 +641,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         const $rangeSlider = $('#slider').dxRangeSlider({
             start: 30,
             end: 31,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -1046,8 +1027,7 @@ QUnit.module('RTL', moduleOptions, () => {
             min: 0,
             start: 0,
             end: 100,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         });
 
         const slider = $element.dxRangeSlider('instance');
@@ -1073,8 +1053,7 @@ QUnit.module('RTL', moduleOptions, () => {
             min: 0,
             start: 0,
             end: 500,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         }).css('width', 500 + 2 * CONTAINER_MARGIN);
 
         const instance = $element.dxRangeSlider('instance');
@@ -1101,8 +1080,7 @@ QUnit.module('RTL', moduleOptions, () => {
             max: 100,
             start: 25,
             end: 75,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         }).css('width', 100 + 2 * CONTAINER_MARGIN);
         const pointer = pointerMock($element).start();
 
@@ -1278,7 +1256,6 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
             end: 80,
             width: 100 + CONTAINER_MARGIN * 2,
             focusStateEnabled: true,
-            useInkRipple: false,
             onValueChanged: this.valueChangedHandler
         });
         this.instance = this.$element.dxRangeSlider('instance');

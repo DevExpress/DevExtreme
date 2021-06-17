@@ -518,10 +518,11 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnResizingMode?: 'nextColumn' | 'widget';
     /**
      * @docid
+     * @type boolean|Enums.Mode
      * @default undefined
      * @public
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * @docid
      * @type Array<GridBaseColumn|string>
@@ -2726,6 +2727,13 @@ export interface ColumnLookup {
    * @default undefined
    */
   valueExpr?: string
+  /**
+   * @docid GridBaseColumn.lookup.calculateCellValue
+   * @type_function_param1 rowData:object
+   * @type_function_return any
+   * @public
+   */
+  calculateCellValue?: ((rowData: any) => any);
 }
 
 /**

@@ -156,7 +156,7 @@ const formatWeekday = function(date) {
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
-            this._viewDataProvider = new ViewDataProvider(this);
+            this._viewDataProvider = new ViewDataProvider();
         }
         return this._viewDataProvider;
     }
@@ -1087,6 +1087,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isDateAndTimeView: this.isDateAndTimeView,
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
+            rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -1099,7 +1100,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._cleanAllowedPositions();
         this.cache.clear();
 
-        this.viewDataProvider.update(isGenerateNewViewData);
+        this.viewDataProvider.update(this.generateRenderOptions(), isGenerateNewViewData);
 
         if(this.isRenovatedRender()) {
             this.renderRWorkSpace();
@@ -1226,7 +1227,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             component = this._createComponent(container, componentClass, viewModel);
             this[componentName] = component;
         } else {
+            // TODO: this is a workaround for setTablesSizes. Remove after CSS refactoring
+            const $element = component.$element();
+            const elementStyle = $element.get(0).style;
+            const height = elementStyle.height;
+            const width = elementStyle.width;
+
             component.option(viewModel);
+
+            height && $element.height(height);
+            width && $element.width(width);
         }
     }
 
