@@ -7,7 +7,6 @@ import {
     getFirstViewDate,
 } from './utils/work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
-import { setStartDayHour } from './utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -61,10 +60,14 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         super._renderView();
     }
 
-    _setFirstViewDate() {
-        const firstViewDate = getFirstViewDate(this._getViewStartByOptions(), this._firstDayOfWeek());
-
-        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
+    _getFirstViewDate() {
+        return getFirstViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this._getIntervalDuration(),
+            this.option('firstDayOfWeek'),
+        );
     }
 
     _getOffsetByCount(cellIndex) {

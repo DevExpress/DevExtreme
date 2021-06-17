@@ -15,7 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { setStartDayHour } from './utils/base';
+import { getFirstViewDate } from './utils/agenda';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -98,10 +98,8 @@ class SchedulerAgenda extends WorkSpace {
         return AGENDA_CLASS;
     }
 
-    _setFirstViewDate() {
-        const currentDate = new Date(this.option('currentDate'));
-
-        this._firstViewDate = setStartDayHour(currentDate, this.option('startDayHour'));
+    _getFirstViewDate() {
+        return getFirstViewDate(this.option('currentDate'), this.option('startDayHour'));
     }
 
     _getRowCount() {
@@ -140,7 +138,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _renderView() {
-        this._setFirstViewDate();
+        this._firstViewDate = this.getFirstViewDate();
         this._rows = [];
     }
 

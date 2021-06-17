@@ -1,4 +1,7 @@
-import { isDateInRange } from './base';
+import dateUtils from '../../../../core/utils/date';
+import { isDefined } from '../../../../core/utils/type';
+import dateLocalization from '../../../../localization/date';
+import { isDateInRange, setStartDayHour } from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
     if(!startDate) {
@@ -22,4 +25,27 @@ export const getViewStartByOptions = (startDate, currentDate, intervalCount, sta
 
         return diff > 0 ? startDate : endDate;
     }
+};
+
+export const getFirstViewDate = (
+    currentDate,
+    startDayHour,
+    startDate,
+    intervalCount,
+    firstDayOfWeekOption,
+) => {
+    const viewStart = getViewStartByOptions(
+        startDate,
+        currentDate,
+        intervalCount,
+        dateUtils.getFirstMonthDate(startDate),
+    );
+    const firstMonthDate = dateUtils.getFirstMonthDate(viewStart);
+    const firstDayOfWeek = isDefined(firstDayOfWeekOption)
+        ? firstDayOfWeekOption
+        : dateLocalization.firstDayOfWeekIndex();
+
+    const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
+
+    return setStartDayHour(firstViewDate, startDayHour);
 };

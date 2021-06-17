@@ -55,7 +55,8 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { getViewStartByOptions, setStartDayHour } from './utils/base';
+import { getViewStartByOptions } from './utils/base';
+import { getFirstViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1041,8 +1042,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _toggleFixedScrollableClass() { return noop(); }
 
+    _setVisibilityDates() {}
+
     _renderView() {
-        this._setFirstViewDate();
+        this._firstViewDate = this._getFirstViewDate();
+        this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {
@@ -1378,11 +1382,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         return firstDayOfWeek;
     }
 
-    _setFirstViewDate() {
-        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
-
-        const firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
-        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
+    _getFirstViewDate() {
+        return getFirstViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this._getIntervalDuration(),
+            this.option('firstDayOfWeek'),
+        );
     }
 
     _getViewStartByOptions() {

@@ -1,6 +1,6 @@
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
-import { setStartDayHour } from './utils/base';
+import { getFirstViewDate } from './utils/day';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
@@ -17,10 +17,13 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return this.option('intervalCount');
     }
 
-    _setFirstViewDate() {
-        const firstViewDate = this._getViewStartByOptions();
-
-        this._firstViewDate = setStartDayHour(firstViewDate, this.option('startDayHour'));
+    _getFirstViewDate() {
+        return getFirstViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this._getIntervalDuration(),
+        );
     }
 
     _getDateByIndex(headerIndex) {
