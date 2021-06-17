@@ -1901,15 +1901,12 @@ module('View Data Provider', {
                 test('selected and focused cells should be marked in viewData', function(assert) {
                     const completeViewDataMap = horizontalDataMap;
                     const viewDataProvider = createViewDataProvider({
-                        workspaceMock: {
-                            ...horizontalGroupedWorkspaceMock,
-                            generateRenderOptions: () => ({
-                                ...horizontalGroupedWorkspaceMock.generateRenderOptions(),
-                                selectedCells: [completeViewDataMap[2][0], completeViewDataMap[2][1]],
-                                focusedCell: {
-                                    cellData: completeViewDataMap[2][0],
-                                }
-                            })
+                        renderOptions: {
+                            ...virtualHorizontalGroupingRenderOptions,
+                            selectedCells: [completeViewDataMap[2][0], completeViewDataMap[2][1]],
+                            focusedCell: {
+                                cellData: completeViewDataMap[2][0],
+                            },
                         },
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
