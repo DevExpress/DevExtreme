@@ -386,7 +386,7 @@ export class AppointmentFilterBaseStrategy {
         const that = this;
 
         return [[(appointment) => {
-            let result = true;
+            let result = appointment.visible;
             const startDate = new Date(dataAccessors.getter.startDate(appointment));
             const endDate = new Date(dataAccessors.getter.endDate(appointment));
             const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
