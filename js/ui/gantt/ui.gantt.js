@@ -42,6 +42,7 @@ class Gantt extends Widget {
     _init() {
         super._init();
         this._isGanttRendered = false;
+        this._initHelpers();
     }
     _initMarkup() {
         super._initMarkup();
@@ -100,7 +101,7 @@ class Gantt extends Widget {
         }
     }
     _renderTreeList() {
-
+        this._ganttTreeList = new GanttTreeList(this);
         this._treeList = this._ganttTreeList.getTreeList();
     }
     _renderSplitter() {
@@ -125,7 +126,6 @@ class Gantt extends Widget {
         this._mappingHelper = new GanttMappingHelper(this);
         this._customFieldsManager = new GanttCustomFieldsManager(this);
         this._actionsManager = new GanttActionsManager(this);
-        this._ganttTreeList = new GanttTreeList(this);
         this._ganttTemplatesManager = new GanttTemplatesManager(this);
         this._sizeHelper = new GanttSizeHelper(this);
     }
@@ -510,7 +510,7 @@ class Gantt extends Widget {
                 this._ganttTreeList?.setOption('columns', this._ganttTreeList.getColumns());
                 break;
             case 'taskListWidth':
-                this._sizeHelper.setInnerElementsWidth();
+                this._sizeHelper?.setInnerElementsWidth();
                 break;
             case 'showResources':
                 this._setGanttViewOption('showResources', args.value);
@@ -525,84 +525,84 @@ class Gantt extends Widget {
                 this._ganttTreeList?.selectRows(GanttHelper.getArrayFromOneElement(args.value));
                 break;
             case 'onSelectionChanged':
-                this._actionsManager.createSelectionChangedAction();
+                this._actionsManager?.createSelectionChangedAction();
                 break;
             case 'onTaskClick':
-                this._actionsManager.createTaskClickAction();
+                this._actionsManager?.createTaskClickAction();
                 break;
             case 'onTaskDblClick':
-                this._actionsManager.createTaskDblClickAction();
+                this._actionsManager?.createTaskDblClickAction();
                 break;
             case 'onTaskInserting':
-                this._actionsManager.createTaskInsertingAction();
+                this._actionsManager?.createTaskInsertingAction();
                 break;
             case 'onTaskInserted':
-                this._actionsManager.createTaskInsertedAction();
+                this._actionsManager?.createTaskInsertedAction();
                 break;
             case 'onTaskDeleting':
-                this._actionsManager.createTaskDeletingAction();
+                this._actionsManager?.createTaskDeletingAction();
                 break;
             case 'onTaskDeleted':
-                this._actionsManager.createTaskDeletedAction();
+                this._actionsManager?.createTaskDeletedAction();
                 break;
             case 'onTaskUpdating':
-                this._actionsManager.createTaskUpdatingAction();
+                this._actionsManager?.createTaskUpdatingAction();
                 break;
             case 'onTaskUpdated':
-                this._actionsManager.createTaskUpdatedAction();
+                this._actionsManager?.createTaskUpdatedAction();
                 break;
             case 'onTaskMoving':
-                this._actionsManager.createTaskMovingAction();
+                this._actionsManager?.createTaskMovingAction();
                 break;
             case 'onTaskEditDialogShowing':
-                this._actionsManager.createTaskEditDialogShowingAction();
+                this._actionsManager?.createTaskEditDialogShowingAction();
                 break;
             case 'onResourceManagerDialogShowing':
-                this._actionsManager.createResourceManagerDialogShowingAction();
+                this._actionsManager?.createResourceManagerDialogShowingAction();
                 break;
             case 'onDependencyInserting':
-                this._actionsManager.createDependencyInsertingAction();
+                this._actionsManager?.createDependencyInsertingAction();
                 break;
             case 'onDependencyInserted':
-                this._actionsManager.createDependencyInsertedAction();
+                this._actionsManager?.createDependencyInsertedAction();
                 break;
             case 'onDependencyDeleting':
-                this._actionsManager.createDependencyDeletingAction();
+                this._actionsManager?.createDependencyDeletingAction();
                 break;
             case 'onDependencyDeleted':
-                this._actionsManager.createDependencyDeletedAction();
+                this._actionsManager?.createDependencyDeletedAction();
                 break;
             case 'onResourceInserting':
-                this._actionsManager.createResourceInsertingAction();
+                this._actionsManager?.createResourceInsertingAction();
                 break;
             case 'onResourceInserted':
-                this._actionsManager.createResourceInsertedAction();
+                this._actionsManager?.createResourceInsertedAction();
                 break;
             case 'onResourceDeleting':
-                this._actionsManager.createResourceDeletingAction();
+                this._actionsManager?.createResourceDeletingAction();
                 break;
             case 'onResourceDeleted':
-                this._actionsManager.createResourceDeletedAction();
+                this._actionsManager?.createResourceDeletedAction();
                 break;
             case 'onResourceAssigning':
-                this._actionsManager.createResourceAssigningAction();
+                this._actionsManager?.createResourceAssigningAction();
                 break;
             case 'onResourceAssigned':
-                this._actionsManager.createResourceAssignedAction();
+                this._actionsManager?.createResourceAssignedAction();
                 break;
             case 'onResourceUnassigning':
                 // eslint-disable-next-line spellcheck/spell-checker
-                this._actionsManager.createResourceUnassigningAction();
+                this._actionsManager?.createResourceUnassigningAction();
                 break;
             case 'onResourceUnassigned':
                 // eslint-disable-next-line spellcheck/spell-checker
-                this._actionsManager.createResourceUnassignedAction();
+                this._actionsManager?.createResourceUnassignedAction();
                 break;
             case 'onCustomCommand':
-                this._actionsManager.createCustomCommandAction();
+                this._actionsManager?.createCustomCommandAction();
                 break;
             case 'onContextMenuPreparing':
-                this._actionsManager.createContextMenuPreparingAction();
+                this._actionsManager?.createContextMenuPreparingAction();
                 break;
             case 'allowSelection':
                 this._ganttTreeList?.setOption('selection.mode', GanttHelper.getSelectionMode(args.value));
@@ -631,27 +631,27 @@ class Gantt extends Widget {
                 this._updateContextMenu();
                 break;
             case 'taskTooltipContentTemplate':
-                this._setGanttViewOption('taskTooltipContentTemplate', this._ganttTemplatesManager.getTaskTooltipContentTemplateFunc(args.value));
+                this._setGanttViewOption('taskTooltipContentTemplate', this._ganttTemplatesManager?.getTaskTooltipContentTemplateFunc(args.value));
                 break;
             case 'taskProgressTooltipContentTemplate':
-                this._setGanttViewOption('taskProgressTooltipContentTemplate', this._ganttTemplatesManager.getTaskProgressTooltipContentTemplateFunc(args.value));
+                this._setGanttViewOption('taskProgressTooltipContentTemplate', this._ganttTemplatesManager?.getTaskProgressTooltipContentTemplateFunc(args.value));
                 break;
             case 'taskTimeTooltipContentTemplate':
-                this._setGanttViewOption('taskTimeTooltipContentTemplate', this._ganttTemplatesManager.getTaskTimeTooltipContentTemplateFunc(args.value));
+                this._setGanttViewOption('taskTimeTooltipContentTemplate', this._ganttTemplatesManager?.getTaskTimeTooltipContentTemplateFunc(args.value));
                 break;
             case 'taskContentTemplate':
-                this._setGanttViewOption('taskContentTemplate', this._ganttTemplatesManager.getTaskContentTemplateFunc(args.value));
+                this._setGanttViewOption('taskContentTemplate', this._ganttTemplatesManager?.getTaskContentTemplateFunc(args.value));
                 break;
             case 'rootValue':
                 this._ganttTreeList?.setOption('rootValue', args.value);
                 break;
             case 'width':
                 super._optionChanged(args);
-                this._sizeHelper.updateGanttWidth();
+                this._sizeHelper?.updateGanttWidth();
                 break;
             case 'height':
                 super._optionChanged(args);
-                this._sizeHelper.setGanttHeight(this._$element.height());
+                this._sizeHelper?.setGanttHeight(this._$element.height());
                 break;
             default:
                 super._optionChanged(args);
