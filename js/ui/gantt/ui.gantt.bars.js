@@ -188,7 +188,7 @@ export class GanttContextMenuBar extends Bar {
                     this._owner._executeCoreCommand(e.itemData.commandId);
                 } else {
                     if(e.itemData.name !== undefined) {
-                        this._owner._raiseCustomCommand(e.itemData.name);
+                        this._owner._actionsManager.raiseCustomCommand(e.itemData.name);
                     }
                 }
             }
