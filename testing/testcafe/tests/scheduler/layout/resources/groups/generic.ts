@@ -1,10 +1,10 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {
