@@ -856,6 +856,37 @@ describe('templates and slots', () => {
     });
     expect($('#component').children('.templates-root').length).toBe(0);
   });
+
+  it('should not re-render template if new data shadow equal', () => {
+    const template = jest.fn();
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      elementTemplate: template,
+      elementTemplatePayload: { value: 'test' },
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('elementTemplatePayload', { value: 'test' });
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('elementTemplatePayload', { value: 'newValue' });
+    expect(template).toBeCalledTimes(2);
+  });
+
+  it('should not re-render template if non-related option changed', () => {
+    const template = jest.fn();
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      elementTemplate: template,
+      elementTemplatePayload: { value: 'test' },
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('text', { value: 'test' });
+    expect(template).toBeCalledTimes(1);
+  });
 });
 
 describe('events/actions', () => {

@@ -67,15 +67,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     const { template: nextTemplate, model: nextModel } = nextProps;
 
     const sameTemplate = template === nextTemplate;
-
     if (!sameTemplate) {
       return true;
-    }
-
-    const sameModel = model === nextModel;
-
-    if (sameModel) {
-      return false;
     }
 
     if (isDefined(model) && isDefined(nextModel)) {
@@ -83,7 +76,9 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
       const { data: nextData, index: nextIndex } = nextModel;
       return index !== nextIndex || !shallowEquals(data, nextData);
     }
-    return false;
+
+    const sameModel = model === nextModel;
+    return !sameModel;
   }
 
   createEffects(): InfernoEffect[] {
