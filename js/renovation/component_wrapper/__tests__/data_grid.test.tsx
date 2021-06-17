@@ -284,6 +284,15 @@ describe('DataGrid Wrapper', () => {
       expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
     });
+
+    it('option changed to same value', () => {
+      const component: any = createDataGrid();
+      const prevProps = { selectedRowKeys: undefined };
+      component.__options = { selectedRowKeys: [{ field1: 1, field2: 2 }] };
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('selectedRowKeys', prevProps.selectedRowKeys, prevProps.selectedRowKeys);
+      expect(prevProps.selectedRowKeys).toBe(component.viewRef.prevProps.selectedRowKeys);
+    });
   });
 
   describe('_optionChanged', () => {
