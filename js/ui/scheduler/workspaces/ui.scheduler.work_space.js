@@ -55,7 +55,7 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { isDateInRange, setStartDayHour } from './utils/base';
+import { getViewStartByOptions, setStartDayHour } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1386,21 +1386,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getViewStartByOptions() {
-        if(!this.option('startDate')) {
-            return this.option('currentDate');
-        } else {
-            let startDate = dateUtils.trimTime(this._getStartViewDate());
-            const currentDate = this.option('currentDate');
-            const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
-            let endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-
-            while(!isDateInRange(currentDate, startDate, endDate, diff)) {
-                startDate = endDate;
-                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-            }
-
-            return diff > 0 ? startDate : endDate;
-        }
+        return getViewStartByOptions(
+            this.option('startDate'),
+            this.option('currentDate'),
+            this._getIntervalDuration(),
+            this._getStartViewDate(),
+        );
     }
 
     _getHeaderDate() {

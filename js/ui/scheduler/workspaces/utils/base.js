@@ -17,3 +17,20 @@ export const setStartDayHour = (date, startDayHour) => {
 
     return nextDate;
 };
+
+export const getViewStartByOptions = (startDate, currentDate, intervalDuration, startViewDate) => {
+    if(!startDate) {
+        return new Date(currentDate);
+    } else {
+        let startDate = dateUtils.trimTime(startViewDate);
+        const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
+        let endDate = new Date(startDate.getTime() + intervalDuration * diff);
+
+        while(!isDateInRange(currentDate, startDate, endDate, diff)) {
+            startDate = endDate;
+            endDate = new Date(startDate.getTime() + intervalDuration * diff);
+        }
+
+        return diff > 0 ? startDate : endDate;
+    }
+};
