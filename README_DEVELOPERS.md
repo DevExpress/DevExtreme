@@ -85,6 +85,7 @@ Please make sure that each pull request passes all automatic checks before submi
 Examples:
 
 - `Mark dxCommand as DOMComponent child (TXXXXX)`
-- `Refactor ContextMenu after T560055 fix`
+- `ContextMenu: Refactor after TXXXXX fix`
 - `Add namespace to doc comments (resolves #XXXX)`
 - `Fix editorFactory tests in IE`
+- `Map: Add custom providers support`

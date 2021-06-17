@@ -61,7 +61,7 @@ test('Click should work if a column button set using svg icon (T863635)', async 
         hint: 'svg icon',
         icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
         onClick: (): void => {
-          const global = window as any;
+          const global = window as Window & typeof globalThis & { onSvgClickCounter: number };
           if (!global.onSvgClickCounter) {
             global.onSvgClickCounter = 0;
           }

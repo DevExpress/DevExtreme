@@ -63,6 +63,8 @@ import type {
   RowRemovingEvent,
   RowUpdatedEvent,
   RowUpdatingEvent,
+  SavingEvent,
+  SavedEvent,
   RowValidatingEvent,
   SelectionChangedEvent,
   ToolbarPreparingEvent,
@@ -823,25 +825,25 @@ export class DataGridRowDragging {
   handle?: string;
 
   @Event()
-  onAdd?: (e: RowDraggingAddEvent) => any;
+  onAdd?: (e: RowDraggingAddEvent) => void;
 
   @Event()
-  onDragChange?: (e: RowDraggingChangeEvent) => any;
+  onDragChange?: (e: RowDraggingChangeEvent) => void;
 
   @Event()
-  onDragEnd?: (e: RowDraggingEndEvent) => any;
+  onDragEnd?: (e: RowDraggingEndEvent) => void;
 
   @Event()
-  onDragMove?: (e: RowDraggingMoveEvent) => any;
+  onDragMove?: (e: RowDraggingMoveEvent) => void;
 
   @Event()
-  onDragStart?: (e: RowDraggingStartEvent) => any;
+  onDragStart?: (e: RowDraggingStartEvent) => void;
 
   @Event()
-  onRemove?: (e: RowDraggingRemoveEvent) => any;
+  onRemove?: (e: RowDraggingRemoveEvent) => void;
 
   @Event()
-  onReorder?: (e: RowDraggingReorderEvent) => any;
+  onReorder?: (e: RowDraggingReorderEvent) => void;
 
   @OneWay()
   scrollSensitivity?: number;
@@ -1347,71 +1349,75 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Event() onCellClick?:
   | ((e: CellClickEvent) => any);
 
-  @Event() onCellDblClick?: (e: CellDblClickEvent) => any;
+  @Event() onCellDblClick?: (e: CellDblClickEvent) => void;
 
-  @Event() onCellHoverChanged?: (e: CellHoverChangedEvent) => any;
+  @Event() onCellHoverChanged?: (e: CellHoverChangedEvent) => void;
 
-  @Event() onCellPrepared?: (e: CellPreparedEvent) => any;
+  @Event() onCellPrepared?: (e: CellPreparedEvent) => void;
 
-  @Event() onContextMenuPreparing?: (e: ContextMenuPreparingEvent) => any;
+  @Event() onContextMenuPreparing?: (e: ContextMenuPreparingEvent) => void;
 
-  @Event() onEditingStart?: (e: EditingStartEvent) => any;
+  @Event() onEditingStart?: (e: EditingStartEvent) => void;
 
-  @Event() onEditorPrepared?: (options: EditorPreparedEvent) => any;
+  @Event() onEditorPrepared?: (options: EditorPreparedEvent) => void;
 
-  @Event() onEditorPreparing?: (e: EditorPreparingEvent) => any;
+  @Event() onEditorPreparing?: (e: EditorPreparingEvent) => void;
 
-  @Event() onExported?: (e: ExportedEvent) => any;
+  @Event() onExported?: (e: ExportedEvent) => void;
 
-  @Event() onExporting?: (e: ExportingEvent) => any;
+  @Event() onExporting?: (e: ExportingEvent) => void;
 
-  @Event() onFileSaving?: (e: FileSavingEvent) => any;
+  @Event() onFileSaving?: (e: FileSavingEvent) => void;
 
-  @Event() onFocusedCellChanged?: (e: FocusedCellChangedEvent) => any;
+  @Event() onFocusedCellChanged?: (e: FocusedCellChangedEvent) => void;
 
-  @Event() onFocusedCellChanging?: (e: FocusedCellChangingEvent) => any;
+  @Event() onFocusedCellChanging?: (e: FocusedCellChangingEvent) => void;
 
-  @Event() onFocusedRowChanged?: (e: FocusedRowChangedEvent) => any;
+  @Event() onFocusedRowChanged?: (e: FocusedRowChangedEvent) => void;
 
-  @Event() onFocusedRowChanging?: (e: FocusedRowChangingEvent) => any;
+  @Event() onFocusedRowChanging?: (e: FocusedRowChangingEvent) => void;
 
-  @Event() onRowClick?: (e: RowClickEvent) => any;
+  @Event() onRowClick?: (e: RowClickEvent) => void;
 
-  @Event() onRowDblClick?: (e: RowDblClickEvent) => any;
+  @Event() onRowDblClick?: (e: RowDblClickEvent) => void;
 
-  @Event() onRowPrepared?: (e: RowPreparedEvent) => any;
+  @Event() onRowPrepared?: (e: RowPreparedEvent) => void;
 
-  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent) => any;
+  @Event() onAdaptiveDetailRowPreparing?: (e: AdaptiveDetailRowPreparingEvent) => void;
 
-  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent) => any;
+  @Event() onDataErrorOccurred?: (e: DataErrorOccurredEvent) => void;
 
-  @Event() onInitNewRow?: (e: InitNewRowEvent) => any;
+  @Event() onInitNewRow?: (e: InitNewRowEvent) => void;
 
-  @Event() onKeyDown?: (e: KeyDownEvent) => any;
+  @Event() onKeyDown?: (e: KeyDownEvent) => void;
 
-  @Event() onRowCollapsed?: (e: RowCollapsedEvent) => any;
+  @Event() onRowCollapsed?: (e: RowCollapsedEvent) => void;
 
-  @Event() onRowCollapsing?: (e: RowCollapsingEvent) => any;
+  @Event() onRowCollapsing?: (e: RowCollapsingEvent) => void;
 
-  @Event() onRowExpanded?: (e: RowExpandedEvent) => any;
+  @Event() onRowExpanded?: (e: RowExpandedEvent) => void;
 
-  @Event() onRowExpanding?: (e: RowExpandingEvent) => any;
+  @Event() onRowExpanding?: (e: RowExpandingEvent) => void;
 
-  @Event() onRowInserted?: (e: RowInsertedEvent) => any;
+  @Event() onRowInserted?: (e: RowInsertedEvent) => void;
 
-  @Event() onRowInserting?: (e: RowInsertingEvent) => any;
+  @Event() onRowInserting?: (e: RowInsertingEvent) => void;
 
-  @Event() onRowRemoved?: (e: RowRemovedEvent) => any;
+  @Event() onRowRemoved?: (e: RowRemovedEvent) => void;
 
-  @Event() onRowRemoving?: (e: RowRemovingEvent) => any;
+  @Event() onRowRemoving?: (e: RowRemovingEvent) => void;
 
-  @Event() onRowUpdated?: (e: RowUpdatedEvent) => any;
+  @Event() onRowUpdated?: (e: RowUpdatedEvent) => void;
 
-  @Event() onRowUpdating?: (e: RowUpdatingEvent) => any;
+  @Event() onRowUpdating?: (e: RowUpdatingEvent) => void;
 
-  @Event() onRowValidating?: (e: RowValidatingEvent) => any;
+  @Event() onRowValidating?: (e: RowValidatingEvent) => void;
 
-  @Event() onSelectionChanged?: (e: SelectionChangedEvent) => any;
+  @Event() onSelectionChanged?: (e: SelectionChangedEvent) => void;
 
-  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent) => any;
+  @Event() onToolbarPreparing?: (e: ToolbarPreparingEvent) => void;
+
+  @Event() onSaving?: (e: SavingEvent) => void;
+
+  @Event() onSaved?: (e: SavedEvent) => void;
 }

@@ -667,7 +667,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, oldValue);
+                        updateFunc(newValue, row);
                     }
                     oldValue = newValue;
                 }

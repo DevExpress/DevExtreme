@@ -17,14 +17,14 @@ export function getElementLocationInternal(
 ): number {
   const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
   const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
-  const relativeLocation = containerElement[`scroll${titleize(prop)}`] + element.getBoundingClientRect()[prop] - containerElement.getBoundingClientRect()[prop];
-  const containerLocation = containerElement[`scroll${titleize(prop)}`];
+  const relativeLocation: number = containerElement[`scroll${titleize(prop)}`] - containerElement.getBoundingClientRect()[prop] + element.getBoundingClientRect()[prop];
+  const containerLocation: number = containerElement[`scroll${titleize(prop)}`];
 
-  const scrollBarSize = containerElement[`offset${dimension}`] - containerElement[`client${dimension}`];
-  const containerSize = containerElement[`offset${dimension}`];
-  const elementOffset = element[`offset${dimension}`];
-  const offsetStart = offset[prop];
-  const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
+  const scrollBarSize: number = containerElement[`offset${dimension}`] - containerElement[`client${dimension}`];
+  const containerSize: number = containerElement[`offset${dimension}`];
+  const elementOffset: number = element[`offset${dimension}`];
+  const offsetStart: number = offset[prop];
+  const offsetEnd: number = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
 
   if (relativeLocation < containerLocation + offsetStart) {
     if (elementOffset < containerSize - offsetStart - offsetEnd) {

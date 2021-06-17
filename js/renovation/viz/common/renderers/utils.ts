@@ -312,8 +312,8 @@ export const removeExtraAttrs = (html: string): string => {
   const findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi;
   const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
-  return html.replace(findTagAttrs, (_, p1, p2, p3) => {
-    p2 = (p2?.match(findStyleAndClassAttrs) || []).map((str: string) => str).join(' ');
+  return html.replace(findTagAttrs, (_, p1: string, p2: string, p3: string) => {
+    p2 = (p2?.match(findStyleAndClassAttrs) ?? []).map((str: string) => str).join(' ');
     return p1 + p2 + p3;
   });
 };

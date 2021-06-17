@@ -702,7 +702,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
-                this._toggleSafariScrolling(!args.value);
+                this._toggleSafariScrolling();
 
                 this._renderGeometry();
 

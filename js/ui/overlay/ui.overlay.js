@@ -32,6 +32,7 @@ import Resizable from '../resizable';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
+import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 const ready = readyCallbacks.add;
 const window = getWindow();
@@ -70,9 +71,6 @@ const POSITION_ALIASES = {
     'left bottom': { my: 'left bottom', at: 'left bottom' },
     'left top': { my: 'left top', at: 'left top' }
 };
-
-const realDevice = devices.real();
-const iOS = realDevice.platform === 'ios';
 
 const getElement = value => {
     if(isEvent(value)) {
@@ -504,7 +502,7 @@ const Overlay = Widget.inherit({
                     that._showAnimationProcessing = false;
                     that._isShown = true;
                     that._actions.onShown();
-                    that._toggleSafariScrolling(false);
+                    that._toggleSafariScrolling();
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -558,7 +556,7 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
-            that._toggleSafariScrolling(true);
+            that._toggleSafariScrolling();
 
             if(hidingArgs.cancel) {
                 this._isHidingActionCanceled = true;
@@ -1117,20 +1115,28 @@ const Overlay = Widget.inherit({
 
     _isContainerWindow: function() {
         const $container = this._getContainer();
-        return this._isWindow($container);
+        return this._isWindow($container) || !$container?.get(0);
     },
 
     _isAllWindowCovered: function() {
         return this._isContainerWindow() && this.option('shading');
     },
 
-    _toggleSafariScrolling: function(scrollingEnabled) {
+    _toggleSafariScrolling: function() {
+        const visible = this.option('visible');
         const $body = $(domAdapter.getBody());
-        const shouldPreventScrolling = this.option('visible')
-            && !$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        const isIosSafari = devices.real().platform === 'ios' && browser.safari;
+        const isAllWindowCovered = this._isAllWindowCovered();
+        const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
 
-        if(iOS && this._isAllWindowCovered()) {
-            if(scrollingEnabled) {
+        const shouldPreventScrolling = !isScrollingPrevented
+            && visible
+            && isAllWindowCovered;
+        const shouldEnableScrolling = isScrollingPrevented
+            && (!visible || !isAllWindowCovered || this._disposed);
+
+        if(isIosSafari) {
+            if(shouldEnableScrolling) {
                 $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
                 window.scrollTo(0, this._cachedBodyScrollTop);
                 this._cachedBodyScrollTop = undefined;
@@ -1158,7 +1164,7 @@ const Overlay = Widget.inherit({
         const isWindow = this._isWindow($container);
         const documentElement = domAdapter.getDocumentElement();
         wrapperWidth = isWindow ? documentElement.clientWidth : $container.outerWidth(),
-        wrapperHeight = isWindow ? documentElement.clientHeight : $container.outerHeight();
+        wrapperHeight = isWindow ? window.innerHeight : $container.outerHeight();
 
         this._$wrapper.css({
             width: wrapperWidth,
@@ -1303,12 +1309,12 @@ const Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
-        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
         this.callBase();
 
+        this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
@@ -1341,6 +1347,9 @@ const Overlay = Widget.inherit({
                 this._renderGeometry();
                 break;
             case 'shading':
+                this._toggleShading(this.option('visible'));
+                this._toggleSafariScrolling();
+                break;
             case 'shadingColor':
                 this._toggleShading(this.option('visible'));
                 break;
@@ -1356,6 +1365,7 @@ const Overlay = Widget.inherit({
             case 'position':
                 this._positionChangeHandled = false;
                 this._renderGeometry();
+                this._toggleSafariScrolling();
                 break;
             case 'visible':
                 this._renderVisibilityAnimate(value).done(() => {
@@ -1373,6 +1383,7 @@ const Overlay = Widget.inherit({
             case 'container':
                 this._initContainer(value);
                 this._invalidate();
+                this._toggleSafariScrolling();
                 break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();

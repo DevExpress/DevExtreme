@@ -161,10 +161,9 @@ const EditorFactoryMixin = (function() {
             const stopWatch = options.row.watch(() => {
                 dataSource = options.lookup.dataSource(options.row);
                 return dataSource && dataSource.filter;
-            }, () => {
-                selectBox.option('dataSource', dataSource);
-            }, (row) => {
+            }, (newValue, row) => {
                 options.row = row;
+                selectBox.option('dataSource', dataSource);
             });
         }
     }
