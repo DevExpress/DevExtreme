@@ -7,22 +7,13 @@ function parseOptionName(fullName: string): (string | number)[] | null {
     const match = /(.+?)\[\s*(\d+)\s*\]/g.exec(part);
 
     if (match) {
-      parts.push(match[1], parseInt(match[2], 10));
+      parts.push(match[1], match[2]);
     } else {
       parts.push(part);
     }
   });
 
-  // if any of parts contains ']' or '[' even after parsing, then it's incorrect
-  const isIncorrect = parts.some((part) => {
-    if (isString(part)) {
-      if (part.includes(']') || part.includes('[')) {
-        return true;
-      }
-    }
-
-    return false;
-  });
+  const isIncorrect = parts.some((part) => isString(part) && (part.includes(']') || part.includes('[')));
 
   return isIncorrect ? null : parts;
 }
@@ -32,6 +23,8 @@ function cloneObjectProp(
   fullNameParts: (string | number)[],
 ): Record<string, unknown> | unknown[] {
   const result = Array.isArray(value) ? [...value] : { ...value };
+
+  console.log(result);
 
   if (fullNameParts.length > 1) {
     const name = fullNameParts[0];

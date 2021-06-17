@@ -102,10 +102,20 @@ it('change object item in nested array option', () => {
 });
 
 it('change object item in double nested array option', () => {
-  const props = { item: { items: [{ value: 'item1' }] } };
-  const option = { item: { items: [{ value: 'item1 modified' }] } };
+  const objectProp = {};
+
+  const props = {
+    item: {
+      objectProp,
+      items: [{ value: 'item1' }, { value: 'item2' }],
+    },
+  };
+  const option = { item: props.item };
+  option.item.items[0].value = 'item1 modified';
 
   updatePropsImmutable(props, option, 'item', 'item.items[0].value');
 
   expect(props.item.items[0].value).toBe('item1 modified');
+  expect(props.item.items[1].value).toBe('item2');
+  expect(props.item.objectProp).toBe(objectProp);
 });
