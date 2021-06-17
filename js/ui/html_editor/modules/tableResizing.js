@@ -32,32 +32,30 @@ export default class TableResizingModule extends BaseModule {
         this._quillContainer = this.editorInstance._getQuillContainer();
 
         if(this.enabled) {
-            this.editorInstance.on('contentReady', () => {
-                this._attachResizerTimeout = setTimeout(() => {
+            this._attachResizerTimeout = setTimeout(() => {
 
-                    const $tables = this._findTables();
-                    if($tables.length) {
-                        this._createResizeFrames($tables);
-                        this._updateFramesPositions();
-                        this._updateFramesSeparators();
+                const $tables = this._findTables();
+                if($tables.length) {
+                    this._createResizeFrames($tables);
+                    this._updateFramesPositions();
+                    this._updateFramesSeparators();
 
-                        quill.on('text-change', (delta, oldContent) => {
-                            if(this._isTableChanges(delta, oldContent)) {
-                                this._removeResizeFrames();
+                    quill.on('text-change', (delta, oldContent) => {
+                        if(this._isTableChanges(delta, oldContent)) {
+                            this._removeResizeFrames();
 
-                                clearTimeout(this._attachResizerTimeout);
-                                this._attachResizerTimeout = setTimeout(() => {
-                                    this._createResizeFrames(this._findTables());
-                                    this._updateFramesPositions();
-                                    this._updateFramesSeparators();
-                                }, 100);
-                            } else {
+                            clearTimeout(this._attachResizerTimeout);
+                            this._attachResizerTimeout = setTimeout(() => {
+                                this._createResizeFrames(this._findTables());
                                 this._updateFramesPositions();
-                            }
-                        });
-                    }
-                }, 100);
-            });
+                                this._updateFramesSeparators();
+                            }, 100);
+                        } else {
+                            this._updateFramesPositions();
+                        }
+                    });
+                }
+            }, 100);
 
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
         }
