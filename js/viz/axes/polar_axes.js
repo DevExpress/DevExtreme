@@ -422,7 +422,7 @@ const circularAxes = {
         }
 
         if(constants.areLabelsOverlap(boxes[0], boxes[lastVisibleLabelIndex], labelOpt.minSpacing, constants.center)) {
-            labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].label.remove() : majorTicks[lastVisibleLabelIndex].label.remove();
+            labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].removeLabel() : majorTicks[lastVisibleLabelIndex].removeLabel();
         }
     },
 
