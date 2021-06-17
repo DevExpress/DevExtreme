@@ -258,12 +258,21 @@ export default class TableResizingModule extends BaseModule {
         }
     }
 
+    _shouldRevertOffset(direction) {
+        return direction === 'horizontal' && this.editorInstance.option('rtlEnabled');
+    }
+
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
-        const currentLineNewSize = this._startLineSize + event.offset[directionInfo.positionCoordinateName];
+        let eventOffset = event.offset[directionInfo.positionCoordinateName];
+
+        if(this._shouldRevertOffset(direction)) {
+            eventOffset = -eventOffset;
+        }
+        const currentLineNewSize = this._startLineSize + eventOffset;
 
         if(direction === 'horizontal') {
-            const nextColumnNewSize = this._nextLineSize && this._nextLineSize - event.offset[directionInfo.positionCoordinateName];
+            const nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
             const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
             const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
 
