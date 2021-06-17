@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { getPathParts } from '../../core/utils/data';
-import Component from './common/component';
 import Component, { ComponentWrapperProps } from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
