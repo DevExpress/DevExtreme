@@ -13,6 +13,7 @@ import { convertRulesToOptions } from '../../../../../core/options/utils';
 import devices from '../../../../../core/devices';
 import { current } from '../../../../../ui/themes';
 import { hasWindow } from '../../../../../core/utils/window';
+import { getPathParts } from '../../../../../core/utils/data';
 
 interface Mock extends jest.Mock {}
 
@@ -448,8 +449,8 @@ describe('DataGrid', () => {
     ${'editing.editColumnName'}
     ${'searchPanel.text'}
     `('$propName property should be assigned on optionChanged event call', ({ fullName }) => {
-      const name = fullName.split('.')[0];
-      const propName = fullName.split('.')[1];
+      const name = getPathParts(fullName)[0];
+      const propName = getPathParts(fullName)[1];
       const prevValue = null;
       const newValue = {};
       const props = {
