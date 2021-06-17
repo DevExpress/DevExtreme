@@ -529,24 +529,45 @@ $transparent-border: 1px solid transparent;
 .dx-table-resize-frame {
   position: absolute;
   pointer-events: none;
+  overflow: hidden;
 
   > div {
     position: absolute;
     pointer-events: auto;
     background-color: transparent;
+
+    &.dx-draggable-dragging {
+      &::after {
+        content: '';
+        position: absolute;
+      }
+    }
   }
 
   .dx-htmleditor-column-resizer {
-    width: 3px;
+    width: 5px;
     top: 0;
     height: 100%;
     cursor: col-resize;
+
+    &::after {
+      width: 3px;
+      top: 0;
+      left: 1px;
+      height: 100%;
+    }
   }
 
   .dx-htmleditor-row-resizer {
-    height: 3px;
+    height: 5px;
     left: 0;
     width: 100%;
     cursor: row-resize;
+
+    &::after {
+      height: 3px;
+      top: 1px;
+      width: 100%;
+    }
   }
 }

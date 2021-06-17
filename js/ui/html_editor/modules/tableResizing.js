@@ -16,7 +16,9 @@ const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 const DEFAULT_MIN_COLUMN_WIDTH = 40;
 
-const DRAGGABLE_ELEMENT_OFFSET = 1;
+const TIMEOUT = 100;
+
+const DRAGGABLE_ELEMENT_OFFSET = 2;
 
 const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
 
@@ -31,6 +33,7 @@ export default class TableResizingModule extends BaseModule {
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
         this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
         this._quillContainer = this.editorInstance._getQuillContainer();
+        this._quillInstance = quill;
 
         if(this.enabled) {
             this._attachResizerTimeout = setTimeout(() => {
@@ -41,25 +44,38 @@ export default class TableResizingModule extends BaseModule {
                     this._updateFramesPositions();
                     this._updateFramesSeparators();
 
-                    eventsEngine.on(this.editorInstance._getContent(), SCROLL_EVENT, this._updateFramesPositions.bind(this));
-                    quill.on('text-change', (delta, oldContent) => {
-                        if(this._isTableChanges(delta, oldContent)) {
-                            this._removeResizeFrames();
-
-                            clearTimeout(this._attachResizerTimeout);
-                            this._attachResizerTimeout = setTimeout(() => {
-                                this._createResizeFrames(this._findTables());
-                                this._updateFramesPositions();
-                                this._updateFramesSeparators();
-                            }, 100);
-                        } else {
-                            this._updateFramesPositions();
-                        }
-                    });
+                    this._attachEvents();
                 }
-            }, 100);
+            }, TIMEOUT);
 
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+        }
+    }
+
+    _attachEvents() {
+        eventsEngine.on(this.editorInstance._getContent(), SCROLL_EVENT, this._updateFramesPositions.bind(this));
+
+        this._quillTextChangeHandler = this._getQuillTextChangeHandler.bind(this);
+        this._quillInstance.on('text-change', this._quillTextChangeHandler);
+    }
+
+    _detachEvents() {
+        eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
+        this._quillInstance.off('text-change', this._quillTextChangeHandler);
+    }
+
+    _getQuillTextChangeHandler(delta, oldContent) {
+        if(this._isTableChanges(delta, oldContent)) {
+            this._removeResizeFrames();
+
+            clearTimeout(this._attachResizerTimeout);
+            this._attachResizerTimeout = setTimeout(() => {
+                this._createResizeFrames(this._findTables());
+                this._updateFramesPositions();
+                this._updateFramesSeparators();
+            }, TIMEOUT);
+        } else {
+            this._updateFramesPositions();
         }
     }
 
@@ -118,12 +134,12 @@ export default class TableResizingModule extends BaseModule {
 
     _removeResizeFrames() {
         each(this._tableResizeFrames, (index, $item) => {
-            this._detachEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
+            this._detachSeparatorEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
             $item.$frame.remove();
         });
     }
 
-    _detachEvents($lineSeparators) {
+    _detachSeparatorEvents($lineSeparators) {
         $lineSeparators.each((i, $lineSeparator) => {
             eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
         });
@@ -354,6 +370,7 @@ export default class TableResizingModule extends BaseModule {
 
     clean() {
         this._removeResizeFrames();
+        this._detachEvents();
 
         _windowResizeCallbacks.remove(this._resizeHandler);
         clearTimeout(this._windowResizeTimeout);

@@ -17,7 +17,7 @@ const DX_DRAGGABLE_CLASS = 'dx-draggable';
 
 const TIME_TO_WAIT = 200;
 
-const DRAGGABLE_ELEMENT_OFFSET = 1;
+const DRAGGABLE_ELEMENT_OFFSET = 2;
 
 const tableMarkup = '\
     <table>\

@@ -334,6 +334,8 @@
 
 .dx-table-resize-frame {
   > .dx-draggable-dragging {
-    background-color: color.change($base-accent, $alpha: 0.5);
+    &::after {
+      background-color: color.change($base-accent, $alpha: 0.5);
+    }
   }
 }
