@@ -4,15 +4,13 @@ import Component, { ComponentWrapperProps } from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
-import type { TemplateComponent } from './common/types';
+import type { TemplateComponent, Option } from './common/types';
 import type { OptionChangedEvent } from '../../ui/data_grid';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
 
-let dataGridClass: {
-  defaultOptions: (options: unknown) => void;
-} | undefined = undefined;
+let dataGridClass: { defaultOptions: (options: unknown) => void } | null = null;
 
 /* istanbul ignore next: temporary workaround */
 // TODO remove when defaultOptionRules initialization problem will be fixed
@@ -79,7 +77,6 @@ export default class DataGridWrapper extends Component {
     return handler;
   }
 
-  /* istanbul ignore next: TODO Vitik */
   _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
     super._optionChanging(fullName, prevValue, value);
     if (this.viewRef && prevValue !== value) {
@@ -90,11 +87,10 @@ export default class DataGridWrapper extends Component {
     }
   }
 
-  /* istanbul ignore next: TODO Vitik */
-  _optionChanged(e): void {
-    const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance?.();
-    if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
-      gridInstance?.option('dataSource', e.value);
+  _optionChanged(e: Option): void {
+    const internalInstance = this._getInternalInstance();
+    if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
+      internalInstance.option('dataSource', e.value as string);
     }
     super._optionChanged(e);
   }
