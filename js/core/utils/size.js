@@ -186,10 +186,6 @@ export const elementSize = function(el, sizeProperty, value) {
         return getSize(el, propName, include);
     }
 
-    if(value === undefined || value === null) {
-        return null;
-    }
-
     if(isNumeric(value)) {
         const elementStyles = window.getComputedStyle(el);
         const sizeAdjustment = getElementBoxParams(propName, elementStyles);

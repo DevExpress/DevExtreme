@@ -98,7 +98,7 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
     return undefined;
   }
 
-  public onHandleResizeStart(event: DragStartEvent): undefined {
+  public onHandleResizeStart(event: DragStartEvent): void {
     this.isResizing = true;
     this.props.onResizeStart?.(event);
     // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-explicit-any
@@ -106,14 +106,14 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
     return undefined;
   }
 
-  public onHandleResize(event: DragEvent): undefined {
+  public onHandleResize(event: DragEvent): void {
     const { onResize } = this.props;
     onResize?.(event);
     triggerResizeEvent(this.mainRef.current);
     return undefined;
   }
 
-  public onHandleResizeEnd(event: Event): undefined {
+  public onHandleResizeEnd(event: Event): void {
     this.isResizing = false;
     this.props.onResizeEnd?.(event);
     return undefined;
