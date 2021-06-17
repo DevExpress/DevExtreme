@@ -3105,7 +3105,7 @@ QUnit.test('Add extra ticks (endOnTick) for extend visualRange and hide overlapp
     });
 
     assert.deepEqual(chart._argumentAxes[0].visualRange(), { startValue: 11, endValue: 25 }, 'extend visualRange');
-    assert.equal(chart._argumentAxes[0]._majorTicks[14].label.element.clientWidth, 0, 'hidden label');
+    assert.strictEqual(chart._argumentAxes[0]._majorTicks[14].label, null, 'hidden label');
 });
 
 QUnit.test('Set/reset the visualRange by API methods', function(assert) {
