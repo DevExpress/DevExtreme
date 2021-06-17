@@ -964,9 +964,23 @@ module('Resizing integration', {
     });
 
     test('Resizing should works correctly after widgets content vertical scrolling', function(assert) {
-        this.createWidget();
+        this.createWidget({
+            value: '1<br>' + tableMarkup + '1<br>' + '1<br>' + '1<br>' + '1<br>' + '1<br>',
+            height: 80
+        });
         this.clock.tick(TIME_TO_WAIT);
 
+        const $editorContent = this.instance._getContent();
+        $editorContent.get(0).scrollTop = 25;
+        $($editorContent).trigger('scroll');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+        const tablePosition = getBoundingRect(this.$element.find('table').get(0));
+        const framePosition = getBoundingRect($resizeFrame.get(0));
+
+        assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
     });
 
     test('Resizing should works correctly if the table has thead elements', function(assert) {

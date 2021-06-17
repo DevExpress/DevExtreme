@@ -21,6 +21,7 @@ const DRAGGABLE_ELEMENT_OFFSET = 1;
 const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
 
 const POINTERDOWN_EVENT = addNamespace('dxpointerdown', MODULE_NAMESPACE);
+const SCROLL_EVENT = addNamespace('scroll', MODULE_NAMESPACE);
 
 export default class TableResizingModule extends BaseModule {
     constructor(quill, options) {
@@ -40,6 +41,7 @@ export default class TableResizingModule extends BaseModule {
                     this._updateFramesPositions();
                     this._updateFramesSeparators();
 
+                    eventsEngine.on(this.editorInstance._getContent(), SCROLL_EVENT, this._updateFramesPositions.bind(this));
                     quill.on('text-change', (delta, oldContent) => {
                         if(this._isTableChanges(delta, oldContent)) {
                             this._removeResizeFrames();
