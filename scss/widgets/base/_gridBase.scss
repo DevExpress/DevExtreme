@@ -1084,15 +1084,15 @@
       }
     }
 
-    .dx-#{$widget-name}-headers,
-    .dx-#{$widget-name}-rowsview,
-    .dx-#{$widget-name}-total-footer {
-      direction: ltr;
+    // .dx-#{$widget-name}-headers,
+    // .dx-#{$widget-name}-rowsview,
+    // .dx-#{$widget-name}-total-footer {
+    //   direction: ltr;
 
-      .dx-#{$widget-name}-table {
-        direction: rtl;
-      }
-    }
+    //   .dx-#{$widget-name}-table {
+    //     direction: rtl;
+    //   }
+    // }
 
     .dx-#{$widget-name}-filter-row {
       .dx-editor-cell .dx-editor-with-menu {
