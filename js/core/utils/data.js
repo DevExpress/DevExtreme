@@ -59,9 +59,7 @@ export const compileGetter = function(expr) {
     }
 
     if(typeof expr === 'string') {
-        expr = bracketsToDots(expr);
-
-        const path = expr.split('.');
+        const path = getPathParts(expr);
 
         return function(obj, options) {
             options = prepareOptions(options);
