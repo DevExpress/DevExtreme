@@ -2718,6 +2718,13 @@ export interface ColumnLookup {
    * @default undefined
    */
   valueExpr?: string
+  /**
+   * @docid GridBaseColumn.lookup.calculateCellValue
+   * @type_function_param1 rowData:object
+   * @type_function_return any
+   * @public
+   */
+  calculateCellValue?: ((rowData: any) => any);
 }
 
 /**
