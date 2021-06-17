@@ -93,8 +93,8 @@ export default class ViewDataProvider {
     }
 
     getCellData(rowIndex, columnIndex, isAllDay) {
-        if(isAllDay && this.viewDataMap.allDayPanelMap) {
-            return this.viewDataMap.allDayPanelMap[columnIndex];
+        if(isAllDay && !this._options.isVerticalGrouping) {
+            return this.viewDataMap.allDayPanelMap[columnIndex].cellData;
         }
 
         const { dateTableMap } = this.viewDataMap;
