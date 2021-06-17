@@ -69,7 +69,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl).png`),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`),
       ).ok();
     }
 
@@ -100,7 +100,7 @@ const createScheduler = async (
       // Another bug in RTL in month view
       if (crossScrollingEnabled || view.type !== 'month') {
         await t.expect(
-          await takeScreenshot(`material-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl).png`),
+          await takeScreenshot(`material-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`),
         ).ok();
       }
     }
