@@ -10831,7 +10831,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSlideOut.toggleMenuVisibility(showing)]
          */
-        toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
+        toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
      * [descr:dxSlideOutItem]
@@ -10890,9 +10890,9 @@ declare module DevExpress.ui {
          */
         showMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * [descr:dxSlideOutView.toggleMenuVisibility()]
+         * [descr:dxSlideOutView.toggleMenuVisibility(showing)]
          */
-        toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+        toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
      * [descr:dxSlider.Options]
