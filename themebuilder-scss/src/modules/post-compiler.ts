@@ -25,7 +25,7 @@ export function addInfoHeader(
   if (source.startsWith(encoding)) {
     return `${encoding}\n${header}${source.replace(`${encoding}\n`, '')}`;
   }
-  return header + css;
+  return `${header}${css}`;
 }
 
 export async function cleanCss(css: string): Promise<string> {

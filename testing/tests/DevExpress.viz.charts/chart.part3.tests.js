@@ -77,6 +77,8 @@ QUnit.test('Create Horizontal Category Axis, Vertical Continuous axis', function
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
+    assert.ok(chart._argumentAxes[0]._labelsAxesGroup);
+    assert.ok(chart.getValueAxis()._labelsAxesGroup);
     const argumentAxis = chart._argumentAxes[0];
 
     assert.ok(argumentAxis.getOptions().categories, 'Categories should be assigned');

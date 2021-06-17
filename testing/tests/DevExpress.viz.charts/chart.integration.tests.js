@@ -2487,6 +2487,7 @@ const VALIDATE_CHART_GROUPS = [
     'dxc-strips-labels-group',
     'dxc-constant-lines-group',
     'dxc-series-group',
+    'dxc-elements-axes-group',
     'dxc-constant-lines-group',
     'dxc-scale-breaks',
     'dxc-labels-group',
@@ -2503,6 +2504,23 @@ const VALIDATE_PIECHART_GROUPS = [
     'dxc-legend',
     'dxc-hole-template',
     'dxc-annotations'
+];
+
+const VALIDATE_POLARCHART_GROUPS = [
+    'dxc-background',
+    'dxc-strips-group',
+    'dxc-grids-group',
+    'dxc-axes-group',
+    'dxc-elements-axes-group',
+    'dxc-strips-labels-group',
+    'dxc-constant-lines-group',
+    'dxc-series-group',
+    'dxc-constant-lines-group',
+    'dxc-scale-breaks',
+    'dxc-labels-group',
+    'dxc-crosshair-cursor',
+    'dxc-legend',
+    'dxc-annotations',
 ];
 
 QUnit.test('Legend inside position', function(assert) {
@@ -3320,6 +3338,37 @@ QUnit.test('Correct canvas for inverted value axis', function(assert) {
 
     assert.roughEqual(canvas.endPadding, 0, 0.5);
     assert.roughEqual(canvas.startPadding, 10.5, 0.5);
+});
+
+QUnit.test('groups order', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 0,
+        val: 4
+    }, {
+        arg: 90,
+        val: 5
+    }, {
+        arg: 180,
+        val: 7
+    }, {
+        arg: 270,
+        val: 0
+    }, {
+        arg: 360,
+        val: 10
+    }];
+
+    const chart = this.createPolarChart({
+        dataSource: dataSource,
+        series: { type: 'line' },
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    checkOrder(assert, groups, VALIDATE_POLARCHART_GROUPS);
 });
 
 QUnit.module('T576725', $.extend({}, moduleSetup, {

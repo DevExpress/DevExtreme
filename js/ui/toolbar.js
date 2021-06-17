@@ -292,10 +292,6 @@ const Toolbar = ToolbarBase.inherit({
             case 'submenuType':
                 this._invalidate();
                 break;
-            case 'visible':
-                this.callBase.apply(this, arguments);
-                this._menuStrategy.handleToolbarVisibilityChange(value);
-                break;
             case 'menuItemTemplate':
                 this._changeMenuOption('itemTemplate', this._getTemplate(value));
                 break;

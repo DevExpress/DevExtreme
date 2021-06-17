@@ -21,8 +21,8 @@ export class GroupedDataMapProvider {
         const lastRow = this.getLastGroupRow(groupIndex);
 
         if(lastRow) {
-            const lastCellIndex = lastRow.length - 1;
-            const { cellData } = lastRow[lastCellIndex];
+            const lastColumnIndex = lastRow.length - 1;
+            const { cellData } = lastRow[lastColumnIndex];
             const { endDate } = cellData;
 
             return endDate;
@@ -36,8 +36,8 @@ export class GroupedDataMapProvider {
 
         const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
 
-        const checkCellStartDate = (rowIndex, cellIndex) => {
-            const { cellData } = groupData[rowIndex][cellIndex];
+        const checkCellStartDate = (rowIndex, columnIndex) => {
+            const { cellData } = groupData[rowIndex][columnIndex];
             const {
                 startDate: secondMin,
                 endDate: secondMax
@@ -54,9 +54,9 @@ export class GroupedDataMapProvider {
         };
         const searchVertical = () => {
             const cellCount = groupData[0].length;
-            for(let cellIndex = 0; cellIndex < cellCount; ++cellIndex) {
+            for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
                 for(let rowIndex = 0; rowIndex < groupData.length; ++rowIndex) {
-                    const result = checkCellStartDate(rowIndex, cellIndex);
+                    const result = checkCellStartDate(rowIndex, columnIndex);
                     if(result) return result;
                 }
             }
@@ -64,8 +64,8 @@ export class GroupedDataMapProvider {
         const searchHorizontal = () => {
             for(let rowIndex = 0; rowIndex < groupData.length; ++rowIndex) {
                 const row = groupData[rowIndex];
-                for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
-                    const result = checkCellStartDate(rowIndex, cellIndex);
+                for(let columnIndex = 0; columnIndex < row.length; ++columnIndex) {
+                    const result = checkCellStartDate(rowIndex, columnIndex);
                     if(result) return result;
                 }
             }
@@ -119,8 +119,8 @@ export class GroupedDataMapProvider {
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];
 
-            for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
-                const cell = row[cellIndex];
+            for(let columnIndex = 0; columnIndex < row.length; ++columnIndex) {
+                const cell = row[columnIndex];
                 const { cellData } = cell;
 
                 if(this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {

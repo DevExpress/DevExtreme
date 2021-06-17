@@ -121,7 +121,7 @@ describe('Native > Effects', () => {
     [-1, -2, -3],
   ]))('Emit "scroll" event, forceGeneratePockets: %o, refreshStrategy: %o, pullDownEnabled: %o, pocketState: %o, useSimulatedScrollbar: %s, isReachBottom: %s, scrollLocation: %o,  prevLocationTop: %s,',
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState,
-      useSimulatedScrollbar, isReachBottom, scrollLocation, prevLocationTop) => {
+      useSimulatedScrollbar, isReachBottom, scrollLocation, prevLocationTop: number) => {
       const event = {
         ...defaultEvent,
         stopImmediatePropagation: jest.fn(),
@@ -166,7 +166,7 @@ describe('Native > Effects', () => {
       const expectedPullDownIconAngle = 0;
       let onReachBottomCalled = false;
 
-      const scrollDelta = prevLocationTop + scrollLocation.top;
+      const scrollDelta = prevLocationTop + (scrollLocation as { top: number }).top;
 
       if (forceGeneratePockets) {
         if (pocketState !== TopPocketState.STATE_REFRESHING) {
