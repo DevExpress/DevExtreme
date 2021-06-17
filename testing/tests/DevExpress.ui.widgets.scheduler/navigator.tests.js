@@ -373,20 +373,6 @@ QUnit.test('Calendar valueChange should notify observer', function(assert) {
     assert.equal($('.dx-popover').dxPopover('instance').option('visible'), false, 'popover is closed');
 });
 
-QUnit.test('Scheduler navigator should have specific duration setting for \'agenda\' view', function(assert) {
-    this.instance.option({
-        step: 'agenda'
-    });
-
-    this.instance.invoke = function(subject) {
-        if(subject === 'getAgendaDuration') {
-            return 5;
-        }
-    };
-
-    assert.equal(this.instance._getConfig().duration, 5, 'duration');
-});
-
 QUnit.test('Caption should be OK for \'agenda\' view if agendaDuration = 1', function(assert) {
     this.instance.invoke = function(subject) {
         if(subject === 'getAgendaDuration') {
