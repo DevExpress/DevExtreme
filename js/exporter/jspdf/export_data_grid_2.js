@@ -48,13 +48,9 @@ function exportDataGrid(doc, dataGrid, options) {
                             pdfCell.colSpan = cellMerging.colspan;
                         }
                     } else if(rowType === 'group') {
-                        if(cellData.cellSourceData.groupSummaryItems?.length > 0) {
-                            pdfCell._summaryItem = true;
-                        }
-
                         if(cellIndex > 0) {
-                            const prevCellsHaveSummaryItems = currentRow.slice(1).filter(pdfCell => pdfCell._summaryItem).length > 0;
-                            if(!pdfCell._summaryItem && !prevCellsHaveSummaryItems) {
+                            const prevCellsHaveSummaryItems = currentRow.slice(1).filter(pdfCell => isDefined(pdfCell.text)).length > 0;
+                            if(!isDefined(pdfCell.text) && !prevCellsHaveSummaryItems) {
                                 for(let i = 0; i < currentRow.length; i++) {
                                     currentRow[i].colSpan = currentRow.length;
                                 }
