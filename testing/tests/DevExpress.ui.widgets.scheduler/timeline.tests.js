@@ -1283,7 +1283,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1334,7 +1334,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1410,7 +1410,7 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1478,7 +1478,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineWeek', function(assert) {
             this.createInstance({}, TIMELINE_WEEK.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 
@@ -1505,7 +1505,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineMonth', function(assert) {
             this.createInstance({}, TIMELINE_MONTH.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 
