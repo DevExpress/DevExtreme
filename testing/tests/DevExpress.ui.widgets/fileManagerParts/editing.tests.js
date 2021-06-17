@@ -1741,4 +1741,47 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok(this.wrapper.getDeleteItemDialog().hasClass('dx-rtl'));
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');
     });
+
+    test('treeView state must be independent for the folders pane and the copy/move dialog: move files via toolbar (T1004864)', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
+        this.$element.dxFileManager('option', {
+            selectionMode: 'multiple',
+            itemView: {
+                showFolders: false
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(0).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are 4 nodes');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 2, 'there are 2 node toggles');
+
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), false, '\'Folder 1\' toggle is closed');
+
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is ensabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
+
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), null, '\'Folder 3\' toggle is absent');
+
+        renderer.fn.width = originalFunc;
+    });
 });
