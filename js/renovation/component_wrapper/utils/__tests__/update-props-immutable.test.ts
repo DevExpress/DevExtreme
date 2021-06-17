@@ -66,16 +66,6 @@ it('change array option', () => {
   expect(props.dataSource).toBe(dataSource);
 });
 
-it('wrong array index', () => {
-  const dataSource = [];
-
-  const option = { dataSource };
-  const props = { dataSource: option.dataSource };
-  updatePropsImmutable(props, option, 'dataSource', 'dataSource["a"]');
-
-  expect(props.dataSource).toBe(dataSource);
-});
-
 it('change item in nested array option', () => {
   const nestedArray = [{ nestedProp: 'item1' }, { nestedProp: 'item2' }, { nestedProp: 'item3' }];
 
@@ -99,4 +89,23 @@ it('change object item in nested array option', () => {
 
   expect(props.nestedArray).not.toBe(nestedArray);
   expect(props.nestedArray[1]).toBe('item2 modified');
+});
+
+it('change object item in double nested array option', () => {
+  const objectProp = {};
+
+  const props = {
+    item: {
+      objectProp,
+      items: [{ value: 'item1' }, { value: 'item2' }],
+    },
+  };
+  const option = { item: props.item };
+  option.item.items[0].value = 'item1 modified';
+
+  updatePropsImmutable(props, option, 'item', 'item.items[0].value');
+
+  expect(props.item.items[0].value).toBe('item1 modified');
+  expect(props.item.items[1].value).toBe('item2');
+  expect(props.item.objectProp).toBe(objectProp);
 });

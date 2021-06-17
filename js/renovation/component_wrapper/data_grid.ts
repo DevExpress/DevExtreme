@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { getPathParts } from '../../core/utils/data';
 import Component, { ComponentWrapperProps } from './common/component';
 import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
@@ -82,7 +83,7 @@ export default class DataGridWrapper extends Component {
   _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
     super._optionChanging(fullName, prevValue, value);
     if (this.viewRef && prevValue !== value) {
-      const name = fullName.split(/[.[]/)[0];
+      const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
       updatePropsImmutable(prevProps, this.option(), name, fullName);
       (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
