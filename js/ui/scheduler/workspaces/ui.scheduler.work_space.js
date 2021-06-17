@@ -156,7 +156,7 @@ const formatWeekday = function(date) {
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
-            this._viewDataProvider = new ViewDataProvider(this);
+            this._viewDataProvider = new ViewDataProvider();
         }
         return this._viewDataProvider;
     }
@@ -1111,6 +1111,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isAllDayPanelVisible: this.isAllDayPanelVisible,
             getAllDayCellData: this._getAllDayCellData.bind(this),
             isDateAndTimeView: this.isDateAndTimeView,
+            rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -1123,7 +1124,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._cleanAllowedPositions();
         this.cache.clear();
 
-        this.viewDataProvider.update(isGenerateNewViewData);
+        this.viewDataProvider.update(this.generateRenderOptions(), isGenerateNewViewData);
 
         if(this.isRenovatedRender()) {
             this.renderRHeaderPanel();
