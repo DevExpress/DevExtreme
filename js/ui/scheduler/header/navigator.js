@@ -340,13 +340,15 @@ export const Navigator = Widget.inherit({
         const { startDate, endDate } = getInterval(options);
 
         const captionFormatter = this._getCaptionFormatter(startDate, endDate);
-        const text = this._getCaptionText(captionFormatter, startDate, endDate);
+        let text = this._getCaptionText(captionFormatter, startDate, endDate);
 
         const customizationFunction = this.option('customizeDateNavigatorText');
 
-        return isFunction(customizationFunction)
-            ? customizationFunction({ startDate, endDate, text })
-            : text;
+        if(isFunction(customizationFunction)) {
+            text = customizationFunction({ startDate, endDate, text });
+        }
+
+        return { startDate, endDate, text };
     },
 
     _renderCaption: function() {
@@ -355,7 +357,7 @@ export const Navigator = Widget.inherit({
         const caption = this._getCaption(date);
 
         this._caption.option({
-            text: caption,
+            text: caption.text,
             onKeyboardHandled: opts => {
                 this.option('focusStateEnabled') &&
                     !this.option('disabled') &&
