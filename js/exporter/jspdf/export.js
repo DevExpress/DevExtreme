@@ -90,7 +90,7 @@ export const Export = {
 
         const internalComponent = component._getInternalInstance?.() || component;
         const initialLoadPanelOptions = extend({}, internalComponent.option('loadPanel'));
-        if('animation' in component.option('loadPanel')) {
+        if('animation' in internalComponent.option('loadPanel')) {
             loadPanel.animation = null;
         }
 

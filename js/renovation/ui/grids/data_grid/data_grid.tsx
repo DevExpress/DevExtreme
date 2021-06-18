@@ -22,7 +22,6 @@ import { DisposeEffectReturn } from '../../../utils/effect_return';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
 import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';
-import browser from '../../../../core/utils/browser';
 import { isMaterial, current } from '../../../../ui/themes';
 
 const aria = { role: 'presentation' };
@@ -122,45 +121,7 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
     },
   },
 },
-{
-  device: (): boolean => browser.webkit,
-  options: {
-    loadingTimeout: 30, // T344031
-    loadPanel: {
-      animation: {
-        show: {
-          easing: 'cubic-bezier(1, 0, 1, 0)',
-          duration: 500,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          from: { opacity: 0 } as any,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          to: { opacity: 1 } as any,
-        },
-      },
-    },
-  },
-}]);
-
-/**
- *
- * device: function() {
-                    return browser.webkit;
-                },
-                options: {
-                    loadingTimeout: 30, // T344031
-                    loadPanel: {
-                        animation: {
-                            show: {
-                                easing: 'cubic-bezier(1, 0, 1, 0)',
-                                duration: 500,
-                                from: { opacity: 0 },
-                                to: { opacity: 1 }
-                            }
-                        }
-                    }
-                }
- */
-
+]);
 @Component({
   defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
