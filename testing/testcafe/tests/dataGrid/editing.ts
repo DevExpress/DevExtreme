@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
@@ -140,9 +142,9 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -192,9 +194,9 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -254,9 +256,9 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -304,8 +306,8 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(true);
+        setTimeout(() => {
+          d.resolve(true);
         }, 1000);
         return d.promise();
       },
@@ -356,9 +358,9 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -413,9 +415,9 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -483,9 +485,9 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -532,8 +534,8 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(false);
+        setTimeout(() => {
+          d.resolve(false);
         }, 50);
         return d.promise();
       },
@@ -571,8 +573,8 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(false);
+        setTimeout(() => {
+          d.resolve(false);
         }, 50);
         return d.promise();
       },
@@ -607,8 +609,8 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(false);
+        setTimeout(() => {
+          d.resolve(false);
         }, 50);
         return d.promise();
       },
@@ -643,8 +645,8 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
       type: 'async',
       validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(false);
+        setTimeout(() => {
+          d.resolve(false);
         }, 50);
         return d.promise();
       },
@@ -705,9 +707,9 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -770,9 +772,9 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -855,9 +857,9 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
@@ -917,18 +919,18 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
       type: 'async',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          if (params.value === 1) await d.resolve(true);
-          else await d.reject();
+        setTimeout(() => {
+          if (params.value === 1) d.resolve(true);
+          else d.reject();
         }, 1000);
         return d.promise();
       },
     }],
     setCellValue(rowData, value): JQueryPromise<unknown> {
       const d = $.Deferred();
-      setTimeout(async () => {
+      setTimeout(() => {
         rowData.age = value;
-        await d.resolve();
+        d.resolve();
       }, 1200);
       return d.promise();
     },
@@ -1393,8 +1395,8 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
       message: 'Invalid value',
       validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
-        setTimeout(async () => {
-          await d.resolve(params.data.name.length < 2);
+        setTimeout(() => {
+          d.resolve(params.data.name.length < 2);
         }, 1000);
         return d.promise();
       },
