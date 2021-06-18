@@ -301,7 +301,7 @@ export const Navigator = Widget.inherit({
     _getIntervalOptions: function() {
         const step = this.option('step');
         const intervalCount = this.option('intervalCount');
-        const firstDayOfWeek = this.option('firstDayOfWeek') || 0; // иногда бывает undefined
+        const firstDayOfWeek = this.option('firstDayOfWeek') || 0; // TODO
         let agendaDuration = this.invoke('getAgendaDuration');
         agendaDuration = agendaDuration ? agendaDuration : 7;
         agendaDuration = agendaDuration === '0' ? 7 : agendaDuration;
