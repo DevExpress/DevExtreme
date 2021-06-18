@@ -79,6 +79,28 @@ describe('DartClient tests', () => {
     expect(reply).toEqual({ error: 'Unable to parse dart server response: test' });
   });
 
+  test('"send" method - wrong reply: no error should be raised if error occurs in dispose', async () => {
+    const longData = [...Array(100000).keys()].join('');
+    const testData = {
+      index: '',
+      file: '',
+      data: longData,
+      items: [{ key: '', value: '' }],
+    };
+    await startServer(false);
+    const client = new DartClient();
+    await client.check();
+    expect(client.isServerAvailable).toBe(true);
+    const originalClientDispose = client.dispose;
+    client.dispose = () => { throw new Error(); };
+    try {
+      expect(async () => { await client.send(testData); }).not.toThrow();
+    } finally {
+      await originalClientDispose();
+      await stopServer();
+    }
+  });
+
   test('"send" method (server stopped while send)', async () => {
     const testData = {
       index: '',
