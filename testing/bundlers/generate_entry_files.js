@@ -2,19 +2,23 @@ const fs = require('fs');
 const path = require('path');
 
 const modulesMetadataFilePath = path.join(__dirname, '../../build/gulp/modules_metadata.json');
-const modulesCjsFilePath = path.join(__dirname, './entry/modules_cjs.js');
-const modulesEsmFilePath = path.join(__dirname, './entry/modules_esm.js');
 
-const globalizeCjs = 'const Globalize = require("globalize");';
-const globalizeEsm = 'import Globalize from "globalize";';
+const filePaths = {
+    cjs: path.join(__dirname, './entry/modules_cjs.js'),
+    esm: path.join(__dirname, './entry/modules_esm.js')
+};
 
-const excludedModules = new Set(['core/set_template_engine', 'data/utils', 'viz/export', 'ui/overlay']);
+const excludedModules = new Set([
+    'core/set_template_engine',
+    'data/utils',
+    'ui/overlay',
+    'viz/export']);
 
 const pathToName = (path) => {
     return path.replace(/(\/|_)+(\w)/g, (...args) => args[2].toUpperCase());
 };
 
-const importTemplate = {
+const importTemplates = {
     cjs: {
         empty: (modulePath) => `require('devextreme/${modulePath}');`,
         default: (modulePath) => `require('devextreme/${modulePath}');`,
@@ -27,23 +31,34 @@ const importTemplate = {
     }
 };
 
-const cjsImportsBag = [ globalizeCjs ];
-const esmImportsBag = [ globalizeEsm ];
+const importsBags = {
+    cjs: [ 'const Globalize = require("globalize");' ],
+    esm: [ 'import Globalize from "globalize";' ]
+};
 
-const addModule = (module) => {
-    const exports = module.exports;
-    if(exports) {
-        for(const moduleExport in exports) {
-            const type = exports[moduleExport].exportAs === 'type';
-            if(!type) {
-                const importType = moduleExport === 'default' ? moduleExport : 'named';
-                cjsImportsBag.push(importTemplate.cjs[importType](module.name, moduleExport));
-                esmImportsBag.push(importTemplate.esm[importType](module.name, moduleExport));
-            }
+const pushToBags = ({ name, moduleExport, type }) => {
+    [ 'cjs', 'esm' ].forEach((standard) => {
+        importsBags[standard].push(importTemplates[standard][type](name, moduleExport));
+    });
+};
+
+const addModule = ({ name, exports }) => {
+    if(!exports) {
+        pushToBags({ name, type: 'empty' });
+        return;
+    }
+
+    for(const moduleExport in exports) {
+        const skipModule = exports[moduleExport].exportAs === 'type';
+        if(skipModule) {
+            continue;
         }
-    } else {
-        cjsImportsBag.push(importTemplate.cjs.empty(module.name));
-        esmImportsBag.push(importTemplate.esm.empty(module.name));
+
+        pushToBags({
+            name,
+            moduleExport,
+            type: moduleExport === 'default' ? moduleExport : 'named'
+        });
     }
 };
 
@@ -56,5 +71,10 @@ JSON.parse(modulesMetadata).forEach((moduleMetadata) => {
     }
 });
 
-fs.writeFileSync(modulesCjsFilePath, cjsImportsBag.join('\n'));
-fs.writeFileSync(modulesEsmFilePath, esmImportsBag.join('\n'));
+const writeToFiles = () => {
+    [ 'cjs', 'esm' ].forEach((standard) => {
+        fs.writeFileSync(filePaths[standard], importsBags[standard].join('\n'));
+    });
+};
+
+writeToFiles();
