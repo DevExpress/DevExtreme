@@ -14,7 +14,7 @@ import Popup from '../../popup';
 import publisherMixin from '../publisher_mixin';
 import dateLocalization from '../../../localization/date';
 import Scrollable from '../../scroll_view/ui.scrollable';
-import { getInterval, getNextDate, getDuration } from './utils';
+import { getInterval, getNextIntervalDate, getDuration } from './utils';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -207,7 +207,7 @@ export const Navigator = Widget.inherit({
         const date = initialDate || this.option('date');
         const options = { ...this._getIntervalOptions(), date };
 
-        return getNextDate(options, direction);
+        return getNextIntervalDate(options, direction);
     },
 
     _renderFocusTarget: noop,

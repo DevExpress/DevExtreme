@@ -24,15 +24,15 @@ const addMS = (date) => {
     return addDateInterval(date, MS_DURATION, 1);
 };
 
-const nextDayStart = (date) => {
+const nextDay = (date) => {
     return addDateInterval(date, DAY_DURATION, 1);
 };
 
-const nextWeekStart = (date) => {
+const nextWeek = (date) => {
     return addDateInterval(date, WEEK_DURATION, 1);
 };
 
-const nextMonthStart = (date) => {
+const nextMonth = (date) => {
     const days = getLastMonthDay(date);
 
     return addDateInterval(date, { days }, 1);
@@ -45,7 +45,7 @@ const isWeekend = (date) => {
 const getWorkWeekStart = (firstDayOfWeek) => {
     let date = new Date(firstDayOfWeek);
     while(isWeekend(date)) {
-        date = nextDayStart(date);
+        date = nextDay(date);
     }
 
     return date;
@@ -60,7 +60,7 @@ const getDateAfterWorkWeek = (workWeekStart) => {
             workedDays++;
         }
 
-        date = nextDayStart(date);
+        date = nextDay(date);
     }
 
     return date;
@@ -120,13 +120,13 @@ const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
 
     switch(step) {
         case 'day':
-            date = nextDayStart(currentPeriodStartDate);
+            date = nextDay(currentPeriodStartDate);
             break;
         case 'week':
-            date = nextWeekStart(currentPeriodStartDate);
+            date = nextWeek(currentPeriodStartDate);
             break;
         case 'month':
-            date = nextMonthStart(currentPeriodStartDate);
+            date = nextMonth(currentPeriodStartDate);
             break;
         case 'workWeek':
             date = getDateAfterWorkWeek(currentPeriodStartDate);
@@ -144,14 +144,14 @@ const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
 
     if(step === 'workWeek') {
         while(isWeekend(date)) {
-            date = nextDayStart(date);
+            date = nextDay(date);
         }
     }
 
     return date;
 };
 
-export const getNextDate = (options, direction) => {
+export const getNextIntervalDate = (options, direction) => {
     const { date, step, intervalCount, agendaDuration } = options;
 
     let dayDuration;
@@ -167,13 +167,13 @@ export const getNextDate = (options, direction) => {
             dayDuration = agendaDuration;
             break;
         case 'month':
-            return getNextDateMonth(date, intervalCount, direction);
+            return getNextMonthDate(date, intervalCount, direction);
     }
 
     return addDateInterval(date, { days: dayDuration }, direction);
 };
 
-const getNextDateMonth = (date, intervalCount, direction) => {
+const getNextMonthDate = (date, intervalCount, direction) => {
     const currentDate = date.getDate();
 
     const currentMonthFirstDate = new Date(new Date(date.getTime()).setDate(1));
