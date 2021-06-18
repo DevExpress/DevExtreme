@@ -555,7 +555,7 @@ QUnit.test('Range selector with stacked series', function(assert) {
 // T1003570
 QUnit.test('Remove overlapped labels. Semidiscrete scale. Right side', function(assert) {
     const container = $('#container');
-    container.width(855).dxRangeSelector({
+    container.width(950).dxRangeSelector({
         scale: {
             startValue: new Date('1995-01-01T21:00:00.000Z'),
             endValue: new Date('1995-12-31T21:00:00.000Z'),
@@ -585,7 +585,7 @@ QUnit.test('Remove overlapped labels. Semidiscrete scale. Right side', function(
 // T1003570
 QUnit.test('Remove overlapped labels. Semidiscrete scale. Left side', function(assert) {
     const container = $('#container');
-    container.width(855).dxRangeSelector({
+    container.width(950).dxRangeSelector({
         scale: {
             startValue: new Date('1994-12-31T11:00:00.000Z'),
             endValue: new Date('1995-12-31T21:00:00.000Z'),
