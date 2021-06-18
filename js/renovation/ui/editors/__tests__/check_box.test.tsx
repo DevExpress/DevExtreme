@@ -308,7 +308,7 @@ describe('CheckBox', () => {
           describe('Click', () => {
             it('should change value by Widget click', () => {
               const checkBox = new CheckBox({
-                value: false,
+                value: null,
               });
               checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(true);
