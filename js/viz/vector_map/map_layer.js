@@ -1581,7 +1581,6 @@ MapLayerCollection.prototype = {
     setOptions(options) {
         const that = this;
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
-        let layerByName = that._layerByName;
         let layers = that._layers;
         let readyCallbacks = [];
         const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
@@ -1592,7 +1591,7 @@ MapLayerCollection.prototype = {
         if(needToCreateLayers) {
             that._params.tracker.reset();
             that._layers.forEach(l => l.dispose());
-            that._layerByName = layerByName = {};
+            const layerByName = that._layerByName = {};
             that._layers = layers = [];
             for(let i = 0, ii = optionList.length; i < ii; ++i) {
                 const name = getName(optionList, i) || ('map-layer-' + i);

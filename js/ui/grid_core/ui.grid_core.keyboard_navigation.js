@@ -1106,7 +1106,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const editingController = this._editingController;
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
 
-            if(!this.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
+            if(isCellEditMode && editingController.hasChanges()) {
                 editingController._focusEditingCell();
                 return;
             }

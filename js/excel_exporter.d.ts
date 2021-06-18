@@ -1,5 +1,5 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
@@ -12,8 +12,9 @@ export interface ExcelDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public
