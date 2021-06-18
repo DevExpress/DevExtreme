@@ -22,7 +22,7 @@ function exportDataGrid(doc, dataGrid, options) {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
-            const rowsIndents = [];
+            const rowsGroups = [];
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
 
@@ -30,7 +30,13 @@ function exportDataGrid(doc, dataGrid, options) {
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
-                const groupLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
+                let groupLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
+                if(rowsGroups.length > 0) {
+                    const prevRowGroup = rowsGroups[rowsGroups.length - 1];
+                    if(prevRowGroup.rowType === 'groupFooter') {
+                        groupLevel = prevRowGroup.groupLevel - 1;
+                    }
+                }
 
                 const currentRow = [];
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
@@ -83,10 +89,10 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                rowsIndents.push(groupLevel * options.indent);
-                const startNewTableWithIndent = rowsIndents.length >= 2 && rowsIndents[rowsIndents.length - 1] !== rowsIndents[rowsIndents.length - 2];
+                rowsGroups.push({ rowType, groupLevel });
+                const startNewTableWithIndent = rowsGroups.length >= 2 && rowsGroups[rowsGroups.length - 1].groupLevel !== rowsGroups[rowsGroups.length - 2].groupLevel;
                 if(startNewTableWithIndent) {
-                    const indent = rowsIndents[rowsIndents.length - 1];
+                    const indent = rowsGroups[rowsGroups.length - 1].groupLevel * options.indent;
                     const prevTable = pdfGrid._currentHorizontalTables[0];
                     const firstColumnWidth = options.columnWidths[0] - indent;
                     const tableTopLeft = {
