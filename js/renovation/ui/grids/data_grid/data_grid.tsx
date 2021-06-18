@@ -22,6 +22,7 @@ import { DisposeEffectReturn } from '../../../utils/effect_return';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
 import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';
+import browser from '../../../../core/utils/browser';
 import { isMaterial, current } from '../../../../ui/themes';
 
 const aria = { role: 'presentation' };
@@ -120,7 +121,45 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
       useIcons: true,
     },
   },
+},
+{
+  device: (): boolean => browser.webkit,
+  options: {
+    loadingTimeout: 30, // T344031
+    loadPanel: {
+      animation: {
+        show: {
+          easing: 'cubic-bezier(1, 0, 1, 0)',
+          duration: 500,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          from: { opacity: 0 } as any,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          to: { opacity: 1 } as any,
+        },
+      },
+    },
+  },
 }]);
+
+/**
+ *
+ * device: function() {
+                    return browser.webkit;
+                },
+                options: {
+                    loadingTimeout: 30, // T344031
+                    loadPanel: {
+                        animation: {
+                            show: {
+                                easing: 'cubic-bezier(1, 0, 1, 0)',
+                                duration: 500,
+                                from: { opacity: 0 },
+                                to: { opacity: 1 }
+                            }
+                        }
+                    }
+                }
+ */
 
 @Component({
   defaultOptionRules,
@@ -505,6 +544,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.getScrollbarWidth(isHorizontal);
   }
 
+  @Method()
+  getDataProvider(selectedRowsOnly: boolean): any {
+    return this.instance?.getDataProvider(selectedRowsOnly);
+  }
+
   // #endregion
 
   @Effect() updateOptions(): void {
@@ -586,7 +630,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
       if (e.fullName === 'focusedColumnIndex') {
         this.props.focusedColumnIndex = e.value as number;
       }
-      if (e.fullName === 'filterValue') {
+      if (e.fullName === 'filterValue' && this.props.filterValue !== e.value) {
         this.props.filterValue = e.value as string;
       }
       if (e.fullName === 'selectedRowKeys') {

@@ -9,7 +9,7 @@ import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import 'generic_light.css!';
 
@@ -92,7 +92,7 @@ QUnit.module('Simple grid', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
             columns: [{ dataField: 'prop1', caption: 'f1' }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -116,7 +116,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: [{ caption: 'f1' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -138,7 +138,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             const done = assert.async();
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{ caption: 'f1', visible: config.visible }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = config.visible
@@ -162,7 +162,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             const done = assert.async();
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{ caption: 'f1', allowExporting: config.allowExporting }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = config.allowExporting
@@ -183,7 +183,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             const done = assert.async();
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{ caption: 'f1', alignment: alignment }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = {
@@ -250,7 +250,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 keyExpr: 'f1',
                 columns: [{ caption: 'f1', width: 50 }, { caption: 'f2' }],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 width: 500
             }).dxDataGrid('instance');
             const options = {
@@ -285,7 +285,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             keyExpr: 'f1',
             columns: [{ caption: 'f1', visible: false }, { caption: 'f2' }, { caption: 'f3' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 500
         }).dxDataGrid('instance');
         const options = {
@@ -315,7 +315,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             keyExpr: 'f1',
             columns: [{ caption: 'f1' }, { caption: 'f2', visible: false }, { caption: 'f3' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 500
         }).dxDataGrid('instance');
         const options = {
@@ -348,7 +348,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 { caption: 'f1', visibleIndex: 1 },
                 { caption: 'f2', visibleIndex: 0 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 500
         }).dxDataGrid('instance');
         const options = {
@@ -382,7 +382,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 { caption: 'f2', visibleIndex: 1, visible: false },
                 { caption: 'f3', visibleIndex: 0 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 500
         }).dxDataGrid('instance');
         const options = {
@@ -416,7 +416,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 { caption: 'f2', visibleIndex: 1, allowExporting: false },
                 { caption: 'f3', visibleIndex: 0 }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 500
         }).dxDataGrid('instance');
         const options = {
@@ -448,7 +448,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
             columns: [{ dataField: 'f1', caption: 'f1' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -474,7 +474,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', caption: 'f1', encodeHtml: encodeHtml }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = {
@@ -498,7 +498,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         const ds = [{ f1: '@123', f2: '=123', f3: '-123', f4: '+123' }];
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -535,7 +535,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
                 pageIndex: 2
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -561,7 +561,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         const ds = [{ f1: 'text1_1', f2: 'text1_2' }, { f1: 'text2_1', f2: 'text2_2' }];
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -593,7 +593,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
             rtlEnabled: true,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -622,7 +622,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
             columns: [ 'f1', { dataField: 'f2', alignment: 'right' }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -657,7 +657,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             dataSource: ds,
             wordWrapEnabled: true,
             columns: [ 'f1', { dataField: 'f2', alignment: 'right' }],
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -700,7 +700,7 @@ QUnit.module('Column data types', moduleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{ dataField: 'f1', dataType: config.dataType }],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = {
@@ -745,7 +745,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -782,7 +782,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                     { dataField: 'f1', dataType: config.dataType }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -818,7 +818,7 @@ QUnit.module('Column data types', moduleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{ dataField: 'f1', dataType: config.dataType }],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -853,7 +853,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 { dataType: 'string', calculateCellValue: () => 'str1' },
                 { dataType: 'string', calculateCellValue: () => 'str2' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -892,7 +892,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 { dataType: 'number', calculateCellValue: () => Number.NEGATIVE_INFINITY }
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -951,7 +951,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 columns: [{ dataField: 'f1', dataType: 'datetime', format: config.format }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = {
@@ -985,7 +985,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'percent', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1022,7 +1022,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'fixedPoint', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1059,7 +1059,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'decimal', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1096,7 +1096,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'exponential', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1133,7 +1133,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'largeNumber', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1170,7 +1170,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'thousands', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1207,7 +1207,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'millions', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1244,7 +1244,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'billions', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1281,7 +1281,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f5', dataType: 'number', format: { type: 'trillions', precision: 6 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1319,7 +1319,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 { dataField: 'f6', dataType: 'number', format: { type: 'currency', precision: 5 } },
             ],
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1357,7 +1357,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', caption: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1394,7 +1394,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                         { caption: 'f2', dataField: 'f2', dataType: 'string' }
                     ],
                     remoteOperations: remoteOperations,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = {
@@ -1432,7 +1432,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1467,7 +1467,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1500,7 +1500,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', caption: 'f2', width: 150 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1544,7 +1544,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1578,7 +1578,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ],
             wordWrapEnabled: true,
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1619,7 +1619,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             wordWrapEnabled: true,
             dataSource: ds,
             rtlEnabled: true,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1656,7 +1656,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false,
             selectedRowKeys: [ds[0]]
         }).dxDataGrid('instance');
@@ -1688,7 +1688,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false,
             selectedRowKeys: [ds[1]]
         }).dxDataGrid('instance');
@@ -1720,7 +1720,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', dataType: 'string' }
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false,
             selectedRowKeys: [ds[0], ds[1]]
         }).dxDataGrid('instance');
@@ -1753,7 +1753,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -1790,7 +1790,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false,
             selectedRowKeys: [ds[1]]
         }).dxDataGrid('instance');
@@ -1825,7 +1825,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false,
             selectedRowKeys: [ds[1]]
         }).dxDataGrid('instance');
@@ -1863,7 +1863,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max' }]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1901,7 +1901,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max', customizeText: (cell) => 'custom' }]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1944,7 +1944,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -1987,7 +1987,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2028,7 +2028,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 groupItems: [{ name: 'GroupItems 1', column: 'f3', summaryType: 'max' }, { name: 'GroupItems 2', column: 'f3', summaryType: 'count' }]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2073,7 +2073,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2132,7 +2132,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2179,7 +2179,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2223,7 +2223,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0, allowExporting: false },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2267,7 +2267,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', width: 250, groupIndex: 0 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2309,7 +2309,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2351,7 +2351,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', width: 500, groupIndex: 0 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2393,7 +2393,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                 { dataField: 'f4', caption: 'f4', dataType: 'string', width: 300, groupIndex: 0 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2443,7 +2443,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2495,7 +2495,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2544,7 +2544,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2593,7 +2593,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2642,7 +2642,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2689,7 +2689,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2738,7 +2738,7 @@ QUnit.module('Group summary', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -2788,7 +2788,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2833,7 +2833,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2877,7 +2877,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             wordWrapEnabled: false,
             rtlEnabled: true,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2929,7 +2929,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             },
             wordWrapEnabled: true,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -2979,7 +2979,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             selectedRowKeys: [ds[1]]
         }).dxDataGrid('instance');
 
@@ -3025,7 +3025,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f1', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3071,7 +3071,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f2', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3116,7 +3116,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f3', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3162,7 +3162,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f1', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3208,7 +3208,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f2', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3254,7 +3254,7 @@ QUnit.module('Total summary', moduleConfig, () => {
                     { column: 'f3', summaryType: 'max' }
                 ]
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -3295,7 +3295,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3335,7 +3335,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3378,7 +3378,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3426,7 +3426,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3477,7 +3477,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3539,7 +3539,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3592,7 +3592,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3635,7 +3635,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3677,7 +3677,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ],
             dataSource: ds,
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3719,7 +3719,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 { dataField: 'f4', width: 200 },
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3764,7 +3764,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 { dataField: 'f4', visible: false, width: 150 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3807,7 +3807,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3854,7 +3854,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3905,7 +3905,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -3958,7 +3958,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4009,7 +4009,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4058,7 +4058,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4111,7 +4111,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4162,7 +4162,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4215,7 +4215,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 }
             ],
             dataSource: ds,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
 
         const expectedCells = {
@@ -4255,7 +4255,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { caption: 'f1', dataType: 'string' },
                 { caption: 'f2', dataType: 'string' }
             ],
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
         const options = {
             customizeCell: (options) => {
@@ -4295,7 +4295,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { dataField: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
         const options = {
@@ -4337,7 +4337,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { dataField: 'f2', caption: 'f2', dataType: 'string' },
             ],
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
         const options = {
@@ -4392,7 +4392,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 ]
             },
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
         const options = {
@@ -4456,7 +4456,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 ]
             },
             showColumnHeaders: false,
-            loadingTimeout: undefined
+            loadingTimeout: null
         }).dxDataGrid('instance');
         const options = {
             customizeCell: (options) => {
@@ -4496,6 +4496,6 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: null }).dxDataGrid('instance'), 'jsPDFDocument');
 
 

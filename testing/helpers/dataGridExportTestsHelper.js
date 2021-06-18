@@ -1,6 +1,6 @@
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { isDefined } from 'core/utils/type';
@@ -26,7 +26,7 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
     const done = assert.async();
     const actualArgs = [];
 
-    options.loadingTimeout = undefined;
+    options.loadingTimeout = null;
     options.export = options.export || {};
 
     if(getExpectedArgs) {

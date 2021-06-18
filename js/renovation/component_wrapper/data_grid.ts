@@ -4,7 +4,7 @@ import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent } from './common/types';
-import type { OptionChangedEvent } from '../../ui/data_grid';
+import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
 
 export default class DataGridWrapper extends Component {
   static registerModule = gridCore.registerModule.bind(gridCore);
@@ -92,6 +92,16 @@ export default class DataGridWrapper extends Component {
     // eslint-disable-next-line no-param-reassign
     options.onInitialized = this._onInitialized;
 
+    const exportOptions = options.export as Export;
+    const originalCustomizeExcelCell = exportOptions?.customizeExcelCell;
+
+    if (originalCustomizeExcelCell) {
+      exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (e as any).component = this;
+        return originalCustomizeExcelCell(e);
+      };
+    }
     return super._patchOptionValues(options);
   }
 

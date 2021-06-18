@@ -11,7 +11,7 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/tag_box';
 
 import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
