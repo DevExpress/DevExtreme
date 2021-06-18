@@ -300,12 +300,18 @@ export default class TableResizingModule extends BaseModule {
             const nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
             const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
             const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
+            const $lineElements = frame.$table.find('td:nth-child(' + (1 + index) + ')');
+            const $nextLineElements = frame.$table.find('td:nth-child(' + (2 + index) + ')');
 
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-                $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
+                $lineElements.each((i, element) => {
+                    $(element).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
+                });
 
                 if(this._nextLineSize) {
-                    $determinantElements.eq(index + 1).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
+                    $nextLineElements.each((i, element) => {
+                        $(element).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
+                    });
                 }
             }
         } else {
