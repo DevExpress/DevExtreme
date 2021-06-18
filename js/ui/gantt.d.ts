@@ -19,7 +19,7 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    dxTreeListColumn,
+    Column,
 } from './tree_list';
 
 import Widget, {
@@ -249,10 +249,11 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     allowSelection?: boolean;
     /**
      * @docid
+     * @type Array<dxTreeListColumn|string>
      * @default undefined
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<Column | string>;
     /**
      * @docid
      * @default null

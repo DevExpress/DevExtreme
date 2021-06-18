@@ -3347,7 +3347,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelDataGridCell.column]
      */
-    column?: DevExpress.ui.dxDataGridColumn;
+    column?: DevExpress.ui.dxDataGrid.Column;
     /**
      * [descr:ExcelDataGridCell.data]
      */
@@ -3954,7 +3954,7 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfDataGridCell.column]
      */
-    column?: DevExpress.ui.dxDataGridColumn;
+    column?: DevExpress.ui.dxDataGrid.Column;
     /**
      * [descr:PdfDataGridCell.data]
      */
@@ -5585,91 +5585,7 @@ declare module DevExpress.ui {
       readonly watch?: Function;
       readonly oldValue?: any;
     };
-    /**
-     * [descr:dxDataGridColumn]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Column extends ColumnBase {
-      /**
-       * [descr:dxDataGridColumn.allowExporting]
-       */
-      allowExporting?: boolean;
-      /**
-       * [descr:dxDataGridColumn.allowGrouping]
-       */
-      allowGrouping?: boolean;
-      /**
-       * [descr:dxDataGridColumn.autoExpandGroup]
-       */
-      autoExpandGroup?: boolean;
-      /**
-       * [descr:dxDataGridColumn.buttons]
-       */
-      buttons?: Array<
-        'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | ColumnButton
-      >;
-      /**
-       * [descr:dxDataGridColumn.calculateGroupValue]
-       */
-      calculateGroupValue?: string | ((rowData: any) => any);
-      /**
-       * [descr:dxDataGridColumn.cellTemplate]
-       */
-      cellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.columns]
-       */
-      columns?: Array<Column | string>;
-      /**
-       * [descr:dxDataGridColumn.editCellTemplate]
-       */
-      editCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnEditCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.groupCellTemplate]
-       */
-      groupCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnGroupCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.groupIndex]
-       */
-      groupIndex?: number;
-      /**
-       * [descr:dxDataGridColumn.headerCellTemplate]
-       */
-      headerCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            columnHeader: DevExpress.core.DxElement,
-            headerInfo: ColumnHeaderCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxDataGridColumn.showWhenGrouped]
-       */
-      showWhenGrouped?: boolean;
-      /**
-       * [descr:dxDataGridColumn.type]
-       */
-      type?:
-        | 'adaptive'
-        | 'buttons'
-        | 'detailExpand'
-        | 'groupExpand'
-        | 'selection';
-    }
+    export type Column = dxDataGridColumn;
     /**
      * [descr:GridBaseColumn]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5927,49 +5843,7 @@ declare module DevExpress.ui {
        */
       width?: number | string;
     }
-    /**
-     * [descr:dxDataGridColumnButton]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnButton extends ColumnButtonBase {
-      /**
-       * [descr:dxDataGridColumnButton.name]
-       */
-      name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
-      /**
-       * [descr:dxDataGridColumnButton.onClick]
-       */
-      onClick?: (e: ColumnButtonClickEvent) => void;
-      /**
-       * [descr:dxDataGridColumnButton.template]
-       */
-      template?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnButtonTemplateData
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:dxDataGridColumnButton.visible]
-       */
-      visible?:
-        | boolean
-        | ((options: {
-            component?: dxDataGrid;
-            row?: RowObject;
-            column?: Column;
-          }) => boolean);
-      /**
-       * [descr:dxDataGridColumnButton.disabled]
-       */
-      disabled?:
-        | boolean
-        | ((options: {
-            component?: dxDataGrid;
-            row?: RowObject;
-            column?: Column;
-          }) => boolean);
-    }
+    export type ColumnButton = dxDataGridColumnButton;
     /**
      * [descr:GridBaseColumnButton]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7763,13 +7637,140 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * @deprecated 
+   * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxDataGridColumn = DevExpress.ui.dxDataGrid.Column;
+  export interface dxDataGridColumn
+    extends DevExpress.ui.dxDataGrid.ColumnBase {
+    /**
+     * [descr:dxDataGridColumn.allowExporting]
+     */
+    allowExporting?: boolean;
+    /**
+     * [descr:dxDataGridColumn.allowGrouping]
+     */
+    allowGrouping?: boolean;
+    /**
+     * [descr:dxDataGridColumn.autoExpandGroup]
+     */
+    autoExpandGroup?: boolean;
+    /**
+     * [descr:dxDataGridColumn.buttons]
+     */
+    buttons?: Array<
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete'
+      | DevExpress.ui.dxDataGrid.ColumnButton
+    >;
+    /**
+     * [descr:dxDataGridColumn.calculateGroupValue]
+     */
+    calculateGroupValue?: string | ((rowData: any) => any);
+    /**
+     * [descr:dxDataGridColumn.cellTemplate]
+     */
+    cellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.columns]
+     */
+    columns?: Array<DevExpress.ui.dxDataGrid.Column | string>;
+    /**
+     * [descr:dxDataGridColumn.editCellTemplate]
+     */
+    editCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnEditCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.groupCellTemplate]
+     */
+    groupCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnGroupCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.groupIndex]
+     */
+    groupIndex?: number;
+    /**
+     * [descr:dxDataGridColumn.headerCellTemplate]
+     */
+    headerCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          columnHeader: DevExpress.core.DxElement,
+          headerInfo: DevExpress.ui.dxDataGrid.ColumnHeaderCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridColumn.showWhenGrouped]
+     */
+    showWhenGrouped?: boolean;
+    /**
+     * [descr:dxDataGridColumn.type]
+     */
+    type?:
+      | 'adaptive'
+      | 'buttons'
+      | 'detailExpand'
+      | 'groupExpand'
+      | 'selection';
+  }
   /**
-   * @deprecated 
+   * @deprecated Use the DataGrid's ColumnButton type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxDataGridColumnButton = DevExpress.ui.dxDataGrid.ColumnButton;
+  export interface dxDataGridColumnButton
+    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    /**
+     * [descr:dxDataGridColumnButton.name]
+     */
+    name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    /**
+     * [descr:dxDataGridColumnButton.onClick]
+     */
+    onClick?: (e: DevExpress.ui.dxDataGrid.ColumnButtonClickEvent) => void;
+    /**
+     * [descr:dxDataGridColumnButton.template]
+     */
+    template?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxDataGrid.ColumnButtonTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxDataGridColumnButton.visible]
+     */
+    visible?:
+      | boolean
+      | ((options: {
+          component?: dxDataGrid;
+          row?: DevExpress.ui.dxDataGrid.RowObject;
+          column?: DevExpress.ui.dxDataGrid.Column;
+        }) => boolean);
+    /**
+     * [descr:dxDataGridColumnButton.disabled]
+     */
+    disabled?:
+      | boolean
+      | ((options: {
+          component?: dxDataGrid;
+          row?: DevExpress.ui.dxDataGrid.RowObject;
+          column?: DevExpress.ui.dxDataGrid.Column;
+        }) => boolean);
+  }
   /**
    * @deprecated 
    */
@@ -12768,7 +12769,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.columns]
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
     /**
      * [descr:dxGanttOptions.dependencies]
      */
@@ -16909,6 +16910,7 @@ declare module DevExpress.ui {
     ): void;
   }
   module dxScheduler {
+    export type Appointment = dxSchedulerAppointment;
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
         readonly appointmentData: dxSchedulerAppointment;
@@ -17036,7 +17038,7 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * [descr:dxSchedulerAppointment]
+   * @deprecated Use the Scheduler's Appointment type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSchedulerAppointment extends CollectionWidgetItem {
@@ -17236,7 +17238,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<dxSchedulerAppointment>
+      | Array<DevExpress.ui.dxScheduler.Appointment>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -19743,110 +19745,8 @@ declare module DevExpress.ui {
         readonly watch?: Function;
         readonly oldValue?: any;
       };
-    /**
-     * [descr:dxTreeListColumn]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Column extends DevExpress.ui.dxDataGrid.ColumnBase {
-      /**
-       * [descr:dxTreeListColumn.buttons]
-       */
-      buttons?: Array<
-        | 'add'
-        | 'cancel'
-        | 'delete'
-        | 'edit'
-        | 'save'
-        | 'undelete'
-        | ColumnButton
-      >;
-      /**
-       * [descr:dxTreeListColumn.cellTemplate]
-       */
-      cellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.columns]
-       */
-      columns?: Array<Column | string>;
-      /**
-       * [descr:dxTreeListColumn.editCellTemplate]
-       */
-      editCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnEditCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.headerCellTemplate]
-       */
-      headerCellTemplate?:
-        | DevExpress.core.template
-        | ((
-            columnHeader: DevExpress.core.DxElement,
-            headerInfo: ColumnHeaderCellTemplateData
-          ) => any);
-      /**
-       * [descr:dxTreeListColumn.type]
-       */
-      type?: 'adaptive' | 'buttons';
-    }
-    /**
-     * [descr:dxTreeListColumnButton]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ColumnButton
-      extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
-      /**
-       * [descr:dxTreeListColumnButton.name]
-       */
-      name?:
-        | 'add'
-        | 'cancel'
-        | 'delete'
-        | 'edit'
-        | 'save'
-        | 'undelete'
-        | string;
-      /**
-       * [descr:dxTreeListColumnButton.onClick]
-       */
-      onClick?: (e: ColumnButtonClickEvent) => void;
-      /**
-       * [descr:dxTreeListColumnButton.template]
-       */
-      template?:
-        | DevExpress.core.template
-        | ((
-            cellElement: DevExpress.core.DxElement,
-            cellInfo: ColumnButtonTemplateData
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:dxTreeListColumnButton.visible]
-       */
-      visible?:
-        | boolean
-        | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: RowObject;
-            readonly column: Column;
-          }) => boolean);
-      /**
-       * [descr:dxTreeListColumnButton.disabled]
-       */
-      disabled?:
-        | boolean
-        | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: RowObject;
-            readonly column: Column;
-          }) => boolean);
-    }
+    export type Column = dxTreeListColumn;
+    export type ColumnButton = dxTreeListColumnButton;
     export type ColumnButtonClickEvent =
       DevExpress.events.NativeEventInfo<dxTreeList> & {
         row?: RowObject;
@@ -20262,13 +20162,103 @@ declare module DevExpress.ui {
         DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
-   * @deprecated 
+   * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxTreeListColumn = DevExpress.ui.dxTreeList.Column;
+  export interface dxTreeListColumn
+    extends DevExpress.ui.dxDataGrid.ColumnBase {
+    /**
+     * [descr:dxTreeListColumn.buttons]
+     */
+    buttons?: Array<
+      | 'add'
+      | 'cancel'
+      | 'delete'
+      | 'edit'
+      | 'save'
+      | 'undelete'
+      | DevExpress.ui.dxTreeList.ColumnButton
+    >;
+    /**
+     * [descr:dxTreeListColumn.cellTemplate]
+     */
+    cellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.columns]
+     */
+    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
+    /**
+     * [descr:dxTreeListColumn.editCellTemplate]
+     */
+    editCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnEditCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.headerCellTemplate]
+     */
+    headerCellTemplate?:
+      | DevExpress.core.template
+      | ((
+          columnHeader: DevExpress.core.DxElement,
+          headerInfo: DevExpress.ui.dxTreeList.ColumnHeaderCellTemplateData
+        ) => any);
+    /**
+     * [descr:dxTreeListColumn.type]
+     */
+    type?: 'adaptive' | 'buttons';
+  }
   /**
-   * @deprecated 
+   * @deprecated Use the TreeList's ColumnButton type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxTreeListColumnButton = DevExpress.ui.dxTreeList.ColumnButton;
+  export interface dxTreeListColumnButton
+    extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
+    /**
+     * [descr:dxTreeListColumnButton.name]
+     */
+    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    /**
+     * [descr:dxTreeListColumnButton.onClick]
+     */
+    onClick?: (e: DevExpress.ui.dxTreeList.ColumnButtonClickEvent) => void;
+    /**
+     * [descr:dxTreeListColumnButton.template]
+     */
+    template?:
+      | DevExpress.core.template
+      | ((
+          cellElement: DevExpress.core.DxElement,
+          cellInfo: DevExpress.ui.dxTreeList.ColumnButtonTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxTreeListColumnButton.visible]
+     */
+    visible?:
+      | boolean
+      | ((options: {
+          readonly component: dxTreeList;
+          readonly row?: DevExpress.ui.dxTreeList.RowObject;
+          readonly column: DevExpress.ui.dxTreeList.Column;
+        }) => boolean);
+    /**
+     * [descr:dxTreeListColumnButton.disabled]
+     */
+    disabled?:
+      | boolean
+      | ((options: {
+          readonly component: dxTreeList;
+          readonly row?: DevExpress.ui.dxTreeList.RowObject;
+          readonly column: DevExpress.ui.dxTreeList.Column;
+        }) => boolean);
+  }
   /**
    * @deprecated 
    */
