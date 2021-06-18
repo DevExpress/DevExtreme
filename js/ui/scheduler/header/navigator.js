@@ -314,9 +314,9 @@ export const Navigator = Widget.inherit({
             const short = this.option('step') === 'agenda' ? this.option('_useShortDateFormat') : false;
 
             return getCaptionFormat(short, this.option('intervalCount'), getDuration(this._getIntervalOptions()));
-        } else {
-            return formatCaptionByMonths.bind(this);
         }
+
+        return formatCaptionByMonths.bind(this);
     },
 
     _getCaptionText: function(captionFormatter, startDate, endDate) {
@@ -332,9 +332,9 @@ export const Navigator = Widget.inherit({
 
                 return firstDateText + '-' + lastDateText;
             }
-        } else {
-            return captionFormatter(endDate, startDate);
         }
+
+        return captionFormatter(endDate, startDate);
     },
 
     _getCaption: function(date) {
