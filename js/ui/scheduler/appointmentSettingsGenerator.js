@@ -3,6 +3,7 @@ import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
+import { createResourcesTree } from './resources/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -37,6 +38,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
         const resourceManager = this.scheduler.fire('getResourceManager');
         const itemResources = resourceManager.getResourcesFromItem(rawAppointment);
+        const itemGroupIndices = this._getGroupIndices(itemResources, resourceManager);
 
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 
@@ -56,7 +58,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const appointmentInfos = this.createAppointmentInfos(
             gridAppointmentList,
-            itemResources,
+            itemGroupIndices,
             isAllDay,
             appointment.isRecurrent
         );
@@ -381,7 +383,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
     }
 
-    createAppointmentInfos(gridAppointments, resources, isAllDay, recurrent) {
+    createAppointmentInfos(gridAppointments, groupIndices, isAllDay, recurrent) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
@@ -389,7 +391,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
             const coordinates = this.getCoordinates({
                 appointment,
-                resources,
+                groupIndices,
                 isAllDay,
                 recurrent
             });
@@ -410,11 +412,11 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     getCoordinates(options) {
         const {
             appointment,
-            resources,
+            groupIndices,
             isAllDay
         } = options;
 
-        return this.workspace.getCoordinatesByDateInGroup(appointment.startDate, resources, isAllDay);
+        return this.workspace.getCoordinatesByDateInGroup(appointment.startDate, groupIndices, isAllDay);
     }
 
     _getAppointmentFirstViewDate(appointment, rawAppointment) {
@@ -429,13 +431,24 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
+
+    _getGroupIndices(appointmentResources, resourceManager) {
+        let result = [];
+        if(this._isGroupsSpecified(appointmentResources)) {
+            const tree = createResourcesTree(resourceManager.loadedResources);
+
+            result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
+        }
+
+        return result;
+    }
 }
 
 export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSettingsGeneratorBaseStrategy {
     get viewDataProvider() { return this.workspace.viewDataProvider; }
     get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
-    createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
+    createAppointmentInfos(gridAppointments, groupIndices, allDay, recurrent) {
         const appointments = allDay
             ? gridAppointments
             : gridAppointments.filter(({ source, startDate, endDate }) => {
@@ -445,16 +458,16 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
             });
 
         if(recurrent) {
-            return this._createRecurrentAppointmentInfos(appointments, resources, allDay);
+            return this._createRecurrentAppointmentInfos(appointments, groupIndices, allDay);
         }
 
-        return super.createAppointmentInfos(appointments, resources, allDay, recurrent);
+        return super.createAppointmentInfos(appointments, groupIndices, allDay, recurrent);
     }
     getCoordinates(options) {
         const {
             appointment,
             isAllDay,
-            resources,
+            groupIndices,
             recurrent
         } = options;
 
@@ -465,10 +478,10 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
             ? appointment.source.groupIndex
             : undefined;
 
-        return workspace.getCoordinatesByDateInGroup(startDate, resources, isAllDay, groupIndex);
+        return workspace.getCoordinatesByDateInGroup(startDate, groupIndices, isAllDay, groupIndex);
     }
 
-    _createRecurrentAppointmentInfos(gridAppointments, resources, allDay) {
+    _createRecurrentAppointmentInfos(gridAppointments, groupIndices, allDay) {
         const result = [];
 
         gridAppointments.forEach(appointment => {
@@ -550,7 +563,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     }
 
     _getGroupIndices(resources) {
-        let groupIndices = this.workspace._getGroupIndexes(resources);
+        let groupIndices = super._getGroupIndices(resources);
         const { viewDataProvider } = this.workspace;
         const viewDataGroupIndices = viewDataProvider.getGroupIndices();
 

@@ -503,6 +503,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'startDate':
                 this._cleanWorkSpace();
                 break;
+            case 'resourceManager':
             case 'groups':
                 this._cleanView();
                 this._removeAllDayElements();
@@ -2300,18 +2301,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return Math.floor((fullInterval + startDayTime) / DAY_MS);
     }
 
-    _getGroupIndexes(appointmentResources) {
-        let result = [];
-        if(this._isGroupsSpecified(appointmentResources)) {
-            const resourceManager = this.invoke('getResourceManager');
-            const tree = createResourcesTree(this.option('groups'));
-
-            result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
-        }
-
-        return result;
-    }
-
     _updateIndex(index) {
         return index * this._getRowCount();
     }
@@ -2680,22 +2669,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow, groupIndex) {
+    getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
         const result = [];
 
         if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        let groupIndices = [groupIndex];
+        const validGroupIndices = [groupIndex] || groupIndices;
 
-        if(!isDefined(groupIndex)) {
-            groupIndices = this._getGroupCount()
-                ? this._getGroupIndexes(appointmentResources)
-                : [0];
-        }
-
-        groupIndices.forEach(groupIndex => {
+        validGroupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
             coordinates && result.push(coordinates);
         });
