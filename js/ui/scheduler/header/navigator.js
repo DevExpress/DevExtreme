@@ -311,7 +311,9 @@ export const Navigator = Widget.inherit({
 
     _getCaptionFormatter: function(startDate, endDate) {
         if(dateUtils.sameDate(startDate, endDate)) {
-            return getCaptionFormat(false, this.option('intervalCount'), getDuration(this._getIntervalOptions()));
+            const short = this.option('step') === 'agenda' ? this.option('_useShortDateFormat') : false;
+
+            return getCaptionFormat(short, this.option('intervalCount'), getDuration(this._getIntervalOptions()));
         } else {
             return formatCaptionByMonths.bind(this);
         }
