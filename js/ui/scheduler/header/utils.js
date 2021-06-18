@@ -5,32 +5,37 @@ const DAYS_IN_WORK_WEEK = 5;
 const {
     correctDateWithUnitBeginning: getPeriodStart,
     getFirstWeekDate: getWeekStart,
-    getLastMonthDate,
-    getFirstMonthDate,
-    getLastMonthDay
+    getLastMonthDay,
+    addDateInterval
 } = dateUtils;
 
-const DAY_DURATION = dateUtils.dateToMilliseconds('day');
-const WEEK_DURATION = dateUtils.dateToMilliseconds('week');
+const MS_DURATION = { milliseconds: 1 };
+const DAY_DURATION = { days: 1 };
+const WEEK_DURATION = { days: 7 };
 
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
 
+const subMS = (date) => {
+    return addDateInterval(date, MS_DURATION, -1);
+};
+
+const addMS = (date) => {
+    return addDateInterval(date, MS_DURATION, 1);
+};
+
 const nextDayStart = (date) => {
-    return new Date(date.getTime() + DAY_DURATION);
+    return addDateInterval(date, DAY_DURATION, 1);
 };
 
 const nextWeekStart = (date) => {
-    return new Date(date.getTime() + WEEK_DURATION);
+    return addDateInterval(date, WEEK_DURATION, 1);
 };
 
 const nextMonthStart = (date) => {
-    const monthDuration =
-        getLastMonthDate(date).getTime()
-        - getFirstMonthDate(date).getTime()
-        + DAY_DURATION;
+    const days = getLastMonthDay(date);
 
-    return new Date(date.getTime() + monthDuration);
+    return addDateInterval(date, { days }, 1);
 };
 
 const isWeekend = (date) => {
@@ -61,11 +66,8 @@ const getDateAfterWorkWeek = (workWeekStart) => {
     return date;
 };
 
-const nextAgendaStart = (currentAgendaStartDate, agendaDuration) => {
-    return new Date(
-        currentAgendaStartDate.getTime()
-        + (agendaDuration * DAY_DURATION)
-    );
+const nextAgendaStart = (date, agendaDuration) => {
+    return addDateInterval(date, { days: agendaDuration }, 1);
 };
 
 export const getInterval = (options) => {
@@ -134,11 +136,11 @@ const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
             break;
     }
 
-    return new Date(date.getTime() - 1);
+    return subMS(date);
 };
 
 const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
-    let date = new Date(currentPeriodEndDate.getTime() + 1);
+    let date = addMS(currentPeriodEndDate);
 
     if(step === 'workWeek') {
         while(isWeekend(date)) {
@@ -168,8 +170,7 @@ export const getNextDate = (options, direction) => {
             return getNextDateMonth(date, intervalCount, direction);
     }
 
-    const duration = dayDuration * direction * DAY_DURATION;
-    return new Date(date.getTime() + duration);
+    return addDateInterval(date, { days: dayDuration }, direction);
 };
 
 const getNextDateMonth = (date, intervalCount, direction) => {
