@@ -112,6 +112,18 @@ module('Resizing integration', {
         assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
     });
 
+    test('Frame is removed if tableResizing option is disabled at runtime', function(assert) {
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('tableResizing', { enabled: false });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+        assert.strictEqual($resizeFrame.length, 0, 'Frame is created for table');
+    });
+
     test('Draggable element should be created on pointerDown event', function(assert) {
         this.createWidget();
         this.clock.tick(TIME_TO_WAIT);

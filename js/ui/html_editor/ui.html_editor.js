@@ -437,6 +437,7 @@ const HtmlEditor = Editor.inherit({
             case 'variables':
             case 'toolbar':
             case 'mentions':
+            case 'tableResizing':
             case 'customizeModules':
                 this._invalidate();
                 break;
@@ -467,13 +468,6 @@ const HtmlEditor = Editor.inherit({
                     this._invalidate();
                 } else {
                     this._quillInstance.getModule('resizing').option(args.name, args.value);
-                }
-                break;
-            case 'tableResizing':
-                if(!args.previousValue || !args.value) {
-                    this._invalidate();
-                } else {
-                    this._quillInstance.getModule('tableResizing').option(args.name, args.value);
                 }
                 break;
             case 'width':
