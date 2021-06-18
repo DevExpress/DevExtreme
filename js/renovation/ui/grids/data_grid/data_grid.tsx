@@ -73,7 +73,7 @@ export const viewFunction = ({
   restAttributes,
 }: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
-    rootElementRef={widgetElementRef as any}
+    rootElementRef={widgetElementRef}
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
     activeStateUnit={rowSelector}
@@ -148,6 +148,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   byKey(key: any | string | number): DxPromise<any> {
     return this.instance?.byKey(key);
   }
@@ -158,7 +159,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cellValue(rowIndex: number, dataField: string | number, value: any): any {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return this.instance?.cellValue(rowIndex, dataField as any, value);
   }
 
@@ -193,6 +196,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columnOption(id: number | string, optionName?: string, optionValue?: unknown): any {
     if (this.instance) {
       if (arguments.length === 1 || optionName === undefined) {
@@ -221,6 +225,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deselectRows(keys: any[]): DxPromise<any> {
     return this.instance?.deselectRows(keys);
   }
@@ -241,11 +246,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expandAdaptiveDetailRow(key: any): void {
     return this.instance?.expandAdaptiveDetailRow(key);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filter(filterExpr: any): void {
     return this.instance?.filter(filterExpr);
   }
@@ -258,21 +265,25 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any/* DxElement | undefined */ {
     return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getCombinedFilter(returnDataField?: boolean): any {
     return this.instance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getDataSource(): any /* DataSource */ {
     return this.instance?.getDataSource();
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getKeyByRowIndex(rowIndex: number): any {
     return this.instance?.getKeyByRowIndex(rowIndex);
   }
@@ -283,11 +294,13 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getRowIndexByKey(key: any | string | number): number {
     return this.instance?.getRowIndexByKey(key);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getScrollable(): any /* dxScrollable */ {
     return this.instance?.getScrollable();
   }
@@ -308,27 +321,32 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isAdaptiveDetailRowExpanded(key: any): boolean {
     return this.instance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isRowFocused(key: any): boolean {
     return this.instance?.isRowFocused(key);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isRowSelected(key: any): boolean {
     return this.instance?.isRowSelected(key);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keyOf(obj: any): any {
     return this.instance?.keyOf(obj);
   }
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/promise-function-async
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
@@ -379,12 +397,15 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   @Method()
   selectRows(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keys: any[], preserve: boolean,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): DxPromise<any> {
     return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectRowsByIndexes(indexes: number[]): DxPromise<any> {
     return this.instance?.selectRowsByIndexes(indexes);
   }
@@ -416,6 +437,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addColumn(columnOptions: any | string): void {
     return this.instance?.addColumn(columnOptions);
   }
@@ -436,6 +458,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   collapseRow(key: any): DxPromise {
     return this.instance?.collapseRow(key);
   }
@@ -446,6 +469,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expandRow(key: any): DxPromise {
     return this.instance?.expandRow(key);
   }
@@ -456,31 +480,37 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getSelectedRowKeys(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getSelectedRowsData(): any[] & DxPromise<any> {
     return this.instance?.getSelectedRowsData();
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getTotalSummaryValue(summaryItemName: string): any {
     return this.instance?.getTotalSummaryValue(summaryItemName);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
     return this.instance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getVisibleRows(): any /* dxDataGridRowObject[] */ {
     return this.instance?.getVisibleRows();
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isRowExpanded(key: any): boolean {
     return this.instance?.isRowExpanded(key);
   }
@@ -496,6 +526,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getTopVisibleRowData(): any {
     return this.instance?.getTopVisibleRowData();
   }
