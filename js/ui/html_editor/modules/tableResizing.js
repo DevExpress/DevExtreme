@@ -138,7 +138,7 @@ export default class TableResizingModule extends BaseModule {
             $item.$frame.remove();
         });
 
-        this._removeResizeFrames = [];
+        this._tableResizeFrames = [];
     }
 
     _detachSeparatorEvents($lineSeparators) {
