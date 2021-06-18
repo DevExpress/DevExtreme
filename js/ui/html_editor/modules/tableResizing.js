@@ -255,7 +255,12 @@ export default class TableResizingModule extends BaseModule {
         if(direction === 'vertical') {
             return $table.find('td:first-child');
         } else {
-            return $table.find('tr').eq(0).find('td');
+            const $thead = $table.find('thead');
+            if($thead.length) {
+                return $thead.eq(0).find('th');
+            } else {
+                return $table.find('tr').eq(0).find('td');
+            }
         }
     }
 
