@@ -118,10 +118,10 @@ export default class dxMultiView<TProperties = Properties> extends CollectionWid
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
-interface MultiViewProperties extends dxMultiViewOptions<dxMultiView<Properties>> { }
+interface MultiViewInstance extends dxMultiView<Properties> { }
 
 /** @public */
-export type Properties = MultiViewProperties;
+export type Properties = dxMultiViewOptions<MultiViewInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

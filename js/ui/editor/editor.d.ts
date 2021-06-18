@@ -98,6 +98,6 @@ export default class Editor<TProperties = Properties> extends Widget<TProperties
     reset(): void;
 }
 
-interface EditorProperties extends EditorOptions<Editor<Properties>> { }
+interface EditorInstance extends Editor<Properties> { }
 
-type Properties = EditorProperties;
+type Properties = EditorOptions<EditorInstance>;

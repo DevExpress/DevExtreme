@@ -203,6 +203,6 @@ export default class dxScrollable<TProperties = Properties> extends DOMComponent
     update(): DxPromise<void>;
 }
 
-interface ScrollableProperties extends dxScrollableOptions<dxScrollable<Properties>> { }
+interface ScrollableInstance extends dxScrollable<Properties> { }
 
-type Properties = ScrollableProperties;
+type Properties = dxScrollableOptions<ScrollableInstance>;

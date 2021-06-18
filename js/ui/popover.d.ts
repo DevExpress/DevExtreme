@@ -185,10 +185,10 @@ export default class dxPopover<TProperties = Properties> extends dxPopup<TProper
     show(target: string | UserDefinedElement): DxPromise<boolean>;
 }
 
-interface PopoverProperties extends dxPopoverOptions<dxPopover<Properties>> { }
+interface PopoverInstance extends dxPopover<Properties> { }
 
 /** @public */
-export type Properties = PopoverProperties;
+export type Properties = dxPopoverOptions<PopoverInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

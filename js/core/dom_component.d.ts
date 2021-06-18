@@ -125,9 +125,9 @@ export type ComponentClass<TProperties> = {
     getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
 }
 
-interface DOMComponentProperties extends DOMComponentOptions<DOMComponent<Properties>> { }
+interface DOMComponentInstance extends DOMComponent<Properties> { }
 
-type Properties = DOMComponentProperties;
+type Properties = DOMComponentOptions<DOMComponentInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

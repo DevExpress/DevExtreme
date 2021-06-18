@@ -97,10 +97,10 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  */
 export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> { }
 
-interface TextBoxProperties extends dxTextBoxOptions<dxTextBox<Properties>> { }
+interface TextBoxInstance extends dxTextBox<Properties> { }
 
 /** @public */
-export type Properties = TextBoxProperties;
+export type Properties = dxTextBoxOptions<TextBoxInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

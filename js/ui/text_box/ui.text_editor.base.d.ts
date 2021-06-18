@@ -314,6 +314,6 @@ export interface dxTextEditorButton {
     options?: dxButtonOptions;
 }
 
-interface TextEditorProperties extends dxTextEditorOptions<dxTextEditor<TextEditorProperties>> {}
+interface TextEditorInstance extends dxTextEditor<Properties> {}
 
-type Properties = TextEditorProperties;
+type Properties = dxTextEditorOptions<TextEditorInstance>;
