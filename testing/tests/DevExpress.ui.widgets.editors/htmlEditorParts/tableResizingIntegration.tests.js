@@ -42,8 +42,24 @@ const tableMarkup = '\
     </table>\
     <br><br>';
 
+const theadTableMarkup = '\
+    <table>\
+        <thead>\
+            <th>0_0</th>\
+            <th>0_1</th>\
+            <th>0_2</th>\
+        </thead>\
+        <tr>\
+            <td>2_0</td>\
+            <td>2_1</td>\
+            <td>2_2</td>\
+        </tr>\
+    </table>';
+
+
 function getColumnBordersOffset($table) {
     const columnBorderOffsets = [];
+
     $table.find('tr').eq(0).find('td').each((i, element) => {
         const columnWidth = $(element).outerWidth();
         if(i > 0) {
@@ -995,10 +1011,21 @@ module('Resizing integration', {
         assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
     });
 
-    test('Resizing should works correctly if the table has thead elements', function(assert) {
-        this.createWidget();
+    test('Resizing elements should be positioned correctly if the start table markup has thead elements', function(assert) {
+        this.createWidget({
+            value: theadTableMarkup
+        });
         this.clock.tick(TIME_TO_WAIT);
 
-    });
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const $table = this.$element.find('table');
+        const columnBorderOffsets = getColumnBordersOffset($table, true);
 
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+
+        assert.strictEqual($columnResizerElements.length, 2);
+    });
 });
