@@ -31,7 +31,7 @@ function exportDataGrid(doc, dataGrid, options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
                 let groupLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
-                if(rowsGroups.length > 0) {
+                if(rowType === 'groupFooter') {
                     const prevRowGroup = rowsGroups[rowsGroups.length - 1];
                     if(prevRowGroup.rowType === 'groupFooter') {
                         groupLevel = prevRowGroup.groupLevel - 1;
