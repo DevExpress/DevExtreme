@@ -12,12 +12,24 @@
         <form id="form">
             <div id="checkBox"></div>
         </form>
+        <form id="form1" style="transform: scale(1);">
+            <div id="checkBox1"></div>
+        </form>
         <script>
             $(function() {
                 const checkBox = $('#checkBox')
                     .dxCheckBox({
                         name: 'style'
                     })
+                    .dxValidator({
+                        validationRules: [{
+                            type: 'required',
+                            message: 'it is required'
+                        }]
+                    });
+
+                    const checkBox1 = $('#checkBox1')
+                    .dxCheckBox({ })
                     .dxValidator({
                         validationRules: [{
                             type: 'required',

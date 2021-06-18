@@ -581,9 +581,7 @@ class Scheduler extends Widget {
                 break;
             case 'resources':
 
-                getResourceManager(this.key).setResources(this.option('resources'));
-
-                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+                this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
                     this._appointments.option('items', []);
@@ -594,6 +592,9 @@ class Scheduler extends Widget {
             case 'startDayHour':
             case 'endDayHour':
                 this.fire('validateDayHours');
+
+                this.updateFactoryInstances();
+
                 this._appointments.option('items', []);
                 this._updateOption('workSpace', name, value);
                 this._appointments.repaint();
@@ -680,6 +681,8 @@ class Scheduler extends Widget {
                 break;
             }
             case 'showAllDayPanel':
+                this.updateFactoryInstances();
+
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption('workSpace', 'allDayExpanded', value);
@@ -944,12 +947,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this.key = createFactoryInstances({
-            scheduler: this,
-            resources: this.option('resources'),
-            dataSource: this._dataSource,
-            appointmentDataAccessors: this._dataAccessors
-        });
+        this.updateFactoryInstances();
 
         this._initActions();
 
@@ -965,6 +963,22 @@ class Scheduler extends Widget {
             getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
             getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || this.option('timeZone'), date),
             getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
+    }
+
+    updateFactoryInstances() {
+        this.key = createFactoryInstances({
+            key: this.key,
+            scheduler: this,
+            resources: this.option('resources'),
+            dataSource: this._dataSource,
+            appointmentDataAccessors: this._dataAccessors,
+            startDayHour: this._getCurrentViewOption('startDayHour'),
+            endDayHour: this._getCurrentViewOption('endDayHour'),
+            appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
+            showAllDayPanel: this.option('showAllDayPanel'),
+            timezone: this.option('timezone')
         });
     }
 
@@ -2003,42 +2017,6 @@ class Scheduler extends Widget {
         );
     }
 
-    // TODO: use for appointment model
-    _getRecurrenceException(rawAppointment) {
-        const appointment = this.createAppointmentAdapter(rawAppointment);
-        const recurrenceException = appointment.recurrenceException;
-
-        if(recurrenceException) {
-            const exceptions = recurrenceException.split(',');
-
-            for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
-            }
-
-            return exceptions.join();
-        }
-
-        return recurrenceException;
-    }
-
-    _convertRecurrenceException(exceptionString, startDate) {
-        exceptionString = exceptionString.replace(/\s/g, '');
-
-        const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, {
-                path: 'toGrid'
-            });
-        };
-
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = getConvertedToTimeZone(startDate);
-        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
-
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
-        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
-        return exceptionString;
-    }
-
     dayHasAppointment(day, rawAppointment, trimTime) {
         const getConvertedToTimeZone = date => {
             return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
@@ -2243,7 +2221,9 @@ class Scheduler extends Widget {
     }
 
     getFirstDayOfWeek() {
-        return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
+        return isDefined(this.option('firstDayOfWeek'))
+            ? this.option('firstDayOfWeek')
+            : dateLocalization.firstDayOfWeekIndex();
     }
 
     createAppointmentAdapter(rawAppointment) {

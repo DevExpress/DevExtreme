@@ -9,6 +9,7 @@ const mockInternalComponent = {
   getController: jest.fn(),
   state: jest.fn(),
   on: jest.fn(),
+  option: jest.fn(),
 };
 
 const mockComponent = {
@@ -23,11 +24,13 @@ const mockComponent = {
   _getAdditionalProps: jest.fn(() => []),
   _patchOptionValues: jest.fn((options) => options),
   _notifyOptionChanged: jest.fn(),
+  _optionChanging: jest.fn(),
+  _optionChanged: jest.fn(),
   silent: jest.fn(),
   getOption: jest.fn(),
   setOption: jest.fn(),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beforeInitialization: (_instance) => {},
+  beforeInitialization: (_instance) => { },
 };
 jest.mock('../common/component', () => class {
   __options: Record<string, unknown>;
@@ -73,6 +76,14 @@ jest.mock('../common/component', () => class {
 
   repaint() {
     this._initMarkup();
+  }
+
+  _optionChanging() {
+    mockComponent._optionChanging();
+  }
+
+  _optionChanged() {
+    mockComponent._optionChanged();
   }
 
   _initializeComponent() {
@@ -203,8 +214,8 @@ describe('DataGrid Wrapper', () => {
   });
 
   it('onInitialized option should not be defined in _initializeComponent', () => {
-    const onInitialized = () => {};
-    let onInitializedInInitializeComponent: unknown = undefined;
+    const onInitialized = () => { };
+    let onInitializedInInitializeComponent: unknown = {};
 
     mockComponent.beforeInitialization = (component) => {
       onInitializedInInitializeComponent = component.option().onInitialized;
@@ -246,11 +257,61 @@ describe('DataGrid Wrapper', () => {
   it('_wrapKeyDownHandler should pass handler without processing', () => {
     const component = createDataGrid();
 
-    const handler = () => {};
+    const handler = () => { };
 
     const wrappedHandler = component._wrapKeyDownHandler(handler);
 
     expect(wrappedHandler).toBe(handler);
+  });
+
+  describe('_optionChanging', () => {
+    it('no viewRef', () => {
+      const component: any = createDataGrid();
+      component.viewRef = null;
+      component._optionChanging('pager.pageSize', 5, 10);
+      expect(mockComponent._optionChanging).toBeCalledTimes(1);
+    });
+
+    it('complex option changed', () => {
+      const component: any = createDataGrid();
+      const prevProps = { pager: { pageSize: 5 } };
+      component.__options = prevProps;
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('pager.pageSize', 5, 10);
+      // emulate base component mutable option change
+      component.__options.pager.pageSize = 10;
+      // value in prev props shouldn't change for future getUpdatedOptions
+      expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
+      expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
+    });
+
+    it('option changed to same value', () => {
+      const component: any = createDataGrid();
+      const prevProps = { selectedRowKeys: undefined };
+      component.__options = { selectedRowKeys: [{ field1: 1, field2: 2 }] };
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('selectedRowKeys', prevProps.selectedRowKeys, prevProps.selectedRowKeys);
+      expect(prevProps.selectedRowKeys).toBe(component.viewRef.prevProps.selectedRowKeys);
+    });
+  });
+
+  describe('_optionChanged', () => {
+    it('no viewRef', () => {
+      const component: any = createDataGrid();
+      component.viewRef = null;
+      component._optionChanged();
+      expect(mockComponent._optionChanged).toBeCalledTimes(1);
+    });
+
+    it('If dataSource not changed update it directly for refresh data', () => {
+      const dataSource = {};
+      const component: any = createDataGrid();
+      component.__options = { dataSource };
+      mockInternalComponent.option.mockReturnValueOnce(dataSource);
+      component._optionChanged({ fullName: 'dataSource', value: dataSource });
+      expect(mockInternalComponent.option).toBeCalledTimes(2);
+      expect(mockInternalComponent.option).toBeCalledWith('dataSource', dataSource);
+    });
   });
 
   describe('_internalOptionChangedHandler and _invalidate', () => {

@@ -190,7 +190,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 width: width,
                 appointmentReduced: 'tail',
                 rowIndex: 0,
-                cellIndex: appointmentSettings.cellIndex + cellsDiff,
+                columnIndex: appointmentSettings.columnIndex + cellsDiff,
             }));
         }
 

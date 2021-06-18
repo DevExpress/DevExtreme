@@ -2554,6 +2554,99 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const selectBox = SelectBox.getInstance($dropDownEditor);
         assert.ok(selectBox.option('opened'), 'dropdowneditor is opened');
     });
+
+    [true, false].forEach(repaintChangesOnly => {
+        QUnit.testInActiveWindow(`Cascading lookup editors should be updated properly when repaintChangesOnly is ${repaintChangesOnly} (T1005100)`, function(assert) {
+            const dataGrid = createDataGrid({
+                repaintChangesOnly,
+                dataSource: [
+                    { id: 1, field1: 3, field2: 6 }
+                ],
+                keyExpr: 'id',
+                columns: [{
+                    dataField: 'field1',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: [
+                            { id: 1, name: 'name1' },
+                            { id: 2, name: 'name2' },
+                            { id: 3, name: 'name3' }
+                        ]
+                    },
+                    setCellValue: function(rowData, value) {
+                        rowData.field1 = value;
+                        rowData.field2 = null;
+                    }
+                }, {
+                    dataField: 'field2',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: function(options) {
+                            return {
+                                store: [
+                                    { id: 1, name: 'name1', cat: 1 },
+                                    { id: 2, name: 'name2', cat: 1 },
+                                    { id: 3, name: 'name3', cat: 2 },
+                                    { id: 4, name: 'name4', cat: 2 },
+                                    { id: 5, name: 'name5', cat: 3 },
+                                    { id: 6, name: 'name6', cat: 3 },
+                                ],
+                                filter: options.data ? ['cat', '=', options.data.field1] : null
+                            };
+                        }
+                    }
+                }],
+                editing: {
+                    mode: 'row',
+                    allowUpdating: true
+                },
+                loadingTimeout: null
+            });
+
+
+            // act
+            dataGrid.editRow(0);
+            this.clock.tick();
+            dataGrid.cellValue(0, 0, 1);
+            this.clock.tick();
+            let $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            let $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            let selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 1');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 1, name: 'name1', cat: 1 }, { id: 2, name: 'name2', cat: 1 }], 'dropdowneditor items 1');
+
+            // act
+            $field2EditorIcon.trigger('dxclick');
+            dataGrid.cellValue(0, 0, 2);
+            this.clock.tick();
+            $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 2');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 3, name: 'name3', cat: 2 }, { id: 4, name: 'name4', cat: 2 }], 'dropdowneditor items 2');
+
+            // act
+            $field2EditorIcon.trigger('dxclick');
+            dataGrid.cellValue(0, 0, 3);
+            this.clock.tick();
+            $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 2');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 5, name: 'name5', cat: 3 }, { id: 6, name: 'name6', cat: 3 }], 'dropdowneditor items 2');
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
