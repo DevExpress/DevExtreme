@@ -120,7 +120,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @Slot() children?: JSX.Element;
 
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
   @OneWay() type?: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
