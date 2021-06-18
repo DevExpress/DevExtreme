@@ -94,7 +94,7 @@ export const getPathToLeaf = (leafIndex, groups) => {
 export const getCellGroups = (groupIndex, groups) => {
     const result = [];
 
-    if(this.getGroupCount(groups)) {
+    if(getGroupCount(groups)) {
         if(groupIndex < 0) {
             return;
         }
