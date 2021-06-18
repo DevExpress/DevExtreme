@@ -4591,7 +4591,7 @@ export interface ColumnButton extends ColumnButtonBase {
      */
     visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
     /**
-     * @docid dxDataGridColumnButton.visible
+     * @docid dxDataGridColumnButton.disabled
      * @default false
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxDataGrid
