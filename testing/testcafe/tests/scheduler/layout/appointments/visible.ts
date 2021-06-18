@@ -13,7 +13,7 @@ fixture`Layout:Appointments:visible`
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`filtering-appointments-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace))
+        .expect(await takeScreenshot(`filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace))
         .ok()
 
         .expect(compareResults.isValid())
