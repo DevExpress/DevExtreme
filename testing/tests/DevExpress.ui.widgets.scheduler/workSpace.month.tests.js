@@ -2,12 +2,10 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -16,21 +14,6 @@ const {
     module,
     testStart
 } = QUnit;
-
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
-};
 
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');

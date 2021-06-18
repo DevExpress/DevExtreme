@@ -12,3 +12,11 @@ test('ValidationMessage integrated in editor should not raise any errors when it
     .click(checkBox.element)
     .expect(true).ok();
 });
+
+test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form that has inline style with scale', async (t) => {
+  const checkBox1 = new CheckBox('#checkBox1');
+  await t
+    .click(checkBox1.element)
+    .click(checkBox1.element)
+    .expect(true).ok();
+});

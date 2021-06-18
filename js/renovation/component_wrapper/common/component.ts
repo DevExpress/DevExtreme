@@ -30,7 +30,7 @@ interface ElementAttributes extends Record<string, unknown> {
   class: string;
 }
 
-interface ComponentWrapperProps extends Record<string, unknown> {
+export interface ComponentWrapperProps extends Record<string, unknown> {
   onContentReady?: (e: Record<string, unknown>) => void;
   elementAttr?: ElementAttributes;
 }

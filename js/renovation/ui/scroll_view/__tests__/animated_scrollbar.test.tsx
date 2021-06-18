@@ -27,8 +27,6 @@ describe('Public methods', () => {
     { name: 'getMinOffset', calledWith: [] },
     { name: 'validateEvent', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
-    { name: 'reachedMin', calledWith: [] },
-    { name: 'reachedMax', calledWith: [] },
     { name: 'initHandler', calledWith: ['arg1', 'arg2'] },
     { name: 'startHandler', calledWith: [] },
     { name: 'moveHandler', calledWith: ['arg1'] },
@@ -114,26 +112,29 @@ describe('Public methods', () => {
   });
 
   each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-    each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
+    const minOffset = -100;
+    const maxOffset = 0;
+    each([10, maxOffset, 0, -1, -99, minOffset, -101]).describe('scrollLocation: %o', (scrollLocation) => {
       it('animator on the step should scrolls scrollbar on correct value', () => {
-        const viewModel = new AnimatedScrollbar({ bounceEnabled });
+        const viewModel = new AnimatedScrollbar({ bounceEnabled, scrollLocation });
         const scrollStepHandler = jest.fn();
 
         viewModel.velocity = -5;
         const acceleration = 0.5;
+
         Object.defineProperties(viewModel, { acceleration: { get() { return acceleration; } } });
-        (inRange as Mock).mockImplementation(inRangeFn);
+
         (viewModel as any).scrollbarRef = {
           current: {
             scrollStep: scrollStepHandler,
-            getMinOffset: jest.fn(),
-            getMaxOffset: jest.fn(),
+            getMinOffset: jest.fn(() => minOffset),
+            getMaxOffset: jest.fn(() => maxOffset),
           },
         };
         viewModel.step();
 
         let expectedVelocity = -5;
-        if (!bounceEnabled && !inRange()) {
+        if (!bounceEnabled && (scrollLocation >= maxOffset || scrollLocation <= minOffset)) {
           expectedVelocity = 0;
         }
 
@@ -220,6 +221,28 @@ describe('Animator', () => {
   });
 
   describe('Getters', () => {
+    each([0, -99.9, -100, -100.1, -150]).describe('scrollLocation: %o', (scrollLocation) => {
+      it('reachedMin', () => {
+        const viewModel = new AnimatedScrollbar({ scrollLocation });
+        const minOffset = -100;
+
+        viewModel.getMinOffset = jest.fn(() => minOffset);
+
+        expect(viewModel.reachedMin()).toEqual(scrollLocation <= minOffset);
+      });
+    });
+
+    each([100, 80.1, 80, 79.9, 0]).describe('scrollLocation: %o', (scrollLocation) => {
+      it('reachedMax', () => {
+        const viewModel = new AnimatedScrollbar({ scrollLocation });
+        const maxOffset = 80;
+
+        viewModel.getMaxOffset = jest.fn(() => maxOffset);
+
+        expect(viewModel.reachedMax()).toEqual(scrollLocation >= maxOffset);
+      });
+    });
+
     each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
       each([undefined, {
         current: {

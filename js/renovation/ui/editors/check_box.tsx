@@ -14,9 +14,7 @@ import {
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
-import { InkRipple, InkRippleConfig } from '../common/ink_ripple';
 import { Widget } from '../common/widget';
-import { isMaterial, current } from '../../../ui/themes';
 import BaseComponent from '../../component_wrapper/editors/check_box';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
@@ -42,13 +40,6 @@ const getCssClasses = (model: CheckBoxProps): string => {
   return combineClasses(classesMap);
 };
 
-const inkRippleConfig: InkRippleConfig = {
-  waveSizeCoefficient: 2.5,
-  useHoldAnimation: false,
-  wavesNumber: 2,
-  isCentered: true,
-};
-
 export const viewFunction = (viewModel: CheckBox): JSX.Element => {
   const { text, name } = viewModel.props;
 
@@ -65,12 +56,9 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       height={viewModel.props.height}
       hint={viewModel.props.hint}
       hoverStateEnabled={viewModel.props.hoverStateEnabled}
-      onActive={viewModel.onActive}
       onFocusIn={viewModel.onFocusIn}
-      onFocusOut={viewModel.onFocusOut}
       aria={viewModel.aria}
       onClick={viewModel.onWidgetClick}
-      onInactive={viewModel.onInactive}
       onKeyDown={viewModel.onWidgetKeyDown}
       rtlEnabled={viewModel.props.rtlEnabled}
       tabIndex={viewModel.props.tabIndex}
@@ -84,8 +72,6 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
         <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
-      {viewModel.props.useInkRipple
-                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
       {viewModel.showValidationMessage
                 && (
                 <ValidationMessage
@@ -126,8 +112,6 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @TwoWay() value?: boolean | null = false;
 
-  @OneWay() useInkRipple?: boolean = false;
-
   @Event() onFocusIn?: (e: Event) => void;
 
   @OneWay() saveValueChangeEvent?: (event: Event) => void;
@@ -136,11 +120,6 @@ export class CheckBoxProps extends BaseWidgetProps {
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: { focusStateEnabled: true },
-}, {
-  // NOTE: it's disabled until styles fix: see https://trello.com/c/5Pbm18YA
-  // eslint-disable-next-line import/no-named-as-default-member
-  device: (): boolean => isMaterial(current()),
-  options: { useInkRipple: false },
 }]);
 
 @Component({
@@ -154,8 +133,6 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() iconRef!: RefObject<HTMLDivElement>;
-
-  @Ref() inkRippleRef!: RefObject<InkRipple>;
 
   @Ref() inputRef!: RefObject<HTMLInputElement>;
 
@@ -177,28 +154,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     this.widgetRef.current!.focus();
   }
 
-  onActive(event: Event): void {
-    const waveId = 1;
-    this.wave(event, 'showWave', waveId);
-  }
-
-  onInactive(event: Event): void {
-    const waveId = 1;
-    this.wave(event, 'hideWave', waveId);
-  }
-
   onFocusIn(event: Event): void {
-    const waveId = 0;
     const { onFocusIn } = this.props;
-    this.wave(event, 'showWave', waveId);
 
     // NOTE: pass to jQ wrapper
     onFocusIn?.(event);
-  }
-
-  onFocusOut(event: Event): void {
-    const waveId = 0;
-    this.wave(event, 'hideWave', waveId);
   }
 
   onWidgetClick(event: Event): void {
@@ -269,12 +229,5 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get targetCurrent(): HTMLDivElement | null | undefined {
     return this.target?.current;
-  }
-
-  wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
-    const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef.current![type]({
-      element: this.iconRef.current!, event, wave: waveId,
-    });
   }
 }

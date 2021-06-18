@@ -76,6 +76,7 @@ const ResizingController = modules.ViewController.inherit({
                     if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
                         !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
                         deferUpdate(function() {
+                            that._setScrollerSpacing(that._hasHeight);
                             that._rowsView.resize();
                         });
                     } else {

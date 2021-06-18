@@ -1325,7 +1325,6 @@ module('Client side after filtering', () => {
             key: 0,
             scheduler: {
                 ...schedulerMock,
-                getAppointmentDurationInMinutes: () => 60
             },
             dataSource,
             appointmentDataAccessors: {
@@ -1349,7 +1348,8 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            },
+            appointmentDuration: 60
         });
 
         appointmentDataProvider.add({

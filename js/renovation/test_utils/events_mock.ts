@@ -28,6 +28,7 @@ export const EVENT = {
   resize: 'dxresize',
   dragStart: 'dxdragstart',
   dragMove: 'dxdrag',
+  drag: 'dxdrag',
   dragEnd: 'dxdragend',
 };
 
@@ -60,7 +61,7 @@ export const emitKeyboard = (key: string, which = key, e = defaultEvent): void =
   });
 };
 
-export const emit = (event: string, e = defaultEvent, element = null): void => {
+export const emit = (event: string, e = defaultEvent, element: HTMLElement | null = null): void => {
   eventHandlers[event]?.forEach(({ handler, el }) => {
     if (!element || el === element) {
       handler(e);
@@ -88,21 +89,40 @@ jest.mock('../../events/core/events_engine', () => {
       ...originalEventsEngine,
 
       on: (el, eventName, ...args): void => {
-        const event = eventName.split('.')[0];
+        if (typeof eventName === 'string') {
+          const event = eventName.split('.')[0];
 
-        if (!eventHandlers[event]) {
-          eventHandlers[event] = [];
+          if (!eventHandlers[event]) {
+            eventHandlers[event] = [];
+          }
+          eventHandlers[event].push({
+            handler: args[args.length - 1],
+            el,
+          });
+        } else {
+          Object.keys(eventName).forEach((event) => {
+            const name = event.split('.')[0];
+
+            if (!eventHandlers[name]) {
+              eventHandlers[name] = [];
+            }
+            eventHandlers[name].push({
+              handler: eventName[event],
+              el,
+            });
+          });
         }
-
-        eventHandlers[event].push({
-          handler: args[args.length - 1],
-          el,
-        });
       },
 
       off: (_, eventName): void => {
-        const event = eventName.split('.')[0];
-        eventHandlers[event] = [];
+        if (typeof eventName === 'string') {
+          const event = eventName.split('.')[0];
+          eventHandlers[event] = [];
+        } else {
+          Object.keys(eventHandlers).forEach((event) => {
+            eventHandlers[event] = eventHandlers[event]?.filter(({ el }) => el !== _);
+          });
+        }
       },
 
       trigger: (element, event): void => {

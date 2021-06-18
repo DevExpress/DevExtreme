@@ -5865,6 +5865,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.lookup.valueExpr]
        */
       valueExpr?: string;
+      /**
+       * [descr:GridBaseColumn.lookup.calculateCellValue]
+       */
+      calculateCellValue?: (rowData: any) => any;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDataGrid>;
     export type ContextMenuPreparingEvent =
@@ -16394,11 +16398,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: any): void;
+    addAppointment(appointment: dxSchedulerAppointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: any): void;
+    deleteAppointment(appointment: dxSchedulerAppointment): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]
@@ -16429,22 +16433,25 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: any,
+      appointmentData?: dxSchedulerAppointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: any,
+      appointmentData: dxSchedulerAppointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(
+      target: dxSchedulerAppointment,
+      appointment: dxSchedulerAppointment
+    ): void;
   }
   module dxScheduler {
     export type AppointmentAddedEvent =
@@ -16569,8 +16576,8 @@ declare module DevExpress.ui {
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: any;
-      readonly targetedAppointmentData?: any;
+      readonly appointmentData: dxSchedulerAppointment;
+      readonly targetedAppointmentData?: dxSchedulerAppointment;
     }
   }
   /**
@@ -17529,7 +17536,7 @@ declare module DevExpress.ui {
      * [descr:dxSlideOut.toggleMenuVisibility(showing)]
      */
     toggleMenuVisibility(
-      showing: boolean
+      showing?: boolean
     ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOut {
@@ -17674,9 +17681,11 @@ declare module DevExpress.ui {
      */
     showMenu(): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:dxSlideOutView.toggleMenuVisibility()]
+     * [descr:dxSlideOutView.toggleMenuVisibility(showing)]
      */
-    toggleMenuVisibility(): DevExpress.core.utils.DxPromise<void>;
+    toggleMenuVisibility(
+      showing?: boolean
+    ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOutView {
     export type DisposingEvent = DevExpress.events.EventInfo<dxSlideOutView>;
@@ -21086,7 +21095,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * [descr:GridBaseOptions.columns]
      */

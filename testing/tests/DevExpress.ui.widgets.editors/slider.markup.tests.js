@@ -23,9 +23,7 @@ testStart(function() {
 
 module('slider markup', () => {
     test('default', function(assert) {
-        const $sliderElement = $('#slider').dxSlider({
-            useInkRipple: false
-        });
+        const $sliderElement = $('#slider').dxSlider();
 
         assert.ok($sliderElement.hasClass(SLIDER_CLASS), 'slider has correct class');
 
@@ -44,8 +42,7 @@ module('slider markup', () => {
 
     test('\'showRange\' option should toggle class to range element', function(assert) {
         const slider = $('#slider').dxSlider({
-            showRange: true,
-            useInkRipple: false
+            showRange: true
         }).dxSlider('instance');
 
         assert.ok($('.' + SLIDER_RANGE_CLASS).hasClass(SLIDER_RANGE_VISIBLE_CLASS));
@@ -60,8 +57,7 @@ module('slider markup', () => {
             max: 100,
             label: {
                 visible: true
-            },
-            useInkRipple: false
+            }
         });
 
         const $sliderLabels = $slider.find('.' + SLIDER_LABEL_CLASS);
@@ -75,8 +71,7 @@ module('slider markup', () => {
                 format: function(value) {
                     return '[' + value + ']';
                 }
-            },
-            useInkRipple: false
+            }
         });
 
         const $sliderLabels = $slider.find('.' + SLIDER_LABEL_CLASS);
@@ -95,8 +90,7 @@ module('slider markup', () => {
             label: {
                 visible: true,
                 position: 'top'
-            },
-            useInkRipple: false
+            }
         });
 
         assert.ok($slider.hasClass('dx-slider-label-position-top'));
@@ -112,9 +106,7 @@ module('slider markup', () => {
     });
 
     test('set the validationMessageOffset for the Generic theme', function(assert) {
-        const slider = $('#slider').dxSlider({
-            useInkRipple: false
-        }).dxSlider('instance');
+        const slider = $('#slider').dxSlider().dxSlider('instance');
 
         assert.deepEqual(slider.option('validationMessageOffset'), { h: 7, v: 4 });
     });
@@ -123,9 +115,7 @@ module('slider markup', () => {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        const slider = $('#slider').dxSlider({
-            useInkRipple: false
-        }).dxSlider('instance');
+        const slider = $('#slider').dxSlider().dxSlider('instance');
 
         assert.deepEqual(slider.option('validationMessageOffset'), { h: 18, v: 0 });
 
@@ -136,8 +126,7 @@ module('slider markup', () => {
 module('widget sizing render', () => {
     test('constructor', function(assert) {
         const $element = $('#widget').dxSlider({
-            width: 400,
-            useInkRipple: false
+            width: 400
         });
         const instance = $element.dxSlider('instance');
 
@@ -146,9 +135,7 @@ module('widget sizing render', () => {
     });
 
     test('root with custom width', function(assert) {
-        const $element = $('#widthRootStyle').dxSlider({
-            useInkRipple: false
-        });
+        const $element = $('#widthRootStyle').dxSlider();
         const instance = $element.dxSlider('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
@@ -156,9 +143,7 @@ module('widget sizing render', () => {
     });
 
     test('change width', function(assert) {
-        const $element = $('#widget').dxSlider({
-            useInkRipple: false
-        });
+        const $element = $('#widget').dxSlider();
         const instance = $element.dxSlider('instance');
         const customWidth = 400;
 
@@ -201,9 +186,7 @@ module('hidden input', () => {
 
 module('aria accessibility', () => {
     test('aria role', function(assert) {
-        const $element = $('#widget').dxSlider({
-            useInkRipple: false
-        });
+        const $element = $('#widget').dxSlider();
         const $handle = $element.find('.dx-slider-handle');
 
         assert.equal($handle.attr('role'), 'slider', 'aria role is correct');
@@ -213,8 +196,7 @@ module('aria accessibility', () => {
         const $element = $('#widget').dxSlider({
             min: 20,
             max: 50,
-            value: 35,
-            useInkRipple: false
+            value: 35
         });
         const $handle = $element.find('.dx-slider-handle');
 
@@ -227,8 +209,7 @@ module('aria accessibility', () => {
         const $element = $('#widget').dxSlider({
             min: 20,
             max: 50,
-            value: 35,
-            useInkRipple: false
+            value: 35
         });
         const instance = $element.dxSlider('instance');
         const $handle = $element.find('.dx-slider-handle');

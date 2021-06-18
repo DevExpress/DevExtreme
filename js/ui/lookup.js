@@ -7,7 +7,6 @@ import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
@@ -274,8 +273,7 @@ const Lookup = DropDownList.inherit({
                         height: 'auto'
                     },
 
-                    usePopover: true,
-                    useInkRipple: false
+                    usePopover: true
                 }
             },
             {
@@ -401,16 +399,10 @@ const Lookup = DropDownList.inherit({
             .append(this._$field)
             .append($arrow)
             .appendTo(this.$element());
-
-        this.option('useInkRipple') && this._renderInkRipple();
     },
 
     _getInputContainer() {
         return this._$fieldWrapper;
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render();
     },
 
     _toggleOpenState: function() {
@@ -418,25 +410,6 @@ const Lookup = DropDownList.inherit({
 
         if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._setPopupPosition();
-        }
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase(...arguments);
-
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: this._inputWrapper(),
-            event: e
-        };
-
-        if(value) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
         }
     },
 
@@ -1033,7 +1006,6 @@ const Lookup = DropDownList.inherit({
     _clean: function() {
         this._$fieldWrapper.remove();
         this._$searchBox = null;
-        delete this._inkRipple;
         this.callBase();
     },
 
