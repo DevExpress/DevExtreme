@@ -2559,6 +2559,7 @@ Axis.prototype = {
             that._applyLabelMode(mode, step, boxes, behavior);
         }
         that._checkBoundedLabelsOverlapping(majorTicks, boxes, mode);
+        that._checkShiftedLabels(majorTicks, boxes, labelOpt.minSpacing, labelOpt.alignment);
     },
 
     _applyLabelMode: function(mode, step, boxes, behavior, notRecastStep) {
@@ -2696,6 +2697,8 @@ Axis.prototype = {
     setSpiderTicks: _noop,
 
     _checkBoundedLabelsOverlapping: _noop,
+
+    _checkShiftedLabels: _noop,
 
     drawScaleBreaks: _noop,
 
