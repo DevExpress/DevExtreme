@@ -368,6 +368,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @public
+     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
     dataSource?: string | Array<Appointment> | Store | DataSource | DataSourceOptions;
     /**
