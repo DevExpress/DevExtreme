@@ -137,6 +137,8 @@ export default class TableResizingModule extends BaseModule {
             this._detachSeparatorEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
             $item.$frame.remove();
         });
+
+        this._removeResizeFrames = [];
     }
 
     _detachSeparatorEvents($lineSeparators) {
