@@ -63,7 +63,7 @@ export default class DartClient {
       const errorHandler = (e?: Error): void => {
         log('Dart client error on write', e);
         this.client.end();
-        this.dispose();
+        this.dispose().catch(() => {});
         resolve({
           error: `${e.name}: ${e.message}`,
         });

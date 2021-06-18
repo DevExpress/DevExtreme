@@ -85,8 +85,8 @@ export default class Compiler {
           changedVariables: reply.changedVariables,
         });
       }
-    }).finally(() => {
-      this.dartClient.dispose();
+    }).finally(async () => {
+      await this.dartClient.dispose();
     });
   }
 

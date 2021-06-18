@@ -215,7 +215,8 @@
             "@typescript-eslint/restrict-plus-operands": ["error",
                 { "checkCompoundAssignments": true }
             ],
-            "@typescript-eslint/require-await": "error"
+            "@typescript-eslint/require-await": "error",
+            "@typescript-eslint/no-floating-promises": "error"
             /*
             "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
