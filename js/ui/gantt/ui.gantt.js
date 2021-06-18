@@ -94,7 +94,6 @@ class Gantt extends Widget {
         this._isMainElementVisible = this.$element().is(':visible');
         if(this._isMainElementVisible && !this._isGanttRendered) {
             this._isGanttRendered = true;
-            this._initHelpers();
             this._renderBars();
             this._renderTreeList();
             this._renderSplitter();
