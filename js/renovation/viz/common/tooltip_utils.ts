@@ -332,7 +332,7 @@ export function prepareData(
   let customize = {} as CustomizedOptions;
 
   if (isFunction(customizeTooltip)) {
-    customize = customizeTooltip.call(data, data);
+    customize = customizeTooltip.call(data, data as Record<string, unknown>);
     customize = isPlainObject(customize) ? customize : {};
     if ('text' in customize) {
       customize.text = isDefined(customize.text) ? String(customize.text) : '';
