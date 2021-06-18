@@ -35,7 +35,7 @@ const createConfig = function(outputFile, mode) {
         alias: {
             'devextreme': sourcesDir
         },
-        mainFields: ['main', 'module']
+        mainFields: ['main']
     };
 
     return config;
