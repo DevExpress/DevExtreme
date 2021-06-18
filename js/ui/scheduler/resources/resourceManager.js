@@ -9,7 +9,7 @@ import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
-import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
+import { createResourcesTree, getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
 
 export class ResourceManager {
     constructor(resources) {
@@ -330,41 +330,6 @@ export class ResourceManager {
         return result;
     }
 
-    createResourcesTree(groups) {
-        let leafIndex = 0;
-
-        function make(group, groupIndex, result, parent) {
-            result = result || [];
-
-            for(let i = 0; i < group.items.length; i++) {
-                const currentGroupItem = group.items[i];
-                const resultItem = {
-                    name: group.name,
-                    value: currentGroupItem.id,
-                    title: currentGroupItem.text,
-                    data: group.data && group.data[i],
-                    children: [],
-                    parent: parent ? parent : null
-                };
-                result.push(resultItem);
-                const nextGroupIndex = groupIndex + 1;
-
-                if(groups[nextGroupIndex]) {
-                    make.call(this,
-                        groups[nextGroupIndex], nextGroupIndex, resultItem.children, resultItem);
-                }
-                if(!resultItem.children.length) {
-                    resultItem.leafIndex = leafIndex;
-                    leafIndex++;
-                }
-            }
-
-            return result;
-        }
-
-        return make.call(this, groups[0], 0);
-    }
-
     _hasGroupItem(appointmentResources, groupName, itemValue) {
         const group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
 
@@ -446,7 +411,7 @@ export class ResourceManager {
         return result;
     }
     groupAppointmentsByResourcesCore(appointments, resources) {
-        const tree = this.createResourcesTree(resources);
+        const tree = createResourcesTree(resources);
         const result = {};
 
         each(appointments, (function(_, appointment) {
@@ -498,7 +463,7 @@ export class ResourceManager {
     }
 
     _getPathToLeaf(leafIndex, groups) {
-        const tree = this.createResourcesTree(groups);
+        const tree = createResourcesTree(groups);
 
         function findLeafByIndex(data, index) {
             for(let i = 0; i < data.length; i++) {
@@ -643,7 +608,7 @@ export class ResourceManager {
     }
 
     createReducedResourcesTree(appointments) {
-        const tree = this.createResourcesTree(this.loadedResources);
+        const tree = createResourcesTree(this.loadedResources);
         return this.reduceResourcesTree(tree, appointments);
     }
 

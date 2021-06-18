@@ -56,6 +56,7 @@ import CellsSelectionState from './cells_selection_state';
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import { isDateInRange } from './utils/base';
+import { createResourcesTree } from '../resources/utils';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1344,8 +1345,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexByResourceId(id) {
         const groups = this.option('groups');
-        const resourceManager = this.invoke('getResourceManager');
-        const resourceTree = resourceManager.createResourcesTree(groups);
+        const resourceTree = createResourcesTree(groups);
 
         if(!resourceTree.length) return 0;
 
@@ -2309,7 +2309,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let result = [];
         if(this._isGroupsSpecified(appointmentResources)) {
             const resourceManager = this.invoke('getResourceManager');
-            const tree = resourceManager.createResourcesTree(this.option('groups'));
+            const tree = createResourcesTree(this.option('groups'));
 
             result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
         }

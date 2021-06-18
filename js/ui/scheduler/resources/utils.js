@@ -20,3 +20,40 @@ export const getWrappedDataSource = dataSource => {
 
     return new DataSource(result);
 };
+
+export const createResourcesTree = (groups) => {
+    let leafIndex = 0;
+
+    const make = (group, groupIndex, result, parent) => {
+        result = result || [];
+
+        for(let itemIndex = 0; itemIndex < group.items.length; itemIndex++) {
+            const currentGroupItem = group.items[itemIndex];
+            const resultItem = {
+                name: group.name,
+                value: currentGroupItem.id,
+                title: currentGroupItem.text,
+                data: group.data?.[itemIndex],
+                children: [],
+                parent: parent || null
+            };
+
+            const nextGroupIndex = groupIndex + 1;
+
+            if(groups[nextGroupIndex]) {
+                make(groups[nextGroupIndex], nextGroupIndex, resultItem.children, resultItem);
+            }
+
+            if(!resultItem.children.length) {
+                resultItem.leafIndex = leafIndex;
+                leafIndex++;
+            }
+
+            result.push(resultItem);
+        }
+
+        return result;
+    };
+
+    return make(groups[0], 0);
+};
