@@ -5,7 +5,7 @@ import {
     getWeekendsCount,
     isDataOnWeekend,
     getFirstDayOfWeek,
-    getFirstViewDate,
+    calculateStartViewDate,
 } from './utils/work_week';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -48,8 +48,8 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
         return toMs('day') * weekendCount * 2;
     }
 
-    _getFirstViewDate() {
-        return getFirstViewDate(
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
             this.option('currentDate'),
             this.option('startDayHour'),
             this.option('startDate'),

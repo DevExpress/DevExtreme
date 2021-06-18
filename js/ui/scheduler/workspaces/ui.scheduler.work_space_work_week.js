@@ -4,7 +4,7 @@ import {
     isDataOnWeekend,
     getWeekendsCount,
     getFirstDayOfWeek,
-    getFirstViewDate,
+    calculateStartViewDate,
 } from './utils/work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
 
@@ -37,13 +37,13 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
+        const resultDate = new Date(this._startViewDate);
 
         if(headerIndex % this._getCellCount() === 0) {
             weekCounter = 0;
         }
 
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekCounter);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex + weekCounter);
         let index = resultDate.getDay();
 
         while(dayIndexes.indexOf(index) === -1) {
@@ -60,8 +60,8 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         super._renderView();
     }
 
-    _getFirstViewDate() {
-        return getFirstViewDate(
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
             this.option('currentDate'),
             this.option('startDayHour'),
             this.option('startDate'),

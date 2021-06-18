@@ -6,7 +6,7 @@ export const getIntervalDuration = (intervalCount) => {
     return dateUtils.dateToMilliseconds('day') * 7 * intervalCount;
 };
 
-export const getFirstViewDate = (
+export const calculateStartViewDate = (
     currentDate,
     startDayHour,
     startDate,
@@ -26,7 +26,7 @@ export const getFirstViewDate = (
     return setStartDayHour(firstViewDate, startDayHour);
 };
 
-export const getStartViewDate = (startDateOption, firstDayOfWeek) => {
+export const calculateViewStartDate = (startDateOption, firstDayOfWeek) => {
     const validFirstDayOfWeek = firstDayOfWeek || dateLocalization.firstDayOfWeekIndex();
 
     return dateUtils.getFirstWeekDate(startDateOption, validFirstDayOfWeek);

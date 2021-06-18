@@ -4,7 +4,7 @@ import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { getViewStartByOptions } from './utils/month';
-import { getFirstViewDate } from './utils/timeline_month';
+import { calculateStartViewDate } from './utils/timeline_month';
 import { setStartDayHour } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
@@ -71,8 +71,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return cellCount;
     }
 
-    _getFirstViewDate() {
-        return getFirstViewDate(
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
             this.option('currentDate'),
             this.option('startDayHour'),
             this.option('startDate'),
@@ -85,8 +85,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
+        const resultDate = new Date(this._startViewDate);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
 
         return resultDate;
     }

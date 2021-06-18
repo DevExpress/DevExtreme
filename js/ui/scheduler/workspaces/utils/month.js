@@ -25,7 +25,7 @@ export const getViewStartByOptions = (startDate, currentDate, intervalCount, sta
     }
 };
 
-export const getFirstViewDate = (
+export const calculateStartViewDate = (
     currentDate,
     startDayHour,
     startDate,

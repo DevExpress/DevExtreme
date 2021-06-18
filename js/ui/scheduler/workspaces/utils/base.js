@@ -43,4 +43,4 @@ export const getCalculatedFirstDayOfWeek = (firstDayOfWeekOption) => {
 };
 
 export const getFirstDayOfWeek = (firstDayOfWeekOption) => firstDayOfWeekOption;
-export const getStartViewDate = (startDateOption) => startDateOption;
+export const calculateViewStartDate = (startDateOption) => startDateOption;

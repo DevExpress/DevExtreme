@@ -7,7 +7,7 @@ import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
-import { getFirstViewDate, getViewStartByOptions } from './utils/month';
+import { calculateStartViewDate, getViewStartByOptions } from './utils/month';
 import { setStartDayHour } from './utils/base';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -45,8 +45,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
+        const resultDate = new Date(this._startViewDate);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
 
         return resultDate;
     }
@@ -139,8 +139,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
     }
 
-    _getFirstViewDate() {
-        return getFirstViewDate(
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
             this.option('currentDate'),
             this.option('startDayHour'),
             this.option('startDate'),
@@ -185,7 +185,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getDate(week, day) {
-        const result = new Date(this._firstViewDate);
+        const result = new Date(this._startViewDate);
         const lastRowInDay = this._getRowCount();
 
         result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);

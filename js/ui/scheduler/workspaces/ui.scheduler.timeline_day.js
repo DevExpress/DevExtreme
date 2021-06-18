@@ -1,6 +1,6 @@
 import registerComponent from '../../../core/component_registrator';
 import SchedulerTimeline from './ui.scheduler.timeline';
-import { getFirstViewDate } from './utils/day';
+import { calculateStartViewDate } from './utils/day';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
@@ -9,8 +9,8 @@ class SchedulerTimelineDay extends SchedulerTimeline {
         return TIMELINE_CLASS;
     }
 
-    _getFirstViewDate() {
-        return getFirstViewDate(
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
             this.option('currentDate'),
             this.option('startDayHour'),
             this.option('startDate'),

@@ -1,6 +1,6 @@
 import { setStartDayHour } from './base';
 
-export const getFirstViewDate = (currentDate, startDayHour) => {
+export const calculateStartViewDate = (currentDate, startDayHour) => {
     const validCurrentDate = new Date(currentDate);
 
     return setStartDayHour(validCurrentDate, startDayHour);

@@ -18,7 +18,7 @@ export const getWeekendsCount = (days) => {
     return 2 * Math.floor(days / 7);
 };
 
-export const getFirstViewDate = (
+export const calculateStartViewDate = (
     currentDate,
     startDayHour,
     startDate,
