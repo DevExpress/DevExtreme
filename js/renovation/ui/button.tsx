@@ -79,7 +79,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
         {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
-        {typeof renderText === 'string' && renderText && (<span className="dx-button-text">{text}</span>)}
+        {renderText !== false && renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
                 && <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
