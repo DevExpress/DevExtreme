@@ -15,6 +15,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -266,7 +267,8 @@ export const rowsModule = {
                     that._scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
-                        e.scrollOffset.left = -this._scrollRight;
+                        e.scrollOffset.left = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+
                         if(!this.isScrollbarVisible(true)) {
                             this._scrollLeft = -1;
                         }
