@@ -214,7 +214,8 @@
             ],
             "@typescript-eslint/restrict-plus-operands": ["error",
                 { "checkCompoundAssignments": true }
-            ]
+            ],
+            "@typescript-eslint/require-await": "error"
             /*
             "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
@@ -231,7 +232,6 @@
             "@typescript-eslint/no-unnecessary-condition": "error",
             "@typescript-eslint/strict-boolean-expressions": "error",
             "@typescript-eslint/unbound-method": "error",
-            "@typescript-eslint/require-await": "error",
             "@typescript-eslint/no-unsafe-member-access": "error",
             "@typescript-eslint/prefer-readonly-parameter-types": "error",
             "@typescript-eslint/explicit-member-accessibility": "error",
