@@ -529,7 +529,6 @@ $transparent-border: 1px solid transparent;
 .dx-table-resize-frame {
   position: absolute;
   pointer-events: none;
-  overflow: hidden;
 
   > div {
     position: absolute;

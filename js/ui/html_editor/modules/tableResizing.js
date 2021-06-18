@@ -278,6 +278,8 @@ export default class TableResizingModule extends BaseModule {
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt($($determinantElements[index + 1])[directionInfo.getSizeFunction]());
+        } else if(direction === 'horizontal') {
+            frame.$table.css('width', 'auto');
         }
     }
 
@@ -302,9 +304,7 @@ export default class TableResizingModule extends BaseModule {
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
                 $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
 
-                const isEnoughPlaceForContent = $determinantElements.eq(index)[directionInfo.getSizeFunction]() <= currentLineNewSize;
-
-                if(this._nextLineSize && isEnoughPlaceForContent) {
+                if(this._nextLineSize) {
                     $determinantElements.eq(index + 1).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
                 }
             }
@@ -373,8 +373,6 @@ export default class TableResizingModule extends BaseModule {
             const columnWidth = $(element).outerWidth();
             $(element).attr('width', columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
         });
-
-        frame.$table.css('width', 'auto');
     }
 
     clean() {
