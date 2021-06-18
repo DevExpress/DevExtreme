@@ -205,7 +205,7 @@ export const getDuration = (options) => {
             return 7 * intervalCount;
         case 'month':
             return 1 * intervalCount;
-        case agendaDuration:
+        case 'agenda':
             return agendaDuration;
     }
 };
