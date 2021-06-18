@@ -54,10 +54,10 @@ const getWorkWeekStart = (firstDayOfWeek) => {
 const getDateAfterWorkWeek = (workWeekStart) => {
     let date = new Date(workWeekStart);
 
-    let workedDays = 0;
-    while(workedDays < DAYS_IN_WORK_WEEK) {
+    let workDaysCount = 0;
+    while(workDaysCount < DAYS_IN_WORK_WEEK) {
         if(!isWeekend(date)) {
-            workedDays++;
+            workDaysCount++;
         }
 
         date = nextDay(date);
