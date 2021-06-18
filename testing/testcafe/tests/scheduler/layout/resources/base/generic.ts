@@ -42,8 +42,8 @@ const resources = [{
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });
 
@@ -55,7 +55,7 @@ const resources = [{
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });

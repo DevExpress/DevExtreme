@@ -1,4 +1,4 @@
-import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import { createScreenshotsComparer } from '../../../../../helpers/screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../model/scheduler';
@@ -35,15 +35,19 @@ const createScheduler = async (
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
     const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-rtl).png`),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`),
       ).ok();
     }
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
@@ -58,15 +62,19 @@ const createScheduler = async (
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view}-crossScrollingEnabled=${!!crossScrollingEnabled}-horizontal-grouping-rtl).png`),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`),
       ).ok();
     }
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
@@ -83,15 +91,19 @@ const createScheduler = async (
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
     const scheduler = new Scheduler('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of verticalViewsForRTL) {
       await scheduler.option('currentView', view.type);
 
       await t.expect(
-        await compareScreenshot(t, `adaptive-generic-layout(view=${view.type}-crossScrollingEnabled=${!!crossScrollingEnabled}-vertical-grouping-rtl).png`),
+        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`),
       ).ok();
     }
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await t.resizeWindow(400, 600);
 
