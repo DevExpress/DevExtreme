@@ -26,7 +26,7 @@ describe('AllDayPanelCell', () => {
         .toBe(true);
     });
 
-    it('should passs correct props to the root component', () => {
+    it('should pass correct props to the root component', () => {
       const props = {
         startDate: new Date(2021, 5, 17, 11),
         endDate: new Date(2021, 5, 17, 11, 30),
