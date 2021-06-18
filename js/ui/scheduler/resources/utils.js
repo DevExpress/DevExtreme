@@ -57,3 +57,72 @@ export const createResourcesTree = (groups) => {
 
     return make(groups[0], 0);
 };
+
+export const getPathToLeaf = (leafIndex, groups) => {
+    const tree = createResourcesTree(groups);
+
+    const findLeafByIndex = (data, index) => {
+        for(let i = 0; i < data.length; i++) {
+            if(data[i].leafIndex === index) {
+                return data[i];
+            } else {
+                const leaf = findLeafByIndex(data[i].children, index);
+                if(leaf) {
+                    return leaf;
+                }
+            }
+        }
+    };
+
+    const makeBranch = (leaf, result) => {
+        result = result || [];
+        result.push(leaf.value);
+
+        if(leaf.parent) {
+            makeBranch(leaf.parent, result);
+        }
+
+        return result;
+    };
+
+    const leaf = findLeafByIndex(tree, leafIndex);
+
+    return makeBranch(leaf).reverse();
+};
+
+// TODO rework
+export const getCellGroups = (groupIndex, groups) => {
+    const result = [];
+
+    if(this.getGroupCount(groups)) {
+        if(groupIndex < 0) {
+            return;
+        }
+
+        const path = getPathToLeaf(groupIndex, groups);
+
+        for(let i = 0; i < groups.length; i++) {
+            result.push({
+                name: groups[i].name,
+                id: path[i]
+            });
+        }
+
+    }
+
+    return result;
+};
+
+export const getGroupCount = (groups) => { // TODO replace with viewDataProvider method
+    let result = 0;
+
+    for(let i = 0, len = groups.length; i < len; i++) {
+        if(!i) {
+            result = groups[i].items.length;
+        } else {
+            result *= groups[i].items.length;
+        }
+    }
+
+    return result;
+};

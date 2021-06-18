@@ -63,6 +63,7 @@ import utils from './utils';
 import { createFactoryInstances, disposeFactoryInstances } from './instanceFactory';
 import { getResourceManager } from './resources/resourceManager';
 import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { getCellGroups } from './resources/utils';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -2063,7 +2064,7 @@ class Scheduler extends Widget {
                 getGroups = function() {
                     const apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
 
-                    return getResourceManager(this.key).getCellGroups(
+                    return getCellGroups(
                         apptSettings[0].groupIndex,
                         this.getWorkSpace().option('groups')
                     );

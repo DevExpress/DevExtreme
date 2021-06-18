@@ -15,6 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getPathToLeaf } from '../resources/utils';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -336,8 +337,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const resourceManager = this.invoke('getResourceManager');
-        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
+        const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;

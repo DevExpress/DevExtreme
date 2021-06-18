@@ -56,7 +56,7 @@ import CellsSelectionState from './cells_selection_state';
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import { isDateInRange } from './utils/base';
-import { createResourcesTree } from '../resources/utils';
+import { createResourcesTree, getCellGroups } from '../resources/utils';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1698,8 +1698,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const resourceManager = this.invoke('getResourceManager');
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1773,8 +1772,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
+        const groupsArray = getCellGroups(
             cellGroupIndex,
             this.option('groups')
         );
@@ -1830,8 +1828,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
 
-            const resourceManager = this.invoke('getResourceManager');
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1945,8 +1942,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
+        const groupsArray = getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -1989,10 +1985,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllGroups() {
         const groupCount = this._getGroupCount();
-        const resourceManager = this.invoke('getResourceManager');
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
