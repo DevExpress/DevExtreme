@@ -552,6 +552,66 @@ QUnit.test('Range selector with stacked series', function(assert) {
     assert.deepEqual(rangeSelector.getValue(), [0.5, 2.5]);
 });
 
+// T1003570
+QUnit.test('Remove overlapped labels. Semidiscrete scale. Right side', function(assert) {
+    const container = $('#container');
+    container.width(855).dxRangeSelector({
+        scale: {
+            startValue: new Date('1995-01-01T21:00:00.000Z'),
+            endValue: new Date('1995-12-31T21:00:00.000Z'),
+            type: 'semidiscrete',
+            marker: {
+                visible: false
+            },
+            label: {
+                customizeText(e) {
+                    return e.valueText.split(' ')[0];
+                },
+                format: 'month'
+            },
+            minorTick: {
+                visible: false
+            },
+            minRange: 'day'
+        }
+    }).dxRangeSelector('instance');
+
+    const drawnLabels = container.find('.dxrs-range-selector-elements text');
+
+    assert.strictEqual(drawnLabels.length, 12);
+    assert.strictEqual($(drawnLabels[drawnLabels.length - 1]).text(), 'December');
+});
+
+// T1003570
+QUnit.test('Remove overlapped labels. Semidiscrete scale. Left side', function(assert) {
+    const container = $('#container');
+    container.width(855).dxRangeSelector({
+        scale: {
+            startValue: new Date('1994-12-31T11:00:00.000Z'),
+            endValue: new Date('1995-12-31T21:00:00.000Z'),
+            type: 'semidiscrete',
+            marker: {
+                visible: false
+            },
+            label: {
+                customizeText(e) {
+                    return e.valueText.split(' ')[0];
+                },
+                format: 'month'
+            },
+            minorTick: {
+                visible: false
+            },
+            minRange: 'day'
+        }
+    }).dxRangeSelector('instance');
+
+    const drawnLabels = container.find('.dxrs-range-selector-elements text');
+
+    assert.strictEqual(drawnLabels.length, 12);
+    assert.strictEqual($(drawnLabels[0]).text(), 'January');
+});
+
 QUnit.module('selectedRangeUpdateMode', {
     createRangeSelector: function(options) {
         return $('#container').dxRangeSelector(options).dxRangeSelector('instance');
