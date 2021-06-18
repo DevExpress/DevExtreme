@@ -91,7 +91,7 @@ jest.mock('../common/component', () => class {
 
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     const result = {};
-    const dataGridProps = ['dataSource'];
+    const dataGridProps = ['dataSource', 'export'];
     dataGridProps.concat(this._getAdditionalProps()).forEach((name) => {
       if (name in options) {
         result[name] = options[name];
@@ -200,6 +200,22 @@ describe('DataGrid Wrapper', () => {
     });
 
     expect(mockComponent._renderWrapper).toBeCalledWith(viewComponentProps);
+  });
+
+  it('editing.customizeExcelCell should have corrent component instance', () => {
+    const customizeExcelCell = jest.fn();
+
+    const instance = createDataGrid({
+      export: {
+        customizeExcelCell,
+      },
+    });
+
+    mockComponent._renderWrapper.mock.calls[0][0].export.customizeExcelCell({});
+
+    expect(customizeExcelCell).toBeCalledWith({
+      component: instance,
+    });
   });
 
   it('onInitialized option should not be defined in _initializeComponent', () => {
