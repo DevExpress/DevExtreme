@@ -47,7 +47,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
     children, icon, iconPosition, template: ButtonTemplate, text, templateData,
   } = viewModel.props;
-  const renderText = !ButtonTemplate && !children && text;
+  const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
   const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
@@ -79,7 +79,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
         {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
-        {renderText !== false && renderText !== '' && (<span className="dx-button-text">{text}</span>)}
+        {renderText && (<span className="dx-button-text">{text}</span>)}
         {!isIconLeft && iconComponent}
         {viewModel.props.useSubmitBehavior
                 && <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />}
