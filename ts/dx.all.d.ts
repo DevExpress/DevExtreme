@@ -7292,7 +7292,7 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumn
     extends DevExpress.ui.dxDataGrid.ColumnBase {
@@ -7383,7 +7383,7 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated Use the DataGrid's ColumnButton type instead
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumnButton
     extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
@@ -16709,7 +16709,7 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated Use the Scheduler's Appointment type instead
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSchedulerAppointment extends CollectionWidgetItem {
     /**
@@ -19886,7 +19886,7 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumn
     extends DevExpress.ui.dxDataGrid.ColumnBase {
@@ -19940,7 +19940,7 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated Use the TreeList's ColumnButton type instead
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumnButton
     extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
