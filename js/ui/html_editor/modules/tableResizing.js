@@ -302,7 +302,9 @@ export default class TableResizingModule extends BaseModule {
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
                 $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
 
-                if(this._nextLineSize) {
+                const isEnoughPlaceForContent = $determinantElements.eq(index)[directionInfo.getSizeFunction]() <= currentLineNewSize;
+
+                if(this._nextLineSize && isEnoughPlaceForContent) {
                     $determinantElements.eq(index + 1).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
                 }
             }
