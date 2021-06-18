@@ -383,7 +383,7 @@ describe('CheckBox', () => {
           });
 
         each([true, false])
-          .it('should have "invalid=%s" if isValid=%s', (isValid) => {
+          .it('should have "invalid=%s" if isValid=%s', (isValid: boolean) => {
             expect(new CheckBox({ isValid }).aria)
               .toMatchObject({ invalid: `${!isValid}` });
           });
