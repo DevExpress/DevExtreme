@@ -23,6 +23,8 @@ const CAPTION_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
 const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
+const DEFAULT_AGENDA_DURATION = 7;
+
 const ACCEPRED_STEPS = ['day', 'week', 'workWeek', 'month', 'agenda'];
 
 const getDateMonthFormat = function(short) {
@@ -302,9 +304,7 @@ export const Navigator = Widget.inherit({
         const step = this.option('step');
         const intervalCount = this.option('intervalCount');
         const firstDayOfWeek = this.option('firstDayOfWeek') || 0; // TODO
-        let agendaDuration = this.invoke('getAgendaDuration');
-        agendaDuration = agendaDuration ? agendaDuration : 7;
-        agendaDuration = agendaDuration === '0' ? 7 : agendaDuration;
+        const agendaDuration = this.invoke('getAgendaDuration') || DEFAULT_AGENDA_DURATION;
 
         return { step, intervalCount, firstDayOfWeek, agendaDuration };
     },

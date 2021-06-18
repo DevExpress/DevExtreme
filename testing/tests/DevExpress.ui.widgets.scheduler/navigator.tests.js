@@ -395,7 +395,7 @@ QUnit.test('Caption should be OK for \'agenda\' view if agendaDuration = 1', fun
 QUnit.test('Caption should be OK for \'agenda\' view if agendaDuration = 0', function(assert) {
     this.instance.invoke = function(subject) {
         if(subject === 'getAgendaDuration') {
-            return '0';
+            return 0;
         }
     };
 
