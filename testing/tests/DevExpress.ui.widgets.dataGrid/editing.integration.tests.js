@@ -5510,7 +5510,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     allowAdding: true,
                     mode: editMode
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 scrolling: { mode: 'virtual' }
             }).dxDataGrid('instance');
 

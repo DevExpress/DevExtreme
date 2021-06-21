@@ -12,6 +12,8 @@ export interface ViewCellData {
   isLastGroupCell: boolean;
   key: number;
   firstDayOfMonth?: boolean;
+  isSelected?: boolean;
+  isFocused?: boolean;
 }
 
 export interface DateHeaderCellData extends ViewCellData {

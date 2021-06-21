@@ -1777,14 +1777,16 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24),
                     endDate: new Date(2020, 7, 24),
                     groups: 'group_2',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    index: 0,
                 },
                 {
                     allDay: true,
                     startDate: new Date(2020, 7, 24),
                     endDate: new Date(2020, 7, 24),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    index: 0,
                 },
             ],
             [
@@ -1793,14 +1795,16 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24, 0, 0),
                     endDate: new Date(2020, 7, 24, 0, 30),
                     groups: 'group_2',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    index: 0,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 1, 0),
                     endDate: new Date(2020, 7, 24, 1, 30),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    index: 0,
                 },
             ],
             [
@@ -1809,14 +1813,16 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24, 0, 30),
                     endDate: new Date(2020, 7, 24, 1, 0),
                     groups: 'group_2',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    index: 1,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 0, 30),
                     endDate: new Date(2020, 7, 24, 1, 0),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    index: 1,
                 },
             ]];
             const horizontalDateHeaderMap = [horizontalDataMap[1]];
@@ -1872,6 +1878,52 @@ module('View Data Provider', {
                         groupedData: [{
                             allDayPanel: completeViewDataMap[0],
                             dateTable: [completeViewDataMap[2]],
+                            groupIndex: 2,
+                            isGroupedAllDayPanel: false,
+                        }],
+                        bottomVirtualRowCount: 2,
+                        topVirtualRowCount: 1,
+                        leftVirtualCellCount: 0,
+                        rightVirtualCellCount: 0,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
+                        isGroupedAllDayPanel: false,
+                    };
+
+                    const viewData = viewDataProvider.viewData;
+
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
+
+                test('selected and focused cells should be marked in viewData', function(assert) {
+                    const completeViewDataMap = horizontalDataMap;
+                    const viewDataProvider = createViewDataProvider({
+                        renderOptions: {
+                            ...virtualHorizontalGroupingRenderOptions,
+                            selectedCells: [completeViewDataMap[2][0], completeViewDataMap[2][1]],
+                            focusedCell: {
+                                cellData: completeViewDataMap[2][0],
+                            },
+                        },
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const expectedViewData = {
+                        groupedData: [{
+                            allDayPanel: completeViewDataMap[0],
+                            dateTable: [[{
+                                ...completeViewDataMap[2][0],
+                                isSelected: true,
+                                isFocused: true,
+                            }, {
+                                ...completeViewDataMap[2][1],
+                                isSelected: true,
+                                isFocused: false,
+                            }]],
                             groupIndex: 2,
                             isGroupedAllDayPanel: false,
                         }],

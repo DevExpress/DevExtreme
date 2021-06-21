@@ -281,6 +281,7 @@ describe('DataGrid', () => {
       ${'isScrollbarVisible'}
       ${'getTopVisibleRowData'}
       ${'getScrollbarWidth'}
+      ${'getDataProvider'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
