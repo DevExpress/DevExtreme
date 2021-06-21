@@ -2,11 +2,14 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { ResourceManager, getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -76,6 +79,12 @@ const stubInvokeMethod = function(instance, options) {
 
             return date;
         }
+        if(subscribe === 'getResourceManager') {
+            return getResourceManager(options.key);
+        }
+        if(subscribe === 'getAppointmentDataProvider') {
+            return getAppointmentDataProvider(options.key);
+        }
     });
 };
 
@@ -132,14 +141,15 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
-            createInstances({
+            const key = createFactoryInstances({
                 scheduler: {
                     isVirtualScrolling: () => false
                 }
             });
+            const observer = getObserver(key);
 
-            this.instance = $('#scheduler-work-space')[view]()[view]('instance');
-            stubInvokeMethod(this.instance);
+            this.instance = $('#scheduler-work-space')[view]({ observer })[view]('instance');
+            stubInvokeMethod(this.instance, { key });
         }
     };
 
@@ -381,8 +391,15 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 
 const dayModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({ observer }).dxSchedulerWorkSpaceDay('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 };
 
@@ -550,14 +567,22 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
 
 const dayWithGroupingModuleConfig = {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceDay({
             groupOrientation: 'vertical',
             showCurrentTimeIndicator: false,
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            observer
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, { key });
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
@@ -657,10 +682,18 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 
 const weekModuleConfig = {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            observer
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, { key });
     }
 };
 
@@ -844,13 +877,21 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
 
 const weekWithGroupingModuleConfig = {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceWeek({
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            observer
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, { key });
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
@@ -896,8 +937,15 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ observer }).dxSchedulerWorkSpaceWorkWeek('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 };
 
@@ -1124,8 +1172,15 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
 
 const monthModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance);
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ observer }).dxSchedulerWorkSpaceMonth('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 };
 
@@ -1364,13 +1419,21 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
 
 const monthWithGroupingModuleConfig = {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceMonth({
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            observer
         }).dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance);
+        stubInvokeMethod(this.instance, { key });
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
@@ -1497,9 +1560,17 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
 
 const scrollingModuleConfig = {
     beforeEach: function() {
+        const key = createFactoryInstances({
+            scheduler: {
+                isVirtualScrolling: () => false
+            }
+        });
+        const observer = getObserver(key);
+
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             crossScrollingEnabled: true,
-            width: 100
+            width: 100,
+            observer
         }).dxSchedulerWorkSpaceWeek('instance');
     }
 };
@@ -1577,6 +1648,13 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
 
         const groupClassesModuleConfig = {
             beforeEach: function() {
+                const key = createFactoryInstances({
+                    scheduler: {
+                        isVirtualScrolling: () => false
+                    }
+                });
+                const observer = getObserver(key);
+
                 this.createInstance = (workspaceClass, options = {}) => {
                     const instance = $('#scheduler-work-space')[workspaceClass]({
                         intervalCount: 3,
@@ -1585,9 +1663,10 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         endDayHour: 2,
                         currentDate: new Date(2020, 8, 27),
                         groupOrientation: 'horizontal',
+                        observer,
                         ...options,
                     })[workspaceClass]('instance');
-                    stubInvokeMethod(instance);
+                    stubInvokeMethod(instance, { key });
 
                     return instance;
                 };

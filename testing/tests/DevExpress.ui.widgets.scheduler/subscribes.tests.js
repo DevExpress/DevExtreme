@@ -68,7 +68,7 @@ module('Subscribes', {
                 expectedEndDate: new Date(2019, 4, 3, 23, 59)
             }
         ].forEach(testCase => {
-            getAppointmentDataProvider().replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
+            getAppointmentDataProvider(this.instance.key).replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
             assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
             assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
         });
@@ -126,7 +126,7 @@ module('Subscribes', {
         try {
             this.instance.fire('setCellDataCacheAlias', {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -138,7 +138,7 @@ module('Subscribes', {
             assert.ok(setCacheAliasStub.calledOnce, 'setCellDataCacheAlias workSpace method called once');
             assert.deepEqual(setCacheAliasStub.getCall(0).args[0], {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -569,8 +569,8 @@ module('Subscribes', {
             }
         ];
 
-        assert.ok(getAppointmentDataProvider().appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(getAppointmentDataProvider().appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
+        assert.ok(getAppointmentDataProvider(this.instance.key).appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
+        assert.notOk(getAppointmentDataProvider(this.instance.key).appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {
@@ -801,7 +801,7 @@ module('Subscribes', {
 
         const groups = this.instance._getCurrentViewOption('groups');
         const workspaceGroups = this.instance.getWorkSpace().option('groups');
-        const result = getResourceManager().getAppointmentColor({
+        const result = getResourceManager(this.instance.key).getAppointmentColor({
             itemData: {
                 typeId: 1,
                 priorityId: 1
@@ -853,7 +853,7 @@ module('Subscribes', {
 
         const groups = this.instance._getCurrentViewOption('groups');
         const workspaceGroups = this.instance.getWorkSpace().option('groups');
-        const result = getResourceManager().getAppointmentColor({
+        const result = getResourceManager(this.instance.key).getAppointmentColor({
             itemData: {
                 'Price': 10,
                 'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -1127,8 +1127,8 @@ module('Grouping By Date', {
         fx.off = false;
     },
 
-    checkNeedCoordinatesResult: (assert, result, cellIndex, rowIndex, top, left, epsilon) => {
-        assert.equal(result.cellIndex, cellIndex, 'cellIndex is correct');
+    checkNeedCoordinatesResult: (assert, result, columnIndex, rowIndex, top, left, epsilon) => {
+        assert.equal(result.columnIndex, columnIndex, 'columnIndex is correct');
         assert.equal(result.rowIndex, rowIndex, 'rowIndex is correct');
         assert.equal(result.top, top, 'top is correct');
         assert.roughEqual(result.left, left, epsilon, 'left is correct');

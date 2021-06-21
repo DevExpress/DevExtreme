@@ -1,4 +1,4 @@
-import { updatePropsImmutable } from '../update-props-immutable';
+import { updatePropsImmutable } from '../update_props_immutable';
 
 class Dummy {
   nestedProp: string;
@@ -30,6 +30,16 @@ it('change nested object option to plain object value', () => {
   expect(props.nestedObject.nestedProp).toBe('new value');
 });
 
+it('change second level nested object option to plain object value', () => {
+  const option = { nestedObject1: { nestedObject2: { nestedProp: 'new value' } } };
+  const props = { nestedObject1: option.nestedObject1 };
+
+  updatePropsImmutable(props, option, 'nestedObject1', 'nestedObject1.nestedObject2.nestedProp');
+  expect(props.nestedObject1).not.toBe(option.nestedObject1);
+  expect(props.nestedObject1.nestedObject2).not.toBe(option.nestedObject1.nestedObject2);
+  expect(props.nestedObject1.nestedObject2.nestedProp).toBe('new value');
+});
+
 it('change nested object option to plain object value 1', () => {
   const option = { nestedObject: { nestedProp: 'new value' } };
   const props = { nestedObject: option.nestedObject };
@@ -52,16 +62,6 @@ it('change array option', () => {
   const option = { dataSource };
   const props = { dataSource: option.dataSource };
   updatePropsImmutable(props, option, 'dataSource', 'dataSource');
-
-  expect(props.dataSource).toBe(dataSource);
-});
-
-it('wrong array index', () => {
-  const dataSource = [];
-
-  const option = { dataSource };
-  const props = { dataSource: option.dataSource };
-  updatePropsImmutable(props, option, 'dataSource', 'dataSource["a"]');
 
   expect(props.dataSource).toBe(dataSource);
 });
@@ -89,4 +89,23 @@ it('change object item in nested array option', () => {
 
   expect(props.nestedArray).not.toBe(nestedArray);
   expect(props.nestedArray[1]).toBe('item2 modified');
+});
+
+it('change object item in double nested array option', () => {
+  const objectProp = {};
+
+  const props = {
+    item: {
+      objectProp,
+      items: [{ value: 'item1' }, { value: 'item2' }],
+    },
+  };
+  const option = { item: props.item };
+  option.item.items[0].value = 'item1 modified';
+
+  updatePropsImmutable(props, option, 'item', 'item.items[0].value');
+
+  expect(props.item.items[0].value).toBe('item1 modified');
+  expect(props.item.items[1].value).toBe('item2');
+  expect(props.item.objectProp).toBe(objectProp);
 });

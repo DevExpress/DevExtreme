@@ -22,6 +22,7 @@ export declare function isPlainObject(object: any): object is { [key: string]: a
 
 export declare function isPrimitive(value: any): value is string | number |  bigint | boolean | undefined | symbol | null;
 
+// @ts-ignore: globalThis was introduced in TypeScript 3.4
 export declare function isWindow(object: any): object is (Window & typeof globalThis);
 
 export declare function isRenderer(object: any): boolean;

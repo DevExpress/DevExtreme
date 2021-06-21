@@ -1,9 +1,9 @@
-import { getElementStyle } from './get_element_style';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 
 export function getTranslateValues(element: Element | null): { left: number; top: number } {
   if (!element) return { left: 0, top: 0 };
 
-  const matrix = getElementStyle('transform', element) as string;
+  const matrix = getElementComputedStyle(element)?.transform ?? '';
   const regex = /matrix.*\((.+)\)/;
   const matrixValues = regex.exec(matrix);
 

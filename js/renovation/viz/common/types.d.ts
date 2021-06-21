@@ -8,7 +8,7 @@ export interface FormatObject extends LocalizationFormatObject, ChartFormatObjec
 export type Format = LocalizationFormat & FormatObject;
 export interface Point {
   size: number;
-  tag: any;
+  tag: string;
   originalArgument: Date | string | number;
   originalValue: Date | string | number;
 }
@@ -48,7 +48,7 @@ export interface CustomizedOptions {
   borderColor?: string;
   fontColor?: string;
 }
-export type CustomizeTooltipFn = (info: any) => CustomizedOptions;
+export type CustomizeTooltipFn = (info: Record<string, unknown>) => CustomizedOptions;
 export type Location = 'center' | 'edge';
 export type Container = string | HTMLElement;
 export interface TooltipData {

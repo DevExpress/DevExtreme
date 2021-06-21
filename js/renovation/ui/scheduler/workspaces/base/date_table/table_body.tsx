@@ -52,6 +52,8 @@ export const viewFunction = ({
                 index: cellIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
+                isSelected,
+                isFocused,
                 key,
                 text,
                 otherMonth,
@@ -72,6 +74,8 @@ export const viewFunction = ({
                   today={today}
                   otherMonth={otherMonth}
                   firstDayOfMonth={firstDayOfMonth}
+                  isSelected={isSelected}
+                  isFocused={isFocused}
                 />
               ))}
             </Row>

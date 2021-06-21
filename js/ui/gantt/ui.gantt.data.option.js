@@ -1,4 +1,4 @@
-import Component from '../../core/component';
+import { Component } from '../../core/component';
 import DataHelperMixin from '../../data_helper';
 
 class DataOption extends Component {

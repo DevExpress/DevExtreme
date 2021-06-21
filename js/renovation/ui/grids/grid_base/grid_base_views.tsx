@@ -1,5 +1,5 @@
 import {
-  JSXComponent, Component,
+  JSXComponent, Component, Mutable,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
 import { GridBaseViewProps } from './common/grid_base_view_props';
@@ -15,9 +15,16 @@ export const viewFunction = ({
     role,
   },
   className,
+  viewRendered,
 }: GridBaseViews): JSX.Element => (
   <div className={className} role={role}>
-    {(views.map(({ name, view }) => (<GridBaseViewWrapper key={name} view={view} />)))}
+    {(views.map(({ name, view }) => (
+      <GridBaseViewWrapper
+        key={name}
+        view={view}
+        onRendered={viewRendered}
+      />
+    )))}
   </div>
 );
 
@@ -33,5 +40,15 @@ export class GridBaseViews extends JSXComponent<GridBaseViewPropsType, 'views' |
       [`${this.props.className}`]: !!this.props.className,
       [`${this.props.className}-${BORDERS_CLASS}`]: !!showBorders,
     });
+  }
+
+  @Mutable() viewRenderedCount = 0;
+
+  viewRendered(): void {
+    this.viewRenderedCount += 1;
+
+    if (this.viewRenderedCount === this.props.views.length) {
+      this.props.onRendered?.();
+    }
   }
 }

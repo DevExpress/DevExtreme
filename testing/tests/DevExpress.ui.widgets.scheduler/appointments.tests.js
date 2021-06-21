@@ -3,8 +3,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -61,9 +62,6 @@ const dataAccessors = {
 
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
-    getAppointmentColor: () => {
-        return $.Deferred().resolve('red').promise();
-    },
     getField: (field, obj) => {
         if(!typeUtils.isDefined(dataAccessors.getter[field])) {
             return;
@@ -106,6 +104,12 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
         return result;
     },
     appendSingleAppointmentData: (data) => data,
+    getResourceManager: () => {
+        return getResourceManager(0);
+    },
+    getAppointmentDataProvider: () => {
+        return getAppointmentDataProvider(0);
+    }
 });
 
 const createInstance = (options, subscribesConfig) => {
@@ -124,7 +128,7 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
-    createInstances({
+    const key = createFactoryInstances({
         resources: options.resources,
         scheduler: {
             isVirtualScrolling: () => false
@@ -132,17 +136,24 @@ const createInstance = (options, subscribesConfig) => {
         appointmentDataAccessors: dataAccessors
     });
 
-    getResourceManager().getResourcesFromItem = () => {
+    getResourceManager(key).getResourcesFromItem = () => {
         return { someId: ['with space'] };
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
-        observer: observer,
+        observer,
         ...options,
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
         draggingMode: 'default',
+        observer: {
+            fire: (functionName) => {
+                if(functionName === 'getResourceManager') {
+                    return getResourceManager(key);
+                }
+            }
+        }
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());

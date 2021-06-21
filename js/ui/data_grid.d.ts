@@ -199,7 +199,7 @@ export interface RowDraggingTemplateDataModel {
   readonly itemElement: DxElement;
 }
 
-export interface FilterPanelCustomizeTextArg<T> { 
+export interface FilterPanelCustomizeTextArg<T> {
   readonly component: T,
   readonly filterValue: any,
   readonly text: string
@@ -518,10 +518,11 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnResizingMode?: 'nextColumn' | 'widget';
     /**
      * @docid
+     * @type number|Enums.Mode
      * @default undefined
      * @public
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * @docid
      * @type Array<GridBaseColumn|string>
@@ -2175,8 +2176,9 @@ export interface GridBase {
      * @publicName navigateToRow(key)
      * @param1 key:any
      * @public
+     * @return Promise<void>
      */
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<void>;
     /**
      * @docid
      * @publicName pageCount()
@@ -2725,6 +2727,13 @@ export interface ColumnLookup {
    * @default undefined
    */
   valueExpr?: string
+  /**
+   * @docid GridBaseColumn.lookup.calculateCellValue
+   * @type_function_param1 rowData:object
+   * @type_function_return any
+   * @public
+   */
+  calculateCellValue?: ((rowData: any) => any);
 }
 
 /**
@@ -4377,7 +4386,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
