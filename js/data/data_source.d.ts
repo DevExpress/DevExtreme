@@ -113,7 +113,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @default "contains"
      * @public
      */
-    searchOperation?: SearchOperations;
+    searchOperation?: SearchOperation;
     /**
      * @docid
      * @default null
@@ -422,4 +422,5 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
+type SearchOperation = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
 type EventName = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;

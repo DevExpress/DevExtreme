@@ -55,7 +55,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    searchOperation?: string;
+    searchOperation?: SearchOperation;
     /**
      * @docid
      * @public
