@@ -102,7 +102,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         const result = this._getDateByIndexCore(firstViewDate, index);
 
-        if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
             result.setDate(result.getDate() - 1);
         }
 
@@ -186,7 +186,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._firstViewDate);
+            const firstViewDate = new Date(this._startViewDate);
             let currentDate = new Date(firstViewDate);
 
             const $cells = [];
@@ -256,7 +256,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        this._setFirstViewDate();
+        this._startViewDate = this._calculateStartViewDate();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
@@ -434,7 +434,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._firstViewDate));
+        return dateUtils.trimTime(new Date(this._startViewDate));
     }
 
     _getIntervalBetween(currentDate, allDay) {

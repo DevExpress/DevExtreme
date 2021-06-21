@@ -55,8 +55,9 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { isDateInRange } from './utils/base';
+import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
 import { createResourcesTree, getCellGroups } from '../resources/utils';
+import { calculateStartViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1017,8 +1018,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _toggleFixedScrollableClass() { return noop(); }
 
+    _setVisibilityDates() {}
+
     _renderView() {
-        this._setFirstViewDate();
+        this._startViewDate = this._calculateStartViewDate();
+        this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {
@@ -1288,62 +1292,39 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
-    _getCalculatedFirstDayOfWeek() {
-        const firstDayOfWeekOption = this._firstDayOfWeek();
-
-        const firstDayOfWeek = isDefined(firstDayOfWeekOption)
-            ? firstDayOfWeekOption
-            : dateLocalization.firstDayOfWeekIndex();
-
-        return firstDayOfWeek;
-    }
-
-    _setFirstViewDate() {
-        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
-
-        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this._getIntervalDuration(),
+            this.option('firstDayOfWeek'),
+        );
     }
 
     _getViewStartByOptions() {
-        if(!this.option('startDate')) {
-            return this.option('currentDate');
-        } else {
-            let startDate = dateUtils.trimTime(this._getStartViewDate());
-            const currentDate = this.option('currentDate');
-            const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
-            let endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-
-            while(!isDateInRange(currentDate, startDate, endDate, diff)) {
-                startDate = endDate;
-                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-            }
-
-            return diff > 0 ? startDate : endDate;
-        }
+        return getViewStartByOptions(
+            this.option('startDate'),
+            this.option('currentDate'),
+            this._getIntervalDuration(),
+            this.option('startDate') ? this._calculateViewStartDate() : undefined,
+        );
     }
 
     _getHeaderDate() {
         return this.getStartViewDate();
     }
 
-    _getStartViewDate() {
-        return this.option('startDate');
+    _calculateViewStartDate() {
+        return calculateViewStartDate(this.option('startDate'));
     }
 
     _getIntervalDuration() {
         return toMs('day') * this.option('intervalCount');
     }
 
-    _setStartDayHour(date) {
-        const startDayHour = this.option('startDayHour');
-        if(isDefined(startDayHour)) {
-            date.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
-        }
-    }
-
     _firstDayOfWeek() {
-        return this.option('firstDayOfWeek');
+        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _attachEvents() {
@@ -2574,7 +2555,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();
-        const minTime = this._firstViewDate.getTime();
+        const minTime = this._startViewDate.getTime();
 
         return (currentDateTime > minTime)
             ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % cellDuration) / cellDuration
@@ -2768,7 +2749,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getStartViewDate() {
-        return this._firstViewDate;
+        return this._startViewDate;
     }
 
     getEndViewDate() {
@@ -3180,7 +3161,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._startViewDate);
         newFirstViewDate.setHours(this.option('startDayHour'));
 
         return newFirstViewDate;
