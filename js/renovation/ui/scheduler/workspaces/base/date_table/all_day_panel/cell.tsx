@@ -3,18 +3,34 @@ import {
 } from '@devextreme-generator/declarations';
 import { DateTableCellBaseProps, DateTableCellBase } from '../cell';
 
-export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    className,
+    startDate,
+    endDate,
+    groups,
+    groupIndex,
+    isFirstGroupCell,
+    isLastGroupCell,
+    index,
+    dataCellTemplate,
+    isSelected,
+    isFocused,
+  },
+}: AllDayPanelCell): JSX.Element => (
   <DateTableCellBase
-    className={`dx-scheduler-all-day-table-cell ${viewModel.props.className}`}
-    startDate={viewModel.props.startDate}
-    endDate={viewModel.props.endDate}
-    groups={viewModel.props.groups}
-    groupIndex={viewModel.props.groupIndex}
+    className={`dx-scheduler-all-day-table-cell ${className}`}
+    startDate={startDate}
+    endDate={endDate}
+    groups={groups}
+    groupIndex={groupIndex}
     allDay
-    isFirstGroupCell={viewModel.props.isFirstGroupCell}
-    isLastGroupCell={viewModel.props.isLastGroupCell}
-    index={viewModel.props.index}
-    dataCellTemplate={viewModel.props.dataCellTemplate}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    index={index}
+    dataCellTemplate={dataCellTemplate}
+    isSelected={isSelected}
+    isFocused={isFocused}
   />
 );
 
