@@ -4,7 +4,7 @@ import ArrayStore from 'data/array_store';
 import Promise from 'core/polyfills/promise';
 import fx from 'animation/fx';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
