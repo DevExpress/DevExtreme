@@ -210,6 +210,7 @@
             "@typescript-eslint/no-unnecessary-type-assertion": "error",
             "@typescript-eslint/prefer-nullish-coalescing": "error",
             "@typescript-eslint/no-explicit-any": "error",
+            "@typescript-eslint/explicit-module-boundary-types": "error",
             "@typescript-eslint/require-array-sort-compare": ["error",
                 { "ignoreStringArrays": true }
             ],
@@ -236,7 +237,7 @@
             "@typescript-eslint/no-unsafe-member-access": "error",
             "@typescript-eslint/prefer-readonly-parameter-types": "error",
             "@typescript-eslint/explicit-member-accessibility": "error",
-            "@typescript-eslint/explicit-module-boundary-types": "error",
+
             */
         }
     }, {

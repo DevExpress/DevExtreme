@@ -170,7 +170,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  onWidgetKeyDown(options): Event | undefined {
+  onWidgetKeyDown(options: Record<string, unknown>): Event | undefined {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
@@ -180,8 +180,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
 
     if (keyName === 'space' || which === 'space') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;

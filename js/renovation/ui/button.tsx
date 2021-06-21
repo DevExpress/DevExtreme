@@ -213,7 +213,7 @@ export class Button extends JSXComponent(ButtonProps) {
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
-  onWidgetKeyDown(options): Event | undefined {
+  onWidgetKeyDown(options: Record<string, unknown>): Event | undefined {
     const { onKeyDown } = this.props;
     const { originalEvent, keyName, which } = options;
 
@@ -223,8 +223,8 @@ export class Button extends JSXComponent(ButtonProps) {
     }
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;
