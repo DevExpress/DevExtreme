@@ -145,7 +145,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
  * @public
  */
 export default class DataSource<TKey = any, TValue = any> {
-    constructor(data: Array<TValue>);
+    constructor(data: TKey extends number ? Array<TValue> : TKey extends string ? Record<TKey, TValue> : { [Symbol.iterator]():IterableIterator<[TKey, TValue]> });
     constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue, any, any>);
     constructor(store: Store<TKey, TValue>);
     constructor(url: string);
