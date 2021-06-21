@@ -79,6 +79,23 @@ it('change item in nested array option', () => {
   expect(props.nestedArray[2]).toBe(nestedArray[2]);
 });
 
+it('change several items in nested array option', () => {
+  const nestedArray = [{ nestedProp1: 'item11', nestedProp2: 'item12' }];
+
+  const option = { nestedArray };
+  const props = { nestedArray: option.nestedArray };
+
+  updatePropsImmutable(props, option, 'nestedArray', 'nestedArray[0].nestedProp1');
+  nestedArray[0].nestedProp1 = 'changed';
+  updatePropsImmutable(props, option, 'nestedArray', 'nestedArray[0].nestedProp2');
+  nestedArray[0].nestedProp2 = 'changed';
+
+  expect(props.nestedArray).not.toBe(nestedArray);
+  expect(props.nestedArray[0]).not.toBe(nestedArray[0]);
+  expect(props.nestedArray[0].nestedProp1).toBe('item11');
+  expect(props.nestedArray[0].nestedProp2).toBe('item12');
+});
+
 it('change object item in nested array option', () => {
   const nestedArray = ['item1', 'item2'];
 
