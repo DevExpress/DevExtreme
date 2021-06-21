@@ -1319,7 +1319,7 @@ export const BaseChart = BaseWidget.inherit({
             }
         });
 
-        (that.series && that.series.length !== 0) && that._tracker.clearHover();
+        (that.series?.length !== 0) && that._tracker.clearHover();
 
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
