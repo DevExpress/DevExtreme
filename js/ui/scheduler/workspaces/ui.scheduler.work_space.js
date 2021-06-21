@@ -2771,7 +2771,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDate() {
-        return this.viewDataProvider.getLastViewDate() - toMs('minute');
+        return new Date(this.viewDataProvider.getLastViewDate().getTime() - toMs('minute'));
     }
 
     getEndViewDateByEndDayHour() {

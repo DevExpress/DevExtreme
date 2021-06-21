@@ -562,23 +562,6 @@ export class ViewDataGenerator {
         return cellsRow;
     }
 
-    _calculateCellIndex(horizontalGroupCount, groupOrientation, isGroupedByDate, rowIndex, columnIndex, columnsNumber) {
-        const groupCount = horizontalGroupCount || 1;
-        let index = rowIndex * columnsNumber + columnIndex;
-        const columnsInGroup = columnsNumber / groupCount;
-
-        if(groupOrientation === 'horizontal') {
-            let columnIndexInCurrentGroup = columnIndex % columnsInGroup;
-            if(isGroupedByDate) {
-                columnIndexInCurrentGroup = Math.floor(columnIndex / groupCount);
-            }
-
-            index = rowIndex * columnsInGroup + columnIndexInCurrentGroup;
-        }
-
-        return index;
-    }
-
     generateGroupedDataMap(viewDataMap) {
         const {
             allDayPanelMap,
