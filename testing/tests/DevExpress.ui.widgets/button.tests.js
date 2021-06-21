@@ -139,22 +139,24 @@ QUnit.module('Button', function() {
             assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
         });
 
-        [
-            { option: 'stylingMode', value: 'text' },
-            { option: 'type', value: 'danger' }
-        ].forEach(({ option, value }) => {
-            QUnit.test(`only className argument is passed when changing the "${option}" option`, function(assert) {
-                const removeClassSpy = sinon.spy(renderer.fn, 'removeClass');
+        if(!isRenovation) {
+            [
+                { option: 'stylingMode', value: 'text' },
+                { option: 'type', value: 'danger' }
+            ].forEach(({ option, value }) => {
+                QUnit.test(`only className argument is passed when changing the "${option}" option`, function(assert) {
+                    const removeClassSpy = sinon.spy(renderer.fn, 'removeClass');
 
-                this.instance.option(option, value);
+                    this.instance.option(option, value);
 
-                removeClassSpy.getCalls().forEach((funcCall) => {
-                    assert.strictEqual(funcCall.args.length, 1, 'only one argument passed to removeClass');
+                    removeClassSpy.getCalls().forEach((funcCall) => {
+                        assert.strictEqual(funcCall.args.length, 1, 'only one argument passed to removeClass');
+                    });
+
+                    removeClassSpy.restore();
                 });
-
-                removeClassSpy.restore();
             });
-        });
+        }
 
         QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
             const clickHandler = sinon.spy();
