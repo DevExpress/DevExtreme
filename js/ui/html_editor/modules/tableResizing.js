@@ -64,14 +64,15 @@ export default class TableResizingModule extends BaseModule {
         this._quillInstance.off('text-change', this._quillTextChangeHandler);
     }
 
-    _getQuillTextChangeHandler() {
+    _getQuillTextChangeHandler(delta) {
         if(this._isTableChanges()) {
             this._removeResizeFrames();
-            this._updateColumnsWidth();
+            const $tables = this._findTables();
+            this._updateColumnsWidth($tables);
 
             clearTimeout(this._attachResizerTimeout);
             this._attachResizerTimeout = setTimeout(() => {
-                this._createResizeFrames(this._findTables());
+                this._createResizeFrames($tables);
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }, TIMEOUT);
@@ -128,7 +129,7 @@ export default class TableResizingModule extends BaseModule {
         let result;
 
         each(this._tableResizeFrames, (_, frame) => {
-            if(frame.$table.get(0) === $table) {
+            if(frame.$table.get(0) === $table.get(0)) {
                 result = frame;
                 return false;
             }
@@ -149,6 +150,12 @@ export default class TableResizingModule extends BaseModule {
     _detachSeparatorEvents($lineSeparators) {
         $lineSeparators.each((i, $lineSeparator) => {
             eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
+        });
+    }
+
+    _updateColumnsWidth($tables) {
+        each($tables, (_, table) => {
+            this._fixColumnsWidth($(table));
         });
     }
 
@@ -278,13 +285,13 @@ export default class TableResizingModule extends BaseModule {
     _dragStartHandler({ $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
 
-        this._fixColumnsWidth(frame);
+        this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt($($determinantElements[index])[directionInfo.getSizeFunction]());
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt($($determinantElements[index + 1])[directionInfo.getSizeFunction]());
         } else if(direction === 'horizontal') {
-            frame.$table.css('width', 'auto');
+            frame.$table.css('width', 'initial');
         }
     }
 
@@ -367,6 +374,9 @@ export default class TableResizingModule extends BaseModule {
                 this._dragStartHandler(options);
             },
             onDragEnd: () => {
+                // if(!options.$determinantElements[options.index + 1] && options.direction !== 'vertical') {
+                options.frame.$table.attr('width', options.frame.$table.outerWidth());
+                // }
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
@@ -377,8 +387,8 @@ export default class TableResizingModule extends BaseModule {
         this._currentDraggableElement = this.editorInstance._createComponent(options.lineSeparator, Draggable, config);
     }
 
-    _fixColumnsWidth(frame) {
-        const determinantElements = this._getTableDeterminantElements(frame.$table);
+    _fixColumnsWidth($table) {
+        const determinantElements = this._getTableDeterminantElements($table);
 
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
