@@ -64,9 +64,10 @@ export default class TableResizingModule extends BaseModule {
         this._quillInstance.off('text-change', this._quillTextChangeHandler);
     }
 
-    _getQuillTextChangeHandler(delta, oldContent) {
-        if(this._isTableChanges(delta, oldContent)) {
+    _getQuillTextChangeHandler() {
+        if(this._isTableChanges()) {
             this._removeResizeFrames();
+            this._updateColumnsWidth();
 
             clearTimeout(this._attachResizerTimeout);
             this._attachResizerTimeout = setTimeout(() => {
@@ -92,44 +93,48 @@ export default class TableResizingModule extends BaseModule {
 
     _createResizeFrames($tables) {
         $tables.each((index, $item) => {
+            const $table = $($item);
             this._tableResizeFrames[index] = {
                 $frame: this._createTableResizeFrame($item),
-                $table: $($item),
-                index: index
+                $table: $table,
+                index: index,
+                columnsCount: this._getTableDeterminantElements($table, 'horizontal').length,
+                rowsCount: this._getTableDeterminantElements($table, 'vertical').length
             };
         });
     }
 
-    _isTableChanges(delta, oldContent) {
+    _isTableChanges() {
         const $tables = this._findTables();
-        return $tables.length !== this._tableResizeFrames.length || this._isTableChangesInDelta(delta, oldContent);
+
+        let result = false;
+        if($tables.length !== this._tableResizeFrames.length) {
+            result = true;
+        } else {
+            each($tables, (_, table) => {
+                const $table = $(table);
+                const frame = this._getFrameForTable($table);
+
+                if(!frame || frame.columnsCount !== this._getTableDeterminantElements($table, 'horizontal').length || frame.rowsCount !== this._getTableDeterminantElements($table, 'vertical').length) {
+                    result = true;
+                    return false;
+                }
+            });
+        }
+        return result;
     }
 
-    _findTableChangesInDelta(delta) {
-        let result = false;
-        each(delta.ops, (_, data) => {
-            if(data?.attributes?.table) {
-                result = true;
+    _getFrameForTable($table) {
+        let result;
+
+        each(this._tableResizeFrames, (_, frame) => {
+            if(frame.$table.get(0) === $table) {
+                result = frame;
                 return false;
             }
         });
 
         return result;
-    }
-
-    _isTableChangesInDelta(delta, oldContent) {
-        if(delta?.ops[0]?.delete || delta?.ops[1]?.delete) {
-            const quill = this.editorInstance.getQuillInstance();
-            const currentContent = quill.getContents();
-
-            return this._findTableChangesInDelta(currentContent.diff(oldContent));
-        }
-
-        if(delta.ops[0].insert || delta.ops[1].insert) {
-            return this._findTableChangesInDelta(delta);
-        }
-
-        return false;
     }
 
     _removeResizeFrames() {
