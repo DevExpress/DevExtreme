@@ -1,3 +1,4 @@
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from '.';
 import {
     DxPromise
 } from '../core/utils/deferred';
@@ -9,8 +10,6 @@ import Store, {
 import {
     CustomStoreOptions
 } from './custom_store';
-
-type Descriptor = {selector: string, desc: boolean};
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValueOut, TValueMap = TValueOut> {
@@ -29,13 +28,13 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @type Filter expression
      * @public
      */
-    filter?: string | Array<any> | Function;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @type Group expression
      * @public
      */
-    group?: string | Descriptor| Array<Descriptor> | Function;
+    group?: GroupDescriptor | Array<GroupDescriptor>;
     /**
      * @docid
      * @type_function_param1 dataItem:object
@@ -125,13 +124,13 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @type Select expression
      * @public
      */
-    select?: string | Array<string> | Function;
+    select?: SelectDescriptor | Array<SelectDescriptor>;
     /**
      * @docid
      * @type Sort expression
      * @public
      */
-    sort?: string | Descriptor | Array<Descriptor> | Function;
+    sort?: SortDescriptor | Array<SortDescriptor>;
     /**
      * @docid
      * @public
@@ -168,28 +167,28 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    filter(): any;
+    filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @public
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
      * @docid
      * @publicName group()
      * @return object
      * @public
      */
-    group(): any;
+    group(): GroupDescriptor | Array<GroupDescriptor>;
     /**
      * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @public
      */
-    group(groupExpr: any): void;
+    group(groupExpr: GroupDescriptor | Array<GroupDescriptor>): void;
     /**
      * @docid
      * @publicName isLastPage()
@@ -238,7 +237,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    loadOptions(): {sort?: any, filter?: any, select?: any, group?: any, requireTotalCount?: boolean};
+    loadOptions(): {sort?: SortDescriptor | Array<SortDescriptor>, filter?: any, select?: SelectDescriptor, group?: GroupDescriptor | Array<GroupDescriptor>, requireTotalCount?: boolean};
     /**
      * @docid
      * @publicName off(eventName)
@@ -384,28 +383,28 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return any
      * @public
      */
-    select(): any;
+    select(): SelectDescriptor | Array<SelectDescriptor>;
     /**
      * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @public
      */
-    select(expr: any): void;
+    select(expr: SelectDescriptor | Array<SelectDescriptor>): void;
     /**
      * @docid
      * @publicName sort()
      * @return any
      * @public
      */
-    sort(): any;
+    sort(): SortDescriptor | Array<SortDescriptor>;
     /**
      * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @public
      */
-    sort(sortExpr: any): void;
+    sort(sortExpr: SortDescriptor | Array<SortDescriptor>): void;
     /**
      * @docid
      * @publicName store()

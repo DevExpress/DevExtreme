@@ -1,4 +1,10 @@
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from ".";
+import { SearchOperation } from "./data_source";
 
+type SummaryDescriptor = {
+    selector: string | Function;
+    summaryType: 'sum' | 'avg' | 'min' | 'max' | 'count';
+}
 /**
  * @docid
  * @namespace DevExpress.data
@@ -14,22 +20,22 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    expand?: any;
+    expand?: Array<string>;
     /**
      * @docid
      * @public
      */
-    filter?: any;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @public
      */
-    group?: any;
+    group?: GroupDescriptor | Array<GroupDescriptor>;
     /**
      * @docid
      * @public
      */
-    groupSummary?: any;
+    groupSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
     /**
      * @docid
      * @public
@@ -65,7 +71,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    select?: any;
+    select?: SelectDescriptor | Array<SelectDescriptor>;
     /**
      * @docid
      * @public
@@ -75,7 +81,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    sort?: any;
+    sort?: SortDescriptor | Array<SortDescriptor>;
     /**
      * @docid
      * @public
@@ -85,7 +91,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    totalSummary?: any;
+    totalSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
     /**
      * @docid
      * @public

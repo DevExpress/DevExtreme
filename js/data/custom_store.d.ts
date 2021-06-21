@@ -1,3 +1,4 @@
+import { FilterDescriptor, GroupDescriptor } from '.';
 import Store, {
     StoreOptions
 } from './abstract_store';
@@ -58,7 +59,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<number>
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => PromiseLike<number>);
+    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor | Array<GroupDescriptor> }) => PromiseLike<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number

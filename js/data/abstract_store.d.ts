@@ -6,6 +6,11 @@ import {
     LoadOptions
 } from './load_options';
 
+import {
+    FilterDescriptor,
+    GroupDescriptor
+} from '.'
+
 /** @namespace DevExpress.data */
 export interface StoreOptions<TKey = any, TValue = any> {
     /**
@@ -215,7 +220,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: Array<any>, group?: Array<any> }): DxPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor | Array<GroupDescriptor> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
