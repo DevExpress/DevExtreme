@@ -313,6 +313,8 @@ class FileManager extends Widget {
 
         $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
         $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
+
+        this._updateToolbar(this._getMultipleSelectedItems());
     }
 
     _switchView(viewMode) {
@@ -677,6 +679,7 @@ class FileManager extends Widget {
     _onSelectedDirectoryChanged() {
         const currentDirectory = this._getCurrentDirectory();
         this._syncToCurrentDirectory();
+        this._updateToolbar(this._getMultipleSelectedItems());
         this._actions.onCurrentDirectoryChanged({ directory: currentDirectory.fileItem });
     }
 
