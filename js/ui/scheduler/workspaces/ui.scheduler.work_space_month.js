@@ -55,16 +55,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this._formatWeekday;
     }
 
-    _calculateCellIndex(rowIndex, columnIndex) {
-        if(this._isVerticalGroupedWorkSpace()) {
-            rowIndex = rowIndex % this._getRowCount();
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
-        return rowIndex * this._getCellCount() + columnIndex;
-    }
-
     _getInterval() {
         return DAY_IN_MILLISECONDS;
     }

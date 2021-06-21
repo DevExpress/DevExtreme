@@ -1980,14 +1980,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getDateForHeaderText(index) {
-        return this._getDateByIndex(index);
+        const validIndex = index % this._getRowCount();
+        return this._getDateByIndex(validIndex);
     }
 
     _getDateByIndex() { return abstract(); }
     _getFormat() { return abstract(); }
 
     _calculateCellIndex(rowIndex, columnIndex) {
-        return this._groupedStrategy.calculateCellIndex(rowIndex, columnIndex);
+        return rowIndex * this._getRowCount() + columnIndex;
     }
 
     _renderTableBody(options, delayCellTemplateRendering) {
@@ -2117,9 +2118,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex, patchedIndexes) {
-        columnIndex = !patchedIndexes ? this._patchColumnIndex(columnIndex) : columnIndex;
-
+    _getDateByCellIndexes(rowIndex, columnIndex) {
         let firstViewDate = this.getStartViewDate();
 
         const isFirstViewDateDuringDST = firstViewDate.getHours() !== Math.floor(this.option('startDayHour'));
@@ -2144,14 +2143,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         currentDate.setTime(currentDate.getTime() + timeZoneDifference);
 
         return currentDate;
-    }
-
-    _patchColumnIndex(columnIndex) {
-        if(this.isGroupedByDate()) {
-            columnIndex = Math.floor(columnIndex / this._getGroupCount());
-        }
-
-        return columnIndex;
     }
 
     _getOffsetByCount() {

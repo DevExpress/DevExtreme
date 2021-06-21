@@ -85,8 +85,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getDateForHeaderText(index) {
         const firstViewDate = this._getFirstViewDateWithoutDST();
+        const validIndex = index % this._getRowCount();
 
-        return this._getDateByIndexCore(firstViewDate, index);
+        return this._getDateByIndexCore(firstViewDate, validIndex);
     }
 
     _getDateByIndexCore(date, index) {
@@ -119,9 +120,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getMillisecondsOffset(rowIndex, columnIndex) {
-        columnIndex = this._calculateCellIndex(rowIndex, columnIndex);
+        const cellIndex = this._calculateCellIndex(rowIndex, columnIndex);
 
-        return this._getInterval() * columnIndex + this._calculateHiddenInterval(rowIndex, columnIndex);
+        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
     }
 
     _createWorkSpaceElements() {
