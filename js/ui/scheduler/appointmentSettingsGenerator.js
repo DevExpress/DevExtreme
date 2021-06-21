@@ -434,7 +434,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _getGroupIndices(appointmentResources, resourceManager) {
         let result = [];
-        if(this._isGroupsSpecified(appointmentResources)) {
+        if(appointmentResources && resourceManager.loadedResources.length) {
             const tree = createResourcesTree(resourceManager.loadedResources);
 
             result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
