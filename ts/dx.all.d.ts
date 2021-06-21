@@ -12416,6 +12416,10 @@ declare module DevExpress.ui {
          */
         icon?: string;
         /**
+         * [descr:dxTreeViewItem.id]
+         */
+        id?: number | string;
+        /**
          * [descr:dxTreeViewItem.items]
          */
         items?: Array<dxTreeViewItem>;
