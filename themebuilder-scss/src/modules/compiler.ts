@@ -85,8 +85,9 @@ export default class Compiler {
           changedVariables: reply.changedVariables,
         });
       }
-    }).finally(async () => {
-      await this.dartClient.dispose();
+    }).finally(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.dartClient.dispose();
     });
   }
 
