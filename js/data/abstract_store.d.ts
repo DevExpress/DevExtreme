@@ -195,7 +195,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-     on(events: {[key in EventName]?: Function}): this;
+    on(events: {[key in EventName]?: Function}): this;
     /**
      * @docid
      * @publicName push(changes)
