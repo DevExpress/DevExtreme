@@ -411,7 +411,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): any;
+    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue> | Array<any>;
     /**
      * @docid
      * @publicName totalCount()
