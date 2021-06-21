@@ -12,7 +12,7 @@ import {
 } from './custom_store';
 
 /** @namespace DevExpress.data */
-export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValueOut, TValueMap = TValueOut> {
+export interface DataSourceOptions<TKey = any, TValue = any, TSourceValue = TValue, TMappedValue = TValue> {
     /**
      * @docid
      * @public
@@ -41,7 +41,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @type_function_return object
      * @public
      */
-    map?: ((dataItem: TValueIn) => TValueMap);
+    map?: ((dataItem: TSourceValue) => TMappedValue);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -49,7 +49,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @action
      * @public
      */
-    onChanged?: ((e: { readonly changes?: Array<TValueMap> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<TMappedValue> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -83,7 +83,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @type_function_return Array<any>
      * @public
      */
-    postProcess?: ((data: Array<TValueMap>) => Array<TValueOut>);
+    postProcess?: ((data: Array<TMappedValue>) => Array<TValue>);
     /**
      * @docid
      * @default undefined
@@ -136,7 +136,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TValueIn> | StoreOptions<TKey, TValueIn> | Array<TValueIn>;
+    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
 }
 /**
  * @docid
