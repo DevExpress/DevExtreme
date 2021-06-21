@@ -3,6 +3,9 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+import { getViewStartByOptions } from './utils/month';
+import { calculateStartViewDate } from './utils/timeline_month';
+import { setStartDayHour } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
@@ -68,9 +71,13 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return cellCount;
     }
 
-    _setFirstViewDate() {
-        this._firstViewDate = dateUtils.getFirstMonthDate(this.option('currentDate'));
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this.option('intervalCount'),
+        );
     }
 
     _getFormat() {
@@ -78,8 +85,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
+        const resultDate = new Date(this._startViewDate);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
 
         return resultDate;
     }
@@ -104,12 +111,10 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return 0;
     }
 
-    _getDateByCellIndexes(rowIndex, cellIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, cellIndex);
+    _getDateByCellIndexes(rowIndex, columnIndex) {
+        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
-        this._setStartDayHour(date);
-
-        return date;
+        return setStartDayHour(date, this.option('startDayHour'));
     }
 
     getPositionShift() {
@@ -118,6 +123,15 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             left: 0,
             cellPosition: 0
         };
+    }
+
+    _getViewStartByOptions() {
+        return getViewStartByOptions(
+            this.option('startDate'),
+            this.option('currentDate'),
+            this.option('intervalCount'),
+            dateUtils.getFirstMonthDate(this.option('startDate')),
+        );
     }
 }
 

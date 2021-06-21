@@ -7,7 +7,7 @@ QUnit.testStart(function() {
 });
 
 import 'generic_light.css!';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
 import columnsView from 'ui/grid_core/ui.grid_core.columns_view';

@@ -13,7 +13,6 @@ import {
   CheckBox, CheckBoxProps, defaultOptionRules, viewFunction,
 } from '../check_box';
 import { Widget } from '../../common/widget';
-import { InkRipple } from '../../common/ink_ripple';
 import { ValidationMessage } from '../../overlays/validation_message';
 
 interface Mock extends jest.Mock {}
@@ -70,20 +69,6 @@ describe('CheckBox', () => {
       expect(input.props()).not.toHaveProperty('name');
     });
 
-    it('should render InkRipple if useInkRipple is true', () => {
-      const checkBox = shallow(viewFunction({
-        props: { useInkRipple: true },
-      } as CheckBox));
-      expect(checkBox.find(InkRipple).props()).toMatchObject({
-        config: {
-          waveSizeCoefficient: 2.5,
-          useHoldAnimation: false,
-          wavesNumber: 2,
-          isCentered: true,
-        },
-      });
-    });
-
     it('should render text if text option is defined', () => {
       const checkBox = shallow(viewFunction({ props: { text: 'checkbox-text' } } as CheckBox));
       const checkBoxText = checkBox.find('.dx-checkbox-container .dx-checkbox-text');
@@ -106,10 +91,7 @@ describe('CheckBox', () => {
     it('should pass all necessary properties to the Widget', () => {
       const renderOptions = {
         aria: { role: 'aria' },
-        onActive: (): null => null,
-        onInactive: (): null => null,
         onFocusIn: (): null => null,
-        onFocusOut: (): null => null,
       };
       const renderProps = {
         accessKey: 'A',
@@ -357,103 +339,7 @@ describe('CheckBox', () => {
       });
     });
 
-    describe('Active/Inactive', () => {
-      it('should ignore inkripple effects if the useInkRipple is "false"', () => {
-        const checkBox = new CheckBox({ useInkRipple: false });
-        checkBox.inkRippleRef = {
-          current: {
-            showWave: jest.fn(),
-            hideWave: jest.fn(),
-          },
-        } as any;
-
-        checkBox.onActive({} as Event);
-        checkBox.onInactive({} as Event);
-        expect(checkBox.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
-        expect(checkBox.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
-      });
-
-      it('should show inkripple effect on active action', () => {
-        const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = { current: {} };
-        const event = {} as Event;
-        checkBox.iconRef = iconRef as any;
-        checkBox.inkRippleRef = { current: { showWave: jest.fn() } } as any;
-        checkBox.onActive(event);
-
-        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
-          event,
-          element: iconRef.current,
-          wave: 1,
-        });
-      });
-
-      it('should hide inkripple effect on inactive action', () => {
-        const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = { current: {} };
-        const event = {} as Event;
-        checkBox.iconRef = iconRef as any;
-        checkBox.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
-        checkBox.onInactive(event);
-
-        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
-          event,
-          element: iconRef.current,
-          wave: 1,
-        });
-      });
-    });
-
-    describe('FocusIn/FocusOut', () => {
-      it('should ignore inkripple effects if the useInkRipple is "false"', () => {
-        const checkBox = new CheckBox({ useInkRipple: false });
-        checkBox.inkRippleRef = {
-          current: {
-            showWave: jest.fn(),
-            hideWave: jest.fn(),
-          },
-        } as any;
-
-        checkBox.onFocusIn({} as Event);
-        checkBox.onFocusOut({} as Event);
-        expect(checkBox.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
-        expect(checkBox.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
-      });
-
-      it('should show inkripple effect on focusin action', () => {
-        const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = { current: {} };
-        const event = {} as Event;
-        checkBox.iconRef = iconRef as any;
-        checkBox.inkRippleRef = { current: { showWave: jest.fn() } } as any;
-        checkBox.onFocusIn(event);
-
-        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
-          event,
-          element: iconRef.current,
-          wave: 0,
-        });
-      });
-
-      it('should hide inkripple effect on focusout action', () => {
-        const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = { current: {} };
-        const event = {} as Event;
-        checkBox.iconRef = iconRef as any;
-        checkBox.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
-        checkBox.onFocusOut(event);
-
-        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
-          event,
-          element: iconRef.current,
-          wave: 0,
-        });
-      });
-
+    describe('FocusIn', () => {
       it('should raise onFocusIn prop event', () => {
         const onFocusIn = jest.fn();
         const checkBox = new CheckBox({ onFocusIn });
@@ -462,6 +348,13 @@ describe('CheckBox', () => {
         checkBox.onFocusIn(event);
 
         expect(onFocusIn).toHaveBeenCalledTimes(1);
+      });
+
+      it('should not raise any error if onFocusIn prop is not passed', () => {
+        const checkBox = new CheckBox({});
+        const event = {} as Event;
+
+        expect(() => { checkBox.onFocusIn(event); }).not.toThrow();
       });
     });
   });
@@ -638,19 +531,6 @@ describe('CheckBox', () => {
       });
 
       afterEach(() => jest.resetAllMocks());
-
-      describe('useInkRiple', () => {
-        // eslint-disable-next-line
-        it.skip('should be true if material theme', () => {
-          (current as Mock).mockImplementation(() => 'material');
-          expect(getDefaultOptions().useInkRipple).toBe(true);
-        });
-
-        it('should be false if theme is not material', () => {
-          (current as Mock).mockImplementation(() => 'generic');
-          expect(getDefaultOptions().useInkRipple).toBe(false);
-        });
-      });
 
       describe('focusStateEnabled', () => {
         it('should be false if device is not desktop', () => {

@@ -57,7 +57,7 @@ import {
 } from './types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
-import { getElementStyle } from './utils/get_element_style';
+import getElementComputedStyle from '../../utils/get_computed_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -256,6 +256,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Mutable() prevContentClientHeight = 0;
 
   @Mutable() tabWasPressed = false;
+
+  @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
 
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
@@ -947,9 +949,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const contentGreaterThanContainer = !reachedMin || !reachedMax;
     const locatedNotAtBound = !reachedMin && !reachedMax;
 
-    const { delta } = event;
-    const scrollFromMin = reachedMin && delta > 0;
-    const scrollFromMax = reachedMax && delta < 0;
+    const scrollFromMin = reachedMin && event.delta > 0;
+    const scrollFromMax = reachedMax && event.delta < 0;
 
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
@@ -1124,7 +1125,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   onVisibilityChangeHandler(visible: boolean): void {
-    this.updateHandler();
+    if (visible) {
+      this.updateHandler();
+
+      if (this.savedScrollOffset) {
+        this.containerElement.scrollTop = this.savedScrollOffset.top;
+        this.containerElement.scrollLeft = this.savedScrollOffset.left;
+      }
+
+      this.savedScrollOffset = undefined;
+    } else {
+      this.savedScrollOffset = this.scrollOffset();
+    }
 
     this.props.onVisibilityChange?.(visible);
   }
@@ -1192,7 +1204,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
-    const isOverflowHidden = getElementStyle('overflowX', this.contentRef.current) === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowX === 'hidden';
 
     /* istanbul ignore next */
     if (!isOverflowHidden) {
@@ -1208,7 +1220,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
-    const isOverflowHidden = getElementStyle('overflowY', this.contentRef.current) === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowY === 'hidden';
 
     /* istanbul ignore next */
     if (!isOverflowHidden) {

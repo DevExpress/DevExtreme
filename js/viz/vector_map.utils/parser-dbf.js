@@ -68,7 +68,7 @@ var DBF_FIELD_PARSERS = {
     },
     'N': function(stream, length) {
         var str = getAsciiString(stream, length);
-        return parseFloat(str, 10);
+        return parseFloat(str);
     },
     'D': function(stream, length) {
         var str = getAsciiString(stream, length);

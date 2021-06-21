@@ -8,7 +8,8 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { DisposeEffectReturn } from '../../utils/effect_return';
-import dxScheduler from '../../../ui/scheduler';
+// eslint-disable-next-line import/named
+import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
 import { SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
@@ -38,13 +39,18 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  addAppointment(appointment: any): void {
+  addAppointment(appointment: dxSchedulerAppointment): void {
     this.instance.addAppointment(appointment);
   }
 
   @Method()
-  deleteAppointment(appointment: any): void {
+  deleteAppointment(appointment: dxSchedulerAppointment): void {
     this.instance.deleteAppointment(appointment);
+  }
+
+  @Method()
+  updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void {
+    this.instance.updateAppointment(target, appointment);
   }
 
   @Method()
@@ -83,22 +89,17 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  showAppointmentPopup(appointmentData?: any, createNewAppointment?: boolean,
-    currentAppointmentData?: any): void {
+  showAppointmentPopup(appointmentData?: dxSchedulerAppointment, createNewAppointment?: boolean,
+    currentAppointmentData?: dxSchedulerAppointment): void {
     this.instance.showAppointmentPopup(appointmentData, createNewAppointment,
       currentAppointmentData);
   }
 
   @Method()
-  showAppointmentTooltip(appointmentData: any, target: string | UserDefinedElement,
-    currentAppointmentData?: any): void {
+  showAppointmentTooltip(appointmentData: dxSchedulerAppointment,
+    target: string | UserDefinedElement, currentAppointmentData?: dxSchedulerAppointment): void {
     this.instance.showAppointmentTooltip(appointmentData, target,
       currentAppointmentData);
-  }
-
-  @Method()
-  updateAppointment(target: any, appointment: any): void {
-    this.instance.updateAppointment(target, appointment);
   }
 
   @Effect({ run: 'once' })

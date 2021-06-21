@@ -11,14 +11,16 @@ const FilterStrategies = {
 
 export class AppointmentDataProvider {
     constructor(options) {
-        this.key = options.key;
-        this.scheduler = options.scheduler;
-        this.dataSource = options.dataSource;
-        this.dataAccessors = this.combineDataAccessors(options.appointmentDataAccessors);
+        this.options = options;
+        this.key = this.options.key;
+        this.scheduler = this.options.scheduler;
+        this.dataSource = this.options.dataSource;
+        this.dataAccessors = this.combineDataAccessors(this.options.appointmentDataAccessors);
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
-        this.initStrategy();
+
+        this.initFilterStrategy();
     }
 
     get filterMaker() { return this.getFilterStrategy().filterMaker; }
@@ -31,27 +33,38 @@ export class AppointmentDataProvider {
 
     getFilterStrategy() {
         if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
-            this.initStrategy();
+            this.initFilterStrategy();
         }
 
         return this.filterStrategy;
     }
 
-    initStrategy() {
+    initFilterStrategy() {
+        const filterOptions = {
+            key: this.key,
+            scheduler: this.scheduler,
+            dataSource: this.dataSource,
+            dataAccessors: this.dataAccessors,
+            startDayHour: this.options.startDayHour,
+            endDayHour: this.options.endDayHour,
+            appointmentDuration: this.options.appointmentDuration,
+            showAllDayPanel: this.options.showAllDayPanel
+        };
+
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
-            ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
-            : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
+            ? new AppointmentFilterVirtualStrategy(filterOptions)
+            : new AppointmentFilterBaseStrategy(filterOptions);
     }
 
     setDataSource(dataSource) {
         this.dataSource = dataSource;
-        this.initStrategy();
+        this.initFilterStrategy();
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
     updateDataAccessors(appointmentDataAccessors) {
         this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
-        this.initStrategy();
+        this.initFilterStrategy();
     }
 
     combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
@@ -124,8 +137,8 @@ const appointmentDataProviders = { };
 export const createAppointmentDataProvider = (key, options) => {
     const validKey = key || 0;
     appointmentDataProviders[validKey] = new AppointmentDataProvider({
-        key,
-        ...options
+        ...options,
+        key
     });
 };
 

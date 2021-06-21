@@ -18,9 +18,7 @@ const RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';
 
 QUnit.module('rangeSlider markup', () => {
     QUnit.test('default', function(assert) {
-        const sliderElement = $('#slider').dxRangeSlider({
-            useInkRipple: false
-        });
+        const sliderElement = $('#slider').dxRangeSlider();
 
         assert.ok(sliderElement.hasClass(SLIDER_CLASS));
         assert.ok(sliderElement.hasClass(RANGE_SLIDER_CLASS));
@@ -29,13 +27,15 @@ QUnit.module('rangeSlider markup', () => {
 
 QUnit.module('hidden inputs', () => {
     QUnit.test('two inputs should be rendered', function(assert) {
-        const $element = $('#slider').dxRangeSlider(); const $inputs = $element.find('input');
+        const $element = $('#slider').dxRangeSlider();
+        const $inputs = $element.find('input');
 
         assert.equal($inputs.length, 2, 'inputs are rendered');
     });
 
     QUnit.test('both inputs should have a \'hidden\' type', function(assert) {
-        const $element = $('#slider').dxRangeSlider(); const $inputs = $element.find('input');
+        const $element = $('#slider').dxRangeSlider();
+        const $inputs = $element.find('input');
 
         assert.equal($inputs.eq(0).attr('type'), 'hidden', 'the first input is of the \'hidden\' type');
         assert.equal($inputs.eq(1).attr('type'), 'hidden', 'the second input is of the \'hidden\' type');
@@ -179,8 +179,7 @@ QUnit.module('aria accessibility', () => {
     QUnit.test('aria-labels for handles', function(assert) {
         const $element = $('#slider').dxRangeSlider({
             start: 50,
-            end: 70,
-            useInkRipple: false
+            end: 70
         });
         const $startHandle = $element.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
         const $endHandle = $element.find('.' + RANGE_SLIDER_END_HANDLE_CLASS);

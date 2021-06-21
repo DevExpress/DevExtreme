@@ -12,6 +12,7 @@ const getNestedOptionValue = require('core/options/utils').getNestedOptionValue;
 const ActionSheet = require('ui/action_sheet');
 const Accordion = require('ui/accordion');
 const Box = require('ui/box');
+const Button = require('ui/button');
 const ColorBox = require('ui/color_box');
 const DataGrid = require('ui/data_grid');
 const DateBox = require('ui/date_box');
@@ -71,6 +72,9 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
 
         $.each(forcedDevices, function(_, device) {
             devices._currentDevice = device;
+            if(componentClass.IS_RENOVATED_WIDGET) {
+                componentClass.defaultOptions({});
+            }
             const component = new componentClass('#cmp');
             options = $.isFunction(options) ? options.call(component) : options;
 
@@ -104,6 +108,36 @@ testComponentDefaults(ActionSheet,
         { platform: 'ios', tablet: true }
     ],
     { usePopover: true }
+);
+
+testComponentDefaults(Button, {},
+    {
+        useInkRipple: true
+    },
+    function() {
+        this._originalIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => true;
+    },
+    function() {
+        themes.isMaterial = this._originalIsMaterial;
+    }
+);
+
+testComponentDefaults(Button, {},
+    {
+        focusStateEnabled: true
+    },
+    function() {
+        this._originalRealDevice = devices.real();
+        this._originalIsSimulator = devices.isSimulator;
+
+        devices.real({ deviceType: 'desktop' });
+        devices.isSimulator = () => false;
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+        devices.isSimulator = this._originalIsSimulator;
+    }
 );
 
 testComponentDefaults(NumberBox,
@@ -989,7 +1023,8 @@ testComponentDefaults(DataGrid,
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: 'ios'
+            platform: 'ios',
+            deviceType: 'tablet'
         });
     },
     function() {

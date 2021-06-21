@@ -13,6 +13,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
@@ -36,21 +37,6 @@ const stubInvokeMethod = function(instance, key) {
             return getAppointmentDataProvider(key);
         }
     });
-};
-
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
 };
 
 QUnit.module('Timeline Base', {
@@ -774,7 +760,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component.initDragBehavior();
                         e.component._attachTablesEvents();
                     },
-                    renovateRender: scrollingMode === 'virtual',
+                    renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                     observer: getObserver(key)
                 }).dxSchedulerTimelineMonth('instance');
@@ -911,6 +897,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
                             allowMultipleCellSelection: true,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
+                            renovateRender: true,
                         });
 
                         const $element = this.instance.$element();
@@ -1297,7 +1284,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1323,10 +1310,10 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: cellsBase[0],
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }, {
                         cellData: cellsBase[1],
-                        position: { cellIndex: 1, rowIndex: 0 }
+                        position: { columnIndex: 1, rowIndex: 0 }
                     }]
                 ]
             };
@@ -1348,7 +1335,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1395,16 +1382,16 @@ QUnit.module('Renovated Render', {
                 allDayPanelMap: [],
                 dateTableMap: [[{
                     cellData: expectedDateTable[0],
-                    position: { cellIndex: 0, rowIndex: 0 }
+                    position: { columnIndex: 0, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[1],
-                    position: { cellIndex: 1, rowIndex: 0 }
+                    position: { columnIndex: 1, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[2],
-                    position: { cellIndex: 2, rowIndex: 0 }
+                    position: { columnIndex: 2, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[3],
-                    position: { cellIndex: 3, rowIndex: 0 }
+                    position: { columnIndex: 3, rowIndex: 0 }
                 }]]
             };
 
@@ -1424,7 +1411,7 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1471,16 +1458,16 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: expectedViewData.groupedData[0].dateTable[0][0],
-                        position: { rowIndex: 0, cellIndex: 0 }
+                        position: { rowIndex: 0, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[0].dateTable[0][1],
-                        position: { rowIndex: 0, cellIndex: 1 }
+                        position: { rowIndex: 0, columnIndex: 1 }
                     }], [{
                         cellData: expectedViewData.groupedData[1].dateTable[0][0],
-                        position: { rowIndex: 1, cellIndex: 0 }
+                        position: { rowIndex: 1, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[1].dateTable[0][1],
-                        position: { rowIndex: 1, cellIndex: 1 }
+                        position: { rowIndex: 1, columnIndex: 1 }
                     }]
                 ]
             };
@@ -1492,7 +1479,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineWeek', function(assert) {
             this.createInstance({}, TIMELINE_WEEK.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 
@@ -1519,7 +1506,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineMonth', function(assert) {
             this.createInstance({}, TIMELINE_MONTH.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 

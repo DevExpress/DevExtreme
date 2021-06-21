@@ -2,8 +2,18 @@ import { mount } from 'enzyme';
 import { DataGridViews, viewFunction } from '../data_grid_views';
 import { GridBaseViews } from '../../grid_base/grid_base_views';
 import { DataGridViewProps } from '../common/data_grid_view_props';
+import { hasWindow } from '../../../../../core/utils/window';
+
+jest.mock('../../../../../core/utils/window', () => ({
+  ...jest.requireActual('../../../../../core/utils/window'),
+  hasWindow: jest.fn(),
+}));
 
 describe('DataGridViews', () => {
+  beforeEach(() => {
+    (hasWindow as jest.Mock).mockReturnValue(true);
+  });
+
   describe('View', () => {
     it('default render', () => {
       const props = {
@@ -79,6 +89,32 @@ describe('DataGridViews', () => {
         expect(dataController.isLoaded).toBeCalledTimes(1);
       });
 
+      it('update on server side', () => {
+        (hasWindow as jest.Mock).mockReturnValue(false);
+        const resizingController = {
+          resize: jest.fn(),
+          fireContentReadyAction: jest.fn(),
+        };
+        const dataController = {
+          isLoaded: jest.fn().mockReturnValue(true),
+        };
+        const props = {
+          instance: {
+            getController: jest.fn().mockImplementation((name) => (name === 'resizing' ? resizingController : dataController)),
+          },
+        } as any;
+        const component = new DataGridViews(props);
+
+        component.update();
+
+        expect(props.instance.getController).toBeCalledTimes(2);
+        expect(props.instance.getController.mock.calls).toEqual([['data'], ['resizing']]);
+
+        expect(resizingController.resize).not.toBeCalled();
+        expect(resizingController.fireContentReadyAction).not.toBeCalled();
+        expect(dataController.isLoaded).not.toBeCalled();
+      });
+
       it('update when data is not loaded', () => {
         const resizingController = {
           resize: jest.fn(),
@@ -102,13 +138,6 @@ describe('DataGridViews', () => {
         expect(resizingController.resize).toBeCalledTimes(1);
         expect(resizingController.fireContentReadyAction).toBeCalledTimes(0);
         expect(dataController.isLoaded).toBeCalledTimes(1);
-      });
-
-      it('update without instance', () => {
-        const props = {} as any;
-        const component = new DataGridViews(props);
-
-        expect(component.update.bind(component)).not.toThrow();
       });
     });
   });

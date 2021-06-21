@@ -62,9 +62,6 @@ const dataAccessors = {
 
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
-    getAppointmentColor: () => {
-        return $.Deferred().resolve('red').promise();
-    },
     getField: (field, obj) => {
         if(!typeUtils.isDefined(dataAccessors.getter[field])) {
             return;

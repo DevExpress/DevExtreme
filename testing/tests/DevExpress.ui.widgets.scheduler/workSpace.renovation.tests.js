@@ -2,7 +2,7 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -16,8 +16,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -36,21 +34,6 @@ const {
     module,
     testStart
 } = QUnit;
-
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
-};
 
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
@@ -96,7 +79,7 @@ module('Renovated Render', {
             test('should work in basic case', function(assert) {
                 this.createInstance();
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -159,7 +142,7 @@ module('Renovated Render', {
                             isLastGroupCell: true,
                             key: 0,
                         },
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }],
                     dateTableMap: [
                         [{
@@ -174,7 +157,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -187,7 +170,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -209,7 +192,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -311,7 +294,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29),
@@ -324,7 +307,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }
                     ],
                     dateTableMap: [
@@ -341,7 +324,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -355,7 +338,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -369,7 +352,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 2,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -383,7 +366,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { cellIndex: 1, rowIndex: 1 }
+                            position: { columnIndex: 1, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -407,7 +390,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData } = this.instance.viewDataProvider;
 
@@ -573,7 +556,7 @@ module('Renovated Render', {
                 ]);
                 this.instance.option('groupOrientation', 'vertical');
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -671,7 +654,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 0, cellIndex: 0 }
+                            position: { rowIndex: 0, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -685,7 +668,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 1, cellIndex: 0 }
+                            position: { rowIndex: 1, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -699,7 +682,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { rowIndex: 2, cellIndex: 0 }
+                            position: { rowIndex: 2, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 allDay: true,
@@ -712,7 +695,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 3, cellIndex: 0 }
+                            position: { rowIndex: 3, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -726,7 +709,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 4, cellIndex: 0 }
+                            position: { rowIndex: 4, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -740,7 +723,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { rowIndex: 5, cellIndex: 0 }
+                            position: { rowIndex: 5, columnIndex: 0 }
                         }]
                     ]
                 };
@@ -759,7 +742,7 @@ module('Renovated Render', {
             showAllDayPanel: false,
         }, WORKSPACE_WEEK.class);
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -774,7 +757,7 @@ module('Renovated Render', {
             endDayHour: 0
         }, 'dxSchedulerWorkSpaceMonth');
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -834,7 +817,7 @@ module('Renovated Render', {
             endDayHour: 24,
         }, WORKSPACE_MONTH.class);
 
-        this.instance.viewDataProvider.update(true);
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions(), true);
 
         const { viewData } = this.instance.viewDataProvider;
         const { allDayPanel } = viewData.groupedData[0];
@@ -957,8 +940,8 @@ module('Renovated Render', {
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(invokeSpy.getCall(0).args[1], {
+        assert.equal(invokeSpy.getCall(2).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
+        assert.deepEqual(invokeSpy.getCall(2).args[1], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
