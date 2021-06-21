@@ -78,7 +78,7 @@ module('Renovated Render', {
             test('should work in basic case', function(assert) {
                 this.createInstance();
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -191,7 +191,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -389,7 +389,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData } = this.instance.viewDataProvider;
 
@@ -555,7 +555,7 @@ module('Renovated Render', {
                 ]);
                 this.instance.option('groupOrientation', 'vertical');
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -741,7 +741,7 @@ module('Renovated Render', {
             showAllDayPanel: false,
         }, WORKSPACE_WEEK.class);
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -756,7 +756,7 @@ module('Renovated Render', {
             endDayHour: 0
         }, 'dxSchedulerWorkSpaceMonth');
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -816,7 +816,7 @@ module('Renovated Render', {
             endDayHour: 24,
         }, WORKSPACE_MONTH.class);
 
-        this.instance.viewDataProvider.update(true);
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions(), true);
 
         const { viewData } = this.instance.viewDataProvider;
         const { allDayPanel } = viewData.groupedData[0];
@@ -939,8 +939,8 @@ module('Renovated Render', {
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(invokeSpy.getCall(0).args[1], {
+        assert.equal(invokeSpy.getCall(2).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
+        assert.deepEqual(invokeSpy.getCall(2).args[1], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),

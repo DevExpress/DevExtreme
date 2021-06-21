@@ -11,7 +11,7 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import { keyboardNavigationModule } from 'ui/grid_core/ui.grid_core.keyboard_navigation';
 import commonUtils from 'core/utils/common';

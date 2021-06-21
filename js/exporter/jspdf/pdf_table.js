@@ -44,7 +44,7 @@ export class PdfTable {
         this.rowHeights.push(rowHeight);
         for(let i = 0; i < cells.length; i++) {
             const currentCell = cells[i];
-            if(currentCell.drawLeftBorder === false) {
+            if(currentCell.drawLeftBorder === false && !isDefined(currentCell.colSpan)) { // TODO
                 if(i >= 1) {
                     cells[i - 1].drawRightBorder = false;
                 }

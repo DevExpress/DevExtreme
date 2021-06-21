@@ -9,7 +9,7 @@ QUnit.testStart(function() {
 });
 
 import $ from 'jquery';
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 

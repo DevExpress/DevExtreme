@@ -7,7 +7,7 @@ const CLASS = {
 export default class TextBox extends Widget {
   input: Selector;
 
-  value: Promise<string>;
+  value: Promise<string | undefined>;
 
   name = 'dxTextBox';
 
@@ -18,7 +18,7 @@ export default class TextBox extends Widget {
     this.value = this.input.value;
   }
 
-  async getButton(index: number): Promise<ActionButton> {
+  getButton(index: number): ActionButton {
     return new ActionButton(this.element, index);
   }
 }
