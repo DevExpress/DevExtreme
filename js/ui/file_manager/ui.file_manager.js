@@ -79,7 +79,6 @@ class FileManager extends Widget {
         this._createNotificationControl();
 
         this._initCommandManager();
-        this._setItemsViewAreaActive(false);
     }
 
     _createNotificationControl() {
@@ -143,7 +142,6 @@ class FileManager extends Widget {
             uploadDropZonePlaceholderContainer: this.$element(),
             rtlEnabled: this.option('rtlEnabled'),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
-            onCreating: () => this._setItemsViewAreaActive(false),
             onError: e => this._onEditingError(e)
         });
     }

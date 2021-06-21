@@ -411,7 +411,6 @@ class FileManagerEditingControl extends Widget {
         this._actions = {
             onSuccess: this._createActionByOption('onSuccess'),
             onError: this._createActionByOption('onError'),
-            onCreating: this._createActionByOption('onCreating'),
         };
     }
 
@@ -423,8 +422,7 @@ class FileManagerEditingControl extends Widget {
             notificationControl: null,
             getItemThumbnail: null,
             onSuccess: null,
-            onError: null,
-            onCreating: null
+            onError: null
         });
     }
 
@@ -445,7 +443,6 @@ class FileManagerEditingControl extends Widget {
                 break;
             case 'onSuccess':
             case 'onError':
-            case 'onCreating':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
