@@ -65,7 +65,9 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getQuillTextChangeHandler(delta) {
+        // console.log('_getQuillTextChangeHandler');
         if(this._isTableChanges()) {
+            // console.log('_isTableChanges');
             this._removeResizeFrames();
             const $tables = this._findTables();
             this._updateColumnsWidth($tables);
@@ -93,6 +95,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _createResizeFrames($tables) {
+        // console.log('_createResizeFrames');
         $tables.each((index, $item) => {
             const $table = $($item);
             this._tableResizeFrames[index] = {
@@ -150,12 +153,6 @@ export default class TableResizingModule extends BaseModule {
     _detachSeparatorEvents($lineSeparators) {
         $lineSeparators.each((i, $lineSeparator) => {
             eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
-        });
-    }
-
-    _updateColumnsWidth($tables) {
-        each($tables, (_, table) => {
-            this._fixColumnsWidth($(table));
         });
     }
 
@@ -376,6 +373,7 @@ export default class TableResizingModule extends BaseModule {
             onDragEnd: () => {
                 // if(!options.$determinantElements[options.index + 1] && options.direction !== 'vertical') {
                 options.frame.$table.attr('width', options.frame.$table.outerWidth());
+                // options.frame.$table.css('minWidth', options.frame.$table.outerWidth());
                 // }
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
@@ -393,6 +391,40 @@ export default class TableResizingModule extends BaseModule {
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
             $(element).attr('width', columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
+        });
+    }
+
+    _recalculateColumnsWidth($table) {
+        // console.log('_recalculateColumnsWidth');
+        const determinantElements = this._getTableDeterminantElements($table);
+
+        const tableWidth = $($table).attr('width');
+
+        const columnsWidths = [];
+
+        let ratio = 1;
+
+        each(determinantElements, (index, element) => {
+            const columnWidth = $(element).outerWidth();
+            columnsWidths[index] = columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH;
+        });
+
+        const columnSum = columnsWidths.reduce((a, b) => a + b, 0);
+
+        if(columnSum > tableWidth - 1) {
+            ratio = tableWidth / columnSum;
+        }
+
+        // console.log('_recalculateColumnsWidth:');
+        each(determinantElements, (index, element) => {
+            // console.log(Math.round(columnsWidths[index] / ratio));
+            $(element).attr('width', Math.round(columnsWidths[index] / ratio));
+        });
+    }
+
+    _updateColumnsWidth($tables) {
+        each($tables, (_, table) => {
+            this._recalculateColumnsWidth($(table));
         });
     }
 
