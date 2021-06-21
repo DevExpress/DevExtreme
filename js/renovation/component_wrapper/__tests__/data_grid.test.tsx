@@ -301,6 +301,19 @@ describe('DataGrid Wrapper', () => {
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
     });
 
+    it('editing complex option changed', () => {
+      const component: any = createDataGrid();
+      const prevProps = { editing: { editRowKey: null } };
+      component.__options = prevProps;
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('editing.editRowKey', null, 1);
+      // emulate base component mutable option change
+      component.__options.editing.editRowKey = 1;
+      // value in prev props shouldn't change for future getUpdatedOptions
+      expect(prevProps.editing).not.toBe(component.viewRef.prevProps.editing);
+      expect(component.viewRef.prevProps.editing.editRowKey).toBe(null);
+    });
+
     it('option changed to same value', () => {
       const component: any = createDataGrid();
       const prevProps = { selectedRowKeys: undefined };
