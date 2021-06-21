@@ -1988,7 +1988,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getFormat() { return abstract(); }
 
     _calculateCellIndex(rowIndex, columnIndex) {
-        return rowIndex * this._getRowCount() + columnIndex;
+        return rowIndex * this._getCellCount() + columnIndex;
     }
 
     _renderTableBody(options, delayCellTemplateRendering) {
