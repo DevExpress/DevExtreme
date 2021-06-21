@@ -2,10 +2,10 @@ import {
   Component, ComponentBindings, JSXComponent,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import LegacyToolbar from '../../ui/toolbar';
+import LegacyToolbar from '../../../ui/toolbar';
 
-import { DomComponentWrapper } from './common/dom_component_wrapper';
-import { BaseWidgetProps } from './common/base_props';
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { BaseWidgetProps } from '../common/base_props';
 
 export const viewFunction = ({
   props,
