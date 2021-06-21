@@ -2775,7 +2775,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDateByEndDayHour() {
-        const dateOfLastViewCell = this.getDateOfLastViewCell();
+        const dateOfLastViewCell = this.getEndViewDate();
         const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
 
         const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
