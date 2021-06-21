@@ -985,6 +985,15 @@ declare module DevExpress {
     shadingColor?: string;
   }
   /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface ExportPivotGridLoadPanel extends ExportLoadPanel {
+    /**
+     * [descr:ExportPivotGridLoadPanel.height]
+     */
+    height?: number;
+  }
+  /**
    * [descr:globalConfig]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -3065,10 +3074,6 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportBaseProps.keepColumnWidths]
      */
     keepColumnWidths?: boolean;
-    /**
-     * [descr:ExcelExportBaseProps.loadPanel]
-     */
-    loadPanel?: ExportLoadPanel;
   }
   /**
    * [descr:ExcelExportDataGridProps]
@@ -3094,6 +3099,10 @@ declare module DevExpress.excelExporter {
       gridCell?: ExcelDataGridCell;
       excelCell?: any;
     }) => void;
+    /**
+     * [descr:ExcelExportDataGridProps.loadPanel]
+     */
+    loadPanel?: ExportLoadPanel;
   }
   /**
    * [descr:ExcelExportPivotGridProps]
@@ -3119,6 +3128,10 @@ declare module DevExpress.excelExporter {
       pivotCell?: ExcelPivotGridCell;
       excelCell?: any;
     }) => void;
+    /**
+     * [descr:ExcelExportPivotGridProps.loadPanel]
+     */
+    loadPanel?: ExportPivotGridLoadPanel;
   }
   /**
    * [descr:ExcelPivotGridCell]

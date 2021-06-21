@@ -114,6 +114,14 @@ export interface CellRange {
     to?: CellAddress;
 }
 
+export interface ExportPivotGridLoadPanel extends ExportLoadPanel {
+    /**
+     * @docid
+     * @default 70
+     */
+    height?: number;
+}
+
 /**
  * @docid
  * @namespace DevExpress.excelExporter
@@ -138,11 +146,6 @@ export interface ExcelExportBaseProps {
      * @public
      */
     keepColumnWidths?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    loadPanel?: ExportLoadPanel;
 }
 
 /**
@@ -177,6 +180,11 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @public
      */
     customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any}) => void);
+    /**
+     * @docid
+     * @public
+     */
+    loadPanel?: ExportLoadPanel;
 }
 
 /**
@@ -211,6 +219,11 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any}) => void);
+    /**
+     * @docid
+     * @public
+     */
+     loadPanel?: ExportPivotGridLoadPanel;
 }
 
 /**
