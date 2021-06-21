@@ -66,14 +66,12 @@ const moduleConfig = {
 QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rename folder in folders area', function(assert) {
-        let $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('click');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Rename').trigger('dxclick');
         this.clock.tick(400);
 
         const $input = this.wrapper.getDialogTextInput();
@@ -83,21 +81,17 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getDialogButton('Save').trigger('dxclick');
         this.clock.tick(400);
 
-        $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'TestFolder 1', 'folder renamed');
-
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'TestFolder 1', 'folder renamed');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
 
     test('rename folder in folders area by Enter in dialog input', function(assert) {
-        let $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('click');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Rename').trigger('dxclick');
         this.clock.tick(400);
 
         const $input = this.wrapper.getDialogTextInput();
@@ -108,9 +102,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
-        $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'TestFolder 1', 'folder renamed');
-
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'TestFolder 1', 'folder renamed');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
 
@@ -243,10 +235,10 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Delete').trigger('dxclick');
         this.clock.tick(400);
 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
@@ -318,15 +310,14 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('dxdblclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Move to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger('dxclick');
+        $folderNodes.eq(3).trigger('dxclick');
 
         this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
@@ -356,15 +347,14 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('dxdblclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger('dxclick');
+        $folderNodes.eq(3).trigger('dxclick');
 
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
@@ -1761,6 +1751,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
 
+        assert.notOk(this.wrapper.getToolbar().hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'file toolbar displayed');
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 4, 'there are 4 nodes');
