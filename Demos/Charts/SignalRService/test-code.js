@@ -5,48 +5,57 @@
         factory(DevExpress.viz.dxChart);
     }
 })(function (dxChart) {
-    var isReady = false;
-    window.checkReady = function () {
-        return isReady;
-    }
+    return new Promise((resolve) => {
+        var intervalId = setInterval(() => {
+            var chart = dxChart.getInstance(document.querySelector("#chart"));
+            if (!chart) return;
 
-    var dataSourceItems = getData(),
-        keyField = "Date";
+            clearInterval(intervalId);
 
-    if (window.$ && window.$.connection && window.$.connection.stockTickDataHub) {
-        window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = function () { };
-    } else {
-        dataSourceItems.forEach(function (item) { for (var key in item) { item[key.charAt(0).toLowerCase() + key.slice(1)] = item[key]; delete item[key]; } });
-        if (window.connection && window.connection.methods)
-            window.connection.methods["updatestockprice"].splice(0, 1);
-        keyField = keyField.toLowerCase();
-    }
+            var isReady = false;
+            window.checkReady = function () {
+                return isReady;
+            }
 
-    var chart = dxChart.getInstance(document.querySelector("#chart"));
+            var dataSourceItems = getData(),
+                keyField = "Date";
 
-    chart.option("adjustAxesOnZoom", true);
+            if (window.$ && window.$.connection && window.$.connection.stockTickDataHub) {
+                window.$.connection.liveUpdateSignalRHub.client.updateStockPrice = function () { };
+            } else {
+                dataSourceItems.forEach(function (item) { for (var key in item) { item[key.charAt(0).toLowerCase() + key.slice(1)] = item[key]; delete item[key]; } });
+                if (window.connection && window.connection.methods)
+                    window.connection.methods["updatestockprice"].splice(0, 1);
+                keyField = keyField.toLowerCase();
+            }
 
-    function stubPush() {
-        var dataSource = chart.getDataSource(),
-            store = dataSource.store();
 
-        store.push = function () {
-            return;
-        };
-    }
+            chart.option("adjustAxesOnZoom", true);
 
-    stubPush();
+            function stubPush() {
+                var dataSource = chart.getDataSource(),
+                    store = dataSource.store();
 
-    chart.on("done", function () {
-        isReady = true;
+                store.push = function () {
+                    return;
+                };
+            }
+
+            stubPush();
+
+            chart.on("done", function () {
+                isReady = true;
+            });
+
+            chart.option("dataSource", dataSourceItems);
+            chart.getArgumentAxis().visualRange({
+                length: "hour",
+                endValue: new Date(1539775980000)
+            });
+            chart.option = function () { };
+            resolve();
+        }, 100);
     });
-
-    chart.option("dataSource", dataSourceItems);
-    chart.getArgumentAxis().visualRange({
-        length: "hour",
-        endValue: new Date(1539775980000)
-    });
-    chart.option = function () { };
 });
 
 function getData() {
