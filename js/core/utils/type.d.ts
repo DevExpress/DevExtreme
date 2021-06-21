@@ -24,6 +24,7 @@ export declare function isPlainObject<T>(object: T): object is Extract<T, object
 
 export declare function isPrimitive<T>(value: T): value is Exclude<T, Function>&Exclude<T, object>&Exclude<T, any[]>;
 
+// @ts-ignore: globalThis was introduced in TypeScript 3.4
 export declare function isWindow<T>(object: T): object is Extract<T, Window & typeof globalThis>;
 
 export declare function isRenderer(object: any): boolean;
