@@ -10,7 +10,7 @@ export interface ODataRequestOptions {
     dataType: string;
     headers: any;
     jsonp?: boolean;
-    method: Lowercase<HttpMethod>;
+    method: string;
     timeout: number;
     url: string;
     xhrFields: any;

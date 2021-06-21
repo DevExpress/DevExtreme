@@ -134,6 +134,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
     /**
      * @docid
      * @public
+     * @type Store|StoreOptions|Array<any>
      */
     store?: Store<TKey, TValueIn> | StoreOptions<TKey, TValueIn> | Array<TValueIn>;
 }
@@ -144,7 +145,7 @@ export interface DataSourceOptions<TKey = any, TValueOut = any, TValueIn = TValu
  * @public
  */
 export default class DataSource<TKey = any, TValue = any> {
-    constructor(data: TKey extends number ? Array<TValue> : TKey extends string ? Record<TKey, TValue> : { [Symbol.iterator]():IterableIterator<[TKey, TValue]> });
+    constructor(data: Array<TValue>);
     constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue, any, any>);
     constructor(store: Store<TKey, TValue>);
     constructor(url: string);
@@ -223,7 +224,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object|string|number
      * @public
      */
-    key(): TKey;
+    key(): string | Array<string>;
     /**
      * @docid
      * @publicName load()
@@ -411,7 +412,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue> | Array<any>;
+    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
     /**
      * @docid
      * @publicName totalCount()
@@ -421,5 +422,9 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
+/**
+ * @docid
+ * @public
+ */
 type SearchOperation = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
 type EventName = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;

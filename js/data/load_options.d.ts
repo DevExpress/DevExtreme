@@ -1,6 +1,10 @@
 import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from ".";
 import { SearchOperation } from "./data_source";
 
+/** 
+ * @docid
+ * @public
+ */
 type SummaryDescriptor = {
     selector: string | Function;
     summaryType: 'sum' | 'avg' | 'min' | 'max' | 'count';

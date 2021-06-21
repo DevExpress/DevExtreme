@@ -8,6 +8,7 @@ export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOption
     /**
      * @docid
      * @public
+     * @type Array<any>
      */
     data?: Array<TValue>;
 }
