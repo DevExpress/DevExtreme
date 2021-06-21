@@ -12,13 +12,15 @@ function cloneObjectProp(
   prevValue: Record<string, unknown> | unknown[],
   fullNameParts: (string | number)[],
 ): Record<string, unknown> | unknown[] {
-  const result = value !== prevValue ? prevValue : cloneObjectValue(value);
+  const result = fullNameParts.length > 0 && prevValue && value !== prevValue
+    ? cloneObjectValue(prevValue)
+    : cloneObjectValue(value);
 
   if (fullNameParts.length > 1) {
     const name = fullNameParts[0];
     result[name] = cloneObjectProp(
       value[name] as Record<string, unknown>,
-      prevValue[name] as Record<string, unknown>,
+      prevValue?.[name] as Record<string, unknown>,
       fullNameParts.slice(1),
     );
   }

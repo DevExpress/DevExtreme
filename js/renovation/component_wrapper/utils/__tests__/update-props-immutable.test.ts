@@ -20,6 +20,7 @@ it('object value', () => {
   const props = { nestedObject };
   updatePropsImmutable(props, option, 'nestedObject', 'nestedObject');
   expect(props.nestedObject).not.toBe(newNestedObject);
+  expect(props.nestedObject.nestedProp).toBe('new value');
 });
 
 it('change nested object option to plain object value', () => {
@@ -86,14 +87,26 @@ it('change several items in nested array option', () => {
   const props = { nestedArray: option.nestedArray };
 
   updatePropsImmutable(props, option, 'nestedArray', 'nestedArray[0].nestedProp1');
-  nestedArray[0].nestedProp1 = 'changed';
+  option.nestedArray[0].nestedProp1 = 'changed';
+
   updatePropsImmutable(props, option, 'nestedArray', 'nestedArray[0].nestedProp2');
-  nestedArray[0].nestedProp2 = 'changed';
+  option.nestedArray[0].nestedProp2 = 'changed';
 
   expect(props.nestedArray).not.toBe(nestedArray);
   expect(props.nestedArray[0]).not.toBe(nestedArray[0]);
   expect(props.nestedArray[0].nestedProp1).toBe('item11');
   expect(props.nestedArray[0].nestedProp2).toBe('item12');
+});
+
+it('change second level nested object option for empty props', () => {
+  const option = { nestedObject1: { nestedObject2: { nestedProp: 'new value' } } };
+  const props = {} as any;
+
+  updatePropsImmutable(props, option, 'nestedObject1', 'nestedObject1.nestedObject2.nestedProp');
+
+  expect(props.nestedObject1).not.toBe(option.nestedObject1);
+  expect(props.nestedObject1.nestedObject2).not.toBe(option.nestedObject1.nestedObject2);
+  expect(props.nestedObject1.nestedObject2.nestedProp).toBe('new value');
 });
 
 it('change object item in nested array option', () => {
