@@ -246,7 +246,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-    off(eventName: EventNames): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -255,7 +255,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-    off(eventName: EventNames, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -264,7 +264,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-    on(eventName: EventNames, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -272,7 +272,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-     on(events: {[key in EventNames]?: Function}): this;
+     on(events: {[key in EventName]?: Function}): this;
     /**
      * @docid
      * @publicName pageIndex()
@@ -422,5 +422,4 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
-type SearchOperations = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
-type EventNames = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;
+type EventName = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;
