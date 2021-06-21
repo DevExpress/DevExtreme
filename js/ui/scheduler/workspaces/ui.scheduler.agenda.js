@@ -15,8 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getResourceManager } from '../resources/resourceManager';
-import { getAppointmentDataProvider } from '../appointments/DataProvider/appointmentDataProvider';
+import { calculateStartViewDate } from './utils/agenda';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -99,9 +98,8 @@ class SchedulerAgenda extends WorkSpace {
         return AGENDA_CLASS;
     }
 
-    _setFirstViewDate() {
-        this._firstViewDate = new Date(this.option('currentDate'));
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
     }
 
     _getRowCount() {
@@ -140,7 +138,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _renderView() {
-        this._setFirstViewDate();
+        this._startViewDate = this._calculateStartViewDate();
         this._rows = [];
     }
 
@@ -240,8 +238,9 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const { filteredItems } = getAppointmentDataProvider(); // TODO refactoring
-        const tree = getResourceManager().createReducedResourcesTree(filteredItems); // TODO refactoring
+        const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
+        const resourceManager = this.invoke('getResourceManager');
+        const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];
@@ -337,7 +336,8 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const path = isGroupedView && getResourceManager()._getPathToLeaf(rowIndex, groupsOpt) || [];
+        const resourceManager = this.invoke('getResourceManager');
+        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;

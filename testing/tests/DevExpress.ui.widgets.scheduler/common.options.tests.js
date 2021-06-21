@@ -102,13 +102,13 @@ QUnit.module('Options', {
     });
 
     QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', function(assert) {
-        const scheduler = createWrapper();
-        const repaintStub = sinon.stub(scheduler.instance, 'repaint');
+        const { instance } = createWrapper();
+        const repaintStub = sinon.stub(instance, 'repaint');
 
         try {
-            const appointmentDataProvider = getAppointmentDataProvider();
+            const appointmentDataProvider = getAppointmentDataProvider(instance.key);
 
-            scheduler.instance.option({
+            instance.option({
                 'startDateExpr': '_startDate',
                 'endDateExpr': '_endDate',
                 'startDateTimeZoneExpr': '_startDateTimeZone',
@@ -120,7 +120,7 @@ QUnit.module('Options', {
                 'recurrenceExceptionExpr': '_recurrenceException'
             });
 
-            const dataAccessors = scheduler.instance._dataAccessors;
+            const dataAccessors = instance._dataAccessors;
 
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');

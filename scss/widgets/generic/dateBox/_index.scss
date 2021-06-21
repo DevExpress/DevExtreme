@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -72,12 +73,12 @@
 .dx-datebox-wrapper-calendar {
   .dx-popup-content {
     padding: 0;
-    margin: 0 $generic-datebox-overlay-item-margin / 2;
+    margin: 0 math.div($generic-datebox-overlay-item-margin, 2);
   }
 
   .dx-calendar {
     border: none;
-    margin: $generic-datebox-overlay-item-margin $generic-datebox-overlay-item-margin / 2;
+    margin: $generic-datebox-overlay-item-margin math.div($generic-datebox-overlay-item-margin, 2);
   }
 
   .dx-datebox-container-cell {
@@ -88,14 +89,14 @@
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
   .dx-calendar {
-    margin-bottom: $generic-datebox-overlay-item-margin / 2;
+    margin-bottom: math.div($generic-datebox-overlay-item-margin, 2);
   }
 
   .dx-timeview {
-    margin: $generic-datebox-overlay-item-margin $generic-datebox-overlay-item-margin / 2 $generic-datebox-overlay-item-margin / 2;
+    margin: $generic-datebox-overlay-item-margin math.div($generic-datebox-overlay-item-margin, 2) math.div($generic-datebox-overlay-item-margin, 2);
 
     @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 $generic-datebox-overlay-item-margin / 2 $generic-datebox-overlay-item-margin / 2;
+      margin: 0 math.div($generic-datebox-overlay-item-margin, 2) math.div($generic-datebox-overlay-item-margin, 2);
     }
   }
 

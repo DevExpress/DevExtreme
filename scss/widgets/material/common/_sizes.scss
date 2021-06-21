@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../sizes" as *;
 
 // adduse
@@ -9,7 +10,7 @@ $material-inline-borderedwidget-inner-size:
   $material-base-border-width * 2 !default;
 
 $material-invalid-badge-size: $material-base-icon-size - 2px !default;
-$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2 !default;
-$material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2 !default;
+$material-invalid-badge-horizontal-padding: math.div($material-inline-borderedwidget-inner-size - $material-invalid-badge-size, 2) !default;
+$material-invalid-badge-halfhorizontal-padding: math.div($material-invalid-badge-horizontal-padding, 2) !default;
 
 $material-valid-badge-font-size: $material-base-font-size + 6px !default;

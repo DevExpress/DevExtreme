@@ -27,9 +27,9 @@ import dxDropDownEditor, {
     dxDropDownEditorOptions
 } from './ui.drop_down_editor';
 
-import {
-    SelectionChangedInfo
-} from '../collection/ui.collection_widget.base';
+export interface SelectionChangedInfo<T = any> {
+    readonly selectedItem: T;
+}
 
 /** @namespace DevExpress.ui */
 export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, dxDropDownEditorOptions<TComponent> {

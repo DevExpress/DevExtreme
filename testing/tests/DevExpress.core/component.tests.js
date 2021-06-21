@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import Component from 'core/component';
+import { Component } from 'core/component';
 import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
 import devices from 'core/devices';

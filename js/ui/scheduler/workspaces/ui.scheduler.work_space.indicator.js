@@ -28,7 +28,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const today = this._getToday();
             const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-            return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+            return dateUtils.dateInRange(today, this._startViewDate, new Date(endViewDate.getTime() + toMs('day')));
         }
         return false;
     }
@@ -139,7 +139,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _getIndicatorDuration() {
         const today = this._getToday();
-        const firstViewDate = new Date(this._firstViewDate);
+        const firstViewDate = new Date(this._startViewDate);
         let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
             timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day'));
@@ -151,7 +151,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     getIndicationHeight() {
         const today = this._getToday();
         const cellHeight = this.getCellHeight();
-        const date = new Date(this._firstViewDate);
+        const date = new Date(this._startViewDate);
 
         if(this.isIndicationOnView()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());

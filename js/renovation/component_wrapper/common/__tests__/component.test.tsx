@@ -15,7 +15,7 @@ import {
   KEY,
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
-import * as UpdatePropsImmutable from '../../utils/update-props-immutable';
+import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -826,6 +826,22 @@ describe('templates and slots', () => {
     expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
   });
 
+  it('should have default templates for jQuery', () => {
+    const instance = $('#component')
+      .dxTemplatedTestWidget()
+      .dxTemplatedTestWidget('instance');
+
+    const templateNames = instance._propsInfo.templates;
+    const defaultTemplates = instance._templatesInfo;
+    const innerOptions = instance._props;
+    const publicOptions = instance.option();
+
+    templateNames.forEach((name) => {
+      expect(innerOptions[name]).toBe(defaultTemplates[name]);
+      expect(publicOptions[name]).toBe(null);
+    });
+  });
+
   it('should remove content after template removed', () => {
     const template = () => $('<div>');
 
@@ -1005,7 +1021,7 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 
   it('should be raised on appropriate option change on endUpdate', () => {
@@ -1023,7 +1039,7 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 
   it('should not be raised on option change if it is not specified in getContentReadyOptions', () => {
@@ -1051,6 +1067,19 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
+  });
+
+  it('should be raised on repaint if subscribe using on', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({});
+    const instance = $('#component').dxTestWidget('instance');
+    instance.on('contentReady', contentReadyHandler);
+
+    instance.repaint();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 });

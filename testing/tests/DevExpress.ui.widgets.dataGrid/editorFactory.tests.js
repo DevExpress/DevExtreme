@@ -28,7 +28,7 @@ QUnit.testStart(function() {
 });
 
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/lookup';
 import 'ui/switch';
 import TextArea from 'ui/text_area';

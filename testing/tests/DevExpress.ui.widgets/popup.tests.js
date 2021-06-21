@@ -19,6 +19,7 @@ import 'ui/tab_panel';
 
 const IS_SAFARI = !!browser.safari;
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 themes.setDefaultTimeout(0);
 
@@ -1201,6 +1202,115 @@ QUnit.module('options changed callbacks', {
         } finally {
             resizeEventSpy.restore();
         }
+    });
+
+    QUnit.module('prevent safari scrolling on ios devices', {
+        beforeEach: function() {
+            this.originalDevice = {
+                platform: devices.real().platform,
+                deviceType: devices.real().deviceType
+            };
+            devices.real({ platform: 'ios', deviceType: 'phone' });
+            this.$body = $('body');
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            devices.real(this.originalDevice);
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+        }
+    }, () => {
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for is popup is in fullScreen mode on init', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.dispose();
+            $('#popup').dxPopup({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for fullScreen popup in safari (T714801)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "fullScreen" option change', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                visible: true
+            });
+            this.instance.option('fullScreen', true);
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "fullScreen" is enabled');
+
+            this.instance.option('fullScreen', false);
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "fullScreen" is disabled');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be added to the body if fullScreen option is set to "true" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', true);
+                }
+            });
+            const $wrapper = this.instance.$wrapper();
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be removed from body if fullScreen option is set to "false" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', false);
+                }
+            });
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed from body on fullScreen disable');
+            assert.strictEqual(window.pageYOffset, 200, 'scroll position is correct');
+        });
     });
 });
 

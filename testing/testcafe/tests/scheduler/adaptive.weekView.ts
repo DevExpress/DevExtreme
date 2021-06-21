@@ -8,7 +8,7 @@ fixture`Week view in adaptive mode`
 const scheduler = new Scheduler('#container');
 
 const createScheduler = async (data, width = '100%'): Promise<void> => {
-  createWidget('dxScheduler', {
+  await createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
     currentView: 'week',

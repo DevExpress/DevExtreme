@@ -8,7 +8,7 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
+import { ScrollViewWrapper } from '../../component_wrapper/navigation/scroll_view';
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 

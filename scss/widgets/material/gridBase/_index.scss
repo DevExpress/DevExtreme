@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -21,13 +22,12 @@
 @use "../overlay";
 @use "../pager";
 
-
 $material-grid-base-border-hidden: 1px solid transparent;
 $material-grid-base-row-border: 1px solid transparent;
 $material-grid-base-border-color: $datagrid-border-color;
 $material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$material-grid-base-header-cell-vertical-padding: round(($material-grid-base-header-height - $material-grid-base-header-line-height) / 2);
+$material-grid-base-header-cell-vertical-padding: round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
 $material-grid-base-footer-font-size: $material-grid-base-header-cell-font-size;
 
 $material-grid-base-command-select-column-width:
@@ -36,7 +36,7 @@ $material-grid-base-command-select-column-width:
   $material-grid-base-cell-first-column-padding +
   $material-command-column-additional-right-margin;
 
-$material-grid-base-cell-vertical-padding: round(($material-grid-base-cell-height - $material-grid-base-cell-line-height) / 2);
+$material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
 
 @mixin grid-base($widget-name) {
@@ -678,7 +678,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           .dx-row {
             &.dx-header-row {
               .dx-command-select {
-                padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
+                padding-bottom: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
               }
 
               > td {

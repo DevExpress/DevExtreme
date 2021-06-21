@@ -14,8 +14,7 @@ QUnit.test('there is no tooltip in markup on server', function(assert) {
         tooltip: {
             enabled: true,
             showMode: 'always'
-        },
-        useInkRipple: false
+        }
     });
 
     const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);

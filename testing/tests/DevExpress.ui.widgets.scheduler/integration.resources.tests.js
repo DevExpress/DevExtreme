@@ -363,7 +363,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Alias for getResourceDataByValue method', function(assert) {
-        createWrapper({
+        const { instance } = createWrapper({
             resources: [{
                 field: 'ownerId',
                 dataSource: [
@@ -378,7 +378,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
+        getResourceManager(instance.key).getResourceDataByValue('ownerId', 1).done(function(resource) {
             assert.deepEqual(resource, {
                 text: 'Jack',
                 id: 1,
@@ -539,7 +539,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, function(assert) {
             const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
-            const scheduler = createWrapper({
+            const { instance } = createWrapper({
                 dataSource: [],
                 currentDate: new Date(2015, 4, 26),
                 groups: ['ownerId'],
@@ -550,8 +550,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 renovateRender,
             });
 
-            scheduler.instance.option('resources[0].dataSource', resourceData);
-            const resources = getResourceManager().getResources();
+            instance.option('resources[0].dataSource', resourceData);
+            const resources = getResourceManager(instance.key).getResources();
 
             assert.deepEqual(resources, [{
                 fieldExpr: 'ownerId',

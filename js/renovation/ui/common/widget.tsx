@@ -250,7 +250,7 @@ export class Widget extends JSXComponent(WidgetProps) {
           !this.active && (this.hovered = true);
           onHoverStart?.(event);
         },
-        ({ event }: { event: Event }) => {
+        (event: Event) => {
           this.hovered = false;
           onHoverEnd?.(event);
         },

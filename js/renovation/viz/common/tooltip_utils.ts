@@ -197,8 +197,8 @@ export function getCanvas(container: HTMLElement): ClientRect {
   const containerBox = container.getBoundingClientRect();
   const html = domAdapter.getDocumentElement();
   const body = domAdapter.getBody();
-  let left = (Number(getWindow()?.pageXOffset) || html.scrollLeft) ?? 0;
-  let top = (Number(getWindow()?.pageYOffset) || html.scrollTop) ?? 0;
+  let left: number = (Number(getWindow()?.pageXOffset) || html.scrollLeft) ?? 0;
+  let top: number = (Number(getWindow()?.pageYOffset) || html.scrollTop) ?? 0;
 
   const box = {
     left,
@@ -332,7 +332,7 @@ export function prepareData(
   let customize = {} as CustomizedOptions;
 
   if (isFunction(customizeTooltip)) {
-    customize = customizeTooltip.call(data, data);
+    customize = customizeTooltip.call(data, data as Record<string, unknown>);
     customize = isPlainObject(customize) ? customize : {};
     if ('text' in customize) {
       customize.text = isDefined(customize.text) ? String(customize.text) : '';

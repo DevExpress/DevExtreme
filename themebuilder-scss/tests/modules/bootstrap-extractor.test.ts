@@ -51,11 +51,11 @@ describe('BootstrapExtractor', () => {
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
-      .toBe(functions
-        + testSassString
-        + variables
-        + setterServiceCode
-        + collectorServiceCode);
+      .toBe(functions.toString()
+      + testSassString
+      + variables.toString()
+      + setterServiceCode
+      + collectorServiceCode);
   });
 
   test('lessProcessor', async () => {
@@ -72,7 +72,7 @@ describe('BootstrapExtractor', () => {
         + collectorServiceCode);
   });
 
-  test('getSetterServiceCode', async () => {
+  test('getSetterServiceCode', () => {
     const extractor = new BootstrapExtractor('', 4);
     extractor.meta = {
       'test-key-var1': '$var1',
@@ -86,7 +86,7 @@ describe('BootstrapExtractor', () => {
     expect(extractor.getSetterServiceCode('!default')).toBe(expectedStyleStringWithPostfix);
   });
 
-  test('getCollectorServiceCode', async () => {
+  test('getCollectorServiceCode', () => {
     const extractor = new BootstrapExtractor('', 4);
     extractor.meta = {
       'test-key-var1': '$var1',

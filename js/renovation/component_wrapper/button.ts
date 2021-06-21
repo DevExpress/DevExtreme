@@ -19,6 +19,10 @@ export default class ButtonWrapper extends Component {
     return props;
   }
 
+  get _templatesInfo(): Record<string, string> {
+    return { template: 'content' };
+  }
+
   _toggleActiveState(_: HTMLElement, value: boolean): void {
     const button = this.viewRef as Button;
     value ? button.activate() : button.deactivate();

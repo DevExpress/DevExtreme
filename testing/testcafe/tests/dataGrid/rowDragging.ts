@@ -37,7 +37,7 @@ async function moveRow(grid: any, rowIndex: number, x: number, y: number): Promi
   })();
 }
 
-fixture.disablePageReloads`Row dragging`
+fixture`Row dragging`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
 

@@ -690,19 +690,6 @@ declare module DevExpress {
      * [descr:Component.resetOption(optionName)]
      */
     resetOption(optionName: string): void;
-
-    _options: { silent(path: any, value: any): void };
-    _createActionByOption(optionName: string, config: object): Function;
-    _dispose(): void;
-    _getDefaultOptions(): object;
-    _init(): void;
-    _initializeComponent(): void;
-    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-    _optionChanged(args: { name: string; value: unknown }): void;
-    _setOptionsByReference(): void;
-    _optionsByReference: object;
-    _setDeprecatedOptions(): void;
-    _deprecatedOptions: object;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -865,13 +852,22 @@ declare module DevExpress {
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
+    _notifyOptionChanged(
+      fullName: string,
+      value: unknown,
+      previousValue: unknown
+    );
     _templateManager: DevExpress.core.TemplateManager;
   }
   module DOMComponent {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = DOMComponentOptions<DOMComponent<Properties>>;
+    interface DOMComponentInstance extends DOMComponent<Properties> {}
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1303,6 +1299,29 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.core {
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  interface Component<TProperties> {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
+    _optionsByReference: Record<string, any>;
+    _deprecatedOptions: Record<string, any>;
+    _options: {
+      silent(path: any, value: any): void;
+    };
+    _createActionByOption(
+      optionName: string,
+      config: Record<string, any>
+    ): (...args: any[]) => any;
+    _dispose(): void;
+    _getDefaultOptions(): Record<string, any>;
+    _init(): void;
+    _initializeComponent(): void;
+    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
+    _optionChanged(args: { name: string; value: unknown }): void;
+    _setOptionsByReference(): void;
+    _setDeprecatedOptions(): void;
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -4366,7 +4385,7 @@ declare module DevExpress.ui {
     export type Properties = dxAutocompleteOptions;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxAutocomplete> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxAutocomplete> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -5138,7 +5157,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -5850,6 +5869,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.lookup.valueExpr]
        */
       valueExpr?: string;
+      /**
+       * [descr:GridBaseColumn.lookup.calculateCellValue]
+       */
+      calculateCellValue?: (rowData: any) => any;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDataGrid>;
     export type ContextMenuPreparingEvent =
@@ -10180,6 +10203,14 @@ declare module DevExpress.ui {
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.data.DataSource;
   }
+  module dxDropDownList {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    export interface SelectionChangedInfo<T = any> {
+      readonly selectedItem: T;
+    }
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -10224,7 +10255,7 @@ declare module DevExpress.ui {
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onValueChanged]
@@ -14588,9 +14619,13 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent =
       DevExpress.events.NativeEventInfo<dxMultiView> &
         DevExpress.events.ItemInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface MultiViewInstance extends dxMultiView<Properties> {}
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxMultiView> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxMultiViewOptions<dxMultiView<Properties>>;
+    export type Properties = dxMultiViewOptions<MultiViewInstance>;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxMultiView> &
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
@@ -15697,7 +15732,11 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPopover>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPopover> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxPopoverOptions<dxPopover<Properties>>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface PopoverInstance extends dxPopover<Properties> {}
+    export type Properties = dxPopoverOptions<PopoverInstance>;
     export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
@@ -15803,7 +15842,11 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPopup>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxPopupOptions<dxPopup<Properties>>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface PopupInstance extends dxPopup<Properties> {}
+    export type Properties = dxPopupOptions<PopupInstance>;
     export type ResizeEndEvent = DevExpress.events.NativeEventInfo<dxPopup> &
       DevExpress.ui.dxResizable.ResizeInfo;
     export type ResizeEvent = DevExpress.events.NativeEventInfo<dxPopup> &
@@ -16371,11 +16414,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: any): void;
+    addAppointment(appointment: dxSchedulerAppointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: any): void;
+    deleteAppointment(appointment: dxSchedulerAppointment): void;
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxScheduler.getEndViewDate()]
@@ -16406,22 +16449,25 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: any,
+      appointmentData?: dxSchedulerAppointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: any,
+      appointmentData: dxSchedulerAppointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: any
+      currentAppointmentData?: dxSchedulerAppointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(
+      target: dxSchedulerAppointment,
+      appointment: dxSchedulerAppointment
+    ): void;
   }
   module dxScheduler {
     export type AppointmentAddedEvent =
@@ -16546,8 +16592,8 @@ declare module DevExpress.ui {
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
     interface TargetedAppointmentInfo {
-      readonly appointmentData: any;
-      readonly targetedAppointmentData?: any;
+      readonly appointmentData: dxSchedulerAppointment;
+      readonly targetedAppointmentData?: dxSchedulerAppointment;
     }
   }
   /**
@@ -17272,7 +17318,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = dxScrollableOptions<dxScrollable<Properties>>;
+    type Properties = dxScrollableOptions<ScrollableInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface ScrollableInstance extends dxScrollable<Properties> {}
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
@@ -17431,10 +17481,14 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSelectBox> &
       DevExpress.events.ChangedOptionInfo;
     export type PasteEvent = DevExpress.events.NativeEventInfo<dxSelectBox>;
-    export type Properties = dxSelectBoxOptions<dxSelectBox<Properties>>;
+    export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface SelectBoxInstance extends dxSelectBox<Properties> {}
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxSelectBox> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+        DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxSelectBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -17506,7 +17560,7 @@ declare module DevExpress.ui {
      * [descr:dxSlideOut.toggleMenuVisibility(showing)]
      */
     toggleMenuVisibility(
-      showing: boolean
+      showing?: boolean
     ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOut {
@@ -17651,9 +17705,11 @@ declare module DevExpress.ui {
      */
     showMenu(): DevExpress.core.utils.DxPromise<void>;
     /**
-     * [descr:dxSlideOutView.toggleMenuVisibility()]
+     * [descr:dxSlideOutView.toggleMenuVisibility(showing)]
      */
-    toggleMenuVisibility(): DevExpress.core.utils.DxPromise<void>;
+    toggleMenuVisibility(
+      showing?: boolean
+    ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOutView {
     export type DisposingEvent = DevExpress.events.EventInfo<dxSlideOutView>;
@@ -18225,9 +18281,13 @@ declare module DevExpress.ui {
       DevExpress.events.ItemInfo;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTabs> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxTabsOptions<dxTabs<Properties>>;
+    export type Properties = dxTabsOptions<TabsInstance>;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTabs> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TabsInstance extends dxTabs<Properties> {}
   }
   /**
    * [descr:dxTabsItem]
@@ -18346,7 +18406,11 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+  export interface dxTagBoxOptions
+    extends Pick<
+      dxSelectBoxOptions<dxTagBox>,
+      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
+    > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
@@ -18488,7 +18552,11 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTextBox> &
       DevExpress.events.ChangedOptionInfo;
     export type PasteEvent = DevExpress.events.NativeEventInfo<dxTextBox>;
-    export type Properties = dxTextBoxOptions<dxTextBox<Properties>>;
+    export type Properties = dxTextBoxOptions<TextBoxInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TextBoxInstance extends dxTextBox<Properties> {}
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxTextBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -18536,7 +18604,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = dxTextEditorOptions<dxTextEditor<Properties>>;
+    type Properties = dxTextEditorOptions<TextEditorInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TextEditorInstance extends dxTextEditor<Properties> {}
   }
   /**
    * [descr:dxTextEditorButton]
@@ -19166,7 +19238,7 @@ declare module DevExpress.ui {
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -20555,7 +20627,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = EditorOptions<Editor<Properties>>;
+    interface EditorInstance extends Editor<Properties> {}
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type Properties = EditorOptions<EditorInstance>;
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
@@ -20912,7 +20988,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.navigateToRow(key)]
      */
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:GridBase.pageCount()]
      */
@@ -21059,7 +21135,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * [descr:GridBaseOptions.columns]
      */
