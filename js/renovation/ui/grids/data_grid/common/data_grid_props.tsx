@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 import {
   ComponentBindings,
@@ -102,7 +103,6 @@ export class DataGridColumnButton {
 
   @Event()
   onClick?:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ((e: ColumnButtonClickEvent) => any);
 
   @OneWay()
@@ -130,10 +130,8 @@ export class DataGridColumnHeaderFilter {
 
   @OneWay()
   dataSource?:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | any[]
   | Store
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ((options: { component?: any; dataSource?: DataSourceOptions }) => any)
   | DataSourceOptions;
 
@@ -157,15 +155,12 @@ export class DataGridColumnLookup {
 
   @OneWay()
   dataSource?:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | any[]
   | DataSourceOptions
   | Store
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ((options: { data?: any; key?: any }) => any[] | DataSourceOptions | Store);
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayExpr?: string | ((data: any) => string);
 
   @OneWay()
@@ -205,24 +200,19 @@ export class DataGridColumn {
   allowSorting?: boolean;
 
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateCellValue?: (rowData: any) => any;
 
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateDisplayValue?: string | ((rowData: any) => any);
 
   @Event()
   calculateFilterExpression?: (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filterValue: any,
     selectedFilterOperation: string,
     target: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => string | any[] | ((...args: any[]) => any);
 
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateSortValue?: string | ((rowData: any) => any);
 
   @OneWay()
@@ -241,7 +231,6 @@ export class DataGridColumn {
   dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editorOptions?: any;
 
   @OneWay()
@@ -272,11 +261,9 @@ export class DataGridColumn {
   filterType?: 'exclude' | 'include';
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue?: any;
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValues?: any[];
 
   @OneWay()
@@ -331,11 +318,8 @@ export class DataGridColumn {
 
   @Event()
   setCellValue?: (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     newData: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     currentRowData: any,
   ) => undefined | DxPromise;
 
@@ -352,7 +336,6 @@ export class DataGridColumn {
   sortOrder?: 'asc' | 'desc';
 
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sortingMethod?: (value1: any, value2: any) => number;
 
   @OneWay()
@@ -392,7 +375,6 @@ export class DataGridColumn {
   buttons?: ('cancel' | 'delete' | 'edit' | 'save' | 'undelete' | DataGridColumnButton)[];
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateGroupValue?: string | ((rowData: any) => any);
 
   @OneWay()
@@ -401,7 +383,6 @@ export class DataGridColumn {
   | ((
     cellElement: DxElement,
     cellInfo: ColumnCellTemplateData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any);
 
   @OneWay()
@@ -413,7 +394,6 @@ export class DataGridColumn {
   | ((
     cellElement: DxElement,
     cellInfo: ColumnEditCellTemplateData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any);
 
   @OneWay()
@@ -422,7 +402,6 @@ export class DataGridColumn {
   | ((
     cellElement: DxElement,
     cellInfo: ColumnGroupCellTemplateData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any);
 
   @OneWay()
@@ -434,7 +413,6 @@ export class DataGridColumn {
   | ((
     columnHeader: DxElement,
     headerInfo: ColumnHeaderCellTemplateData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any);
 
   @OneWay()
@@ -523,7 +501,6 @@ export class DataGridEditing {
   changes?: [] = [];
 
   @TwoWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editRowKey?: any = null;
 
   @TwoWay()
@@ -733,7 +710,6 @@ export class DataGridSummaryTotalItem {
 @ComponentBindings()
 export class DataGridSummary {
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateCustomSummary?: (options: CustomSummaryInfo) => any;
 
   @Nested()
@@ -800,7 +776,6 @@ export class DataGridMasterDetail {
   | ((
     detailElement: DxElement,
     detailInfo: MasterDetailTemplateData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any);
 }
 
@@ -825,7 +800,6 @@ export class DataGridRowDragging {
   cursorOffset?: string | { x?: number; y?: number };
 
   @OneWay()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
 
   @OneWay()
@@ -971,11 +945,9 @@ export class DataGridSorting {
 @ComponentBindings()
 export class DataGridStateStoring {
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customLoad?: () => DxPromise<any>;
 
   @Event()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customSave?: (gridState: any) => any;
 
   @OneWay()
@@ -1118,7 +1090,6 @@ export class DataGridLoadPanel {
 export class DataGridExport {
   @OneWay() allowExportSelectedData?: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() customizeExcelCell?: ((options: ExcelCellInfo) => any);
 
   @OneWay() enabled?: boolean;
@@ -1272,16 +1243,13 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() stateStoring?: DataGridStateStoring;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() customizeColumns?: (columns: Column[]) => any;
 
   @OneWay() customizeExportData?: (
     columns: Column[],
     rows: RowObject[],
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any;
 
   @OneWay() keyExpr?: string | string[];
@@ -1318,7 +1286,6 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() columnWidth?: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() dataSource?: string | any[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() dateSerializationFormat?: string;
@@ -1368,24 +1335,19 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 
   @TwoWay() focusedColumnIndex = -1;
 
   @TwoWay() focusedRowIndex = -1;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @TwoWay() focusedRowKey: any = null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @TwoWay() selectedRowKeys: any[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
 
   @Event() onCellClick?:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ((e: CellClickEvent) => any);
 
   @Event() onCellDblClick?: (e: CellDblClickEvent) => void;
