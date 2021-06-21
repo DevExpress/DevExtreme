@@ -2676,7 +2676,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             return result;
         }
 
-        const validGroupIndices = [groupIndex] || groupIndices;
+        const validGroupIndices = groupIndex ? [groupIndex] : groupIndices;
 
         validGroupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
