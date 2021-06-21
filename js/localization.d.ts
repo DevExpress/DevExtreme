@@ -104,13 +104,7 @@ export function parseDate(text: string, format: Format): Date;
  */
 export function parseNumber(text: string, format: Format): number;
 
-declare namespace Globalize {
-    interface NumberFormatterOptions { }
-    interface DateFormatterOptions { }
-    interface CurrencyFormatterOptions { }
-}
-
-type FormatType = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 export interface FormatObject {
     /**
      * @docid
@@ -136,7 +130,7 @@ export interface FormatObject {
     * @docid
     * @type Enums.Format
     */
-   type?: FormatType
+   type?: PredefinedFormat
 }
-type ExternalFormat = {} extends Globalize.NumberFormatterOptions ? (Intl.NumberFormatOptions | Intl.DateTimeFormatOptions) : (Globalize.NumberFormatterOptions | Globalize.DateFormatterOptions | Globalize.CurrencyFormatterOptions);
-export type Format = FormatObject | FormatType | string | ((value: number | Date) => string) | ExternalFormat;
+type ExternalFormat = any;
+export type Format = FormatObject | PredefinedFormat | string | ((value: number | Date) => string) | ExternalFormat;
