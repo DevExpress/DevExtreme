@@ -593,7 +593,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @param1_field2 options:Object
      * @hidden
      */
-     static defaultOptions<TProperties>(rule: Rule<TProperties>): void;
+    static defaultOptions<TProperties>(rule: Rule<TProperties>): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)
