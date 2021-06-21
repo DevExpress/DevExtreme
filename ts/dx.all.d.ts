@@ -5608,7 +5608,7 @@ declare module DevExpress.ui {
             column?: Column;
           }) => boolean);
       /**
-       * [descr:dxDataGridColumnButton.visible]
+       * [descr:dxDataGridColumnButton.disabled]
        */
       disabled?:
         | boolean
@@ -19328,7 +19328,7 @@ declare module DevExpress.ui {
             readonly column: Column;
           }) => boolean);
       /**
-       * [descr:dxTreeListColumnButton.visible]
+       * [descr:dxTreeListColumnButton.disabled]
        */
       disabled?:
         | boolean
