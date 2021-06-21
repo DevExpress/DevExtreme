@@ -33,7 +33,9 @@ const isAppendMode = function(that) {
 
 const isVirtualRowRendering = function(that) {
     const rowRenderingMode = that.option('scrolling.rowRenderingMode');
-    if(rowRenderingMode === SCROLLING_MODE_VIRTUAL) {
+    if(that.option(NEW_SCROLLING_MODE) && (isVirtualMode(that) || isAppendMode(that))) {
+        return true;
+    } else if(rowRenderingMode === SCROLLING_MODE_VIRTUAL) {
         return true;
     } else if(rowRenderingMode === SCROLLING_MODE_STANDARD) {
         return false;
@@ -988,13 +990,12 @@ export const virtualScrollingModule = {
                     _updateLoadViewportParams: function() {
                         this._loadViewportParams = this._rowsScrollController.getViewportParams();
                     },
-                    _afterProcessItems: function(items, change) {
+                    _afterProcessItems: function(items) {
                         this._uncountableItemCount = 0;
                         if(isDefined(this._loadViewportParams)) {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
                             const { skipForCurrentPage } = this.getLoadPageParams();
-                            change.repaintChangesOnly = change.changeType === 'refresh';
 
                             return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                         }
@@ -1130,13 +1131,15 @@ export const virtualScrollingModule = {
                             this._updateLoadViewportParams();
                             const { pageIndex, loadPageCount } = this.getLoadPageParams();
                             const dataSourceAdapter = this._dataSource;
-
                             if(pageIndex !== dataSourceAdapter.pageIndex() || loadPageCount !== dataSourceAdapter.loadPageCount()) {
                                 dataSourceAdapter.pageIndex(pageIndex);
                                 dataSourceAdapter.loadPageCount(loadPageCount);
-                                this.load();
+                                this._repaintChangesOnly = true;
+                                this.load().always(() => {
+                                    this._repaintChangesOnly = undefined;
+                                });
                             } else if(!this._isLoading) {
-                                this.updateItems();
+                                this.updateItems({ repaintChangesOnly: true });
                             }
                         }
                     },
