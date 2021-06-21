@@ -55,7 +55,6 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { isDateInRange } from './utils/base';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
 import { calculateStartViewDate } from './utils/week';
