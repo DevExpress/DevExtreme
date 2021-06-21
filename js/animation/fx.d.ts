@@ -2,7 +2,11 @@ import { DxElement } from '../core/element';
 import { DxPromise } from '../core/utils/deferred';
 import { positionConfig } from './position';
 
-export type animationState = string | number | 
+/**
+ * @docid
+ * @public
+ */
+export type AnimationState = string | number | 
 { opacity: number; } | 
 { scale: number; } | 
 { position: positionConfig; } |
@@ -51,8 +55,8 @@ export interface AnimationConfig {
      * @docid
      * @default {}
      * @public
-     */    
-    from?: animationState;
+     */
+    from?: AnimationState;
     /**
      * @docid
      * @default undefined
@@ -71,7 +75,7 @@ export interface AnimationConfig {
      * @default {}
      * @public
      */
-    to?: animationState;
+    to?: AnimationState;
     /**
      * @docid
      * @type Enums.AnimationType
