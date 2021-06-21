@@ -1,6 +1,5 @@
 import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
-import { isFunction } from '../../../core/utils/type';
 import errors from '../../widget/ui.errors';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
@@ -12,9 +11,8 @@ import Calendar from '../../calendar';
 import Popover from '../../popover';
 import Popup from '../../popup';
 import publisherMixin from '../publisher_mixin';
-import dateLocalization from '../../../localization/date';
 import Scrollable from '../../scroll_view/ui.scrollable';
-import { getInterval, getNextIntervalDate, getDuration } from './utils';
+import { getCaption, getNextIntervalDate } from './utils';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -26,55 +24,6 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 const DEFAULT_AGENDA_DURATION = 7;
 
 const ACCEPRED_STEPS = ['day', 'week', 'workWeek', 'month', 'agenda'];
-
-const getDateMonthFormat = function(short) {
-    return function(date) {
-        const monthName = dateLocalization.getMonthNames(short ? 'abbreviated' : 'wide')[date.getMonth()];
-        return [dateLocalization.format(date, 'day'), monthName].join(' ');
-    };
-};
-
-const getMonthYearFormat = function(date) {
-    return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'year');
-};
-
-const getCaptionFormat = function(short, intervalCount, duration) {
-    const dateMonthFormat = getDateMonthFormat(short);
-    return function(date) {
-        if(intervalCount > 1) {
-            const lastIntervalDate = new Date(date);
-            const defaultViewDuration = duration;
-            lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
-
-            const isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth();
-            const useShortFormat = isDifferentMonthDates || short;
-            const firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : 'd');
-            const lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat));
-
-            return firstWeekDateText + '-' + lastWeekDateText;
-        }
-
-        return [dateMonthFormat(date), dateLocalization.format(date, 'year')].join(' ');
-    };
-};
-
-const formatCaptionByMonths = function(lastDate, firstDate) {
-    const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
-    const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
-    const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
-    let lastDateText;
-    let firstDateText;
-
-    if(isDifferentYears) {
-        firstDateText = dateLocalization.format(firstDate, getCaptionFormat(true));
-        lastDateText = dateLocalization.format(lastDate, getCaptionFormat(true));
-    } else {
-        firstDateText = dateLocalization.format(firstDate, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : 'd');
-        lastDateText = dateLocalization.format(lastDate, getCaptionFormat(useShortFormat));
-    }
-
-    return firstDateText + '-' + lastDateText;
-};
 
 export const Navigator = Widget.inherit({
 
@@ -309,48 +258,12 @@ export const Navigator = Widget.inherit({
         return { step, intervalCount, firstDayOfWeek, agendaDuration };
     },
 
-    _getCaptionFormatter: function(startDate, endDate) {
-        if(dateUtils.sameDate(startDate, endDate)) {
-            const short = this.option('step') === 'agenda' ? this.option('_useShortDateFormat') : false;
-
-            return getCaptionFormat(short, this.option('intervalCount'), getDuration(this._getIntervalOptions()));
-        }
-
-        return formatCaptionByMonths.bind(this);
-    },
-
-    _getCaptionText: function(captionFormatter, startDate, endDate) {
-        if(this.option('step') === 'month') {
-            if(dateUtils.sameMonth(startDate, endDate)) {
-                return dateLocalization.format(startDate, 'monthandyear');
-            } else {
-                const isSameYear = dateUtils.sameYear(startDate, endDate);
-                const lastDateText = getMonthYearFormat(endDate);
-                const firstDateText = isSameYear
-                    ? dateLocalization.getMonthNames('abbreviated')[startDate.getMonth()]
-                    : getMonthYearFormat(startDate);
-
-                return firstDateText + '-' + lastDateText;
-            }
-        }
-
-        return captionFormatter(endDate, startDate);
-    },
-
     _getCaption: function(date) {
         const options = { ...this._getIntervalOptions(), date };
-        const { startDate, endDate } = getInterval(options);
-
-        const captionFormatter = this._getCaptionFormatter(startDate, endDate);
-        let text = this._getCaptionText(captionFormatter, startDate, endDate);
-
         const customizationFunction = this.option('customizeDateNavigatorText');
+        const useShortDateFormat = this.option('_useShortDateFormat');
 
-        if(isFunction(customizationFunction)) {
-            text = customizationFunction({ startDate, endDate, text });
-        }
-
-        return { startDate, endDate, text };
+        return getCaption(options, customizationFunction, useShortDateFormat);
     },
 
     _renderCaption: function() {
