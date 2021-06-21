@@ -4,6 +4,7 @@ import dateLocalization from 'localization/date';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
 import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createResourcesTree } from 'ui/scheduler/resources/utils';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -38,6 +39,9 @@ module('Agenda', {}, () => {
             resources
         });
 
+        const resourceManager = getResourceManager(key);
+        resourceManager.createReducedResourcesTree = () => createResourcesTree(options.groups);
+
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
@@ -55,7 +59,7 @@ module('Agenda', {}, () => {
                     }
                 }
             },
-            resourceManager: getResourceManager(key),
+            resourceManager,
         };
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });
