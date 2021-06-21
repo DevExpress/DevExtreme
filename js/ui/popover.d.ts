@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -156,13 +156,13 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
      * @default { type: "fade", to: 0 }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopoverOptions.animation.show
      * @default { type: "fade", from: 0, to: 1 }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

@@ -6,7 +6,7 @@ import {
 import LegacyOverlay from '../../../ui/overlay/ui.overlay';
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
-import { animationConfig } from '../../../animation/fx';
+import { AnimationConfig } from '../../../animation/fx';
 import { positionConfig } from '../../../animation/position';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
@@ -40,7 +40,7 @@ export class OverlayProps extends BaseWidgetProps {
 
   @OneWay() closeOnTargetScroll? = false;
 
-  @OneWay() animation?: animationConfig | null = {
+  @OneWay() animation?: AnimationConfig | null = {
     type: 'pop', duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 },
   };
 

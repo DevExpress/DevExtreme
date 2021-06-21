@@ -14,14 +14,14 @@ export type animationState = string | number |
  * @namespace DevExpress
  * @type object
  */
-export interface animationConfig {
+export interface AnimationConfig {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @public
      */
-    complete?: (($element: DxElement, config: animationConfig) => void);
+    complete?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default 0
@@ -65,7 +65,7 @@ export interface animationConfig {
      * @type_function_param2 config:object
      * @public
      */
-    start?: (($element: DxElement, config: animationConfig) => void);
+    start?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default {}
@@ -81,6 +81,9 @@ export interface animationConfig {
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
 
+/** @deprecated use AnimationConfig instead */
+export type animationConfig = AnimationConfig;
+
 /**
  * @docid
  * @section utils
@@ -93,12 +96,12 @@ declare const fx: {
      * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
-     * @param2 config:animationConfig
+     * @param2 config:AnimationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
      * @public
      */
-    animate(element: Element, config: animationConfig): DxPromise<void>;
+    animate(element: Element, config: AnimationConfig): DxPromise<void>;
 
     /**
      * @docid

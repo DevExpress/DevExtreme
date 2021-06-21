@@ -10,7 +10,7 @@ import {
 } from '../events/index';
 
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -152,13 +152,13 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
      * @default null
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
      * @default null
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

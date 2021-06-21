@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: animationConfig,
+      hide?: AnimationConfig,
       /**
        * @docid
        * @default undefined
        */
-      show?: animationConfig
+      show?: AnimationConfig
     };
     /**
      * @docid

@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -199,13 +199,13 @@ export interface dxOverlayAnimation {
      * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxOverlayOptions.animation.show
      * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

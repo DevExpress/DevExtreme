@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -221,13 +221,13 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
      * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} [for](iOS)
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopupOptions.animation.show
      * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} [for](iOS)
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopupToolbarItem {

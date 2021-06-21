@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -148,13 +148,13 @@ export interface dxToastAnimation extends dxOverlayAnimation {
      * @default { type: "fade", duration: 400, to: 0 }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxToastOptions.animation.show
      * @default { type: "fade", duration: 400, from: 0, to: 1 }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid
