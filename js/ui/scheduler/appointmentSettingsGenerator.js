@@ -42,7 +42,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 
-        let appointmentList = this._createAppointments(appointment, itemResources);
+        let appointmentList = this._createAppointments(appointment, itemResources, resourceManager);
 
         appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointment); // T983264
 
@@ -100,8 +100,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return this.scheduler.appointmentTakesAllDay(rawAppointment) && this.workspace.supportAllDayRow();
     }
 
-    _createAppointments(appointment, resources) {
-        let appointments = this._createRecurrenceAppointments(appointment, resources);
+    _createAppointments(appointment, resources, resourceManager) {
+        let appointments = this._createRecurrenceAppointments(appointment, resources, resourceManager);
 
         if(!appointment.isRecurrent && appointments.length === 0) {
             appointments.push({
@@ -509,11 +509,11 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return result;
     }
 
-    _createRecurrenceAppointments(appointment, resources) {
+    _createRecurrenceAppointments(appointment, resources, resourceManager) {
         const { duration } = appointment;
         const result = [];
         const groupIndices = this.workspace._getGroupCount()
-            ? this._getGroupIndices(resources)
+            ? this._getGroupIndices(resources, resourceManager)
             : [0];
 
         groupIndices.forEach(groupIndex => {
@@ -543,8 +543,8 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return firstViewDate.getHours();
     }
 
-    _updateGroupIndices(appointments, itemResources) {
-        const groupIndices = this._getGroupIndices(itemResources);
+    _updateGroupIndices(appointments, itemResources, resourceManager) {
+        const groupIndices = this._getGroupIndices(itemResources, resourceManager);
         const result = [];
 
         groupIndices.forEach(groupIndex => {
@@ -562,8 +562,8 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return result;
     }
 
-    _getGroupIndices(resources) {
-        let groupIndices = super._getGroupIndices(resources);
+    _getGroupIndices(resources, resourceManager) {
+        let groupIndices = super._getGroupIndices(resources, resourceManager);
         const { viewDataProvider } = this.workspace;
         const viewDataGroupIndices = viewDataProvider.getGroupIndices();
 
@@ -576,11 +576,11 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         );
     }
 
-    _createAppointments(appointment, resources) {
-        const appointments = super._createAppointments(appointment, resources);
+    _createAppointments(appointment, resources, resourceManager) {
+        const appointments = super._createAppointments(appointment, resources, resourceManager);
 
         return !appointment.isRecurrent
-            ? this._updateGroupIndices(appointments, resources)
+            ? this._updateGroupIndices(appointments, resources, resourceManager)
             : appointments;
     }
 }

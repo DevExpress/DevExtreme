@@ -2590,7 +2590,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             return result;
         }
 
-        const validGroupIndices = groupIndex ? [groupIndex] : groupIndices;
+        let validGroupIndices = [groupIndex];
+
+        if(!isDefined(groupIndex)) {
+            validGroupIndices = this._getGroupCount() ? groupIndices : [0];
+        }
 
         validGroupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
