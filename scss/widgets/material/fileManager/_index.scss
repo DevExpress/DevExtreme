@@ -132,11 +132,6 @@
   }
 
   .dx-filemanager-thumbnails {
-    &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
-      color: $base-text-color;
-      background: $base-bg;
-    }
-
     .dx-filemanager-thumbnails-item {
       &.dx-item-selected {
         color: $filemanager-file-item-select-color;
