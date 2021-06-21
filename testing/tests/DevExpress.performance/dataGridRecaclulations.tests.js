@@ -4,7 +4,7 @@ require('../../helpers/qunitPerformanceExtension.js');
 require('../../content/orders.js');
 
 require('generic_light.css!');
-require('ui/data_grid');
+require('ui/data_grid/ui.data_grid');
 const Pager = require('ui/pager');
 
 const createDataGridMeasureFunction = function(options) {
