@@ -240,7 +240,7 @@ class SchedulerAgenda extends WorkSpace {
 
     _makeGroupRows() {
         const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-        const resourceManager = this.invoke('getResourceManager');
+        const resourceManager = this.option('resourceManager');
         const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;

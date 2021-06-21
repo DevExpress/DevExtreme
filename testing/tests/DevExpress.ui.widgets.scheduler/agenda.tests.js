@@ -31,6 +31,13 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
+        const schedulerMock = { isVirtualScrolling: () => false };
+        const resources = options && options.groups || { };
+        const key = createFactoryInstances({
+            scheduler: schedulerMock,
+            resources
+        });
+
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
@@ -43,24 +50,13 @@ module('Agenda', {}, () => {
                                 return { calculateRows: () => rows };
                             }
                         };
-                    } else if(functionName === 'getResourceManager') {
-                        return getResourceManager(key);
                     } else if(functionName === 'getAppointmentDataProvider') {
                         return getAppointmentDataProvider(key);
                     }
                 }
-            }
+            },
+            resourceManager: getResourceManager(key),
         };
-
-        const schedulerMock = { isVirtualScrolling: () => false };
-        const resources = options && options.groups || { };
-        const key = createFactoryInstances({
-            scheduler: schedulerMock,
-            resources
-        });
-
-        const resourceManager = getResourceManager(key);
-        resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });
         return $element.dxSchedulerAgenda('instance');
