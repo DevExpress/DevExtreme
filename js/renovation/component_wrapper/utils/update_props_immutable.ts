@@ -16,13 +16,15 @@ function cloneObjectProp(
     ? cloneObjectValue(prevValue)
     : cloneObjectValue(value);
 
+  const name = fullNameParts[0];
   if (fullNameParts.length > 1) {
-    const name = fullNameParts[0];
     result[name] = cloneObjectProp(
       value[name] as Record<string, unknown>,
       prevValue?.[name] as Record<string, unknown>,
       fullNameParts.slice(1),
     );
+  } else if (name) {
+    result[name] = value[name];
   }
   return result;
 }

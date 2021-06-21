@@ -109,6 +109,18 @@ it('change second level nested object option for empty props', () => {
   expect(props.nestedObject1.nestedObject2.nestedProp).toBe('new value');
 });
 
+it('change modified property in nested object if prevProps', () => {
+  const option = { nestedObject: { nestedProp: 'new value' } };
+  const newNestedObject = { nestedProp: 'old value' };
+  const props = { nestedObject: newNestedObject };
+
+  updatePropsImmutable(props, option, 'nestedObject', 'nestedObject.nestedProp');
+
+  expect(props.nestedObject).not.toBe(option.nestedObject);
+  expect(props.nestedObject).not.toBe(newNestedObject);
+  expect(props.nestedObject.nestedProp).toBe('new value');
+});
+
 it('change object item in nested array option', () => {
   const nestedArray = ['item1', 'item2'];
 
