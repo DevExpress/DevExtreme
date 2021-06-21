@@ -11,7 +11,7 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
     const that = this;
     const done = assert.async();
 
-    options.loadingTimeout = undefined;
+    options.loadingTimeout = null;
     options.export = options.export || {};
     options.export.ignoreExcelErrors = false;
     if(!isDefined(styles)) {

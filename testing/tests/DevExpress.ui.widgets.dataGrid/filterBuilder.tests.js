@@ -1,4 +1,4 @@
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import fx from 'animation/fx';

@@ -5,7 +5,7 @@ import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSLocalizationFormatTests = {
@@ -44,7 +44,7 @@ const ExcelJSLocalizationFormatTests = {
                             { dataField: 'f6', dataType: 'number', format: { type: 'currency', currency: currency.value } }
                         ],
                         showColumnHeaders: false,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
