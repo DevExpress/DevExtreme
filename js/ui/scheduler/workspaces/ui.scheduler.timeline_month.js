@@ -47,10 +47,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return toMs('day');
     }
 
-    calculateEndViewDate(dateOfLastViewCell) {
-        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
-    }
-
     isIndicatorVisible() {
         return true;
     }

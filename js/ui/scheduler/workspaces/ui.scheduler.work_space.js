@@ -2771,10 +2771,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDate() {
-        const dateOfLastViewCell = this.getDateOfLastViewCell();
-        const endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
-
-        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+        return this.viewDataProvider.getLastViewDate() - toMs('minute');
     }
 
     getEndViewDateByEndDayHour() {
@@ -2787,10 +2784,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     }
 
-    calculateEndViewDate(dateOfLastViewCell) {
-        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
-    }
-
     _adjustEndViewDateByDaylightDiff(startDate, endDate) {
         const daylightDiff = timeZoneUtils.getDaylightOffsetInMs(startDate, endDate);
 
@@ -2801,19 +2794,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getEndViewDateTimeDiff() {
         return toMs('minute');
-    }
-
-    getDateOfLastViewCell() {
-        const rowIndex = this._getRowCount() - 1;
-        let columnIndex = this._getCellCount();
-
-        if(this.isGroupedByDate()) {
-            columnIndex = columnIndex * this._getGroupCount() - 1;
-        } else {
-            columnIndex = columnIndex - 1;
-        }
-
-        return this._getDateByCellIndexes(rowIndex, columnIndex, true);
     }
 
     getCellDuration() {
