@@ -76,15 +76,27 @@ describe('ResizableContainer', () => {
 
     describe('Events', () => {
       describe('onResizeStart', () => {
+        it('should store current mouse position', () => {
+          const onResizeStart = jest.fn();
+          const container = new ResizableContainer({ onResizeStart });
+          const event = { dragEvent: true, clientX: 33, clientY: 44 };
+
+          expect(container.startX).toEqual(Number.NaN);
+          expect(container.startY).toEqual(Number.NaN);
+          container.onHandleResizeStart(event as any, 'top');
+          expect(container.startX).toEqual(33);
+          expect(container.startY).toEqual(44);
+        });
+
         it('should reset targetElements field', () => {
           const onResizeStart = jest.fn();
           const container = new ResizableContainer({ onResizeStart });
           const event = { dragEvent: true };
 
-          container.onHandleResizeStart(event as any);
+          container.onHandleResizeStart(event as any, 'top');
 
           expect(onResizeStart).toHaveBeenCalledTimes(1);
-          expect(onResizeStart).toHaveBeenCalledWith(event);
+          expect(onResizeStart).toHaveBeenCalledWith({ event, handle: 'top' });
           expect((event as any).targetElements).toEqual([]);
         });
 
@@ -92,7 +104,7 @@ describe('ResizableContainer', () => {
           const container = new ResizableContainer({});
 
           expect(container.isResizing).toBe(false);
-          container.onHandleResizeStart({} as any);
+          container.onHandleResizeStart({} as any, 'top');
           expect(container.isResizing).toBe(true);
         });
       });
@@ -108,21 +120,38 @@ describe('ResizableContainer', () => {
           const event = { dragEvent: true };
 
           container.mainRef = { current: mainEl } as any;
-          container.onHandleResize(event as any);
+          container.onHandleResize(event as any, 'top');
 
           expect(onResize).toHaveBeenCalledTimes(1);
-          expect(onResize).toHaveBeenCalledWith(event);
+          expect(onResize).toHaveBeenCalledWith({
+            event, handle: 'top', delta: { x: Number.NaN, y: Number.NaN },
+          });
           expect(triggerResizeEvent).toHaveBeenCalledTimes(1);
           expect(triggerResizeEvent).toHaveBeenCalledWith(mainEl);
+        });
+
+        it('should calculate and pass delta values', () => {
+          const onResize = jest.fn();
+          const container = new ResizableContainer({ onResize });
+          container.startX = 10;
+          container.startY = 50;
+          container.mainRef = { current: {} } as any;
+          const event = { dragEvent: true, clientX: 33, clientY: 44 };
+
+          container.onHandleResize(event as any, 'top');
+
+          expect(onResize).toHaveBeenCalledWith({
+            event, handle: 'top', delta: { x: 23, y: -6 },
+          });
         });
 
         it('should ignore empty handlers', () => {
           const container = new ResizableContainer({});
           container.mainRef = { current: {} } as any;
 
-          expect(() => container.onHandleResize(defaultEvent as any)).not.toThrow();
-          expect(() => container.onHandleResizeEnd(defaultEvent as any)).not.toThrow();
-          expect(() => container.onHandleResizeStart(defaultEvent as any)).not.toThrow();
+          expect(() => container.onHandleResize(defaultEvent as any, 'top')).not.toThrow();
+          expect(() => container.onHandleResizeEnd(defaultEvent as any, 'top')).not.toThrow();
+          expect(() => container.onHandleResizeStart(defaultEvent as any, 'top')).not.toThrow();
         });
       });
 
@@ -132,18 +161,18 @@ describe('ResizableContainer', () => {
           const container = new ResizableContainer({ onResizeEnd });
           const event = { dragEvent: true };
 
-          container.onHandleResizeEnd(event as any);
+          container.onHandleResizeEnd(event as any, 'top');
 
           expect(onResizeEnd).toHaveBeenCalledTimes(1);
-          expect(onResizeEnd).toHaveBeenCalledWith(event);
+          expect(onResizeEnd).toHaveBeenCalledWith({ event, handle: 'top' });
         });
 
         it('should change "isResizable" state value', () => {
           const container = new ResizableContainer({});
 
-          container.onHandleResizeStart({} as any);
+          container.onHandleResizeStart({} as any, 'top');
           expect(container.isResizing).toBe(true);
-          container.onHandleResizeEnd({} as any);
+          container.onHandleResizeEnd({} as any, 'top');
           expect(container.isResizing).toBe(false);
         });
       });
