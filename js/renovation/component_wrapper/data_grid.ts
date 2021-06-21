@@ -127,15 +127,7 @@ export default class DataGridWrapper extends Component {
         return originalCustomizeExcelCell(e);
       };
     }
-    // const { onInitialized } = options;
 
-    // if (onInitialized) {
-    //   // eslint-disable-next-line no-param-reassign
-    //   options.onInitialized = (e: { component: Component }): void => {
-    //     e.component = this;
-    //     (onInitialized as Function)(e);
-    //   };
-    // }
     return super._patchOptionValues(options);
   }
 
