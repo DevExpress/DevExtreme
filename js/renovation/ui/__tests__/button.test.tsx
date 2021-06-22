@@ -551,6 +551,20 @@ describe('Button', () => {
             .toEqual(rippleConfig);
         });
       });
+
+      describe('buttonTemplateData', () => {
+        it('should return icon and text as is', () => {
+          expect(new Button({ icon: 'icon', text: 'text' }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text' });
+        });
+
+        it('should add templateData fields', () => {
+          const templateData = { customData: 'data ' };
+
+          expect(new Button({ icon: 'icon', text: 'text', templateData }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text', ...templateData });
+        });
+      });
     });
 
     describe('Default options', () => {
