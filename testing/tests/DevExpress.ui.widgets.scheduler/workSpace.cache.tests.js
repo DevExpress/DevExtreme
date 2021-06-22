@@ -21,9 +21,8 @@ module('Work Space cellData Cache', {
     beforeEach: function() {
 
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 

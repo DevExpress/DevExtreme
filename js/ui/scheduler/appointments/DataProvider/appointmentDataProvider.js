@@ -1,8 +1,5 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
-import { getResourceManager } from '../../resources/resourceManager';
-import { extend } from '../../../../core/utils/extend';
-import { each } from '../../../../core/utils/iterator';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -15,7 +12,7 @@ export class AppointmentDataProvider {
         this.key = this.options.key;
         this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
-        this.dataAccessors = this.combineDataAccessors(this.options.appointmentDataAccessors);
+        this.dataAccessors = this.options.getDataAccessors(this.key);
         this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
@@ -26,7 +23,7 @@ export class AppointmentDataProvider {
     get filterMaker() { return this.getFilterStrategy().filterMaker; }
     get keyName() { return this.appointmentDataSource.keyName; }
     get filterStrategyName() {
-        return this.scheduler.isVirtualScrolling()
+        return this.options.getIsVirtualScrolling()
             ? FilterStrategies.virtual
             : FilterStrategies.standard;
     }
@@ -48,7 +45,9 @@ export class AppointmentDataProvider {
             startDayHour: this.options.startDayHour,
             endDayHour: this.options.endDayHour,
             appointmentDuration: this.options.appointmentDuration,
-            showAllDayPanel: this.options.showAllDayPanel
+            showAllDayPanel: this.options.showAllDayPanel,
+            timeZoneCalculator: this.options.timeZoneCalculator,
+            resourceManager: this.options.resourceManager
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
@@ -62,22 +61,9 @@ export class AppointmentDataProvider {
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
-    updateDataAccessors(appointmentDataAccessors) {
-        this.dataAccessors = this.combineDataAccessors(appointmentDataAccessors);
+    updateDataAccessors(dataAccessors) {
+        this.dataAccessors = dataAccessors;
         this.initFilterStrategy();
-    }
-
-    combineDataAccessors(appointmentDataAccessors) { // TODO move to utils or get rid of it
-        const result = extend(true, {}, appointmentDataAccessors);
-        const resourceManager = getResourceManager(this.key);
-
-        if(appointmentDataAccessors && resourceManager) {
-            each(resourceManager._dataAccessors, (type, accessor) => {
-                result[type].resources = accessor;
-            });
-        }
-
-        return result;
     }
 
     // Filter mapping
@@ -131,16 +117,3 @@ export class AppointmentDataProvider {
         return this.appointmentDataSource.remove(rawAppointment);
     }
 }
-
-const appointmentDataProviders = { };
-
-export const createAppointmentDataProvider = (key, options) => {
-    const validKey = key || 0;
-    appointmentDataProviders[validKey] = new AppointmentDataProvider({
-        ...options,
-        key
-    });
-};
-
-export const getAppointmentDataProvider = (key = 0) => appointmentDataProviders[key];
-export const removeAppointmentDataProvider = (key) => appointmentDataProviders[key] = null;
