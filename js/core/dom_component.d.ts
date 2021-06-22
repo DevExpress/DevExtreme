@@ -3,9 +3,6 @@ import {
     ComponentOptions
 } from './component';
 
-import {
-    Device
-} from './devices';
 
 import {
     UserDefinedElement,
@@ -14,7 +11,6 @@ import {
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
-import { ChangedOptionInfo, EventInfo } from '../events/index';
 import { Rule } from './options/utils';
 
 /** @namespace DevExpress */

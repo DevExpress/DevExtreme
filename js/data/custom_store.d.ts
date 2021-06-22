@@ -1,4 +1,4 @@
-import { FilterDescriptor, GroupDescriptor } from '.';
+import { FilterDescriptor, GroupDescriptor } from './index';
 import Store, {
     StoreOptions
 } from './abstract_store';

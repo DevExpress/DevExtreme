@@ -519,7 +519,7 @@ declare module DevExpress {
      */
     animate(
       element: Element,
-      config: animationConfig
+      config: AnimationConfig
     ): DevExpress.core.utils.DxPromise<void>;
 
     /**
@@ -533,68 +533,9 @@ declare module DevExpress {
     stop(element: Element, jumpToEnd: boolean): void;
   };
   /**
-    * [descr:devices]
-    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
-    */
-   export const devices: DevicesObject;
-  /**
-   * [descr:animationConfig]
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
-   */
-  export interface animationConfig {
-    /**
-     * [descr:animationConfig.complete]
-     */
-    complete?: ($element: DevExpress.core.DxElement, config: any) => void;
-    /**
-     * [descr:animationConfig.delay]
-     */
-    delay?: number;
-    /**
-     * [descr:animationConfig.direction]
-     */
-    direction?: 'bottom' | 'left' | 'right' | 'top';
-    /**
-     * [descr:animationConfig.duration]
-     */
-    duration?: number;
-    /**
-     * [descr:animationConfig.easing]
-     */
-    easing?: string;
-    /**
-     * [descr:animationConfig.from]
-     */
-    from?: number | string | any;
-    /**
-     * [descr:animationConfig.staggerDelay]
-     */
-    staggerDelay?: number;
-    /**
-     * [descr:animationConfig.start]
-     */
-    start?: ($element: DevExpress.core.DxElement, config: any) => void;
-    /**
-     * [descr:animationConfig.to]
-     */
-    to?: number | string | any;
-    /**
-     * [descr:animationConfig.type]
-     */
-    type?:
-      | 'css'
-      | 'fade'
-      | 'fadeIn'
-      | 'fadeOut'
-      | 'pop'
-      | 'slide'
-      | 'slideIn'
-      | 'slideOut';
-  }
-  /**
    * [descr:animationPresets]
    */
-  export class animationPresets {
+  export const animationPresets: {
     /**
      * [descr:animationPresets.applyChanges()]
      */
@@ -610,7 +551,7 @@ declare module DevExpress {
     /**
      * [descr:animationPresets.getPreset(name)]
      */
-    getPreset(name: string): any;
+    getPreset(name: string): AnimationConfig;
     /**
      * [descr:animationPresets.registerDefaultPresets()]
      */
@@ -620,12 +561,77 @@ declare module DevExpress {
      */
     registerPreset(
       name: string,
-      config: { animation?: animationConfig; device?: Device }
+      config: { animation: AnimationConfig; device?: Device }
     ): void;
     /**
      * [descr:animationPresets.resetToDefaults()]
      */
     resetToDefaults(): void;
+  };
+  /**
+    * [descr:devices]
+    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+    */
+   export const devices: DevicesObject;
+  /**
+   * [descr:AnimationConfig]
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface AnimationConfig {
+    /**
+     * [descr:AnimationConfig.complete]
+     */
+    complete?: (
+      $element: DevExpress.core.DxElement,
+      config: AnimationConfig
+    ) => void;
+    /**
+     * [descr:AnimationConfig.delay]
+     */
+    delay?: number;
+    /**
+     * [descr:AnimationConfig.direction]
+     */
+    direction?: 'bottom' | 'left' | 'right' | 'top';
+    /**
+     * [descr:AnimationConfig.duration]
+     */
+    duration?: number;
+    /**
+     * [descr:AnimationConfig.easing]
+     */
+    easing?: string;
+    /**
+     * [descr:AnimationConfig.from]
+     */
+    from?: DevExpress.animation.AnimationState;
+    /**
+     * [descr:AnimationConfig.staggerDelay]
+     */
+    staggerDelay?: number;
+    /**
+     * [descr:AnimationConfig.start]
+     */
+    start?: (
+      $element: DevExpress.core.DxElement,
+      config: AnimationConfig
+    ) => void;
+    /**
+     * [descr:AnimationConfig.to]
+     */
+    to?: DevExpress.animation.AnimationState;
+    /**
+     * [descr:AnimationConfig.type]
+     */
+    type?:
+      | 'css'
+      | 'fade'
+      | 'fadeIn'
+      | 'fadeOut'
+      | 'pop'
+      | 'slide'
+      | 'slideIn'
+      | 'slideOut';
   }
   /**
    * [descr:Component]
@@ -660,7 +666,7 @@ declare module DevExpress {
     /**
      * [descr:Component.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key: string]: Function }): this;
     /**
      * [descr:Component.option()]
      */
@@ -780,7 +786,7 @@ declare module DevExpress {
    * [descr:DevicesObject]
    */
   export class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
      * [descr:DevicesObject.current()]
      */
@@ -792,23 +798,23 @@ declare module DevExpress {
     /**
      * [descr:DevicesObject.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.core.EventName): this;
     /**
      * [descr:DevicesObject.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: DevExpress.core.EventName, eventHandler: Function): this;
     /**
      * [descr:DevicesObject.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: DevExpress.core.EventName, eventHandler: Function): this;
     /**
      * [descr:DevicesObject.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key in DevExpress.core.EventName]?: Function }): this;
     /**
      * [descr:DevicesObject.orientation()]
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
      * [descr:DevicesObject.real()]
      */
@@ -829,10 +835,9 @@ declare module DevExpress {
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
-    static defaultOptions(rule: {
-      device?: Device | Array<Device> | Function;
-      options?: any;
-    }): void;
+    static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
+      rule: DevExpress.core.Rule<TProperties>
+    ): void;
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -877,11 +882,11 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.bindingOptions]
      */
-    bindingOptions?: any;
+    bindingOptions?: { [key: string]: any };
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
-    elementAttr?: any;
+    elementAttr?: { [key: string]: any };
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -983,6 +988,44 @@ declare module DevExpress {
      * [descr:ExportLoadPanel.shadingColor]
      */
     shadingColor?: string;
+  }
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  type ExternalFormat = any;
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export type Format =
+    | FormatObject
+    | PredefinedFormat
+    | string
+    | ((value: number | Date) => string)
+    | ExternalFormat;
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface FormatObject {
+    /**
+     * [descr:FormatObject.currency]
+     */
+    currency?: string;
+    /**
+     * [descr:FormatObject.formatter]
+     */
+    formatter?: (value: number | Date) => string;
+    /**
+     * [descr:FormatObject.parser]
+     */
+    parser?: (value: string) => number | Date;
+    /**
+     * [descr:FormatObject.precision]
+     */
+    precision?: number;
+    /**
+     * [descr:FormatObject.type]
+     */
+    type?: PredefinedFormat;
   }
   /**
    * [descr:globalConfig]
@@ -1199,18 +1242,55 @@ declare module DevExpress {
         };
   }
   /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  type PredefinedFormat =
+    | 'billions'
+    | 'currency'
+    | 'day'
+    | 'decimal'
+    | 'exponential'
+    | 'fixedPoint'
+    | 'largeNumber'
+    | 'longDate'
+    | 'longTime'
+    | 'millions'
+    | 'millisecond'
+    | 'month'
+    | 'monthAndDay'
+    | 'monthAndYear'
+    | 'percent'
+    | 'quarter'
+    | 'quarterAndYear'
+    | 'shortDate'
+    | 'shortTime'
+    | 'thousands'
+    | 'trillions'
+    | 'year'
+    | 'dayOfWeek'
+    | 'hour'
+    | 'longDateLongTime'
+    | 'minute'
+    | 'second'
+    | 'shortDateShortTime';
+  /**
    * [descr:registerComponent(name, componentClass)]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export function registerComponent(name: string, componentClass: any): void;
+  export function registerComponent<TComponent>(
+    name: string,
+    componentClass: DevExpress.core.ComponentFactory<TComponent>
+  ): void;
   /**
    * [descr:registerComponent(name, namespace, componentClass)]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export function registerComponent(
+  export function registerComponent<TComponent>(
     name: string,
-    namespace: any,
-    componentClass: any
+    namespace: {
+      [key: string]: DevExpress.core.ComponentFactory<DOMComponent>;
+    },
+    componentClass: DevExpress.core.ComponentFactory<TComponent>
   ): void;
   /**
    * [descr:setTemplateEngine(name)]
@@ -1232,14 +1312,14 @@ declare module DevExpress {
      */
     enter(
       elements: DevExpress.core.UserDefinedElementsArray,
-      animation: animationConfig | string
+      animation: AnimationConfig | string
     ): void;
     /**
      * [descr:TransitionExecutor.leave(elements, animation)]
      */
     leave(
       elements: DevExpress.core.UserDefinedElementsArray,
-      animation: animationConfig | string
+      animation: AnimationConfig | string
     ): void;
     /**
      * [descr:TransitionExecutor.reset()]
@@ -1298,6 +1378,19 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.animation {
+  /**
+   * [descr:AnimationState]
+   */
+  export type AnimationState =
+    | string
+    | number
+    | { opacity: number }
+    | { scale: number }
+    | { position: positionConfig }
+    | { left: number }
+    | { top: number };
+}
 declare module DevExpress.core {
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1322,6 +1415,13 @@ declare module DevExpress.core {
     _setOptionsByReference(): void;
     _setDeprecatedOptions(): void;
   }
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  type ComponentFactory<TComponent> = {
+    new (): TComponent;
+    getInstance(element: UserDefinedElement): TComponent;
+  };
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
@@ -1381,6 +1481,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
+  type EventName = 'orientationChanged';
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
   export class FunctionTemplate {
     render(template: {
       container: unknown;
@@ -1396,6 +1500,19 @@ declare module DevExpress.core {
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>;
+  };
+  /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export declare type Rule<T> = {
+    device: ((device: Device) => boolean) | Device | Device[];
+    options: RecursivePartial<T>;
+  };
   /**
    * [descr:template]
    */
@@ -1447,8 +1564,11 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore extends Store {
-    constructor(options?: ArrayStoreOptions);
+  export class ArrayStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: ArrayStoreOptions<TKey, TValue>);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1456,16 +1576,17 @@ declare module DevExpress.data {
     /**
      * [descr:ArrayStore.createQuery()]
      */
-    createQuery(): any;
+    createQuery(): Query;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+  export interface ArrayStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
-    data?: Array<any>;
+    data?: Array<TValue>;
   }
   /**
    * [descr:Utils.base64_encode(input)]
@@ -1474,8 +1595,11 @@ declare module DevExpress.data {
   /**
    * [descr:CustomStore]
    */
-  export class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions);
+  export class CustomStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: CustomStoreOptions<TKey, TValue>);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
@@ -1484,11 +1608,12 @@ declare module DevExpress.data {
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+  export interface CustomStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
-    byKey?: (key: any | string | number) => PromiseLike<any>;
+    byKey?: (key: TKey) => PromiseLike<TValue>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
      */
@@ -1496,11 +1621,11 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.insert]
      */
-    insert?: (values: any) => PromiseLike<any>;
+    insert?: (values: TValue) => PromiseLike<TValue>;
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (options: LoadOptions) => PromiseLike<any> | Array<any>;
+    load?: (options: LoadOptions) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1508,18 +1633,18 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.remove]
      */
-    remove?: (key: any | string | number) => PromiseLike<void>;
+    remove?: (key: TKey) => PromiseLike<void>;
     /**
      * [descr:CustomStoreOptions.totalCount]
      */
     totalCount?: (loadOptions: {
-      filter?: any;
-      group?: any;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor | Array<GroupDescriptor>;
     }) => PromiseLike<number>;
     /**
      * [descr:CustomStoreOptions.update]
      */
-    update?: (key: any | string | number, values: any) => PromiseLike<any>;
+    update?: (key: TKey, values: TValue) => PromiseLike<any>;
     /**
      * [descr:CustomStoreOptions.useDefaultSearch]
      */
@@ -1528,15 +1653,19 @@ declare module DevExpress.data {
   /**
    * [descr:DataSource]
    */
-  export class DataSource {
-    constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
-    constructor(store: Store);
+  export class DataSource<TKey = any, TValue = any> {
+    constructor(data: Array<TValue>);
+    constructor(
+      options:
+        | CustomStoreOptions<TKey, TValue>
+        | DataSourceOptions<TKey, any, TValue, any>
+    );
+    constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
      */
-    cancel(): boolean;
+    cancel(operationId: number): boolean;
     /**
      * [descr:DataSource.dispose()]
      */
@@ -1544,19 +1673,19 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.filter()]
      */
-    filter(): any;
+    filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:DataSource.filter(filterExpr)]
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
      * [descr:DataSource.group()]
      */
-    group(): any;
+    group(): GroupDescriptor | Array<GroupDescriptor>;
     /**
      * [descr:DataSource.group(groupExpr)]
      */
-    group(groupExpr: any): void;
+    group(groupExpr: GroupDescriptor | Array<GroupDescriptor>): void;
     /**
      * [descr:DataSource.isLastPage()]
      */
@@ -1576,7 +1705,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.key()]
      */
-    key(): any & string & number;
+    key(): string | Array<string>;
     /**
      * [descr:DataSource.load()]
      */
@@ -1584,23 +1713,37 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): any;
+    loadOptions(): {
+      sort?: SortDescriptor | Array<SortDescriptor>;
+      filter?: any;
+      select?: SelectDescriptor;
+      group?: GroupDescriptor | Array<GroupDescriptor>;
+      requireTotalCount?: boolean;
+    };
     /**
      * [descr:DataSource.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.DataSource.EventName): this;
     /**
      * [descr:DataSource.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.DataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:DataSource.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.DataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:DataSource.on(events)]
      */
-    on(events: any): this;
+    on(
+      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
+    ): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -1664,32 +1807,60 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.select()]
      */
-    select(): any;
+    select(): SelectDescriptor | Array<SelectDescriptor>;
     /**
      * [descr:DataSource.select(expr)]
      */
-    select(expr: any): void;
+    select(expr: SelectDescriptor | Array<SelectDescriptor>): void;
     /**
      * [descr:DataSource.sort()]
      */
-    sort(): any;
+    sort(): SortDescriptor | Array<SortDescriptor>;
     /**
      * [descr:DataSource.sort(sortExpr)]
      */
-    sort(sortExpr: any): void;
+    sort(sortExpr: SortDescriptor | Array<SortDescriptor>): void;
     /**
      * [descr:DataSource.store()]
      */
-    store(): any;
+    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
     totalCount(): number;
   }
+  module DataSource {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type EventName =
+      | 'changed'
+      | 'loadError'
+      | 'loadingChanged' /*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;
+    /**
+     * [descr:SearchOperation]
+     */
+    type SearchOperation =
+      | '='
+      | '<>'
+      | '>'
+      | '>='
+      | '<'
+      | '<='
+      | 'startswith'
+      | 'endswith'
+      | 'contains'
+      | 'notcontains';
+  }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface DataSourceOptions {
+  export interface DataSourceOptions<
+    TKey = any,
+    TSourceValue = any,
+    TValue = TSourceValue,
+    TMappedValue = TValue
+  > {
     /**
      * [descr:DataSourceOptions.customQueryParams]
      */
@@ -1701,23 +1872,23 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.filter]
      */
-    filter?: string | Array<any> | Function;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:DataSourceOptions.group]
      */
-    group?: string | Array<any> | Function;
+    group?: GroupDescriptor | Array<GroupDescriptor>;
     /**
      * [descr:DataSourceOptions.map]
      */
-    map?: (dataItem: any) => any;
+    map?: (dataItem: TSourceValue) => TMappedValue;
     /**
      * [descr:DataSourceOptions.onChanged]
      */
-    onChanged?: (e: { changes?: Array<any> }) => void;
+    onChanged?: (e: { readonly changes?: Array<TMappedValue> }) => void;
     /**
      * [descr:DataSourceOptions.onLoadError]
      */
-    onLoadError?: (error: { message?: string }) => void;
+    onLoadError?: (error: { readonly message?: string }) => void;
     /**
      * [descr:DataSourceOptions.onLoadingChanged]
      */
@@ -1733,7 +1904,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.postProcess]
      */
-    postProcess?: (data: Array<any>) => Array<any>;
+    postProcess?: (data: Array<TMappedValue>) => Array<TValue>;
     /**
      * [descr:DataSourceOptions.pushAggregationTimeout]
      */
@@ -1753,7 +1924,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.searchOperation]
      */
-    searchOperation?: string;
+    searchOperation?: DevExpress.data.DataSource.SearchOperation;
     /**
      * [descr:DataSourceOptions.searchValue]
      */
@@ -1761,15 +1932,18 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.select]
      */
-    select?: string | Array<any> | Function;
+    select?: SelectDescriptor | Array<SelectDescriptor>;
     /**
      * [descr:DataSourceOptions.sort]
      */
-    sort?: string | Array<any> | Function;
+    sort?: SortDescriptor | Array<SortDescriptor>;
     /**
      * [descr:DataSourceOptions.store]
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?:
+      | Store<TKey, TSourceValue>
+      | StoreOptions<TKey, TSourceValue>
+      | Array<TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -1786,6 +1960,19 @@ declare module DevExpress.data {
    * @deprecated [depNote:Utils.errorHandler]
    */
   export function errorHandler(e: Error): void;
+  /**
+   * [descr:FilterDescriptor]
+   */
+  export type FilterDescriptor = any;
+  /**
+   * [descr:GroupDescriptor]
+   */
+  export type GroupDescriptor =
+    | Function
+    | string
+    | {
+        [prop in 'getter' | 'field' | 'selector']?: Function | string;
+      };
   /**
    * [descr:Guid]
    */
@@ -1813,19 +2000,19 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.expand]
      */
-    expand?: any;
+    expand?: Array<string>;
     /**
      * [descr:LoadOptions.filter]
      */
-    filter?: any;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:LoadOptions.group]
      */
-    group?: any;
+    group?: GroupDescriptor | Array<GroupDescriptor>;
     /**
      * [descr:LoadOptions.groupSummary]
      */
-    groupSummary?: any;
+    groupSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
     /**
      * [descr:LoadOptions.parentIds]
      */
@@ -1845,7 +2032,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.searchOperation]
      */
-    searchOperation?: string;
+    searchOperation?: DevExpress.data.DataSource.SearchOperation;
     /**
      * [descr:LoadOptions.searchValue]
      */
@@ -1853,7 +2040,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.select]
      */
-    select?: any;
+    select?: SelectDescriptor | Array<SelectDescriptor>;
     /**
      * [descr:LoadOptions.skip]
      */
@@ -1861,7 +2048,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.sort]
      */
-    sort?: any;
+    sort?: SortDescriptor | Array<SortDescriptor>;
     /**
      * [descr:LoadOptions.take]
      */
@@ -1869,7 +2056,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.totalSummary]
      */
-    totalSummary?: any;
+    totalSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
     /**
      * [descr:LoadOptions.userData]
      */
@@ -1920,12 +2107,34 @@ declare module DevExpress.data {
     invoke(
       operationName: string,
       params: any,
-      httpMethod: any
+      httpMethod: DevExpress.data.ODataContext.HttpMethod
     ): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:ODataContext.objectLink(entityAlias, key)]
      */
     objectLink(entityAlias: string, key: any | string | number): any;
+  }
+  module ODataContext {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    export interface ODataRequestOptions {
+      accepts: any;
+      async: boolean;
+      contentType: string | boolean;
+      data: any;
+      dataType: string;
+      headers: any;
+      jsonp?: boolean;
+      method: string;
+      timeout: number;
+      url: string;
+      xhrFields: any;
+    }
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1935,13 +2144,13 @@ declare module DevExpress.data {
      * [descr:ODataContextOptions.beforeSend]
      */
     beforeSend?: (options: {
-      url?: string;
-      async?: boolean;
-      method?: string;
-      timeout?: number;
-      params?: any;
-      payload?: any;
-      headers?: any;
+      url: string;
+      async: boolean;
+      method: string;
+      timeout: number;
+      params: any;
+      payload: any;
+      headers: any;
     }) => void;
     /**
      * [descr:ODataContextOptions.deserializeDates]
@@ -1955,9 +2164,9 @@ declare module DevExpress.data {
      * [descr:ODataContextOptions.errorHandler]
      */
     errorHandler?: (e: {
-      httpStatus?: number;
-      errorDetails?: any;
-      requestOptions?: any;
+      httpStatus: number;
+      errorDetails: any;
+      requestOptions: DevExpress.data.ODataContext.ODataRequestOptions;
     }) => void;
     /**
      * [descr:ODataContextOptions.filterToLower]
@@ -1983,31 +2192,38 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore extends Store {
-    constructor(options?: ODataStoreOptions);
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+  export class ODataStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: ODataStoreOptions<TKey, TValue>);
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
      */
     byKey(
-      key: any | string | number,
+      key: TKey,
       extraOptions: {
         expand?: string | Array<string>;
         select?: string | Array<string>;
       }
-    ): DevExpress.core.utils.DxPromise<any>;
+    ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.createQuery(loadOptions)]
      */
-    createQuery(loadOptions: any): any;
+    createQuery(loadOptions?: {
+      expand?: string | Array<string>;
+      requireTotalCount?: boolean;
+      customQueryParams?: any;
+    }): Query;
 
     /**
      * [descr:ODataStore.insert(values)]
      */
     insert(
-      values: any
-    ): DevExpress.core.utils.DxPromise<any> &
-      DevExpress.data.ODataStore.PromiseExtension<any>;
+      values: TValue
+    ): DevExpress.core.utils.DxPromise<TValue> &
+      DevExpress.data.ODataStore.PromiseExtension<TValue>;
   }
   module ODataStore {
     /**
@@ -2032,18 +2248,19 @@ declare module DevExpress.data {
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+  export interface ODataStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
     beforeSend?: (options: {
-      url?: string;
-      async?: boolean;
-      method?: string;
-      timeout?: number;
-      params?: any;
-      payload?: any;
-      headers?: any;
+      url: string;
+      async: boolean;
+      method: string;
+      timeout: number;
+      params: any;
+      payload: any;
+      headers: any;
     }) => void;
     /**
      * [descr:ODataStoreOptions.deserializeDates]
@@ -2053,9 +2270,9 @@ declare module DevExpress.data {
      * [descr:ODataStoreOptions.errorHandler]
      */
     errorHandler?: (e: {
-      httpStatus?: number;
-      errorDetails?: any;
-      requestOptions?: any;
+      httpStatus: number;
+      errorDetails: any;
+      requestOptions: DevExpress.data.ODataContext.ODataRequestOptions;
     }) => void;
     /**
      * [descr:ODataStoreOptions.fieldTypes]
@@ -2179,19 +2396,29 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.PivotGridDataSource.EventName): this;
     /**
      * [descr:PivotGridDataSource.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.PivotGridDataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:PivotGridDataSource.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.PivotGridDataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(events: any): this;
+    on(
+      events: {
+        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+      }
+    ): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
@@ -2204,6 +2431,16 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSource.state(state)]
      */
     state(state: any): void;
+  }
+  module PivotGridDataSource {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type EventName =
+      | 'changed'
+      | 'fieldsPrepared'
+      | 'loadError'
+      | 'loadingChanged';
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -2551,82 +2788,124 @@ declare module DevExpress.data {
     toArray(): Array<any>;
   }
   /**
+   * [descr:SelectDescriptor]
+   */
+  export type SelectDescriptor = Function | string;
+  /**
    * [descr:Utils.setErrorHandler]
    */
   export function setErrorHandler(handler: (e: Error) => void): void;
   /**
+   * [descr:SortDescriptor]
+   */
+  export type SortDescriptor =
+    | GroupDescriptor
+    | {
+        [prop in 'desc' | 'dir']?: boolean | 'ascending' | 'descending';
+      };
+  /**
    * [descr:Store]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export class Store {
-    constructor(options?: StoreOptions);
+  export class Store<TKey = any, TValue = any> {
+    constructor(options?: StoreOptions<TKey, TValue>);
     /**
      * [descr:Store.byKey(key)]
      */
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+    byKey(
+      key: TKey,
+      extraOptions?: LoadOptions
+    ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.insert(values)]
      */
-    insert(values: any): DevExpress.core.utils.DxPromise<any>;
+    insert(values: TValue): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.key()]
      */
-    key(): any;
+    key(): string | Array<string>;
     /**
      * [descr:Store.keyOf(obj)]
      */
-    keyOf(obj: any): any;
+    keyOf(obj: TValue): TKey;
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxPromise<any>;
+    load(): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.load(options)]
      */
-    load(options: LoadOptions): DevExpress.core.utils.DxPromise<any>;
+    load(options: LoadOptions): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.Store.EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.Store.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.Store.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key in DevExpress.data.Store.EventName]?: Function }): this;
     /**
      * [descr:Store.push(changes)]
      */
-    push(changes: Array<any>): void;
+    push(
+      changes: Array<{
+        type: 'insert' | 'update' | 'remove';
+        data?: TValue;
+        key?: TKey;
+        index?: number;
+      }>
+    ): void;
     /**
      * [descr:Store.remove(key)]
      */
-    remove(key: any | string | number): DevExpress.core.utils.DxPromise<void>;
+    remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:Store.totalCount(options)]
      */
     totalCount(obj: {
-      filter?: any;
-      group?: any;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor | Array<GroupDescriptor>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
      * [descr:Store.update(key, values)]
      */
-    update(
-      key: any | string | number,
-      values: any
-    ): DevExpress.core.utils.DxPromise<any>;
+    update(key: TKey, values: TValue): DevExpress.core.utils.DxPromise<TValue>;
+  }
+  module Store {
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type EventName =
+      | 'loaded'
+      | 'loading'
+      | 'inserted'
+      | 'inserting'
+      | 'updated'
+      | 'updating'
+      | 'push'
+      | 'removed'
+      | 'removing'
+      | 'modified'
+      | 'modifying';
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface StoreOptions<T = Store> {
+  export interface StoreOptions<TKey = any, TValue = any> {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -2638,15 +2917,15 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onInserted]
      */
-    onInserted?: (values: any, key: any | string | number) => void;
+    onInserted?: (values: TValue, key: TKey) => void;
     /**
      * [descr:StoreOptions.onInserting]
      */
-    onInserting?: (values: any) => void;
+    onInserting?: (values: TValue) => void;
     /**
      * [descr:StoreOptions.onLoaded]
      */
-    onLoaded?: (result: Array<any>) => void;
+    onLoaded?: (result: Array<TValue>, loadOptions: LoadOptions) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
@@ -2662,24 +2941,31 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<any>) => void;
+    onPush?: (changes: Array<TValue>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
-    onRemoved?: (key: any | string | number) => void;
+    onRemoved?: (key: TKey) => void;
     /**
      * [descr:StoreOptions.onRemoving]
      */
-    onRemoving?: (key: any | string | number) => void;
+    onRemoving?: (key: TKey) => void;
     /**
      * [descr:StoreOptions.onUpdated]
      */
-    onUpdated?: (key: any | string | number, values: any) => void;
+    onUpdated?: (key: TKey, values: TValue) => void;
     /**
      * [descr:StoreOptions.onUpdating]
      */
-    onUpdating?: (key: any | string | number, values: any) => void;
+    onUpdating?: (key: TKey, values: TValue) => void;
   }
+  /**
+   * [descr:SummaryDescriptor]
+   */
+  type SummaryDescriptor = {
+    selector: string | Function;
+    summaryType: 'sum' | 'avg' | 'min' | 'max' | 'count';
+  };
   /**
    * [descr:XmlaStore]
    */
@@ -3569,7 +3855,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatDate(value, format)]
    */
-  export function formatDate(value: Date, format: DevExpress.ui.format): string;
+  export function formatDate(value: Date, format: Format): string;
   /**
    * [descr:localization.formatMessage(key, value)]
    */
@@ -3577,10 +3863,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatNumber(value, format)]
    */
-  export function formatNumber(
-    value: number,
-    format: DevExpress.ui.format
-  ): string;
+  export function formatNumber(value: number, format: Format): string;
   /**
    * [descr:localization.loadMessages(messages)]
    */
@@ -3596,14 +3879,11 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.parseDate(text, format)]
    */
-  export function parseDate(text: string, format: DevExpress.ui.format): Date;
+  export function parseDate(text: string, format: Format): Date;
   /**
    * [descr:localization.parseNumber(text, format)]
    */
-  export function parseNumber(
-    text: string,
-    format: DevExpress.ui.format
-  ): number;
+  export function parseNumber(text: string, format: Format): number;
 }
 declare module DevExpress.pdfExporter {
   /**
@@ -7783,7 +8063,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.animation]
      */
-    animation?: animationConfig;
+    animation?: AnimationConfig;
     /**
      * [descr:dxDeferRenderingOptions.onRendered]
      */
@@ -13813,11 +14093,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxLoadPanelOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -13933,11 +14213,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxLookupOptions.animation.hide]
        */
-      hide?: animationConfig;
+      hide?: AnimationConfig;
       /**
        * [descr:dxLookupOptions.animation.show]
        */
-      show?: animationConfig;
+      show?: AnimationConfig;
     };
     /**
      * [descr:dxLookupOptions.applyButtonText]
@@ -14450,11 +14730,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMenuBaseOptions.animation.hide]
        */
-      hide?: animationConfig;
+      hide?: AnimationConfig;
       /**
        * [descr:dxMenuBaseOptions.animation.show]
        */
-      show?: animationConfig;
+      show?: AnimationConfig;
     };
     /**
      * [descr:dxMenuBaseOptions.cssClass]
@@ -14828,11 +15108,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxOverlayOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -15749,11 +16029,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxPopoverOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -15871,11 +16151,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxPopupOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -18874,11 +19154,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxToastOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -20704,88 +20984,9 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:format]
+   * @deprecated [depNote:format]
    */
-  export type format =
-    | 'billions'
-    | 'currency'
-    | 'day'
-    | 'decimal'
-    | 'exponential'
-    | 'fixedPoint'
-    | 'largeNumber'
-    | 'longDate'
-    | 'longTime'
-    | 'millions'
-    | 'millisecond'
-    | 'month'
-    | 'monthAndDay'
-    | 'monthAndYear'
-    | 'percent'
-    | 'quarter'
-    | 'quarterAndYear'
-    | 'shortDate'
-    | 'shortTime'
-    | 'thousands'
-    | 'trillions'
-    | 'year'
-    | 'dayOfWeek'
-    | 'hour'
-    | 'longDateLongTime'
-    | 'minute'
-    | 'second'
-    | 'shortDateShortTime'
-    | string
-    | ((value: number | Date) => string)
-    | {
-        /**
-         * [descr:format.currency]
-         */
-        currency?: string;
-        /**
-         * [descr:format.formatter]
-         */
-        formatter?: (value: number | Date) => string;
-        /**
-         * [descr:format.parser]
-         */
-        parser?: (value: string) => number | Date;
-        /**
-         * [descr:format.precision]
-         */
-        precision?: number;
-        /**
-         * [descr:format.type]
-         */
-        type?:
-          | 'billions'
-          | 'currency'
-          | 'day'
-          | 'decimal'
-          | 'exponential'
-          | 'fixedPoint'
-          | 'largeNumber'
-          | 'longDate'
-          | 'longTime'
-          | 'millions'
-          | 'millisecond'
-          | 'month'
-          | 'monthAndDay'
-          | 'monthAndYear'
-          | 'percent'
-          | 'quarter'
-          | 'quarterAndYear'
-          | 'shortDate'
-          | 'shortTime'
-          | 'thousands'
-          | 'trillions'
-          | 'year'
-          | 'dayOfWeek'
-          | 'hour'
-          | 'longDateLongTime'
-          | 'minute'
-          | 'second'
-          | 'shortDateShortTime';
-      };
+  export type format = Format;
   /**
    * [descr:GridBase]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -22925,10 +23126,9 @@ declare module DevExpress.viz {
      * [descr:BaseWidget.defaultOptions(rule)]
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    static defaultOptions(rule: {
-      device?: Device | Array<Device> | Function;
-      options?: any;
-    }): void;
+    static defaultOptions<TProperties>(
+      rule: DevExpress.core.Rule<TProperties>
+    ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]
      */

@@ -1,4 +1,4 @@
-import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from '.';
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from './index';
 import {
     DxPromise
 } from '../core/utils/deferred';
