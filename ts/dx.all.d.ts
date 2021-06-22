@@ -1509,7 +1509,7 @@ declare module DevExpress.core {
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export declare type Rule<T> = {
+  export type Rule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
   };
