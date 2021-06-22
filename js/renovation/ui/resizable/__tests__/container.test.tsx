@@ -20,6 +20,42 @@ describe('ResizableContainer', () => {
       expect(container.find('#child').exists()).toBe(true);
     });
 
+    it('should pass handle type to the onHandleResizeStart callback', () => {
+      const onHandleResizeStart = jest.fn();
+      const container = shallow(viewFunction({ onHandleResizeStart, handles: ['top'], props: {} } as any));
+      const handle = container.find(ResizableHandle);
+      const event = { dragEvent: true };
+
+      handle.props().onResizeStart(event);
+
+      expect(onHandleResizeStart).toHaveBeenCalledTimes(1);
+      expect(onHandleResizeStart).toHaveBeenCalledWith(event, 'top');
+    });
+
+    it('should pass handle type to the onHandleResize callback', () => {
+      const onHandleResize = jest.fn();
+      const container = shallow(viewFunction({ onHandleResize, handles: ['top'], props: {} } as any));
+      const handle = container.find(ResizableHandle);
+      const event = { dragEvent: true };
+
+      handle.props().onResize(event);
+
+      expect(onHandleResize).toHaveBeenCalledTimes(1);
+      expect(onHandleResize).toHaveBeenCalledWith(event, 'top');
+    });
+
+    it('should pass handle type to the onHandleResizeEnd callback', () => {
+      const onHandleResizeEnd = jest.fn();
+      const container = shallow(viewFunction({ onHandleResizeEnd, handles: ['top'], props: {} } as any));
+      const handle = container.find(ResizableHandle);
+      const event = { dragEvent: true };
+
+      handle.props().onResizeEnd(event);
+
+      expect(onHandleResizeEnd).toHaveBeenCalledTimes(1);
+      expect(onHandleResizeEnd).toHaveBeenCalledWith(event, 'top');
+    });
+
     it('should spread restAttributes', () => {
       const container = shallow(viewFunction({
         props: {},
