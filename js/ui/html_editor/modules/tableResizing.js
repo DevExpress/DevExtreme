@@ -73,11 +73,12 @@ export default class TableResizingModule extends BaseModule {
             this._updateColumnsWidth($tables);
 
             clearTimeout(this._attachResizerTimeout);
-            this._attachResizerTimeout = setTimeout(() => {
-                this._createResizeFrames($tables);
-                this._updateFramesPositions();
-                this._updateFramesSeparators();
-            }, TIMEOUT);
+            // this._attachResizerTimeout = setTimeout(() => {
+
+            this._createResizeFrames($tables);
+            this._updateFramesPositions();
+            this._updateFramesSeparators();
+            // }, TIMEOUT);
         } else {
             this._updateFramesPositions();
         }
@@ -398,7 +399,7 @@ export default class TableResizingModule extends BaseModule {
         // console.log('_recalculateColumnsWidth');
         const determinantElements = this._getTableDeterminantElements($table);
 
-        const tableWidth = $($table).attr('width');
+        const tableWidth = $table.attr('width');
 
         const columnsWidths = [];
 
@@ -416,9 +417,12 @@ export default class TableResizingModule extends BaseModule {
         }
 
         // console.log('_recalculateColumnsWidth:');
+        // console.log('columnSum: ' + columnSum);
+        // console.log('tableWidth: ' + tableWidth);
+        // console.log('ratio: ' + ratio);
         each(determinantElements, (index, element) => {
-            // console.log(Math.round(columnsWidths[index] / ratio));
-            $(element).attr('width', Math.round(columnsWidths[index] / ratio));
+            // console.log(Math.round(columnsWidths[index] * ratio));
+            $(element).attr('width', Math.round(columnsWidths[index] * ratio));
         });
     }
 
