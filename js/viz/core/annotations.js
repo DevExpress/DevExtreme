@@ -64,7 +64,9 @@ function coreAnnotation(options, contentTemplate) {
                 };
                 callback(tooltip.show(options, { x, y }, { target: options }, options.customizeTooltip, callback));
             } else {
-                tooltip.move(x, y);
+                if(!tooltip.isCursorOnTooltip(x, y)) {
+                    tooltip.move(x, y);
+                }
             }
         }
     };
@@ -465,7 +467,11 @@ const corePlugin = {
                 .attr({ 'class': `${this._rootClassPrefix}-annotations` })
                 .css(this._getAnnotationStyles())
                 .linkOn(this._renderer.root, 'annotations').linkAppend();
-            eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
+            eventsEngine.on(getDocument(), POINTER_ACTION, (e) => {
+                if(!this._annotations.tooltip.isCursorOnTooltip(e.pageX, e.pageY)) {
+                    this._annotations.hideTooltip();
+                }
+            });
             eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
                 this._annotationsPointerEventHandler(event);
