@@ -17,7 +17,7 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -197,7 +197,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
                 useNative: false,
                 showScrollbar: false
             },
-            loadingTimeout: undefined
+            loadingTimeout: null
         }, 'options');
     });
 

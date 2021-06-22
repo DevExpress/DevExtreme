@@ -14,7 +14,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/drop_down_box';
 import 'ui/drop_down_button';
 import 'ui/switch';

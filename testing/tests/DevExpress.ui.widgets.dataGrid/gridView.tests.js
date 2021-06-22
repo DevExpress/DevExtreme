@@ -25,7 +25,7 @@ import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 

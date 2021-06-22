@@ -2,13 +2,11 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import { ResourceManager, getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(() => {
@@ -142,9 +140,8 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
     const moduleConfig = {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
             const observer = getObserver(key);
 
@@ -392,9 +389,8 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 const dayModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -568,9 +564,8 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
 const dayWithGroupingModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -683,9 +678,8 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 const weekModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -878,9 +872,8 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
 const weekWithGroupingModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -938,9 +931,8 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 const workWeekModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -1173,9 +1165,8 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
 const monthModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -1420,9 +1411,8 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
 const monthWithGroupingModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -1561,9 +1551,8 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
 const scrollingModuleConfig = {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
         });
         const observer = getObserver(key);
 
@@ -1649,9 +1638,8 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
         const groupClassesModuleConfig = {
             beforeEach: function() {
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => false
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {},
                 });
                 const observer = getObserver(key);
 

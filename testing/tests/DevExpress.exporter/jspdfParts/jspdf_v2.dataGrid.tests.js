@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf';
 
 import { isFunction, isObject } from 'core/utils/type';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
@@ -86,7 +86,7 @@ function createMockPdfDoc() {
 }
 
 function createDataGrid(options) {
-    options.loadingTimeout = undefined;
+    options.loadingTimeout = null;
     return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
 }
 

@@ -11,6 +11,7 @@ export interface GridInstance extends dxDataGrid, ComponentExt {
   isScrollbarVisible: () => boolean;
   getTopVisibleRowData: () => any;
   getScrollbarWidth: (isHorizontal: boolean) => number;
+  getDataProvider: (selectedRowsOnly: boolean) => any;
 }
 
 export interface DataGridForComponentWrapper {

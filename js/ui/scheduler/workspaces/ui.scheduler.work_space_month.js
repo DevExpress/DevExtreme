@@ -7,7 +7,8 @@ import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
-import { getViewStartByOptions } from './utils/month';
+import { calculateStartViewDate, getViewStartByOptions } from './utils/month';
+import { setStartDayHour } from './utils/base';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -44,8 +45,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
+        const resultDate = new Date(this._startViewDate);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
 
         return resultDate;
     }
@@ -78,9 +79,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _getDateByCellIndexes(rowIndex, columnIndex) {
         const date = super._getDateByCellIndexes(rowIndex, columnIndex);
 
-        this._setStartDayHour(date);
-
-        return date;
+        return setStartDayHour(date, this.option('startDayHour'));
     }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
@@ -134,17 +133,20 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 
-    _setFirstViewDate() {
-        const firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
-
-        const firstDayOfWeek = this._getCalculatedFirstDayOfWeek();
-
-        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
-        this._setStartDayHour(this._firstViewDate);
-
+    _setVisibilityDates() {
         const date = this._getViewStartByOptions();
         this._minVisibleDate = new Date(date.setDate(1));
         this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
+    }
+
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this.option('intervalCount'),
+            this.option('firstDayOfWeek'),
+        );
     }
 
     _getViewStartByOptions() {
@@ -152,13 +154,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             this.option('startDate'),
             this.option('currentDate'),
             this.option('intervalCount'),
-            this._getStartViewDate(),
+            dateUtils.getFirstMonthDate(this.option('startDate')),
         );
-    }
-
-    _getStartViewDate() {
-        const firstMonthDate = dateUtils.getFirstMonthDate(this.option('startDate'));
-        return firstMonthDate;
     }
 
     _renderTableBody(options) {
@@ -188,7 +185,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getDate(week, day) {
-        const result = new Date(this._firstViewDate);
+        const result = new Date(this._startViewDate);
         const lastRowInDay = this._getRowCount();
 
         result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
