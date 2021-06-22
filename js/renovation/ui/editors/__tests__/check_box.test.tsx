@@ -266,7 +266,8 @@ describe('CheckBox', () => {
           describe('Key down', () => {
             it('should call onKeyDown callback by Widget key down', () => {
               const onKeyDown = jest.fn(() => ({ cancel: true }));
-              const options = {};
+              const originalEvent = {} as Event & { cancel: boolean };
+              const options = { keyName: '', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown });
               checkBox.onWidgetKeyDown(options);
               expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -276,7 +277,8 @@ describe('CheckBox', () => {
             it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
               const onKeyDown = jest.fn(() => ({ cancel: true }));
               const onClick = jest.fn();
-              const options = { keyName: 'enter' };
+              const originalEvent = {} as Event & { cancel: boolean };
+              const options = { keyName: 'enter', which: '', originalEvent };
               const checkBox = new CheckBox({ onKeyDown, onClick });
               checkBox.onWidgetKeyDown(options);
               expect(onKeyDown).toBeCalled();
@@ -284,11 +286,13 @@ describe('CheckBox', () => {
             });
 
             it('should prevent default key down event and simulate click by space key', () => {
+              const originalEvent = {
+                preventDefault: jest.fn(),
+              } as unknown as Event & { cancel: boolean };
               const options = {
                 keyName: 'space',
-                originalEvent: {
-                  preventDefault: jest.fn(),
-                },
+                which: 'space',
+                originalEvent,
               };
               const checkBox = new CheckBox({});
               checkBox.onWidgetClick = jest.fn();
@@ -300,7 +304,8 @@ describe('CheckBox', () => {
             it('should not simulate click by keys down except space', () => {
               const onClick = jest.fn();
               const checkBox = new CheckBox({ onClick });
-              checkBox.onWidgetKeyDown({ keyName: 'enter' });
+              const originalEvent = {} as Event & { cancel: boolean };
+              checkBox.onWidgetKeyDown({ keyName: 'enter', which: 'enter', originalEvent });
               expect(onClick).not.toBeCalled();
             });
           });
@@ -308,7 +313,7 @@ describe('CheckBox', () => {
           describe('Click', () => {
             it('should change value by Widget click', () => {
               const checkBox = new CheckBox({
-                value: false,
+                value: null,
               });
               checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(true);
@@ -383,7 +388,7 @@ describe('CheckBox', () => {
           });
 
         each([true, false])
-          .it('should have "invalid=%s" if isValid=%s', (isValid) => {
+          .it('should have "invalid=%s" if isValid=%s', (isValid: boolean) => {
             expect(new CheckBox({ isValid }).aria)
               .toMatchObject({ invalid: `${!isValid}` });
           });

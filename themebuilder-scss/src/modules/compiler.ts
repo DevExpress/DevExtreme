@@ -86,6 +86,7 @@ export default class Compiler {
         });
       }
     }).finally(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.dartClient.dispose();
     });
   }

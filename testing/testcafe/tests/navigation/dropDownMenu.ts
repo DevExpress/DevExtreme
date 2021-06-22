@@ -21,7 +21,7 @@ test('Drop down button should lost hover state', async (t) => {
     id: 'button', width: 50, height: 50, backgroundColor: 'steelblue',
   });
 
-  createWidget('dxDropDownMenu', {
+  await createWidget('dxDropDownMenu', {
     items: [{ text: 'item1' }, { text: 'item2' }, { text: 'item3' }],
   });
 });
