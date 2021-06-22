@@ -2635,6 +2635,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(!dataGrid.getController('data').isLoading(), 'is not loading');
     });
 
+    QUnit.test('getSelectedRowKeys in onInitialized', function(assert) {
+        // arrange, act
+        let initializedComponent;
+        const dataGrid = createDataGrid({
+            onInitialized: function(e) {
+                assert.deepEqual(e.component.getSelectedRowKeys(), [], 'selectedRowKeys');
+                initializedComponent = e.component;
+            },
+            dataSource: [{ id: 1111 }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(initializedComponent, dataGrid, 'component in onInitialized callback is correct');
+    });
+
     // T461925
     QUnit.test('columnOption in onInitialized', function(assert) {
         // arrange, act

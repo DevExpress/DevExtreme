@@ -50,7 +50,7 @@ function normalizeProps(props: Record<string, unknown>): Record<string, unknown>
 }
 
 export const viewFunction = ({
-  instance,
+  initializedInstance,
   widgetElementRef,
   onHoverStart,
   onHoverEnd,
@@ -94,7 +94,10 @@ export const viewFunction = ({
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    <DataGridViews instance={instance} showBorders={showBorders} />
+    <DataGridViews
+      instance={initializedInstance}
+      showBorders={showBorders}
+    />
   </Widget>
 );
 
@@ -130,11 +133,17 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
 export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
   @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
 
-  @InternalState() instance!: GridInstance;
+  @Mutable() instance!: GridInstance;
+
+  @InternalState() initialized = false;
 
   @Mutable() isTwoWayPropUpdating = false;
 
   @Mutable() prevProps!: DataGridProps;
+
+  get initializedInstance(): GridInstance | undefined {
+    return this.initialized ? this.instance : undefined;
+  }
 
   @Method()
   getComponentInstance(): GridInstance {
@@ -538,9 +547,15 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
+    const { onInitialized, onContentReady } = this.restAttributes;
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+      onInitialized: (e) => {
+        this.instance = e.component;
+
+        onInitialized?.(e);
+      },
+      onContentReady,
     } as unknown as Record<string, unknown>;
     const instance: GridInstance = new DataGridComponent(
       element,
@@ -549,8 +564,10 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     if (hasWindow()) {
       instance.getController('resizing').updateSize(element);
     }
+
     instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-    this.instance = instance;
+    this.initialized = true;
+    // this.instance = instance;
   }
 
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
