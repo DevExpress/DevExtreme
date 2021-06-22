@@ -634,7 +634,6 @@ class FileManager extends Widget {
     _onSelectedDirectoryChanged() {
         const currentDirectory = this._getCurrentDirectory();
         this._syncToCurrentDirectory();
-        this._updateToolbar();
         this._actions.onCurrentDirectoryChanged({ directory: currentDirectory.fileItem });
     }
 
