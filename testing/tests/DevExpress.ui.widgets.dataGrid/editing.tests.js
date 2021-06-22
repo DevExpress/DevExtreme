@@ -7886,6 +7886,87 @@ QUnit.module('Editing with real dataController', {
         assert.ok($linkElements.eq(1).hasClass('dx-link-cancel'), 'the cancel link');
     });
 
+    QUnit.test('Should not be able to click on disabled edit link', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        let clicked = false;
+
+        this.options.columns.push({
+            type: 'buttons',
+            buttons: [{
+                text: 'My button',
+                disabled: true,
+                onClick: function() {
+                    clicked = true;
+                }
+            }]
+        });
+        this.columnsController.reset();
+        rowsView.render($testElement);
+
+        let $linkElement = $testElement.find('.dx-command-edit').first().find('.dx-link').first();
+
+        // act
+        $linkElement.trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok(!clicked, 'not clicked when disabled');
+
+        // arrange
+        this.columnOption(5, 'buttons[0].disabled', false);
+        $linkElement = $testElement.find('.dx-command-edit').first().find('.dx-link').first();
+
+        // act
+        $linkElement.trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok(clicked, 'clicked when isn\'t disabled');
+    });
+
+    QUnit.test('Disabled option of button works when it is a function', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        const disabledSpy = sinon.spy(function(e) {
+            return e.row.data.stateId === 1;
+        });
+
+        this.options.columns.push({
+            type: 'buttons',
+            buttons: [{
+                text: 'My button',
+                disabled: disabledSpy
+            }]
+        });
+
+        this.columnsController.reset();
+        rowsView.render($testElement);
+
+        const rows = this.getVisibleRows();
+        const buttonColumn = this.getVisibleColumns()[5];
+
+        assert.ok(rows.length > 0, 'grid has rows');
+
+        rows.forEach((row, i) => {
+            const args = disabledSpy.getCall(i).args;
+
+            assert.strictEqual(buttonColumn, args[0].column, 'right column');
+            assert.strictEqual(row, args[0].row, 'right row');
+            assert.strictEqual(this, args[0].component, 'right component');
+
+            const $row = this.getRowElement(i);
+            const $link = $($row[0]).find('.dx-command-edit').first().find('.dx-link').first();
+
+            const mustHaveClass = row.data.stateId === 1;
+            assert.strictEqual($link.hasClass('dx-state-disabled'), mustHaveClass, 'row\'s state is right');
+        });
+    });
+
     QUnit.test('Clicking on the edit link should not work when the link is set via the \'buttons\' option and allowUpdating is false', function(assert) {
         // arrange
         const that = this;

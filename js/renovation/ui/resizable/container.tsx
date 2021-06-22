@@ -9,6 +9,7 @@ import {
   Slot,
   RefObject,
   InternalState,
+  Mutable,
 } from '@devextreme-generator/declarations';
 import type {
   Handle, Corner, DragStartEvent, DragEvent,
@@ -45,9 +46,9 @@ export const viewFunction = (viewModel: ResizableContainer): JSX.Element => {
       { handles.map((handleType) => (
         <ResizableHandle
           key={handleType}
-          onResizeStart={onHandleResizeStart}
-          onResize={onHandleResize}
-          onResizeEnd={onHandleResizeEnd}
+          onResizeStart={(event): void => onHandleResizeStart(event, handleType)}
+          onResize={(event): void => onHandleResize(event, handleType)}
+          onResizeEnd={(event): void => onHandleResizeEnd(event, handleType)}
           disabled={disabled}
           direction={handleType}
         />
@@ -62,11 +63,18 @@ export class ResizableContainerProps {
 
   @OneWay() handles: Handle[] | Handle = [];
 
-  @OneWay() onResizeStart?: (e: Event) => void;
+  @OneWay() onResizeStart?: (e: { event: Event; handle: Handle | Corner }) => void;
 
-  @OneWay() onResize?: (e: DragEvent) => void;
+  @OneWay() onResize?: (e: {
+    event: DragEvent;
+    handle: Handle | Corner;
+    delta: {
+      x: number;
+      y: number;
+    };
+  }) => void;
 
-  @OneWay() onResizeEnd?: (e: Event) => void;
+  @OneWay() onResizeEnd?: (e: { event: Event; handle: Handle | Corner }) => void;
 
   @Slot() children: JSX.Element | (JSX.Element | undefined | false | null)[] = [];
 
@@ -87,6 +95,10 @@ export class ResizableContainerProps {
 export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
   @InternalState() isResizing = false;
 
+  @Mutable() startX = Number.NaN;
+
+  @Mutable() startY = Number.NaN;
+
   @Ref() mainRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' })
@@ -98,24 +110,36 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
     return undefined;
   }
 
-  public onHandleResizeStart(event: DragStartEvent): void {
+  public onHandleResizeStart(event: DragStartEvent, handle: Handle | Corner): void {
     this.isResizing = true;
-    this.props.onResizeStart?.(event);
-    // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-explicit-any
+    this.startX = event.clientX;
+    this.startY = event.clientY;
+    this.props.onResizeStart?.({ event, handle });
+    // eslint-disable-next-line no-param-reassign
     event.targetElements = [];
     return undefined;
   }
 
-  public onHandleResize(event: DragEvent): void {
+  public onHandleResize(event: DragEvent, handle: Handle | Corner): void {
     const { onResize } = this.props;
-    onResize?.(event);
+
+    onResize?.({
+      event,
+      handle,
+      delta: {
+        x: event.clientX - this.startX,
+        y: event.clientY - this.startY,
+      },
+    });
     triggerResizeEvent(this.mainRef.current);
     return undefined;
   }
 
-  public onHandleResizeEnd(event: Event): void {
+  public onHandleResizeEnd(event: Event, handle: Handle | Corner): void {
     this.isResizing = false;
-    this.props.onResizeEnd?.(event);
+    this.startX = Number.NaN;
+    this.startY = Number.NaN;
+    this.props.onResizeEnd?.({ event, handle });
     return undefined;
   }
 

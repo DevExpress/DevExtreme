@@ -5626,6 +5626,16 @@ declare module DevExpress.ui {
             row?: RowObject;
             column?: Column;
           }) => boolean);
+      /**
+       * [descr:dxDataGridColumnButton.disabled]
+       */
+      disabled?:
+        | boolean
+        | ((options: {
+            component?: dxDataGrid;
+            row?: RowObject;
+            column?: Column;
+          }) => boolean);
     }
     /**
      * [descr:GridBaseColumnButton]
@@ -19390,7 +19400,17 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            row?: RowObject;
+            readonly row?: RowObject;
+            readonly column: Column;
+          }) => boolean);
+      /**
+       * [descr:dxTreeListColumnButton.disabled]
+       */
+      disabled?:
+        | boolean
+        | ((options: {
+            readonly component: dxTreeList;
+            readonly row?: RowObject;
             readonly column: Column;
           }) => boolean);
     }
