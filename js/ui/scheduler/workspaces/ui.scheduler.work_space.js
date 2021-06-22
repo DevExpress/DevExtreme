@@ -538,6 +538,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 super._optionChanged(args);
                 this._dimensionChanged();
                 break;
+            case 'resourceManager':
             case 'allowMultipleCellSelection':
                 break;
             case 'selectedCellData':

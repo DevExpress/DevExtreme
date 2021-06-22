@@ -58,7 +58,6 @@ class SchedulerAgenda extends WorkSpace {
 
         switch(name) {
             case 'agendaDuration':
-            case 'resourceManager':
                 break;
             case 'noDataText':
             case 'rowHeight':
