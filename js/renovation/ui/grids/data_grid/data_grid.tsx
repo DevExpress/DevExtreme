@@ -547,27 +547,30 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
-    const { onInitialized, onContentReady } = this.restAttributes;
+
+    const restAttributes = this.restAttributes as unknown as Record<string, unknown>;
+    const { onInitialized, onContentReady } = restAttributes;
+
     const { onOptionChanged, ...restProps } = {
       ...this.props,
       onInitialized: (e) => {
         this.instance = e.component;
 
-        onInitialized?.(e);
+        (onInitialized as (e: unknown) => void)?.(e);
       },
       onContentReady,
     } as unknown as Record<string, unknown>;
-    const instance: GridInstance = new DataGridComponent(
+
+    new DataGridComponent(
       element,
       normalizeProps(restProps),
     ) as unknown as GridInstance;
     if (hasWindow()) {
-      instance.getController('resizing').updateSize(element);
+      this.instance.getController('resizing').updateSize(element);
     }
 
-    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
     this.initialized = true;
-    // this.instance = instance;
   }
 
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
