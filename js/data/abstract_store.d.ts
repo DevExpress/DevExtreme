@@ -9,7 +9,7 @@ import {
 import {
     FilterDescriptor,
     GroupDescriptor
-} from '.'
+} from './index'
 
 /** @namespace DevExpress.data */
 export interface StoreOptions<TKey = any, TValue = any> {
