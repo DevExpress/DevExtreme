@@ -4,6 +4,7 @@ import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
 import { createResourcesTree } from './resources/utils';
+import { getTimeZoneCalculator } from './instanceFactory';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -24,10 +25,9 @@ export class AppointmentSettingsGenerator {
 export class AppointmentSettingsGeneratorBaseStrategy {
     constructor(scheduler) {
         this.scheduler = scheduler;
-    }
+        this.key = this.scheduler.key;
 
-    get timeZoneCalculator() {
-        return this.scheduler.timeZoneCalculator;
+        this.timeZoneCalculator = getTimeZoneCalculator(this.key);
     }
 
     get workspace() { return this.scheduler.getWorkSpace(); }

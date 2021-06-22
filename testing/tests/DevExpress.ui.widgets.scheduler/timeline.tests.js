@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -11,8 +11,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
@@ -51,9 +49,8 @@ QUnit.module('Timeline Base', {
             const resources = options && options.resources || {};
             const key = createFactoryInstances({
                 resources,
-                scheduler: {
-                    isVirtualScrolling: () => true
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {}
             });
 
             this.instance = $('#scheduler-timeline').dxSchedulerTimeline({ observer: getObserver(key) }).dxSchedulerTimeline('instance');
@@ -253,9 +250,8 @@ QUnit.test('Group table cells should have correct height', function(assert) {
 
 QUnit.test('the "getCoordinatesByDate" method should return right coordinates for grouped timeline', function(assert) {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => true
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
@@ -366,9 +362,8 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 QUnit.module('Timeline Day', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({ observer: getObserver(key) }).dxSchedulerTimelineDay('instance');
@@ -437,9 +432,8 @@ QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
@@ -513,9 +507,8 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
 QUnit.module('Timeline Week', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({ observer: getObserver(key) }).dxSchedulerTimelineWeek('instance');
@@ -648,9 +641,8 @@ QUnit.test('Get visible bounds for timelineWeek', function(assert) {
 
 QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => true
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
     const observer = getObserver(key);
 
@@ -678,9 +670,8 @@ QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
 QUnit.module('Timeline Month', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
@@ -746,9 +737,8 @@ QUnit.module('Timeline Keyboard Navigation', () => {
         QUnit.module(moduleDescription, {
             beforeEach: function() {
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => true
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {}
                 });
 
                 this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
@@ -936,9 +926,8 @@ QUnit.module('Mouse Interaction', () => {
     [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach((workSpace) => {
         QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => true
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {}
             });
             const observer = getObserver(key);
 
@@ -956,9 +945,8 @@ QUnit.module('Mouse Interaction', () => {
 QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
@@ -1002,9 +990,8 @@ QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week 
 QUnit.module('TimelineWeek with grouping by date', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 
@@ -1167,9 +1154,8 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
 QUnit.module('TimelineDay with grouping by date', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 
@@ -1238,9 +1224,8 @@ QUnit.module('Renovated Render', {
     },
     beforeEach() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 

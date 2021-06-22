@@ -55,6 +55,7 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
+import { getTimeZoneCalculator } from '../instanceFactory';
 import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
 import { createResourcesTree, getCellGroups } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
@@ -2865,8 +2866,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date, groups, allDay = false) {
-        const scheduler = this.option('observer');
-        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
         const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
         if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {

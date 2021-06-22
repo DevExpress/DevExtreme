@@ -47,10 +47,9 @@ module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 

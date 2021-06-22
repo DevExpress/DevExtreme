@@ -439,10 +439,9 @@ module('Work Space Week', () => {
     module('Group by date', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -506,10 +505,9 @@ module('Work Space Week', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -603,10 +601,9 @@ module('Work Space Work Week', () => {
     module('Default', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -667,10 +664,9 @@ module('Work Space Work Week', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 

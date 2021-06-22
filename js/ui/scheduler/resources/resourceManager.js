@@ -587,16 +587,3 @@ export class ResourceManager {
         return this.reduceResourcesTree(tree, appointments);
     }
 }
-
-const resourceManagers = { };
-export const createResourceManager = (key, resources) => {
-    const validKey = key || 0;
-
-    if(resourceManagers[validKey]) {
-        resourceManagers[validKey].setResources(resources);
-    } else {
-        resourceManagers[validKey] = new ResourceManager(resources);
-    }
-};
-export const getResourceManager = (key) => resourceManagers[key];
-export const removeResourceManager = (key) => resourceManagers[key] = null;
