@@ -583,6 +583,16 @@ QUnit.module('skip mousewheel event test', () => {
             $element.remove();
         }
     });
+
+    test('needSkipEvent returns false for nested in .dx-skip-gesture-event dropdownlist popup wrapper dxmousewheel (T1000311)', function(assert) {
+        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
+        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
+
+        $popup.appendTo($element);
+
+        assert.ok(needSkipMouseWheel($element), 'event is skipped with .dx-skip-gesture-event class');
+        assert.notOk(needSkipMouseWheel($popup), 'event is not skipped in inner dropdownlist popup wrapper element');
+    });
 });
 
 QUnit.module('skip mouse event tests', () => {
