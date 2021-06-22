@@ -202,11 +202,11 @@ const getNextMonthDate = (date, intervalCount, direction) => {
     return thatMonthMinDate;
 };
 
-const getDateMonthFormat = function(isShort) {
+const getDateMonthFormat = (isShort) => {
     const monthType = isShort ? 'abbreviated' : 'wide';
     const months = dateLocalization.getMonthNames(monthType);
 
-    return function(date) {
+    return (date) => {
         const day = dateFormat(date, 'day');
 
         const month = months[date.getMonth()];
@@ -215,7 +215,7 @@ const getDateMonthFormat = function(isShort) {
     };
 };
 
-const monthYearFormat = function(date) {
+const monthYearFormat = (date) => {
     const months = dateLocalization.getMonthNames('abbreviated');
     const month = months[date.getMonth()];
 
@@ -261,10 +261,13 @@ const getSameDateCaption = (date, step, isShort) => {
 
     const dateMonthFormat = getDateMonthFormat(useShortFormat);
 
-    return [dateMonthFormat(date), dateFormat(date, 'year')].join(' ');
+    const dateMonth = dateMonthFormat(date);
+    const year = dateFormat(date, 'year');
+
+    return `${dateMonth} ${year}`;
 };
 
-const formatCaptionByMonths = function(startDate, endDate, isShort) {
+const formatCaptionByMonths = (startDate, endDate, isShort) => {
     const isDifferentYears = startDate.getFullYear() !== endDate.getFullYear();
 
     if(isDifferentYears) {
@@ -277,16 +280,16 @@ const formatCaptionByMonths = function(startDate, endDate, isShort) {
 const formatMonthViewCaption = (startDate, endDate) => {
     if(dateUtils.sameMonth(startDate, endDate)) {
         return dateFormat(startDate, 'monthandyear');
-    } else {
-        const isSameYear = dateUtils.sameYear(startDate, endDate);
-
-        const firstDateText = isSameYear
-            ? dateLocalization.getMonthNames('abbreviated')[startDate.getMonth()]
-            : monthYearFormat(startDate);
-        const lastDateText = monthYearFormat(endDate);
-
-        return firstDateText + '-' + lastDateText;
     }
+
+    const isSameYear = dateUtils.sameYear(startDate, endDate);
+
+    const firstDateText = isSameYear
+        ? dateLocalization.getMonthNames('abbreviated')[startDate.getMonth()]
+        : monthYearFormat(startDate);
+    const lastDateText = monthYearFormat(endDate);
+
+    return `${firstDateText}-${lastDateText}`;
 };
 
 const getCaptionText = (startDate, endDate, isShort, step) => {
