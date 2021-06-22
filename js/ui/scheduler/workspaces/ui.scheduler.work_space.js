@@ -1972,8 +1972,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getDateForHeaderText(index) {
-        const validIndex = index % this._getRowCount();
-        return this._getDateByIndex(validIndex);
+        return this._getDateByIndex(index);
     }
 
     _getDateByIndex() { return abstract(); }
