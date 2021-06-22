@@ -1294,10 +1294,10 @@ const environment = {
 
         TooltipModule.Tooltip = (options) => {
             this.tooltip = new vizMocks.Tooltip(options);
-            this.tooltip.show = sinon.stub();
-            this.tooltip.show.returns(true);
+            this.tooltip.show = sinon.stub().returns(true);
             this.tooltip.hide = sinon.spy();
             this.tooltip.move = sinon.spy();
+            this.tooltip.isCursorOnTooltip = sinon.stub().returns(false);
             return this.tooltip;
         };
     },
@@ -1439,6 +1439,28 @@ QUnit.module('Tooltip', environment, function() {
         assert.deepEqual(tooltip.move.getCall(0).args, [73, 73]);
     });
 
+    QUnit.test('Show tooltip and not move it if the tooltip is interactive and cursor on it (T1006930)', function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
+            }
+        });
+        this.tooltip.isCursorOnTooltip.returns(true);
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 70, y: 70 }).move().move(3, 3);
+
+        const tooltip = this.tooltip;
+        assert.equal(tooltip.show.callCount, 1);
+        assert.equal(tooltip.isCursorOnTooltip.callCount, 1);
+        assert.equal(tooltip.move.callCount, 0);
+    });
+
     QUnit.test('set content template for tooltip', function(assert) {
         const tooltipTemplate = sinon.spy();
         const chart = this.createChart({
@@ -1509,6 +1531,32 @@ QUnit.module('Tooltip', environment, function() {
 
         assert.equal(tooltip.hide.callCount, 1);
         assert.ok(tooltip.hide.getCall(0).calledAfter(tooltip.show.getCall(0)));
+    });
+
+    QUnit.test('Not hide tooltip on pointer down outside chart if cursor on the tooltip (T1006930)', function(assert) {
+        const customizeTooltip = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                customizeTooltip
+            }
+        });
+        this.tooltip.isCursorOnTooltip.returns(true);
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+        const rootPointer = pointerMock(chart._renderer.root.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 30, y: 30 }).down().up();
+        rootPointer.start().down(40, 40).up();
+        eventsEngine.trigger(getDocument(), 'dxpointerdown');
+
+        const tooltip = this.tooltip;
+
+        assert.equal(tooltip.show.callCount, 1);
+        assert.equal(tooltip.isCursorOnTooltip.callCount, 1);
+        assert.equal(tooltip.hide.callCount, 0);
     });
 
     QUnit.test('Hide tooltip on container scroll', function(assert) {
