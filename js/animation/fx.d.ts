@@ -18,7 +18,7 @@ export type AnimationState = string | number |
  * @namespace DevExpress
  * @type object
  */
-export interface AnimationConfig {
+export type AnimationConfig = {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
