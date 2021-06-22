@@ -148,18 +148,11 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _renderTableBody(options) {
-        options.getCellText = this._getCellText.bind(this);
         options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
         super._renderTableBody(options);
     }
 
     _getCellText(rowIndex, columnIndex) {
-        if(this.isGroupedByDate()) {
-            columnIndex = Math.floor(columnIndex / this._getGroupCount());
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
         const date = this._getDate(rowIndex, columnIndex);
 
         if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {

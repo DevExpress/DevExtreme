@@ -1807,6 +1807,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
                 return {
                     value: this._filterCellDataFields(cellData),
+                    fullValue: cellData,
                     key: CELL_DATA,
                 };
             },
