@@ -138,10 +138,9 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _initMarkup(): void {
-    const props = this.getProps();
-
     // TODO: SSR does not work correctly with renovated render
     if (hasWindow()) {
+      const props = this.getProps();
       this._renderWrapper(props);
     }
   }
