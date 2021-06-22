@@ -288,6 +288,14 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
               width: auto;
             }
           }
+
+          .dx-link.dx-state-disabled {
+            opacity: $datagrid-text-link-disabled-opacity;
+
+            &.dx-link-icon {
+              opacity: $datagrid-icon-link-disabled-opacity;
+            }
+          }
         }
 
         &.dx-command-expand,
