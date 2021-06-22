@@ -85,9 +85,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getDateForHeaderText(index) {
         const firstViewDate = this._getFirstViewDateWithoutDST();
-        const validIndex = index % this._getRowCount();
 
-        return this._getDateByIndexCore(firstViewDate, validIndex);
+        return this._getDateByIndexCore(firstViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
