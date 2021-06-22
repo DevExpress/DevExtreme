@@ -15,13 +15,19 @@ const LoadPanelTests = {
                     let actualLoadPanelSettingsOnExporting;
                     let loadPanelOnShownHandlerCallCount = 0;
 
+                    const getLoadPanelOptions = () => {
+                        const instance = component._getInternalInstance ? component._getInternalInstance() : component;
+                        return instance.option('loadPanel');
+                    };
+
                     const loadPanelOnShownHandler = () => {
                         loadPanelOnShownHandlerCallCount++;
-                        actualLoadPanelSettingsOnExporting = extend({}, component.option('loadPanel'));
+                        actualLoadPanelSettingsOnExporting = extend({}, getLoadPanelOptions());
                     };
 
                     component.option('loadPanel.onShown', loadPanelOnShownHandler);
-                    const initialLoadPanelSettings = extend({}, component.option('loadPanel'));
+
+                    const initialLoadPanelSettings = extend({}, getLoadPanelOptions());
                     const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
 
                     if(component.NAME === 'dxDataGrid' && browser.webkit) {
@@ -31,7 +37,7 @@ const LoadPanelTests = {
                     exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelConfig }).then(() => {
                         assert.strictEqual(loadPanelOnShownHandlerCallCount, 1, 'loadPanel should be shown on Exporting');
                         assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'loadPanel settings on exporting');
-                        assert.deepEqual(component.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
+                        assert.deepEqual(getLoadPanelOptions(), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
                         done();
                     });
                 });
@@ -77,11 +83,13 @@ const LoadPanelTests = {
                         localization.locale('ja');
 
                         const component = getComponent();
+                        const internalComponent = component._getInternalInstance ? component._getInternalInstance() : component;
+
 
                         let actualLoadPanelText;
 
                         const loadPanelOnShownHandler = () => {
-                            actualLoadPanelText = component.option('loadPanel').text;
+                            actualLoadPanelText = internalComponent.option('loadPanel').text;
                         };
 
                         component.option('loadPanel.onShown', loadPanelOnShownHandler);

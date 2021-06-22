@@ -863,7 +863,11 @@ declare module DevExpress {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = DOMComponentOptions<DOMComponent<Properties>>;
+    interface DOMComponentInstance extends DOMComponent<Properties> {}
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -14615,9 +14619,13 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent =
       DevExpress.events.NativeEventInfo<dxMultiView> &
         DevExpress.events.ItemInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface MultiViewInstance extends dxMultiView<Properties> {}
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxMultiView> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxMultiViewOptions<dxMultiView<Properties>>;
+    export type Properties = dxMultiViewOptions<MultiViewInstance>;
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxMultiView> &
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
@@ -15724,7 +15732,11 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPopover>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPopover> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxPopoverOptions<dxPopover<Properties>>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface PopoverInstance extends dxPopover<Properties> {}
+    export type Properties = dxPopoverOptions<PopoverInstance>;
     export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
@@ -15830,7 +15842,11 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxPopup>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxPopupOptions<dxPopup<Properties>>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface PopupInstance extends dxPopup<Properties> {}
+    export type Properties = dxPopupOptions<PopupInstance>;
     export type ResizeEndEvent = DevExpress.events.NativeEventInfo<dxPopup> &
       DevExpress.ui.dxResizable.ResizeInfo;
     export type ResizeEvent = DevExpress.events.NativeEventInfo<dxPopup> &
@@ -17302,7 +17318,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = dxScrollableOptions<dxScrollable<Properties>>;
+    type Properties = dxScrollableOptions<ScrollableInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface ScrollableInstance extends dxScrollable<Properties> {}
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
@@ -17461,7 +17481,11 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSelectBox> &
       DevExpress.events.ChangedOptionInfo;
     export type PasteEvent = DevExpress.events.NativeEventInfo<dxSelectBox>;
-    export type Properties = dxSelectBoxOptions<dxSelectBox<Properties>>;
+    export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface SelectBoxInstance extends dxSelectBox<Properties> {}
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxSelectBox> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo;
@@ -18257,9 +18281,13 @@ declare module DevExpress.ui {
       DevExpress.events.ItemInfo;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTabs> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxTabsOptions<dxTabs<Properties>>;
+    export type Properties = dxTabsOptions<TabsInstance>;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTabs> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TabsInstance extends dxTabs<Properties> {}
   }
   /**
    * [descr:dxTabsItem]
@@ -18524,7 +18552,11 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTextBox> &
       DevExpress.events.ChangedOptionInfo;
     export type PasteEvent = DevExpress.events.NativeEventInfo<dxTextBox>;
-    export type Properties = dxTextBoxOptions<dxTextBox<Properties>>;
+    export type Properties = dxTextBoxOptions<TextBoxInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TextBoxInstance extends dxTextBox<Properties> {}
     export type ValueChangedEvent =
       DevExpress.events.NativeEventInfo<dxTextBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
@@ -18572,7 +18604,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = dxTextEditorOptions<dxTextEditor<Properties>>;
+    type Properties = dxTextEditorOptions<TextEditorInstance>;
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    interface TextEditorInstance extends dxTextEditor<Properties> {}
   }
   /**
    * [descr:dxTextEditorButton]
@@ -20591,7 +20627,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type Properties = EditorOptions<Editor<Properties>>;
+    interface EditorInstance extends Editor<Properties> {}
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type Properties = EditorOptions<EditorInstance>;
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */

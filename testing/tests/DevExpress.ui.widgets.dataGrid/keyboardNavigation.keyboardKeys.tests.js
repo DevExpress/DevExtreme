@@ -11,7 +11,7 @@ import 'generic_light.css!';
 
 import $ from 'jquery';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import devices from 'core/devices';

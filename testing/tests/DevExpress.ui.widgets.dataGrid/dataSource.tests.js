@@ -12,7 +12,7 @@ import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from 'ui/dat
 import { createOffsetFilter } from 'ui/data_grid/ui.data_grid.grouping.core';
 import { getContinuationGroupCount, GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 
 let TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

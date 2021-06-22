@@ -7,6 +7,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
+import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Column,
@@ -1083,6 +1084,9 @@ export class DataGridLoadPanel {
 
   @OneWay()
   width?: number;
+
+  @OneWay()
+  animation?: dxLoadPanelAnimation;
 }
 
 @ComponentBindings()
@@ -1214,7 +1218,15 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     editOnKeyPress: false,
   };
 
-  @Nested() loadPanel?: DataGridLoadPanel;
+  @Nested() loadPanel?: DataGridLoadPanel = {
+    enabled: 'auto',
+    text: messageLocalization.format('Loading'),
+    width: 200,
+    height: 90,
+    showIndicator: true,
+    indicatorSrc: '',
+    showPane: true,
+  };
 
   @Nested() pager?: DataGridPager;
 

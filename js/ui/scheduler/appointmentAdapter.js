@@ -2,6 +2,7 @@ import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import { getRecurrenceProcessor } from './recurrence';
+import { getTimeZoneCalculator } from './instanceFactory';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -96,7 +97,7 @@ class AppointmentAdapter {
     }
 
     get timeZoneCalculator() {
-        return this.options.getTimeZoneCalculator();
+        return getTimeZoneCalculator(this.options.key);
     }
 
     get isRecurrent() {
