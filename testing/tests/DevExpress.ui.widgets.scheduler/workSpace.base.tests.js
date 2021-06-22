@@ -32,9 +32,8 @@ module('Work Space Base', {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
@@ -70,9 +69,8 @@ module('Work Space Base', {
         QUnit.module(viewName, {
             beforeEach: function() {
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => false
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {}
                 });
                 const observer = getObserver(key);
 
