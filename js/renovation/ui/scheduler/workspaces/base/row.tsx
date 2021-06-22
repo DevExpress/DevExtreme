@@ -66,14 +66,14 @@ export class RowProps {
 })
 export class Row extends JSXComponent(RowProps) {
   get hasLeftVirtualCell(): boolean {
-    const { leftVirtualCellWidth } = this.props;
+    const { leftVirtualCellCount } = this.props;
 
-    return !!leftVirtualCellWidth;
+    return !!leftVirtualCellCount;
   }
 
   get hasRightVirtualCell(): boolean {
-    const { rightVirtualCellWidth } = this.props;
+    const { rightVirtualCellCount } = this.props;
 
-    return !!rightVirtualCellWidth;
+    return !!rightVirtualCellCount;
   }
 }

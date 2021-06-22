@@ -245,9 +245,16 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('close button is shown when title changes', function(assert) {
-        const popup = $('#popup').dxPopup({ visible: true, showTitle: true, showCloseButton: true }).dxPopup('instance');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            showCloseButton: true
+        }).dxPopup('instance');
+
         popup.option('title', 'new title');
-        assert.ok($('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, popup._$title).length);
+
+        const $titleToolbar = popup.$wrapper().find(`.${POPUP_TITLE_CLASS}`);
+        assert.ok($(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, $titleToolbar).length);
     });
 
     QUnit.test('popup top toolbar rendering', function(assert) {

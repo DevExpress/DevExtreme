@@ -20,6 +20,7 @@ $generic-colorview-hue-scale-height: $generic-colorview-palette-height;
 
   label {
     line-height: $generic-colorview-container-line-height;
+    display: block;
 
     &.dx-colorview-label-hex {
       margin: $generic-colorview-container-hex-margin;

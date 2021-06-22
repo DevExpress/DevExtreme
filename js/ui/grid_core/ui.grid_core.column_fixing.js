@@ -9,6 +9,7 @@ import { each } from '../../core/utils/iterator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
+import Scrollable from '../scroll_view/ui.scrollable';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -245,10 +246,10 @@ const baseFixedColumns = {
     _getCellElementsCore: function(rowIndex) {
         const cellElements = this.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
-        const index = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
         if(this._fixedTableElement && cellElements) {
-            const fixedColumns = this.getFixedColumns(index);
+            const fixedColumns = this.getFixedColumns(headerRowIndex);
             const fixedCellElements = this._getRowElements(this._fixedTableElement).eq(rowIndex).children('td');
 
             each(fixedCellElements, (columnIndex, cell) => {
@@ -265,7 +266,7 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, rowIndex);
+                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, headerRowIndex);
                             cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
                         }
                     }
@@ -600,8 +601,18 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 });
                 eventsEngine.on($content, wheelEventName, function(e) {
                     const $nearestScrollable = $(e.target).closest('.dx-scrollable');
+                    let shouldScroll = false;
 
                     if(scrollable && scrollable.$element().is($nearestScrollable)) {
+                        shouldScroll = true;
+                    } else {
+                        const nearestScrollableInstance = $nearestScrollable.length && Scrollable.getInstance($nearestScrollable.get(0));
+                        const nearestScrollableHasVerticalScrollbar = nearestScrollableInstance && (nearestScrollableInstance.scrollHeight() - nearestScrollableInstance.clientHeight() > 0);
+
+                        shouldScroll = nearestScrollableInstance && !nearestScrollableHasVerticalScrollbar;
+                    }
+
+                    if(shouldScroll) {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 

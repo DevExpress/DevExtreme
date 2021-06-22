@@ -1,20 +1,20 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
  * @docid
  * @namespace DevExpress.excelExporter
- * @prevFileNamespace DevExpress
  * @type object
  */
 export interface ExcelDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public
@@ -32,12 +32,10 @@ export interface ExcelDataGridCell {
     groupSummaryItems?: Array<{
       /**
        * @docid
-       * @prevFileNamespace DevExpress
        */
       name?: string,
       /**
        * @docid
-       * @prevFileNamespace DevExpress
        */
       value?: any
     }>;
@@ -83,7 +81,6 @@ export interface ExcelPivotGridCell extends dxPivotGridPivotGridCell {
 
 /**
  * @docid
- * @prevFileNamespace DevExpress
  * @namespace DevExpress.excelExporter
  * @type object
  */
@@ -102,7 +99,6 @@ export interface CellAddress {
 
 /**
  * @docid
- * @prevFileNamespace DevExpress
  * @namespace DevExpress.excelExporter
  * @type object
  */
@@ -226,7 +222,6 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
  * @namespace DevExpress.excelExporter
  * @module excel_exporter
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
 export function exportDataGrid(options: ExcelExportDataGridProps): DxPromise<CellRange>;
@@ -239,7 +234,6 @@ export function exportDataGrid(options: ExcelExportDataGridProps): DxPromise<Cel
  * @namespace DevExpress.excelExporter
  * @module excel_exporter
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
 export function exportPivotGrid(options: ExcelExportPivotGridProps): DxPromise<CellRange>;

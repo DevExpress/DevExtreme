@@ -11,6 +11,7 @@ import { getFiltersByPath,
     setDefaultFieldValueFormatting } from './ui.pivot_grid.utils';
 import { forEachGroup } from './remote_store.utils';
 import dateSerialization from '../../core/utils/date_serialization';
+import { normalizeLoadResult } from '../../data/data_source/utils';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
     const groupingOptions = [];
@@ -466,7 +467,8 @@ export default Class.inherit((function() {
                 skip: 0,
                 take: 20
             }).done(function(data) {
-                d.resolve(discoverObjectFields(data, fields));
+                const normalizedArguments = normalizeLoadResult(data);
+                d.resolve(discoverObjectFields(normalizedArguments.data, fields));
             }).fail(d.reject);
 
             return d;
@@ -508,7 +510,8 @@ export default Class.inherit((function() {
                 const args = deferreds.length > 1 ? arguments : [arguments];
 
                 each(args, function(index, argument) {
-                    parseResult(argument[0], argument[1], requestsData[index], result);
+                    const normalizedArguments = normalizeLoadResult(argument[0], argument[1]);
+                    parseResult(normalizedArguments.data, normalizedArguments.extra, requestsData[index], result);
                 });
 
                 d.resolve({

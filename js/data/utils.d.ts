@@ -6,7 +6,6 @@
  * @namespace DevExpress.data
  * @module data/utils
  * @export base64_encode
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export function base64_encode(input: string | Array<number>): string;

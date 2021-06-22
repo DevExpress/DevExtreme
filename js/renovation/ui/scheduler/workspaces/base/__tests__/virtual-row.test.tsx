@@ -50,14 +50,18 @@ describe('VirtualRow', () => {
         props: {
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 10,
+          rightVirtualCellCount: 15,
         },
       });
 
-      expect(row.prop('leftVirtualCellWidth'))
-        .toEqual(100);
-
-      expect(row.prop('rightVirtualCellWidth'))
-        .toEqual(150);
+      expect(row.props())
+        .toMatchObject({
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 10,
+          rightVirtualCellCount: 15,
+        });
     });
   });
 

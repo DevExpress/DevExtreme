@@ -83,7 +83,7 @@ export const rowsModule = {
 
             const getScrollableBottomPadding = function(that) {
                 const scrollable = that.getScrollable();
-                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
+                return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
             };
 
             return {
@@ -276,7 +276,6 @@ export const rowsModule = {
                     const scrollHandler = that._handleScroll.bind(that);
 
                     dxScrollableOptions.onScroll = scrollHandler;
-                    dxScrollableOptions.onStop = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
                     that._scrollableContainer = that._scrollable && that._scrollable._$container;
@@ -446,7 +445,7 @@ export const rowsModule = {
 
                     if($content) {
                         if(scrollable) {
-                            $content = scrollable.$content();
+                            $content = $(scrollable.content());
                         }
                         return $content.children().first();
                     }
@@ -800,8 +799,9 @@ export const rowsModule = {
 
                 _getHeightCorrection: function() {
                     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    const isChromeLatest = browser.chrome && browser.version >= 91;
                     const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
-                    return isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
+                    return isZoomedWebkit || hasExtraBorderTop || isChromeLatest ? 1 : 0;
                 },
 
                 _columnOptionChanged: function(e) {

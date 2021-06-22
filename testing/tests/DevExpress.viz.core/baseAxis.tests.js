@@ -87,7 +87,7 @@ QUnit.module('Creation', environment);
 QUnit.test('Create axis', function(assert) {
     const renderer = this.renderer;
     const stripsGroup = renderer.g();
-    const labelAxesGroup = renderer.g();
+    const stripLabelAxesGroup = renderer.g();
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
@@ -97,7 +97,7 @@ QUnit.test('Create axis', function(assert) {
     const axis = new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
-        labelAxesGroup: labelAxesGroup,
+        stripLabelAxesGroup: stripLabelAxesGroup,
         constantLinesGroup: constantLinesGroup,
         axesContainerGroup: axesContainerGroup,
         gridGroup: gridGroup,
@@ -129,7 +129,7 @@ QUnit.test('Create axis', function(assert) {
 QUnit.test('Create axis when axis class is undefined', function(assert) {
     const renderer = this.renderer;
     const stripsGroup = renderer.g();
-    const labelAxesGroup = renderer.g();
+    const stripLabelAxesGroup = renderer.g();
     const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
@@ -139,7 +139,7 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
     new Axis({
         renderer: renderer,
         stripsGroup: stripsGroup,
-        labelAxesGroup: labelAxesGroup,
+        stripLabelAxesGroup: stripLabelAxesGroup,
         constantLinesGroup: constantLinesGroup,
         axesContainerGroup: axesContainerGroup,
         gridGroup: gridGroup,
@@ -179,7 +179,7 @@ QUnit.module('API', {
 
         const renderer = that.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -189,7 +189,7 @@ QUnit.module('API', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -520,6 +520,7 @@ QUnit.test('applyClipRects', function(assert) {
 
     assert.equal(renderer.g.getCall(1).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForElements', 'axis strip group');
     assert.equal(renderer.g.getCall(0).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForCanvas', 'axis group');
+    assert.equal(renderer.g.getCall(3).returnValue.attr.lastCall.args[0]['clip-path'], 'clipRectForCanvas', 'axis elements group');
 });
 
 QUnit.test('Disposing', function(assert) {
@@ -532,57 +533,6 @@ QUnit.test('Disposing', function(assert) {
     assert.ok(renderer.g.getCall(0).returnValue.dispose.called, 'axis group was cleared');
     assert.ok(renderer.g.getCall(1).returnValue.dispose.called, 'strips group was cleared');
     assert.ok(renderer.g.getCall(3).returnValue.dispose.called, 'elements group was cleared');
-});
-
-QUnit.test('beforeCleanGroups with templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions({
-        label: {
-            template: ()=>{}
-        }
-    });
-
-    this.axis.beforeCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkRemove.callCount, 1);
-});
-
-QUnit.test('afterCleanGroups with templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions({
-        label: {
-            template: ()=>{}
-        }
-    });
-
-    renderer.g.getCall(3).returnValue.linkAppend.reset();
-    this.axis.afterCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 1);
-});
-
-
-QUnit.test('beforeCleanGroups without templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions();
-
-    this.axis.beforeCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.stub('linkRemove').callCount, 0);
-});
-
-QUnit.test('afterCleanGroups without templates for labels', function(assert) {
-    const renderer = this.renderer;
-
-    this.updateOptions();
-
-    renderer.g.getCall(3).returnValue.linkAppend.reset();
-    this.axis.afterCleanGroups();
-
-    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 0);
 });
 
 QUnit.test('calculateInterval - returns absolute difference of two numbers', function(assert) {
@@ -866,7 +816,7 @@ QUnit.module('Labels template', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -881,7 +831,7 @@ QUnit.module('Labels template', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -895,9 +845,10 @@ QUnit.module('Labels template', {
 });
 
 QUnit.test('getTemplate called on labels drawing', function(assert) {
+    const templateOption = function() {};
     this.updateOptions({
         label: {
-            template: function() {}
+            template: templateOption
         }
     });
     this.axis.setBusinessRange({
@@ -912,6 +863,7 @@ QUnit.test('getTemplate called on labels drawing', function(assert) {
 
     // assert
     assert.strictEqual(this.getTemplate.callCount, 1);
+    assert.strictEqual(this.getTemplate.lastCall.args[0], templateOption);
 });
 
 QUnit.test('arguments passing to render', function(assert) {
@@ -1075,7 +1027,7 @@ QUnit.module('Labels Settings', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1085,7 +1037,7 @@ QUnit.module('Labels Settings', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1161,7 +1113,7 @@ QUnit.module('Validate', {
         environment.beforeEach.call(this);
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1172,7 +1124,7 @@ QUnit.module('Validate', {
         this.axis = new Axis({
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1257,7 +1209,7 @@ QUnit.module('Zoom', {
         environment.beforeEach.call(this);
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1267,7 +1219,7 @@ QUnit.module('Zoom', {
         this.axisOptions = {
             renderer: renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             eventTrigger: this.eventTrigger,
@@ -1672,7 +1624,7 @@ QUnit.module('VisualRange', {
 
         const renderer = this.renderer;
         const stripsGroup = renderer.g();
-        const labelAxesGroup = renderer.g();
+        const stripLabelAxesGroup = renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
@@ -1682,7 +1634,7 @@ QUnit.module('VisualRange', {
         this.axis = new Axis({
             renderer: this.renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -1776,7 +1728,7 @@ const dataMarginsEnvironment = {
         const axis = new Axis({
             renderer: renderer,
             stripsGroup: renderer.g(),
-            labelAxesGroup: renderer.g(),
+            stripLabelAxesGroup: renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: renderer.g(),
             gridGroup: renderer.g(),
@@ -5134,156 +5086,4 @@ QUnit.test('getZoomBounds when initRange is set, and wholeRange is set', functio
     this.axis.setInitRange();
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: 1, endValue: 2 });
-});
-
-QUnit.module('dataVisualRangeIsReduced method', {
-    beforeEach: function() {
-        environment.beforeEach.call(this);
-        sinon.spy(translator2DModule, 'Translator2D');
-
-        this.axis = new Axis({
-            renderer: this.renderer,
-            axisType: 'xyAxes',
-            drawingType: 'linear',
-            isArgumentAxis: true,
-            eventTrigger: () => { },
-            getTemplate() {}
-        });
-
-        this.updateOptions({});
-        this.axis.updateCanvas({
-            left: 0,
-            right: 0,
-            width: 100
-        });
-        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
-    },
-    afterEach: function() {
-        environment.afterEach.call(this);
-        translator2DModule.Translator2D.restore();
-    },
-    updateOptions: environment.updateOptions
-});
-
-QUnit.test('No visualRange, wholeRange - false', function(assert) {
-    this.updateOptions({
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
-});
-
-QUnit.test('visualRange is equal to dataRange - false', function(assert) {
-    this.updateOptions({
-        visualRange: [100, 120]
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
-});
-
-QUnit.test('visualRange is less then dataRange - true', function(assert) {
-    this.updateOptions({
-        visualRange: [101, 119]
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
-});
-
-QUnit.test('startValue in data range - true', function(assert) {
-    this.updateOptions({
-        visualRange: [101, 120]
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
-});
-
-QUnit.test('wholeRange less then data range - true', function(assert) {
-    this.updateOptions({
-        wholeRange: [100, 119]
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
-});
-
-QUnit.test('discrete data, visualRange and whole range are not set - false', function(assert) {
-    this.updateOptions({
-        type: 'discrete'
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        categories: ['a', 'b', 'c']
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
-});
-
-QUnit.test('discrete data, visualRange is set - true', function(assert) {
-    this.updateOptions({
-        type: 'discrete',
-        visualRange: ['a', 'b']
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        categories: ['a', 'b', 'c']
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
-});
-
-QUnit.test('discrete data, visualRange includes only last point - true', function(assert) {
-    this.updateOptions({
-        type: 'discrete',
-        visualRange: ['c', 'c']
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        categories: ['a', 'b', 'c']
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
-});
-
-QUnit.test('discrete data, one point - false', function(assert) {
-    this.updateOptions({
-        type: 'discrete'
-    });
-
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        categories: ['a']
-    });
-
-    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
 });

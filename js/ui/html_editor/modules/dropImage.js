@@ -6,16 +6,15 @@ import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';
 
-let DropImageModule = {};
+import BaseModule from './base';
+
+let DropImageModule = BaseModule;
 
 if(Quill) {
-    const BaseModule = Quill.import('core/module');
-
     DropImageModule = class DropImageModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
 
-            this.editorInstance = options.editorInstance;
             const widgetName = this.editorInstance.NAME;
 
             eventsEngine.on(this.quill.root, addNamespace('dragover', widgetName), this._dragOverHandler.bind(this));
@@ -33,7 +32,7 @@ if(Quill) {
             const dataTransfer = e.originalEvent.dataTransfer;
             const hasFiles = dataTransfer?.files?.length;
 
-            this.editorInstance._saveValueChangeEvent(e);
+            this.saveValueChangeEvent(e);
             e.preventDefault();
             if(hasFiles) {
                 this._getImage(dataTransfer.files, this._addImage.bind(this));
@@ -43,7 +42,7 @@ if(Quill) {
         _pasteHandler(e) {
             const { clipboardData } = e.originalEvent;
 
-            this.editorInstance._saveValueChangeEvent(e);
+            this.saveValueChangeEvent(e);
 
             if(!clipboardData) {
                 return;

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import { prepareTableValue } from './utils.js';
+import { prepareEmbedValue, prepareTableValue } from './utils.js';
 import { isObject } from 'core/utils/type';
 
 const { test, module: testModule } = QUnit;
@@ -222,7 +222,7 @@ testModule('API', moduleConfig, () => {
             ' data-var-value="template"><span contenteditable="false">#template#</span></span>est 1</p><p>Test 2</p><p>Test 3</p>';
         this.instance.insertEmbed(1, 'variable', { value: 'template', escapeChar: '#' });
 
-        assert.strictEqual(this.instance.option('value').replace(/\uFEFF/g, ''), expected, 'insert embed');
+        assert.strictEqual(prepareEmbedValue(this.instance.option('value')), expected, 'insert embed');
     });
 
     test('undo/redo', function(assert) {

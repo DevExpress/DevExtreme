@@ -30,6 +30,8 @@ export const viewFunction = ({
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
+    leftVirtualCellCount={viewData.leftVirtualCellCount}
+    rightVirtualCellCount={viewData.rightVirtualCellCount}
     virtualCellsCount={virtualCellsCount}
     className={classes}
   >

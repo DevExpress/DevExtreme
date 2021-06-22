@@ -11,7 +11,7 @@
 
 /**
 * @pseudo CommonVizDataSource
-* @type Array<any>|DataSource|DataSourceOptions|string
+* @type Array<any>|Store|DataSource|DataSourceOptions|string
 * @notUsedInTheme
 */
 
@@ -20,56 +20,3 @@
 * @type Array<string>|Enums.VizPalette
 * @default "Material"
 */
-/**
-* @name VizTimeInterval
-* @type number|object|Enums.VizTimeInterval
-* @default undefined
-* @hidden
-*/
-const tickInterval = {
-    /**
-    * @name VizTimeInterval.years
-    * @type number
-    */
-    years: undefined,
-    /**
-    * @name VizTimeInterval.quarters
-    * @type number
-    */
-    quarters: undefined,
-    /**
-    * @name VizTimeInterval.months
-    * @type number
-    */
-    months: undefined,
-    /**
-    * @name VizTimeInterval.weeks
-    * @type number
-    */
-    weeks: undefined,
-    /**
-    * @name VizTimeInterval.days
-    * @type number
-    */
-    days: undefined,
-    /**
-    * @name VizTimeInterval.hours
-    * @type number
-    */
-    hours: undefined,
-    /**
-    * @name VizTimeInterval.minutes
-    * @type number
-    */
-    minutes: undefined,
-    /**
-    * @name VizTimeInterval.seconds
-    * @type number
-    */
-    seconds: undefined,
-    /**
-    * @name VizTimeInterval.milliseconds
-    * @type number
-    */
-    milliseconds: undefined
-};

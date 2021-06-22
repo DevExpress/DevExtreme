@@ -7,7 +7,6 @@
  * @static
  * @module viz/themes
  * @export currentTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function currentTheme(): string;
@@ -20,7 +19,6 @@ export function currentTheme(): string;
  * @static
  * @module viz/themes
  * @export currentTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function currentTheme(platform: string, colorScheme: string): void;
@@ -32,7 +30,6 @@ export function currentTheme(platform: string, colorScheme: string): void;
  * @static
  * @module viz/themes
  * @export currentTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function currentTheme(theme: string): void;
@@ -45,7 +42,6 @@ export function currentTheme(theme: string): void;
  * @static
  * @module viz/themes
  * @export getTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function getTheme(theme: string): any;
@@ -56,7 +52,6 @@ export function getTheme(theme: string): any;
  * @static
  * @module viz/themes
  * @export refreshTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function refreshTheme(): void;
@@ -69,7 +64,6 @@ export function refreshTheme(): void;
  * @static
  * @module viz/themes
  * @export registerTheme
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function registerTheme(customTheme: any, baseTheme: string): void;

@@ -24,7 +24,7 @@ export const pointInCanvas = (canvas: ClientRect, x: number, y: number): boolean
   x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom
 );
 
-export function getFormatValue(value: number|Date|string, specialFormat: string|undefined,
+export function getFormatValue(value: number | Date | string, specialFormat: string | undefined,
   { argumentFormat, format }: { argumentFormat?: Format; format?: Format }): string {
   let option = format;
   if (specialFormat) {

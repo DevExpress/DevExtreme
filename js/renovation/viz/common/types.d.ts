@@ -5,7 +5,7 @@ export interface FormatObject {
   currency?: string;
   percentPrecision?: number;
 }
-export type Format = FormatObject | FormatType | string | ((value: number|Date) => string);
+export type Format = FormatObject | FormatType | string | ((value: number | Date) => string);
 export interface Point {
   size: number;
   tag: any;
@@ -14,7 +14,7 @@ export interface Point {
 }
 
 export interface Translator {
-  translate: (value: number|string|Date) => number;
+  translate: (value: number | string | Date) => number;
 }
 
 export interface BaseEventData {

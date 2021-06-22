@@ -181,10 +181,6 @@ QUnit.test('stop inertia on click', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(Math.round(location.top), Math.round(distance), 'scroll was stopped');
-        }
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
@@ -199,6 +195,9 @@ QUnit.test('stop inertia on click', function(assert) {
         .up();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(Math.round(location.top), Math.round(distance), 'scroll was stopped');
 });
 
 QUnit.test('scrollbar is hidden on stop', function(assert) {
@@ -209,11 +208,8 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
     };
 
     const $scrollable = $('#scrollable').dxScrollable({
+        showScrollbar: 'onScroll',
         useNative: false,
-        onStop: function() {
-            const $scroll = $scrollable.find('.dx-scrollable-scroll');
-            assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
-        }
     });
     const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
@@ -223,11 +219,10 @@ QUnit.test('scrollbar is hidden on stop', function(assert) {
         .move(0, -10)
         .up();
 
-    mouse
-        .down()
-        .up();
-
     this.clock.tick();
+
+    const $scroll = $scrollable.find('.dx-scrollable-scroll');
+    assert.ok($scroll.hasClass('dx-state-invisible'), 'scroll was hidden');
 });
 
 QUnit.test('bounce top', function(assert) {
@@ -313,12 +308,7 @@ QUnit.test('stop bounce on click', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(location.top, 0, 'bounced stopped');
-        },
         onEnd: function() {
-            assert.ok(false, 'shouldn\'t fire end action');
         }
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
@@ -333,10 +323,12 @@ QUnit.test('stop bounce on click', function(assert) {
         .down();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(location.top, 0, 'bounced stopped');
 });
 
 QUnit.test('stop inertia bounce on after mouse up', function(assert) {
-    assert.expect(1);
 
     animationFrame.requestAnimationFrame = function(callback) {
         setTimeout(callback, 0);
@@ -347,12 +339,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
-        onStop: function() {
-            const location = getScrollOffset($scrollable);
-            assert.notEqual(location.top, 0, 'bounced stopped');
-        },
         onEnd: function() {
-            assert.ok(false, 'scroll complete shouldn`t be fired');
         }
     });
     const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
@@ -369,6 +356,9 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
         .down();
 
     this.clock.tick();
+
+    const location = getScrollOffset($scrollable);
+    assert.notEqual(location.top, 0, 'bounced stopped');
 });
 
 QUnit.test('bounce elastic', function(assert) {
@@ -380,7 +370,6 @@ QUnit.test('bounce elastic', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
-
         onScroll: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);

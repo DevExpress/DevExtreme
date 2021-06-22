@@ -146,13 +146,13 @@ module('Work Space Day', {
             }
         ]);
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(5).addClass('dx-scheduler-date-table-droppable-cell');
+        this.instance.$element().find('.' + CELL_CLASS).eq(3).addClass('dx-scheduler-date-table-droppable-cell');
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2015, 1, 18, 1),
-            endDate: undefined,
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: new Date(2015, 1, 18, 1),
             groups: {
                 res: 2
             }
@@ -187,7 +187,7 @@ module('Work Space Day', {
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             startDate: new Date(2015, 1, 18, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 1, 0),
             allDay: false,
             groups: {
                 one: 2,

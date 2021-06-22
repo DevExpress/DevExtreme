@@ -21,7 +21,6 @@ import DOMComponent from '../core/dom_component';
  * @static
  * @module viz/export
  * @export exportFromMarkup
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
@@ -33,7 +32,6 @@ export function exportFromMarkup(markup: string, options: { fileName?: string, f
  * @static
  * @module viz/export
  * @export exportWidgets
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
@@ -58,7 +56,6 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
  * @static
  * @module viz/export
  * @export exportWidgets
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
@@ -71,7 +68,6 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, optio
  * @static
  * @module viz/export
  * @export getMarkup
- * @prevFileNamespace DevExpress.viz
  * @public
  */
 export function getMarkup(widgetInstances: Array<DOMComponent>): string;

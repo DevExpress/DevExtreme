@@ -12,8 +12,16 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
-        const duration = this._getDurationInDays(startDate, endDate);
-        const width = this.cropAppointmentWidth(Math.ceil(duration) * cellWidth, cellWidth);
+        const duration = Math.ceil(this._getDurationInDays(startDate, endDate));
+
+        let width = this.cropAppointmentWidth(duration * cellWidth, cellWidth);
+
+        if(this.instance.isVirtualScrolling()) {
+            const workSpace = this.instance.getWorkSpace();
+            const skippedDays = workSpace.viewDataProvider.getSkippedDaysCount(position.groupIndex, startDate, endDate, duration);
+
+            width -= skippedDays * cellWidth;
+        }
 
         return width;
     }

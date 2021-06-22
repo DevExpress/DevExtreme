@@ -6,10 +6,11 @@ import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
 
+import BaseModule from './base';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
 
-let MentionModule = {};
+let MentionModule = BaseModule;
 
 if(Quill) {
     const USER_ACTION = 'user';
@@ -63,7 +64,6 @@ if(Quill) {
         constructor(quill, options) {
             super(quill, options);
             this._mentions = {};
-            this.editorInstance = options.editorInstance;
 
             options.mentions.forEach((item) => {
                 let marker = item.marker;
@@ -81,7 +81,7 @@ if(Quill) {
             });
 
             this._attachKeyboardHandlers();
-            this.editorInstance.addCleanCallback(this.clean.bind(this));
+            this.addCleanCallback(this.clean.bind(this));
             this.quill.on('text-change', this.onTextChange.bind(this));
         }
 

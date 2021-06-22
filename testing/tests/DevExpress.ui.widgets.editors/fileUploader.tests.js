@@ -3576,6 +3576,36 @@ QUnit.module('files selection', moduleConfig, () => {
 
         assert.equal($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 1, 'only one file is in list');
     });
+
+    QUnit.test('the file list should not remove duplicates (T969288)', function(assert) {
+        const uploadedSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            chunkSize: 200000,
+            uploadChunk: () => executeAfterDelay(null, this.xhrMock.LOAD_TIMEOUT),
+            onUploaded: uploadedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'two files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
+
+        uploadedSpy.reset();
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 4, 'four files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded again');
+    });
 });
 
 QUnit.module('disabled option', () => {

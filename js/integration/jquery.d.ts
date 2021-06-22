@@ -81,6 +81,7 @@ import dxTreeMap, { dxTreeMapOptions } from '../viz/tree_map';
 import dxVectorMap, { dxVectorMapOptions } from '../viz/vector_map';
 
 declare module '../core/element' {
+    interface Condition extends JQueryEventObject { }
     interface ElementWrapper<T extends Element> extends JQuery<T> { }
     interface ElementsArrayWrapper<T extends Element> extends JQuery<T> { }
     interface InternalElementWrapper<T extends Element> extends JQuery<T> { }
@@ -102,6 +103,7 @@ declare module '../events/index' {
 declare global {
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
+    interface JQuery<TElement = HTMLElement> { }
     interface JQuery<TElement = HTMLElement> {
 
         dxAccordion(): JQuery;

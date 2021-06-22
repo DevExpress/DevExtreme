@@ -46,6 +46,7 @@ import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/head
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
+import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -736,6 +737,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualScrollingDispatcher?.updateDimensions(true);
         this._renderView();
         this.option('crossScrollingEnabled') && this._setTableSizes();
+        this.cache.clear();
     }
 
     _init() {
@@ -1246,7 +1248,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
     }
 
-    generateRenderOptions() {
+    generateRenderOptions(isProvideVirtualCellsWidth) {
         const groupCount = this._getGroupCount();
         const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
@@ -1282,6 +1284,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupsList: this._getAllGroups(),
             isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
             isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+            isProvideVirtualCellsWidth,
         };
 
         if(this.isVirtualScrolling()) {
@@ -1565,7 +1568,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
             let endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
 
-            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+            while(!isDateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = endDate;
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
             }
@@ -1580,10 +1583,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getStartViewDate() {
         return this.option('startDate');
-    }
-
-    _dateInRange(date, startDate, endDate, diff) {
-        return diff > 0 ? dateUtils.dateInRange(date, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(date, endDate, startDate, 'date');
     }
 
     _getIntervalDuration() {
@@ -2802,7 +2801,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHorizontalMax(groupIndex) {
-        groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
+        if(this.isGroupedByDate()) {
+            const correctedGroupIndex = this._getGroupCount() - 1;
+
+            return Math.max(
+                this._groupedStrategy.getHorizontalMax(groupIndex),
+                this._groupedStrategy.getHorizontalMax(correctedGroupIndex)
+            );
+        }
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
@@ -2949,12 +2955,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellData = this.getCellData($(this._getDroppableCell()));
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
-        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
+        const endDate = cellData.endDate;
 
         return {
-            startDate: startDate,
-            endDate: endDate,
-            allDay: allDay,
+            startDate,
+            endDate,
+            allDay,
             groups: cellData.groups
         };
     }
@@ -3073,7 +3079,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedPosition[groupIndex]) {
-            const { cellIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { cellIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(cellIndex);
         }
 
@@ -3123,7 +3129,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(!this._maxAllowedVerticalPosition[groupIndex]) {
-            const { rowIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
             getMaxPosition(rowIndex);
         }
 
@@ -3362,6 +3368,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
+        // TODO: refactor after deleting old render
+        if(this.isVirtualScrolling()) {
+            const groupedData = this.viewDataProvider.groupedDataMap.dateTableGroupedMap;
+            const groupLength = groupedData[groupIndex][0].length;
+
+            result = groupLength * this.getCellWidth();
+        }
+
         const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 
@@ -3485,10 +3499,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
-        this._createDragBehaviorBase($element, getItemData, getItemSettings);
+        const options = {
+            getItemData,
+            getItemSettings,
+        };
+
+        this._createDragBehaviorBase($element, options);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, options = {}) {
+    _createDragBehaviorBase($element, options) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
         const element = this.$element();
@@ -3507,8 +3526,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             () => this._getDroppableCell(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
-            getItemData,
-            getItemSettings,
             options)
         );
     }
@@ -3607,8 +3624,6 @@ const createDragBehaviorConfig = (
     getDroppableCell,
     removeDroppableCellClass,
     getCellWidth,
-    getItemData,
-    getItemSettings,
     options) => {
 
     const state = {
@@ -3640,8 +3655,9 @@ const createDragBehaviorConfig = (
         const $itemElement = $(e.itemElement);
         const appointments = e.component._appointments;
 
-        state.itemData = getItemData(e.itemElement, appointments);
-        const settings = getItemSettings($itemElement, e);
+        state.itemData = options.getItemData(e.itemElement, appointments);
+        const settings = options.getItemSettings($itemElement, e);
+        const initialPosition = options.initialPosition;
 
         if(state.itemData && !state.itemData.disabled) {
             event.data = event.data || {};
@@ -3653,7 +3669,7 @@ const createDragBehaviorConfig = (
                 state.dragElement = createDragAppointment(state.itemData, settings, appointments);
 
                 event.data.itemElement = state.dragElement;
-                event.data.initialPosition = locate($(state.dragElement));
+                event.data.initialPosition = initialPosition ?? locate($(state.dragElement));
                 event.data.itemData = state.itemData;
                 event.data.itemSettings = settings;
 
@@ -3669,15 +3685,16 @@ const createDragBehaviorConfig = (
             return;
         }
 
-        const mouseIndent = 10;
+        const MOUSE_IDENT = 10;
 
         const appointmentWidth = $(state.dragElement).width();
         const isWideAppointment = appointmentWidth > getCellWidth();
 
-        const draggableElement = locate($(state.dragElement).parent());
+        const dragElementContainer = $(state.dragElement).parent();
+        const boundingRect = getBoundingRect(dragElementContainer.get(0));
 
-        const newX = draggableElement.left + mouseIndent;
-        const newY = draggableElement.top + mouseIndent;
+        const newX = boundingRect.left + MOUSE_IDENT;
+        const newY = boundingRect.top + MOUSE_IDENT;
 
         const elements = isWideAppointment ?
             getElementsFromPoint(newX, newY) :

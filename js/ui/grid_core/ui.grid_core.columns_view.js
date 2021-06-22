@@ -668,7 +668,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, oldValue);
+                        updateFunc(newValue, row);
                     }
                     oldValue = newValue;
                 }
@@ -802,6 +802,15 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     callbackNames: function() {
         return ['scrollChanged'];
+    },
+
+    _updateScrollLeftPosition: function() {
+        const scrollLeft = this._scrollLeft;
+
+        if(scrollLeft >= 0) {
+            this._scrollLeft = 0;
+            this.scrollTo({ left: scrollLeft });
+        }
     },
 
     scrollTo: function(pos) {

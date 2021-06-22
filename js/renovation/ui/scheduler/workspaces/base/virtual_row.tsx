@@ -9,6 +9,8 @@ export const viewFunction = ({
   props: {
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
   },
   classes,
   style,
@@ -19,6 +21,8 @@ export const viewFunction = ({
     className={classes}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
+    leftVirtualCellCount={leftVirtualCellCount}
+    rightVirtualCellCount={rightVirtualCellCount}
   >
     {virtualCells.map((_, index) => (
       <VirtualCell key={index.toString()} />
@@ -33,6 +37,10 @@ export class VirtualRowProps extends RowProps {
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
 
   @OneWay() cellsCount = 1;
 }

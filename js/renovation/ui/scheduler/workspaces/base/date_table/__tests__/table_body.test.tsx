@@ -59,6 +59,7 @@ describe('DateTableBody', () => {
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
       leftVirtualCellCount: 2,
+      rightVirtualCellCount: 21,
     };
     const cellTemplate = () => null;
 
@@ -90,6 +91,8 @@ describe('DateTableBody', () => {
             className: 'dx-scheduler-date-table-row',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 2,
+            rightVirtualCellCount: 21,
           });
       });
     });

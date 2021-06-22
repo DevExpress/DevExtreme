@@ -56,8 +56,6 @@ $generic-checkbox-disable-opacity: 0.4;
   }
 
   .dx-checkbox-indeterminate & {
-    @include dx-icon(square);
-
     color: $checkbox-indeterminate-bg;
 
     @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size);

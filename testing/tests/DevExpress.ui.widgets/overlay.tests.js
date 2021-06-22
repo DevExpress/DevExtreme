@@ -13,7 +13,7 @@ import eventsEngine from 'events/core/events_engine';
 import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
-import Overlay from 'ui/overlay';
+import Overlay from 'ui/overlay/ui.overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from 'ui/widget/selectors';
@@ -165,7 +165,7 @@ testModule('render', moduleConfig, () => {
 
         assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length);
 
-        instance._dispose();
+        instance.dispose();
         assert.ok(!$(toSelector(OVERLAY_CONTENT_CLASS)).length);
     });
 
@@ -933,12 +933,15 @@ testModule('position', moduleConfig, () => {
     });
 
     test('position as function', function(assert) {
-        const instance = $('#overlay').dxOverlay({
+        const overlay = $('#overlay').dxOverlay({
             visible: true,
-            position: function() { return { of: 'body' }; }
+            position: function() { return { my: 'left', at: 'left', of: 'body', offset: '7 0' }; }
         }).dxOverlay('instance');
 
-        assert.strictEqual(instance._position.of, 'body');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
     });
 
     test('overlay wrapper should have correct dimensions even when there is "target" property in window', function(assert) {

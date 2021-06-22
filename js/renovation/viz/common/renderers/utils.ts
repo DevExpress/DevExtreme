@@ -48,9 +48,9 @@ export const extend = (target: Record<string, unknown>, source: Record<string, u
   return target;
 };
 
-type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
+type BuildSimpleSegmentFn = (points: (Point | number)[], close: boolean, list: Segment[]) => Segment[];
 
-function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
+function buildSegments(points: (Point | number)[] | number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
   let i: number;
   let ii: number;
   const list: Segment[] = [];
@@ -59,12 +59,12 @@ function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: 
       buildSimpleSegment(points[i] as number[], close, list);
     }
   } else {
-    buildSimpleSegment(points as (Point|number)[], close, list);
+    buildSimpleSegment(points as (Point | number)[], close, list);
   }
   return list;
 }
 
-function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
+function buildSimpleLineSegment(points: (Point | number)[], close: boolean, list: Segment[]): Segment[] {
   let i = 0;
   const k0 = list.length;
   let k = k0;
@@ -91,7 +91,7 @@ function buildSimpleLineSegment(points: (Point|number)[], close: boolean, list: 
   return list;
 }
 
-function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list: Segment[]): Segment[] {
+function buildSimpleCurveSegment(points: (Point | number)[], close: boolean, list: Segment[]): Segment[] {
   let i: number;
   let k = list.length;
   const ii = (points || []).length;
@@ -134,15 +134,15 @@ function buildSimpleCurveSegment(points: (Point|number)[], close: boolean, list:
   return list;
 }
 
-function buildLineSegments(points: (Point|number)[]|number[][], close: boolean): Segment[] {
+function buildLineSegments(points: (Point | number)[] | number[][], close: boolean): Segment[] {
   return buildSegments(points, buildSimpleLineSegment, close);
 }
 
-function buildCurveSegments(points: (Point|number)[]|number[][], close: boolean): Segment[] {
+function buildCurveSegments(points: (Point | number)[] | number[][], close: boolean): Segment[] {
   return buildSegments(points, buildSimpleCurveSegment, close);
 }
 
-export const buildPathSegments = (points: (Point|number)[]|number[][], type: PathType): Segment[] => {
+export const buildPathSegments = (points: (Point | number)[] | number[][], type: PathType): Segment[] => {
   let list: Segment[] = [['M', 0, 0]];
   if (type === 'line') {
     list = buildLineSegments(points, false);

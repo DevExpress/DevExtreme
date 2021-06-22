@@ -34,7 +34,7 @@ export class ScrollbarProps {
 
   @TwoWay() pocketState = TopPocketState.STATE_RELEASED; // TODO: avoid twoWay
 
-  @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
+  @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
   @Event() onAnimatorCancel?: () => void = noop;
 

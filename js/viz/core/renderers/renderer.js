@@ -881,7 +881,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
             ellipsisMaxWidth -= ellipsisWidth;
         }
 
-        lines = applyOverflowRules(that.element, that._texts, maxWidth, ellipsisMaxWidth, options, maxHeight);
+        lines = applyOverflowRules(that.element, that._texts, maxWidth, ellipsisMaxWidth, options);
         lines = setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, parseFloat(this._getLineHeight()));
 
         this._texts = lines.reduce((texts, line) => {

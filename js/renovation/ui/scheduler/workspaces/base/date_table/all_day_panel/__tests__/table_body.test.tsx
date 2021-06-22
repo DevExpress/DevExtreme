@@ -49,6 +49,8 @@ describe('AllDayPanelTableBody', () => {
         props: {
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 34,
+          rightVirtualCellCount: 44,
         },
       });
 
@@ -62,6 +64,8 @@ describe('AllDayPanelTableBody', () => {
           className: 'some-class',
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 34,
+          rightVirtualCellCount: 44,
         });
 
       const cells = tableBody.find(AllDayPanelCell);

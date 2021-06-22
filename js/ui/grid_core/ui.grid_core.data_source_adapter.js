@@ -493,33 +493,35 @@ export default gridCore.Controller.inherit((function() {
                 error: error
             });
         },
+        _loadPageSize: function() {
+            return this.pageSize();
+        },
         _handleDataChanged: function(args) {
-            const that = this;
             let currentTotalCount;
-            const dataSource = that._dataSource;
+            const dataSource = this._dataSource;
             let isLoading = false;
-            const itemsCount = that.itemsCount();
+            const itemsCount = this.itemsCount();
 
-            that._isLastPage = !itemsCount || !that.pageSize() || itemsCount < that.pageSize();
+            this._isLastPage = !itemsCount || !this._loadPageSize() || itemsCount < this._loadPageSize();
 
-            if(that._isLastPage) {
-                that._hasLastPage = true;
+            if(this._isLastPage) {
+                this._hasLastPage = true;
             }
 
             if(dataSource.totalCount() >= 0) {
-                if(dataSource.pageIndex() >= that.pageCount()) {
-                    dataSource.pageIndex(that.pageCount() - 1);
-                    that.pageIndex(dataSource.pageIndex());
-                    that.resetPagesCache();
+                if(dataSource.pageIndex() >= this.pageCount()) {
+                    dataSource.pageIndex(this.pageCount() - 1);
+                    this.pageIndex(dataSource.pageIndex());
+                    this.resetPagesCache();
                     dataSource.load();
                     isLoading = true;
                 }
             } else if(!args || isDefined(args.changeType)) {
-                currentTotalCount = dataSource.pageIndex() * that.pageSize() + itemsCount;
-                that._currentTotalCount = Math.max(that._currentTotalCount, currentTotalCount);
-                if(itemsCount === 0 && dataSource.pageIndex() >= that.pageCount()) {
-                    dataSource.pageIndex(that.pageCount() - 1);
-                    if(that.option('scrolling.mode') !== 'infinite') {
+                currentTotalCount = dataSource.pageIndex() * this.pageSize() + itemsCount;
+                this._currentTotalCount = Math.max(this._currentTotalCount, currentTotalCount);
+                if(itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
+                    dataSource.pageIndex(this.pageCount() - 1);
+                    if(this.option('scrolling.mode') !== 'infinite') {
                         dataSource.load();
                         isLoading = true;
                     }
@@ -527,12 +529,12 @@ export default gridCore.Controller.inherit((function() {
             }
 
             if(!isLoading) {
-                that._operationTypes = that._lastOperationTypes;
-                that._lastOperationTypes = {};
+                this._operationTypes = this._lastOperationTypes;
+                this._lastOperationTypes = {};
 
-                that.component._optionCache = {};
-                that.changed.fire(args);
-                that.component._optionCache = undefined;
+                this.component._optionCache = {};
+                this.changed.fire(args);
+                this.component._optionCache = undefined;
             }
         },
         _scheduleCustomLoadCallbacks: function(deferred) {

@@ -130,3 +130,7 @@ export const scrollConfig = [{
   firstDate: new Date(2021, 0, 30),
   lastDate: new Date(2021, 0, 1),
 }];
+
+export const setZoomLevel = ClientFunction((zoomLevel: number) => {
+  $('body').css('zoom', `${zoomLevel}%`);
+});

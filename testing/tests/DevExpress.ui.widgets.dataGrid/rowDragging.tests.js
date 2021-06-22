@@ -661,6 +661,34 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
 
     });
 
+    QUnit.test('Sortables points should be updated on scroll for fixed columns (T996293)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns[2] = {
+            dataField: 'field3',
+            fixed: true
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+        rowsView.height(50);
+
+        const $sortable = $testElement.find('.dx-sortable');
+        const fixedScrollable = $sortable.eq(1).dxSortable('instance');
+        sinon.spy(fixedScrollable, '_correctItemPoints');
+
+        // act
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 70);
+
+        $sortable.eq(1).scrollTop(10);
+        $sortable.eq(1).trigger('scroll');
+
+        // assert
+        assert.equal($sortable.length, 2, 'two sortables are rendered');
+        assert.equal(fixedScrollable._correctItemPoints.callCount, 1, '_correctItemPoints for fixed sortable is called');
+    });
+
     // T830034
     QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists', function(assert) {
     // arrange

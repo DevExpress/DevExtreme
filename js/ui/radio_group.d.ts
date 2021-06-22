@@ -35,25 +35,26 @@ export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
      * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
@@ -62,21 +63,18 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      * @default 'horizontal' [for](tablets)
      * @type Enums.Orientation
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     layout?: 'horizontal' | 'vertical';
     /**
      * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
@@ -87,7 +85,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @inherits Editor, DataExpressionMixin
  * @module ui/radio_group
  * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
 export default class dxRadioGroup extends Editor {

@@ -3,15 +3,16 @@ import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
 
+import BaseModule from './base';
+
 import Popup from '../../popup';
 import List from '../../list';
 
-let ListPopupModule = {};
+let ListPopupModule = BaseModule;
 
 if(Quill) {
     const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
     const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
-    const BaseModule = Quill.import('core/module');
 
     const MIN_HEIGHT = 100;
 

@@ -143,39 +143,35 @@ describe('RowBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('leftVirtualCellWidth', () => {
+      describe('hasLeftVirtualCell', () => {
         [{
-          leftVirtualCellWidth: 0,
+          leftVirtualCellCount: 0,
           hasLeftVirtualCell: false,
         }, {
-          leftVirtualCellWidth: 10,
+          leftVirtualCellCount: 10,
           hasLeftVirtualCell: true,
-        }].forEach((option) => {
-          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellWidth is ${option.leftVirtualCellWidth}`, () => {
-            const row = new Row({
-              leftVirtualCellWidth: option.leftVirtualCellWidth,
-            });
+        }].forEach(({ leftVirtualCellCount, hasLeftVirtualCell }) => {
+          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellCount is ${leftVirtualCellCount}`, () => {
+            const row = new Row({ leftVirtualCellCount });
 
-            expect(option.hasLeftVirtualCell)
+            expect(hasLeftVirtualCell)
               .toBe(row.hasLeftVirtualCell);
           });
         });
       });
 
-      describe('rightVirtualCellWidth', () => {
+      describe('hasRightVirtualCell', () => {
         [{
-          rightVirtualCellWidth: 0,
+          rightVirtualCellCount: 0,
           hasRightVirtualCell: false,
         }, {
-          rightVirtualCellWidth: 10,
+          rightVirtualCellCount: 10,
           hasRightVirtualCell: true,
-        }].forEach((option) => {
-          it(`should determine "hasRightVirtualCell" correctly if rightVirtualCellWidth is ${option.rightVirtualCellWidth}`, () => {
-            const row = new Row({
-              rightVirtualCellWidth: option.rightVirtualCellWidth,
-            });
+        }].forEach(({ rightVirtualCellCount, hasRightVirtualCell }) => {
+          it(`should determine "hasRightVirtualCell" correctly if rightVirtualCellCount is ${rightVirtualCellCount}`, () => {
+            const row = new Row({ rightVirtualCellCount });
 
-            expect(option.hasRightVirtualCell)
+            expect(hasRightVirtualCell)
               .toBe(row.hasRightVirtualCell);
           });
         });

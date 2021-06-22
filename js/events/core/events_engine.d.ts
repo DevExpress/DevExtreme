@@ -1,8 +1,8 @@
 type EventsEngineType = {
-    on: (element, eventName, handler) => void;
-    off: (element, eventName, handler) => void;
-    set: (eventEngine) => void;
+    on: (element: any, eventName: any, handler: any) => void;
+    off: (element: any, eventName: any, handler: any) => void;
+    set: (eventEngine: any) => void;
 };
 declare const eventsEngine: EventsEngineType;
-export declare function set(eventEngine): void;
+export declare function set(eventEngine: any): void;
 export default eventsEngine;
