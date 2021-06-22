@@ -11,6 +11,7 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
+import { hasWindow } from '../../../core/utils/window';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
@@ -138,7 +139,11 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _initMarkup(): void {
     const props = this.getProps();
-    this._renderWrapper(props);
+
+    // TODO: SSR does not work correctly with renovated render
+    if (hasWindow()) {
+      this._renderWrapper(props);
+    }
   }
 
   _renderWrapper(props: Record<string, unknown>): void {
