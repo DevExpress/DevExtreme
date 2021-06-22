@@ -1,16 +1,16 @@
-import devices from '../../../../core/devices';
-import $ from '../../../../core/renderer';
-import dateUtils from '../../../../core/utils/date';
-import { Deferred, when } from '../../../../core/utils/deferred';
-import { extend } from '../../../../core/utils/extend';
-import { each } from '../../../../core/utils/iterator';
-import { isDefined, isEmptyObject } from '../../../../core/utils/type';
-import { getWindow, hasWindow } from '../../../../core/utils/window';
-import { triggerResizeEvent } from '../../../../events/visibility_change';
-import messageLocalization from '../../../../localization/message';
-import Popup from '../../../popup';
+import devices from '../../../core/devices';
+import $ from '../../../core/renderer';
+import dateUtils from '../../../core/utils/date';
+import { Deferred, when } from '../../../core/utils/deferred';
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { isDefined, isEmptyObject } from '../../../core/utils/type';
+import { getWindow, hasWindow } from '../../../core/utils/window';
+import { triggerResizeEvent } from '../../../events/visibility_change';
+import messageLocalization from '../../../localization/message';
+import Popup from '../../popup';
 import { AppointmentForm } from './form';
-import { hide as hideLoading, show as showLoading } from '../../loading';
+import { hide as hideLoading, show as showLoading } from '../loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 
