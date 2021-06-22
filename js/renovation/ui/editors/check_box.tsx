@@ -170,11 +170,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  onWidgetKeyDown(options): Event | undefined {
+  onWidgetKeyDown(e: {
+    originalEvent: Event & { cancel: boolean };
+    keyName: string;
+    which: string;
+  }): Event | undefined {
     const { onKeyDown } = this.props;
-    const { originalEvent, keyName, which } = options;
+    const { originalEvent, keyName, which } = e;
 
-    const result = onKeyDown?.(options);
+    const result = onKeyDown?.(e);
     if (result?.cancel) {
       return result;
     }

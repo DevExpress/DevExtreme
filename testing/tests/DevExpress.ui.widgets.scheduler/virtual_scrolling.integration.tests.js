@@ -13,7 +13,7 @@ import {
     asyncWrapper,
     isIE11
 } from '../../helpers/scheduler/helpers.js';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 

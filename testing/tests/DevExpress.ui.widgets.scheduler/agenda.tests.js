@@ -1,9 +1,7 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -52,11 +50,11 @@ module('Agenda', {}, () => {
             }
         };
 
-        const schedulerMock = { isVirtualScrolling: () => false };
         const resources = options && options.groups || { };
         const key = createFactoryInstances({
-            scheduler: schedulerMock,
-            resources
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
+            resources,
         });
 
         const resourceManager = getResourceManager(key);
