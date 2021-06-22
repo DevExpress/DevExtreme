@@ -24,6 +24,7 @@ const LoadPanelTests = {
                 }
             ].forEach((loadPanelOptions) => {
                 QUnit.test(`loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
+                    assert.expect(11);
                     const done = assert.async();
                     const component = getComponent();
 
@@ -71,6 +72,7 @@ const LoadPanelTests = {
             });
 
             QUnit.test('loadPanel: { enabled: true }, $targetElement.height() > $window.height()', function(assert) {
+                assert.expect(7);
                 const done = assert.async();
                 const component = getComponent();
 
@@ -113,6 +115,7 @@ const LoadPanelTests = {
             });
 
             QUnit.test('loadPanel: { enabled: true }, $targetElement.height() < $window.height()', function(assert) {
+                assert.expect(5);
                 const done = assert.async();
                 const component = getComponent();
 

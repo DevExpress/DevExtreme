@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
 import messageLocalization from '../../localization/message';
-import { hasWindow } from '../../core/utils/window';
+import { ExportLoadPanel } from '../common/export_load_panel';
 
 export const Export = {
     getFullOptions: function(options) {
@@ -62,21 +62,6 @@ export const Export = {
         };
     },
 
-    _setLoadPanelOptions: function(component, options) {
-        if(!hasWindow()) {
-            return;
-        }
-
-        component._setOptionWithoutOptionChange('loadPanel', options);
-
-        this._renderLoadPanel(component);
-    },
-
-    _renderLoadPanel: function(component) {
-        const rowsView = component.getView('rowsView');
-        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
-    },
-
     export: function(options) {
         const {
             jsPDFDocument,
@@ -88,13 +73,12 @@ export const Export = {
             loadPanel
         } = options;
 
-        const internalComponent = component._getInternalInstance?.() || component;
-        const initialLoadPanelOptions = extend({}, internalComponent.option('loadPanel'));
-        if('animation' in internalComponent.option('loadPanel')) {
-            loadPanel.animation = null;
-        }
+        if(loadPanel.enabled) {
+            const rowsView = component.getView('rowsView');
 
-        this._setLoadPanelOptions(internalComponent, loadPanel);
+            this._loadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
+            this._loadPanel.show();
+        }
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
@@ -169,7 +153,10 @@ export const Export = {
 
                 resolve();
             }).always(() => {
-                this._setLoadPanelOptions(internalComponent, initialLoadPanelOptions);
+                if(loadPanel.enabled) {
+                    this._loadPanel.hide();
+                    this._loadPanel.dispose();
+                }
             });
         });
     },
