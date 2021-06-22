@@ -1,5 +1,5 @@
-import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from ".";
-import { SearchOperation } from "./data_source";
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from './index';
+import { SearchOperation } from './data_source';
 
 /** 
  * @docid
