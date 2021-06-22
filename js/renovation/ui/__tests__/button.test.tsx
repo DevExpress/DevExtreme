@@ -133,12 +133,12 @@ describe('Button', () => {
       mount(viewFunction({
         props: {
           template,
+        },
+        buttonTemplateData: {
           text: 'button',
           icon: 'icon',
-          templateData: {
-            templateField1: 'field1',
-            templateField2: 'field2',
-          },
+          templateField1: 'field1',
+          templateField2: 'field2',
         },
       } as any) as any);
 
@@ -161,7 +161,8 @@ describe('Button', () => {
         };
       }) => <div className="custom-content">{`${text}_text`}</div>;
       const button = mount(viewFunction({
-        props: { template, text: 'button', icon: 'icon' },
+        props: { template },
+        buttonTemplateData: { text: 'button', icon: 'icon' },
       } as any) as any);
 
       const buttonContent = button.find('.dx-button-content');
