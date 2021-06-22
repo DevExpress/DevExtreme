@@ -6,9 +6,9 @@ import { isDefined } from '../../core/utils/type';
 import LoadPanel from '../../ui/load_panel';
 
 class ExportLoadPanel {
-    constructor(component, helpers, options) {
-        this._$targetElement = helpers._getLoadPanelTargetElement(component);
-        this._$container = helpers._getLoadPanelContainer(component);
+    constructor(component, $targetElement, $container, options) {
+        this._$targetElement = $targetElement;
+        this._$container = $container;
 
         this._loadPanel = this.render(component, options);
     }
@@ -54,10 +54,10 @@ class ExportLoadPanel {
 
     hide() {
         this._loadPanel.hide();
-        this.remove();
+        this.dispose();
     }
 
-    remove() {
+    dispose() {
         $(this._loadPanel.element()).remove();
         delete this._loadPanel;
     }

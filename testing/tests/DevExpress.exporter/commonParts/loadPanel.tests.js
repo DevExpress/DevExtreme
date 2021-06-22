@@ -22,10 +22,15 @@ const LoadPanelTests = {
                 showIndicator: false,
                 showPane: false,
                 }
-            ].forEach((loadPanelConfig) => {
-                QUnit.test(`loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
+            ].forEach((loadPanelOptions) => {
+                QUnit.test(`loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
                     const done = assert.async();
                     const component = getComponent();
+
+                    let initialOptions = loadPanel;
+                    if(!initialOptions) {
+                        initialOptions = {};
+                    }
 
                     const {
                         animation = null,
@@ -36,14 +41,14 @@ const LoadPanelTests = {
                         showPane = true,
                         text = 'Exporting...',
                         width = 200,
-                    } = loadPanelConfig = {};
+                    } = initialOptions;
 
                     const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, showIndicator, showPane, text, width };
 
                     let isFirstCall = true;
                     let loadPanel;
 
-                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelConfig, customizeCell: () => {
+                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelOptions, customizeCell: () => {
                         if(isFirstCall) {
                             const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
                             assert.strictEqual($loadPanel.length, 1, 'loadPanel rendered');

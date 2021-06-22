@@ -113,7 +113,10 @@ export const Export = {
         } = options;
 
         if(loadPanel.enabled && hasWindow()) {
-            this._loadPanel = new ExportLoadPanel(component, helpers, loadPanel);
+            const $targetElement = helpers._getLoadPanelTargetElement(component);
+            const $container = helpers._getLoadPanelContainer(component);
+
+            this._loadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
             this._loadPanel.show();
         }
 
