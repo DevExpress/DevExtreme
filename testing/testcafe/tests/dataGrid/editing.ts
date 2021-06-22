@@ -1472,7 +1472,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
     template(): any {
@@ -1538,7 +1538,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
     template(): any {
@@ -1602,7 +1602,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
     template(): any {
@@ -1704,7 +1704,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
     template(): any {
@@ -1805,7 +1805,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
       mode: editMode.toLowerCase(),
       allowUpdating: true,
     },
-    loadingTimeout: undefined,
+    loadingTimeout: null,
     customizeColumns(columns) {
       columns.forEach((col) => {
         col.showEditorAlways = true;
