@@ -49,7 +49,8 @@ export class AppComponent {
     }
 
     set currentVisualRange(range: any) {
-        this._visualRange = range;
+        this._visualRange.startValue = range.startValue;
+        this._visualRange.endValue = range.endValue;
         this.onVisualRangeChanged();
     }
 
