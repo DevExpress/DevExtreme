@@ -64,6 +64,7 @@ export default class DartClient {
       const errorHandler = (e?: Error): void => {
         log('Dart client error on write', e);
         this.client.end();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.dispose();
         resolve({
           error: `${e.name}: ${e.message}`,
