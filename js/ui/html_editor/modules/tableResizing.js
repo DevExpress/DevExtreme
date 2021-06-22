@@ -65,20 +65,15 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getQuillTextChangeHandler(delta) {
-        // console.log('_getQuillTextChangeHandler');
         if(this._isTableChanges()) {
-            // console.log('_isTableChanges');
             this._removeResizeFrames();
             const $tables = this._findTables();
             this._updateColumnsWidth($tables);
 
             clearTimeout(this._attachResizerTimeout);
-            // this._attachResizerTimeout = setTimeout(() => {
-
             this._createResizeFrames($tables);
             this._updateFramesPositions();
             this._updateFramesSeparators();
-            // }, TIMEOUT);
         } else {
             this._updateFramesPositions();
         }
@@ -96,7 +91,6 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _createResizeFrames($tables) {
-        // console.log('_createResizeFrames');
         $tables.each((index, $item) => {
             const $table = $($item);
             this._tableResizeFrames[index] = {
@@ -396,34 +390,32 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _recalculateColumnsWidth($table) {
-        // console.log('_recalculateColumnsWidth');
         const determinantElements = this._getTableDeterminantElements($table);
-
-        const tableWidth = $table.attr('width');
-
+        const tableWidth = parseInt($table.attr('width'));
         const columnsWidths = [];
-
-        let columnSum;
-
+        let columnSum = 0;
         let ratio = 1;
 
         each(determinantElements, (index, element) => {
-            const columnWidth = $(element).outerWidth();
-            columnSum += columnWidth;
-            columnsWidths[index] = columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH;
+            const columnWidth = parseInt($(element).attr('width')?.replace('px', '')) || $(element).outerWidth();
+
+            columnsWidths[index] = columnWidth >= this._minColumnWidth ? columnWidth : this._minColumnWidth;
+
+            columnSum += columnsWidths[index];
         });
 
-        if(columnSum > tableWidth - 1) {
-            ratio = tableWidth / columnSum;
-        }
+        const minWidthForColumns = determinantElements.length * this._minColumnWidth;
 
-        // console.log('_recalculateColumnsWidth:');
-        // console.log('columnSum: ' + columnSum);
-        // console.log('tableWidth: ' + tableWidth);
-        // console.log('ratio: ' + ratio);
+        ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);
+
         each(determinantElements, (index, element) => {
-            // console.log(Math.round(columnsWidths[index] * ratio));
-            $(element).attr('width', Math.round(columnsWidths[index] * ratio));
+            const $lineElements = $table.find('td:nth-child(' + (1 + index) + ')');
+
+            const resultWidth = (this._minColumnWidth + Math.round((columnsWidths[index] - this._minColumnWidth) * ratio));
+
+            $lineElements.each((i, element) => {
+                $(element).attr('width', resultWidth + 'px');
+            });
         });
     }
 
