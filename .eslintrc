@@ -215,13 +215,14 @@
             "@typescript-eslint/restrict-plus-operands": ["error",
                 { "checkCompoundAssignments": true }
             ],
-            "@typescript-eslint/require-await": "error"
+            "@typescript-eslint/require-await": "error",
+            "no-return-await": "off"
+            
             /*
             "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/explicit-function-return-type": "error",
-            "no-return-await": "off",
             "@typescript-eslint/no-extraneous-class": "error",
             "@typescript-eslint/no-unsafe-return": "error",
             "@typescript-eslint/no-misused-promises": "error",
