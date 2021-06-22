@@ -245,7 +245,7 @@ const baseTrackerPrototype = {
             const rootOffset = that._renderer.getRootOffset();
             const x = _floor(e.pageX - rootOffset.left);
             const y = _floor(e.pageY - rootOffset.top);
-            if(!inCanvas(that._mainCanvas, x, y) && that._isCursorNotOnTooltip(e)) {
+            if(!inCanvas(that._mainCanvas, x, y) && !that._isCursorOnTooltip(e)) {
                 that._pointerOut();
                 that._disableOutHandler();
             }
@@ -255,11 +255,8 @@ const baseTrackerPrototype = {
         this._outHandler = handler;
     },
 
-    _isCursorNotOnTooltip: function(e) {
-        if(this._tooltip.isEnabled()) {
-            return !this._tooltip.isCursorOnTooltip(e.pageX, e.pageY);
-        }
-        return true;
+    _isCursorOnTooltip: function(e) {
+        return this._tooltip.isEnabled() && this._tooltip.isCursorOnTooltip(e.pageX, e.pageY);
     },
 
     _disableOutHandler: function() {
