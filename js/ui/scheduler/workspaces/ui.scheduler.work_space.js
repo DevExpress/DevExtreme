@@ -3270,7 +3270,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             let validGroupIndex = groupIndex || 0;
 
             if(this.isGroupedByDate()) {
-                validGroupIndex = Math.floor(columnIndex / this._getGroupCount());
+                validGroupIndex = Math.floor(columnIndex % this._getGroupCount());
             } else if(this._isHorizontalGroupedWorkSpace()) {
                 validGroupIndex = Math.floor(columnIndex / this._getCellCount());
             }
