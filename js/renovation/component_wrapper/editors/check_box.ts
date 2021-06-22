@@ -11,7 +11,7 @@ export default class CheckBox extends Editor {
   }
 
   _optionChanged(option: Option): void {
-    const { name, value, previousValue } = option || {};
+    const { name, value, previousValue } = option;
 
     switch (name) {
       case 'value':

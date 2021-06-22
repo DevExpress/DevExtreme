@@ -313,7 +313,7 @@ describe('CheckBox', () => {
           describe('Click', () => {
             it('should change value by Widget click', () => {
               const checkBox = new CheckBox({
-                value: false,
+                value: null,
               });
               checkBox.onWidgetClick({} as Event);
               expect(checkBox.props.value).toBe(true);
@@ -388,7 +388,7 @@ describe('CheckBox', () => {
           });
 
         each([true, false])
-          .it('should have "invalid=%s" if isValid=%s', (isValid) => {
+          .it('should have "invalid=%s" if isValid=%s', (isValid: boolean) => {
             expect(new CheckBox({ isValid }).aria)
               .toMatchObject({ invalid: `${!isValid}` });
           });

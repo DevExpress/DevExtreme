@@ -36,7 +36,7 @@ export default class ButtonWrapper extends Component {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
-        if (validationGroup) {
+        if (validationGroup !== undefined && validationGroup !== '') {
           const { status, complete } = validationGroup.validate();
 
           validationStatus = status;
@@ -88,6 +88,9 @@ export default class ButtonWrapper extends Component {
 
   _findGroup(): any {
     const $element = this.$element();
-    return this.option('validationGroup') || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+    const validationGroup = this.option('validationGroup');
+    return validationGroup !== undefined && validationGroup !== ''
+      ? validationGroup
+      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
