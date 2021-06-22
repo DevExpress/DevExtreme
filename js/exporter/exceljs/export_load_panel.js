@@ -54,7 +54,6 @@ class ExportLoadPanel {
 
     hide() {
         this._loadPanel.hide();
-        this.dispose();
     }
 
     dispose() {

@@ -2,7 +2,7 @@ import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
-import { setWindow, getWindow } from 'core/utils/window';
+import { getWindow } from 'core/utils/window';
 
 const LOAD_PANEL_CLASS = 'dx-loadpanel';
 
@@ -27,7 +27,7 @@ const LoadPanelTests = {
                     const done = assert.async();
                     const component = getComponent();
 
-                    let initialOptions = loadPanel;
+                    let initialOptions = loadPanelOptions;
                     if(!initialOptions) {
                         initialOptions = {};
                     }
@@ -43,7 +43,7 @@ const LoadPanelTests = {
                         width = 200,
                     } = initialOptions;
 
-                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, showIndicator, showPane, text, width };
+                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, showIndicator, showPane, width };
 
                     let isFirstCall = true;
                     let loadPanel;
@@ -169,34 +169,6 @@ const LoadPanelTests = {
 
                     done();
                 });
-            });
-
-            QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
-                assert.expect(2);
-                const done = assert.async();
-                const component = getComponent();
-
-                let isFirstCall = true;
-                setWindow({ }, false);
-
-                try {
-                    exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
-                        if(isFirstCall) {
-                            const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist');
-
-                            isFirstCall = false;
-                        }
-                    } }).then(() => {
-                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
-                        assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
-
-                        done();
-                    });
-                } finally {
-                    setWindow(window);
-                }
-
             });
 
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {

@@ -3,7 +3,6 @@ import { isDefined, isString, isDate, isObject, isFunction } from '../../core/ut
 import { ExportFormat } from './export_format';
 import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
 import { ExportLoadPanel } from './export_load_panel';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
@@ -112,7 +111,7 @@ export const Export = {
             mergeColumnFieldValues,
         } = options;
 
-        if(loadPanel.enabled && hasWindow()) {
+        if(loadPanel.enabled) {
             const $targetElement = helpers._getLoadPanelTargetElement(component);
             const $container = helpers._getLoadPanelContainer(component);
 
@@ -180,7 +179,10 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this._loadPanel?.hide();
+                if(loadPanel.enabled) {
+                    this._loadPanel.hide();
+                    this._loadPanel.dispose();
+                }
             });
         });
     },
