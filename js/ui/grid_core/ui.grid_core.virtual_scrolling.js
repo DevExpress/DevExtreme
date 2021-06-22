@@ -22,6 +22,7 @@ const SCROLLING_MODE_VIRTUAL = 'virtual';
 const SCROLLING_MODE_STANDARD = 'standard';
 const LOAD_TIMEOUT = 300;
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 
 const isVirtualMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
@@ -640,7 +641,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _needUpdateRowHeight: function(itemsCount) {
             const that = this;
-            return that.callBase.apply(that, arguments) || (itemsCount > 0 && that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && that.option('scrolling.rowRenderingMode') !== SCROLLING_MODE_VIRTUAL);
+            return that.callBase.apply(that, arguments) || (itemsCount > 0 && that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && that.option(ROW_RENDERING_MODE_OPTION) !== SCROLLING_MODE_VIRTUAL);
         },
 
         _updateRowHeight: function() {
@@ -758,6 +759,9 @@ export const virtualScrollingModule = {
             data: (function() {
                 const members = {
                     _refreshDataSource: function() {
+                        if(this.option(NEW_SCROLLING_MODE) && !isVirtualRowRendering(this)) {
+                            this._silentOption(ROW_RENDERING_MODE_OPTION, SCROLLING_MODE_VIRTUAL);
+                        }
                         const baseResult = this.callBase.apply(this, arguments) || new Deferred().resolve().promise();
                         baseResult.done(this.initVirtualRows.bind(this));
                         return baseResult;
