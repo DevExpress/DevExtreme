@@ -1933,6 +1933,23 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
         this.clock.tick(CARET_TIMEOUT_DURATION);
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret is just before decimal separator');
     });
+
+    QUnit.test('caret should be moved to the integer part end on input click if format contains stub in the end (T996477)', function(assert) {
+        this.instance.option({
+            format: '#0 \'9\'',
+            value: 0
+        });
+
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        for(let i = 0; i < 2; ++i) {
+            this.keyboard.caret(3);
+            this.input.trigger('dxclick');
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+        }
+
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+    });
 });
 
 QUnit.module('format: custom parser and formatter', moduleConfig, () => {
