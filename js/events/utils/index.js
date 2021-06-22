@@ -151,7 +151,7 @@ export const needSkipEvent = e => {
     const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
     const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
 
-    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event') && !$target.is('.dx-dropdownlist-popup-wrapper *')) {
+    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event')) {
         return true;
     }
 

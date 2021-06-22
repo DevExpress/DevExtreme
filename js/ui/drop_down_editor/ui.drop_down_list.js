@@ -259,8 +259,10 @@ const DropDownList = DropDownEditor.inherit({
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
 
+        // NOTE: fix scrolling in case when popup's container it dropDownList root element (T1000311)
+        const shouldSkipGestureEvent = !$(this.option('dropDownOptions').container).is(this.$element());
         const that = this;
-        this._popup.on({
+        shouldSkipGestureEvent && this._popup.on({
             'shown': function() {
                 that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
             },
