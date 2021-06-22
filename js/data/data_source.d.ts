@@ -12,7 +12,7 @@ import {
 } from './custom_store';
 
 /** @namespace DevExpress.data */
-export interface DataSourceOptions<TKey = any, TValue = any, TSourceValue = TValue, TMappedValue = TValue> {
+export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
     /**
      * @docid
      * @public
@@ -146,7 +146,7 @@ export interface DataSourceOptions<TKey = any, TValue = any, TSourceValue = TVal
  */
 export default class DataSource<TKey = any, TValue = any> {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, TValue, any, any>);
+    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, any, TValue, any>);
     constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
