@@ -498,15 +498,15 @@ export class FileManagerWrapper {
     }
 
     getFolderChooserDialog() {
-        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getNameEditorDialog() {
-        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDeleteItemDialog() {
-        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDialogTextInput() {

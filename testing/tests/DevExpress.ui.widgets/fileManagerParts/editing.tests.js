@@ -613,7 +613,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('Action dialogues must have "Cancel" button', function(assert) {
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
@@ -1704,7 +1704,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect choose directory dialogs', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
@@ -1714,7 +1715,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect edit name dialogs', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
         this.clock.tick(400);
@@ -1724,7 +1726,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect delete item dialog', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
         this.clock.tick(400);
@@ -1732,7 +1735,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');
     });
 
-    test('treeView state must be independent for the folders pane and the copy/move dialog: move files via toolbar (T1004864)', function(assert) {
+    test('it should not be possible to invoke move/copy dialog for treeView folders (T1004864)', function(assert) {
         const originalFunc = renderer.fn.width;
         renderer.fn.width = () => 1200;
 
@@ -1773,6 +1776,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3', true), null, '\'Folder 3\' toggle is absent');
 
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
         renderer.fn.width = originalFunc;
     });
 });

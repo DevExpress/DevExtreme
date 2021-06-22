@@ -268,12 +268,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
+        if(!itemInfo) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         const itemName = itemInfos[0].fileItem.name;
         const itemCount = itemInfos.length;
         return this._showDialog(this._dialogManager.getDeleteItemDialog(), { itemName, itemCount })
@@ -282,12 +288,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getMoveDialog(itemInfos))
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getCopyDialog(itemInfos))
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
@@ -299,6 +311,9 @@ class FileManagerEditingControl extends Widget {
 
     _download(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._controller.downloadItems(itemInfos);
     }
 
