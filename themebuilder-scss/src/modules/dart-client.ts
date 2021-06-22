@@ -25,6 +25,7 @@ export default class DartClient {
     this.client.setTimeout(100);
 
     return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       this.setClientErrorHandlers(async () => {
         this.isServerAvailable = false;
         await this.dispose();

@@ -216,9 +216,7 @@
                 { "checkCompoundAssignments": true }
             ],
             "@typescript-eslint/require-await": "error",
-            "@typescript-eslint/no-misused-promises": ["error",
-                { "checksVoidReturn": false }
-            ]
+            "@typescript-eslint/no-misused-promises": "error"
             /*
             "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
