@@ -4114,8 +4114,30 @@ export interface SummaryTexts {
     sumOtherColumn?: string
 }
 
+
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface ToolbarItem extends dxToolbarItem {
+  name?: DefaultToolbarItemName
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface Toolbar {
-  items?: (string | dxToolbarItem)[];
+  /**
+   * @docid
+   * @type Array<ToolbarItem,Enums.DataGridToolbarItem>
+   * @public
+   */
+  items?: (DefaultToolbarItemName | ToolbarItem)[];
 }
 
 /**

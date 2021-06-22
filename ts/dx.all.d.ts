@@ -5902,6 +5902,18 @@ declare module DevExpress.ui {
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
+    /**
+     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     */
+    type DefaultToolbarItemName =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'exportButton'
+      | 'groupPanel'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     export type DisposingEvent = DevExpress.events.EventInfo<dxDataGrid>;
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -7389,12 +7401,6 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
       valueFormat?: format;
-    }
-    /**
-     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
-     */
-    export interface Toolbar {
-      items?: (string | dxToolbarItem)[];
     }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
@@ -21398,7 +21404,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.toolbar]
      */
-    toolbar?: DevExpress.ui.dxDataGrid.Toolbar;
+    toolbar?: Toolbar;
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
      */
@@ -21671,6 +21677,23 @@ declare module DevExpress.ui {
      */
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
+  }
+  /**
+   * [descr:Toolbar]
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface Toolbar {
+    /**
+     * [descr:Toolbar.items]
+     */
+    items?: (DevExpress.ui.dxDataGrid.DefaultToolbarItemName | ToolbarItem)[];
+  }
+  /**
+   * [descr:ToolbarItem]
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  export interface ToolbarItem extends dxToolbarItem {
+    name?: DevExpress.ui.dxDataGrid.DefaultToolbarItemName;
   }
   export interface ValidationCallbackData {
     value?: string | number;

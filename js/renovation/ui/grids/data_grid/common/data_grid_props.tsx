@@ -1124,9 +1124,15 @@ export class DataGridCommonColumnSettings {
   @OneWay() falseText?: string;
 }
 
+type DataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+export interface DataGridToolbarItem extends dxToolbarItem {
+  name?: DataGridDefaultToolbarItemName;
+}
+
 @ComponentBindings()
 export class DataGridToolbar {
-  @OneWay() items?: (string | dxToolbarItem)[];
+  @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
 }
 
 @ComponentBindings()
