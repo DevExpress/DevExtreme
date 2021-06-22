@@ -6,6 +6,7 @@ import { isNumeric, isObject } from '../../../core/utils/type';
 import { current as currentTheme } from '../../themes';
 
 import timeZoneUtils from '../utils.timeZone';
+import { ExpressionUtils } from '../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -19,6 +20,7 @@ const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 class BaseRenderingStrategy {
     constructor(instance) {
         this.instance = instance;
+        this.key = this.instance.key;
         this._initPositioningStrategy();
     }
 
@@ -505,7 +507,7 @@ class BaseRenderingStrategy {
         }
 
         const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
         if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {

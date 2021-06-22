@@ -54,7 +54,7 @@ import SchedulerWorkSpaceDay from './workspaces/ui.scheduler.work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
-import AppointmentAdapter from './appointmentAdapter';
+import { createAppointmentAdapter } from './appointmentAdapter';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import { utils } from './utils';
@@ -66,6 +66,7 @@ import {
     getTimeZoneCalculator
 } from './instanceFactory';
 import { getCellGroups } from './resources/utils';
+import { ExpressionUtils } from './expressionUtils';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -970,9 +971,11 @@ class Scheduler extends Widget {
     }
 
     updateFactoryInstances() {
+        const model = this._options._optionManager._options;
         this.key = createFactoryInstances({
             key: this.key,
             scheduler: this,
+            model,
             getIsVirtualScrolling: this.isVirtualScrolling.bind(this),
             resources: this.option('resources'),
             dataSource: this._dataSource,
@@ -1206,9 +1209,9 @@ class Scheduler extends Widget {
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        super._dispose();
-
         disposeFactoryInstances(this.key);
+
+        super._dispose();
     }
 
     _initActions() {
@@ -1246,8 +1249,10 @@ class Scheduler extends Widget {
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
 
-        this._appointmentTooltip = new (this.option('adaptivityEnabled') ?
-            MobileTooltipStrategy : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
+        this._appointmentTooltip = new (this.option('adaptivityEnabled')
+            ? MobileTooltipStrategy
+            : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
+
         this._appointmentPopup = new AppointmentPopup(this);
 
         if(this._isLoaded() || this._isDataSourceLoading()) {
@@ -1276,12 +1281,12 @@ class Scheduler extends Widget {
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
             createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format),
-            getAppointmentDisabled: appointment => this.createAppointmentAdapter(appointment).disabled
+            getAppointmentDisabled: (appointment) => createAppointmentAdapter(this.key, appointment).disabled
         };
     }
 
     checkAndDeleteAppointment(appointment, targetedAppointment) {
-        const targetedAdapter = this.createAppointmentAdapter(targetedAppointment);
+        const targetedAdapter = createAppointmentAdapter(this.key, targetedAppointment);
 
         this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
             this.deleteAppointment(appointment);
@@ -1677,7 +1682,7 @@ class Scheduler extends Widget {
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
         delete this._updatedRecAppointment;
 
-        const recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
+        const recurrenceRule = ExpressionUtils.getField(this.key, 'recurrenceRule', targetAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
@@ -1710,8 +1715,8 @@ class Scheduler extends Widget {
     }
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const appointment = this.createAppointmentAdapter({ ...rawAppointment });
-        const newAppointment = this.createAppointmentAdapter(newRawAppointment);
+        const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
+        const newAppointment = createAppointmentAdapter(this.key, newRawAppointment);
 
         newAppointment.recurrenceRule = '';
         newAppointment.recurrenceException = '';
@@ -1792,7 +1797,7 @@ class Scheduler extends Widget {
         const isValidDate = date => !isNaN(new Date(date).getTime());
 
         const targetCell = this.getTargetCellData();
-        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
 
         const cellStartDate = getConvertedFromGrid(targetCell.startDate);
         const cellEndDate = getConvertedFromGrid(targetCell.endDate);
@@ -1825,7 +1830,7 @@ class Scheduler extends Widget {
             resultedStartDate = timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
-        const result = this.createAppointmentAdapter({});
+        const result = createAppointmentAdapter(this.key, {});
         if(targetCell.allDay !== undefined) {
             result.allDay = targetCell.allDay;
         }
@@ -1864,7 +1869,7 @@ class Scheduler extends Widget {
 
         const appointmentIndex = $(element).data(this._appointments._itemIndexKey());
 
-        const adapter = this.createAppointmentAdapter(appointment);
+        const adapter = createAppointmentAdapter(this.key, appointment);
         const targetedAdapter = adapter.clone();
 
         if(this._isAgenda() && adapter.isRecurrent) {
@@ -2035,7 +2040,7 @@ class Scheduler extends Widget {
             return getTimeZoneCalculator(this.key).createDate(date, { path: 'toGrid' });
         };
 
-        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
 
         let startDate = new Date(appointment.startDate);
         let endDate = new Date(appointment.endDate);
@@ -2110,7 +2115,7 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
-        const appointment = this.createAppointmentAdapter(rawTargetedAppointment || rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, (rawTargetedAppointment || rawAppointment));
         const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
         this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
@@ -2179,7 +2184,7 @@ class Scheduler extends Widget {
     }
 
     addAppointment(rawAppointment) {
-        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
         appointment.text = appointment.text || '';
 
         const serializedAppointment = appointment.source(true);
@@ -2237,15 +2242,6 @@ class Scheduler extends Widget {
         return isDefined(this.option('firstDayOfWeek'))
             ? this.option('firstDayOfWeek')
             : dateLocalization.firstDayOfWeekIndex();
-    }
-
-    createAppointmentAdapter(rawAppointment) {
-        const options = {
-            key: this.key,
-            getField: (rawAppointment, property) => this.fire('getField', property, rawAppointment),
-            setField: (rawAppointment, property, value) => this.fire('setField', property, rawAppointment, value),
-        };
-        return new AppointmentAdapter(rawAppointment, options);
     }
 
     /**
