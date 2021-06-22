@@ -1,71 +1,202 @@
-import browser from 'core/utils/browser';
+import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
-import { extend } from 'core/utils/extend';
+import { setWindow, getWindow } from 'core/utils/window';
+
+const LOAD_PANEL_CLASS = 'dx-loadpanel';
 
 const LoadPanelTests = {
     runTests(moduleConfig, exportFunc, getComponent, document) {
         QUnit.module('LoadPanel', moduleConfig, () => {
-            [undefined, { enabled: true, text: 'Export to .Extention...' }].forEach((loadPanelConfig) => {
-                QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
+            [undefined,
+                { enabled: true },
+                { enabled: true, text: 'Export to .Extention...' },
+                { animation:
+                    {
+                        easing: 'linear',
+                        duration: 500
+                    },
+                height: 50,
+                width: 100,
+                showIndicator: false,
+                showPane: false,
+                }
+            ].forEach((loadPanelConfig) => {
+                QUnit.test(`loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
                     const done = assert.async();
                     const component = getComponent();
 
-                    let actualLoadPanelSettingsOnExporting;
-                    let loadPanelOnShownHandlerCallCount = 0;
+                    const {
+                        animation = null,
+                        enabled = true,
+                        height = 90,
+                        indicatorSrc = '',
+                        showIndicator = true,
+                        showPane = true,
+                        text = 'Exporting...',
+                        width = 200,
+                    } = loadPanelConfig = {};
 
-                    const getLoadPanelOptions = () => {
-                        const instance = component._getInternalInstance ? component._getInternalInstance() : component;
-                        return instance.option('loadPanel');
-                    };
+                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, showIndicator, showPane, text, width };
 
-                    const loadPanelOnShownHandler = () => {
-                        loadPanelOnShownHandlerCallCount++;
-                        actualLoadPanelSettingsOnExporting = extend({}, getLoadPanelOptions());
-                    };
+                    let isFirstCall = true;
+                    let loadPanel;
 
-                    component.option('loadPanel.onShown', loadPanelOnShownHandler);
+                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelConfig, customizeCell: () => {
+                        if(isFirstCall) {
+                            const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                            assert.strictEqual($loadPanel.length, 1, 'loadPanel rendered');
 
-                    const initialLoadPanelSettings = extend({}, getLoadPanelOptions());
-                    const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
+                            loadPanel = $loadPanel.dxLoadPanel('instance');
+                            assert.strictEqual(loadPanel.option('visible'), true, 'loadPanel should be shown on export');
 
-                    if(component.NAME === 'dxDataGrid' && browser.webkit) {
-                        extend(expectedLoadPanelSettingsOnExporting, { animation: null });
-                    }
+                            for(const optionName in expectedOptions) {
+                                assert.strictEqual(loadPanel.option(optionName), expectedOptions[optionName], `loadPanel.${optionName}`);
+                            }
+                            isFirstCall = false;
+                        }
+                    } }).then(() => {
+                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
 
-                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelConfig }).then(() => {
-                        assert.strictEqual(loadPanelOnShownHandlerCallCount, 1, 'loadPanel should be shown on Exporting');
-                        assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'loadPanel settings on exporting');
-                        assert.deepEqual(getLoadPanelOptions(), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
                         done();
                     });
                 });
             });
 
-            QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
-                assert.expect();
+            QUnit.test('loadPanel: { enabled: true }, $targetElement.height() > $window.height()', function(assert) {
                 const done = assert.async();
                 const component = getComponent();
 
-                let loadPanelOnShownHandlerCallCount = 0;
+                let isFirstCall = true;
+                let loadPanel;
+                let $targetElement;
+                let $loadPanelContainer;
 
-                const loadPanelOnShownHandler = (e) => {
-                    loadPanelOnShownHandlerCallCount++;
-                };
+                if(component.NAME === 'dxDataGrid') {
+                    $targetElement = component.$element().find('.dx-datagrid-rowsview');
+                    $targetElement.height(5000);
+                    $loadPanelContainer = component.$element().find('.dx-gridbase-container');
+                } else {
+                    // pivot
+                }
 
-                component.option('loadPanel.onShown', loadPanelOnShownHandler);
-                const initialLoadPanelSettings = component.option('loadPanel');
+                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                    if(isFirstCall) {
+                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($loadPanel.length, 1, 'loadPanel rendered');
 
-                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: false } }).then(() => {
-                    assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
-                    assert.deepEqual(component.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings');
+                        loadPanel = $loadPanel.dxLoadPanel('instance');
+                        assert.strictEqual(loadPanel.option('visible'), true, 'loadPanel should be shown on export');
+
+                        const actualPosition = loadPanel.option('position')();
+
+                        assert.deepEqual(actualPosition.of, $(getWindow()), 'loadPanel.position.of');
+                        assert.strictEqual(actualPosition.collision, 'fit', 'loadPanel.position.collision');
+                        assert.deepEqual(actualPosition.boundary, $targetElement, 'loadPanel.position.boundary');
+
+                        assert.strictEqual(loadPanel.option('container').get(0), $loadPanelContainer.get(0), 'loadPanel.container');
+                        isFirstCall = false;
+                    }
+                } }).then(() => {
+                    const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
+
                     done();
                 });
             });
 
+            QUnit.test('loadPanel: { enabled: true }, $targetElement.height() < $window.height()', function(assert) {
+                const done = assert.async();
+                const component = getComponent();
+
+                let isFirstCall = true;
+                let loadPanel;
+                let $targetElement;
+                let $loadPanelContainer;
+
+                if(component.NAME === 'dxDataGrid') {
+                    $targetElement = component.$element().find('.dx-datagrid-rowsview');
+                    $targetElement.height(100);
+                    $loadPanelContainer = component.$element().find('.dx-gridbase-container');
+                } else {
+                    // pivot
+                }
+
+                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                    if(isFirstCall) {
+                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($loadPanel.length, 1, 'loadPanel rendered');
+
+                        loadPanel = $loadPanel.dxLoadPanel('instance');
+                        assert.strictEqual(loadPanel.option('visible'), true, 'loadPanel should be shown on export');
+
+                        assert.deepEqual(loadPanel.option('position')(), { of: $targetElement }, 'loadPanel.position');
+                        assert.strictEqual(loadPanel.option('container').get(0), $loadPanelContainer.get(0), 'loadPanel.container');
+                        isFirstCall = false;
+                    }
+                } }).then(() => {
+                    const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
+
+                    done();
+                });
+            });
+
+            QUnit.test('loadPanel: { enabled: false }', function(assert) {
+                assert.expect(2);
+                const done = assert.async();
+                const component = getComponent();
+
+                let isFirstCall = true;
+
+                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: false }, customizeCell: () => {
+                    if(isFirstCall) {
+                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist');
+
+                        isFirstCall = false;
+                    }
+                } }).then(() => {
+                    const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
+
+                    done();
+                });
+            });
+
+            QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
+                assert.expect(2);
+                const done = assert.async();
+                const component = getComponent();
+
+                let isFirstCall = true;
+                setWindow({ }, false);
+
+                try {
+                    exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                        if(isFirstCall) {
+                            const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                            assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist');
+
+                            isFirstCall = false;
+                        }
+                    } }).then(() => {
+                        const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
+
+                        done();
+                    });
+                } finally {
+                    setWindow(window);
+                }
+
+            });
+
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-                QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
+                QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {
+                    assert.expect(4);
                     const done = assert.async();
                     const locale = localization.locale();
 
@@ -83,19 +214,25 @@ const LoadPanelTests = {
                         localization.locale('ja');
 
                         const component = getComponent();
-                        const internalComponent = component._getInternalInstance ? component._getInternalInstance() : component;
 
+                        let isFirstCall = true;
+                        let loadPanel;
 
-                        let actualLoadPanelText;
+                        exportFunc({ component: component, [document]: this[document], customizeCell: () => {
+                            if(isFirstCall) {
+                                const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                                assert.strictEqual($loadPanel.length, 1, 'loadPanel exist');
 
-                        const loadPanelOnShownHandler = () => {
-                            actualLoadPanelText = internalComponent.option('loadPanel').text;
-                        };
+                                loadPanel = $loadPanel.dxLoadPanel('instance');
+                                assert.strictEqual(loadPanel.option('visible'), true, 'loadPanel.visible');
+                                assert.strictEqual(loadPanel.option('message'), localizationText.expected, 'loadPanel.text');
 
-                        component.option('loadPanel.onShown', loadPanelOnShownHandler);
+                                isFirstCall = false;
+                            }
+                        } }).then(() => {
+                            const $loadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                            assert.strictEqual($loadPanel.length, 0, 'loadPanel not exist after export');
 
-                        exportFunc({ component: component, [document]: this[document] }).then(() => {
-                            assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
                             done();
                         });
                     } finally {
