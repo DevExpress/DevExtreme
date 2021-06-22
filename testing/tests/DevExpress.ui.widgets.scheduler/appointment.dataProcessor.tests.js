@@ -3,25 +3,18 @@ import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
 
-const timeZoneCalculator = {
-    createDate: date => date
-};
-
 const {
     module,
     test
 } = QUnit;
 
-const schedulerMock = {
-    isVirtualScrolling: () => false,
-    option: (name) => {
-
-    },
-    _options: {
-        scrolling: {
-            mode: 'standard'
-        }
-    }
+const createAppointmentDataProvider = (options) => {
+    return new AppointmentDataProvider({
+        ...options,
+        timeZoneCalculator: ({
+            createDate: date => date
+        })
+    });
 };
 
 module('Server side filtering', () => {
@@ -42,16 +35,16 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 },
-            }
+            }),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
@@ -78,16 +71,16 @@ module('Server side filtering', () => {
             store: data,
             filter: ['text', '=', 'Appointment 2']
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 },
-            }
+            })
         });
         const dateFilter = [
             [
@@ -132,11 +125,11 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -160,7 +153,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
@@ -173,7 +166,7 @@ module('Server side filtering', () => {
             appointmentDataProvider.filterLoadedAppointments({
                 startDayHour: 3,
                 endDayHour: 4
-            }, timeZoneCalculator);
+            });
 
             assert.equal(appointmentDataProvider.filterMaker._filterRegistry.user, undefined, 'Empty user filter');
         });
@@ -197,16 +190,16 @@ module('Server side filtering', () => {
             filter: [dateFilter, ['text', '=', 'Appointment 2']]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
@@ -238,16 +231,16 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = new AppointmentDataProvider({
+            const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
-                scheduler: schedulerMock,
                 dataSource,
-                appointmentDataAccessors: {
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
                     }
-                }
+                })
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -288,16 +281,16 @@ module('Server side filtering', () => {
                     }
                 ]
             });
-            const appointmentDataProvider = new AppointmentDataProvider({
+            const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
-                scheduler: schedulerMock,
                 dataSource,
-                appointmentDataAccessors: {
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => ({
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
                     }
-                }
+                })
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -336,16 +329,16 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: data,
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
@@ -363,16 +356,16 @@ module('Server side filtering', () => {
             }]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
@@ -393,17 +386,17 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'AllDay'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
@@ -423,17 +416,17 @@ module('Server side filtering', () => {
             store: tasks
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'AllDay'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
@@ -459,18 +452,18 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: recurrentAppts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: '_recurrenceRule'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -496,18 +489,18 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'allDay',
                     recurrenceRuleExpr: null
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -534,18 +527,18 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'allDay',
                     recurrenceRuleExpr: ''
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -565,17 +558,17 @@ module('Server side filtering', () => {
         const dataSource = new DataSource({
             store: appts
         });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 expr: {
                     startDateExpr: 'startDate',
                     endDateExpr: 'endDate',
                     allDayExpr: 'allDay'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
@@ -595,11 +588,11 @@ module('Server side filtering', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -623,7 +616,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
@@ -636,7 +629,7 @@ module('Server side filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 1, 0),
             max: new Date(2015, 0, 3)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
     });
@@ -653,11 +646,11 @@ module('Server side filtering', () => {
             filter: ['priorityId', '=', 1]
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -672,7 +665,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
@@ -695,11 +688,11 @@ module('Server side filtering', () => {
 module('Client side after filtering', () => {
     test('Loaded appointments should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -720,7 +713,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -730,18 +723,18 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], 'Appointments are OK');
     });
 
     test('Loaded appointments on the borders should be filtered by start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -762,7 +755,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
@@ -771,18 +764,18 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3,
             endDayHour: 7
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], 'Appointments are OK. Appointment \'a\' was filtered');
     });
 
     test('Loaded appointments should be filtered by decimal start & end day hours', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -803,7 +796,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
@@ -813,18 +806,18 @@ module('Client side after filtering', () => {
         const appts = appointmentDataProvider.filterLoadedAppointments({
             startDayHour: 3.5,
             endDayHour: 7.5
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }], 'Appointments are OK');
     });
 
     test('Loaded appointments should be filtered by recurrence rule', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -845,7 +838,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -859,7 +852,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2014, 11, 31).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -869,11 +862,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -894,7 +887,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -905,7 +898,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 11, 7, 0).toString()
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -915,11 +908,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by recurrence rule correctly for day interval', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -940,7 +933,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -951,7 +944,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 5, 3, 0).toString(),
             max: new Date(2015, 0, 5, 7, 0).toString()
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
@@ -961,11 +954,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -983,7 +976,7 @@ module('Client side after filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: null
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -997,7 +990,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -1008,11 +1001,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1030,7 +1023,7 @@ module('Client side after filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: ''
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -1044,7 +1037,7 @@ module('Client side after filtering', () => {
             endDayHour: 7,
             min: new Date(2015, 0, 1).toString(),
             max: new Date(2015, 0, 1, 23, 59).toString()
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -1055,11 +1048,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by resources', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1080,7 +1073,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
@@ -1103,7 +1096,7 @@ module('Client side after filtering', () => {
                     items: [{ 'id': 1, 'text': 'a' }, { 'id': 2, 'text': 'b' }]
                 }
             ]
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [
             { text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 },
@@ -1113,11 +1106,11 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by allDay field', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1134,7 +1127,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
@@ -1146,18 +1139,18 @@ module('Client side after filtering', () => {
             startDayHour: 3,
             endDayHour: 7,
             allDay: false
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
     });
 
     test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1178,7 +1171,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
@@ -1188,18 +1181,18 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 0, 1, 3),
             max: new Date(2015, 0, 1, 9, 59)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1216,7 +1209,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({
@@ -1230,18 +1223,18 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 1, 23, 1, 0),
             max: new Date(2015, 2, 1, 9, 59)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1258,7 +1251,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({
@@ -1272,18 +1265,18 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
             max: new Date(2015, 2, 8, 9, 59)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('Appointment between days should be filtered by start/endDayHour (T339519)', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1300,7 +1293,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.add({
@@ -1314,20 +1307,18 @@ module('Client side after filtering', () => {
             endDayHour: 10,
             min: new Date(2015, 2, 1, 1, 0),
             max: new Date(2015, 2, 8, 9, 59)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
 
     test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
         const dataSource = new DataSource({ store: [] });
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: {
-                ...schedulerMock,
-            },
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1348,7 +1339,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            },
+            }),
             appointmentDuration: 60
         });
 
@@ -1363,7 +1354,7 @@ module('Client side after filtering', () => {
             endDayHour: 24,
             min: new Date(2015, 2, 1),
             max: new Date(2015, 2, 8)
-        }, timeZoneCalculator);
+        });
 
         assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
     });
@@ -1383,11 +1374,11 @@ module('Virtual Scrolling', () => {
             store: appointments
         });
 
-        const appointmentDataProvider = new AppointmentDataProvider({
+        const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
-            scheduler: schedulerMock,
             dataSource,
-            appointmentDataAccessors: {
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => ({
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1411,7 +1402,7 @@ module('Virtual Scrolling', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            })
         });
 
         appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
@@ -1429,7 +1420,7 @@ module('Virtual Scrolling', () => {
                 min: new Date(2021, 8, 6, 9),
                 max: new Date(2021, 8, 6, 18),
                 allDay: false
-            }, timeZoneCalculator);
+            });
 
             assert.deepEqual(result, appointments, 'Items feltered correcly');
         });

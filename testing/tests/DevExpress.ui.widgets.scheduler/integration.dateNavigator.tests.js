@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import 'generic_light.css!';
 import dxPopup from 'ui/popup';
