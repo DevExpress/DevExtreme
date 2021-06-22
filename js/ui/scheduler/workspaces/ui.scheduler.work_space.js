@@ -479,7 +479,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'startDate':
                 this._cleanWorkSpace();
                 break;
-            case 'resourceManager':
             case 'groups':
                 this._cleanView();
                 this._removeAllDayElements();
