@@ -20209,6 +20209,10 @@ declare module DevExpress.ui {
      */
     items?: Array<dxTreeViewItem>;
     /**
+     * [descr:dxTreeViewItem.id]
+     */
+    id?: number | string;
+    /**
      * [descr:dxTreeViewItem.parentId]
      */
     parentId?: number | string;
