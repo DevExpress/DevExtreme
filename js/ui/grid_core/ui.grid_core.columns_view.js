@@ -18,8 +18,11 @@ import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import columnStateMixin from './ui.grid_core.column_state_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
+import { nativeScrolling } from '../../core/utils/support';
+
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
+const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
 const GROUP_SPACE_CLASS = 'group-space';
 const CONTENT_CLASS = 'content';
 const TABLE_CLASS = 'table';
@@ -824,6 +827,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _wrapTableInScrollContainer: function($table) {
         const $scrollContainer = $('<div>');
+
+        if(this.option('scrolling.useNative') === false || (this.option('scrolling.useNative') === 'auto' && !nativeScrolling)) {
+            $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
+        }
 
         eventsEngine.on($scrollContainer, 'scroll', () => {
             const scrollLeft = $scrollContainer.scrollLeft();
