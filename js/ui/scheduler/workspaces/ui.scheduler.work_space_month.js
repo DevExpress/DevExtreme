@@ -332,6 +332,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
         return options;
     }
+
+    _calculateCellIndex(rowIndex, columnIndex) {
+        return rowIndex * this._getCellCount() + columnIndex;
+    }
 }
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);

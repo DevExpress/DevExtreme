@@ -1655,9 +1655,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
     }
 
-    _getAllDayCellData(cell, rowIndex, columnIndex, groupIndex) {
+    _getAllDayCellData(cell, rowIndex, columnIndex) {
         let startDate = this._getDateByCellIndexes(rowIndex, columnIndex);
-        const cellGroupIndex = groupIndex || this._getGroupIndex(rowIndex, columnIndex);
 
         startDate = dateUtils.trimTime(startDate);
 
@@ -1665,14 +1664,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: startDate,
             endDate: startDate,
             allDay: true,
-            groupIndex: cellGroupIndex,
+            groupIndex: 0,
         };
 
         const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
-            cellGroupIndex,
-            this.option('groups')
-        );
+        const groupsArray = resourceManager.getCellGroups(0, this.option('groups'));
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1832,19 +1828,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     _prepareCellData(rowIndex, columnIndex) {
         const startDate = this._getDateByCellIndexes(rowIndex, columnIndex);
         const endDate = this.calculateEndDate(startDate);
-        const groupIndex = this._getGroupIndex(rowIndex, columnIndex);
         const data = {
             startDate: startDate,
             endDate: endDate,
             allDay: this._getTableAllDay(),
-            groupIndex,
+            groupIndex: 0,
         };
 
         const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
-            groupIndex,
-            this.option('groups')
-        );
+        const groupsArray = resourceManager.getCellGroups(0, this.option('groups'));
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1988,7 +1980,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getFormat() { return abstract(); }
 
     _calculateCellIndex(rowIndex, columnIndex) {
-        return rowIndex * this._getCellCount() + columnIndex;
+        return columnIndex * this._getRowCount() + rowIndex;
     }
 
     _renderTableBody(options, delayCellTemplateRendering) {
