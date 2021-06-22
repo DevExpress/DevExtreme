@@ -1,4 +1,8 @@
 import dateUtils from '../../../core/utils/date';
+import dateLocalization from '../../../localization/date';
+import { isFunction } from '../../../core/utils/type';
+
+const DAY_FORMAT = 'd';
 
 const DAYS_IN_WORK_WEEK = 5;
 
@@ -8,6 +12,10 @@ const {
     getLastMonthDay,
     addDateInterval
 } = dateUtils;
+
+const {
+    format: formatDate
+} = dateLocalization;
 
 const MS_DURATION = { milliseconds: 1 };
 const DAY_DURATION = { days: 1 };
@@ -70,7 +78,7 @@ const nextAgendaStart = (date, agendaDuration) => {
     return addDateInterval(date, { days: agendaDuration }, 1);
 };
 
-export const getInterval = (options) => {
+const getInterval = (options) => {
     const startDate = getIntervalStartDate(options);
     const endDate = getIntervalEndDate(startDate, options);
 
@@ -194,18 +202,116 @@ const getNextMonthDate = (date, intervalCount, direction) => {
     return thatMonthMinDate;
 };
 
-export const getDuration = (options) => {
-    const { intervalCount, agendaDuration, step } = options;
+const getDateMonthFormatter = (isShort) => {
+    const monthType = isShort ? 'abbreviated' : 'wide';
+    const months = dateLocalization.getMonthNames(monthType);
 
-    switch(step) {
-        case 'day':
-            return 1 * intervalCount;
-        case 'week':
-        case 'workWeek':
-            return 7 * intervalCount;
-        case 'month':
-            return 1 * intervalCount;
-        case 'agenda':
-            return agendaDuration;
+    return (date) => {
+        const day = formatDate(date, 'day');
+
+        const month = months[date.getMonth()];
+
+        return `${day} ${month}`;
+    };
+};
+
+const formatMonthYear = (date) => {
+    const months = dateLocalization.getMonthNames('abbreviated');
+    const month = months[date.getMonth()];
+
+    const year = formatDate(date, 'year');
+
+    return `${month} ${year}`;
+};
+
+const getDateMonthYearFormatter = (isShort) => {
+    return (date) => {
+        const dateMonthFormat = getDateMonthFormatter(isShort);
+        const dateMonth = dateMonthFormat(date);
+
+        const year = formatDate(date, 'year');
+
+        return `${dateMonth} ${year}`;
+    };
+};
+
+const getDifferentYearCaption = (startDate, endDate) => {
+    const firstDateText = formatDate(startDate, getDateMonthYearFormatter(true));
+    const lastDateDateText = formatDate(endDate, getDateMonthYearFormatter(true));
+
+    return `${firstDateText}-${lastDateDateText}`;
+};
+
+const getSameYearCaption = (startDate, endDate, isShort) => {
+    const isDifferentMonthDates = startDate.getMonth() !== endDate.getMonth();
+    const useShortFormat = isDifferentMonthDates || isShort;
+
+    const firstDateFormat = isDifferentMonthDates
+        ? getDateMonthFormatter(useShortFormat)
+        : DAY_FORMAT;
+
+    const firstDateText = formatDate(startDate, firstDateFormat);
+    const lastDateText = formatDate(endDate, getDateMonthYearFormatter(useShortFormat));
+
+    return `${firstDateText}-${lastDateText}`;
+};
+
+const getSameDateCaption = (date, step, isShort) => {
+    const useShortFormat = step === 'agenda' ? isShort : false;
+
+    const dateMonthFormat = getDateMonthFormatter(useShortFormat);
+
+    const dateMonth = dateMonthFormat(date);
+    const year = formatDate(date, 'year');
+
+    return `${dateMonth} ${year}`;
+};
+
+const formatCaptionByMonths = (startDate, endDate, isShort) => {
+    const isDifferentYears = startDate.getFullYear() !== endDate.getFullYear();
+
+    if(isDifferentYears) {
+        return getDifferentYearCaption(startDate, endDate);
     }
+
+    return getSameYearCaption(startDate, endDate, isShort);
+};
+
+const formatMonthViewCaption = (startDate, endDate) => {
+    if(dateUtils.sameMonth(startDate, endDate)) {
+        return formatDate(startDate, 'monthandyear');
+    }
+
+    const isSameYear = dateUtils.sameYear(startDate, endDate);
+
+    const firstDateText = isSameYear
+        ? dateLocalization.getMonthNames('abbreviated')[startDate.getMonth()]
+        : formatMonthYear(startDate);
+    const lastDateText = formatMonthYear(endDate);
+
+    return `${firstDateText}-${lastDateText}`;
+};
+
+const getCaptionText = (startDate, endDate, isShort, step) => {
+    if(dateUtils.sameDate(startDate, endDate)) {
+        return getSameDateCaption(startDate, step, isShort);
+    }
+
+    if(step === 'month') {
+        return formatMonthViewCaption(startDate, endDate);
+    }
+
+    return formatCaptionByMonths(startDate, endDate, isShort);
+};
+
+export const getCaption = (options, isShort, customizationFunction) => {
+    const { startDate, endDate } = getInterval(options);
+
+    let text = getCaptionText(startDate, endDate, isShort, options.step);
+
+    if(isFunction(customizationFunction)) {
+        text = customizationFunction({ startDate, endDate, text });
+    }
+
+    return { startDate, endDate, text };
 };
