@@ -119,7 +119,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _renderTimePanel() { return noop(); }
     _renderAllDayPanel() { return noop(); }
-    _getTableAllDay() { return noop(); }
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 

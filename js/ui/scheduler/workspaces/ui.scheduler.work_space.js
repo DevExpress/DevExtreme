@@ -1047,7 +1047,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isGroupedAllDayPanel() {
-        return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
+        return this.isAllDayPanelVisible && this._isVerticalGroupedWorkSpace();
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
@@ -1631,7 +1631,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: this._getAllDayCellData.bind(this),
+            // TODO: remove along with old render
+            getCellData: this._oldRender_getAllDayCellData(index),
             groupIndex: index
         }, true);
 
@@ -1791,7 +1792,24 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: DATE_TABLE_ROW_CLASS,
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: this._getCellData.bind(this),
+            // TODO: remove along with old render
+            getCellData: (_, rowIndex, columnIndex) => {
+                const isGroupedAllDayPanel = this.isGroupedAllDayPanel();
+                let validRowIndex = rowIndex;
+
+                if(isGroupedAllDayPanel) {
+                    const rowCount = this._getRowCount();
+                    const allDayPanelsCount = Math.ceil(rowIndex / rowCount);
+                    validRowIndex += allDayPanelsCount;
+                }
+
+                const cellData = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex].cellData;
+
+                return {
+                    value: this._filterCellDataFields(cellData),
+                    key: CELL_DATA,
+                };
+            },
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
             groupByDate: this.option('groupByDate')
@@ -1831,7 +1849,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: this._getTableAllDay(),
+            allDay: false,
             groupIndex: 0,
         };
 
@@ -1847,10 +1865,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndex(rowIndex, columnIndex) {
         return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
-    }
-
-    _getTableAllDay() {
-        return false;
     }
 
     calculateEndDate(startDate) {
@@ -2412,9 +2426,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.cellsSelectionState.getSelectedCells();
     }
 
-    getCellData($cell) {
-        const cellData = this._getFullCellData($cell) || {};
-
+    _filterCellDataFields(cellData) {
         return extend(true, {}, {
             startDate: cellData.startDate,
             endDate: cellData.endDate,
@@ -2422,6 +2434,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
         });
+    }
+
+    getCellData($cell) {
+        const cellData = this._getFullCellData($cell) || {};
+
+        return this._filterCellDataFields(cellData);
     }
 
     _getFullCellData($cell) {
@@ -3238,6 +3256,43 @@ class SchedulerWorkSpace extends WidgetObserver {
             width: cellRect.width,
             height: cellRect.height,
         });
+    }
+
+    // TODO: remove along with old render
+    _oldRender_getAllDayCellData(groupIndex) {
+        return (cell, rowIndex, columnIndex) => {
+            const validColumnIndex = columnIndex % this._getCellCount();
+            let startDate = this._getDateByCellIndexes(rowIndex, validColumnIndex);
+
+            startDate = dateUtils.trimTime(startDate);
+
+            let validGroupIndex = groupIndex || 0;
+
+            if(this.isGroupedByDate()) {
+                validGroupIndex = Math.floor(columnIndex / this._getGroupCount());
+            } else if(this._isHorizontalGroupedWorkSpace()) {
+                validGroupIndex = Math.floor(columnIndex / this._getCellCount());
+            }
+
+            const data = {
+                startDate: startDate,
+                endDate: startDate,
+                allDay: true,
+                groupIndex: validGroupIndex,
+            };
+
+            const resourceManager = this.invoke('getResourceManager');
+            const groupsArray = resourceManager.getCellGroups(validGroupIndex, this.option('groups'));
+
+            if(groupsArray.length) {
+                data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
+            }
+
+            return {
+                key: CELL_DATA,
+                value: data
+            };
+        };
     }
 }
 
