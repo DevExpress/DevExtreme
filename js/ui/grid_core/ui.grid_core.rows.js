@@ -261,13 +261,17 @@ export const rowsModule = {
                 _handleScroll: function(e) {
                     const that = this;
                     const rtlEnabled = that.option('rtlEnabled');
+                    const isNativeScrolling = e.component.option('useNative');
 
                     that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
-                        e.scrollOffset.left = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+
+                        if(isNativeScrolling) {
+                            e.scrollOffset.left = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                        }
 
                         if(!this.isScrollbarVisible(true)) {
                             this._scrollLeft = -1;
