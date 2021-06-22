@@ -403,14 +403,15 @@ export default class TableResizingModule extends BaseModule {
 
         const columnsWidths = [];
 
+        let columnSum;
+
         let ratio = 1;
 
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
+            columnSum += columnWidth;
             columnsWidths[index] = columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH;
         });
-
-        const columnSum = columnsWidths.reduce((a, b) => a + b, 0);
 
         if(columnSum > tableWidth - 1) {
             ratio = tableWidth / columnSum;
