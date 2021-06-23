@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
@@ -12,28 +12,11 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const {
     test,
     module
 } = QUnit;
-
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
-};
 
 module('Work Space Base', {
     beforeEach: function() {
@@ -49,9 +32,8 @@ module('Work Space Base', {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
@@ -87,9 +69,8 @@ module('Work Space Base', {
         QUnit.module(viewName, {
             beforeEach: function() {
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => false
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {}
                 });
                 const observer = getObserver(key);
 

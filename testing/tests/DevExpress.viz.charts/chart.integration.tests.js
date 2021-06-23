@@ -2506,6 +2506,23 @@ const VALIDATE_PIECHART_GROUPS = [
     'dxc-annotations'
 ];
 
+const VALIDATE_POLARCHART_GROUPS = [
+    'dxc-background',
+    'dxc-strips-group',
+    'dxc-grids-group',
+    'dxc-axes-group',
+    'dxc-elements-axes-group',
+    'dxc-strips-labels-group',
+    'dxc-constant-lines-group',
+    'dxc-series-group',
+    'dxc-constant-lines-group',
+    'dxc-scale-breaks',
+    'dxc-labels-group',
+    'dxc-crosshair-cursor',
+    'dxc-legend',
+    'dxc-annotations',
+];
+
 QUnit.test('Legend inside position', function(assert) {
     const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
@@ -3105,7 +3122,7 @@ QUnit.test('Add extra ticks (endOnTick) for extend visualRange and hide overlapp
     });
 
     assert.deepEqual(chart._argumentAxes[0].visualRange(), { startValue: 11, endValue: 25 }, 'extend visualRange');
-    assert.equal(chart._argumentAxes[0]._majorTicks[14].label.element.clientWidth, 0, 'hidden label');
+    assert.strictEqual(chart._argumentAxes[0]._majorTicks[14].label, null, 'hidden label');
 });
 
 QUnit.test('Set/reset the visualRange by API methods', function(assert) {
@@ -3321,6 +3338,37 @@ QUnit.test('Correct canvas for inverted value axis', function(assert) {
 
     assert.roughEqual(canvas.endPadding, 0, 0.5);
     assert.roughEqual(canvas.startPadding, 10.5, 0.5);
+});
+
+QUnit.test('groups order', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 0,
+        val: 4
+    }, {
+        arg: 90,
+        val: 5
+    }, {
+        arg: 180,
+        val: 7
+    }, {
+        arg: 270,
+        val: 0
+    }, {
+        arg: 360,
+        val: 10
+    }];
+
+    const chart = this.createPolarChart({
+        dataSource: dataSource,
+        series: { type: 'line' },
+    });
+
+    const root = $(chart._renderer.root.element);
+    const groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
+    const groups = root.find('>' + groupTag);
+
+    checkOrder(assert, groups, VALIDATE_POLARCHART_GROUPS);
 });
 
 QUnit.module('T576725', $.extend({}, moduleSetup, {

@@ -998,4 +998,39 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.pageSize(), 10, 'pageSize from stateStoring is applied');
     });
+
+    // T1004507
+    QUnit.test('Header container should have padding-right after expanding the master detail when using native scrolling', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 0, field1: 'test1', field2: 'test2', field3: 'test3' }],
+            keyExpr: 'id',
+            columns: ['field1', 'field2', 'field3'],
+            columnMinWidth: 100,
+            scrolling: {
+                useNative: true
+            },
+            width: 150,
+            height: 200,
+            masterDetail: {
+                enabled: true,
+                template: function() {
+                    return $('<div/>').css({
+                        height: '300px',
+                        width: '100px'
+                    });
+                }
+            }
+        });
+
+        // assert
+        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+
+        // act
+        dataGrid.expandRow(0);
+
+        // assert
+        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+    });
 });

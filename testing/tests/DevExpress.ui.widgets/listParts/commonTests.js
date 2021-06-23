@@ -4,6 +4,7 @@ import { isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
@@ -3248,6 +3249,64 @@ QUnit.module('scrollView integration', {
 
         instance.scrollToItem(items[0]);
         assert.strictEqual(getCallSpy.callCount, 0);
+    });
+
+    QUnit.test('list should load new items if the new height allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 10);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 10, 'second page loaded');
+    });
+
+    QUnit.test('list should not load new items if the new height does not allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 2);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 5, 'new page has not been loaded');
     });
 });
 

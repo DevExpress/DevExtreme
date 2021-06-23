@@ -684,11 +684,3 @@ export class ResourceManager {
         return result;
     }
 }
-
-const resourceManagers = { };
-export const createResourceManager = (key, resources) => {
-    const validKey = key || 0;
-    resourceManagers[validKey] = new ResourceManager(resources);
-};
-export const getResourceManager = (key) => resourceManagers[key];
-export const removeResourceManager = (key) => resourceManagers[key] = null;

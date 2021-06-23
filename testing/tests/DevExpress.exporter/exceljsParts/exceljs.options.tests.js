@@ -1,6 +1,6 @@
 import messageLocalization from 'localization/message';
 import { runCommonOptionTests } from '../commonParts/options.tests.js';
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
 import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSOptionTests = {
@@ -48,7 +48,7 @@ const ExcelJSOptionTests = {
                 const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).loadPanel, defaultLoadPanel, 'no member');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: null }).loadPanel, defaultLoadPanel, 'undefined');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');

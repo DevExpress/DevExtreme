@@ -122,13 +122,15 @@ export const Export = {
             mergeRowFieldValues,
             mergeColumnFieldValues,
         } = options;
+        const internalComponent = component._getInternalInstance?.() || component;
 
-        const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
-        if('animation' in component.option('loadPanel')) {
+        const initialLoadPanelOptions = extend({}, internalComponent.option('loadPanel'));
+
+        if('animation' in internalComponent.option('loadPanel')) {
             loadPanel.animation = null;
         }
 
-        this.setLoadPanelOptions(component, loadPanel, helpers._renderLoadPanel);
+        this.setLoadPanelOptions(internalComponent, loadPanel, helpers._renderLoadPanel);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -190,7 +192,7 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this.setLoadPanelOptions(component, initialLoadPanelOptions, helpers._renderLoadPanel);
+                this.setLoadPanelOptions(internalComponent, initialLoadPanelOptions, helpers._renderLoadPanel);
             });
         });
     },

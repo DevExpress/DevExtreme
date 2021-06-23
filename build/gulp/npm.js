@@ -130,4 +130,4 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));
+gulp.task('npm', gulp.series('npm-sources', 'ts-check-public-modules', 'npm-sass'));

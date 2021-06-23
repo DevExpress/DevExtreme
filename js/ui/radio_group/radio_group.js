@@ -3,7 +3,6 @@ import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { deferRender } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import * as inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';
@@ -110,10 +109,6 @@ class RadioCollection extends CollectionWidget {
 }
 
 class RadioGroup extends Editor {
-    _clean() {
-        delete this._inkRipple;
-        super._clean();
-    }
 
     _dataSourceOptions() {
         return { paginate: false };
@@ -156,11 +151,7 @@ class RadioGroup extends Editor {
 
             activeStateEnabled: true,
 
-            layout: 'vertical',
-
-            useInkRipple: false
-
-
+            layout: 'vertical'
         }));
     }
 
@@ -184,7 +175,6 @@ class RadioGroup extends Editor {
         this._renderSubmitElement();
         this.setAria('role', 'radiogroup');
         this._renderRadios();
-        this.option('useInkRipple') && this._renderInkRipple();
         this._renderLayout();
         super._initMarkup();
     }
@@ -210,7 +200,6 @@ class RadioGroup extends Editor {
         this._dataExpressionOptionChanged(args);
 
         switch(name) {
-            case 'useInkRipple':
             case 'dataSource':
                 this._invalidate();
                 break;
@@ -249,14 +238,6 @@ class RadioGroup extends Editor {
     _render() {
         super._render();
         this._updateItemsSize();
-    }
-
-    _renderInkRipple() {
-        this._inkRipple = inkRipple.render({
-            waveSizeCoefficient: 3.3,
-            useHoldAnimation: false,
-            isCentered: true
-        });
     }
 
     _renderLayout() {
@@ -328,19 +309,6 @@ class RadioGroup extends Editor {
 
     _setCollectionWidgetOption() {
         this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
-    }
-
-    _toggleActiveState($element, value, e) {
-        super._toggleActiveState($element, value, e);
-
-        if(this._inkRipple) {
-            const event = {
-                element: $element.find(`.${RADIO_BUTTON_ICON_CLASS}`),
-                event: e
-            };
-
-            value ? this._inkRipple.showWave(event) : this._inkRipple.hideWave(event);
-        }
     }
 
     _updateItemsSize() {

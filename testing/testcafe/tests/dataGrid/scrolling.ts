@@ -247,7 +247,7 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
     .expect(visibleRows[0].key)
     .eql(1);
 }).before(async () => {
-  const getItems = function (): Record<string, unknown>[] {
+  const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 1; i <= 25; i += 1) {
       const groupIndex = (i % 8) + 1;

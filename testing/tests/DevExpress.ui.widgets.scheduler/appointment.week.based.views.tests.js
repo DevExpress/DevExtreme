@@ -115,47 +115,44 @@ module('Integration: Appointment Day, Week views', {
             assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
         });
 
-        [true, false].forEach((renovateRender) => {
-            test(`DblClick on appointment should not affect the related cell start date (T395620) when renovateRender is ${renovateRender}`, function(assert) {
-                const scheduler = createInstanceBase({
-                    currentDate: new Date(2015, 1, 9),
-                    dataSource: [
-                        {
-                            text: 'Task 1',
-                            startDate: new Date(2015, 1, 9, 1, 0),
-                            endDate: new Date(2015, 1, 9, 2, 0)
-                        },
-                        {
-                            text: 'Task 2',
-                            startDate: new Date(2015, 1, 9, 3, 0),
-                            endDate: new Date(2015, 1, 9, 4, 0)
-                        }
-                    ],
-                    height: 600,
-                    renovateRender,
-                }, this.clock);
+        test('DblClick on appointment should not affect the related cell start date (T395620)', function(assert) {
+            const scheduler = createInstanceBase({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: [
+                    {
+                        text: 'Task 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Task 2',
+                        startDate: new Date(2015, 1, 9, 3, 0),
+                        endDate: new Date(2015, 1, 9, 4, 0)
+                    }
+                ],
+                height: 600,
+            }, this.clock);
 
-                sinon.stub(scheduler.instance, 'showAppointmentPopup');
+            sinon.stub(scheduler.instance, 'showAppointmentPopup');
 
-                try {
-                    const appointment = scheduler.appointmentList[0];
-                    const apptData = appointment.data;
+            try {
+                const appointment = scheduler.appointmentList[0];
+                const apptData = appointment.data;
 
-                    apptData.startDate = new Date(2015, 1, 9, 2);
+                apptData.startDate = new Date(2015, 1, 9, 2);
 
-                    appointment.dbClick();
+                appointment.dbClick();
 
-                    const cell = scheduler.workSpace.getCell(2, 0).get(0);
+                const cell = scheduler.workSpace.getCell(2, 0).get(0);
 
-                    const relatedCellData = !scheduler.instance.option('renovateRender')
-                        ? dataUtils.data(cell, 'dxCellData').startDate
-                        : scheduler.instance.getWorkSpace().getCellData($(cell)).startDate;
+                const relatedCellData = !scheduler.instance.option('renovateRender')
+                    ? dataUtils.data(cell, 'dxCellData').startDate
+                    : scheduler.instance.getWorkSpace().getCellData($(cell)).startDate;
 
-                    assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
-                } finally {
-                    scheduler.instance.showAppointmentPopup.restore();
-                }
-            });
+                assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
+            } finally {
+                scheduler.instance.showAppointmentPopup.restore();
+            }
         });
     });
 

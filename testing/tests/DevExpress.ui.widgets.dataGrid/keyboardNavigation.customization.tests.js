@@ -11,7 +11,7 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';

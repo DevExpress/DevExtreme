@@ -222,13 +222,13 @@ module('Work Space Week', () => {
             assert.roughEqual(coordinates.left, cellPosition.left, 0.01);
         });
 
-        test('getCoordinatesByDate should return rowIndex and cellIndex', function(assert) {
+        test('getCoordinatesByDate should return rowIndex and columnIndex', function(assert) {
             this.instance.option('currentDate', new Date(2015, 2, 4));
 
             const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 45));
 
             assert.equal(coords.rowIndex, 5, 'Row index is OK');
-            assert.equal(coords.cellIndex, 3, 'Cell index is OK');
+            assert.equal(coords.columnIndex, 3, 'Column index is OK');
         });
 
         test('Get first view date', function(assert) {
@@ -440,10 +440,9 @@ module('Work Space Week', () => {
     module('Group by date', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -507,10 +506,9 @@ module('Work Space Week', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -604,10 +602,9 @@ module('Work Space Work Week', () => {
     module('Default', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -668,10 +665,9 @@ module('Work Space Work Week', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 

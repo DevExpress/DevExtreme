@@ -5,8 +5,7 @@ import {
     AppointmentSettingsGeneratorBaseStrategy,
     AppointmentSettingsGeneratorVirtualStrategy
 } from 'ui/scheduler/appointmentSettingsGenerator';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -126,7 +125,7 @@ module('Subscribes', {
         try {
             this.instance.fire('setCellDataCacheAlias', {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -138,7 +137,7 @@ module('Subscribes', {
             assert.ok(setCacheAliasStub.calledOnce, 'setCellDataCacheAlias workSpace method called once');
             assert.deepEqual(setCacheAliasStub.getCall(0).args[0], {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -1127,8 +1126,8 @@ module('Grouping By Date', {
         fx.off = false;
     },
 
-    checkNeedCoordinatesResult: (assert, result, cellIndex, rowIndex, top, left, epsilon) => {
-        assert.equal(result.cellIndex, cellIndex, 'cellIndex is correct');
+    checkNeedCoordinatesResult: (assert, result, columnIndex, rowIndex, top, left, epsilon) => {
+        assert.equal(result.columnIndex, columnIndex, 'columnIndex is correct');
         assert.equal(result.rowIndex, rowIndex, 'rowIndex is correct');
         assert.equal(result.top, top, 'top is correct');
         assert.roughEqual(result.left, left, epsilon, 'left is correct');

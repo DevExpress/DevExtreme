@@ -46,11 +46,17 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         if(isDefined(barPadding) || isDefined(barWidth)) {
             extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
-            offset = getOffset(stackIndex, extraParameters);
+            if(!series.getBarOverlapGroup()) {
+                offset = getOffset(stackIndex, extraParameters);
+            }
         }
 
         correctPointCoordinates(points, width, offset);
     });
+}
+
+function getStackName(series) {
+    return series.getStackName() || series.getBarOverlapGroup();
 }
 
 function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback) {
@@ -76,7 +82,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        const stackName = s.getStackName() || s.getBarOverlapGroup() || i.toString();
+        const stackName = getStackName(s) || i.toString();
         let argument;
 
         for(argument in s.pointsByArgument) {
@@ -208,7 +214,7 @@ function adjustStackedSeriesValues() {
     const lastSeriesInNegativeStack = {};
 
     series.forEach(function(singleSeries) {
-        const stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup();
+        const stackName = getStackName(singleSeries);
         let hole = false;
 
         const stack = getFirstValueSign(singleSeries) < 0 ? lastSeriesInNegativeStack : lastSeriesInPositiveStack;
@@ -272,7 +278,7 @@ function adjustStackedSeriesValues() {
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             const argument = point.argument.valueOf();
-            const stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup();
+            const stackName = getStackName(singleSeries);
             const absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument);
             const total = getStackSumByArg(stackKeepers, stackName, argument);
 

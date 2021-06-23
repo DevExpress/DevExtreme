@@ -8,7 +8,7 @@ import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

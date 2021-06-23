@@ -1,6 +1,11 @@
 import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
-import workWeekUtils from './utils.work_week';
+import {
+    isDataOnWeekend,
+    getWeekendsCount,
+    getFirstDayOfWeek,
+    calculateStartViewDate,
+} from './utils/work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -15,8 +20,8 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     constructor(...args) {
         super(...args);
 
-        this._isSkippedData = workWeekUtils.isDataOnWeekend;
-        this._getWeekendsCount = workWeekUtils.getWeekendsCount;
+        this._isSkippedData = isDataOnWeekend;
+        this._getWeekendsCount = getWeekendsCount;
     }
 
     _getElementClass() {
@@ -28,17 +33,17 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     }
 
     _firstDayOfWeek() {
-        return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
+        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._firstViewDate);
+        const resultDate = new Date(this._startViewDate);
 
         if(headerIndex % this._getCellCount() === 0) {
             weekCounter = 0;
         }
 
-        resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekCounter);
+        resultDate.setDate(this._startViewDate.getDate() + headerIndex + weekCounter);
         let index = resultDate.getDay();
 
         while(dayIndexes.indexOf(index) === -1) {
@@ -55,9 +60,14 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         super._renderView();
     }
 
-    _setFirstViewDate() {
-        this._firstViewDate = workWeekUtils.getFirstViewDate(this._getViewStartByOptions(), this._firstDayOfWeek());
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(
+            this.option('currentDate'),
+            this.option('startDayHour'),
+            this.option('startDate'),
+            this._getIntervalDuration(),
+            this.option('firstDayOfWeek'),
+        );
     }
 
     _getOffsetByCount(cellIndex) {
