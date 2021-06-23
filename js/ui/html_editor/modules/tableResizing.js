@@ -40,6 +40,7 @@ export default class TableResizingModule extends BaseModule {
 
                 const $tables = this._findTables();
                 if($tables.length) {
+                    this._fixTablesWidths($tables);
                     this._createResizeFrames($tables);
                     this._updateFramesPositions();
                     this._updateFramesSeparators();
@@ -68,9 +69,9 @@ export default class TableResizingModule extends BaseModule {
         if(this._isTableChanges()) {
             this._removeResizeFrames();
             const $tables = this._findTables();
-            this._updateColumnsWidth($tables);
+            this._fixTablesWidths($tables);
 
-            clearTimeout(this._attachResizerTimeout);
+            this._updateColumnsWidth($tables);
             this._createResizeFrames($tables);
             this._updateFramesPositions();
             this._updateFramesSeparators();
@@ -97,6 +98,23 @@ export default class TableResizingModule extends BaseModule {
 
     _findTables() {
         return $(this.editorInstance._getQuillContainer()).find('table');
+    }
+
+    _fixTablesWidths($tables) {
+        each($tables, (_, table) => {
+            const $table = $(table);
+            const $columnElements = this._getTableDeterminantElements($table, 'horizontal');
+            if($columnElements.eq(0).attr('width')) {
+                let columnsSum = 0;
+
+                each($columnElements, (_, element) => {
+                    columnsSum += parseInt($(element).attr('width'));
+                });
+
+                $table.css('width', 'initial');
+                $table.attr('width', columnsSum + 'px');
+            }
+        });
     }
 
     _createResizeFrames($tables) {

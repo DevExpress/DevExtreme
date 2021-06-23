@@ -42,6 +42,17 @@ const tableMarkup = '\
     </table>\
     <br><br>';
 
+const tableMarkupWidth = '\
+    <table>\
+        <tr>\
+            <td width="50px">0_0</td>\
+            <td width="100px">0_1</td>\
+            <td width="50px">0_2</td>\
+            <td width="50px">0_3</td>\
+        </tr>\
+    </table>\
+    <br><br>';
+
 
 function getColumnBordersOffset($table) {
     const columnBorderOffsets = [];
@@ -460,6 +471,25 @@ module('Resizing integration', {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.roughEqual($table.outerWidth(), startTableWidth + offset, 3);
+    });
+
+    test('Table and columns width was saved if we apply new markup with td width attributes', function(assert) {
+        this.createWidget({ width: 630 });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('value', tableMarkupWidth);
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $table = this.$element.find('table');
+
+        const expectedColumnsWidths = [50, 100, 50, 50];
+
+        $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+        });
+
+        assert.roughEqual($table.outerWidth(), 250, 3);
     });
 
     test('Table height was changed if we drag the row height resizer', function(assert) {
