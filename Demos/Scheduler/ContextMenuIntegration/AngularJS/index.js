@@ -1,5 +1,8 @@
 ﻿var DemoApp = angular.module('DemoApp', ['dx']);
 
+var appointmentClassName = ".dx-scheduler-appointment";
+var cellClassName = ".dx-scheduler-date-table-cell";
+
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.groups = undefined;
     $scope.crossScrolling = false;
@@ -7,7 +10,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
     $scope.dataSource = [];
     $scope.disabled = true;
-    $scope.target = undefined;
+    $scope.target = appointmentClassName;
     $scope.itemTemplate = undefined;
     $scope.onItemClick = undefined;
 
@@ -35,14 +38,14 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         startDayHour: 9,
         recurrenceEditMode: "series",
         onAppointmentContextMenu: function(e) {
-            $scope.target = ".dx-scheduler-appointment";
+            $scope.target = appointmentClassName;
             $scope.disabled = false;
             $scope.dataSource = appointmentContextMenuItems;
             $scope.itemTemplate = "item-template";
             $scope.onItemClick = onItemClick(e);
         },
         onCellContextMenu: function(e) {
-            $scope.target = ".dx-scheduler-date-table-cell";
+            $scope.target = cellClassName;
             $scope.disabled = false;
             $scope.dataSource = cellContextMenuItems;
             $scope.itemTemplate = 'item';
@@ -63,14 +66,14 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     }
 
     var createAppointment = function(e) {
-      e.component.showAppointmentPopup({
-        startDate: e.cellData.startDate
+        e.component.showAppointmentPopup({
+            startDate: e.cellData.startDate
         }, true);
     }
 
     var createRecurringAppointment = function(e) {
-      e.component.showAppointmentPopup({
-        startDate: e.cellData.startDate,
+        e.component.showAppointmentPopup({
+            startDate: e.cellData.startDate,
             recurrenceRule: "FREQ=DAILY"
         }, true);
     };
@@ -90,17 +93,17 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     }
 
     var showAppointment = function(e) {
-      e.component.showAppointmentPopup(e.appointmentData);
+        e.component.showAppointmentPopup(e.appointmentData);
     };
 
     var deleteAppointment = function(e) {
-      e.component.deleteAppointment(e.appointmentData);
+        e.component.deleteAppointment(e.appointmentData);
     };
 
     var repeatAppointmentWeekly = function(e) {
-      var itemData = e.appointmentData;
+        var itemData = e.appointmentData;
 
-      e.component.updateAppointment(itemData, $.extend(itemData, {
+        e.component.updateAppointment(itemData, $.extend(itemData, {
             startDate: e.targetedAppointmentData.startDate,
             recurrenceRule: "FREQ=WEEKLY"
         }));
@@ -109,7 +112,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     var setResource = function(e, clickEvent) {
         var itemData = e.appointmentData;
 
-      e.component.updateAppointment(itemData, $.extend(itemData, {
+        e.component.updateAppointment(itemData, $.extend(itemData, {
             roomId: [clickEvent.itemData.id]
         }));
     };

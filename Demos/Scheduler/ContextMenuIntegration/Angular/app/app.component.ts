@@ -10,6 +10,9 @@ if(!/localhost/.test(document.location.host)) {
     enableProdMode();
 }
 
+const appointmentClassName = ".dx-scheduler-appointment";
+const cellClassName = ".dx-scheduler-date-table-cell";
+
 @Component({
     selector: 'demo-app',
     templateUrl: 'app/app.component.html',
@@ -29,7 +32,7 @@ export class AppComponent {
 
     dataSource: any[] = [];
     disabled: boolean = true;
-    target: any;
+    target: string = appointmentClassName;
     onContextMenuItemClick: any;
     cellContextMenuItems: any[];
     appointmentContextMenuItems: any[];
@@ -70,21 +73,21 @@ export class AppComponent {
     setResource(e, clickEvent) {
         const itemData = e.appointmentData;
 
-      e.component.updateAppointment(itemData, {
+        e.component.updateAppointment(itemData, {
             itemData,
             ...{ roomId: [clickEvent.itemData.id] }
         });
     }
 
     createAppointment(e) {
-      e.component.showAppointmentPopup({
-          startDate: e.cellData.startDate
+        e.component.showAppointmentPopup({
+            startDate: e.cellData.startDate
         }, true);
     }
 
     createRecurringAppointment(e) {
-      e.component.showAppointmentPopup({
-          startDate: e.cellData.startDate,
+        e.component.showAppointmentPopup({
+            startDate: e.cellData.startDate,
             recurrenceRule: "FREQ=DAILY"
         }, true);
     }
@@ -104,22 +107,22 @@ export class AppComponent {
     }
 
     showAppointment(e) {
-      e.component.showAppointmentPopup(e.appointmentData);
+        e.component.showAppointmentPopup(e.appointmentData);
     }
     
     deleteAppointment(e) {
-      e.component.deleteAppointment(e.appointmentData);
+        e.component.deleteAppointment(e.appointmentData);
     }
     
     repeatAppointmentWeekly(e) {
-      const itemData = e.appointmentData;
+        const itemData = e.appointmentData;
 
-      e.component.updateAppointment(itemData, {
-        itemData, ...{
-          startDate: e.targetedAppointmentData.startDate,
-          recurrenceRule: "FREQ=WEEKLY"
-        }
-      });
+        e.component.updateAppointment(itemData, {
+            itemData, ...{
+                startDate: e.targetedAppointmentData.startDate,
+                recurrenceRule: "FREQ=WEEKLY"
+            }
+        });
     }
 
     onItemClick(contextMenuEvent) {
@@ -129,14 +132,14 @@ export class AppComponent {
     }
 
     onAppointmentContextMenu(e) {
-        this.target = ".dx-scheduler-appointment";
+        this.target = appointmentClassName;
         this.disabled = false;
         this.dataSource = this.appointmentContextMenuItems;
         this.onContextMenuItemClick = this.onItemClick(e);
     }
 
     onCellContextMenu(e) {
-        this.target = ".dx-scheduler-date-table-cell";
+        this.target = cellClassName;
         this.disabled = false;
         this.dataSource = this.cellContextMenuItems;
         this.onContextMenuItemClick = this.onItemClick(e);

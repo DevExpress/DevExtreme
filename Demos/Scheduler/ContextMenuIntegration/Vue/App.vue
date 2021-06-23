@@ -42,6 +42,9 @@ import ItemTemplate from './ItemTemplate.vue';
 import { resourcesData, data } from './data.js';
 import { cellContextMenuItems, appointmentContextMenuItems, setResource } from './MenuItems.js';
 
+const appointmentClassName = '.dx-scheduler-appointment';
+const cellClassName = '.dx-scheduler-date-table-cell';
+
 export default {
   components: {
     DxScheduler,
@@ -60,19 +63,19 @@ export default {
       disabled: true,
       contextMenuItems: [],
       contextMenuEvent: null,
-      target: undefined,
+      target: appointmentClassName,
     };
   },
   methods: {
     onAppointmentContextMenu(e) {
-      this.target = '.dx-scheduler-appointment';
+      this.target = appointmentClassName;
       this.disabled = false;
       this.contextMenuItems = this.appointmentContextMenuItems;
       this.contextMenuEvent = e;
     },
 
     onCellContextMenu(e) {
-      this.target = '.dx-scheduler-date-table-cell';
+      this.target = cellClassName;
       this.disabled = false;
       this.contextMenuItems = this.cellContextMenuItems;
       this.contextMenuEvent = e;

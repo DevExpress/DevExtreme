@@ -1,4 +1,7 @@
 $(function() {
+    var appointmentClassName = ".dx-scheduler-appointment";
+    var cellClassName = ".dx-scheduler-date-table-cell";
+
     $("#scheduler").dxScheduler({
         timeZone: "America/Los_Angeles",
         dataSource: data,
@@ -9,10 +12,10 @@ $(function() {
         groups: undefined,
         recurrenceEditMode: "series",
         onAppointmentContextMenu: function (e) {
-            updateContextMenu(false, appointmentContextMenuItems, ".dx-scheduler-appointment", itemTemplate, onItemClick(e));
+            updateContextMenu(false, appointmentContextMenuItems, appointmentClassName, itemTemplate, onItemClick(e));
         },
         onCellContextMenu: function (e) {
-            updateContextMenu(false, cellContextMenuItems, ".dx-scheduler-date-table-cell", 'item', onItemClick(e));
+            updateContextMenu(false, cellContextMenuItems, cellClassName, 'item', onItemClick(e));
         },
         resources: [{
             fieldExpr: "roomId",
@@ -26,6 +29,7 @@ $(function() {
         width: 200,
         dataSource: [],
         disabled: true,
+        target: appointmentClassName,
     }).dxContextMenu("instance");
 
     var updateContextMenu = function (disable, dataSource, target, itemTemplate, onItemClick) {
