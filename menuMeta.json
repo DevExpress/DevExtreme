@@ -3946,7 +3946,6 @@
               {
                 "Title": "Virtual Mode",
                 "Name": "VirtualMode",
-                "DocUrl": "Guide/UI_Components/TreeView/Enhance_Performance_on_Large_Datasets/",
                 "Widget": "TreeView",
                 "DemoType": "Web"
               }
