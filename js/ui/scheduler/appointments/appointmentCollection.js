@@ -522,10 +522,8 @@ class SchedulerAppointments extends CollectionWidget {
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
             const config = {
-                key: this.key,
                 data: rawAppointment,
                 groupIndex: settings.groupIndex,
-
                 observer: this.option('observer'),
                 geometry: geometry,
                 direction: settings.direction || 'vertical',
@@ -548,7 +546,10 @@ class SchedulerAppointments extends CollectionWidget {
             this._createComponent(
                 element,
                 this.isAgendaView ? AgendaAppointment : Appointment,
-                config
+                {
+                    globalKey: this.key,
+                    ...config
+                }
             );
         }
     }

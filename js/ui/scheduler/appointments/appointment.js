@@ -43,7 +43,7 @@ export class Appointment extends DOMComponent {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            key: 0,
+            componentKey: 0,
             data: {},
             groupIndex: -1,
             groups: [],
@@ -138,7 +138,7 @@ export class Appointment extends DOMComponent {
 
         this.$element().data('dxAppointmentStartDate', this.option('startDate'));
 
-        const text = ExpressionUtils.getField(this.option('key'), 'text', this.rawAppointment);
+        const text = ExpressionUtils.getField(this.option('globalKey'), 'text', this.rawAppointment);
         this.$element().attr('title', text);
         this.$element().attr('role', 'button');
 
@@ -149,7 +149,7 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const resourceManager = getResourceManager(this.option('key'));
+        const resourceManager = getResourceManager(this.option('componentKey'));
         const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
@@ -218,7 +218,7 @@ export class Appointment extends DOMComponent {
     }
 
     _getEndDate() {
-        const result = ExpressionUtils.getField(this.option('key'), 'endDate', this.rawAppointment);
+        const result = ExpressionUtils.getField(this.option('globalKey'), 'endDate', this.rawAppointment);
         if(result) {
             return new Date(result);
         }
@@ -234,7 +234,7 @@ export class Appointment extends DOMComponent {
     }
 
     _renderRecurrenceClass() {
-        const rule = ExpressionUtils.getField(this.option('key'), 'recurrenceRule', this.rawAppointment);
+        const rule = ExpressionUtils.getField(this.option('globalKey'), 'recurrenceRule', this.rawAppointment);
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
