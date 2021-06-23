@@ -342,7 +342,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     // TODO: Remove along with old render
     _renderTableBody(options) {
         options.getCellText = (rowIndex, columnIndex) => {
-            let validColumnIndex = columnIndex;
+            let validColumnIndex;
             if(this.isGroupedByDate()) {
                 validColumnIndex = Math.floor(columnIndex / this._getGroupCount());
             } else {
