@@ -56,7 +56,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
@@ -2205,7 +2204,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
     });
 
-    QUnit.test('Change button settings via toolbar.items option in runtime', function(assert) {
+    QUnit.test('Change toolbar.items[i].prop in runtime', function(assert) {
         // arrange
 
         const dataGrid = createDataGrid({
@@ -2252,6 +2251,208 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
         assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items[i] in runtime', function(assert) {
+        // arrange
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1]', { name: 'addRowButton', location: 'after' });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items in runtime', function(assert) {
+        // arrange
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items', [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }]);
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar option in runtime', function(assert) {
+        // arrange
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar', { items: [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }] });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Changing toolbar.items[i].prop saves the state of button', function(assert) {
+        // arrange
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        location: 'before',
+                        widget: 'dxSelectBox',
+                        cssClass: 'my-test-button',
+                        options: {
+                            items: ['item1', 'item2'],
+                            value: 'item1',
+                        }
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $selectBox = dataGrid.$element().find('.my-test-button .dx-selectbox');
+        const selectBox = $selectBox.dxSelectBox('instance');
+        selectBox.option('value', 'item2');
+
+        // act
+        dataGrid.option('toolbar.items[0].location', 'after');
+
+        // assert
+        const $selectBoxInAfter = dataGrid.$element().find('.dx-toolbar-after .my-test-button .dx-selectbox');
+        const selectBoxInAfter = $selectBoxInAfter.dxSelectBox('instance');
+        assert.equal($selectBoxInAfter.length, 1, 'selectbox option changed');
+        assert.equal(selectBoxInAfter.option('value'), 'item2', 'selectbox state saved');
     });
 });
 

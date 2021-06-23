@@ -8,6 +8,7 @@ import messageLocalization from '../../localization/message';
 
 import '../drop_down_menu';
 import { extend } from '../../core/utils/extend';
+import { getPathParts } from '../../core/utils/data';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
@@ -149,8 +150,20 @@ const HeaderPanel = ColumnsView.inherit({
             args.handled = true;
         }
         if(args.name === 'toolbar') {
-            const toolbarOptionName = args.fullName.split('.').slice(1).join('.');
-            this._toolbar.option(toolbarOptionName, args.value);
+            debugger;
+
+            const parts = getPathParts(args.fullName);
+
+            if(parts.length === 1 || (parts.length === 2 && parts[1] === 'items')) {
+                const toolbarOptions = this._getToolbarOptions();
+                this._toolbar.option(toolbarOptions);
+            } else if(parts.length === 3 && parts[1] === 'items') {
+                const toolbarOptions = this._getToolbarOptions();
+                this._toolbar.option(toolbarOptions);
+            } else if(parts.length >= 4 && parts[1] === 'items') {
+                this._toolbar.option(parts.slice(1).join('.'), args.value);
+            }
+
         }
         this.callBase(args);
     },
