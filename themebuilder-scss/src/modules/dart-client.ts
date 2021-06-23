@@ -45,8 +45,8 @@ export default class DartClient {
     return new Promise((resolve) => {
       let data = '';
 
-      this.addClientEventListener('data', (d) => {
-        data += d.message;
+      this.addClientEventListener('data', (d: Buffer | string) => {
+        data += d.toString();
       });
 
       this.addClientEventListener('end', () => {
@@ -81,7 +81,10 @@ export default class DartClient {
     });
   }
 
-  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
+  private addClientEventListener(
+    name: string,
+    handler: (e?: Error | string | Buffer) => void,
+  ): void {
     this.eventListeners.push({ name, handler });
     this.client.on(name, handler);
   }
