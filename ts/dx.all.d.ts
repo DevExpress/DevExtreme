@@ -577,7 +577,7 @@ declare module DevExpress {
    * [descr:AnimationConfig]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface AnimationConfig {
+  export type AnimationConfig = {
     /**
      * [descr:AnimationConfig.complete]
      */
@@ -632,7 +632,7 @@ declare module DevExpress {
       | 'slide'
       | 'slideIn'
       | 'slideOut';
-  }
+  };
   /**
    * [descr:Component]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1593,6 +1593,12 @@ declare module DevExpress.data {
    */
   export function base64_encode(input: string | Array<number>): string;
   /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  type BaseGroupDescriptor<T> = {
+    selector: KeySelector<T>;
+  };
+  /**
    * [descr:CustomStore]
    */
   export class CustomStore<TKey = any, TValue = any> extends Store<
@@ -1625,7 +1631,9 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (options: LoadOptions) => PromiseLike<TValue> | Array<TValue>;
+    load?: (
+      options: LoadOptions<TKey, TValue>
+    ) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1639,7 +1647,7 @@ declare module DevExpress.data {
      */
     totalCount?: (loadOptions: {
       filter?: FilterDescriptor | Array<FilterDescriptor>;
-      group?: GroupDescriptor | Array<GroupDescriptor>;
+      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     }) => PromiseLike<number>;
     /**
      * [descr:CustomStoreOptions.update]
@@ -1681,11 +1689,13 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.group()]
      */
-    group(): GroupDescriptor | Array<GroupDescriptor>;
+    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * [descr:DataSource.group(groupExpr)]
      */
-    group(groupExpr: GroupDescriptor | Array<GroupDescriptor>): void;
+    group(
+      groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.isLastPage()]
      */
@@ -1713,13 +1723,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): {
-      sort?: SortDescriptor | Array<SortDescriptor>;
-      filter?: any;
-      select?: SelectDescriptor;
-      group?: GroupDescriptor | Array<GroupDescriptor>;
-      requireTotalCount?: boolean;
-    };
+    loadOptions(): LoadOptions<TKey, TValue>;
     /**
      * [descr:DataSource.off(eventName)]
      */
@@ -1807,19 +1811,23 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.select()]
      */
-    select(): SelectDescriptor | Array<SelectDescriptor>;
+    select(): SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * [descr:DataSource.select(expr)]
      */
-    select(expr: SelectDescriptor | Array<SelectDescriptor>): void;
+    select(
+      expr: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.sort()]
      */
-    sort(): SortDescriptor | Array<SortDescriptor>;
+    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * [descr:DataSource.sort(sortExpr)]
      */
-    sort(sortExpr: SortDescriptor | Array<SortDescriptor>): void;
+    sort(
+      sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.store()]
      */
@@ -1833,24 +1841,7 @@ declare module DevExpress.data {
     /**
      * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
      */
-    type EventName =
-      | 'changed'
-      | 'loadError'
-      | 'loadingChanged' /*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;
-    /**
-     * [descr:SearchOperation]
-     */
-    type SearchOperation =
-      | '='
-      | '<>'
-      | '>'
-      | '>='
-      | '<'
-      | '<='
-      | 'startswith'
-      | 'endswith'
-      | 'contains'
-      | 'notcontains';
+    type EventName = 'changed' | 'loadError' | 'loadingChanged';
   }
   /**
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -1876,7 +1867,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.group]
      */
-    group?: GroupDescriptor | Array<GroupDescriptor>;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.map]
      */
@@ -1924,7 +1915,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.searchOperation]
      */
-    searchOperation?: DevExpress.data.DataSource.SearchOperation;
+    searchOperation?: SearchOperation;
     /**
      * [descr:DataSourceOptions.searchValue]
      */
@@ -1932,11 +1923,11 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.select]
      */
-    select?: SelectDescriptor | Array<SelectDescriptor>;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.sort]
      */
-    sort?: SortDescriptor | Array<SortDescriptor>;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.store]
      */
@@ -1967,12 +1958,11 @@ declare module DevExpress.data {
   /**
    * [descr:GroupDescriptor]
    */
-  export type GroupDescriptor =
-    | Function
-    | string
-    | {
-        [prop in 'getter' | 'field' | 'selector']?: Function | string;
-      };
+  export type GroupDescriptor<T> =
+    | KeySelector<T>
+    | (BaseGroupDescriptor<T> & {
+        desc?: boolean;
+      });
   /**
    * [descr:Guid]
    */
@@ -1989,10 +1979,14 @@ declare module DevExpress.data {
     valueOf(): string;
   }
   /**
+   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   */
+  type KeySelector<T> = string | ((source: T) => string);
+  /**
    * [descr:LoadOptions]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
    */
-  export interface LoadOptions {
+  export interface LoadOptions<TKey = any, TValue = any> {
     /**
      * [descr:LoadOptions.customQueryParams]
      */
@@ -2008,11 +2002,11 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.group]
      */
-    group?: GroupDescriptor | Array<GroupDescriptor>;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * [descr:LoadOptions.groupSummary]
      */
-    groupSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
+    groupSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
      * [descr:LoadOptions.parentIds]
      */
@@ -2032,7 +2026,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.searchOperation]
      */
-    searchOperation?: DevExpress.data.DataSource.SearchOperation;
+    searchOperation?: SearchOperation;
     /**
      * [descr:LoadOptions.searchValue]
      */
@@ -2040,7 +2034,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.select]
      */
-    select?: SelectDescriptor | Array<SelectDescriptor>;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * [descr:LoadOptions.skip]
      */
@@ -2048,7 +2042,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.sort]
      */
-    sort?: SortDescriptor | Array<SortDescriptor>;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * [descr:LoadOptions.take]
      */
@@ -2056,7 +2050,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.totalSummary]
      */
-    totalSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
+    totalSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
      * [descr:LoadOptions.userData]
      */
@@ -2301,7 +2295,7 @@ declare module DevExpress.data {
     /**
      * [descr:ODataStoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions) => void;
+    onLoading?: (loadOptions: LoadOptions<TKey, TValue>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -2788,9 +2782,23 @@ declare module DevExpress.data {
     toArray(): Array<any>;
   }
   /**
+   * [descr:SearchOperation]
+   */
+  export type SearchOperation =
+    | '='
+    | '<>'
+    | '>'
+    | '>='
+    | '<'
+    | '<='
+    | 'startswith'
+    | 'endswith'
+    | 'contains'
+    | 'notcontains';
+  /**
    * [descr:SelectDescriptor]
    */
-  export type SelectDescriptor = Function | string;
+  export type SelectDescriptor<T> = KeySelector<T>;
   /**
    * [descr:Utils.setErrorHandler]
    */
@@ -2798,11 +2806,7 @@ declare module DevExpress.data {
   /**
    * [descr:SortDescriptor]
    */
-  export type SortDescriptor =
-    | GroupDescriptor
-    | {
-        [prop in 'desc' | 'dir']?: boolean | 'ascending' | 'descending';
-      };
+  export type SortDescriptor<T> = GroupDescriptor<T>;
   /**
    * [descr:Store]
    * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
@@ -2814,7 +2818,7 @@ declare module DevExpress.data {
      */
     byKey(
       key: TKey,
-      extraOptions?: LoadOptions
+      extraOptions?: LoadOptions<TKey, TValue>
     ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.insert(values)]
@@ -2835,7 +2839,9 @@ declare module DevExpress.data {
     /**
      * [descr:Store.load(options)]
      */
-    load(options: LoadOptions): DevExpress.core.utils.DxPromise<Array<TValue>>;
+    load(
+      options: LoadOptions<TKey, TValue>
+    ): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.off(eventName)]
      */
@@ -2878,7 +2884,7 @@ declare module DevExpress.data {
      */
     totalCount(obj: {
       filter?: FilterDescriptor | Array<FilterDescriptor>;
-      group?: GroupDescriptor | Array<GroupDescriptor>;
+      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
      * [descr:Store.update(key, values)]
@@ -2925,11 +2931,14 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onLoaded]
      */
-    onLoaded?: (result: Array<TValue>, loadOptions: LoadOptions) => void;
+    onLoaded?: (
+      result: Array<TValue>,
+      loadOptions: LoadOptions<TKey, TValue>
+    ) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions) => void;
+    onLoading?: (loadOptions: LoadOptions<TKey, TValue>) => void;
     /**
      * [descr:StoreOptions.onModified]
      */
@@ -2962,10 +2971,11 @@ declare module DevExpress.data {
   /**
    * [descr:SummaryDescriptor]
    */
-  type SummaryDescriptor = {
-    selector: string | Function;
-    summaryType: 'sum' | 'avg' | 'min' | 'max' | 'count';
-  };
+  export type SummaryDescriptor<T> =
+    | KeySelector<T>
+    | (BaseGroupDescriptor<T> & {
+        summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
+      });
   /**
    * [descr:XmlaStore]
    */

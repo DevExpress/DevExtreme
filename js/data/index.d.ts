@@ -13,6 +13,7 @@ type BaseGroupDescriptor<T> = {
 /**
  * @docid
  * @public
+ * @type object
  */
 export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     desc?: boolean;
@@ -21,12 +22,14 @@ export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
 /**
  * @docid
  * @public
+ * @type object
  */
 export type SortDescriptor<T> = GroupDescriptor<T>;
 
 /**
  * @docid
  * @public
+ * @type object
  */
 export type SelectDescriptor<T> = KeySelector<T>;
 /**
@@ -38,8 +41,9 @@ export type SelectDescriptor<T> = KeySelector<T>;
  /** 
  * @docid
  * @public
+ * @type object
  */
-type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
+export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
 }
 
@@ -62,16 +66,19 @@ type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     /**
      * @docid
      * @public
+     * @type object
      */
     filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @public
+     * @type object
      */
     group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @public
+     * @type object
      */
     groupSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
@@ -108,6 +115,7 @@ type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     /**
      * @docid
      * @public
+     * @type object
      */
     select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
@@ -118,6 +126,7 @@ type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     /**
      * @docid
      * @public
+     * @type object
      */
     sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
@@ -128,6 +137,7 @@ type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     /**
      * @docid
      * @public
+     * @type object
      */
     totalSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
