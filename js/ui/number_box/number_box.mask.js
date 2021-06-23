@@ -166,11 +166,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _shouldMoveCaret: function(text, caret) {
         const decimalSeparator = number.getDecimalSeparator();
         const isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
-        const isZeroNext = text.charAt(caret.end) === '0';
         const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.') && isDecimalSeparatorNext;
-        const zeroToZeroReplace = this._lastKey === '0' && isZeroNext;
 
-        return moveToFloat || zeroToZeroReplace;
+        return moveToFloat;
     },
 
     _getInputVal: function() {
