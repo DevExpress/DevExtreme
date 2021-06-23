@@ -2118,15 +2118,24 @@ class Scheduler extends Widget {
         const appointment = createAppointmentAdapter(this.key, (rawTargetedAppointment || rawAppointment));
         const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
-        this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
-            if(createNewAppointment || isEmptyObject(rawAppointment)) {
-                delete this._editAppointmentData;
-                this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
-            } else {
+        const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
+
+        if(isCreateAppointment) {
+            delete this._editAppointmentData;
+            this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
+        } else {
+            this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
                 this._editAppointmentData = rawAppointment;
                 this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
-            }
-        }, false, true);
+                // if(createNewAppointment || isEmptyObject(rawAppointment)) {
+                //     delete this._editAppointmentData;
+                //     this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
+                // } else {
+                //     this._editAppointmentData = rawAppointment;
+                //     this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
+                // }
+            }, false, true);
+        }
     }
 
     hideAppointmentPopup(saveChanges) {
