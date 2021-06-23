@@ -79,7 +79,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
                 hiddenInterval: this._hiddenInterval,
                 calculateCellIndex,
                 interval: this._getInterval(),
-                cellCountInDay: this._getCellCountInDay(),
+                cellCountInDay: 1,
                 startViewDate: this.getStartViewDate(),
                 rowCount: this._getRowCount(),
                 columnCount: this._getCellCount(),
@@ -137,6 +137,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _renderTimePanel() { return noop(); }
     _renderAllDayPanel() { return noop(); }
+    _getTableAllDay() { return noop(); }
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 

@@ -1858,7 +1858,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: false,
+            allDay: this._getTableAllDay(),
             groupIndex: 0,
         };
 
@@ -1873,6 +1873,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndex(rowIndex, columnIndex) {
         return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
+    }
+
+    _getTableAllDay() {
+        return false;
     }
 
     calculateEndDate(startDate) {
@@ -3250,8 +3254,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 groupIndex: validGroupIndex,
             };
 
-            const resourceManager = this.invoke('getResourceManager');
-            const groupsArray = resourceManager.getCellGroups(validGroupIndex, this.option('groups'));
+            const groupsArray = getCellGroups(validGroupIndex, this.option('groups'));
 
             if(groupsArray.length) {
                 data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);

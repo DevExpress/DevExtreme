@@ -1,7 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
-import timeZoneUtils from '../../timezones/utils.timezones_data';
+import timeZoneUtils from '../../utils.timeZone';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
