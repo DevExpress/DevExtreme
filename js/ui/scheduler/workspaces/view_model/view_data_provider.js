@@ -34,7 +34,9 @@ export default class ViewDataProvider {
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
-        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, renderOptions);
+        this.updateViewData(renderOptions);
+
+
         this._groupedDataMapProvider = new GroupedDataMapProvider(
             this.viewDataGenerator,
             this.viewDataMap,
@@ -50,6 +52,13 @@ export default class ViewDataProvider {
             this.completeTimePanelMap,
             renderOptions,
         );
+    }
+
+    updateViewData(renderOptions) {
+        this.viewDataMapWithSelection = this.viewDataGenerator
+            .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
+        this.viewData = this.viewDataGenerator
+            ._getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
     }
 
     getGroupStartDate(groupIndex) {

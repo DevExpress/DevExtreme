@@ -1,6 +1,5 @@
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 
 export const getObserver = (key) => {
     return {
@@ -20,9 +19,8 @@ export const getObserver = (key) => {
 
 export const initFactoryInstance = (resourceGetter) => {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => false
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     getResourceManager(key).createResourcesTree = (groups) => {

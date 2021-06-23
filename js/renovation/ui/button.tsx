@@ -47,7 +47,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
     children, icon, iconPosition, template: ButtonTemplate, text, templateData,
   } = viewModel.props;
-  const renderText = !ButtonTemplate && !children && text;
+  const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
   const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
@@ -97,11 +97,11 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
 
 @ComponentBindings()
 export class ButtonProps extends BaseWidgetProps {
-  @OneWay() activeStateEnabled?: boolean = true;
+  @OneWay() activeStateEnabled = true;
 
-  @OneWay() hoverStateEnabled?: boolean = true;
+  @OneWay() hoverStateEnabled = true;
 
-  @OneWay() icon?: string = '';
+  @OneWay() icon = '';
 
   @OneWay() iconPosition?: string = 'left';
 
@@ -114,19 +114,19 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() pressed?: boolean;
 
-  @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+  @OneWay() stylingMode: 'outlined' | 'text' | 'contained' = 'contained';
 
   @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
-  @OneWay() type?: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
+  @OneWay() type: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
-  @OneWay() useInkRipple?: boolean = false;
+  @OneWay() useInkRipple = false;
 
-  @OneWay() useSubmitBehavior?: boolean = false;
+  @OneWay() useSubmitBehavior = false;
 
   @OneWay() validationGroup?: string = undefined;
 
@@ -213,11 +213,15 @@ export class Button extends JSXComponent(ButtonProps) {
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
-  onWidgetKeyDown(options: Record<string, unknown>): Event | undefined {
+  onWidgetKeyDown(e: {
+    originalEvent: Event & { cancel: boolean };
+    keyName: string;
+    which: string;
+  }): Event | undefined {
     const { onKeyDown } = this.props;
-    const { originalEvent, keyName, which } = options;
+    const { originalEvent, keyName, which } = e;
 
-    const result = onKeyDown?.(options);
+    const result: Event & { cancel: boolean } = onKeyDown?.(e);
     if (result?.cancel) {
       return result;
     }

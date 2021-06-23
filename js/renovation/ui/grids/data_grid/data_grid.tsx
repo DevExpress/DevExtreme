@@ -120,8 +120,8 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
       useIcons: true,
     },
   },
-}]);
-
+},
+]);
 @Component({
   defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
@@ -507,6 +507,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.getScrollbarWidth(isHorizontal);
   }
 
+  @Method()
+  getDataProvider(selectedRowsOnly: boolean): any {
+    return this.instance?.getDataProvider(selectedRowsOnly);
+  }
+
   // #endregion
 
   /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -591,7 +596,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
       if (e.fullName === 'focusedColumnIndex') {
         this.props.focusedColumnIndex = e.value as number;
       }
-      if (e.fullName === 'filterValue') {
+      if (e.fullName === 'filterValue' && this.props.filterValue !== e.value) {
         this.props.filterValue = e.value as string;
       }
       if (e.fullName === 'selectedRowKeys') {

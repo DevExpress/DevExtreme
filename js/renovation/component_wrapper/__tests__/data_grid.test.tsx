@@ -102,7 +102,7 @@ jest.mock('../common/component', () => class {
 
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     const result = {};
-    const dataGridProps = ['dataSource'];
+    const dataGridProps = ['dataSource', 'export'];
     dataGridProps.concat(this._getAdditionalProps()).forEach((name) => {
       if (name in options) {
         result[name] = options[name];
@@ -213,6 +213,22 @@ describe('DataGrid Wrapper', () => {
     expect(mockComponent._renderWrapper).toBeCalledWith(viewComponentProps);
   });
 
+  it('editing.customizeExcelCell should have corrent component instance', () => {
+    const customizeExcelCell = jest.fn();
+
+    const instance = createDataGrid({
+      export: {
+        customizeExcelCell,
+      },
+    });
+
+    mockComponent._renderWrapper.mock.calls[0][0].export.customizeExcelCell({});
+
+    expect(customizeExcelCell).toBeCalledWith({
+      component: instance,
+    });
+  });
+
   it('onInitialized option should not be defined in _initializeComponent', () => {
     const onInitialized = () => { };
     let onInitializedInInitializeComponent: unknown = {};
@@ -283,6 +299,19 @@ describe('DataGrid Wrapper', () => {
       // value in prev props shouldn't change for future getUpdatedOptions
       expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
+    });
+
+    it('editing complex option changed', () => {
+      const component: any = createDataGrid();
+      const prevProps = { editing: { editRowKey: null } };
+      component.__options = prevProps;
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('editing.editRowKey', null, 1);
+      // emulate base component mutable option change
+      component.__options.editing.editRowKey = 1;
+      // value in prev props shouldn't change for future getUpdatedOptions
+      expect(prevProps.editing).not.toBe(component.viewRef.prevProps.editing);
+      expect(component.viewRef.prevProps.editing.editRowKey).toBe(null);
     });
 
     it('option changed to same value', () => {

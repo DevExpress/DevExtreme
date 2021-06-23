@@ -25,10 +25,9 @@ testStart(function() {
 module('Work Space Day', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => false,
-                getAppointmentDurationInMinutes: () => 60
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
+            appointmentDuration: 60
         });
         const observer = getObserver(key);
 
@@ -266,10 +265,9 @@ module('Work Space Day with grouping by date', () => {
     module('Default', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 
@@ -458,10 +456,9 @@ module('Work Space Day with grouping by date', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
             const observer = getObserver(key);
 

@@ -12,7 +12,7 @@ QUnit.testStart(function() {
 });
 
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 

@@ -14,6 +14,8 @@ export interface GridInstance extends dxDataGrid, ComponentExt {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getTopVisibleRowData: () => any;
   getScrollbarWidth: (isHorizontal: boolean) => number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getDataProvider: (selectedRowsOnly: boolean) => any;
 }
 
 export interface DataGridForComponentWrapper {

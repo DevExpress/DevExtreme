@@ -42,9 +42,8 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     const key = createFactoryInstances({
-                        scheduler: {
-                            isVirtualScrolling: () => false
-                        }
+                        getIsVirtualScrolling: () => false,
+                        getDataAccessors: () => {},
                     });
                     const observer = getObserver(key);
 
@@ -52,7 +51,7 @@ module('Workspace navigation', () => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             observer,
                             ...options,
                         });
@@ -961,16 +960,15 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     const key = createFactoryInstances({
-                        scheduler: {
-                            isVirtualScrolling: () => false
-                        }
+                        getIsVirtualScrolling: () => false,
+                        getDataAccessors: () => {},
                     });
                     const observer = getObserver(key);
 
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             currentDate: new Date(2021, 0, 10),
                             observer,
                             ...options,

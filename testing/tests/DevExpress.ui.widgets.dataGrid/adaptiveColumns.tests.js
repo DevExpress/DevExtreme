@@ -10,7 +10,7 @@ QUnit.testStart(function() {
 });
 
 import 'generic_light.css!';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import devices from 'core/devices';

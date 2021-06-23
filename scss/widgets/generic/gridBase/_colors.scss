@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -201,6 +202,9 @@ $datagrid-columnchooser-shadow-color: color.change($base-shadow-color, $alpha: 0
 $datagrid-columnchooser-overlay-border-radius: null !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
+
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;

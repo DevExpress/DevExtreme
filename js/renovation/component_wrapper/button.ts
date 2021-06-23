@@ -39,7 +39,7 @@ export default class ButtonWrapper extends Component {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
-        if (validationGroup) {
+        if (validationGroup !== undefined && validationGroup !== '') {
           const { status, complete } = validationGroup.validate();
 
           validationStatus = status;
@@ -92,7 +92,10 @@ export default class ButtonWrapper extends Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _findGroup(): any {
     const $element = this.$element();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.option('validationGroup') || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+    const validationGroup = this.option('validationGroup');
+    return validationGroup !== undefined && validationGroup !== ''
+      ? validationGroup
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
