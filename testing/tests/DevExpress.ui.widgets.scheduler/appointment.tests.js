@@ -1,10 +1,8 @@
 import $ from 'jquery';
 import { Appointment } from 'ui/scheduler/appointments/appointment';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const { module, test, testStart } = QUnit;
 
@@ -15,10 +13,6 @@ const APPOINTMENT_DRAG_SOURCE_CLASS = 'dx-scheduler-appointment-drag-source';
 testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
 });
-
-const schedulerMock = {
-    isVirtualScrolling: () => false
-};
 
 const createInstance = () => {
     const observer = {
@@ -45,7 +39,8 @@ const createInstance = () => {
     };
 
     const key = createFactoryInstances({
-        scheduler: schedulerMock
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
     return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
 };

@@ -5,7 +5,7 @@ import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
 import { updatePropsImmutable } from './utils/update_props_immutable';
 import type { TemplateComponent, Option } from './common/types';
-import type { OptionChangedEvent } from '../../ui/data_grid';
+import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
 
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
@@ -82,7 +82,14 @@ export default class DataGridWrapper extends Component {
     if (this.viewRef && prevValue !== value) {
       const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+
+      if (name === 'editing' && name !== fullName) {
+        // T751778
+        // TODO remove when silent assign will be removed from editing
+        updatePropsImmutable(prevProps, this.option(), name, name);
+      }
       updatePropsImmutable(prevProps, this.option(), name, fullName);
+
       (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
     }
   }
@@ -109,6 +116,17 @@ export default class DataGridWrapper extends Component {
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     // eslint-disable-next-line no-param-reassign
     options.onInitialized = this._onInitialized;
+
+    const exportOptions = options.export as Export;
+    const originalCustomizeExcelCell = exportOptions?.customizeExcelCell;
+
+    if (originalCustomizeExcelCell) {
+      exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (e as any).component = this;
+        return originalCustomizeExcelCell(e);
+      };
+    }
 
     return super._patchOptionValues(options);
   }

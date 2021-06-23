@@ -25,6 +25,7 @@ export default class DartClient {
     this.client.setTimeout(100);
 
     return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       this.setClientErrorHandlers(async () => {
         this.isServerAvailable = false;
         await this.dispose();
@@ -63,6 +64,7 @@ export default class DartClient {
       const errorHandler = (e?: Error): void => {
         log('Dart client error on write', e);
         this.client.end();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.dispose();
         resolve({
           error: `${e.name}: ${e.message}`,
