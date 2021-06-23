@@ -68,13 +68,11 @@ class SchedulerTableCreator {
                 let cellDataObject;
                 let dataKey;
                 let dataValue;
-                let fullDataValue;
 
                 if(options.getCellData) {
                     cellDataObject = options.getCellData(td, rowIndex, columnIndex, groupIndex);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
-                    fullDataValue = cellDataObject.fullDataValue;
                     dataKey && elementData(td, dataKey, dataValue);
                 }
 
@@ -114,9 +112,9 @@ class SchedulerTableCreator {
                     templateCallbacks.push(options.cellTemplate.render.bind(options.cellTemplate, templateOptions));
 
                 } else {
-                    if(fullDataValue?.text) {
+                    if(options.getCellText) {
                         $('<div>')
-                            .text(fullDataValue.text)
+                            .text(options.getCellText(rowIndex, columnIndex))
                             .addClass(options.getCellTextClass)
                             .appendTo($(td));
                     }

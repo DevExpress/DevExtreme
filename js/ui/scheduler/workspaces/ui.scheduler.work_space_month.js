@@ -166,11 +166,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _renderTableBody(options) {
-        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-        super._renderTableBody(options);
-    }
-
     _getCellText(rowIndex, columnIndex) {
         const date = this._getDate(rowIndex, columnIndex);
 
@@ -342,6 +337,22 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         options.cellDataGetters.push(getCellMetaData);
 
         return options;
+    }
+
+    // TODO: Remove along with old render
+    _renderTableBody(options) {
+        options.getCellText = (rowIndex, columnIndex) => {
+            let validColumnIndex = columnIndex;
+            if(this.isGroupedByDate()) {
+                validColumnIndex = Math.floor(columnIndex / this._getGroupCount());
+            } else {
+                validColumnIndex = columnIndex % this._getCellCount();
+            }
+
+            return this._getCellText(rowIndex, validColumnIndex);
+        };
+        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
+        super._renderTableBody(options);
     }
 }
 

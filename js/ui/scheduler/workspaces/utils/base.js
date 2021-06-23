@@ -56,7 +56,7 @@ const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay) => {
     return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
 };
 
-const getStartViewDateWithoutDST = (startViewDate, startDayHour) => {
+export const getStartViewDateWithoutDST = (startViewDate, startDayHour) => {
     const newStartViewDate = timeZoneUtils.getDateWithoutTimezoneChange(startViewDate);
     newStartViewDate.setHours(startDayHour);
 

@@ -3131,13 +3131,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return 0;
     }
 
-    _getFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._startViewDate);
-        newFirstViewDate.setHours(this.option('startDayHour'));
-
-        return newFirstViewDate;
-    }
-
     _updateSelectedCellDataOption(selectedCellData) {
         const correctedSelectedCellData = selectedCellData.map(({
             startDate,

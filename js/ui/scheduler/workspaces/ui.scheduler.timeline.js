@@ -14,7 +14,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getDateByCellIndices, calculateCellIndex } from './utils/base';
+import { getDateByCellIndices, calculateCellIndex, getStartViewDateWithoutDST } from './utils/base';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -85,7 +85,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const firstViewDate = getStartViewDateWithoutDST(this.getStartViewDate());
 
         return this._getDateByIndexCore(firstViewDate, index);
     }
@@ -99,7 +99,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const firstViewDate = getStartViewDateWithoutDST(this.getStartViewDate());
 
         const result = this._getDateByIndexCore(firstViewDate, index);
 
