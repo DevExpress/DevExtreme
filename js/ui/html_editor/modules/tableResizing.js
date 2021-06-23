@@ -113,7 +113,12 @@ export default class TableResizingModule extends BaseModule {
                 });
 
                 $table.css('width', 'initial');
-                $table.attr('width', columnsSum + 'px');
+
+                const tableWidth = $table.attr('width') ? parseInt($table.attr('width')) : $table.outerWidth();
+
+                // console.log('_fixTablesWidths ' + tableWidth);
+
+                $table.attr('width', Math.max(columnsSum, tableWidth) + 'px');
             }
         });
     }
@@ -432,6 +437,9 @@ export default class TableResizingModule extends BaseModule {
 
         const minWidthForColumns = determinantElements.length * this._minColumnWidth;
 
+        // console.log(tableWidth);
+        // console.log(columnSum);
+
         if(columnSum > minWidthForColumns) {
             ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);
         } else {
@@ -440,6 +448,8 @@ export default class TableResizingModule extends BaseModule {
 
         if(ratio < 0) {
             $table.attr('width', minWidthForColumns + 'px');
+        } else {
+            $table.attr('width', tableWidth + 'px');
         }
 
         each(determinantElements, (index, element) => {
@@ -450,6 +460,8 @@ export default class TableResizingModule extends BaseModule {
             } else {
                 resultWidth = this._minColumnWidth;
             }
+
+            // console.log(ratio);
 
             $lineElements.each((i, element) => {
                 $(element).attr('width', resultWidth + 'px');
