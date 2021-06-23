@@ -43,7 +43,26 @@ module.exports = {
         componentNamesGenerator: {
             importFrom: 'devextreme-angular-generator/dist/component-names-generator',
             componentFilesPath: './src/ui/',
-            excludedFileNames: [ 'nested', 'validation-group', 'validation-summary', 'validator' ],
+            excludedFileNames: [
+                'nested',
+                'validation-group',
+                'validation-summary',
+                'validator',
+                'button',
+                'calendar',
+                'check-box',
+                'color-box',
+                'data-grid',
+                'date-box',
+                'diagram',
+                'drop-down-box',
+                'drop-down-button',
+                'file-manager',
+                'file-uploader',
+                'list',
+                'scheduler',
+                'select-box',
+                'slide-out' ],
             outputFileName: 'tests/src/server/component-names.ts'
         }
     },
