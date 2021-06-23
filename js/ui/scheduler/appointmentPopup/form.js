@@ -1,16 +1,16 @@
-import Form from '../form';
-import dateSerialization from '../../core/utils/date_serialization';
-import messageLocalization from '../../localization/message';
-import devices from '../../core/devices';
-import DataSource from '../../data/data_source';
-import timeZoneDataUtils from './timezones/utils.timezones_data';
-import { extend } from '../../core/utils/extend';
+import Form from '../../form';
+import dateSerialization from '../../../core/utils/date_serialization';
+import messageLocalization from '../../../localization/message';
+import devices from '../../../core/devices';
+import DataSource from '../../../data/data_source';
+import timeZoneDataUtils from '../timezones/utils.timezones_data';
+import { extend } from '../../../core/utils/extend';
 
-import './recurrence_editor';
-import '../text_area';
-import '../tag_box';
-import '../switch';
-import '../select_box';
+import '../recurrence_editor';
+import '../../text_area';
+import '../../tag_box';
+import '../../switch';
+import '../../select_box';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
