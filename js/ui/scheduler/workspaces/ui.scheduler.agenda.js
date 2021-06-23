@@ -15,6 +15,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getPathToLeaf } from '../resources/utils';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { calculateStartViewDate } from './utils/agenda';
 
@@ -240,7 +241,7 @@ class SchedulerAgenda extends WorkSpace {
 
     _makeGroupRows() {
         const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-        const resourceManager = this.invoke('getResourceManager');
+        const resourceManager = this.option('resourceManager');
         const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
@@ -337,8 +338,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const resourceManager = this.invoke('getResourceManager');
-        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
+        const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
