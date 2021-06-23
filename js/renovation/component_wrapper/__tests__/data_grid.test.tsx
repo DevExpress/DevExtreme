@@ -114,6 +114,7 @@ jest.mock('../common/component', () => class {
 
   _renderWrapper(options: Record<string, unknown>): void {
     mockComponent._renderWrapper(options);
+    (options.onInitialized as Function)?.({});
     this._isNodeReplaced = true;
   }
 
@@ -195,7 +196,7 @@ describe('DataGrid Wrapper', () => {
 
   it('additional props should be passed to ViewComponent', () => {
     const viewComponentProps = {
-      onInitialized: true,
+      onInitialized: () => {},
       onColumnsChanging: true,
       integrationOptions: true,
       adaptColumnWidthByRatio: true,
@@ -210,7 +211,10 @@ describe('DataGrid Wrapper', () => {
       customProp: true,
     });
 
-    expect(mockComponent._renderWrapper).toBeCalledWith(viewComponentProps);
+    expect(mockComponent._renderWrapper).toBeCalledWith({
+      ...viewComponentProps,
+      onInitialized: expect.any(Function),
+    });
   });
 
   it('editing.customizeExcelCell should have corrent component instance', () => {
@@ -241,7 +245,17 @@ describe('DataGrid Wrapper', () => {
 
     expect(onInitializedInInitializeComponent).toBe(null);
     expect(mockComponent._renderWrapper).toBeCalledWith({
-      onInitialized,
+      onInitialized: expect.any(Function),
+    });
+  });
+
+  it('onInitialized should have correct component parameter', () => {
+    const onInitialized = jest.fn();
+
+    const component = createDataGrid({ onInitialized });
+
+    expect(onInitialized).toBeCalledWith({
+      component,
     });
   });
 

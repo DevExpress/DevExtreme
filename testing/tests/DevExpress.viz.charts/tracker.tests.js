@@ -472,6 +472,7 @@ QUnit.test('dxpointermove on series, mouse out of the chart', function(assert) {
 });
 
 QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the interactive tooltip', function(assert) {
+    this.options.tooltip.stub('isEnabled').returns(true);
     this.options.tooltip.stub('isCursorOnTooltip').returns(true);
     // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
@@ -484,7 +485,27 @@ QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the int
     // assert
     assert.ok(this.options.tooltip.show.calledOnce);
     assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.ok(this.options.tooltip.stub('isEnabled').called);
     assert.deepEqual(this.options.tooltip.stub('isCursorOnTooltip').args[0], [500, 500]);
+});
+
+QUnit.test('Mouseout from chart after dxpointermove on series. Tooltip is not enabled', function(assert) {
+    this.options.tooltip.stub('isEnabled').returns(false);
+    this.options.tooltip.stub('isCursorOnTooltip').returns(false);
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 500 }));
+
+    // assert
+    assert.ok(!this.options.tooltip.show.called);
+    assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.equal(this.options.tooltip.stub('isEnabled').callCount, 3);
+    assert.ok(!this.options.tooltip.stub('isCursorOnTooltip').called);
+    assert.equal(this.series.clearHover.callCount, 1, 'series was unhover');
 });
 
 QUnit.test('dxpointermove over point', function(assert) {
