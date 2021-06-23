@@ -1123,20 +1123,16 @@ QUnit.module('Overlay integration', {
 
     QUnit.test('popup showing calls list update (B254555)', function(assert) {
         fx.off = true;
-        let listUpdated = 0;
 
         const $popup = this.popup;
         const popup = $popup.dxPopup('instance');
 
         const list = $popup.find('.dx-list').dxList('instance');
-        list.updateDimensions = () => {
-            listUpdated++;
-        };
+        const updateDimensionsSpy = sinon.spy(list, 'updateDimensions');
 
         popup.show();
         this.clock.tick();
-
-        assert.equal(listUpdated, 1, 'list updated once');
+        assert.equal(updateDimensionsSpy.callCount, 3, 'initial render + 2x dimension changed handler');
     });
 
     QUnit.test('dxAutocomplete - popup list has vertical scroll when items count is small and scroll is not needed(T105434)', function(assert) {
