@@ -3,7 +3,7 @@ import { getAppointmentDataProvider, getModel } from './instanceFactory';
 
 export const ExpressionUtils = {
     getField: (key, field, obj) => {
-        const { dataAccessors } = getAppointmentDataProvider(key);
+        const dataAccessors = getAppointmentDataProvider(key).getDataAccessors();
 
         if(isDefined(dataAccessors.getter[field])) {
             return dataAccessors.getter[field](obj);

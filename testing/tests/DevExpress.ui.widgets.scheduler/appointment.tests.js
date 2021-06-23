@@ -16,7 +16,7 @@ testStart(function() {
 
 const createInstance = () => {
     const observer = {
-        fire: (command, field, obj, value) => {
+        fire: (command) => {
             switch(command) {
                 case 'getCellHeight':
                     return CELL_HEIGHT;
@@ -40,9 +40,13 @@ const createInstance = () => {
 
     const key = createFactoryInstances({
         getIsVirtualScrolling: () => false,
-        getDataAccessors: () => {}
+        getDataAccessors: () => ({
+            getter: {},
+            setter: {}
+        })
     });
-    return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
+
+    return $('#scheduler-appointment').dxSchedulerAppointment({ key, observer }).dxSchedulerAppointment('instance');
 };
 
 const moduleOptions = {

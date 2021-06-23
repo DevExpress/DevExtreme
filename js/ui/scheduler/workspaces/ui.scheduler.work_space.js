@@ -417,7 +417,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _focusOutHandler() {
         super._focusOutHandler.apply(this, arguments);
 
-        if(!this._contextMenuHandled) {
+        if(!this._contextMenuHandled && !this._disposed) {
             this.cellsSelectionState.releaseSelectedAndFocusedCells();
 
             this.viewDataProvider.updateViewData(this.generateRenderOptions());
