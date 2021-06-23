@@ -57,6 +57,7 @@ import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
+import { createResourcesTree, getCellGroups } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
@@ -538,6 +539,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 super._optionChanged(args);
                 this._dimensionChanged();
                 break;
+            case 'resourceManager':
             case 'allowMultipleCellSelection':
                 break;
             case 'selectedCellData':
@@ -1267,8 +1269,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexByResourceId(id) {
         const groups = this.option('groups');
-        const resourceManager = this.invoke('getResourceManager');
-        const resourceTree = resourceManager.createResourcesTree(groups);
+        const resourceTree = createResourcesTree(groups);
 
         if(!resourceTree.length) return 0;
 
@@ -1594,8 +1595,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-            const resourceManager = this.invoke('getResourceManager');
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1669,8 +1669,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
+        const groupsArray = getCellGroups(
             cellGroupIndex,
             this.option('groups')
         );
@@ -1726,8 +1725,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const groupIndex = this._getGroupIndex(rowIndex, 0);
 
-            const resourceManager = this.invoke('getResourceManager');
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -1841,8 +1839,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const resourceManager = this.invoke('getResourceManager');
-        const groupsArray = resourceManager.getCellGroups(
+        const groupsArray = getCellGroups(
             groupIndex,
             this.option('groups')
         );
@@ -1885,10 +1882,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllGroups() {
         const groupCount = this._getGroupCount();
-        const resourceManager = this.invoke('getResourceManager');
 
         return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = resourceManager.getCellGroups(
+            const groupsArray = getCellGroups(
                 groupIndex,
                 this.option('groups')
             );
@@ -2199,18 +2195,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getDaysOfInterval(fullInterval, startDayTime) {
         return Math.floor((fullInterval + startDayTime) / DAY_MS);
-    }
-
-    _getGroupIndexes(appointmentResources) {
-        let result = [];
-        if(this._isGroupsSpecified(appointmentResources)) {
-            const resourceManager = this.invoke('getResourceManager');
-            const tree = resourceManager.createResourcesTree(this.option('groups'));
-
-            result = resourceManager.getResourceTreeLeaves(tree, appointmentResources);
-        }
-
-        return result;
     }
 
     _updateIndex(index) {
@@ -2581,22 +2565,20 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow, groupIndex) {
+    getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
         const result = [];
 
         if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        let groupIndices = [groupIndex];
+        let validGroupIndices = [groupIndex];
 
         if(!isDefined(groupIndex)) {
-            groupIndices = this._getGroupCount()
-                ? this._getGroupIndexes(appointmentResources)
-                : [0];
+            validGroupIndices = this._getGroupCount() ? groupIndices : [0];
         }
 
-        groupIndices.forEach(groupIndex => {
+        validGroupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
             coordinates && result.push(coordinates);
         });

@@ -185,8 +185,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
 
     if (keyName === 'space' || which === 'space') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;
