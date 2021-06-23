@@ -771,6 +771,8 @@ module('Resizing integration', {
             .drag(30, 0)
             .dragEnd();
 
+        this.clock.tick(TIME_TO_WAIT);
+
         const tableModule = this.quillInstance.getModule('table');
 
         this.quillInstance.setSelection(5, 0);
@@ -780,7 +782,7 @@ module('Resizing integration', {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const expectedColumnsWidths = [];
+        const expectedColumnsWidths = [40, 40, 40, 114, 114, 114, 135];
 
         const $table = this.$element.find('table');
 
@@ -807,6 +809,8 @@ module('Resizing integration', {
             .drag(30, 0)
             .dragEnd();
 
+        this.clock.tick(TIME_TO_WAIT);
+
         const tableModule = this.quillInstance.getModule('table');
 
         this.quillInstance.setSelection(5, 0);
@@ -816,11 +820,11 @@ module('Resizing integration', {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const expectedColumnsWidths = [];
+        const expectedColumnsWidths = [40, 40, 40, 114, 114, 94, 155];
 
         $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
 
-        $columnResizerElements.eq(3)
+        $columnResizerElements.eq(5)
             .trigger('dxpointerdown');
 
         $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
