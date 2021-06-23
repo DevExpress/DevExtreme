@@ -1,15 +1,5 @@
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import {
-    LoadOptions
-} from './load_options';
-
-import {
-    FilterDescriptor,
-    GroupDescriptor
-} from './index'
+import { DxPromise } from '../core/utils/deferred';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index'
 
 /** @namespace DevExpress.data */
 export interface StoreOptions<TKey = any, TValue = any> {

@@ -1,14 +1,6 @@
-import {
-    DxPromise
-} from '../../core/utils/deferred';
-
-import Store, {
-    StoreOptions
-} from '../abstract_store';
-
-import {
-    LoadOptions
-} from '../load_options';
+import { DxPromise } from '../../core/utils/deferred';
+import Store, { StoreOptions } from '../abstract_store';
+import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context'
 

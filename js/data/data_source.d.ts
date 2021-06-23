@@ -1,16 +1,7 @@
-import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from './index';
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import Store, {
-    StoreOptions
-} from './abstract_store';
-
-import {
-    CustomStoreOptions
-} from './custom_store';
-import { LoadOptions } from './load_options';
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation } from './index';
+import { DxPromise } from '../core/utils/deferred';
+import Store, { StoreOptions } from './abstract_store';
+import { CustomStoreOptions } from './custom_store';
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
@@ -423,9 +414,4 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
-/**
- * @docid
- * @public
- */
-type SearchOperation = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
 type EventName = 'changed'|'loadError'|'loadingChanged';

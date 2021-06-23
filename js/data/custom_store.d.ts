@@ -1,11 +1,5 @@
-import { FilterDescriptor, GroupDescriptor } from './index';
-import Store, {
-    StoreOptions
-} from './abstract_store';
-
-import {
-    LoadOptions
-} from './load_options';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
+import Store, { StoreOptions } from './abstract_store';
 
 /** @namespace DevExpress.data */
 export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
