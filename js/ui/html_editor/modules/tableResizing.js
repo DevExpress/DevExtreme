@@ -81,6 +81,15 @@ export default class TableResizingModule extends BaseModule {
 
     _resizeHandler() {
         this._windowResizeTimeout = setTimeout(() => {
+            const $tables = this._findTables();
+            each($tables, (index, table) => {
+                const actualTableWidth = $(table).outerWidth();
+                const lastTableWidth = parseInt($(table).attr('width')?.replace('px', ''));
+                if(actualTableWidth > lastTableWidth + 1 || actualTableWidth < lastTableWidth - 1) {
+                    $(table).attr('width', actualTableWidth + 'px');
+                    this._recalculateColumnsWidth($(table));
+                }
+            });
             this._updateFramesPositions();
             this._updateFramesSeparators();
         });
@@ -389,7 +398,7 @@ export default class TableResizingModule extends BaseModule {
 
     _recalculateColumnsWidth($table) {
         const determinantElements = this._getTableDeterminantElements($table);
-        const tableWidth = parseInt($table.attr('width'));
+        const tableWidth = $table.attr('width') ? parseInt($table.attr('width')) : $table.outerWidth();
         const columnsWidths = [];
         let columnSum = 0;
         let ratio = 1;
@@ -404,12 +413,24 @@ export default class TableResizingModule extends BaseModule {
 
         const minWidthForColumns = determinantElements.length * this._minColumnWidth;
 
-        ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);
+        if(columnSum > minWidthForColumns) {
+            ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);
+        } else {
+            ratio = -1;
+        }
+
+        if(ratio < 0) {
+            $table.attr('width', minWidthForColumns + 'px');
+        }
 
         each(determinantElements, (index, element) => {
             const $lineElements = $table.find('td:nth-child(' + (1 + index) + ')');
-
-            const resultWidth = (this._minColumnWidth + Math.round((columnsWidths[index] - this._minColumnWidth) * ratio));
+            let resultWidth;
+            if(ratio > 0) {
+                resultWidth = (this._minColumnWidth + Math.round((columnsWidths[index] - this._minColumnWidth) * ratio));
+            } else {
+                resultWidth = this._minColumnWidth;
+            }
 
             $lineElements.each((i, element) => {
                 $(element).attr('width', resultWidth + 'px');

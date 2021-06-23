@@ -591,6 +591,54 @@ module('Resizing integration', {
         });
     });
 
+    test('Check columns widths and resizers positions after window resize', function(assert) {
+        this.createWidget({
+            width: 630
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        let $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(20, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        $('#htmlEditor').width(430);
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        resizeCallbacks.fire();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        const $table = this.$element.find('table');
+
+        const columnBorderOffsets = getColumnBordersOffset($table);
+
+        const expectedColumnsWidths = [97, 97, 97, 108];
+
+        $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+            assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1, 'Column has expected width attr, index = ' + i);
+        });
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+    });
+
     test('Window resize callback should be cleaned after the widget dispose (move to module tests)', function(assert) {
         this.createWidget();
 
@@ -839,6 +887,7 @@ module('Resizing integration', {
 
         $table.find('tr').eq(0).find('td').each((i, columnElement) => {
             assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+            assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1, 'Column has expected width attr, index = ' + i);
         });
     });
 
@@ -1109,5 +1158,38 @@ module('Resizing integration', {
         const framePosition = getBoundingRect($resizeFrame.get(0));
 
         assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
+    });
+
+    test('Table should has a correct width if it has not anough place after insert rows', function(assert) {
+        assert.expect(17);
+
+        const minColumnWidth = 40;
+        this.createWidget({
+            width: 230,
+            tableResizing: {
+                enabled: true,
+                minColumnWidth: minColumnWidth
+            }
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $table = this.$element.find('table').eq(0);
+
+        $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+            assert.roughEqual($(columnElement).outerWidth(), minColumnWidth, 1, 'Column has expected width, index = ' + i);
+            assert.roughEqual(parseInt($(columnElement).attr('width')), minColumnWidth, 1, 'Column has expected width attr, index = ' + i);
+        });
+
+        assert.roughEqual($table.outerWidth(), minColumnWidth * 8, 2, 'Table width');
     });
 });
