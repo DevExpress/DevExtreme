@@ -728,6 +728,91 @@ module('Resizing integration', {
         });
     });
 
+    test('Columns widths should be updated after a some columns insert', function(assert) {
+        this.createWidget({
+            width: 630
+        });
+        this.clock.tick(TIME_TO_WAIT);
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(30, 0)
+            .dragEnd();
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const expectedColumnsWidths = [];
+
+        const $table = this.$element.find('table');
+
+        $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+        });
+    });
+
+    test('Column resizers should be updated after a some columns insert', function(assert) {
+        this.createWidget({
+            width: 630
+        });
+        this.clock.tick(TIME_TO_WAIT);
+        let $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        let $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(30, 0)
+            .dragEnd();
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const expectedColumnsWidths = [];
+
+        $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(-20, 0)
+            .dragEnd();
+
+        const $table = this.$element.find('table');
+
+        $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+        });
+    });
+
     test('Second table frame should update position after the insert row to the first table', function(assert) {
         this.createWidget({
             value: tableMarkup + '<br>' + tableMarkup

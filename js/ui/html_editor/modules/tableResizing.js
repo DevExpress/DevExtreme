@@ -366,10 +366,8 @@ export default class TableResizingModule extends BaseModule {
                 this._dragStartHandler(options);
             },
             onDragEnd: () => {
-                // if(!options.$determinantElements[options.index + 1] && options.direction !== 'vertical') {
-                options.frame.$table.attr('width', options.frame.$table.outerWidth());
-                // options.frame.$table.css('minWidth', options.frame.$table.outerWidth());
-                // }
+                options.frame.$table.attr('width', options.frame.$table.outerWidth() + 'px');
+
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
