@@ -1,20 +1,12 @@
-import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor } from './index';
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, SummaryDescriptor } from './index';
 import { SearchOperation } from './data_source';
 
-/** 
- * @docid
- * @public
- */
-type SummaryDescriptor = {
-    selector: string | Function;
-    summaryType: 'sum' | 'avg' | 'min' | 'max' | 'count';
-}
 /**
  * @docid
  * @namespace DevExpress.data
  * @type object
  */
-export interface LoadOptions {
+export interface LoadOptions<TKey = any, TValue = any> {
     /**
      * @docid
      * @public
@@ -34,12 +26,12 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    group?: GroupDescriptor | Array<GroupDescriptor>;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @public
      */
-    groupSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
+    groupSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
      * @docid
      * @public
@@ -75,7 +67,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    select?: SelectDescriptor | Array<SelectDescriptor>;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * @docid
      * @public
@@ -85,7 +77,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    sort?: SortDescriptor | Array<SortDescriptor>;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * @docid
      * @public
@@ -95,7 +87,7 @@ export interface LoadOptions {
      * @docid
      * @public
      */
-    totalSummary?: SummaryDescriptor | Array<SummaryDescriptor>;
+    totalSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
     /**
      * @docid
      * @public

@@ -35,7 +35,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<any>|Array<any>
      * @public
      */
-    load?: ((options: LoadOptions) => PromiseLike<TValue> | Array<TValue>);
+    load?: ((options: LoadOptions<TKey, TValue>) => PromiseLike<TValue> | Array<TValue>);
     /**
      * @docid
      * @type string
@@ -59,7 +59,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<number>
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor | Array<GroupDescriptor> }) => PromiseLike<number>);
+    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }) => PromiseLike<number>);
     /**
      * @docid
      * @type_function_param1 key:object|string|number

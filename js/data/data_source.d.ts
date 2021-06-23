@@ -10,6 +10,7 @@ import Store, {
 import {
     CustomStoreOptions
 } from './custom_store';
+import { LoadOptions } from './load_options';
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
@@ -34,7 +35,7 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @type Group expression
      * @public
      */
-    group?: GroupDescriptor | Array<GroupDescriptor>;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @type_function_param1 dataItem:object
@@ -124,13 +125,13 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @type Select expression
      * @public
      */
-    select?: SelectDescriptor | Array<SelectDescriptor>;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * @docid
      * @type Sort expression
      * @public
      */
-    sort?: SortDescriptor | Array<SortDescriptor>;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * @docid
      * @public
@@ -182,14 +183,14 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    group(): GroupDescriptor | Array<GroupDescriptor>;
+    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @public
      */
-    group(groupExpr: GroupDescriptor | Array<GroupDescriptor>): void;
+    group(groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName isLastPage()
@@ -238,7 +239,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    loadOptions(): {sort?: SortDescriptor | Array<SortDescriptor>, filter?: any, select?: SelectDescriptor, group?: GroupDescriptor | Array<GroupDescriptor>, requireTotalCount?: boolean};
+    loadOptions(): LoadOptions<TKey, TValue>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -384,28 +385,28 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return any
      * @public
      */
-    select(): SelectDescriptor | Array<SelectDescriptor>;
+    select(): SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @public
      */
-    select(expr: SelectDescriptor | Array<SelectDescriptor>): void;
+    select(expr: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName sort()
      * @return any
      * @public
      */
-    sort(): SortDescriptor | Array<SortDescriptor>;
+    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @public
      */
-    sort(sortExpr: SortDescriptor | Array<SortDescriptor>): void;
+    sort(sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName store()
@@ -427,4 +428,4 @@ export default class DataSource<TKey = any, TValue = any> {
  * @public
  */
 type SearchOperation = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
-type EventName = 'changed'|'loadError'|'loadingChanged'/*|'customizeLoadResult'|'customizeStoreLoadOptions'*/;
+type EventName = 'changed'|'loadError'|'loadingChanged';
