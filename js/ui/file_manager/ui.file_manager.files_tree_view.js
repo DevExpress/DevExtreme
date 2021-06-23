@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { getImageContainer } from '../../core/utils/icon';
 import { noop } from '../../core/utils/common';
@@ -53,13 +52,10 @@ class FileManagerFilesTreeView extends Widget {
         }
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
-
-        eventsEngine.on($treeView, 'click', () => this._actions.onClick());
     }
 
     _initActions() {
         this._actions = {
-            onClick: this._createActionByOption('onClick'),
             onDirectoryClick: this._createActionByOption('onDirectoryClick'),
             onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady')
         };
@@ -231,7 +227,6 @@ class FileManagerFilesTreeView extends Widget {
             case 'getCurrentDirectory':
                 this.getCurrentDirectory = this.option(name);
                 break;
-            case 'onClick':
             case 'onDirectoryClick':
             case 'onFilesTreeViewContentReady':
                 this._actions[name] = this._createActionByOption(name);
