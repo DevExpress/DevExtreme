@@ -1,5 +1,10 @@
 import dateUtils from '../../../../core/utils/date';
-import { getCalculatedFirstDayOfWeek, isDateInRange, setStartDayHour } from './base';
+import {
+    getCalculatedFirstDayOfWeek,
+    isDateInRange,
+    setStartDayHour,
+    getDateByCellIndices as getDateByCellIndicesBase,
+} from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
     if(!startDate) {
@@ -44,4 +49,14 @@ export const calculateStartViewDate = (
     const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
 
     return setStartDayHour(firstViewDate, startDayHour);
+};
+
+export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
+    return rowIndex * columnCount + columnIndex;
+};
+
+export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
+    const date = getDateByCellIndicesBase(options, rowIndex, columnIndex);
+
+    return setStartDayHour(date, options.startDayHour);
 };

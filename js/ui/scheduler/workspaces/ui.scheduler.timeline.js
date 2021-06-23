@@ -14,6 +14,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getDateByCellIndices, calculateCellIndex } from './utils/base';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -92,7 +93,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getDateByIndexCore(date, index) {
         const result = new Date(date);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+        result.setTime(date.getTime() + index * this._getInterval() + dayIndex * this._getHiddenInterval());
 
         return result;
     }
@@ -111,17 +112,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getFormat() {
         return 'shorttime';
-    }
-
-    _calculateHiddenInterval(rowIndex, columnIndex) {
-        const dayIndex = Math.floor(columnIndex / this._getCellCountInDay());
-        return dayIndex * this._getHiddenInterval();
-    }
-
-    _getMillisecondsOffset(rowIndex, columnIndex) {
-        const cellIndex = this._calculateCellIndex(rowIndex, columnIndex);
-
-        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
     }
 
     _createWorkSpaceElements() {
@@ -257,6 +247,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
@@ -628,6 +619,25 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
         };
+    }
+
+    _getDateByCellIndexes(rowIndex, columnIndex) {
+        return getDateByCellIndices(
+            {
+                startDayHour: this.option('startDayHour'),
+                isWorkView: this.isWorkView,
+                columnsInDay: this._getCellCountInDay(),
+                hiddenInterval: this._hiddenInterval,
+                calculateCellIndex,
+                interval: this._getInterval(),
+                cellCountInDay: this._getCellCountInDay(),
+                startViewDate: this.getStartViewDate(),
+                rowCount: this._getRowCount(),
+                columnCount: this._getCellCount(),
+            },
+            rowIndex,
+            columnIndex,
+        );
     }
 }
 

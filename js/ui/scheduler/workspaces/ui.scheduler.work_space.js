@@ -55,7 +55,7 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
-import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
+import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions, getDateByCellIndices, calculateCellIndex } from './utils/base';
 import { calculateStartViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
@@ -217,6 +217,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     get viewDirection() { return 'vertical'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
+    get isWorkView() { return false; }
 
     _supportedKeys() {
         const clickHandler = function(e) {
@@ -1020,6 +1022,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
         this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
@@ -1993,9 +1996,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getDateByIndex() { return abstract(); }
     _getFormat() { return abstract(); }
 
-    _calculateCellIndex(rowIndex, columnIndex) {
-        return columnIndex * this._getRowCount() + rowIndex;
-    }
 
     _renderTableBody(options, delayCellTemplateRendering) {
         let result = [];
@@ -2125,43 +2125,22 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getDateByCellIndexes(rowIndex, columnIndex) {
-        let firstViewDate = this.getStartViewDate();
-
-        const isFirstViewDateDuringDST = firstViewDate.getHours() !== Math.floor(this.option('startDayHour'));
-
-        if(isFirstViewDateDuringDST) {
-            const dateWithCorrectHours = this._getFirstViewDateWithoutDST();
-
-            firstViewDate = new Date(dateWithCorrectHours - toMs('day'));
-        }
-
-        const firstViewDateTime = firstViewDate.getTime();
-        const millisecondsOffset = this._getMillisecondsOffset(rowIndex, columnIndex);
-        const offsetByCount = this._getOffsetByCount(columnIndex);
-
-        const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount);
-
-        let timeZoneDifference = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-        if(isFirstViewDateDuringDST) {
-            timeZoneDifference = 0;
-        }
-
-        currentDate.setTime(currentDate.getTime() + timeZoneDifference);
-
-        return currentDate;
-    }
-
-    _getOffsetByCount() {
-        return 0;
-    }
-
-    _getMillisecondsOffset(rowIndex, columnIndex) {
-        return this._getInterval() * this._calculateCellIndex(rowIndex, columnIndex) + this._calculateHiddenInterval(rowIndex, columnIndex);
-    }
-
-    _calculateHiddenInterval(rowIndex, columnIndex) {
-        const dayCount = columnIndex % this._getCellCount();
-        return dayCount * this._getHiddenInterval();
+        return getDateByCellIndices(
+            {
+                startDayHour: this.option('startDayHour'),
+                isWorkView: this.isWorkView,
+                columnsInDay: 1,
+                hiddenInterval: this._hiddenInterval,
+                calculateCellIndex,
+                interval: this._getInterval(),
+                cellCountInDay: this._getCellCountInDay(),
+                startViewDate: this.getStartViewDate(),
+                rowCount: this._getRowCount(),
+                columnCount: this._getCellCount(),
+            },
+            rowIndex,
+            columnIndex,
+        );
     }
 
     _getHiddenInterval() {

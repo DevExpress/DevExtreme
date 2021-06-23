@@ -1,5 +1,4 @@
 import registerComponent from '../../../core/component_registrator';
-import dateUtils from '../../../core/utils/date';
 import {
     isDataOnWeekend,
     getWeekendsCount,
@@ -8,8 +7,6 @@ import {
 } from './utils/work_week';
 import SchedulerWorkSpaceWeek from './ui.scheduler.work_space_week';
 
-const toMs = dateUtils.dateToMilliseconds;
-
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 
 const dayIndexes = [1, 2, 3, 4, 5];
@@ -17,6 +14,8 @@ const dayIndexes = [1, 2, 3, 4, 5];
 let weekCounter = 0;
 
 class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
+    get isWorkView() { return true; }
+
     constructor(...args) {
         super(...args);
 
@@ -68,17 +67,6 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
             this._getIntervalDuration(),
             this.option('firstDayOfWeek'),
         );
-    }
-
-    _getOffsetByCount(cellIndex) {
-        const cellsInGroup = this._getCellCount();
-        const inGroup = Math.floor(cellIndex / cellsInGroup);
-
-        cellIndex = cellIndex - cellsInGroup * inGroup;
-
-        const weekendCount = Math.floor(cellIndex / 5);
-
-        return toMs('day') * weekendCount * 2;
     }
 }
 
