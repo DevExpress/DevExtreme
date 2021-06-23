@@ -227,8 +227,8 @@ export class Button extends JSXComponent(ButtonProps) {
     }
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;

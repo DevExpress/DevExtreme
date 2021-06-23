@@ -73,7 +73,7 @@ export const viewFunction = ({
   restAttributes,
 }: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
-    rootElementRef={widgetElementRef as any}
+    rootElementRef={widgetElementRef}
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
     activeStateUnit={rowSelector}
@@ -149,6 +149,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   getComponentInstance(): GridInstance {
     return this.instance;
   }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
   // #region methods
   @Method()
@@ -337,7 +340,6 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
@@ -520,6 +522,9 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   // #endregion
+
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+  /* eslint-enable @typescript-eslint/explicit-module-boundary-types */
 
   @Effect() updateOptions(): void {
     if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {

@@ -1304,17 +1304,21 @@ declare module DevExpress.core {
    */
   interface Component<TProperties> {
     // eslint-disable-line @typescript-eslint/no-unused-vars
-    _optionsByReference: Record<string, any>;
-    _deprecatedOptions: Record<string, any>;
+    _optionsByReference: Record<string, unknown>;
+    _deprecatedOptions: Record<string, unknown>;
     _options: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       silent(path: any, value: any): void;
     };
     _createActionByOption(
       optionName: string,
-      config: Record<string, any>
-    ): (...args: any[]) => any;
+      config: Record<string, unknown>
+    ): (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...args: any[]
+    ) => any;
     _dispose(): void;
-    _getDefaultOptions(): Record<string, any>;
+    _getDefaultOptions(): Record<string, unknown>;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
