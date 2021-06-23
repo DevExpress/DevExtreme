@@ -108,7 +108,8 @@ export default class TableResizingModule extends BaseModule {
                 let columnsSum = 0;
 
                 each($columnElements, (_, element) => {
-                    columnsSum += parseInt($(element).attr('width'));
+                    const columnWidth = $(element).attr('width') ? parseInt($(element).attr('width').replace('px', '')) : $(element).outerWidth();
+                    columnsSum += columnWidth;
                 });
 
                 $table.css('width', 'initial');
