@@ -2206,7 +2206,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     QUnit.test('Change toolbar.items[i].prop in runtime', function(assert) {
         // arrange
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
@@ -2255,7 +2254,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     QUnit.test('Change toolbar.items[i] in runtime', function(assert) {
         // arrange
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
@@ -2304,7 +2302,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     QUnit.test('Change toolbar.items in runtime', function(assert) {
         // arrange
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
@@ -2357,9 +2354,8 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
     });
 
-    QUnit.test('Change toolbar option in runtime', function(assert) {
+    QUnit.test('Change toolbar in runtime', function(assert) {
         // arrange
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
@@ -2414,17 +2410,9 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     QUnit.test('Changing toolbar.items[i].prop saves the state of button', function(assert) {
         // arrange
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2 }],
-            columnChooser: {
-                enabled: true,
-                title: 'Column chooser'
-            },
-            editing: {
-                allowAdding: true
-            },
             toolbar: {
                 items: [
                     {
@@ -2445,14 +2433,70 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const selectBox = $selectBox.dxSelectBox('instance');
         selectBox.option('value', 'item2');
 
+        // assert
+        assert.equal(selectBox.option('value'), 'item2', 'selectbox state is right');
+
         // act
-        dataGrid.option('toolbar.items[0].location', 'after');
+        dataGrid.option('toolbar.items[0].disabled', true);
 
         // assert
-        const $selectBoxInAfter = dataGrid.$element().find('.dx-toolbar-after .my-test-button .dx-selectbox');
-        const selectBoxInAfter = $selectBoxInAfter.dxSelectBox('instance');
-        assert.equal($selectBoxInAfter.length, 1, 'selectbox option changed');
-        assert.equal(selectBoxInAfter.option('value'), 'item2', 'selectbox state saved');
+        const $selectBoxDisabledContainer = dataGrid.$element().find('.my-test-button');
+        assert.ok($selectBoxDisabledContainer.hasClass('dx-state-disabled'), 'button option changed');
+
+        const $selectBoxDisabled = $selectBoxDisabledContainer.find('.dx-selectbox');
+        const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
+        assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
+    });
+
+    QUnit.test('Changing toolbar.items[i] saves the state of another button', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        location: 'after',
+                        widget: 'dxSelectBox',
+                        cssClass: 'my-test-button',
+                        options: {
+                            items: ['item1', 'item2'],
+                            value: 'item1',
+                        }
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $selectBox = dataGrid.$element().find('.my-test-button .dx-selectbox');
+        const selectBox = $selectBox.dxSelectBox('instance');
+        selectBox.option('value', 'item2');
+
+        // act
+        dataGrid.option('toolbar.items[1]', {
+            name: 'columnChooserButton',
+            disabled: true
+        });
+
+        // assert
+        const $columnChooserButton = dataGrid.$element().find('.dx-toolbar-before .dx-toolbar-item');
+        assert.ok($columnChooserButton.hasClass('dx-state-disabled'), 'button option changed');
+
+        const $selectBoxAfterChange = dataGrid.$element().find('.my-test-button .dx-selectbox');
+        const selectBoxAfterChange = $selectBoxAfterChange.dxSelectBox('instance');
+        assert.equal(selectBoxAfterChange.option('value'), 'item2', 'selectbox state saved');
     });
 });
 

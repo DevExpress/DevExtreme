@@ -43,7 +43,8 @@ const HeaderPanel = ColumnsView.inherit({
             }
         };
 
-        options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items);
+        const userItems = this.option('toolbar.items');
+        options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items, userItems);
 
         this.executeAction('onToolbarPreparing', options);
 
@@ -55,19 +56,23 @@ const HeaderPanel = ColumnsView.inherit({
         return options.toolbarOptions;
     },
 
-    _normalizeToolbarItems(items) {
-        const userItems = this.option('toolbar.items');
+    _normalizeToolbarItems(defaultItems, userItems) {
+        const isArray = Array.isArray(userItems);
 
         if(!isDefined(userItems)) {
-            return items;
+            return defaultItems;
+        }
+
+        if(!isArray) {
+            userItems = [userItems];
         }
 
         const defaultButtonsByNames = {};
-        items.forEach(button => {
+        defaultItems.forEach(button => {
             defaultButtonsByNames[button.name] = button;
         });
 
-        return extend(true, [], userItems.map(button => {
+        const normalizedItems = extend(true, [], userItems.map(button => {
             if(isString(button)) {
                 button = { name: button };
             }
@@ -78,6 +83,8 @@ const HeaderPanel = ColumnsView.inherit({
 
             return extend(defaultButtonsByNames[button.name], button);
         }));
+
+        return isArray ? normalizedItems : normalizedItems[0];
     },
 
     _renderCore: function() {
@@ -145,25 +152,27 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     optionChanged: function(args) {
+        const parts = getPathParts(args.fullName);
+
         if(args.name === 'onToolbarPreparing') {
             this._invalidate();
             args.handled = true;
         }
         if(args.name === 'toolbar') {
-            debugger;
-
-            const parts = getPathParts(args.fullName);
-
-            if(parts.length === 1 || (parts.length === 2 && parts[1] === 'items')) {
+            if(parts.length <= 2) {
+                // toolbar and toolbar.items case
                 const toolbarOptions = this._getToolbarOptions();
                 this._toolbar.option(toolbarOptions);
-            } else if(parts.length === 3 && parts[1] === 'items') {
-                const toolbarOptions = this._getToolbarOptions();
-                this._toolbar.option(toolbarOptions);
-            } else if(parts.length >= 4 && parts[1] === 'items') {
-                this._toolbar.option(parts.slice(1).join('.'), args.value);
+            } else if(parts.length === 3) {
+                // toolbar.items[i] case
+                const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
+                const optionName = args.fullName.replace(/^toolbar./, '');
+                this._toolbar.option(optionName, normalizedItem);
+            } else if(parts.length >= 4) {
+                // toolbar.items[i].prop case
+                const optionName = args.fullName.replace(/^toolbar./, '');
+                this._toolbar.option(optionName, args.value);
             }
-
         }
         this.callBase(args);
     },

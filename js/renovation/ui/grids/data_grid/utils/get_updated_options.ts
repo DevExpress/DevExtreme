@@ -10,7 +10,7 @@ function getDiffItem(key, value, previousValue): ResultItem {
   return { path: key, value, previousValue };
 }
 
-function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
+function compare(resultPaths: ResultItem[], item1, item2, key: string, fullPropName: string): void {
   const type1 = type(item1);
   const type2 = type(item2);
   if (item1 === item2) return;
@@ -21,17 +21,17 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const diffPaths = objectDiffs(item1, item2);
+      const diffPaths = objectDiffs(item1, item2, fullPropName);
       resultPaths.push(...diffPaths.map((item) => ({ ...item, path: `${key}.${item.path}` })));
     }
   } else if (type1 === 'array') {
-    if (key !== 'columns' && item1 !== item2) {
+    if (key !== 'columns' && !(key === 'items' && fullPropName.includes('toolbar')) && item1 !== item2) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else if ((item1 as []).length !== (item2 as []).length) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const diffPaths = objectDiffs(item1, item2);
+      const diffPaths = objectDiffs(item1, item2, fullPropName);
       ([] as ResultItem[]).push.apply(resultPaths,
         diffPaths.map((item) => ({ ...item, path: `${key}${item.path}` })));
     }
@@ -43,12 +43,16 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
 const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (
   oldProps: Record<string, unknown>,
   props: Record<string, unknown>,
+  fullPropName: string,
 ):
 ResultItem[] => {
   const resultPaths: ResultItem[] = [];
   const processItem = !Array.isArray(oldProps)
-    ? (propName): void => compare(resultPaths, oldProps[propName], props[propName], propName)
-    : (propName): void => compare(resultPaths, oldProps[propName], props[propName], `[${propName}]`);
+    ? (propName): void => {
+      compare(resultPaths, oldProps[propName], props[propName], propName, `${fullPropName}.${propName}`);
+    } : (propName): void => {
+      compare(resultPaths, oldProps[propName], props[propName], `[${propName}]`, `${fullPropName}.${propName}`);
+    };
 
   propsEnumerator(oldProps).forEach(processItem);
   Object.keys(props)
@@ -73,5 +77,5 @@ const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(p
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function getUpdatedOptions(oldProps: {}, props: {}): ResultItem[] {
-  return objectDiffsWithoutReactProps(oldProps, props);
+  return objectDiffsWithoutReactProps(oldProps, props, '');
 }
