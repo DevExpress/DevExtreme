@@ -86,8 +86,9 @@ const createInstance = (options = {}) => {
     });
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
+        key,
         observer: createObserver(options.renderingStrategy),
-        ...options
+        ...options,
     }).dxSchedulerAppointments('instance');
 };
 

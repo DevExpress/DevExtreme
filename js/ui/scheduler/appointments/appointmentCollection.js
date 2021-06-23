@@ -42,7 +42,6 @@ class SchedulerAppointments extends CollectionWidget {
 
     constructor(element, options) {
         super(element, options);
-        this.key = options.key;
         this._virtualAppointments = {};
     }
 
@@ -547,8 +546,8 @@ class SchedulerAppointments extends CollectionWidget {
                 element,
                 this.isAgendaView ? AgendaAppointment : Appointment,
                 {
-                    globalKey: this.key,
-                    ...config
+                    ...config,
+                    key: this.option('key'),
                 }
             );
         }
@@ -613,7 +612,7 @@ class SchedulerAppointments extends CollectionWidget {
         const { info } = $element.data('dxAppointmentSettings');
         const sourceAppointment = this._getItemData($element);
 
-        const modifiedAppointmentAdapter = createAppointmentAdapter(this.key, sourceAppointment).clone();
+        const modifiedAppointmentAdapter = createAppointmentAdapter(this.option('key'), sourceAppointment).clone();
 
         const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
         const endDate = info.appointment.endDate;
@@ -631,7 +630,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _getEndResizeAppointmentStartDate(e, rawAppointment, appointmentInfo) {
-        const appointmentAdapter = createAppointmentAdapter(this.key, rawAppointment);
+        const appointmentAdapter = createAppointmentAdapter(this.option('key'), rawAppointment);
 
         let startDate = appointmentInfo.startDate;
         const recurrenceProcessor = getRecurrenceProcessor();
@@ -640,7 +639,7 @@ class SchedulerAppointments extends CollectionWidget {
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
-            startDate = getTimeZoneCalculator(this.key).createDate(
+            startDate = getTimeZoneCalculator(this.option('key')).createDate(
                 appointmentAdapter.startDate,
                 {
                     appointmentTimeZone: startDateTimeZone,
@@ -800,8 +799,8 @@ class SchedulerAppointments extends CollectionWidget {
     _sortAppointmentsByStartDate(appointments) {
         appointments.sort((function(a, b) {
             let result = 0;
-            const firstDate = new Date(ExpressionUtils.getField(this.key, 'startDate', a.settings || a)).getTime();
-            const secondDate = new Date(ExpressionUtils.getField(this.key, 'startDate', b.settings || b)).getTime();
+            const firstDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', a.settings || a)).getTime();
+            const secondDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', b.settings || b)).getTime();
 
             if(firstDate < secondDate) {
                 result = -1;
@@ -816,7 +815,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
         // NOTE: this method is actual only for agenda
-        const recurrenceRule = ExpressionUtils.getField(this.key, 'recurrenceRule', appointment);
+        const recurrenceRule = ExpressionUtils.getField(this.option('key'), 'recurrenceRule', appointment);
         const result = {
             parts: [],
             indexes: []
@@ -825,10 +824,10 @@ class SchedulerAppointments extends CollectionWidget {
         if(recurrenceRule) {
             const dates = appointment.settings || appointment;
 
-            const startDate = new Date(ExpressionUtils.getField(this.key, 'startDate', dates));
-            const endDate = new Date(ExpressionUtils.getField(this.key, 'endDate', dates));
+            const startDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', dates));
+            const endDate = new Date(ExpressionUtils.getField(this.option('key'), 'endDate', dates));
             const appointmentDuration = endDate.getTime() - startDate.getTime();
-            const recurrenceException = ExpressionUtils.getField(this.key, 'recurrenceException', appointment);
+            const recurrenceException = ExpressionUtils.getField(this.option('key'), 'recurrenceException', appointment);
             const startViewDate = this.invoke('getStartViewDate');
             const endViewDate = this.invoke('getEndViewDate');
             const recurrentDates = getRecurrenceProcessor().generateDates({
@@ -871,7 +870,7 @@ class SchedulerAppointments extends CollectionWidget {
         const endViewDate = this.invoke('getEndViewDate').getTime();
         const startViewDate = this.invoke('getStartViewDate').getTime();
 
-        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
 
         result = result || {
             parts: []
@@ -881,7 +880,7 @@ class SchedulerAppointments extends CollectionWidget {
             extend(appointment, parts[0]);
 
             for(let i = 1; i < partCount; i++) {
-                let startDate = ExpressionUtils.getField(this.key, 'startDate', parts[i].settings).getTime();
+                let startDate = ExpressionUtils.getField(this.option('key'), 'startDate', parts[i].settings).getTime();
                 startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
 
                 if(startDate < endViewDate && startDate > startViewDate) {
@@ -907,12 +906,12 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyStartDateToObj(startDate, obj) {
-        ExpressionUtils.setField(this.key, 'startDate', obj, startDate);
+        ExpressionUtils.setField(this.option('key'), 'startDate', obj, startDate);
         return obj;
     }
 
     _applyEndDateToObj(endDate, obj) {
-        ExpressionUtils.setField(this.key, 'endDate', obj, endDate);
+        ExpressionUtils.setField(this.option('key'), 'endDate', obj, endDate);
         return obj;
     }
 
@@ -956,16 +955,16 @@ class SchedulerAppointments extends CollectionWidget {
     splitAppointmentByDay(appointment) {
         const dates = appointment.settings || appointment;
 
-        const originalStartDate = new Date(ExpressionUtils.getField(this.key, 'startDate', dates));
+        const originalStartDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', dates));
         let startDate = dateUtils.makeDate(originalStartDate);
-        let endDate = dateUtils.makeDate(ExpressionUtils.getField(this.key, 'endDate', dates));
+        let endDate = dateUtils.makeDate(ExpressionUtils.getField(this.option('key'), 'endDate', dates));
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
         const appointmentIsLong = this.invoke('getAppointmentDataProvider').appointmentTakesSeveralDays(appointment);
         const result = [];
 
-        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
 
         startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
         endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });

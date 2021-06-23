@@ -75,6 +75,7 @@ const createInstance = (options) => {
     };
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
+        key,
         observer,
         ...options,
     }).dxSchedulerAppointments('instance');
