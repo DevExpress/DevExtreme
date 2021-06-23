@@ -990,11 +990,11 @@ declare module DevExpress {
     shadingColor?: string;
   }
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type ExternalFormat = any;
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type Format =
     | FormatObject
@@ -1003,7 +1003,7 @@ declare module DevExpress {
     | ((value: number | Date) => string)
     | ExternalFormat;
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface FormatObject {
     /**
@@ -1242,7 +1242,7 @@ declare module DevExpress {
         };
   }
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type PredefinedFormat =
     | 'billions'
@@ -1423,7 +1423,7 @@ declare module DevExpress.core {
     getInstance(element: UserDefinedElement): TComponent;
   };
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface Condition {}
   /**
@@ -1483,7 +1483,7 @@ declare module DevExpress.core {
    */
   type EventName = 'orientationChanged';
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export class FunctionTemplate {
     render(template: {
@@ -1501,13 +1501,13 @@ declare module DevExpress.core {
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type RecursivePartial<T> = {
     [P in keyof T]?: RecursivePartial<T[P]>;
   };
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type Rule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
@@ -1593,7 +1593,7 @@ declare module DevExpress.data {
    */
   export function base64_encode(input: string | Array<number>): string;
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type BaseGroupDescriptor<T> = {
     selector: KeySelector<T>;
@@ -1839,12 +1839,12 @@ declare module DevExpress.data {
   }
   module DataSource {
     /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
   }
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
     TKey = any,
@@ -1979,7 +1979,7 @@ declare module DevExpress.data {
     valueOf(): string;
   }
   /**
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type KeySelector<T> = string | ((source: T) => string);
   /**
@@ -2110,11 +2110,11 @@ declare module DevExpress.data {
   }
   module ODataContext {
     /**
-     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';
     /**
-     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface ODataRequestOptions {
       accepts: any;
@@ -2428,7 +2428,7 @@ declare module DevExpress.data {
   }
   module PivotGridDataSource {
     /**
-     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type EventName =
       | 'changed'
@@ -2892,6 +2892,9 @@ declare module DevExpress.data {
     update(key: TKey, values: TValue): DevExpress.core.utils.DxPromise<TValue>;
   }
   module Store {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     type EventName =
       | 'loaded'
       | 'loading'
