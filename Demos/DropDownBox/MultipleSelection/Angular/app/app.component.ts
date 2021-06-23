@@ -45,23 +45,29 @@ export class AppComponent {
         });
     };
 
-    syncTreeViewSelection(e) {
-        var component = (e && e.component) || (this.treeView && this.treeView.instance);
-
-        if (!component) return;
+    onDropDownBoxValueChanged(e) {
+        this.updateSelection(this.treeView && this.treeView.instance)
+    }
+     
+    onTreeViewReady(e) {
+        this.updateSelection(e.component);
+    }
+     
+    updateSelection(treeView) {
+        if (!treeView) return;
 
         if (!this.treeBoxValue) {
-            component.unselectAll();
+            treeView.unselectAll();
         }
 
         if (this.treeBoxValue) {
             this.treeBoxValue.forEach((function (value) {
-                component.selectItem(value);
+                treeView.selectItem(value);
             }).bind(this));
         }
     }
 
-    treeView_itemSelectionChanged(e){
+    onTreeViewSelectionChanged(e){
         this.treeBoxValue = e.component.getSelectedNodeKeys();
     }
 }
