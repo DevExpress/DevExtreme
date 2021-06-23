@@ -707,6 +707,9 @@ const ValidationEngine = {
     },
 
     _synchronizeGroupValidationInfo(validator, result) {
+        if(!validator) {
+            return;
+        }
         const groupConfig = ValidationEngine.getGroupConfig(validator._validationGroup);
         groupConfig._updateBrokenRules.call(groupConfig, { validator, brokenRules: result.brokenRules ?? [] });
     },
