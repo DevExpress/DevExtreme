@@ -46,16 +46,14 @@ DevExpress.EndpointSelector = require('../../data/endpoint_selector');
 DevExpress.data.queryImpl = require('../../data/query_implementation').queryImpl;
 DevExpress.data.queryAdapters = require('../../data/query_adapters');
 
-const dataUtils = require('../../data/utils');
-
-DevExpress.data.utils.normalizeBinaryCriterion = dataUtils.normalizeBinaryCriterion;
-DevExpress.data.utils.normalizeSortingInfo = dataUtils.normalizeSortingInfo;
-DevExpress.data.utils.errorMessageFromXhr = dataUtils.errorMessageFromXhr;
-DevExpress.data.utils.aggregators = dataUtils.aggregators;
-DevExpress.data.utils.keysEqual = dataUtils.keysEqual;
-DevExpress.data.utils.isDisjunctiveOperator = dataUtils.isDisjunctiveOperator;
-DevExpress.data.utils.isConjunctiveOperator = dataUtils.isConjunctiveOperator;
-DevExpress.data.utils.processRequestResultLock = dataUtils.processRequestResultLock;
+DevExpress.data.utils.normalizeBinaryCriterion = require('../../data/utils').normalizeBinaryCriterion;
+DevExpress.data.utils.normalizeSortingInfo = require('../../data/utils').normalizeSortingInfo;
+DevExpress.data.utils.errorMessageFromXhr = require('../../data/utils').errorMessageFromXhr;
+DevExpress.data.utils.aggregators = require('../../data/utils').aggregators;
+DevExpress.data.utils.keysEqual = require('../../data/utils').keysEqual;
+DevExpress.data.utils.isDisjunctiveOperator = require('../../data/utils').isDisjunctiveOperator;
+DevExpress.data.utils.isConjunctiveOperator = require('../../data/utils').isConjunctiveOperator;
+DevExpress.data.utils.processRequestResultLock = require('../../data/utils').processRequestResultLock;
 
 DevExpress.data.utils.toComparable = require('../../core/utils/data').toComparable;
 

@@ -4,7 +4,7 @@ import { each, map } from '../core/utils/iterator';
 import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import { errors, handleError as handleDataError } from './errors';
-import dataUtils from './utils';
+import { aggregators, isConjunctiveOperator as isConjunctiveOperatorFromDataUtils, isGroupCriterion, isUnaryOperation, normalizeBinaryCriterion } from './utils';
 
 const Iterator = Class.inherit({
 
@@ -239,7 +239,7 @@ const compileCriteria = (function() {
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = dataUtils.isConjunctiveOperator(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorFromDataUtils(this);
             }
         });
 
@@ -262,7 +262,7 @@ const compileCriteria = (function() {
     };
 
     const compileBinary = function(crit) {
-        crit = dataUtils.normalizeBinaryCriterion(crit);
+        crit = normalizeBinaryCriterion(crit);
         const getter = compileGetter(crit[0]);
         const op = crit[1];
         let value = crit[2];
@@ -336,10 +336,10 @@ const compileCriteria = (function() {
         if(isFunction(crit)) {
             return crit;
         }
-        if(dataUtils.isGroupCriterion(crit)) {
+        if(isGroupCriterion(crit)) {
             return compileGroup(crit);
         }
-        if(dataUtils.isUnaryOperation(crit)) {
+        if(isUnaryOperation(crit)) {
             return compileUnary(crit);
         }
         return compileBinary(crit);
@@ -538,7 +538,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 
     const standardAggregate = function(name) {
-        return aggregateCore(dataUtils.aggregators[name]);
+        return aggregateCore(aggregators[name]);
     };
 
     const select = function(getter) {

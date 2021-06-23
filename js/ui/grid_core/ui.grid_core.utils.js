@@ -9,7 +9,7 @@ import { getBoundingRect } from '../../core/utils/position';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
-import dataUtils from '../../data/utils';
+import { normalizeSortingInfo as normalizeSortingInfoFromDataUtils } from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -78,7 +78,7 @@ const setEmptyText = function($container) {
 
 const normalizeSortingInfo = function(sort) {
     sort = sort || [];
-    const result = dataUtils.normalizeSortingInfo(sort);
+    const result = normalizeSortingInfoFromDataUtils(sort);
 
     for(let i = 0; i < sort.length; i++) {
         if(sort && sort[i] && sort[i].isExpanded !== undefined) {

@@ -5,7 +5,7 @@ import { extend } from '../../core/utils/extend';
 import queryAdapters from '../query_adapters';
 import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
 import { errors } from '../errors';
-import dataUtils from '../utils';
+import { isConjunctiveOperator, normalizeBinaryCriterion, isUnaryOperation } from '../utils';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
@@ -61,7 +61,7 @@ const compileCriteria = (() => {
     });
 
     const compileBinary = (criteria) => {
-        criteria = dataUtils.normalizeBinaryCriterion(criteria);
+        criteria = normalizeBinaryCriterion(criteria);
 
         const op = criteria[1];
         const fieldName = criteria[0];
@@ -121,7 +121,7 @@ const compileCriteria = (() => {
                 groupOperator = nextGroupOperator;
                 nextGroupOperator = 'and';
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? 'and' : 'or';
+                nextGroupOperator = isConjunctiveOperator(this) ? 'and' : 'or';
             }
         });
 
@@ -133,7 +133,7 @@ const compileCriteria = (() => {
             return compileGroup(criteria);
         }
 
-        if(dataUtils.isUnaryOperation(criteria)) {
+        if(isUnaryOperation(criteria)) {
             return compileUnary(criteria);
         }
 
