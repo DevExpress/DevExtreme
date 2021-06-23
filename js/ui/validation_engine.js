@@ -500,7 +500,6 @@ const GroupConfig = Class.inherit({
             this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
             const res = extend({}, this._validationInfo.result, { complete: null });
             const deferred = this._validationInfo.deferred;
-            this._resetValidationInfo();
             this._raiseValidatedEvent(res);
             deferred && setTimeout(() => {
                 deferred.resolve(res);
