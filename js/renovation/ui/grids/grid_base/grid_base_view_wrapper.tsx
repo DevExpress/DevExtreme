@@ -27,7 +27,7 @@ export class GridBaseViewWrapper extends JSXComponent<GridBaseViewWrapperProps, 
     // eslint-disable-next-line no-underscore-dangle
     this.props.view._$element = $element;
     // eslint-disable-next-line no-underscore-dangle
-    this.props.view._$parent = ($element as any).parent();
+    this.props.view._$parent = $element.parent();
     this.props.view.render();
     this.props.onRendered?.();
   }

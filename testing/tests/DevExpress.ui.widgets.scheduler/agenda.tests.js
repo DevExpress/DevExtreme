@@ -2,6 +2,7 @@ import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
 import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { createResourcesTree } from 'ui/scheduler/resources/utils';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -29,6 +30,16 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
+        const resources = options && options.groups || { };
+        const key = createFactoryInstances({
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
+            resources,
+        });
+
+        const resourceManager = getResourceManager(key);
+        resourceManager.createReducedResourcesTree = () => createResourcesTree(options.groups);
+
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
@@ -41,24 +52,13 @@ module('Agenda', {}, () => {
                                 return { calculateRows: () => rows };
                             }
                         };
-                    } else if(functionName === 'getResourceManager') {
-                        return getResourceManager(key);
                     } else if(functionName === 'getAppointmentDataProvider') {
                         return getAppointmentDataProvider(key);
                     }
                 }
-            }
+            },
+            resourceManager,
         };
-
-        const resources = options && options.groups || { };
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-            resources,
-        });
-
-        const resourceManager = getResourceManager(key);
-        resourceManager.createReducedResourcesTree = () => resourceManager.createResourcesTree(options.groups);
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });
         return $element.dxSchedulerAgenda('instance');

@@ -1304,17 +1304,21 @@ declare module DevExpress.core {
    */
   interface Component<TProperties> {
     // eslint-disable-line @typescript-eslint/no-unused-vars
-    _optionsByReference: Record<string, any>;
-    _deprecatedOptions: Record<string, any>;
+    _optionsByReference: Record<string, unknown>;
+    _deprecatedOptions: Record<string, unknown>;
     _options: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       silent(path: any, value: any): void;
     };
     _createActionByOption(
       optionName: string,
-      config: Record<string, any>
-    ): (...args: any[]) => any;
+      config: Record<string, unknown>
+    ): (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...args: any[]
+    ) => any;
     _dispose(): void;
-    _getDefaultOptions(): Record<string, any>;
+    _getDefaultOptions(): Record<string, unknown>;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
@@ -5620,6 +5624,16 @@ declare module DevExpress.ui {
        * [descr:dxDataGridColumnButton.visible]
        */
       visible?:
+        | boolean
+        | ((options: {
+            component?: dxDataGrid;
+            row?: RowObject;
+            column?: Column;
+          }) => boolean);
+      /**
+       * [descr:dxDataGridColumnButton.disabled]
+       */
+      disabled?:
         | boolean
         | ((options: {
             component?: dxDataGrid;
@@ -19390,7 +19404,17 @@ declare module DevExpress.ui {
         | boolean
         | ((options: {
             readonly component: dxTreeList;
-            row?: RowObject;
+            readonly row?: RowObject;
+            readonly column: Column;
+          }) => boolean);
+      /**
+       * [descr:dxTreeListColumnButton.disabled]
+       */
+      disabled?:
+        | boolean
+        | ((options: {
+            readonly component: dxTreeList;
+            readonly row?: RowObject;
             readonly column: Column;
           }) => boolean);
     }

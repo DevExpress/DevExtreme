@@ -49,5 +49,5 @@ export class PagerProps {
 
   @OneWay() totalCount = 0;
 
-  @Event() onKeyDown?: (e: any) => void;
+  @Event() onKeyDown?: (e: Event) => void;
 }

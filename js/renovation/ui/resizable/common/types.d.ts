@@ -12,8 +12,9 @@ export interface ResizeActionArgs {
 
 export interface DragOffset { offset: { x: number; y: number } }
 export interface DragTarget { targetElements?: [] }
-export type DragEvent = Event & DragOffset;
-export type DragStartEvent = Event & DragTarget;
+export interface DragPosition { clientX: number; clientY: number }
+export type DragEvent = Event & DragOffset & DragPosition;
+export type DragStartEvent = Event & DragTarget & DragPosition;
 
 export type AreaProp = (() => Area | HTMLElement) | AreaObject | HTMLElement | Window;
 export interface MovingSides {
