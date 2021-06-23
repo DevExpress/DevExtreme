@@ -8,13 +8,12 @@ export default class MetadataCollector {
   generator = new MetadataGenerator();
 
   static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    (await files).forEach(async (file) => {
+    await Promise.all((await files).map(async (file) => {
       const absolutePath = resolve(join(destination, file.path));
       const directory = dirname(absolutePath);
       await fs.mkdir(directory, { recursive: true });
       await fs.writeFile(absolutePath, file.content);
-    });
+    }));
   }
 
   static getStringFromObject(
