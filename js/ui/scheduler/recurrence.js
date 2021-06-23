@@ -196,6 +196,8 @@ class RecurrenceProcessor {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
+        ruleOptions.until = timeZoneUtils.createUTCDateWithLocalOffset(ruleOptions.until);
+
         this._createRRule(ruleOptions);
 
         if(options.exception) {
