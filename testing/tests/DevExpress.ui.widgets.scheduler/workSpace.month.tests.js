@@ -23,9 +23,8 @@ module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
             const observer = getObserver(key);
 
@@ -282,9 +281,8 @@ module('Work Space Month', () => {
     module('it with grouping by date', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
             const observer = getObserver(key);
 
@@ -325,9 +323,8 @@ module('Work Space Month', () => {
     module('it with horizontal grouping', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
             const observer = getObserver(key);
 
@@ -373,9 +370,8 @@ module('Work Space Month', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
             const observer = getObserver(key);
 

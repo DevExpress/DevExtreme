@@ -82,7 +82,14 @@ export default class DataGridWrapper extends Component {
     if (this.viewRef && prevValue !== value) {
       const name = getPathParts(fullName)[0];
       const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+
+      if (name === 'editing' && name !== fullName) {
+        // T751778
+        // TODO remove when silent assign will be removed from editing
+        updatePropsImmutable(prevProps, this.option(), name, name);
+      }
       updatePropsImmutable(prevProps, this.option(), name, fullName);
+
       (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
     }
   }
@@ -120,6 +127,17 @@ export default class DataGridWrapper extends Component {
         return originalCustomizeExcelCell(e);
       };
     }
+
+    const { onInitialized } = options;
+
+    if (onInitialized) {
+      // eslint-disable-next-line no-param-reassign
+      options.onInitialized = (e: { component: Component }): void => {
+        e.component = this;
+        (onInitialized as Function)(e);
+      };
+    }
+
     return super._patchOptionValues(options);
   }
 

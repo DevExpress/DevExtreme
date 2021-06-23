@@ -35,11 +35,13 @@ export const viewFunction = ({
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;
     itemTemplate?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueChange?: EventCallback<any>;
   };
 }

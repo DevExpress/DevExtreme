@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 import {
   ComponentBindings,
@@ -115,6 +116,15 @@ export class DataGridColumnButton {
 
   @OneWay()
   visible?:
+  | boolean
+  | ((options: {
+    component?: DxDataGrid;
+    row?: RowObject;
+    column?: Column;
+  }) => boolean);
+
+  @OneWay()
+  disabled?:
   | boolean
   | ((options: {
     component?: DxDataGrid;

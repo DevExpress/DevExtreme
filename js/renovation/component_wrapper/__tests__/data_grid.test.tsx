@@ -114,6 +114,7 @@ jest.mock('../common/component', () => class {
 
   _renderWrapper(options: Record<string, unknown>): void {
     mockComponent._renderWrapper(options);
+    (options.onInitialized as Function)?.({});
     this._isNodeReplaced = true;
   }
 
@@ -195,7 +196,7 @@ describe('DataGrid Wrapper', () => {
 
   it('additional props should be passed to ViewComponent', () => {
     const viewComponentProps = {
-      onInitialized: true,
+      onInitialized: () => {},
       onColumnsChanging: true,
       integrationOptions: true,
       adaptColumnWidthByRatio: true,
@@ -210,7 +211,10 @@ describe('DataGrid Wrapper', () => {
       customProp: true,
     });
 
-    expect(mockComponent._renderWrapper).toBeCalledWith(viewComponentProps);
+    expect(mockComponent._renderWrapper).toBeCalledWith({
+      ...viewComponentProps,
+      onInitialized: expect.any(Function),
+    });
   });
 
   it('editing.customizeExcelCell should have corrent component instance', () => {
@@ -241,7 +245,17 @@ describe('DataGrid Wrapper', () => {
 
     expect(onInitializedInInitializeComponent).toBe(null);
     expect(mockComponent._renderWrapper).toBeCalledWith({
-      onInitialized,
+      onInitialized: expect.any(Function),
+    });
+  });
+
+  it('onInitialized should have correct component parameter', () => {
+    const onInitialized = jest.fn();
+
+    const component = createDataGrid({ onInitialized });
+
+    expect(onInitialized).toBeCalledWith({
+      component,
     });
   });
 
@@ -299,6 +313,19 @@ describe('DataGrid Wrapper', () => {
       // value in prev props shouldn't change for future getUpdatedOptions
       expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
+    });
+
+    it('editing complex option changed', () => {
+      const component: any = createDataGrid();
+      const prevProps = { editing: { editRowKey: null } };
+      component.__options = prevProps;
+      component.viewRef.prevProps = prevProps;
+      component._optionChanging('editing.editRowKey', null, 1);
+      // emulate base component mutable option change
+      component.__options.editing.editRowKey = 1;
+      // value in prev props shouldn't change for future getUpdatedOptions
+      expect(prevProps.editing).not.toBe(component.viewRef.prevProps.editing);
+      expect(component.viewRef.prevProps.editing.editRowKey).toBe(null);
     });
 
     it('option changed to same value', () => {

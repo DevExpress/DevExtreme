@@ -316,6 +316,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.scrollComplete();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollbar(): any { // technical limitation in the generator
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.scrollbarRef.current!;

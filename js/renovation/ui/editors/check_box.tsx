@@ -32,7 +32,7 @@ const getCssClasses = (model: CheckBoxProps): string => {
   const classesMap = {
     'dx-checkbox': true,
     'dx-state-readonly': !!readOnly,
-    'dx-checkbox-checked': !!checked,
+    'dx-checkbox-checked': checked === true,
     'dx-checkbox-has-text': !!text,
     'dx-invalid': !isValid,
     'dx-checkbox-indeterminate': indeterminate,
@@ -90,27 +90,27 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
 
 @ComponentBindings()
 export class CheckBoxProps extends BaseWidgetProps {
-  @OneWay() activeStateEnabled?: boolean = true;
+  @OneWay() activeStateEnabled = true;
 
-  @OneWay() hoverStateEnabled?: boolean = true;
+  @OneWay() hoverStateEnabled = true;
 
-  @OneWay() validationError?: Record<string, unknown> | null = null;
+  @OneWay() validationError: Record<string, unknown> | null = null;
 
-  @OneWay() validationErrors?: Record<string, unknown>[] | null = null;
+  @OneWay() validationErrors: Record<string, unknown>[] | null = null;
 
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
-  @OneWay() validationMessageMode?: 'auto' | 'always' = 'auto';
+  @OneWay() validationMessageMode: 'auto' | 'always' = 'auto';
 
-  @OneWay() validationStatus?: string = 'valid';
+  @OneWay() validationStatus: 'valid' | 'invalid' | 'pending' = 'valid';
 
-  @OneWay() name?: string = '';
+  @OneWay() name = '';
 
-  @OneWay() readOnly?: boolean = false;
+  @OneWay() readOnly = false;
 
-  @OneWay() isValid?: boolean = true;
+  @OneWay() isValid = true;
 
-  @TwoWay() value?: boolean | null = false;
+  @TwoWay() value: boolean | null = false;
 
   @Event() onFocusIn?: (e: Event) => void;
 
@@ -162,7 +162,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { readOnly, value, saveValueChangeEvent } = this.props;
+    const { readOnly, saveValueChangeEvent } = this.props;
+    const value = this.props.value ?? false;
 
     if (!readOnly) {
       saveValueChangeEvent?.(event);
@@ -170,18 +171,22 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
   }
 
-  onWidgetKeyDown(options): Event | undefined {
+  onWidgetKeyDown(e: {
+    originalEvent: Event & { cancel: boolean };
+    keyName: string;
+    which: string;
+  }): Event | undefined {
     const { onKeyDown } = this.props;
-    const { originalEvent, keyName, which } = options;
+    const { originalEvent, keyName, which } = e;
 
-    const result = onKeyDown?.(options);
+    const result: Event & { cancel: boolean } = onKeyDown?.(e);
     if (result?.cancel) {
       return result;
     }
 
     if (keyName === 'space' || which === 'space') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;
@@ -193,14 +198,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get shouldShowValidationMessage(): boolean {
     const { isValid, validationStatus } = this.props;
+    const validationErrors = this.validationErrors ?? [];
     return !isValid
       && validationStatus === 'invalid'
-      && !!this.validationErrors?.length;
+      && validationErrors.length > 0;
   }
 
   get aria(): Record<string, string> {
     const { readOnly, isValid } = this.props;
-    const checked = !!this.props.value;
+    const checked = this.props.value === true;
     const indeterminate = this.props.value === null;
 
     const result: Record<string, string> = {

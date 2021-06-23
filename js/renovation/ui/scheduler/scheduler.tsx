@@ -6,7 +6,6 @@ import {
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
-
 import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
 import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
@@ -79,7 +78,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  scrollTo(date: Date, group?: any, allDay?: boolean): void {
+  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): void {
     this.instance.scrollTo(date, group, allDay);
   }
 
