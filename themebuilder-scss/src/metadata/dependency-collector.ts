@@ -7,6 +7,7 @@ import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
 
 const stylesRegex = /\sSTYLE (.*)/;
+const filePathMap = new Map();
 
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
@@ -66,21 +67,32 @@ export default class DependencyCollector {
 
   getFullDependencyTree(filePath: string): ScriptsDependencyTree {
     let cacheItem = this.scriptsCache[filePath];
+    const busyCache = {
+      widget: '',
+      dependencies: {},
+    };
+
+    if (filePathMap.get(filePath)) {
+      return cacheItem;
+    }
 
     if (cacheItem === undefined) {
-      const deps = precinct.paperwork(filePath, {
+      filePathMap.set(filePath, busyCache);
+
+      const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
-      })
-        .map((relativeDependency: string): string => cabinet({
-          partial: relativeDependency,
-          directory: '../js',
-          filename: filePath,
-          ast: precinct.ast,
-        }))
+      });
+
+      const deps = result.map((relativeDependency: string): string => cabinet({
+        partial: relativeDependency,
+        directory: '../js',
+        filename: filePath,
+        ast: precinct.ast,
+      }))
         .filter((path: string): boolean => path !== null
-          && existsSync(path)
-          && !path.includes('node_modules')
-          && !path.includes('viz'));
+            && existsSync(path)
+            && !path.includes('node_modules')
+            && !path.includes('viz'));
 
       cacheItem = {
         widget: DependencyCollector.getWidgetFromAst(precinct.ast),
@@ -88,7 +100,10 @@ export default class DependencyCollector {
       };
 
       deps.forEach((absolutePath: string) => {
-        cacheItem.dependencies[absolutePath] = this.getFullDependencyTree(absolutePath);
+        const node = this.getFullDependencyTree(absolutePath);
+        if (node) {
+          cacheItem.dependencies[absolutePath] = node;
+        }
       });
 
       this.scriptsCache[filePath] = cacheItem;

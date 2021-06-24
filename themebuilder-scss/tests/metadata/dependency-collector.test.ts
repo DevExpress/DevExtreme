@@ -16,6 +16,10 @@ const simpleDependencies: ScriptsDependencyTree = {
               dependencies: {},
               widget: 'icon',
             },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
           },
           widget: '',
         },
@@ -38,6 +42,10 @@ const simpleDependencies: ScriptsDependencyTree = {
               dependencies: {},
               widget: 'icon',
             },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
           },
           widget: '',
         },
@@ -54,7 +62,8 @@ const filesContent: { [key: string]: string } = {
   'menu.js': '// STYLE menu',
   'button.js': 'import u from \'./utils\';\n// STYLE button',
   'icon.js': '// STYLE icon',
-  'utils.js': 'import f from \'./fx\';import i from \'./icon\';',
+  'utils.js': 'import f from \'./fx\';import i from \'./icon\';import t from \'./render\';',
+  'render.js': 'import t from \'./utils\';',
   'fx.js': '',
 
   // validation tests
