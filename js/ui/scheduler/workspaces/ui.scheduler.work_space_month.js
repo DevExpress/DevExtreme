@@ -7,8 +7,11 @@ import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
-import { calculateStartViewDate, getViewStartByOptions } from './utils/month';
-import { setStartDayHour } from './utils/base';
+import {
+    calculateStartViewDate,
+    getViewStartByOptions,
+    calculateCellIndex,
+} from './utils/month';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -55,16 +58,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this._formatWeekday;
     }
 
-    _calculateCellIndex(rowIndex, columnIndex) {
-        if(this._isVerticalGroupedWorkSpace()) {
-            rowIndex = rowIndex % this._getRowCount();
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
-        return rowIndex * this._getCellCount() + columnIndex;
-    }
-
     _getInterval() {
         return DAY_IN_MILLISECONDS;
     }
@@ -76,10 +69,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
-
-        return setStartDayHour(date, this.option('startDayHour'));
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: 1,
+            cellCountInDay: 1,
+            calculateCellIndex,
+        };
     }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
@@ -98,9 +94,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         });
     }
 
-    _calculateHiddenInterval() {
+    _getHiddenInterval() {
         return 0;
     }
+
 
     _insertAllDayRowsIntoDateTable() {
         return false;
@@ -158,19 +155,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _renderTableBody(options) {
-        options.getCellText = this._getCellText.bind(this);
-        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-        super._renderTableBody(options);
-    }
-
     _getCellText(rowIndex, columnIndex) {
-        if(this.isGroupedByDate()) {
-            columnIndex = Math.floor(columnIndex / this._getGroupCount());
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
         const date = this._getDate(rowIndex, columnIndex);
 
         if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
@@ -341,6 +326,22 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         options.cellDataGetters.push(getCellMetaData);
 
         return options;
+    }
+
+    // TODO: Remove along with old render
+    _renderTableBody(options) {
+        options.getCellText = (rowIndex, columnIndex) => {
+            let validColumnIndex;
+            if(this.isGroupedByDate()) {
+                validColumnIndex = Math.floor(columnIndex / this._getGroupCount());
+            } else {
+                validColumnIndex = columnIndex % this._getCellCount();
+            }
+
+            return this._getCellText(rowIndex, validColumnIndex);
+        };
+        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
+        super._renderTableBody(options);
     }
 }
 

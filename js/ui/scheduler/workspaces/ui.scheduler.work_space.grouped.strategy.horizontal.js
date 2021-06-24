@@ -25,12 +25,6 @@ class HorizontalGroupedStrategy {
         }
     }
 
-    calculateCellIndex(rowIndex, columnIndex) {
-        columnIndex = columnIndex % this._workSpace._getCellCount();
-
-        return this._workSpace._getRowCount() * columnIndex + rowIndex;
-    }
-
     getGroupIndex(rowIndex, columnIndex) {
         const groupByDay = this._workSpace.isGroupedByDate();
         const groupCount = this._workSpace._getGroupCount();

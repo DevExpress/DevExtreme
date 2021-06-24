@@ -1410,7 +1410,7 @@ QUnit.module('Renovated Render', {
                         groups: { res: 1 },
                     }]],
                     groupIndex: 0,
-                    isGroupedAllDayPanel: true,
+                    isGroupedAllDayPanel: false,
                 }, {
                     dateTable: [[{
                         ...cellsBase[0],
@@ -1424,11 +1424,11 @@ QUnit.module('Renovated Render', {
                         key: 3,
                     }]],
                     groupIndex: 1,
-                    isGroupedAllDayPanel: true,
+                    isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
                 cellCountInGroupRow: 2,
-                isGroupedAllDayPanel: true,
+                isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
                 rightVirtualCellWidth: undefined,

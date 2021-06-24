@@ -3,9 +3,8 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { getViewStartByOptions } from './utils/month';
+import { calculateCellIndex, getViewStartByOptions } from './utils/month';
 import { calculateStartViewDate } from './utils/timeline_month';
-import { setStartDayHour } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
@@ -45,10 +44,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
     getCellDuration() {
         return toMs('day');
-    }
-
-    calculateEndViewDate(dateOfLastViewCell) {
-        return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
     }
 
     isIndicatorVisible() {
@@ -107,14 +102,12 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return new Date(startDateCopy.setHours(this.option('endDayHour')));
     }
 
-    _calculateHiddenInterval() {
-        return 0;
-    }
-
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
-
-        return setStartDayHour(date, this.option('startDayHour'));
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: 1,
+            calculateCellIndex,
+        };
     }
 
     getPositionShift() {

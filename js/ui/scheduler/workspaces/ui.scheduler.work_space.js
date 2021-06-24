@@ -55,8 +55,14 @@ import CellsSelectionState from './cells_selection_state';
 
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
+import {
+    getFirstDayOfWeek,
+    calculateViewStartDate,
+    getViewStartByOptions,
+    getDateByCellIndices,
+    calculateCellIndex,
+} from './utils/base';
 import { getTimeZoneCalculator } from '../instanceFactory';
-import { getFirstDayOfWeek, calculateViewStartDate, getViewStartByOptions } from './utils/base';
 import { createResourcesTree, getCellGroups } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
 
@@ -219,6 +225,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     get viewDirection() { return 'vertical'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
+    get isWorkView() { return false; }
 
     _supportedKeys() {
         const clickHandler = function(e) {
@@ -1023,6 +1031,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
         this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
@@ -1050,7 +1059,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isGroupedAllDayPanel() {
-        return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
+        return this.isAllDayPanelVisible && this._isVerticalGroupedWorkSpace();
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
@@ -1632,7 +1641,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: this._getAllDayCellData.bind(this),
+            // TODO: remove along with old render
+            getCellData: this._oldRender_getAllDayCellData(index),
             groupIndex: index
         }, true);
 
@@ -1656,9 +1666,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
     }
 
-    _getAllDayCellData(cell, rowIndex, columnIndex, groupIndex) {
+    _getAllDayCellData(cell, rowIndex, columnIndex) {
         let startDate = this._getDateByCellIndexes(rowIndex, columnIndex);
-        const cellGroupIndex = groupIndex || this._getGroupIndex(rowIndex, columnIndex);
 
         startDate = dateUtils.trimTime(startDate);
 
@@ -1666,13 +1675,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: startDate,
             endDate: startDate,
             allDay: true,
-            groupIndex: cellGroupIndex,
+            groupIndex: 0,
         };
 
-        const groupsArray = getCellGroups(
-            cellGroupIndex,
-            this.option('groups')
-        );
+        const groupsArray = getCellGroups(0, this.option('groups'));
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1794,7 +1800,25 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: DATE_TABLE_ROW_CLASS,
             cellTemplate: this.option('dataCellTemplate'),
-            getCellData: this._getCellData.bind(this),
+            // TODO: remove along with old render
+            getCellData: (_, rowIndex, columnIndex) => {
+                const isGroupedAllDayPanel = this.isGroupedAllDayPanel();
+                let validRowIndex = rowIndex;
+
+                if(isGroupedAllDayPanel) {
+                    const rowCount = this._getRowCount();
+                    const allDayPanelsCount = Math.ceil(rowIndex / rowCount);
+                    validRowIndex += allDayPanelsCount;
+                }
+
+                const cellData = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex].cellData;
+
+                return {
+                    value: this._filterCellDataFields(cellData),
+                    fullValue: cellData,
+                    key: CELL_DATA,
+                };
+            },
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
             groupByDate: this.option('groupByDate')
@@ -1831,18 +1855,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     _prepareCellData(rowIndex, columnIndex) {
         const startDate = this._getDateByCellIndexes(rowIndex, columnIndex);
         const endDate = this.calculateEndDate(startDate);
-        const groupIndex = this._getGroupIndex(rowIndex, columnIndex);
         const data = {
             startDate: startDate,
             endDate: endDate,
             allDay: this._getTableAllDay(),
-            groupIndex,
+            groupIndex: 0,
         };
 
-        const groupsArray = getCellGroups(
-            groupIndex,
-            this.option('groups')
-        );
+        const groupsArray = getCellGroups(0, this.option('groups'));
 
         if(groupsArray.length) {
             data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
@@ -1983,9 +2003,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getDateByIndex() { return abstract(); }
     _getFormat() { return abstract(); }
 
-    _calculateCellIndex(rowIndex, columnIndex) {
-        return this._groupedStrategy.calculateCellIndex(rowIndex, columnIndex);
-    }
 
     _renderTableBody(options, delayCellTemplateRendering) {
         let result = [];
@@ -2114,54 +2131,27 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex, patchedIndexes) {
-        columnIndex = !patchedIndexes ? this._patchColumnIndex(columnIndex) : columnIndex;
-
-        let firstViewDate = this.getStartViewDate();
-
-        const isFirstViewDateDuringDST = firstViewDate.getHours() !== Math.floor(this.option('startDayHour'));
-
-        if(isFirstViewDateDuringDST) {
-            const dateWithCorrectHours = this._getFirstViewDateWithoutDST();
-
-            firstViewDate = new Date(dateWithCorrectHours - toMs('day'));
-        }
-
-        const firstViewDateTime = firstViewDate.getTime();
-        const millisecondsOffset = this._getMillisecondsOffset(rowIndex, columnIndex);
-        const offsetByCount = this._getOffsetByCount(columnIndex);
-
-        const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount);
-
-        let timeZoneDifference = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
-        if(isFirstViewDateDuringDST) {
-            timeZoneDifference = 0;
-        }
-
-        currentDate.setTime(currentDate.getTime() + timeZoneDifference);
-
-        return currentDate;
+    _getDateByCellIndexes(rowIndex, columnIndex) {
+        return getDateByCellIndices(
+            this._getDateGenerationOptions(),
+            rowIndex,
+            columnIndex,
+        );
     }
 
-    _patchColumnIndex(columnIndex) {
-        if(this.isGroupedByDate()) {
-            columnIndex = Math.floor(columnIndex / this._getGroupCount());
-        }
-
-        return columnIndex;
-    }
-
-    _getOffsetByCount() {
-        return 0;
-    }
-
-    _getMillisecondsOffset(rowIndex, columnIndex) {
-        return this._getInterval() * this._calculateCellIndex(rowIndex, columnIndex) + this._calculateHiddenInterval(rowIndex, columnIndex);
-    }
-
-    _calculateHiddenInterval(rowIndex, columnIndex) {
-        const dayCount = columnIndex % this._getCellCount();
-        return dayCount * this._getHiddenInterval();
+    _getDateGenerationOptions() {
+        return {
+            startDayHour: this.option('startDayHour'),
+            isWorkView: this.isWorkView,
+            columnsInDay: 1,
+            hiddenInterval: this._hiddenInterval,
+            calculateCellIndex,
+            interval: this._getInterval(),
+            cellCountInDay: this._getCellCountInDay(),
+            startViewDate: this.getStartViewDate(),
+            rowCount: this._getRowCount(),
+            columnCount: this._getCellCount(),
+        };
     }
 
     _getHiddenInterval() {
@@ -2415,9 +2405,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.cellsSelectionState.getSelectedCells();
     }
 
-    getCellData($cell) {
-        const cellData = this._getFullCellData($cell) || {};
-
+    _filterCellDataFields(cellData) {
         return extend(true, {}, {
             startDate: cellData.startDate,
             endDate: cellData.endDate,
@@ -2425,6 +2413,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
         });
+    }
+
+    getCellData($cell) {
+        const cellData = this._getFullCellData($cell) || {};
+
+        return this._filterCellDataFields(cellData);
     }
 
     _getFullCellData($cell) {
@@ -2754,24 +2748,17 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getEndViewDate() {
-        const dateOfLastViewCell = this.getDateOfLastViewCell();
-        const endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
-
-        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+        return new Date(this.viewDataProvider.getLastViewDate().getTime() - toMs('minute'));
     }
 
     getEndViewDateByEndDayHour() {
-        const dateOfLastViewCell = this.getDateOfLastViewCell();
+        const dateOfLastViewCell = this.getEndViewDate();
         const endTime = dateUtils.dateTimeFromDecimal(this.option('endDayHour'));
 
         const endDateOfLastViewCell = new Date(dateOfLastViewCell.setHours(endTime.hours, endTime.minutes));
 
         return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
 
-    }
-
-    calculateEndViewDate(dateOfLastViewCell) {
-        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
     }
 
     _adjustEndViewDateByDaylightDiff(startDate, endDate) {
@@ -2784,19 +2771,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getEndViewDateTimeDiff() {
         return toMs('minute');
-    }
-
-    getDateOfLastViewCell() {
-        const rowIndex = this._getRowCount() - 1;
-        let columnIndex = this._getCellCount();
-
-        if(this.isGroupedByDate()) {
-            columnIndex = columnIndex * this._getGroupCount() - 1;
-        } else {
-            columnIndex = columnIndex - 1;
-        }
-
-        return this._getDateByCellIndexes(rowIndex, columnIndex, true);
     }
 
     getCellDuration() {
@@ -3161,13 +3135,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return 0;
     }
 
-    _getFirstViewDateWithoutDST() {
-        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._startViewDate);
-        newFirstViewDate.setHours(this.option('startDayHour'));
-
-        return newFirstViewDate;
-    }
-
     _updateSelectedCellDataOption(selectedCellData) {
         const correctedSelectedCellData = selectedCellData.map(({
             startDate,
@@ -3259,6 +3226,42 @@ class SchedulerWorkSpace extends WidgetObserver {
             width: cellRect.width,
             height: cellRect.height,
         });
+    }
+
+    // TODO: remove along with old render
+    _oldRender_getAllDayCellData(groupIndex) {
+        return (cell, rowIndex, columnIndex) => {
+            const validColumnIndex = columnIndex % this._getCellCount();
+            let startDate = this._getDateByCellIndexes(rowIndex, validColumnIndex);
+
+            startDate = dateUtils.trimTime(startDate);
+
+            let validGroupIndex = groupIndex || 0;
+
+            if(this.isGroupedByDate()) {
+                validGroupIndex = Math.floor(columnIndex % this._getGroupCount());
+            } else if(this._isHorizontalGroupedWorkSpace()) {
+                validGroupIndex = Math.floor(columnIndex / this._getCellCount());
+            }
+
+            const data = {
+                startDate: startDate,
+                endDate: startDate,
+                allDay: true,
+                groupIndex: validGroupIndex,
+            };
+
+            const groupsArray = getCellGroups(validGroupIndex, this.option('groups'));
+
+            if(groupsArray.length) {
+                data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
+            }
+
+            return {
+                key: CELL_DATA,
+                value: data
+            };
+        };
     }
 }
 

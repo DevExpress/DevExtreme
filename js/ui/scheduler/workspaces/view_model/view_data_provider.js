@@ -321,4 +321,11 @@ export default class ViewDataProvider {
             && firstIndex === secondIndex
         );
     }
+
+    getLastViewDate() {
+        const completeViewDataMap = this.completeViewDataMap;
+        const rowsCount = completeViewDataMap.length - 1;
+
+        return completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
+    }
 }

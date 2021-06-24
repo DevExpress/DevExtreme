@@ -29,12 +29,6 @@ class VerticalGroupedStrategy {
         };
     }
 
-    calculateCellIndex(rowIndex, columnIndex) {
-        rowIndex = rowIndex % this._workSpace._getRowCount();
-
-        return this._workSpace._getRowCount() * columnIndex + rowIndex;
-    }
-
     getGroupIndex(rowIndex) {
         return Math.floor(rowIndex / this._workSpace._getRowCount());
     }

@@ -14,6 +14,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getStartViewDateWithoutDST } from './utils/base';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -84,23 +85,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        return this._getDateByIndexCore(firstViewDate, index);
+        return this._getDateByIndexCore(startViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
         const result = new Date(date);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+        result.setTime(date.getTime() + index * this._getInterval() + dayIndex * this._getHiddenInterval());
 
         return result;
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        const result = this._getDateByIndexCore(firstViewDate, index);
+        const result = this._getDateByIndexCore(startViewDate, index);
 
         if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
             result.setDate(result.getDate() - 1);
@@ -111,17 +112,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getFormat() {
         return 'shorttime';
-    }
-
-    _calculateHiddenInterval(rowIndex, columnIndex) {
-        const dayIndex = Math.floor(columnIndex / this._getCellCountInDay());
-        return dayIndex * this._getHiddenInterval();
-    }
-
-    _getMillisecondsOffset(rowIndex, columnIndex) {
-        columnIndex = this._calculateCellIndex(rowIndex, columnIndex);
-
-        return this._getInterval() * columnIndex + this._calculateHiddenInterval(rowIndex, columnIndex);
     }
 
     _createWorkSpaceElements() {
@@ -257,6 +247,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
@@ -627,6 +618,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
+        };
+    }
+
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: this._getCellCountInDay(),
         };
     }
 }

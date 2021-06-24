@@ -123,7 +123,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 5, 0),
                 endDate: new Date(2015, 1, 24, 0, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -141,7 +140,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 10, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -160,7 +158,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 5, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -251,7 +248,6 @@ module('Work Space Month', () => {
                 assert.deepEqual($cell.data('dxCellData'), {
                     startDate: new Date(2016, 2, 14, 5, 0),
                     endDate: new Date(2016, 2, 15, 0, 0),
-                    allDay: undefined,
                     groupIndex: 0,
                 }, 'data of the cell is right');
             } finally {
