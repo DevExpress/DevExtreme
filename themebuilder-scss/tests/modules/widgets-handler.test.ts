@@ -14,7 +14,7 @@ jest.mock('fs', () => ({
 
 describe('Widgets handler tests', () => {
   test('getIndexWidgetItems', () => {
-    const widgetsHandler = new WidgetsHandler([], '', {});
+    const widgetsHandler = new WidgetsHandler([], '', null);
     const indexContent = 'common content\n'
             + '@use "./commonUse";\n'
             + '// public widgets\n'
