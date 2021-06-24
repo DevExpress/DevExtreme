@@ -4,7 +4,13 @@ import { each, map } from '../core/utils/iterator';
 import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import { errors, handleError as handleDataError } from './errors';
-import { aggregators, isConjunctiveOperator as isConjunctiveOperatorFromDataUtils, isGroupCriterion, isUnaryOperation, normalizeBinaryCriterion } from './utils';
+import {
+    aggregators,
+    isGroupCriterion,
+    isUnaryOperation,
+    normalizeBinaryCriterion,
+    isConjunctiveOperator as isConjunctiveOperatorUtils
+} from './utils';
 
 const Iterator = Class.inherit({
 
@@ -239,7 +245,7 @@ const compileCriteria = (function() {
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = isConjunctiveOperatorFromDataUtils(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorUtils(this);
             }
         });
 

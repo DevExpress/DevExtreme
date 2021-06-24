@@ -3,9 +3,20 @@ import { each } from '../../core/utils/iterator';
 import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import queryAdapters from '../query_adapters';
-import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
+import {
+    sendRequest,
+    generateSelect,
+    generateExpand,
+    serializeValue,
+    convertPrimitiveValue,
+    serializePropName
+} from './utils';
 import { errors } from '../errors';
-import { isConjunctiveOperator, normalizeBinaryCriterion, isUnaryOperation } from '../utils';
+import {
+    isConjunctiveOperator,
+    normalizeBinaryCriterion,
+    isUnaryOperation
+} from '../utils';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];

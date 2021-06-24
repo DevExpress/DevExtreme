@@ -1,5 +1,9 @@
 import $ from '../core/renderer';
-import { keysEqual, errorMessageFromXhr as errorMessageFromXhrFromDataUtils, XHR_ERROR_UNLOAD } from './utils';
+import {
+    keysEqual,
+    XHR_ERROR_UNLOAD,
+    errorMessageFromXhr as errorMessageFromXhrUtils
+} from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
 import config from '../core/config';
@@ -43,7 +47,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
             return null;
         }
 
-        return errorMessageFromXhrFromDataUtils(xhr, textStatus);
+        return errorMessageFromXhrUtils(xhr, textStatus);
     }
 
     return function(arg) {
