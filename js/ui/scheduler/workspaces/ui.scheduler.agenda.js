@@ -15,6 +15,9 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getPathToLeaf } from '../resources/utils';
+import { getTimeZoneCalculator } from '../instanceFactory';
+import { calculateStartViewDate } from './utils/agenda';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -97,9 +100,8 @@ class SchedulerAgenda extends WorkSpace {
         return AGENDA_CLASS;
     }
 
-    _setFirstViewDate() {
-        this._firstViewDate = new Date(this.option('currentDate'));
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
     }
 
     _getRowCount() {
@@ -138,7 +140,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _renderView() {
-        this._setFirstViewDate();
+        this._startViewDate = this._calculateStartViewDate();
         this._rows = [];
     }
 
@@ -239,7 +241,7 @@ class SchedulerAgenda extends WorkSpace {
 
     _makeGroupRows() {
         const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-        const resourceManager = this.invoke('getResourceManager');
+        const resourceManager = this.option('resourceManager');
         const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
@@ -336,8 +338,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const resourceManager = this.invoke('getResourceManager');
-        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
+        const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
@@ -519,8 +520,8 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     updateScrollPosition(date) {
-        const scheduler = this.option('observer');
-        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
         const startDateHour = newDate.getHours();

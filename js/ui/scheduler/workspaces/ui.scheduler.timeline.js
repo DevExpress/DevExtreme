@@ -10,10 +10,10 @@ const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 import {
     HEADER_CURRENT_TIME_CELL_CLASS,
-    DATE_TABLE_ROW_CLASS,
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
+import { getStartViewDateWithoutDST } from './utils/base';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -40,28 +40,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
-    _init() {
-        super._init();
-
-        this.$element().addClass(TIMELINE_CLASS);
-        this._$sidebarTable = $('<div>')
-            .addClass(GROUP_TABLE_CLASS);
-    }
-
-    _getDefaultGroupStrategy() {
-        return 'vertical';
-    }
-
-    _toggleGroupingDirectionClass() {
-        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
-    }
-
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            groupOrientation: 'vertical'
-        });
-    }
-
     _getRowCount() {
         return 1;
     }
@@ -84,25 +62,25 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        return this._getDateByIndexCore(firstViewDate, index);
+        return this._getDateByIndexCore(startViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
         const result = new Date(date);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+        result.setTime(date.getTime() + index * this._getInterval() + dayIndex * this._getHiddenInterval());
 
         return result;
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        const result = this._getDateByIndexCore(firstViewDate, index);
+        const result = this._getDateByIndexCore(startViewDate, index);
 
-        if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
+        if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
             result.setDate(result.getDate() - 1);
         }
 
@@ -111,21 +89,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getFormat() {
         return 'shorttime';
-    }
-
-    _calculateHiddenInterval(rowIndex, cellIndex) {
-        const dayIndex = Math.floor(cellIndex / this._getCellCountInDay());
-        return dayIndex * this._getHiddenInterval();
-    }
-
-    _getMillisecondsOffset(rowIndex, cellIndex) {
-        cellIndex = this._calculateCellIndex(rowIndex, cellIndex);
-
-        return this._getInterval() * cellIndex + this._calculateHiddenInterval(rowIndex, cellIndex);
-    }
-
-    _createWorkSpaceElements() {
-        this._createWorkSpaceScrollableElements();
     }
 
     _getWorkSpaceHeight() {
@@ -157,15 +120,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         });
     }
 
-    _renderTimePanel() { return noop(); }
-    _renderAllDayPanel() { return noop(); }
-
-    _getDateHeaderTemplate() {
-        return this.option('timeCellTemplate');
-    }
-    _toggleAllDayVisibility() { return noop(); }
-    _changeAllDayVisibility() { return noop(); }
-
     supportAllDayRow() {
         return false;
     }
@@ -181,68 +135,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _createAllDayPanelElements() { return noop(); }
-
-    _renderDateHeader() {
-        const $headerRow = super._renderDateHeader();
-        if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._firstViewDate);
-            let currentDate = new Date(firstViewDate);
-
-            const $cells = [];
-            const groupCount = this._getGroupCount();
-            const cellCountInDay = this._getCellCountInDay();
-            const colSpan = this.isGroupedByDate()
-                ? cellCountInDay * groupCount
-                : cellCountInDay;
-            const cellTemplate = this.option('dateCellTemplate');
-
-            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-                ? groupCount
-                : 1;
-            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
-
-            const cellsCount = cellsInGroup * horizontalGroupCount;
-
-            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
-                const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(currentDate);
-
-                if(cellTemplate) {
-                    const templateOptions = {
-                        model: {
-                            text,
-                            date: new Date(currentDate),
-                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
-                        },
-                        container: $th,
-                        index: templateIndex,
-                    };
-
-                    cellTemplate.render(templateOptions);
-                } else {
-                    $th.text(text);
-                }
-
-                $th
-                    .addClass(HEADER_PANEL_CELL_CLASS)
-                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
-                    .attr('colSpan', colSpan);
-
-                $cells.push($th);
-
-                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
-                    currentDate = new Date(firstViewDate);
-                } else {
-                    this._incrementDate(currentDate);
-                }
-            }
-
-            const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
-            $headerRow.before($row);
-        }
-    }
-
     _needRenderWeekHeader() {
         return false;
     }
@@ -254,28 +146,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getWeekDuration() {
         return 1;
     }
-
-    _renderView() {
-        this._setFirstViewDate();
-        let groupCellTemplates;
-        if(!this.isRenovatedRender()) {
-            groupCellTemplates = this._renderGroupHeader();
-        }
-
-        this.renderWorkSpace();
-
-        this._shader = new HorizontalShader(this);
-
-        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
-
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
-            this.renderRGroupPanel();
-        }
-
-        this._applyCellTemplates(groupCellTemplates);
-    }
-
-    _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
     getIndicationCellCount() {
         const timeDiff = this._getTimeDiff();
@@ -317,35 +187,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    _renderIndicator(height, rtlOffset, $container, groupCount) {
-        let $indicator;
-        const width = this.getIndicationWidth();
-
-        if(this.option('groupOrientation') === 'vertical') {
-            $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container.get(0)).height);
-            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
-        } else {
-            for(let i = 0; i < groupCount; i++) {
-                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-                $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container.get(0)).height);
-
-                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
-            }
-        }
-    }
-
     _isVerticalShader() {
         return false;
     }
 
     _isCurrentTimeHeaderCell() {
         return false;
-    }
-
-    _visibilityChanged(visible) {
-        super._visibilityChanged(visible);
     }
 
     _setTableSizes() {
@@ -380,41 +227,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return minHeight;
     }
 
-    _makeGroupRows(groups, groupByDate) {
-        const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
-
-        return tableCreator.makeGroupedTable(tableCreatorStrategy,
-            groups, {
-                groupRowClass: GROUP_ROW_CLASS,
-                groupHeaderRowClass: GROUP_ROW_CLASS,
-                groupHeaderClass: this._getGroupHeaderClass.bind(this),
-                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
-            },
-            this._getCellCount() || 1,
-            this.option('resourceCellTemplate'),
-            this._getTotalRowCount(this._getGroupCount()),
-            groupByDate);
-    }
-
-    _ensureGroupHeaderCellsHeight(cellHeight) {
-        const minCellHeight = this._calculateMinCellHeight();
-
-        if(cellHeight < minCellHeight) {
-            return minCellHeight;
-        }
-        return cellHeight;
-    }
-
-    _calculateMinCellHeight() {
-        const dateTable = this._getDateTable();
-        const dateTableRowSelector = `.${DATE_TABLE_ROW_CLASS}`;
-
-        return (getBoundingRect(dateTable).height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
-    }
-
     _getCellCoordinatesByIndex(index) {
         return {
-            cellIndex: index % this._getCellCount(),
+            columnIndex: index % this._getCellCount(),
             rowIndex: 0
         };
     }
@@ -426,7 +241,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .find('tr')
             .eq(indexes.rowIndex)
             .find('td')
-            .eq(indexes.cellIndex);
+            .eq(indexes.columnIndex);
     }
 
     _getWorkSpaceWidth() {
@@ -434,7 +249,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._firstViewDate));
+        return dateUtils.trimTime(new Date(this._startViewDate));
     }
 
     _getIntervalBetween(currentDate, allDay) {
@@ -566,44 +381,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return this._getRowCount();
     }
 
-    _setCurrentTimeCells() {
-        const timePanelCells = this._getTimePanelCells();
-        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
-        currentTimeCellIndices.forEach((timePanelCellIndex) => {
-            timePanelCells.eq(timePanelCellIndex)
-                .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
-        });
-    }
-
-    _cleanCurrentTimeCells() {
-        this.$element()
-            .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
-            .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
-    }
-
-    _getTimePanelCells() {
-        return this.$element()
-            .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
-    }
-
-    _getCurrentTimePanelCellIndices() {
-        const columnCountPerGroup = this._getCellCount();
-        const today = this._getToday();
-        const index = this.getCellIndexByDate(today);
-        const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
-
-        if(currentTimeCellIndex === undefined) {
-            return [];
-        }
-
-        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-            ? this._getGroupCount()
-            : 1;
-
-        return [...(new Array(horizontalGroupCount))]
-            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
@@ -628,6 +405,215 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
         };
+    }
+
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: this._getCellCountInDay(),
+        };
+    }
+
+    // -------------
+    // We need these methods for now but they are useless for renovation
+    // -------------
+
+    _init() {
+        super._init();
+
+        this.$element().addClass(TIMELINE_CLASS);
+        this._$sidebarTable = $('<div>')
+            .addClass(GROUP_TABLE_CLASS);
+    }
+
+    _getDefaultGroupStrategy() {
+        return 'vertical';
+    }
+
+    _toggleGroupingDirectionClass() {
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    }
+
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            groupOrientation: 'vertical'
+        });
+    }
+
+    _createWorkSpaceElements() {
+        this._createWorkSpaceScrollableElements();
+    }
+
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
+
+    _getDateHeaderTemplate() {
+        return this.option('timeCellTemplate');
+    }
+
+    _renderView() {
+        this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
+        let groupCellTemplates;
+        if(!this.isRenovatedRender()) {
+            groupCellTemplates = this._renderGroupHeader();
+        }
+
+        this.renderWorkSpace();
+
+        this._shader = new HorizontalShader(this);
+
+        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        }
+
+        this._applyCellTemplates(groupCellTemplates);
+    }
+
+    _setHorizontalGroupHeaderCellsHeight() { return noop(); }
+
+    _setCurrentTimeCells() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+        });
+    }
+
+    _cleanCurrentTimeCells() {
+        this.$element()
+            .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
+    }
+
+    _getTimePanelCells() {
+        return this.$element()
+            .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const columnCountPerGroup = this._getCellCount();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { columnIndex: currentTimeColumnIndex } = this._getCellCoordinatesByIndex(index);
+
+        if(currentTimeColumnIndex === undefined) {
+            return [];
+        }
+
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(horizontalGroupCount))]
+            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeColumnIndex);
+    }
+
+    // --------------
+    // These methods should be deleted when we get rid of old render
+    // --------------
+
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
+
+    _createAllDayPanelElements() { return noop(); }
+
+    _renderDateHeader() {
+        const $headerRow = super._renderDateHeader();
+        if(this._needRenderWeekHeader()) {
+            const firstViewDate = new Date(this._startViewDate);
+            let currentDate = new Date(firstViewDate);
+
+            const $cells = [];
+            const groupCount = this._getGroupCount();
+            const cellCountInDay = this._getCellCountInDay();
+            const colSpan = this.isGroupedByDate()
+                ? cellCountInDay * groupCount
+                : cellCountInDay;
+            const cellTemplate = this.option('dateCellTemplate');
+
+            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+                ? groupCount
+                : 1;
+            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+
+            const cellsCount = cellsInGroup * horizontalGroupCount;
+
+            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
+                const $th = $('<th>');
+                const text = this._formatWeekdayAndDay(currentDate);
+
+                if(cellTemplate) {
+                    const templateOptions = {
+                        model: {
+                            text,
+                            date: new Date(currentDate),
+                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
+                        },
+                        container: $th,
+                        index: templateIndex,
+                    };
+
+                    cellTemplate.render(templateOptions);
+                } else {
+                    $th.text(text);
+                }
+
+                $th
+                    .addClass(HEADER_PANEL_CELL_CLASS)
+                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
+                    .attr('colSpan', colSpan);
+
+                $cells.push($th);
+
+                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
+                    currentDate = new Date(firstViewDate);
+                } else {
+                    this._incrementDate(currentDate);
+                }
+            }
+
+            const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
+            $headerRow.before($row);
+        }
+    }
+
+    _renderIndicator(height, rtlOffset, $container, groupCount) {
+        let $indicator;
+        const width = this.getIndicationWidth();
+
+        if(this.option('groupOrientation') === 'vertical') {
+            $indicator = this._createIndicator($container);
+            $indicator.height(getBoundingRect($container.get(0)).height);
+            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
+        } else {
+            for(let i = 0; i < groupCount; i++) {
+                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+                $indicator = this._createIndicator($container);
+                $indicator.height(getBoundingRect($container.get(0)).height);
+
+                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
+            }
+        }
+    }
+
+    _makeGroupRows(groups, groupByDate) {
+        const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+
+        return tableCreator.makeGroupedTable(tableCreatorStrategy,
+            groups, {
+                groupRowClass: GROUP_ROW_CLASS,
+                groupHeaderRowClass: GROUP_ROW_CLASS,
+                groupHeaderClass: this._getGroupHeaderClass.bind(this),
+                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
+            },
+            this._getCellCount() || 1,
+            this.option('resourceCellTemplate'),
+            this._getTotalRowCount(this._getGroupCount()),
+            groupByDate);
     }
 }
 

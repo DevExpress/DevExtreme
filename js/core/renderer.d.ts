@@ -81,7 +81,7 @@ export interface dxElementWrapper {
 
   outerWidth(value: number | string): this;
 
-  parent(selector: string): this;
+  parent(selector?: string): this;
 
   parents(selector: string): this;
 

@@ -86,7 +86,7 @@ export default class Compiler {
         });
       }
     }).finally(() => {
-      this.dartClient.dispose();
+      this.dartClient.dispose().finally(() => {});
     });
   }
 
@@ -142,6 +142,7 @@ export default class Compiler {
       const keyMap = map.getKey(mapIndex);
       if (keyMap instanceof sass.types.String) {
         const variableKey = keyMap.getValue();
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         const variableValue = map.getValue(mapIndex).toString();
 
         // eslint-disable-next-line no-continue

@@ -26,7 +26,7 @@ test('Click on action button should correctly work with SelectBox containing the
     .expect(await selectBox.isOpened())
     .notOk();
 
-  const actionButton = await selectBox.getButton(0);
+  const actionButton = selectBox.getButton(0);
   await pureClick(t, actionButton);
   await t
     .expect(selectBox.isFocused).ok()
@@ -44,7 +44,7 @@ test('Click on action button after typing should correctly work with SelectBox c
     .expect(await selectBox.isOpened())
     .notOk();
 
-  const actionButton = await selectBox.getButton(0);
+  const actionButton = selectBox.getButton(0);
 
   await t
     .typeText(selectBox.input, 'tt');
@@ -60,7 +60,7 @@ fixture`SelectBox as Toolbar item`
 
 test('SelectBox should correctly render his buttons when editor rendered as Toolbar item with fieldTemplate(T949859)', async (t) => {
   const selectBox = new SelectBox('#editor');
-  const actionButton = await selectBox.getButton(0);
+  const actionButton = selectBox.getButton(0);
 
   await t
     .expect(actionButton.getText().innerText)
@@ -77,7 +77,7 @@ test('editor can be focused out after click on action button', async (t) => {
   await t
     .expect(selectBox.isFocused).ok();
 
-  const actionButton = await selectBox.getButton(0);
+  const actionButton = selectBox.getButton(0);
   await pureClick(t, actionButton);
   await t
     .expect(selectBox.isFocused).ok();

@@ -4,14 +4,12 @@ import { isRenderer } from 'core/utils/type';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
 import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
@@ -34,21 +32,6 @@ const {
     testStart
 } = QUnit;
 
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
-};
-
 testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
@@ -59,9 +42,8 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     const key = createFactoryInstances({
-                        scheduler: {
-                            isVirtualScrolling: () => false
-                        }
+                        getIsVirtualScrolling: () => false,
+                        getDataAccessors: () => {},
                     });
                     const observer = getObserver(key);
 
@@ -69,7 +51,7 @@ module('Workspace navigation', () => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             observer,
                             ...options,
                         });
@@ -978,16 +960,15 @@ module('Workspace navigation', () => {
             module(`${scrollingMode} scrolling`, {
                 beforeEach: function() {
                     const key = createFactoryInstances({
-                        scheduler: {
-                            isVirtualScrolling: () => false
-                        }
+                        getIsVirtualScrolling: () => false,
+                        getDataAccessors: () => {},
                     });
                     const observer = getObserver(key);
 
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             currentDate: new Date(2021, 0, 10),
                             observer,
                             ...options,

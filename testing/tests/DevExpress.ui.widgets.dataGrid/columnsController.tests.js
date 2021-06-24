@@ -11,7 +11,7 @@ import config from 'core/config';
 import errors from 'ui/widget/ui.errors';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 QUnit.testDone(function() {
     ajaxMock.clear();

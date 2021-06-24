@@ -8,7 +8,7 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
+import { ScrollViewWrapper } from '../../component_wrapper/navigation/scroll_view';
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
@@ -270,6 +270,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollable(): any {
     return this.scrollableRef.current!;
   }

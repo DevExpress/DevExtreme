@@ -238,11 +238,13 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
           expect(onFocusIn).toHaveBeenCalledTimes(1);
+          expect(onFocusIn).toHaveBeenCalledWith(e);
 
           emit(EVENT.blur, e);
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
           expect(onFocusOut).toHaveBeenCalledTimes(1);
+          expect(onFocusOut).toHaveBeenCalledWith(e);
         });
 
         it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
@@ -344,11 +346,13 @@ describe('Widget', () => {
           emit(EVENT.hoverStart);
           expect(widget.hovered).toBe(true);
           expect(onHoverStart).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledWith(defaultEvent);
           expect(onHoverEnd).toHaveBeenCalledTimes(0);
 
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
           expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverEnd).toHaveBeenCalledWith(defaultEvent);
           expect(onHoverStart).toHaveBeenCalledTimes(1);
         });
 

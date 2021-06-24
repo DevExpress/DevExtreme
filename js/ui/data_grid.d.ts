@@ -518,10 +518,11 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     columnResizingMode?: 'nextColumn' | 'widget';
     /**
      * @docid
+     * @type number|Enums.Mode
      * @default undefined
      * @public
      */
-    columnWidth?: number;
+    columnWidth?: number | 'auto';
     /**
      * @docid
      * @type Array<GridBaseColumn|string>
@@ -2726,6 +2727,13 @@ export interface ColumnLookup {
    * @default undefined
    */
   valueExpr?: string
+  /**
+   * @docid GridBaseColumn.lookup.calculateCellValue
+   * @type_function_param1 rowData:object
+   * @type_function_return any
+   * @public
+   */
+  calculateCellValue?: ((rowData: any) => any);
 }
 
 /**
@@ -4597,6 +4605,17 @@ export interface ColumnButton extends ColumnButtonBase {
      * @public
      */
     visible?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
+    /**
+     * @docid dxDataGridColumnButton.disabled
+     * @default false
+     * @type_function_param1 options:object
+     * @type_function_param1_field1 component:dxDataGrid
+     * @type_function_param1_field2 row:dxDataGridRowObject
+     * @type_function_param1_field3 column:dxDataGridColumn
+     * @type_function_return Boolean
+     * @public
+     */
+    disabled?: boolean | ((options: { component?: dxDataGrid, row?: RowObject, column?: Column }) => boolean);
 }
 
 /**

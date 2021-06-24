@@ -50,7 +50,7 @@ function normalizeProps(props: Record<string, unknown>): Record<string, unknown>
 }
 
 export const viewFunction = ({
-  instance,
+  initializedInstance,
   widgetElementRef,
   onHoverStart,
   onHoverEnd,
@@ -73,7 +73,7 @@ export const viewFunction = ({
   restAttributes,
 }: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
-    rootElementRef={widgetElementRef as any}
+    rootElementRef={widgetElementRef}
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
     activeStateUnit={rowSelector}
@@ -94,7 +94,10 @@ export const viewFunction = ({
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    <DataGridViews instance={instance} showBorders={showBorders} />
+    <DataGridViews
+      instance={initializedInstance}
+      showBorders={showBorders}
+    />
   </Widget>
 );
 
@@ -120,8 +123,8 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
       useIcons: true,
     },
   },
-}]);
-
+},
+]);
 @Component({
   defaultOptionRules,
   jQuery: { register: true, component: DataGridBaseComponent },
@@ -130,16 +133,25 @@ export const defaultOptionRules = createDefaultOptionRules<DataGridProps>([{
 export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
   @Ref() widgetElementRef?: RefObject<HTMLDivElement>;
 
-  @InternalState() instance!: GridInstance;
+  @Mutable() instance!: GridInstance;
+
+  @InternalState() initialized = false;
 
   @Mutable() isTwoWayPropUpdating = false;
 
   @Mutable() prevProps!: DataGridProps;
 
+  get initializedInstance(): GridInstance | undefined {
+    return this.initialized ? this.instance : undefined;
+  }
+
   @Method()
   getComponentInstance(): GridInstance {
     return this.instance;
   }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
   // #region methods
   @Method()
@@ -328,7 +340,6 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   navigateToRow(key: any): DxPromise {
     return this.instance?.navigateToRow(key);
   }
@@ -505,7 +516,15 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     return this.instance?.getScrollbarWidth(isHorizontal);
   }
 
+  @Method()
+  getDataProvider(selectedRowsOnly: boolean): any {
+    return this.instance?.getDataProvider(selectedRowsOnly);
+  }
+
   // #endregion
+
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+  /* eslint-enable @typescript-eslint/explicit-module-boundary-types */
 
   @Effect() updateOptions(): void {
     if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {
@@ -533,19 +552,30 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
     const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
+
+    const restAttributes = this.restAttributes as unknown as Record<string, unknown>;
+    const { onInitialized, onContentReady } = restAttributes;
+
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onContentReady: (this.restAttributes as unknown as Record<string, unknown>).onContentReady,
+      onInitialized: (e) => {
+        this.instance = e.component;
+
+        (onInitialized as (e: unknown) => void)?.(e);
+      },
+      onContentReady,
     } as unknown as Record<string, unknown>;
-    const instance: GridInstance = new DataGridComponent(
+
+    new DataGridComponent(
       element,
       normalizeProps(restProps),
     ) as unknown as GridInstance;
     if (hasWindow()) {
-      instance.getController('resizing').updateSize(element);
+      this.instance.getController('resizing').updateSize(element);
     }
-    instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
-    this.instance = instance;
+
+    this.instance.on('optionChanged', this.instanceOptionChangedHandler.bind(this));
+    this.initialized = true;
   }
 
   instanceOptionChangedHandler(e: OptionChangedEvent): void {
@@ -586,7 +616,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
       if (e.fullName === 'focusedColumnIndex') {
         this.props.focusedColumnIndex = e.value as number;
       }
-      if (e.fullName === 'filterValue') {
+      if (e.fullName === 'filterValue' && this.props.filterValue !== e.value) {
         this.props.filterValue = e.value as string;
       }
       if (e.fullName === 'selectedRowKeys') {

@@ -1,5 +1,9 @@
 import $ from '../core/renderer';
-import dataUtils from './utils';
+import {
+    keysEqual,
+    XHR_ERROR_UNLOAD,
+    errorMessageFromXhr as errorMessageFromXhrUtility
+} from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
 import config from '../core/config';
@@ -43,7 +47,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
             return null;
         }
 
-        return dataUtils.errorMessageFromXhr(xhr, textStatus);
+        return errorMessageFromXhrUtility(xhr, textStatus);
     }
 
     return function(arg) {
@@ -55,7 +59,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
             error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || 'Unknown error');
         }
 
-        if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
+        if(error.message !== XHR_ERROR_UNLOAD) {
             pendingDeferred.reject(error);
         }
     };
@@ -202,7 +206,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
 
         for(let i = 0, len = rawData.length; i < len; i++) {
             item = rawData[i];
-            if(dataUtils.keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
+            if(keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
                 pendingDeferred.resolve(item);
                 return;
             }

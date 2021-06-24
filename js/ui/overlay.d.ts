@@ -264,7 +264,9 @@ export default class dxOverlay<TProperties> extends Widget<TProperties> {
  */
 export function baseZIndex(zIndex: number): void;
 
-type Properties = dxOverlayOptions<dxOverlay<Properties>>;
+interface OverlayInstance extends dxOverlay<Properties> { }
+
+type Properties = dxOverlayOptions<OverlayInstance>;
 
 export type Options = Properties;
 export type IOptions = Properties;

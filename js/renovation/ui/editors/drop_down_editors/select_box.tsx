@@ -25,14 +25,17 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class SelectBoxProps extends BaseWidgetProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() dataSource?: string | (string | any)[] | Store | DataSource | DataSourceOptions;
 
   @OneWay() displayExpr?: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @TwoWay() value?: any = null;
 
   @OneWay() valueExpr?: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() valueChange?: EventCallback<any>;
 
   @OneWay() focusStateEnabled?: boolean = true;

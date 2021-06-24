@@ -3,7 +3,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -11,8 +11,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { getResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
@@ -38,21 +37,6 @@ const stubInvokeMethod = function(instance, key) {
     });
 };
 
-const getObserver = (key) => {
-    return {
-        fire: (command) => {
-            switch(command) {
-                case 'getResourceManager':
-                    return getResourceManager(key);
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
-                default:
-                    break;
-            }
-        }
-    };
-};
-
 QUnit.module('Timeline Base', {
 
     beforeEach: function() {
@@ -65,9 +49,8 @@ QUnit.module('Timeline Base', {
             const resources = options && options.resources || {};
             const key = createFactoryInstances({
                 resources,
-                scheduler: {
-                    isVirtualScrolling: () => true
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {}
             });
 
             this.instance = $('#scheduler-timeline').dxSchedulerTimeline({ observer: getObserver(key) }).dxSchedulerTimeline('instance');
@@ -267,9 +250,8 @@ QUnit.test('Group table cells should have correct height', function(assert) {
 
 QUnit.test('the "getCoordinatesByDate" method should return right coordinates for grouped timeline', function(assert) {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => true
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
     const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
@@ -380,9 +362,8 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 QUnit.module('Timeline Day', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({ observer: getObserver(key) }).dxSchedulerTimelineDay('instance');
@@ -451,9 +432,8 @@ QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
@@ -527,9 +507,8 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
 QUnit.module('Timeline Week', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({ observer: getObserver(key) }).dxSchedulerTimelineWeek('instance');
@@ -662,9 +641,8 @@ QUnit.test('Get visible bounds for timelineWeek', function(assert) {
 
 QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
     const key = createFactoryInstances({
-        scheduler: {
-            isVirtualScrolling: () => true
-        }
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
     const observer = getObserver(key);
 
@@ -692,9 +670,8 @@ QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
 QUnit.module('Timeline Month', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
@@ -760,9 +737,8 @@ QUnit.module('Timeline Keyboard Navigation', () => {
         QUnit.module(moduleDescription, {
             beforeEach: function() {
                 const key = createFactoryInstances({
-                    scheduler: {
-                        isVirtualScrolling: () => true
-                    }
+                    getIsVirtualScrolling: () => false,
+                    getDataAccessors: () => {}
                 });
 
                 this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
@@ -774,7 +750,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component.initDragBehavior();
                         e.component._attachTablesEvents();
                     },
-                    renovateRender: scrollingMode === 'virtual',
+                    renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                     observer: getObserver(key)
                 }).dxSchedulerTimelineMonth('instance');
@@ -911,6 +887,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
                             allowMultipleCellSelection: true,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
+                            renovateRender: true,
                         });
 
                         const $element = this.instance.$element();
@@ -949,9 +926,8 @@ QUnit.module('Mouse Interaction', () => {
     [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach((workSpace) => {
         QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
             const key = createFactoryInstances({
-                scheduler: {
-                    isVirtualScrolling: () => true
-                }
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {}
             });
             const observer = getObserver(key);
 
@@ -969,9 +945,8 @@ QUnit.module('Mouse Interaction', () => {
 QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
 
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
@@ -1015,9 +990,8 @@ QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week 
 QUnit.module('TimelineWeek with grouping by date', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 
@@ -1180,9 +1154,8 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
 QUnit.module('TimelineDay with grouping by date', {
     beforeEach: function() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 
@@ -1251,9 +1224,8 @@ QUnit.module('Renovated Render', {
     },
     beforeEach() {
         const key = createFactoryInstances({
-            scheduler: {
-                isVirtualScrolling: () => true
-            }
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
         const observer = getObserver(key);
 
@@ -1297,7 +1269,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work in basic case', function(assert) {
             this.createInstance();
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1323,10 +1295,10 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: cellsBase[0],
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }, {
                         cellData: cellsBase[1],
-                        position: { cellIndex: 1, rowIndex: 0 }
+                        position: { columnIndex: 1, rowIndex: 0 }
                     }]
                 ]
             };
@@ -1348,7 +1320,7 @@ QUnit.module('Renovated Render', {
                 }
             ]);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1395,16 +1367,16 @@ QUnit.module('Renovated Render', {
                 allDayPanelMap: [],
                 dateTableMap: [[{
                     cellData: expectedDateTable[0],
-                    position: { cellIndex: 0, rowIndex: 0 }
+                    position: { columnIndex: 0, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[1],
-                    position: { cellIndex: 1, rowIndex: 0 }
+                    position: { columnIndex: 1, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[2],
-                    position: { cellIndex: 2, rowIndex: 0 }
+                    position: { columnIndex: 2, rowIndex: 0 }
                 }, {
                     cellData: expectedDateTable[3],
-                    position: { cellIndex: 3, rowIndex: 0 }
+                    position: { columnIndex: 3, rowIndex: 0 }
                 }]]
             };
 
@@ -1424,7 +1396,7 @@ QUnit.module('Renovated Render', {
             ]);
             this.instance.option('groupOrientation', 'vertical');
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -1438,7 +1410,7 @@ QUnit.module('Renovated Render', {
                         groups: { res: 1 },
                     }]],
                     groupIndex: 0,
-                    isGroupedAllDayPanel: true,
+                    isGroupedAllDayPanel: false,
                 }, {
                     dateTable: [[{
                         ...cellsBase[0],
@@ -1452,11 +1424,11 @@ QUnit.module('Renovated Render', {
                         key: 3,
                     }]],
                     groupIndex: 1,
-                    isGroupedAllDayPanel: true,
+                    isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
                 cellCountInGroupRow: 2,
-                isGroupedAllDayPanel: true,
+                isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
                 rightVirtualCellWidth: undefined,
@@ -1471,16 +1443,16 @@ QUnit.module('Renovated Render', {
                 dateTableMap: [
                     [{
                         cellData: expectedViewData.groupedData[0].dateTable[0][0],
-                        position: { rowIndex: 0, cellIndex: 0 }
+                        position: { rowIndex: 0, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[0].dateTable[0][1],
-                        position: { rowIndex: 0, cellIndex: 1 }
+                        position: { rowIndex: 0, columnIndex: 1 }
                     }], [{
                         cellData: expectedViewData.groupedData[1].dateTable[0][0],
-                        position: { rowIndex: 1, cellIndex: 0 }
+                        position: { rowIndex: 1, columnIndex: 0 }
                     }, {
                         cellData: expectedViewData.groupedData[1].dateTable[0][1],
-                        position: { rowIndex: 1, cellIndex: 1 }
+                        position: { rowIndex: 1, columnIndex: 1 }
                     }]
                 ]
             };
@@ -1492,7 +1464,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineWeek', function(assert) {
             this.createInstance({}, TIMELINE_WEEK.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 
@@ -1519,7 +1491,7 @@ QUnit.module('Renovated Render', {
         QUnit.test('should work correctly with timelineMonth', function(assert) {
             this.createInstance({}, TIMELINE_MONTH.class);
 
-            this.instance.viewDataProvider.update();
+            this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
             const { viewData } = this.instance.viewDataProvider;
 

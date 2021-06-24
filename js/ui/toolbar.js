@@ -38,7 +38,7 @@ const Toolbar = ToolbarBase.inherit({
             submenuType: 'dropDownMenu',
 
             menuContainer: undefined,
-
+            overflowMenuVisible: false,
 
             /**
             * @name dxToolbarOptions.selectedIndex
@@ -101,7 +101,6 @@ const Toolbar = ToolbarBase.inherit({
             return;
         }
 
-        this._menuStrategy.toggleMenuVisibility(false, true);
         this.callBase();
         this._menuStrategy.renderMenuItems();
     },
@@ -285,16 +284,11 @@ const Toolbar = ToolbarBase.inherit({
     },
 
     _optionChanged: function(args) {
-        const name = args.name;
-        const value = args.value;
+        const { name, value } = args;
 
         switch(name) {
             case 'submenuType':
                 this._invalidate();
-                break;
-            case 'visible':
-                this.callBase.apply(this, arguments);
-                this._menuStrategy.handleToolbarVisibilityChange(value);
                 break;
             case 'menuItemTemplate':
                 this._changeMenuOption('itemTemplate', this._getTemplate(value));
@@ -305,6 +299,9 @@ const Toolbar = ToolbarBase.inherit({
                 break;
             case 'menuContainer':
                 this._changeMenuOption('container', value);
+                break;
+            case 'overflowMenuVisible':
+                this._changeMenuOption(this._menuStrategy.NAME === 'dropDownMenu' ? 'opened' : 'visible', value);
                 break;
             default:
                 this.callBase.apply(this, arguments);

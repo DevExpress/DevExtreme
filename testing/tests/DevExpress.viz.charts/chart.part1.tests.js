@@ -80,6 +80,21 @@ QUnit.test('Clear hover after series updating', function(assert) {
     assert.equal(commons.getTrackerStub().stub('clearHover').callCount, 1);
 });
 
+// T1004608
+QUnit.test('Refresh chart when series hovered', function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+
+    const chart = this.createChart({ series: [{ name: 'series1' }] });
+
+    commons.getTrackerStub().stub('clearHover').reset();
+
+    // act
+    chart.refresh();
+
+    assert.equal(commons.getTrackerStub().stub('clearHover').callCount, 0);
+});
+
 QUnit.test('Create Tracker.', function(assert) {
     this.themeManager.getOptions.withArgs('pointSelectionMode').returns('pointSelectionModeWithTheme');
     this.themeManager.getOptions.withArgs('seriesSelectionMode').returns('serieSelectionModeWithTheme');

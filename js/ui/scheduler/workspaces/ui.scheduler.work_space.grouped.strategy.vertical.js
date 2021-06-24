@@ -25,14 +25,8 @@ class VerticalGroupedStrategy {
 
         return {
             rowIndex: rowIndex,
-            cellIndex: cellCoordinates.cellIndex
+            columnIndex: cellCoordinates.columnIndex
         };
-    }
-
-    calculateCellIndex(rowIndex, cellIndex) {
-        rowIndex = rowIndex % this._workSpace._getRowCount();
-
-        return this._workSpace._getRowCount() * cellIndex + rowIndex;
     }
 
     getGroupIndex(rowIndex) {
@@ -53,28 +47,6 @@ class VerticalGroupedStrategy {
 
     getTotalRowCount() {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
-    }
-
-    addAdditionalGroupCellClasses(cellClass, index, i, j) {
-        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
-
-        return this._addFirstGroupCellClass(cellClass, i + 1);
-    }
-
-    _addLastGroupCellClass(cellClass, index) {
-        if(index % this._workSpace._getRowCount() === 0) {
-            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
-        }
-
-        return cellClass;
-    }
-
-    _addFirstGroupCellClass(cellClass, index) {
-        if((index - 1) % this._workSpace._getRowCount() === 0) {
-            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
-        }
-
-        return cellClass;
     }
 
     getVerticalMax(groupIndex) {
@@ -211,6 +183,32 @@ class VerticalGroupedStrategy {
 
     getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
+    }
+
+    // ------------
+    // We do not need these methods in renovation
+    // ------------
+
+    addAdditionalGroupCellClasses(cellClass, index, i, j) {
+        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
+
+        return this._addFirstGroupCellClass(cellClass, i + 1);
+    }
+
+    _addLastGroupCellClass(cellClass, index) {
+        if(index % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
+    }
+
+    _addFirstGroupCellClass(cellClass, index) {
+        if((index - 1) % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
     }
 }
 

@@ -34,7 +34,7 @@ import { custom as customDialog } from '../dialog';
 import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
-import AppointmentPopup from './appointmentPopup';
+import AppointmentPopup from './appointmentPopup/popup';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
@@ -55,14 +55,17 @@ import SchedulerWorkSpaceMonth from './workspaces/ui.scheduler.work_space_month'
 import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import AppointmentAdapter from './appointmentAdapter';
-import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
-import utils from './utils';
-
-import { createFactoryInstances, disposeFactoryInstances } from './instanceFactory';
-import { getResourceManager } from './resources/resourceManager';
-import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { utils } from './utils';
+import {
+    createFactoryInstances,
+    disposeFactoryInstances,
+    getResourceManager,
+    getAppointmentDataProvider,
+    getTimeZoneCalculator
+} from './instanceFactory';
+import { getCellGroups } from './resources/utils';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -581,9 +584,7 @@ class Scheduler extends Widget {
                 break;
             case 'resources':
 
-                getResourceManager(this.key).setResources(this.option('resources'));
-
-                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+                this.updateFactoryInstances();
 
                 this._postponeResourceLoading().done((resources) => {
                     this._appointments.option('items', []);
@@ -594,6 +595,9 @@ class Scheduler extends Widget {
             case 'startDayHour':
             case 'endDayHour':
                 this.fire('validateDayHours');
+
+                this.updateFactoryInstances();
+
                 this._appointments.option('items', []);
                 this._updateOption('workSpace', name, value);
                 this._appointments.repaint();
@@ -680,6 +684,8 @@ class Scheduler extends Widget {
                 break;
             }
             case 'showAllDayPanel':
+                this.updateFactoryInstances();
+
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption('workSpace', 'allDayExpanded', value);
@@ -700,6 +706,9 @@ class Scheduler extends Widget {
             case 'recurrenceEditMode':
             case 'remoteFiltering':
             case 'timeZone':
+                this.updateFactoryInstances();
+                this.repaint();
+                break;
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
@@ -726,7 +735,9 @@ class Scheduler extends Widget {
             case 'disabledExpr':
                 this._updateExpression(name, value);
 
-                getAppointmentDataProvider(this.key).updateDataAccessors(this._dataAccessors);
+                getAppointmentDataProvider(this.key).updateDataAccessors(
+                    utils.dataAccessors.combine(this.key, this._dataAccessors)
+                );
 
                 this._initAppointmentTemplate();
                 this.repaint();
@@ -827,9 +838,10 @@ class Scheduler extends Widget {
 
     _filterAppointmentsByDate() {
         const dateRange = this._workSpace.getDateRange();
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
-        const startDate = this.timeZoneCalculator.createDate(dateRange[0], { path: 'fromGrid' });
-        const endDate = this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' });
+        const startDate = timeZoneCalculator.createDate(dateRange[0], { path: 'fromGrid' });
+        const endDate = timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' });
 
         getAppointmentDataProvider(this.key).filterByDate(startDate, endDate, this.option('remoteFiltering'), this.option('dateSerializationFormat'));
     }
@@ -944,12 +956,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this.key = createFactoryInstances({
-            scheduler: this,
-            resources: this.option('resources'),
-            dataSource: this._dataSource,
-            appointmentDataAccessors: this._dataAccessors
-        });
+        this.updateFactoryInstances();
 
         this._initActions();
 
@@ -960,11 +967,24 @@ class Scheduler extends Widget {
         this._dataSourceLoadedCallback = Callbacks();
 
         this._subscribes = subscribes;
+    }
 
-        this.timeZoneCalculator = new TimeZoneCalculator({
-            getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
-            getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || this.option('timeZone'), date),
-            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+    updateFactoryInstances() {
+        this.key = createFactoryInstances({
+            key: this.key,
+            scheduler: this,
+            getIsVirtualScrolling: this.isVirtualScrolling.bind(this),
+            resources: this.option('resources'),
+            dataSource: this._dataSource,
+            startDayHour: this._getCurrentViewOption('startDayHour'),
+            endDayHour: this._getCurrentViewOption('endDayHour'),
+            appointmentDuration: this._getCurrentViewOption('cellDuration'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
+            showAllDayPanel: this.option('showAllDayPanel'),
+            timeZone: this.option('timeZone'),
+            getDataAccessors: function(key) {
+                return utils.dataAccessors.combine(key, this._dataAccessors);
+            }.bind(this),
         });
     }
 
@@ -1186,9 +1206,9 @@ class Scheduler extends Widget {
         this._asyncTemplatesTimers.forEach(clearTimeout);
         this._asyncTemplatesTimers = [];
 
-        disposeFactoryInstances(this.key);
-
         super._dispose();
+
+        disposeFactoryInstances(this.key);
     }
 
     _initActions() {
@@ -1345,7 +1365,7 @@ class Scheduler extends Widget {
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
 
         result.todayDate = () => {
-            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            const result = getTimeZoneCalculator(this.key).createDate(new Date(), { path: 'toGrid' });
             return result;
         };
 
@@ -1354,6 +1374,7 @@ class Scheduler extends Widget {
 
     _appointmentsConfig() {
         const config = {
+            key: this.key,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
             onItemClick: this._createActionByOption('onAppointmentClick'),
@@ -1500,6 +1521,7 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),
@@ -1527,6 +1549,7 @@ class Scheduler extends Widget {
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
             draggingMode: this.option('_draggingMode'),
+            resourceManager: getResourceManager(this.key),
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
@@ -1761,7 +1784,11 @@ class Scheduler extends Widget {
     }
 
     _getUpdatedData(rawAppointment) {
-        const getConvertedFromGrid = date => date ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' }) : undefined;
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const getConvertedFromGrid = date => date
+            ? timeZoneCalculator.createDate(date, { path: 'fromGrid' })
+            : undefined;
+
         const isValidDate = date => !isNaN(new Date(date).getTime());
 
         const targetCell = this.getTargetCellData();
@@ -1791,11 +1818,11 @@ class Scheduler extends Widget {
         if(isKeepAppointmentHours) {
             const { trimTime } = dateUtils;
 
-            const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
+            const startDate = timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
             const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
 
             resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
-            resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
+            resultedStartDate = timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
         const result = this.createAppointmentAdapter({});
@@ -2003,45 +2030,9 @@ class Scheduler extends Widget {
         );
     }
 
-    // TODO: use for appointment model
-    _getRecurrenceException(rawAppointment) {
-        const appointment = this.createAppointmentAdapter(rawAppointment);
-        const recurrenceException = appointment.recurrenceException;
-
-        if(recurrenceException) {
-            const exceptions = recurrenceException.split(',');
-
-            for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
-            }
-
-            return exceptions.join();
-        }
-
-        return recurrenceException;
-    }
-
-    _convertRecurrenceException(exceptionString, startDate) {
-        exceptionString = exceptionString.replace(/\s/g, '');
-
-        const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, {
-                path: 'toGrid'
-            });
-        };
-
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = getConvertedToTimeZone(startDate);
-        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
-
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
-        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
-        return exceptionString;
-    }
-
     dayHasAppointment(day, rawAppointment, trimTime) {
         const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+            return getTimeZoneCalculator(this.key).createDate(date, { path: 'toGrid' });
         };
 
         const appointment = this.createAppointmentAdapter(rawAppointment);
@@ -2085,7 +2076,7 @@ class Scheduler extends Widget {
                 getGroups = function() {
                     const apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
 
-                    return getResourceManager(this.key).getCellGroups(
+                    return getCellGroups(
                         apptSettings[0].groupIndex,
                         this.getWorkSpace().option('groups')
                     );
@@ -2243,14 +2234,16 @@ class Scheduler extends Widget {
     }
 
     getFirstDayOfWeek() {
-        return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
+        return isDefined(this.option('firstDayOfWeek'))
+            ? this.option('firstDayOfWeek')
+            : dateLocalization.firstDayOfWeekIndex();
     }
 
     createAppointmentAdapter(rawAppointment) {
         const options = {
+            key: this.key,
             getField: (rawAppointment, property) => this.fire('getField', property, rawAppointment),
             setField: (rawAppointment, property, value) => this.fire('setField', property, rawAppointment, value),
-            getTimeZoneCalculator: () => this.timeZoneCalculator
         };
         return new AppointmentAdapter(rawAppointment, options);
     }

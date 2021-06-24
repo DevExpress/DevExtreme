@@ -13,6 +13,7 @@ import { convertRulesToOptions } from '../../../../../core/options/utils';
 import devices from '../../../../../core/devices';
 import { current } from '../../../../../ui/themes';
 import { hasWindow } from '../../../../../core/utils/window';
+import { getPathParts } from '../../../../../core/utils/data';
 
 interface Mock extends jest.Mock {}
 
@@ -21,21 +22,26 @@ const mockUpdateSize = jest.fn();
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
-  DataGridComponent: jest.fn().mockImplementation((element, options) => ({
-    options,
-    option: () => options,
-    beginUpdate: jest.fn(),
-    endUpdate: jest.fn(),
-    // eslint-disable-next-line no-underscore-dangle
-    _options: { silent: jest.fn() },
-    dispose: jest.fn(),
-    on: jest.fn(),
-    element: () => element,
-    getController: jest.fn().mockImplementation(() => ({
-      updateSize: mockUpdateSize,
-    })),
-    updateDimensions: jest.fn(),
-  })),
+  DataGridComponent: jest.fn().mockImplementation((element, options) => {
+    const component = {
+      options,
+      option: () => options,
+      beginUpdate: jest.fn(),
+      endUpdate: jest.fn(),
+      // eslint-disable-next-line no-underscore-dangle
+      _options: { silent: jest.fn() },
+      dispose: jest.fn(),
+      on: jest.fn(),
+      element: () => element,
+      getController: jest.fn().mockImplementation(() => ({
+        updateSize: mockUpdateSize,
+      })),
+      updateDimensions: jest.fn(),
+    };
+    options.onInitialized({ component });
+
+    return component;
+  }),
 }));
 jest.mock('../utils/get_updated_options');
 jest.mock('../../../../../core/devices', () => {
@@ -143,6 +149,17 @@ describe('DataGrid', () => {
       expect(component.instance.element()).toBe(component.widgetElementRef.current);
     });
 
+    it('Init with onInitialized', () => {
+      const onInitialized = jest.fn();
+      const component = new DataGrid({});
+      component.props = {} as DataGridProps;
+      component.restAttributes = { onInitialized };
+
+      component.setupInstance();
+
+      expect(onInitialized).toHaveBeenCalled();
+    });
+
     it('updateSize should be called if not server side', () => {
       (hasWindow as jest.Mock).mockReturnValue(true);
 
@@ -181,6 +198,22 @@ describe('DataGrid', () => {
       component.setupInstance();
 
       expect((component.instance as any).options.onContentReady).toBe(contentReadyHandler);
+    });
+
+    describe('Getters', () => {
+      it('initializedInstance without setupInstance', () => {
+        const component = new DataGrid({});
+
+        expect(component.initializedInstance).toBeUndefined();
+      });
+
+      it('initializedInstance with setupInstance', () => {
+        const component = new DataGrid({});
+
+        component.setupInstance();
+
+        expect(component.initializedInstance).toBeDefined();
+      });
     });
 
     describe('Methods', () => {
@@ -280,6 +313,7 @@ describe('DataGrid', () => {
       ${'isScrollbarVisible'}
       ${'getTopVisibleRowData'}
       ${'getScrollbarWidth'}
+      ${'getDataProvider'}
     `
         .describe('Proxying the Grid methods', ({
           methodName,
@@ -448,8 +482,8 @@ describe('DataGrid', () => {
     ${'editing.editColumnName'}
     ${'searchPanel.text'}
     `('$propName property should be assigned on optionChanged event call', ({ fullName }) => {
-      const name = fullName.split('.')[0];
-      const propName = fullName.split('.')[1];
+      const name = getPathParts(fullName)[0];
+      const propName = getPathParts(fullName)[1];
       const prevValue = null;
       const newValue = {};
       const props = {

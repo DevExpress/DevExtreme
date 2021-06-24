@@ -31,6 +31,19 @@ const moduleConfig = {
 };
 
 QUnit.module('format: api value changing', moduleConfig, () => {
+    QUnit.test('zero should be typed as another digits (T997851)', function(assert) {
+        this.instance.option({
+            format: '#,##0.##',
+            value: 100000
+        });
+
+        this.input.focus();
+        this.keyboard.caret(1);
+
+        this.keyboard.type('000');
+        assert.strictEqual(this.input.val(), '100,000,000', 'input text is correct');
+    });
+
     QUnit.test('number type of input should be converted to tel on mobile device when inputMode is unsupported', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'mobile' });
         const realBrowser = browser;
@@ -1932,6 +1945,23 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
 
         this.clock.tick(CARET_TIMEOUT_DURATION);
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret is just before decimal separator');
+    });
+
+    QUnit.test('caret should be moved to the integer part end on input click if format contains stub in the end (T996477)', function(assert) {
+        this.instance.option({
+            format: '#0 \'9\'',
+            value: 0
+        });
+
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        for(let i = 0; i < 2; ++i) {
+            this.keyboard.caret(3);
+            this.input.trigger('dxclick');
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+        }
+
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
     });
 });
 

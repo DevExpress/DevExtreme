@@ -1,8 +1,6 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  OneWay,
 } from '@devextreme-generator/declarations';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
@@ -45,17 +43,13 @@ export const viewFunction = ({
     />
   </Table>
 );
-@ComponentBindings()
-export class DateTableLayoutBaseProps extends DateTableLayoutProps {
-  @OneWay() className?: string;
-}
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
   jQuery: { register: true },
 })
-export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+export class DateTableLayoutBase extends JSXComponent(DateTableLayoutProps) {
   get classes(): string | undefined {
     const { addDateTableClass } = this.props;
 

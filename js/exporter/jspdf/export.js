@@ -68,6 +68,7 @@ export const Export = {
         }
 
         component._setOptionWithoutOptionChange('loadPanel', options);
+
         this._renderLoadPanel(component);
     },
 
@@ -87,12 +88,13 @@ export const Export = {
             loadPanel
         } = options;
 
-        const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
-        if('animation' in component.option('loadPanel')) {
+        const internalComponent = component._getInternalInstance?.() || component;
+        const initialLoadPanelOptions = extend({}, internalComponent.option('loadPanel'));
+        if('animation' in internalComponent.option('loadPanel')) {
             loadPanel.animation = null;
         }
 
-        this._setLoadPanelOptions(component, loadPanel);
+        this._setLoadPanelOptions(internalComponent, loadPanel);
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
@@ -167,7 +169,7 @@ export const Export = {
 
                 resolve();
             }).always(() => {
-                this._setLoadPanelOptions(component, initialLoadPanelOptions);
+                this._setLoadPanelOptions(internalComponent, initialLoadPanelOptions);
             });
         });
     },

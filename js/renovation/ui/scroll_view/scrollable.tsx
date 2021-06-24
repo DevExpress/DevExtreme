@@ -22,7 +22,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
-import { ScrollableWrapper } from '../../component_wrapper/scrollable';
+import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
@@ -253,6 +253,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;
