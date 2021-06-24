@@ -5925,7 +5925,7 @@ declare module DevExpress.ui {
       readonly error?: Error;
     }
     /**
-     * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type DefaultToolbarItemName =
       | 'addRowButton'
@@ -21750,7 +21750,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:Toolbar]
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface Toolbar {
     /**
@@ -21760,7 +21760,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:ToolbarItem]
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ToolbarItem extends dxToolbarItem {
     name?: DevExpress.ui.dxDataGrid.DefaultToolbarItemName;

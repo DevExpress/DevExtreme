@@ -4142,7 +4142,7 @@ export interface ToolbarItem extends dxToolbarItem {
 export interface Toolbar {
   /**
    * @docid
-   * @type Array<ToolbarItem,Enums.DataGridToolbarItem>
+   * @type Array<ToolbarItem,Enums.GridToolbarItemName>
    * @public
    */
   items?: (DefaultToolbarItemName | ToolbarItem)[];
