@@ -53,7 +53,6 @@ class RecurrenceProcessor {
 
             if(endAppointmentTime >= minTime) {
                 const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
-
                 result.push(correctDate);
             }
         });
@@ -200,9 +199,6 @@ class RecurrenceProcessor {
             const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
-
-        // const anotherUntil = timeZoneUtils.createUTCDateWithLocalOffset(ruleOptions.until);
-        // ruleOptions.until = until;
 
         this._createRRule(ruleOptions);
 
