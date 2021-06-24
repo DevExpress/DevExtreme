@@ -87,11 +87,12 @@ export default class TableResizingModule extends BaseModule {
         this._windowResizeTimeout = setTimeout(() => {
             const $tables = this._findTables();
             each($tables, (index, table) => {
-                const actualTableWidth = $(table).outerWidth();
-                const lastTableWidth = parseInt($(table).attr('width')?.replace('px', ''));
+                const $table = $(table);
+                const actualTableWidth = $table.outerWidth();
+                const lastTableWidth = this._getWidthAttrValue($table);
                 if(actualTableWidth > lastTableWidth + 1 || actualTableWidth < lastTableWidth - 1) {
-                    $(table).attr('width', actualTableWidth + 'px');
-                    this._recalculateColumnsWidth($(table));
+                    $table.attr('width', actualTableWidth + 'px');
+                    this._recalculateColumnsWidth($table);
                 }
             });
             this._updateFramesPositions();
@@ -103,6 +104,11 @@ export default class TableResizingModule extends BaseModule {
         return $(this.editorInstance._getQuillContainer()).find('table');
     }
 
+    _getWidthAttrValue($element) {
+        const attrValue = $element.attr('width');
+        return attrValue ? parseInt(attrValue.replace('px', '')) : undefined;
+    }
+
     _fixTablesWidths($tables) {
         each($tables, (_, table) => {
             const $table = $(table);
@@ -111,15 +117,14 @@ export default class TableResizingModule extends BaseModule {
                 let columnsSum = 0;
 
                 each($columnElements, (_, element) => {
-                    const columnWidth = $(element).attr('width') ? parseInt($(element).attr('width').replace('px', '')) : $(element).outerWidth();
+                    const $element = $(element);
+                    const columnWidth = $element.attr('width') ? this._getWidthAttrValue($element) : $element.outerWidth();
                     columnsSum += columnWidth;
                 });
 
                 $table.css('width', 'initial');
 
                 const tableWidth = $table.attr('width') ? parseInt($table.attr('width')) : $table.outerWidth();
-
-                // console.log('_fixTablesWidths ' + tableWidth);
 
                 $table.attr('width', Math.max(columnsSum, tableWidth) + 'px');
             }
@@ -431,7 +436,8 @@ export default class TableResizingModule extends BaseModule {
         let ratio = 1;
 
         each(determinantElements, (index, element) => {
-            const columnWidth = parseInt($(element).attr('width')?.replace('px', '')) || $(element).outerWidth();
+            const $element = $(element);
+            const columnWidth = this._getWidthAttrValue($element) || $element.outerWidth();
 
             columnsWidths[index] = columnWidth >= this._minColumnWidth ? columnWidth : this._minColumnWidth;
 
@@ -439,9 +445,6 @@ export default class TableResizingModule extends BaseModule {
         });
 
         const minWidthForColumns = determinantElements.length * this._minColumnWidth;
-
-        // console.log(tableWidth);
-        // console.log(columnSum);
 
         if(columnSum > minWidthForColumns) {
             ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);

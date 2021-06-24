@@ -684,18 +684,6 @@ module('Resizing integration', {
         });
     });
 
-    test('Window resize callback should be cleaned after the widget dispose (move to module tests)', function(assert) {
-        this.createWidget();
-
-        this.clock.tick(TIME_TO_WAIT);
-    });
-
-    test('All frame elements and subscriptions should be removed ater the table removing (move to module tests)', function(assert) {
-        this.createWidget();
-        this.clock.tick(TIME_TO_WAIT);
-
-    });
-
     test('Second frame should be added if we add the second table', function(assert) {
         this.createWidget();
         this.clock.tick(TIME_TO_WAIT);
@@ -877,7 +865,7 @@ module('Resizing integration', {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const expectedColumnsWidths = [40, 40, 40, 114, 114, 114, 135];
+        const expectedColumnsWidths = [40, 40, 40, 120, 141, 98, 120];
 
         $table = this.$element.find('table');
 
@@ -885,7 +873,7 @@ module('Resizing integration', {
             assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
         });
 
-        assert.roughEqual($table.outerWidth(), startTableWidth, 1, 'Table width is not changed');
+        assert.roughEqual($table.outerWidth(), startTableWidth, 3, 'Table width is not changed');
     });
 
     test('Table width should not be updated after a some columns insert', function(assert) {
