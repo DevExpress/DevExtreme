@@ -47,7 +47,7 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
     [true, false].forEach(nativeScrolling => {
-        const isRtlNegative = nativeScrolling && !getScrollRtlBehavior().positive;
+        const isRtlNegative = nativeScrolling && !(getScrollRtlBehavior().positive && getScrollRtlBehavior().decreasing);
 
         QUnit.test(`Correct start scroll position when RTL with nativeScrolling: ${nativeScrolling}`, function(assert) {
             // arrange, act
