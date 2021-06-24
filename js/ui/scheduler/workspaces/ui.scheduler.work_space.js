@@ -445,6 +445,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.option('hoursInterval') === 0.5 && !this.isVirtualScrolling();
     }
 
+    _getRealGroupOrientation() {
+        return this._isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
+    }
+
     createRAllDayPanelElements() {
         this._$allDayPanel = $('<div>');
         this._$allDayTitle = $('<div>').appendTo(this.$element());
