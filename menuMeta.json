@@ -3776,7 +3776,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/NavBar/Overview/",
             "Widget": "NavBar",
             "DemoType": "Mobile"
           }
@@ -3791,7 +3790,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/SlideOut/Overview/",
             "Widget": "Slideout",
             "DemoType": "Mobile"
           }
