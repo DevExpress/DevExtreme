@@ -73,12 +73,16 @@ export const Export = {
             loadPanel
         } = options;
 
+        const internalComponent = component._getInternalInstance?.() || component;
+        const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
+
         if(loadPanel.enabled) {
             const rowsView = component.getView('rowsView');
 
             this._loadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
             this._loadPanel.show();
         }
+        component.option('loadPanel.enabled', false);
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
@@ -153,8 +157,9 @@ export const Export = {
 
                 resolve();
             }).always(() => {
+                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+
                 if(loadPanel.enabled) {
-                    this._loadPanel.hide();
                     this._loadPanel.dispose();
                 }
             });

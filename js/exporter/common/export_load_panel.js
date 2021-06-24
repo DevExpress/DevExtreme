@@ -5,6 +5,8 @@ import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
 import LoadPanel from '../../ui/load_panel';
 
+
+const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
 class ExportLoadPanel {
     constructor(component, $targetElement, $container, options) {
         this._$targetElement = $targetElement;
@@ -45,15 +47,11 @@ class ExportLoadPanel {
     }
 
     render(component, options) {
-        return component._createComponent($('<div>').appendTo(this._$container), LoadPanel, this.getOptions(options));
+        return component._createComponent($('<div>').addClass(EXPORT_LOAD_PANEL_CLASS).appendTo(this._$container), LoadPanel, this.getOptions(options));
     }
 
     show() {
         this._loadPanel.show();
-    }
-
-    hide() {
-        this._loadPanel.hide();
     }
 
     dispose() {

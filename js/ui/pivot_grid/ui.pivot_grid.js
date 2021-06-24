@@ -456,6 +456,9 @@ const PivotGrid = Widget.inherit({
                 break;
             case 'loadPanel':
                 if(hasWindow()) {
+                    if(args.value === false) {
+                        clearTimeout(this._hideLoadingTimeoutID);
+                    }
                     that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                     that._invalidate();
                 }
