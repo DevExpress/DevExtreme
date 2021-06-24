@@ -645,6 +645,7 @@ const ValidationEngine = {
             status: STATUS.valid,
             complete: null
         };
+
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
             const ruleValidator = rulesValidators[rule.type];
@@ -698,8 +699,16 @@ const ValidationEngine = {
                 name
             });
         }
+
+        this._synchronizeGroupValidationInfo(validator, result);
+
         result.status = result.pendingRules ? STATUS.pending : (result.isValid ? STATUS.valid : STATUS.invalid);
         return result;
+    },
+
+    _synchronizeGroupValidationInfo(validator, result) {
+        const groupConfig = ValidationEngine.getGroupConfig(validator._validationGroup);
+        groupConfig._updateBrokenRules.call(groupConfig, { validator, brokenRules: result.brokenRules ?? [] });
     },
 
     _validateAsyncRules({ result, value, items, name }) {
