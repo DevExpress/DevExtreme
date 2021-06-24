@@ -198,6 +198,21 @@ module('Resizing integration', {
         assert.strictEqual($resizeFrame.length, 0, 'Frame is not created');
     });
 
+    test('Frame is created if we apply new value with table in runtime', function(assert) {
+        this.createWidget({
+            value: ''
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('value', tableMarkup);
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+        assert.strictEqual($resizeFrame.length, 1, 'Frame is created');
+    });
+
     test('Check table resize frame position', function(assert) {
         this.createWidget();
         this.clock.tick(TIME_TO_WAIT);

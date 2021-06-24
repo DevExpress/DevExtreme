@@ -44,9 +44,9 @@ export default class TableResizingModule extends BaseModule {
                     this._createResizeFrames($tables);
                     this._updateFramesPositions();
                     this._updateFramesSeparators();
-
-                    this._attachEvents();
                 }
+
+                this._attachEvents();
             }, TIMEOUT);
 
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
