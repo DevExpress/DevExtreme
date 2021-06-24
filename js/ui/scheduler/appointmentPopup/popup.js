@@ -68,16 +68,21 @@ export default class AppointmentPopup {
         this.state.isNew = !!isNew;
         this.state.isExcludeFromSeries = !!isExcludeFromSeries;
 
-        this.popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
-        this.popup.show();
+        if(!this._popup) {
+            const popupConfig = this._createPopupConfig();
+            this._popup = this._createPopup(popupConfig);
+        }
+
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
+        this._popup.show();
     }
 
     hide() {
-        this.popup.hide();
+        this._popup.hide();
     }
 
     isVisible() {
-        return this.popup.option('visible');
+        return this._popup ? this._popup.option('visible') : false;
     }
 
     ///#DEBUG
