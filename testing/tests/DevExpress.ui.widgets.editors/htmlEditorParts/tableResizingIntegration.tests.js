@@ -486,7 +486,7 @@ module('Resizing integration', {
         const expectedColumnsWidths = [50, 100, 50, 50];
 
         $table.find('tr').eq(0).find('td').each((i, columnElement) => {
-            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
+            assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2, 'Column has expected width, index = ' + i);
         });
 
         assert.roughEqual($table.outerWidth(), 250, 3);
@@ -837,8 +837,10 @@ module('Resizing integration', {
         });
         this.clock.tick(TIME_TO_WAIT);
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        let $table = this.$element.find('table');
+        const startTableWidth = $table.outerWidth();
 
-        $columnResizerElements.eq(3)
+        $columnResizerElements.eq(1)
             .trigger('dxpointerdown');
 
         const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
@@ -862,11 +864,50 @@ module('Resizing integration', {
 
         const expectedColumnsWidths = [40, 40, 40, 114, 114, 114, 135];
 
-        const $table = this.$element.find('table');
+        $table = this.$element.find('table');
 
         $table.find('tr').eq(0).find('td').each((i, columnElement) => {
             assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
         });
+
+        assert.roughEqual($table.outerWidth(), startTableWidth, 1, 'Table width is not changed');
+    });
+
+    test('Table width should not be updated after a some columns insert', function(assert) {
+        this.createWidget({
+            width: 630
+        });
+        this.clock.tick(TIME_TO_WAIT);
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+        $columnResizerElements.eq(3)
+            .trigger('dxpointerdown');
+
+        const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+        PointerMock($draggableElements.eq(0))
+            .start()
+            .dragStart()
+            .drag(-50, 0)
+            .dragEnd();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        let $table = this.$element.find('table');
+        const startTableWidth = $table.outerWidth();
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+        tableModule.insertColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        $table = this.$element.find('table');
+
+        assert.roughEqual($table.outerWidth(), startTableWidth, 1, 'Table width is not changed');
     });
 
     test('Column resizers should be updated after a some columns insert', function(assert) {
@@ -919,6 +960,35 @@ module('Resizing integration', {
             assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1, 'Column has expected width, index = ' + i);
             assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1, 'Column has expected width attr, index = ' + i);
         });
+    });
+
+    test('Column resizers should be updated after a column delete', function(assert) {
+        this.createWidget({
+            value: tableMarkup,
+            width: 630
+        });
+        this.clock.tick(TIME_TO_WAIT);
+        let $table = this.$element.find('table').eq(0);
+        const tableWidth = $table.outerWidth();
+
+        const tableModule = this.quillInstance.getModule('table');
+
+        this.quillInstance.setSelection(5, 0);
+        tableModule.deleteColumn();
+        tableModule.deleteColumn();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        $table = this.$element.find('table').eq(0);
+        const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+        const columnBorderOffsets = getColumnBordersOffset($table);
+
+        $columnResizerElements.each((i, column) => {
+            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
+            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+        });
+
+        assert.roughEqual($table.outerWidth(), tableWidth, 2, 'Table width is not changed');
     });
 
     test('Second table frame should update position after the insert row to the first table', function(assert) {

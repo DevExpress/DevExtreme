@@ -65,11 +65,14 @@ export default class TableResizingModule extends BaseModule {
         this._quillInstance.off('text-change', this._quillTextChangeHandler);
     }
 
-    _getQuillTextChangeHandler(delta) {
+    _getQuillTextChangeHandler(delta, oldContent, source) {
         if(this._isTableChanges()) {
             this._removeResizeFrames();
             const $tables = this._findTables();
-            this._fixTablesWidths($tables);
+
+            if(source === 'api') {
+                this._fixTablesWidths($tables);
+            }
 
             this._updateColumnsWidth($tables);
             this._createResizeFrames($tables);
