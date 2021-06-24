@@ -2447,57 +2447,6 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
         assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
     });
-
-    QUnit.test('Changing toolbar.items[i] saves the state of another button', function(assert) {
-        // arrange
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            dataSource: [{ field1: 1, field2: 2 }],
-            columnChooser: {
-                enabled: true,
-                title: 'Column chooser'
-            },
-            editing: {
-                allowAdding: true
-            },
-            toolbar: {
-                items: [
-                    {
-                        location: 'after',
-                        widget: 'dxSelectBox',
-                        cssClass: 'my-test-button',
-                        options: {
-                            items: ['item1', 'item2'],
-                            value: 'item1',
-                        }
-                    },
-                    {
-                        name: 'addRowButton',
-                        location: 'before'
-                    }
-                ]
-            }
-        });
-
-        // act
-        const $selectBox = dataGrid.$element().find('.my-test-button .dx-selectbox');
-        const selectBox = $selectBox.dxSelectBox('instance');
-        selectBox.option('value', 'item2');
-
-        // act
-        dataGrid.option('toolbar.items[1]', {
-            name: 'columnChooserButton',
-            disabled: true
-        });
-
-        // assert
-        const $columnChooserButton = dataGrid.$element().find('.dx-toolbar-before .dx-toolbar-item');
-        assert.ok($columnChooserButton.hasClass('dx-state-disabled'), 'button option changed');
-
-        const $selectBoxAfterChange = dataGrid.$element().find('.my-test-button .dx-selectbox');
-        const selectBoxAfterChange = $selectBoxAfterChange.dxSelectBox('instance');
-        assert.equal(selectBoxAfterChange.option('value'), 'item2', 'selectbox state saved');
-    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
