@@ -70,7 +70,7 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions<TKey, TValue>) => void);
+    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @public

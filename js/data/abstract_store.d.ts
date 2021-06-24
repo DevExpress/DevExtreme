@@ -35,14 +35,14 @@ export interface StoreOptions<TKey = any, TValue = any> {
      * @action
      * @public
      */
-    onLoaded?: ((result: Array<TValue>, loadOptions: LoadOptions<TKey, TValue>) => void);
+    onLoaded?: ((result: Array<TValue>, loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions<TKey, TValue>) => void);
+    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
     /**
      * @docid
      * @action
@@ -113,7 +113,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions?: LoadOptions<TKey, TValue>): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions?: LoadOptions<TValue>): DxPromise<TValue>;
     /**
      * @docid
      * @publicName insert(values)
@@ -151,7 +151,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TKey, TValue>): DxPromise<Array<TValue>>;
+    load(options: LoadOptions<TValue>): DxPromise<Array<TValue>>;
     /**
      * @docid
      * @publicName off(eventName)

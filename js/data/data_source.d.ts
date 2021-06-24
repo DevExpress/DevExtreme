@@ -230,7 +230,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    loadOptions(): LoadOptions<TKey, TValue>;
+    loadOptions(): LoadOptions<TValue>;
     /**
      * @docid
      * @publicName off(eventName)

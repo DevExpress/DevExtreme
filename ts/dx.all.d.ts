@@ -1632,7 +1632,7 @@ declare module DevExpress.data {
      * [descr:CustomStoreOptions.load]
      */
     load?: (
-      options: LoadOptions<TKey, TValue>
+      options: LoadOptions<TValue>
     ) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
@@ -1723,7 +1723,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): LoadOptions<TKey, TValue>;
+    loadOptions(): LoadOptions<TValue>;
     /**
      * [descr:DataSource.off(eventName)]
      */
@@ -1986,7 +1986,7 @@ declare module DevExpress.data {
    * [descr:LoadOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LoadOptions<TKey = any, TValue = any> {
+  export interface LoadOptions<T = any> {
     /**
      * [descr:LoadOptions.customQueryParams]
      */
@@ -2002,11 +2002,11 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.group]
      */
-    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group?: GroupDescriptor<T> | Array<GroupDescriptor<T>>;
     /**
      * [descr:LoadOptions.groupSummary]
      */
-    groupSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
+    groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * [descr:LoadOptions.parentIds]
      */
@@ -2034,7 +2034,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.select]
      */
-    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
+    select?: SelectDescriptor<T> | Array<SelectDescriptor<T>>;
     /**
      * [descr:LoadOptions.skip]
      */
@@ -2042,7 +2042,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.sort]
      */
-    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort?: SortDescriptor<T> | Array<SortDescriptor<T>>;
     /**
      * [descr:LoadOptions.take]
      */
@@ -2050,7 +2050,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.totalSummary]
      */
-    totalSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
+    totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * [descr:LoadOptions.userData]
      */
@@ -2295,7 +2295,7 @@ declare module DevExpress.data {
     /**
      * [descr:ODataStoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions<TKey, TValue>) => void;
+    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -2818,7 +2818,7 @@ declare module DevExpress.data {
      */
     byKey(
       key: TKey,
-      extraOptions?: LoadOptions<TKey, TValue>
+      extraOptions?: LoadOptions<TValue>
     ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.insert(values)]
@@ -2840,7 +2840,7 @@ declare module DevExpress.data {
      * [descr:Store.load(options)]
      */
     load(
-      options: LoadOptions<TKey, TValue>
+      options: LoadOptions<TValue>
     ): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.off(eventName)]
@@ -2933,12 +2933,12 @@ declare module DevExpress.data {
      */
     onLoaded?: (
       result: Array<TValue>,
-      loadOptions: LoadOptions<TKey, TValue>
+      loadOptions: LoadOptions<TValue>
     ) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions<TKey, TValue>) => void;
+    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
     /**
      * [descr:StoreOptions.onModified]
      */

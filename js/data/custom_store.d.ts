@@ -29,7 +29,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<any>|Array<any>
      * @public
      */
-    load?: ((options: LoadOptions<TKey, TValue>) => PromiseLike<TValue> | Array<TValue>);
+    load?: ((options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>);
     /**
      * @docid
      * @type string

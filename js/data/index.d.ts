@@ -52,7 +52,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
  * @namespace DevExpress.data
  * @type object
  */
- export interface LoadOptions<TKey = any, TValue = any> {
+ export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
@@ -74,13 +74,13 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @public
      * @type object
      */
-    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group?: GroupDescriptor<T> | Array<GroupDescriptor<T>>;
     /**
      * @docid
      * @public
      * @type object
      */
-    groupSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
+    groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * @docid
      * @public
@@ -117,7 +117,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @public
      * @type object
      */
-    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
+    select?: SelectDescriptor<T> | Array<SelectDescriptor<T>>;
     /**
      * @docid
      * @public
@@ -128,7 +128,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @public
      * @type object
      */
-    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort?: SortDescriptor<T> | Array<SortDescriptor<T>>;
     /**
      * @docid
      * @public
@@ -139,7 +139,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @public
      * @type object
      */
-    totalSummary?: SummaryDescriptor<TValue> | Array<SummaryDescriptor<TValue>>;
+    totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * @docid
      * @public
