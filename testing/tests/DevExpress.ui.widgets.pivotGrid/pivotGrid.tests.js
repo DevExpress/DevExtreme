@@ -6256,13 +6256,13 @@ QUnit.module('Vertical headers', {
             assert.equal(fields[2].dataType, 'number');
         }
 
-        function checkPivotGridCellsText(grid, assert) {
+        function checkPivotGridCellsText(grid, headers, assert) {
             const rowCells = $(grid._rowsArea.element()).find('.dx-last-cell');
-            assert.equal($(rowCells.get(0)).text(), 'row');
+            assert.equal($(rowCells.get(0)).text(), headers.row);
             assert.equal($(rowCells.get(1)).text(), 'Grand Total');
 
             const columnCells = $(grid._columnsArea.element()).find('.dx-pivotgrid-horizontal-headers td');
-            assert.equal($(columnCells.get(0)).text(), '2021');
+            assert.equal($(columnCells.get(0)).text(), headers.column);
             assert.equal($(columnCells.get(1)).text(), 'Grand Total');
 
             const dataCells = $(grid._dataArea.element()).find('td');
@@ -6277,7 +6277,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6302,7 +6302,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6332,7 +6332,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6362,7 +6362,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6387,7 +6387,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6419,7 +6419,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6456,7 +6456,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6493,7 +6493,7 @@ QUnit.module('Vertical headers', {
             const grid = $('#pivotGrid').dxPivotGrid({
                 onContentReady: function() {
                     checkFieldsTypes(grid, assert);
-                    checkPivotGridCellsText(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'row', column: '2021' }, assert);
                     done();
                 },
                 dataSource: {
@@ -6512,6 +6512,144 @@ QUnit.module('Vertical headers', {
                                 resolve({ data: [{ key: date.getFullYear(), summary: [1] }] });
                             } else if(options.group && options.group[0].selector === 'row') {
                                 resolve({ data: [{ key: 'row', summary: [1], items: [ { key: date.getFullYear(), summary: [1] } ] }], summary: [1] });
+                            }
+                        });
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+        });
+
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as arguments list. JQuery promise', function(assert) {
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkFieldsTypes(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'displayText in row', column: 'displayText in column' }, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: true,
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum' }
+                    ],
+                    load: function(options) {
+                        const d = $.Deferred();
+                        const date = new Date('2021-05-24T03:24:00');
+                        if(options.group === undefined) {
+                            d.resolve([{ row: 'row', date, amount: 1 }]); // retrieve fields
+                        } else if(options.group && options.group[0].selector === 'date') {
+                            d.resolve([{ key: date.getFullYear(), summary: [1], displayText: 'displayText in column' }]);
+                        } else if(options.group && options.group[0].selector === 'row') {
+                            d.resolve([ { key: 'row', summary: [1], displayText: 'displayText in row', items: [ { key: date.getFullYear(), summary: [1] } ] }], { summary: [1] });
+                        }
+                        return d.promise();
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+        });
+
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. JQuery promise', function(assert) {
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkFieldsTypes(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'displayText in row', column: 'displayText in column' }, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: true,
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum' }
+                    ],
+                    load: function(options) {
+                        const d = $.Deferred();
+                        const date = new Date('2021-05-24T03:24:00');
+                        if(options.group === undefined) {
+                            d.resolve({ data: [ { row: 'row', date, amount: 1 } ] }); // retrieve fields
+                        } else if(options.group && options.group[0].selector === 'date') {
+                            d.resolve({ data: [{ key: date.getFullYear(), summary: [1], displayText: 'displayText in column' }] });
+                        } else if(options.group && options.group[0].selector === 'row') {
+                            d.resolve({ data: [{ key: 'row', summary: [1], displayText: 'displayText in row', items: [ { key: date.getFullYear(), summary: [1] } ] }], summary: [1] });
+                        }
+                        return d.promise();
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+        });
+
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise', function(assert) {
+            if(browser.msie) {
+                assert.ok(true, 'IE not supports native promises');
+                return;
+            }
+
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkFieldsTypes(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'displayText in row', column: 'displayText in column' }, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: true,
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum' }
+                    ],
+                    load: function(options) {
+                        return new Promise(resolve => {
+                            const date = new Date('2021-05-24T03:24:00');
+                            if(options.group === undefined) {
+                                resolve({ data: [ { row: 'row', date, amount: 1 } ] }); // retrieve fields
+                            } else if(options.group && options.group[0].selector === 'date') {
+                                resolve({ data: [{ key: date.getFullYear(), summary: [1], displayText: 'displayText in column' }] });
+                            } else if(options.group && options.group[0].selector === 'row') {
+                                resolve({ data: [{ key: 'row', summary: [1], displayText: 'displayText in row', items: [ { key: date.getFullYear(), summary: [1] } ] }], summary: [1] });
+                            }
+                        });
+                    }
+                }
+            }).dxPivotGrid('instance');
+            this.clock.tick();
+        });
+
+        QUnit.test('PivotGrid. [col x row x data]. remoteOperations = true. displayText is specified. Resolve data as object. Native promise. Retrieve fields as simple array', function(assert) {
+            if(browser.msie) {
+                assert.ok(true, 'IE not supports native promises');
+                return;
+            }
+
+            const done = assert.async();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                onContentReady: function() {
+                    checkFieldsTypes(grid, assert);
+                    checkPivotGridCellsText(grid, { row: 'displayText in row', column: 'displayText in column' }, assert);
+                    done();
+                },
+                dataSource: {
+                    remoteOperations: true,
+                    fields: [
+                        { area: 'row', dataField: 'row' },
+                        { area: 'column', dataField: 'date' },
+                        { area: 'data', dataField: 'amount', summaryType: 'sum' }
+                    ],
+                    load: function(options) {
+                        return new Promise(resolve => {
+                            const date = new Date('2021-05-24T03:24:00');
+                            if(options.group === undefined) {
+                                resolve([ { row: 'row', date, amount: 1 } ]); // retrieve fields
+                            } else if(options.group && options.group[0].selector === 'date') {
+                                resolve({ data: [{ key: date.getFullYear(), summary: [1], displayText: 'displayText in column' }] });
+                            } else if(options.group && options.group[0].selector === 'row') {
+                                resolve({ data: [{ key: 'row', summary: [1], displayText: 'displayText in row', items: [ { key: date.getFullYear(), summary: [1] } ] }], summary: [1] });
                             }
                         });
                     }
