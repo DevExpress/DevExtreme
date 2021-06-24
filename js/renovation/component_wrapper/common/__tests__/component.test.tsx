@@ -1,8 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-// eslint-disable-next-line import/named
-import renderer, { dxElementWrapper } from '../../../../core/renderer';
+import renderer from '../../../../core/renderer';
+import type { dxElementWrapper } from '../../../../core/renderer';
 import './utils/test_components/empty';
 import './utils/test_components/base';
 import './utils/test_components/options';
@@ -421,7 +421,6 @@ describe('option', () => {
 
     component.option('nestedObject.nestedProp', 'new value');
     expect(spyUpdatePropsImmutable).toBeCalledWith(
-      // eslint-disable-next-line no-underscore-dangle
       component._props,
       component.option(),
       'nestedObject',

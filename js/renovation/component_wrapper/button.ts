@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../core/renderer';
+import type { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
@@ -29,8 +28,8 @@ export default class ButtonWrapper extends Component {
     value ? button.activate() : button.deactivate();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getSubmitAction(): any {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  _getSubmitAction(): Function {
     let needValidate = true;
     let validationStatus = 'valid';
 
@@ -89,8 +88,7 @@ export default class ButtonWrapper extends Component {
     return super._patchOptionValues({ ...options, templateData: options._templateData });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _findGroup(): any {
+  _findGroup(): unknown {
     const $element = this.$element();
     const validationGroup = this.option('validationGroup');
     return validationGroup !== undefined && validationGroup !== ''
