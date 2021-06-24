@@ -1735,7 +1735,10 @@ class Scheduler extends Widget {
             // TODO: need to refactor - move as parameter to appointment popup
             this._updatedRecAppointment = appointment.source();
 
-            this._appointmentPopup.show(newRawAppointment, true);
+            this._appointmentPopup.show(newRawAppointment, {
+                isDoneButtonVisible: true,
+                isExcludeFromSeries: true
+            });
             this._editAppointmentData = rawAppointment;
 
         } else {
@@ -2121,19 +2124,17 @@ class Scheduler extends Widget {
         const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
         if(isCreateAppointment) {
-            delete this._editAppointmentData;
-            this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
+            delete this._editAppointmentData; // TODO
+            this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
+                isDoneButtonVisible: true,
+                isNew: true
+            });
         } else {
             this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
-                this._editAppointmentData = rawAppointment;
-                this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
-                // if(createNewAppointment || isEmptyObject(rawAppointment)) {
-                //     delete this._editAppointmentData;
-                //     this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
-                // } else {
-                //     this._editAppointmentData = rawAppointment;
-                //     this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
-                // }
+                this._editAppointmentData = rawAppointment; // TODO
+                this._appointmentPopup.show(rawAppointment, {
+                    isDoneButtonVisible: this._editing.allowUpdating
+                });
             }, false, true);
         }
     }

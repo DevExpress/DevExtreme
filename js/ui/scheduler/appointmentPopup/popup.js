@@ -45,7 +45,9 @@ export default class AppointmentPopup {
                 data: null,
                 isEmptyText: false,
                 isEmptyDescription: false
-            }
+            },
+            isNew: false,
+            isExcludeFromSeries: false
         };
     }
 
@@ -53,30 +55,29 @@ export default class AppointmentPopup {
     get currentDate() { return this.scheduler.option('currentDate'); }
     get cellDuration() { return this.scheduler.option('cellDuration'); }
 
-    show(data = {}, isDoneButtonVisible) {
-        if(isEmptyObject(data)) {
+    show(appointment = {}, config = {}) {
+        const { isDoneButtonVisible, isNew, isExcludeFromSeries } = config;
+
+        if(isEmptyObject(appointment)) {
             const startDate = this.currentDate;
             const endDate = new Date(startDate.getTime() + this.cellDuration * toMs('minute'));
-            ExpressionUtils.setField(this.key, 'startDate', data, startDate);
-            ExpressionUtils.setField(this.key, 'endDate', data, endDate);
+            ExpressionUtils.setField(this.key, 'startDate', appointment, startDate);
+            ExpressionUtils.setField(this.key, 'endDate', appointment, endDate);
         }
-        this.state.appointment.data = data;
+        this.state.appointment.data = appointment;
+        this.state.isNew = !!isNew;
+        this.state.isExcludeFromSeries = !!isExcludeFromSeries;
 
-        if(!this._popup) {
-            const popupConfig = this._createPopupConfig();
-            this._popup = this._createPopup(popupConfig);
-        }
-
-        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
-        this._popup.show();
+        this.popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
+        this.popup.show();
     }
 
     hide() {
-        this._popup.hide();
+        this.popup.hide();
     }
 
     isVisible() {
-        return this._popup ? this._popup.option('visible') : false;
+        return this.popup.option('visible');
     }
 
     ///#DEBUG
@@ -352,18 +353,32 @@ export default class AppointmentPopup {
                 delete appointment.repeat; // TODO
             }
 
-            if(oldData && !recData) {
-                this.scheduler.updateAppointment(oldData, appointment)
-                    .done(deferred.resolve);
-            } else {
-                if(recData) {
-                    this.scheduler.updateAppointment(oldData, recData);
-                    delete this.scheduler._updatedRecAppointment;
-                }
+            // if(this.state.isNew) {
+            //     this.scheduler.addAppointment(appointment)
+            //         .done(deferred.resolve);
+            // }
 
-                this.scheduler.addAppointment(appointment)
-                    .done(deferred.resolve);
+            if(!this.state.isNew && !this.state.isExcludeFromSeries) {
+                this.scheduler.updateAppointment(oldData, appointment).done(deferred.resolve);
+            } else {
+                if(this.state.isExcludeFromSeries) {
+                    this.scheduler.updateAppointment(oldData, recData);
+                    // delete this.scheduler._updatedRecAppointment;
+                }
+                this.scheduler.addAppointment(appointment).done(deferred.resolve);
             }
+
+            // if(oldData && !recData) {
+            //     this.scheduler.updateAppointment(oldData, appointment)
+            //         .done(deferred.resolve);
+            // } else {
+            //     if(recData) {
+            //         this.scheduler.updateAppointment(oldData, recData);
+            //         delete this.scheduler._updatedRecAppointment;
+            //     }
+            //     this.scheduler.addAppointment(appointment)
+            //         .done(deferred.resolve);
+            // }
 
             deferred.done(() => {
                 this._hideLoadPanel();
