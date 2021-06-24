@@ -33,7 +33,7 @@ const isAppendMode = function(that) {
 };
 
 const isVirtualRowRendering = function(that) {
-    const rowRenderingMode = that.option('scrolling.rowRenderingMode');
+    const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
     if(that.option(NEW_SCROLLING_MODE) && (isVirtualMode(that) || isAppendMode(that))) {
         return true;
     } else if(rowRenderingMode === SCROLLING_MODE_VIRTUAL) {
