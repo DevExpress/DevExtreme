@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
-import dataUtils from '../utils';
+import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
@@ -70,7 +70,7 @@ export const DataSource = Class.inherit({
             let pushDeferred;
             let lastPushWaiters;
 
-            const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
+            const throttlingPushHandler = throttleChanges((changes) => {
                 pushDeferred.resolve();
                 const storePushPending = when(...lastPushWaiters);
                 storePushPending.done(() => this._onPush(changes));
