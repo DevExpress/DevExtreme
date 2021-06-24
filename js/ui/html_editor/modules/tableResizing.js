@@ -49,6 +49,7 @@ export default class TableResizingModule extends BaseModule {
                 this._attachEvents();
             }, TIMEOUT);
 
+            this.addCleanCallback(this.clean.bind(this));
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
         }
     }
@@ -101,7 +102,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _findTables() {
-        return $(this.editorInstance._getQuillContainer()).find('table');
+        return $(this._quillContainer).find('table');
     }
 
     _getWidthAttrValue($element) {
@@ -195,7 +196,7 @@ export default class TableResizingModule extends BaseModule {
     _createTableResizeFrame() {
         return $('<div>')
             .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
-            .appendTo(this.editorInstance._getQuillContainer());
+            .appendTo(this._quillContainer);
     }
 
     _updateFramesPositions() {
