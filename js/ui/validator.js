@@ -186,7 +186,7 @@ const Validator = DOMComponent.inherit({
             currentError.validator = this;
             result = { isValid: false, status: VALIDATION_STATUS_INVALID, brokenRule: currentError, brokenRules: [currentError] };
         } else {
-            result = ValidationEngine.validate(value, rules, name, this);
+            result = ValidationEngine.validate(value, rules, name);
         }
         result.id = new Guid().toString();
         this._applyValidationResult(result, adapter);

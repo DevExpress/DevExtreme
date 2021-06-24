@@ -580,7 +580,7 @@ const ValidationEngine = {
         result.brokenRules.push(rule);
     },
 
-    validate(value, rules, name, validator) {
+    validate(value, rules, name) {
         let result = {
             name: name,
             value: value,
@@ -592,6 +592,7 @@ const ValidationEngine = {
             status: STATUS.valid,
             complete: null
         };
+        const validator = rules?.[0].validator;
 
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
