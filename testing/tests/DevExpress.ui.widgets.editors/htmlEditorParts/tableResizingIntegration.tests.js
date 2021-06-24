@@ -84,6 +84,14 @@ function getRowBordersOffset($table) {
     return rowBorderOffsets;
 }
 
+function checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, isRTL) {
+    const cssProperty = isRTL ? 'right' : 'left';
+    $columnResizerElements.each((i, column) => {
+        const resizerLeftPosition = parseInt($(column).css(cssProperty).replace('px', ''));
+        assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+    });
+}
+
 
 module('Resizing integration', {
     beforeEach: function() {
@@ -265,10 +273,7 @@ module('Resizing integration', {
         const $table = this.$element.find('table');
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Check column resizers elements and border positions after drag', function(assert) {
@@ -293,10 +298,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
         assert.roughEqual(columnBorderOffsets[0], 150, 3);
         assert.roughEqual(columnBorderOffsets[1], 200, 3);
@@ -630,10 +632,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Check columns widths and resizers positions after window resize', function(assert) {
@@ -678,10 +677,7 @@ module('Resizing integration', {
             assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1, 'Column has expected width attr, index = ' + i);
         });
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Second frame should be added if we add the second table', function(assert) {
@@ -828,10 +824,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Columns widths should be updated after a some columns insert', function(assert) {
@@ -986,10 +979,7 @@ module('Resizing integration', {
         const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
         assert.roughEqual($table.outerWidth(), tableWidth, 2, 'Table width is not changed');
     });
@@ -1086,10 +1076,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Column resizers should works correctly after the table structure update after resize', function(assert) {
@@ -1136,10 +1123,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($tables.eq(0));
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('left').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
     });
 
     test('Columns resizers should be positioned correctly if the rtl mode is enabled', function(assert) {
@@ -1151,10 +1135,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
     });
 
     test('Columns should be resized correctly after drag at the rtl mode', function(assert) {
@@ -1179,10 +1160,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
 
         assert.roughEqual(columnBorderOffsets[0], 70, 3);
         assert.roughEqual(columnBorderOffsets[1], 200, 3);
@@ -1201,10 +1179,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
 
         assert.strictEqual($resizeFrames.length, 1);
     });
@@ -1234,10 +1209,7 @@ module('Resizing integration', {
 
         const columnBorderOffsets = getColumnBordersOffset($table);
 
-        $columnResizerElements.each((i, column) => {
-            const resizerLeftPosition = parseInt($(column).css('right').replace('px', ''));
-            assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
-        });
+        checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
 
         assert.roughEqual(columnBorderOffsets[0], 70, 3);
         assert.roughEqual(columnBorderOffsets[1], 200, 3);
