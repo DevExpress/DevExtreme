@@ -7,7 +7,7 @@ import LegacyOverlay from '../../../ui/overlay/ui.overlay';
 import { UserDefinedElement, DxElement } from '../../../core/element';
 import { template } from '../../../core/templates/template';
 import { AnimationConfig } from '../../../animation/fx';
-import { positionConfig } from '../../../animation/position';
+import { PositionConfig } from '../../../animation/position';
 /* eslint-enable import/named */
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseWidgetProps } from '../common/base_props';
@@ -45,7 +45,7 @@ export class OverlayProps extends BaseWidgetProps {
   };
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  @OneWay() position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+  @OneWay() position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
 
   @OneWay() visible?: boolean = false;
 

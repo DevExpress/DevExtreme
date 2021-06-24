@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -101,11 +101,11 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     } | string;
     /**
      * @docid
-     * @type Enums.Position|positionConfig
+     * @type Enums.Position|PositionConfig
      * @default 'bottom'
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * @docid
      * @default false

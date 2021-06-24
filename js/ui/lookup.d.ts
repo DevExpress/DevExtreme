@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -309,7 +309,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default false

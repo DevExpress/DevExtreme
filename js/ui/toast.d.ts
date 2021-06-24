@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -117,7 +117,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
      * @public
      */
-    position?: positionConfig | string;
+    position?: PositionConfig | string;
     /**
      * @docid
      * @default false

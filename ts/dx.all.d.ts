@@ -1082,7 +1082,7 @@ declare module DevExpress {
         | 'right bottom'
         | 'right top'
         | 'top'
-        | positionConfig
+        | PositionConfig
         | Function;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.shading]
@@ -1124,12 +1124,12 @@ declare module DevExpress {
    */
   export function hideTopOverlay(): boolean;
   /**
-   * [descr:positionConfig]
+   * [descr:PositionConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface positionConfig {
+  export interface PositionConfig {
     /**
-     * [descr:positionConfig.at]
+     * [descr:PositionConfig.at]
      */
     at?:
       | 'bottom'
@@ -1143,35 +1143,35 @@ declare module DevExpress {
       | 'top'
       | {
           /**
-           * [descr:positionConfig.at.x]
+           * [descr:PositionConfig.at.x]
            */
           x?: 'center' | 'left' | 'right';
           /**
-           * [descr:positionConfig.at.y]
+           * [descr:PositionConfig.at.y]
            */
           y?: 'bottom' | 'center' | 'top';
         };
     /**
-     * [descr:positionConfig.boundary]
+     * [descr:PositionConfig.boundary]
      */
     boundary?: string | DevExpress.core.UserDefinedElement | Window;
     /**
-     * [descr:positionConfig.boundaryOffset]
+     * [descr:PositionConfig.boundaryOffset]
      */
     boundaryOffset?:
       | string
       | {
           /**
-           * [descr:positionConfig.boundaryOffset.x]
+           * [descr:PositionConfig.boundaryOffset.x]
            */
           x?: number;
           /**
-           * [descr:positionConfig.boundaryOffset.y]
+           * [descr:PositionConfig.boundaryOffset.y]
            */
           y?: number;
         };
     /**
-     * [descr:positionConfig.collision]
+     * [descr:PositionConfig.collision]
      */
     collision?:
       | 'fit'
@@ -1190,16 +1190,16 @@ declare module DevExpress {
       | 'none flipfit'
       | {
           /**
-           * [descr:positionConfig.collision.x]
+           * [descr:PositionConfig.collision.x]
            */
           x?: 'fit' | 'flip' | 'flipfit' | 'none';
           /**
-           * [descr:positionConfig.collision.y]
+           * [descr:PositionConfig.collision.y]
            */
           y?: 'fit' | 'flip' | 'flipfit' | 'none';
         };
     /**
-     * [descr:positionConfig.my]
+     * [descr:PositionConfig.my]
      */
     my?:
       | 'bottom'
@@ -1213,30 +1213,30 @@ declare module DevExpress {
       | 'top'
       | {
           /**
-           * [descr:positionConfig.my.x]
+           * [descr:PositionConfig.my.x]
            */
           x?: 'center' | 'left' | 'right';
           /**
-           * [descr:positionConfig.my.y]
+           * [descr:PositionConfig.my.y]
            */
           y?: 'bottom' | 'center' | 'top';
         };
     /**
-     * [descr:positionConfig.of]
+     * [descr:PositionConfig.of]
      */
     of?: string | DevExpress.core.UserDefinedElement | Window;
     /**
-     * [descr:positionConfig.offset]
+     * [descr:PositionConfig.offset]
      */
     offset?:
       | string
       | {
           /**
-           * [descr:positionConfig.offset.x]
+           * [descr:PositionConfig.offset.x]
            */
           x?: number;
           /**
-           * [descr:positionConfig.offset.y]
+           * [descr:PositionConfig.offset.y]
            */
           y?: number;
         };
@@ -1387,7 +1387,7 @@ declare module DevExpress.animation {
     | number
     | { opacity: number }
     | { scale: number }
-    | { position: positionConfig }
+    | { position: PositionConfig }
     | { left: number }
     | { top: number };
 }
@@ -5211,7 +5211,7 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type PositioningEvent =
       DevExpress.events.NativeEventInfo<dxContextMenu> & {
-        readonly position: positionConfig;
+        readonly position: PositionConfig;
       };
     export type Properties = dxContextMenuOptions;
     export type SelectionChangedEvent =
@@ -5279,7 +5279,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.position]
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * [descr:dxContextMenuOptions.showEvent]
      */
@@ -14173,7 +14173,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | PositionConfig
       | Function;
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
@@ -14349,7 +14349,7 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.position]
      * @deprecated [depNote:dxLookupOptions.position]
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
      */
@@ -16093,7 +16093,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * [descr:dxPopoverOptions.shading]
      */
@@ -16236,7 +16236,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | PositionConfig
       | Function;
     /**
      * [descr:dxPopupOptions.resizeEnabled]
@@ -19226,7 +19226,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.position]
      */
-    position?: positionConfig | string;
+    position?: PositionConfig | string;
     /**
      * [descr:dxToastOptions.shading]
      */

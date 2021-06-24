@@ -1,6 +1,6 @@
 import { DxElement } from '../core/element';
 import { DxPromise } from '../core/utils/deferred';
-import { positionConfig } from './position';
+import { PositionConfig } from './position';
 
 /**
  * @docid
@@ -9,7 +9,7 @@ import { positionConfig } from './position';
 export type AnimationState = string | number | 
 { opacity: number; } | 
 { scale: number; } | 
-{ position: positionConfig; } |
+{ position: PositionConfig; } |
 { left: number; } | 
 { top: number; };
 

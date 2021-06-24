@@ -14,7 +14,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import dxOverlay, {
@@ -113,10 +113,10 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     message?: string;
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default 'transparent'

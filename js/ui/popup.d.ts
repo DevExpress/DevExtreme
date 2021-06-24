@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -163,10 +163,10 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default false
