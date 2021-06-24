@@ -289,31 +289,6 @@ export function throttleChanges(func, timeout) {
     };
 }
 
-// /**
-// * @name Utils
-// */
-// const utils = {
-//     XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,
-
-//     normalizeBinaryCriterion: normalizeBinaryCriterion,
-//     normalizeSortingInfo: normalizeSortingInfo,
-//     errorMessageFromXhr: errorMessageFromXhr,
-//     aggregators: aggregators,
-
-//     keysEqual: keysEqual,
-//     throttleChanges: throttleChanges,
-//     trivialPromise: trivialPromise,
-//     rejectedPromise: rejectedPromise,
-
-//     isDisjunctiveOperator: isDisjunctiveOperator,
-//     isConjunctiveOperator: isConjunctiveOperator,
-
-//     processRequestResultLock: processRequestResultLock,
-
-//     isUnaryOperation: isUnaryOperation,
-//     isGroupCriterion: isGroupCriterion,
-
-//     base64_encode: base64_encode
-// };
-
-// export default utils;
+/**
+* @name Utils
+*/
