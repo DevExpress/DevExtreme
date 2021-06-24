@@ -87,7 +87,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
 
     if(isStartViewDateDuringDST) {
-        const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate);
+        const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
 
         startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
     }

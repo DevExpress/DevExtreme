@@ -85,9 +85,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateForHeaderText(index) {
-        const firstViewDate = getStartViewDateWithoutDST(this.getStartViewDate());
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        return this._getDateByIndexCore(firstViewDate, index);
+        return this._getDateByIndexCore(startViewDate, index);
     }
 
     _getDateByIndexCore(date, index) {
@@ -99,9 +99,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        const firstViewDate = getStartViewDateWithoutDST(this.getStartViewDate());
+        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
 
-        const result = this._getDateByIndexCore(firstViewDate, index);
+        const result = this._getDateByIndexCore(startViewDate, index);
 
         if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
             result.setDate(result.getDate() - 1);
