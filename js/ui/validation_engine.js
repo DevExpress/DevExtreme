@@ -645,6 +645,7 @@ const ValidationEngine = {
             status: STATUS.valid,
             complete: null
         };
+        const validator = rules?.[0].validator;
 
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
