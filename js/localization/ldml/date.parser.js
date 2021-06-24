@@ -23,7 +23,7 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return '[0-9]+';
+        return `[0-9]{${count}}`;
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
