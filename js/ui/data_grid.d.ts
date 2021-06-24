@@ -1033,12 +1033,6 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     stateStoring?: StateStoring;
     /**
      * @docid
-     * @default undefined
-     * @public
-     */
-    toolbar?: Toolbar;
-    /**
-     * @docid
      * @default true
      * @public
      */
@@ -3688,6 +3682,12 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     summary?: Summary;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: dxDataGridToolbar;
 }
 
 export interface ExcelCellInfo {
@@ -4122,20 +4122,20 @@ export interface SummaryTexts {
     sumOtherColumn?: string
 }
 
-type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /**
  * @docid
  * @type object
  * @namespace DevExpress.ui
  */
-export interface ToolbarItem extends dxToolbarItem {
+export interface dxDataGridToolbarItem extends dxToolbarItem {
   /**
    * @docid
    * @type Enums.GridToolbarItemName|string
    * @public
   */
-  name?: DefaultToolbarItemName | string
+  name?: dxDataGridDefaultToolbarItemName | string
 }
 
 /**
@@ -4143,13 +4143,13 @@ export interface ToolbarItem extends dxToolbarItem {
  * @type object
  * @namespace DevExpress.ui
  */
-export interface Toolbar {
+export interface dxDataGridToolbar {
   /**
    * @docid
-   * @type Array<ToolbarItem,Enums.GridToolbarItemName>
+   * @type Array<dxDataGridToolbarItem,Enums.GridToolbarItemName>
    * @public
    */
-  items?: (DefaultToolbarItemName | ToolbarItem)[];
+  items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
 }
 
 /**

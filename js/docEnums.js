@@ -1217,3 +1217,8 @@
  * @typedef {string} Enums.GridToolbarItemName
  * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel'}
  */
+
+/**
+ * @typedef {string} Enums.TreeListToolbarItemName
+ * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel'}
+ */
