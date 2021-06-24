@@ -7,9 +7,12 @@ import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
 
 const {
-    module,
-    test,
+    module
 } = QUnit;
+
+const test = (description, callback) => {
+    return QUnit.test(description, sinon.test(callback));
+};
 
 module('Virtual Scrolling', {
     beforeEach: function() {
