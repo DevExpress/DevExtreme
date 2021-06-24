@@ -370,7 +370,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
 .dx-editor-filled {
   $input-vertical-diff: 6px;
-  $label-position-top: floor($material-filled-texteditor-input-top-padding / 2);
+  $label-position-top: floor(math.div($material-filled-texteditor-input-top-padding, 2));
 
   .dx-texteditor-label {
     left: $material-filled-texteditor-input-horizontal-padding;
@@ -416,7 +416,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         transition: $material-editor-label-transition;
         font-size: $material-texteditor-font-size;
         top: 50%;
-        margin-top: -($material-texteditor-font-size / 2);
+        margin-top: math.div(-$material-texteditor-font-size, 2);
         height: $material-texteditor-font-size;
         line-height: $material-texteditor-font-size;
       }
@@ -452,7 +452,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 }
 
 .dx-editor-outlined {
-  $label-offset-y: $material-texteditor-label-font-size / 2;
+  $label-offset-y: math.div($material-texteditor-label-font-size, 2);
   $label-default-transform: translate(0, 0);
 
   @mixin dx-state($borderColor, $shadowOffset) {
@@ -492,7 +492,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
     .dx-texteditor-label {
       top: 50%;
-      margin-top: -($material-texteditor-font-size / 2);
+      margin-top: math.div(-$material-texteditor-font-size, 2);
       height: $material-texteditor-font-size;
       line-height: $material-texteditor-font-size;
 
@@ -765,7 +765,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         transform: translate(0, 0);
         font-size: $material-texteditor-font-size;
         top: 50%;
-        margin-top: -($material-texteditor-font-size / 2);
+        margin-top: math.div(-$material-texteditor-font-size, 2);
         height: $material-texteditor-font-size;
         line-height: $material-texteditor-font-size;
       }

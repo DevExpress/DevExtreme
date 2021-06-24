@@ -264,7 +264,7 @@ $generic-texteditor-label-transition:
         height: $generic-base-font-size;
         line-height: $generic-base-font-size;
         top: 50%;
-        margin-top: -($generic-base-font-size / 2);
+        margin-top: math.div(-$generic-base-font-size, 2);
       }
 
       &.dx-textarea {
@@ -301,7 +301,7 @@ $generic-texteditor-label-transition:
 
 .dx-editor-outlined {
   $border-width: 1px;
-  $label-offset-y: ($border-width + $generic-base-font-size) / 2;
+  $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
   $label-default-transform: translate(0, 0);
 
   @mixin dx-state($borderColor, $borderStyle) {
@@ -343,7 +343,7 @@ $generic-texteditor-label-transition:
       width: 0;
       top: 50%;
       height: $generic-base-font-size;
-      margin-top: -($generic-base-font-size / 2);
+      margin-top: math.div(-$generic-base-font-size, 2);
       line-height: $generic-base-font-size;
 
       span {
@@ -622,7 +622,7 @@ $generic-texteditor-label-transition:
         font-size: $generic-base-font-size;
         top: 50%;
         height: $generic-base-font-size;
-        margin-top: -($generic-base-font-size / 2);
+        margin-top: math.div(-$generic-base-font-size, 2);
         line-height: $generic-base-font-size;
       }
 
