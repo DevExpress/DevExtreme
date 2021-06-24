@@ -220,9 +220,7 @@ module('Table resizing integration', {
 
             assert.strictEqual($resizeFrame.length, 1, 'Frame is created');
         });
-
     });
-
 
     module('frame position', {}, () => {
         test('Check table resize frame position', function(assert) {
@@ -289,7 +287,6 @@ module('Table resizing integration', {
             assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
         });
     });
-
 
     module('Column resizing', {}, () => {
         test('Check column resizers elements positions', function(assert) {
@@ -479,9 +476,7 @@ module('Table resizing integration', {
 
             assert.roughEqual($table.outerWidth(), startTableWidth + offset, 3);
         });
-
     });
-
 
     module('Row resizing', {}, () => {
         test('Table height was changed if we drag the row height resizer', function(assert) {
@@ -588,7 +583,6 @@ module('Table resizing integration', {
             checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
     });
-
 
     module('Resizers boundaries', {}, () => {
         test('Boundary should has bottom boundary offset we use vertical drag', function(assert) {
