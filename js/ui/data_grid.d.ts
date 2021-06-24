@@ -4122,7 +4122,6 @@ export interface SummaryTexts {
     sumOtherColumn?: string
 }
 
-
 type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /**
@@ -4131,7 +4130,12 @@ type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChoo
  * @namespace DevExpress.ui
  */
 export interface ToolbarItem extends dxToolbarItem {
-  name?: DefaultToolbarItemName
+  /**
+   * @docid
+   * @type Enums.GridToolbarItemName|string
+   * @public
+  */
+  name?: DefaultToolbarItemName | string
 }
 
 /**

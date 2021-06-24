@@ -1143,7 +1143,7 @@ export class DataGridCommonColumnSettings {
 type DataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 export interface DataGridToolbarItem extends dxToolbarItem {
-  name?: DataGridDefaultToolbarItemName;
+  name?: DataGridDefaultToolbarItemName | string;
 }
 
 @ComponentBindings()
