@@ -84,11 +84,11 @@ function getRowBordersOffset($table) {
     return rowBorderOffsets;
 }
 
-function checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, isRTL) {
-    const cssProperty = isRTL ? 'right' : 'left';
-    $columnResizerElements.each((i, column) => {
-        const resizerLeftPosition = parseInt($(column).css(cssProperty).replace('px', ''));
-        assert.roughEqual(resizerLeftPosition, columnBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
+function checkColumnResizerPositions(assert, $lineResizerElements, lineBorderOffsets, property) {
+    const cssProperty = property ? property : 'left';
+    $lineResizerElements.each((i, item) => {
+        const resizerLeftPosition = parseInt($(item).css(cssProperty).replace('px', ''));
+        assert.roughEqual(resizerLeftPosition, lineBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the column border, index = ' + i);
     });
 }
 
@@ -585,10 +585,7 @@ module('Table resizing integration', {
                 }
             });
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
     });
 
@@ -744,10 +741,7 @@ module('Table resizing integration', {
             rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(1));
             $rowResizerElements = $resizeFrames.eq(1).find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the second table, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
 
             assert.strictEqual($resizeFrames.length, 2);
         });
@@ -769,10 +763,7 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
 
             assert.strictEqual($resizeFrames.length, 1);
         });
@@ -794,10 +785,7 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
 
         test('Row resizers should be updated after some rows insert', function(assert) {
@@ -819,10 +807,7 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
 
         test('Row resizers should be updated after a row delete', function(assert) {
@@ -842,10 +827,7 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrames.eq(0).find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            $rowResizerElements.each((i, row) => {
-                const resizerLeftPosition = parseInt($(row).css('top').replace('px', ''));
-                assert.roughEqual(resizerLeftPosition, rowBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1, 'Resizer has the same offset as the row border for the table, index = ' + i);
-            });
+            checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
 
         test('Column resizers should be updated after a column insert', function(assert) {
@@ -1212,7 +1194,7 @@ module('Table resizing integration', {
 
             const columnBorderOffsets = getColumnBordersOffset($table);
 
-            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
+            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
         });
 
         test('Columns should be resized correctly after drag at the rtl mode', function(assert) {
@@ -1237,7 +1219,7 @@ module('Table resizing integration', {
 
             const columnBorderOffsets = getColumnBordersOffset($table);
 
-            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
+            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
 
             assert.roughEqual(columnBorderOffsets[0], 70, 3);
             assert.roughEqual(columnBorderOffsets[1], 200, 3);
@@ -1256,7 +1238,7 @@ module('Table resizing integration', {
 
             const columnBorderOffsets = getColumnBordersOffset($table);
 
-            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
+            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
 
             assert.strictEqual($resizeFrames.length, 1);
         });
@@ -1286,7 +1268,7 @@ module('Table resizing integration', {
 
             const columnBorderOffsets = getColumnBordersOffset($table);
 
-            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, true);
+            checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
 
             assert.roughEqual(columnBorderOffsets[0], 70, 3);
             assert.roughEqual(columnBorderOffsets[1], 200, 3);
