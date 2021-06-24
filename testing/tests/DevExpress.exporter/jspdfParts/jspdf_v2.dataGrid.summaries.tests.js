@@ -638,6 +638,46 @@ const JSPdfSummariesTests = {
                 });
             });
 
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [f1, {f3, alignByColumn, showInGroupFooter}, {f4, alignByColumn, showInGroupFooter}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true },
+                            { column: 'f4', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
+                });
+
+                const expectedLog = [
+                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
+                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
+                    'text,Max: f3,30,87,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,230,16',
+                    'text,Max: f4,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f3,20,103,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,240,16',
+                    'text,Max: f4,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16'];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, {f3, groupIndex: 2}, f4, f5], groupItems: [f1, {f5, alignByColumn, showInGroupFooter}]', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -653,10 +693,10 @@ const JSPdfSummariesTests = {
                     summary: {
                         groupItems: [
                             { column: 'f1', summaryType: 'max' },
-                            { column: 'f4', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                            { column: 'f5', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
                         ]
                     },
-                    dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
+                    dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4', f5: 'f5' }]
                 });
 
                 const expectedLog = [
@@ -666,13 +706,57 @@ const JSPdfSummariesTests = {
                     'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
                     'text,F3: f3 (Max of F1 is f1),30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
                     'text,f4,40,87,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
-                    'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,f5,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'setLineWidth,1', 'rect,40,95,220,16',
+                    'text,Max: f5,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
+                    'setLineWidth,1', 'rect,30,111,230,16',
+                    'text,Max: f5,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
+                    'setLineWidth,1', 'rect,20,127,240,16',
+                    'text,Max: f5,260,135,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, {f3, groupIndex: 2}, f4, f5], groupItems: [f1, {f4, alignByColumn, showInGroupFooter}, {f5, alignByColumn, showInGroupFooter}]', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3', groupIndex: 2 },
+                        { dataField: 'f4' },
+                        { dataField: 'f5' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f4', summaryType: 'max', alignByColumn: true, showInGroupFooter: true },
+                            { column: 'f5', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4', f5: 'f5' }]
+                });
+
+                const expectedLog = [
+                    'text,F4,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F5,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,F3: f3 (Max of F1 is f1),30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
+                    'text,f4,40,87,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
+                    'text,f5,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
                     'text,Max: f4,40,103,{baseline:middle}', 'setLineWidth,1', 'rect,40,95,220,16',
-                    'setLineWidth,1', 'rect,260,95,100,16',
+                    'text,Max: f5,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
                     'text,Max: f4,30,119,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
-                    'setLineWidth,1', 'rect,260,111,100,16',
+                    'text,Max: f5,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
                     'text,Max: f4,20,135,{baseline:middle}', 'setLineWidth,1', 'rect,20,127,240,16',
-                    'setLineWidth,1', 'rect,260,127,100,16' ];
+                    'text,Max: f5,260,135,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
