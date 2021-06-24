@@ -2133,21 +2133,25 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getDateByCellIndexes(rowIndex, columnIndex) {
         return getDateByCellIndices(
-            {
-                startDayHour: this.option('startDayHour'),
-                isWorkView: this.isWorkView,
-                columnsInDay: 1,
-                hiddenInterval: this._hiddenInterval,
-                calculateCellIndex,
-                interval: this._getInterval(),
-                cellCountInDay: this._getCellCountInDay(),
-                startViewDate: this.getStartViewDate(),
-                rowCount: this._getRowCount(),
-                columnCount: this._getCellCount(),
-            },
+            this._getDateGenerationOptions(),
             rowIndex,
             columnIndex,
         );
+    }
+
+    _getDateGenerationOptions() {
+        return {
+            startDayHour: this.option('startDayHour'),
+            isWorkView: this.isWorkView,
+            columnsInDay: 1,
+            hiddenInterval: this._hiddenInterval,
+            calculateCellIndex,
+            interval: this._getInterval(),
+            cellCountInDay: this._getCellCountInDay(),
+            startViewDate: this.getStartViewDate(),
+            rowCount: this._getRowCount(),
+            columnCount: this._getCellCount(),
+        };
     }
 
     _getHiddenInterval() {

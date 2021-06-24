@@ -9,7 +9,6 @@ import dateLocalization from '../../../localization/date';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     calculateStartViewDate,
-    getDateByCellIndices,
     getViewStartByOptions,
     calculateCellIndex,
 } from './utils/month';
@@ -70,23 +69,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        return getDateByCellIndices(
-            {
-                startDayHour: this.option('startDayHour'),
-                isWorkView: this.isWorkView,
-                columnsInDay: 1,
-                hiddenInterval: this._hiddenInterval,
-                calculateCellIndex,
-                interval: this._getInterval(),
-                cellCountInDay: 1,
-                startViewDate: this.getStartViewDate(),
-                rowCount: this._getRowCount(),
-                columnCount: this._getCellCount(),
-            },
-            rowIndex,
-            columnIndex,
-        );
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: 1,
+            cellCountInDay: 1,
+            calculateCellIndex,
+        };
     }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431

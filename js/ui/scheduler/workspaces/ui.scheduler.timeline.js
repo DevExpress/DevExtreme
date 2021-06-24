@@ -14,7 +14,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getDateByCellIndices, calculateCellIndex, getStartViewDateWithoutDST } from './utils/base';
+import { getStartViewDateWithoutDST } from './utils/base';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -621,23 +621,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         };
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        return getDateByCellIndices(
-            {
-                startDayHour: this.option('startDayHour'),
-                isWorkView: this.isWorkView,
-                columnsInDay: this._getCellCountInDay(),
-                hiddenInterval: this._hiddenInterval,
-                calculateCellIndex,
-                interval: this._getInterval(),
-                cellCountInDay: this._getCellCountInDay(),
-                startViewDate: this.getStartViewDate(),
-                rowCount: this._getRowCount(),
-                columnCount: this._getCellCount(),
-            },
-            rowIndex,
-            columnIndex,
-        );
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: this._getCellCountInDay(),
+        };
     }
 }
 

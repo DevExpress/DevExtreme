@@ -3,7 +3,7 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { calculateCellIndex, getDateByCellIndices, getViewStartByOptions } from './utils/month';
+import { calculateCellIndex, getViewStartByOptions } from './utils/month';
 import { calculateStartViewDate } from './utils/timeline_month';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
@@ -102,23 +102,12 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return new Date(startDateCopy.setHours(this.option('endDayHour')));
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        return getDateByCellIndices(
-            {
-                startDayHour: this.option('startDayHour'),
-                isWorkView: this.isWorkView,
-                columnsInDay: 1,
-                hiddenInterval: this._hiddenInterval,
-                calculateCellIndex,
-                interval: this._getInterval(),
-                cellCountInDay: this._getCellCountInDay(),
-                startViewDate: this.getStartViewDate(),
-                rowCount: this._getRowCount(),
-                columnCount: this._getCellCount(),
-            },
-            rowIndex,
-            columnIndex,
-        );
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: 1,
+            calculateCellIndex,
+        };
     }
 
     getPositionShift() {
