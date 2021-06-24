@@ -500,7 +500,7 @@ const GroupConfig = Class.inherit({
             this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
             const res = extend({}, this._validationInfo.result, { complete: null });
             const deferred = this._validationInfo.deferred;
-            this._resetValidationInfo();
+            this._validationInfo.deferred = null;
             this._raiseValidatedEvent(res);
             deferred && setTimeout(() => {
                 deferred.resolve(res);
@@ -645,6 +645,8 @@ const ValidationEngine = {
             status: STATUS.valid,
             complete: null
         };
+        const validator = rules?.[0]?.validator;
+
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
             const ruleValidator = rulesValidators[rule.type];
@@ -698,8 +700,19 @@ const ValidationEngine = {
                 name
             });
         }
+
+        this._synchronizeGroupValidationInfo(validator, result);
+
         result.status = result.pendingRules ? STATUS.pending : (result.isValid ? STATUS.valid : STATUS.invalid);
         return result;
+    },
+
+    _synchronizeGroupValidationInfo(validator, result) {
+        if(!validator) {
+            return;
+        }
+        const groupConfig = ValidationEngine.getGroupConfig(validator._validationGroup);
+        groupConfig._updateBrokenRules.call(groupConfig, { validator, brokenRules: result.brokenRules ?? [] });
     },
 
     _validateAsyncRules({ result, value, items, name }) {
