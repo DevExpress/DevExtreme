@@ -90,7 +90,7 @@ export default class TableResizingModule extends BaseModule {
                 const $table = $(table);
                 const actualTableWidth = $table.outerWidth();
                 const lastTableWidth = this._getWidthAttrValue($table);
-                if(actualTableWidth > lastTableWidth + 1 || actualTableWidth < lastTableWidth - 1) {
+                if(Math.abs(actualTableWidth - lastTableWidth) > 1) {
                     $table.attr('width', actualTableWidth + 'px');
                     this._recalculateColumnsWidth($table);
                 }
@@ -332,6 +332,10 @@ export default class TableResizingModule extends BaseModule {
         return direction === 'horizontal' && this.editorInstance.option('rtlEnabled');
     }
 
+    _getLineElements($table, index) {
+        return $table.find(`td:nth-child(${(1 + index)})`);
+    }
+
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
         let eventOffset = event.offset[directionInfo.positionCoordinateName];
@@ -345,8 +349,8 @@ export default class TableResizingModule extends BaseModule {
             const nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
             const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
             const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
-            const $lineElements = frame.$table.find('td:nth-child(' + (1 + index) + ')');
-            const $nextLineElements = frame.$table.find('td:nth-child(' + (2 + index) + ')');
+            const $lineElements = this._getLineElements(frame.$table, index);
+            const $nextLineElements = this._getLineElements(frame.$table, index + 1);
 
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
                 $lineElements.each((i, element) => {
@@ -408,7 +412,6 @@ export default class TableResizingModule extends BaseModule {
             },
             onDragEnd: () => {
                 options.frame.$table.attr('width', options.frame.$table.outerWidth() + 'px');
-
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
@@ -430,17 +433,16 @@ export default class TableResizingModule extends BaseModule {
 
     _recalculateColumnsWidth($table) {
         const determinantElements = this._getTableDeterminantElements($table);
-        const tableWidth = $table.attr('width') ? parseInt($table.attr('width')) : $table.outerWidth();
+        const tableWidth = this._getWidthAttrValue($table) || $table.outerWidth();
         const columnsWidths = [];
         let columnSum = 0;
-        let ratio = 1;
+        let ratio;
 
         each(determinantElements, (index, element) => {
             const $element = $(element);
             const columnWidth = this._getWidthAttrValue($element) || $element.outerWidth();
 
-            columnsWidths[index] = columnWidth >= this._minColumnWidth ? columnWidth : this._minColumnWidth;
-
+            columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
             columnSum += columnsWidths[index];
         });
 
@@ -452,22 +454,16 @@ export default class TableResizingModule extends BaseModule {
             ratio = -1;
         }
 
-        if(ratio < 0) {
-            $table.attr('width', minWidthForColumns + 'px');
-        } else {
-            $table.attr('width', tableWidth + 'px');
-        }
+        $table.attr('width', (ratio > 0 ? tableWidth : minWidthForColumns) + 'px');
 
-        each(determinantElements, (index, element) => {
-            const $lineElements = $table.find('td:nth-child(' + (1 + index) + ')');
+        each(determinantElements, (index) => {
+            const $lineElements = this._getLineElements($table, index);
             let resultWidth;
             if(ratio > 0) {
                 resultWidth = (this._minColumnWidth + Math.round((columnsWidths[index] - this._minColumnWidth) * ratio));
             } else {
                 resultWidth = this._minColumnWidth;
             }
-
-            // console.log(ratio);
 
             $lineElements.each((i, element) => {
                 $(element).attr('width', resultWidth + 'px');
