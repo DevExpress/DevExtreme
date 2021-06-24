@@ -187,7 +187,6 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
-            onContextMenuShowing: () => this._onContextMenuShowing(VIEW_AREAS.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -215,7 +214,6 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
-            onContextMenuShowing: () => this._onContextMenuShowing(viewArea),
             isolateCreationItemCommands,
             viewArea
         });
@@ -362,9 +360,6 @@ class FileManager extends Widget {
         });
 
         return itemsCopy;
-    }
-
-    _onContextMenuShowing(viewArea) {
     }
 
     _getItemThumbnailInfo(fileInfo) {
