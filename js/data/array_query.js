@@ -9,7 +9,7 @@ import {
     isGroupCriterion,
     isUnaryOperation,
     normalizeBinaryCriterion,
-    isConjunctiveOperator as isConjunctiveOperatorUtils
+    isConjunctiveOperator as isConjunctiveOperatorChecker
 } from './utils';
 
 const Iterator = Class.inherit({
@@ -245,7 +245,7 @@ const compileCriteria = (function() {
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = isConjunctiveOperatorUtils(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorChecker(this);
             }
         });
 

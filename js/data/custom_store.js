@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import {
     keysEqual,
     XHR_ERROR_UNLOAD,
-    errorMessageFromXhr as errorMessageFromXhrUtils
+    errorMessageFromXhr as errorMessageFromXhrUtility
 } from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
@@ -47,7 +47,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
             return null;
         }
 
-        return errorMessageFromXhrUtils(xhr, textStatus);
+        return errorMessageFromXhrUtility(xhr, textStatus);
     }
 
     return function(arg) {
