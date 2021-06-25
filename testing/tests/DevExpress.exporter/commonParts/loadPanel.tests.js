@@ -2,7 +2,7 @@ import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
-import { getWindow, setWindow } from 'core/utils/window';
+import windowUtils from 'core/utils/window';
 
 const LOAD_PANEL_CLASS = 'dx-loadpanel';
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
@@ -119,7 +119,7 @@ const LoadPanelTests = {
                         }
                         const actualPosition = exportLoadPanel.option('position')();
 
-                        assert.deepEqual(actualPosition.of, $(getWindow()), 'loadPanel.position.of');
+                        assert.deepEqual(actualPosition.of, $(windowUtils.getWindow()), 'loadPanel.position.of');
                         assert.strictEqual(actualPosition.collision, 'fit', 'loadPanel.position.collision');
                         assert.deepEqual(actualPosition.boundary.get(0), $targetElement.get(0), 'loadPanel.position.boundary');
 
@@ -221,12 +221,21 @@ const LoadPanelTests = {
             QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
                 assert.expect(5);
                 const done = assert.async();
-                setWindow(undefined, false);
+
+                const originalGetWindow = windowUtils.getWindow;
+                const originalHasWindow = windowUtils.hasWindow;
+                windowUtils.getWindow = function() {
+                    const fakeWindow = {};
+                    fakeWindow.window = fakeWindow;
+
+                    return fakeWindow;
+                };
+                windowUtils.hasWindow = () => false;
+
                 const component = getComponent(componentOptions);
                 const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
 
                 let isFirstCall = true;
-
 
                 exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
@@ -246,7 +255,8 @@ const LoadPanelTests = {
                     assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel exist');
                     assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
 
-                    setWindow(window);
+                    windowUtils.getWindow = originalGetWindow;
+                    windowUtils.hasWindow = originalHasWindow;
                     done();
                 });
             });
@@ -257,7 +267,6 @@ const LoadPanelTests = {
                     assert.expect(7);
                     const done = assert.async();
                     const locale = localization.locale();
-
 
                     try {
                         if(localizationText.type === 'default') {
