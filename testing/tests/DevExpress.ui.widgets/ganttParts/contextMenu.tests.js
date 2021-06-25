@@ -59,7 +59,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
         this.instance._showPopupMenu({ position: { x: 0, y: positionTop } });
         const contextMenuElement = getContextMenuElement();
         assert.equal(contextMenuElement.length, 1, 'menu is visible after right click');
-        assert.equal(contextMenuElement.position().top, boundsMax - contextMenuElement.height(), 'menu has been shown at correct position');
+        assert.roughEqual(contextMenuElement.position().top, boundsMax - contextMenuElement.height(), 0.9, 'menu has been shown at correct position');
         this.clock.tick();
         $('#qunit-fixture').css('top', oldTop);
         $('#qunit-fixture').css('left', oldLeft);
