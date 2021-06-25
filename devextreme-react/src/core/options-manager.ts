@@ -91,8 +91,8 @@ class OptionsManager {
       this.setValue(key, changes.options[key]);
     });
 
-    this.isUpdating = false;
     this.instance.endUpdate();
+    this.isUpdating = false;
 
     this.currentConfig = config;
   }

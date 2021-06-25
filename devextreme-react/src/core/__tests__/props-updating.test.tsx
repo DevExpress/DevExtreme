@@ -215,6 +215,29 @@ describe('option control', () => {
       expect(handler.mock.calls.length).toBe(1);
     });
 
+    it('should not rollback option if optionChanged is fired in endUpdate on props updating', () => {
+      const { rerender } = render(
+        <ControlledComponent
+          controlledOption="controlled"
+        />,
+      );
+
+      Widget.endUpdate.mockImplementation(
+        () => {
+          fireOptionChange('controlledOption', 'changed');
+        },
+      );
+
+      rerender(<ControlledComponent
+        controlledOption="changed"
+      />);
+
+      jest.runAllTimers(); // it is necessary to test that setGuard is not called
+
+      expect(Widget.option).toHaveBeenCalledTimes(1);
+      expect(Widget.option).toHaveBeenCalledWith('controlledOption', 'changed');
+    });
+
     it('is not updated on other prop updating', () => {
       const controlledOptionChanged = jest.fn();
       const { rerender } = render(
