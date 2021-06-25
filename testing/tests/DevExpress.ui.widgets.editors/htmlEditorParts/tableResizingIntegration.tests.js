@@ -57,13 +57,10 @@ const tableMarkupWidth = '\
 function getColumnBordersOffset($table) {
     const columnBorderOffsets = [];
 
-    $table.find('tr').eq(0).find('td').each((i, element) => {
-        const columnWidth = $(element).outerWidth();
-        if(i > 0) {
-            columnBorderOffsets[i] = columnBorderOffsets[i - 1] + columnWidth;
-        } else {
-            columnBorderOffsets[i] = columnWidth;
-        }
+    $table.find('tr').eq(0).find('td').each((i, column) => {
+        const columnWidth = $(column).outerWidth();
+
+        columnBorderOffsets.push(i === 0 ? columnWidth : columnBorderOffsets[i - 1] + columnWidth);
     });
 
     return columnBorderOffsets;
@@ -72,22 +69,18 @@ function getColumnBordersOffset($table) {
 function getRowBordersOffset($table) {
     const rowBorderOffsets = [];
 
-    $table.find('td:first-child').each((i, element) => {
-        const rowHeight = $(element).outerHeight();
-        if(i > 0) {
-            rowBorderOffsets[i] = rowBorderOffsets[i - 1] + rowHeight;
-        } else {
-            rowBorderOffsets[i] = rowHeight;
-        }
+    $table.find('td:first-child').each((i, row) => {
+        const rowHeight = $(row).outerHeight();
+
+        rowBorderOffsets.push(i === 0 ? rowHeight : rowBorderOffsets[i - 1] + rowHeight);
     });
 
     return rowBorderOffsets;
 }
 
-function checkColumnResizerPositions(assert, $lineResizerElements, lineBorderOffsets, property) {
-    const cssProperty = property ? property : 'left';
+function checkColumnResizerPositions(assert, $lineResizerElements, lineBorderOffsets, cssProperty = 'left') {
     $lineResizerElements.each((i, item) => {
-        const resizerLeftPosition = parseInt($(item).css(cssProperty).replace('px', ''));
+        const resizerLeftPosition = parseInt($(item).css(cssProperty));
         assert.roughEqual(resizerLeftPosition, lineBorderOffsets[i] - DRAGGABLE_ELEMENT_OFFSET, 1.01, 'Resizer has the same offset as the column border, index = ' + i);
     });
 }

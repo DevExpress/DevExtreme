@@ -75,7 +75,7 @@ export default class TableResizingModule extends BaseModule {
                 this._fixTablesWidths($tables);
             }
 
-            this._updateColumnsWidth($tables);
+            this._updateTablesColumnsWidth($tables);
             this._createResizeFrames($tables);
             this._updateFramesPositions();
             this._updateFramesSeparators();
@@ -93,7 +93,7 @@ export default class TableResizingModule extends BaseModule {
                 const lastTableWidth = this._getWidthAttrValue($table);
                 if(Math.abs(actualTableWidth - lastTableWidth) > 1) {
                     $table.attr('width', actualTableWidth + 'px');
-                    this._recalculateColumnsWidth($table);
+                    this._updateColumnsWidth($table);
                 }
             });
             this._updateFramesPositions();
@@ -230,7 +230,7 @@ export default class TableResizingModule extends BaseModule {
         return $element.hasClass('dx-draggable') && $element.is(':visible');
     }
 
-    _removeOldDraggable($currentLineSeparator, lineResizerClass) {
+    _removeDraggable($currentLineSeparator, lineResizerClass) {
         if(this._isDraggable($currentLineSeparator)) {
             const draggable = $($currentLineSeparator).dxDraggable('instance');
             draggable.dispose();
@@ -281,7 +281,7 @@ export default class TableResizingModule extends BaseModule {
 
             const $currentLineSeparator = $(lineSeparators[i]);
 
-            this._removeOldDraggable($currentLineSeparator, directionInfo.lineResizerClass);
+            this._removeDraggable($currentLineSeparator, directionInfo.lineResizerClass);
 
             styleOptions[directionInfo.positionCoordinate] = currentPosition - DRAGGABLE_ELEMENT_OFFSET;
             $($currentLineSeparator).css(styleOptions);
@@ -432,7 +432,7 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _recalculateColumnsWidth($table) {
+    _updateColumnsWidth($table) {
         const determinantElements = this._getTableDeterminantElements($table);
         const tableWidth = this._getWidthAttrValue($table) || $table.outerWidth();
         const columnsWidths = [];
@@ -472,9 +472,9 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _updateColumnsWidth($tables) {
+    _updateTablesColumnsWidth($tables) {
         each($tables, (_, table) => {
-            this._recalculateColumnsWidth($(table));
+            this._updateColumnsWidth($(table));
         });
     }
 
@@ -484,7 +484,7 @@ export default class TableResizingModule extends BaseModule {
 
         _windowResizeCallbacks.remove(this._resizeHandler);
         clearTimeout(this._windowResizeTimeout);
-        this._resizeHandler = null;
+        this._resizeHandler = undefined;
 
         clearTimeout(this._attachResizerTimeout);
     }
