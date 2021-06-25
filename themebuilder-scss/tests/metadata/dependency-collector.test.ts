@@ -1,6 +1,6 @@
 import fs from 'fs';
 import cabinet from 'filing-cabinet';
-import DependencyCollector from '../../src/metadata/dependency-collector';
+import DependencyCollector, { filePathMap } from '../../src/metadata/dependency-collector';
 
 const simpleDependencies: ScriptsDependencyTree = {
   dependencies: {
@@ -92,6 +92,7 @@ jest.mock('filing-cabinet', () => ({
 describe('DependencyCollector', () => {
   beforeEach(() => {
     (fs.readFileSync as jest.Mock).mockClear();
+    filePathMap.clear();
   });
 
   test('getWidgetFromAst - no comments in ast', () => {
@@ -199,7 +200,7 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     dependencyCollector.collect();
 
-    expect(fs.readFileSync).toBeCalledTimes(9);
+    expect(fs.readFileSync).toBeCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
       toolbar: ['menu', 'icon'],
       button: ['icon'],

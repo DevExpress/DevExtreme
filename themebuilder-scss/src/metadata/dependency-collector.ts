@@ -6,8 +6,12 @@ import cabinet from 'filing-cabinet';
 import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
 
+export const filePathMap = new Map();
 const stylesRegex = /\sSTYLE (.*)/;
-const filePathMap = new Map();
+const busyCache = {
+  widget: '',
+  dependencies: {},
+};
 
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
@@ -67,16 +71,9 @@ export default class DependencyCollector {
 
   getFullDependencyTree(filePath: string): ScriptsDependencyTree {
     let cacheItem = this.scriptsCache[filePath];
-    const busyCache = {
-      widget: '',
-      dependencies: {},
-    };
+    const filePathInProcess = filePathMap.get(filePath);
 
-    if (filePathMap.get(filePath)) {
-      return cacheItem;
-    }
-
-    if (cacheItem === undefined) {
+    if (!filePathInProcess && cacheItem === undefined) {
       filePathMap.set(filePath, busyCache);
 
       const result = precinct.paperwork(filePath, {
