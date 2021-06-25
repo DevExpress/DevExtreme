@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
-import { DataGridRowExporter } from './export_data_grid_row_exporter';
+import { DataGridRowExporter } from './data_grid_row_exporter';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -21,7 +21,6 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const columns = dataProvider.getColumns();
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
@@ -34,15 +33,14 @@ function exportDataGrid(doc, dataGrid, options) {
                 prevRowInfo = currentRowInfo;
                 currentRowInfo = DataGridRowExporter.createRowInfo({ dataProvider, rowIndex, prevRowInfo });
 
-                for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-                    const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-                    const pdfCell = DataGridRowExporter.createPdfCell({ dataProvider, rowIndex, cellIndex, targetRowInfo: currentRowInfo, value: cellData.value });
+                const currentRowPdfCells = [];
+                currentRowInfo.cellsInfo.forEach(cellInfo => {
+                    const pdfCell = DataGridRowExporter.createPdfCell(cellInfo);
                     if(options.onCellExporting) {
-                        options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
+                        options.onCellExporting({ gridCell: { value: cellInfo.value }, pdfCell });
                     }
-                    currentRowInfo.pdfCells.push(pdfCell);
-                }
-                DataGridRowExporter.updatePdfCells(currentRowInfo);
+                    currentRowPdfCells.push(pdfCell);
+                });
 
                 if(currentRowInfo.startNewTableWithIndent) {
                     const indent = currentRowInfo.indentLevel * options.indent;
@@ -58,7 +56,7 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 let rowHeight = null; // TODO: Default Value
                 if(options.onRowExporting) {
-                    const args = { drawNewTableFromThisRow: {}, rowCells: currentRowInfo.pdfCells };
+                    const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);
                     const { startNewTable, addPage, tableTopLeft, splitToTablesByColumns } = args.drawNewTableFromThisRow;
                     if(startNewTable === true) {
@@ -70,7 +68,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                pdfGrid.addRow(currentRowInfo.pdfCells, rowHeight);
+                pdfGrid.addRow(currentRowPdfCells, rowHeight);
             }
 
             pdfGrid.mergeCellsBySpanAttributes();
