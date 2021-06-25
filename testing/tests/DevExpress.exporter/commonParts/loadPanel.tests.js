@@ -243,7 +243,7 @@ const LoadPanelTests = {
                         assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
 
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
-                        assert.strictEqual($builtInLoadPanel.length, componentLoadPanelEnabledOption ? 1 : 0, 'builtin loadpanel exist');
+                        assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel exist');
                         assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
 
                         done();

@@ -4,6 +4,7 @@ import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
 import messageLocalization from '../../localization/message';
 import { ExportLoadPanel } from '../common/export_load_panel';
+import { hasWindow } from '../../core/utils/window';
 
 export const Export = {
     getFullOptions: function(options) {
@@ -76,13 +77,13 @@ export const Export = {
         const internalComponent = component._getInternalInstance?.() || component;
         const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
 
-        if(loadPanel.enabled) {
+        component.option('loadPanel.enabled', false);
+        if(loadPanel.enabled && hasWindow()) {
             const rowsView = component.getView('rowsView');
 
             this._loadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
             this._loadPanel.show();
         }
-        component.option('loadPanel.enabled', false);
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
@@ -159,7 +160,7 @@ export const Export = {
             }).always(() => {
                 component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
 
-                if(loadPanel.enabled) {
+                if(loadPanel.enabled && hasWindow()) {
                     this._loadPanel.dispose();
                 }
             });
