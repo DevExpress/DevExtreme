@@ -1049,7 +1049,7 @@ export const ListBase = CollectionWidget.inherit({
     scrollToItem: function(itemElement) {
         const $item = this._editStrategy.getItemElement(itemElement);
 
-        this._scrollView.scrollToElement($item.get(0));
+        this._scrollView.scrollToElement($item?.get(0));
     },
 
     _dimensionChanged: function() {
