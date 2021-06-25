@@ -190,7 +190,7 @@ class ScrollableTestHelper {
   }
 
   initScrollbarSettings(additionalProps:
-  { [key: string]: any } = { translateOffset: 0, props: {} }): void {
+  { [key: string]: any } = { props: {} }): void {
     const scrollbars = this.getScrollbars();
 
     const initSettings = (scrollbarRef) => {
@@ -199,8 +199,6 @@ class ScrollableTestHelper {
       scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
       scrollbar.scrollRef = React.createRef();
       scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
-
-      scrollbar.translateOffset = additionalProps.translateOffset;
 
       Object.assign(scrollbar, {
         props: {

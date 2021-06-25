@@ -1369,7 +1369,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.deepEqual(dataSource[2], {
             text: 'Test',
             startDate: new Date(2018, 4, 21, 9, 0),
-            endDate: new Date(2018, 4, 21, 9, 30)
+            endDate: new Date(2018, 4, 21, 16, 0)
         }, 'added appointment data');
     });
 

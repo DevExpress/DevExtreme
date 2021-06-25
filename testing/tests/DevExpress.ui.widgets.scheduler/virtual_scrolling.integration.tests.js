@@ -13,7 +13,7 @@ import {
     asyncWrapper,
     isIE11
 } from '../../helpers/scheduler/helpers.js';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -51,12 +51,6 @@ module('Virtual scrolling integration', () => {
                     const workspace = instance.getWorkSpace();
 
                     assert.equal(
-                        !!workspace.virtualScrollingDispatcher,
-                        result,
-                        'Virtual scrolling initialised',
-                    );
-
-                    assert.equal(
                         workspace.isRenovatedRender(),
                         result,
                         'Render type is correct'
@@ -75,11 +69,6 @@ module('Virtual scrolling integration', () => {
                     }).instance;
 
                     assert.equal(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        result,
-                        'Virtual scrolling initialization',
-                    );
-                    assert.equal(
                         instance.getWorkSpace().isRenovatedRender(),
                         result,
                         'Correct render is used'
@@ -96,18 +85,10 @@ module('Virtual scrolling integration', () => {
 
                 instance.option('scrolling.mode', 'virtual');
 
-                assert.ok(
-                    !!instance.getWorkSpace().virtualScrollingDispatcher,
-                    'Virtual scrolling Initialized'
-                );
                 assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('scrolling.mode', 'standard');
 
-                assert.notOk(
-                    !!instance.getWorkSpace().virtualScrollingDispatcher,
-                    'Virtual scrolling not initialized'
-                );
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
@@ -122,17 +103,9 @@ module('Virtual scrolling integration', () => {
                 }).instance;
 
                 instance.option('views[0].scrolling.mode', 'virtual');
-                assert.ok(
-                    !!instance.getWorkSpace().virtualScrollingDispatcher,
-                    'Virtual scrolling is initialized'
-                );
                 assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('views[0].scrolling.mode', 'standard');
-                assert.notOk(
-                    !!instance.getWorkSpace().virtualScrollingDispatcher,
-                    'Virtual scrolling is not initialized'
-                );
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
@@ -1487,7 +1460,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider();
+                                const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                                 filteredItems.forEach((dataItem, index) => {
                                     const settings = instance.fire('createAppointmentSettings', dataItem);
@@ -2086,7 +2059,7 @@ module('Virtual scrolling integration', () => {
                         }
                     ];
 
-                    createWrapper({
+                    const { instance } = createWrapper({
                         dataSource: data,
                         currentDate: new Date(2016, 9, 5),
                         views: [{
@@ -2099,9 +2072,9 @@ module('Virtual scrolling integration', () => {
                             orientation: 'vertical'
                         },
                         height: 400
-                    }).instance;
+                    });
 
-                    const { filteredItems } = getAppointmentDataProvider();
+                    const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                     assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                     assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2143,7 +2116,7 @@ module('Virtual scrolling integration', () => {
                         }
                     ];
 
-                    createWrapper({
+                    const { instance } = createWrapper({
                         dataSource: data,
                         currentDate: new Date(2016, 9, 5),
                         views: [{
@@ -2163,9 +2136,9 @@ module('Virtual scrolling integration', () => {
                             label: 'Resource0'
                         }],
                         height: 400
-                    }).instance;
+                    });
 
-                    const { filteredItems } = getAppointmentDataProvider();
+                    const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                     assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                     assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2208,7 +2181,7 @@ module('Virtual scrolling integration', () => {
                     }
                 ];
 
-                createWrapper({
+                const { instance } = createWrapper({
                     dataSource: data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -2230,9 +2203,9 @@ module('Virtual scrolling integration', () => {
                     }],
                     height: 400,
                     width: 800
-                }).instance;
+                });
 
-                const { filteredItems } = getAppointmentDataProvider();
+                const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                 assert.equal(filteredItems.length, 2, 'Filtered items length is correct');
                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2273,7 +2246,7 @@ module('Virtual scrolling integration', () => {
                     }
                 ];
 
-                createWrapper({
+                const { instance } = createWrapper({
                     dataSource: data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -2295,9 +2268,9 @@ module('Virtual scrolling integration', () => {
                     }],
                     height: 400,
                     width: 800
-                }).instance;
+                });
 
-                const { filteredItems } = getAppointmentDataProvider();
+                const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                 assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2320,7 +2293,7 @@ module('Virtual scrolling integration', () => {
                     recurrenceRule: 'FREQ=HOURLY'
                 }];
 
-                const instance = createWrapper({
+                const { instance } = createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'day',
@@ -2340,7 +2313,7 @@ module('Virtual scrolling integration', () => {
                         ]
                     }],
                     height: 600
-                }).instance;
+                });
 
                 instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
@@ -2360,7 +2333,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider();
+                                const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                                 const { expectedDataIndices } = option;
                                 assert.equal(filteredItems.length, expectedDataIndices.length, 'Filtered items length is correct');
@@ -2468,7 +2441,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider();
+                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
@@ -2506,7 +2479,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider();
+                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                     assert.equal(filteredItems.length, expectedIndices.length, `Filtered items length is correct if scrollOffset: ${option.y}`);
 
@@ -2559,7 +2532,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider();
+                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                     assert.equal(filteredItems.length, expectedIndices.length, `ScrollY: ${option.y}. Filtered items length is correct`);
 
@@ -2611,7 +2584,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider();
+                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                     assert.equal(
                                         filteredItems.length,
@@ -2663,7 +2636,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider();
+                                const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                 assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
                                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
@@ -2864,7 +2837,7 @@ module('Virtual scrolling integration', () => {
 
                                         assert.ok(true, `Scroll to x: ${offset.x}, y: ${offset.y}`);
 
-                                        const { filteredItems } = getAppointmentDataProvider();
+                                        const { filteredItems } = getAppointmentDataProvider(this.instance.key);
 
                                         assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 

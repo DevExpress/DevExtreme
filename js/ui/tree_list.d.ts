@@ -1163,7 +1163,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     isRowFocused(key: any): boolean;
     isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
@@ -1327,7 +1327,18 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList, row?: RowObject, readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
+    /**
+     * @docid dxTreeListColumnButton.disabled
+     * @default false
+     * @type_function_param1 options:object
+     * @type_function_param1_field1 component:dxTreeList
+     * @type_function_param1_field2 row:dxTreeListRowObject
+     * @type_function_param1_field3 column:dxTreeListColumn
+     * @type_function_return Boolean
+     * @public
+     */
+    disabled?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
 }
 
 /**

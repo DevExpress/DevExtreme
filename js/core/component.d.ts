@@ -36,14 +36,14 @@ export interface ComponentOptions<TComponent> {
   onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
 }
 /**
- * @docid
+ * @docid Component
  * @module core/component
- * @export default
+ * @export Component
  * @namespace DevExpress
  * @hidden
  * @wrappable
  */
-export default class Component<TProperties> {
+export class Component<TProperties> {
   constructor(options?: TProperties);
   /**
    * @docid
@@ -135,17 +135,4 @@ export default class Component<TProperties> {
    * @public
    */
   resetOption(optionName: string): void;
-
-  _options: { silent(path: any, value: any): void };
-  _createActionByOption(optionName: string, config: object): Function;
-  _dispose(): void;
-  _getDefaultOptions(): object;
-  _init(): void;
-  _initializeComponent(): void;
-  _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-  _optionChanged(args: { name: string; value: unknown }): void;
-  _setOptionsByReference(): void;
-  _optionsByReference: object;
-  _setDeprecatedOptions(): void;
-  _deprecatedOptions: object;
 }

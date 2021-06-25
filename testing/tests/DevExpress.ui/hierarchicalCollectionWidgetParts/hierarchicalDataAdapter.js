@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import HierarchicalDataAdapter from 'ui/hierarchical_collection/ui.data_adapter';
-import dataUtils from 'data/utils';
+import { processRequestResultLock } from 'data/utils';
 import HierarchicalCollectionTestHelper from './hierarchicalCollectionTestHelper.js';
 import errors from 'ui/widget/ui.errors';
 
@@ -527,10 +527,10 @@ module('public methods', moduleConfig, () => {
         const items = [{ id: 1, text: 'item 1' }];
         const dataAdapter = helper.initDataAdapter({ items: items });
         try {
-            dataUtils.processRequestResultLock.obtain();
+            processRequestResultLock.obtain();
             assert.equal(dataAdapter.getRootNodes().length, 1);
         } finally {
-            dataUtils.processRequestResultLock.release();
+            processRequestResultLock.release();
         }
     });
 

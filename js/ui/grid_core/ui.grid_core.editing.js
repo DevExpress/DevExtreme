@@ -298,6 +298,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return isFunction(visible) ? visible.call(button, { component: options.component, row: options.row, column: options.column }) : visible;
         },
 
+        _isButtonDisabled: function(button, options) {
+            const disabled = button.disabled;
+
+            return isFunction(disabled) ? disabled.call(button, { component: options.component, row: options.row, column: options.column }) : !!disabled;
+        },
+
         _getButtonConfig: function(button, options) {
             const config = isObject(button) ? button : {};
             const buttonName = getButtonName(button);
@@ -1941,11 +1947,16 @@ const EditingController = modules.ViewController.inherit((function() {
                     $button.attr('title', button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
-                    button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
-                    e.event.preventDefault();
-                    e.event.stopPropagation();
-                }));
+                if(this._isButtonDisabled(button, options)) {
+                    $button.addClass('dx-state-disabled');
+                } else {
+                    eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
+                        button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                    }));
+                }
+
                 $container.append($button, '&nbsp;');
             }
         },

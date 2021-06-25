@@ -7,7 +7,7 @@ import {
 
 import { Page } from './page';
 import { PAGER_INFO_CLASS } from '../info';
-import { NumberBox } from '../../number_box';
+import { NumberBox } from '../../editors/number_box';
 import messageLocalization from '../../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';

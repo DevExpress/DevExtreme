@@ -18,16 +18,20 @@ const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
 const TS_MODULES_GLOB = './js/**/*.d.ts';
 
-const COMMON_TS_COMPILER_OPTIONS = {
-    noEmitOnError: true,
-    types: ['jquery']
-};
+function compileTS(settings) {
+    return ts.createProject({
+        typescript: require('typescript-min'),
+        types: ['jquery'],
+        noEmitOnError: true,
+        ...settings
+    })(ts.reporter.fullReporter());
+}
 
 const packagePath = `${context.RESULT_NPM_PATH}/${packageDir}`;
 const packageBundlesPath = path.join(packagePath, 'bundles');
 
 
-gulp.task('ts-vendor', function() {
+gulp.task('ts-copy-vendor', function() {
     return gulp.src('./ts/vendor/*')
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
@@ -38,7 +42,7 @@ function bundleTS() {
         .pipe(headerPipes.bangLicense());
 }
 
-gulp.task('ts-bundle', gulp.series(
+gulp.task('ts-copy-bundle', gulp.series(
     function writeTsBundle() {
         return bundleTS()
             .pipe(replace(/^declare global\s*{([\s\S]*?)^}/gm, '$1'))
@@ -60,7 +64,7 @@ gulp.task('ts-bundle', gulp.series(
     }
 ));
 
-gulp.task('ts-jquery-check', function checkJQueryAugmentations() {
+gulp.task('ts-check-jquery', function() {
     let content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
     content += 'import * as $ from \'jquery\';';
 
@@ -83,37 +87,43 @@ gulp.task('ts-jquery-check', function checkJQueryAugmentations() {
         }).join('\n');
 
     return file('artifacts/globals.ts', content, { src: true })
-        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
+        .pipe(compileTS());
 });
 
-gulp.task('ts-compilation-check', function() {
+gulp.task('ts-check-bundle', function() {
+
     return gulp.src(path.join(OUTPUT_ARTIFACTS_DIR, 'dx.all.d.ts'))
-        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
+        .pipe(compileTS());
 });
 
-gulp.task('ts-modules', function generateModules() {
-    const bundleImport = 'import DevExpress from \'../bundles/dx.all\';';
+gulp.task('ts-check-modules', function() {
+    return gulp.src(TS_MODULES_GLOB)
+        .pipe(compileTS());
+});
+
+gulp.task('ts-copy-modules', function() {
+    const BUNDLE_IMPORT = 'import DevExpress from \'../bundles/dx.all\';';
 
     return gulp.src(TS_MODULES_GLOB)
         /* legacy modules */
-        .pipe(file('events/click.d.ts', bundleImport))
-        .pipe(file('events/contextmenu.d.ts', bundleImport))
-        .pipe(file('events/dblclick.d.ts', bundleImport))
-        .pipe(file('events/drag.d.ts', bundleImport))
-        .pipe(file('events/hold.d.ts', bundleImport))
-        .pipe(file('events/hover.d.ts', bundleImport))
-        .pipe(file('events/pointer.d.ts', bundleImport))
-        .pipe(file('events/swipe.d.ts', bundleImport))
-        .pipe(file('events/transform.d.ts', bundleImport))
+        .pipe(file('events/click.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/contextmenu.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/dblclick.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/drag.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/hold.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/hover.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/pointer.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
+        .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
 
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(packagePath));
 });
 
-gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle'));
+gulp.task('ts-sources', gulp.series('ts-copy-modules', 'ts-copy-bundle'));
 
-gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() {
+gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
     let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
@@ -144,25 +154,22 @@ gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() 
     }).join('\n');
 
     return file('artifacts/modules.ts', content, { src: true })
-        .pipe(ts(
-            Object.assign({}, COMMON_TS_COMPILER_OPTIONS, {
-                allowSyntheticDefaultImports: true
-            })
-        ), ts.reporter.fullReporter());
+        .pipe(compileTS({ allowSyntheticDefaultImports: true }));
 }));
 
 gulp.task('validate-ts', gulp.series(
-    'ts-bundle',
-    'ts-compilation-check',
-    'ts-jquery-check',
-    'ts-modules-check'
+    'ts-check-modules',
+    'ts-copy-bundle',
+    'ts-check-bundle',
+    'ts-check-jquery',
+    'ts-check-public-modules'
 ));
 
 gulp.task('ts', gulp.series(
-    'ts-vendor',
-    'ts-bundle',
-    'ts-jquery-check',
-    'ts-compilation-check'
+    'ts-copy-vendor',
+    'ts-copy-bundle',
+    'ts-check-jquery',
+    'ts-check-bundle'
 ));
 
 function widgetNameByPath(widgetPath) {

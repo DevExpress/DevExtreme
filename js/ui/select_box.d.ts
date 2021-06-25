@@ -16,15 +16,12 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
-} from './collection/ui.collection_widget.base';
-
-import {
     DropDownButtonTemplateDataModel
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    SelectionChangedInfo
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -186,8 +183,10 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  */
 export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }
 
+interface SelectBoxInstance extends dxSelectBox<Properties> { }
+
 /** @public */
-export type Properties = dxSelectBoxOptions<dxSelectBox<Properties>>;
+export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

@@ -86,11 +86,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps {
-  @OneWay() className? = '';
-
   @OneWay() groupOrientation?: GroupOrientation;
-
-  @OneWay() allDayPanelVisible? = false;
 
   @OneWay() timePanelData: TimePanelData = {
     groupedData: [],

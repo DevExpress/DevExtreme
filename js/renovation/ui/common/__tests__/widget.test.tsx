@@ -238,11 +238,13 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
           expect(onFocusIn).toHaveBeenCalledTimes(1);
+          expect(onFocusIn).toHaveBeenCalledWith(e);
 
           emit(EVENT.blur, e);
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
           expect(onFocusOut).toHaveBeenCalledTimes(1);
+          expect(onFocusOut).toHaveBeenCalledWith(e);
         });
 
         it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
@@ -344,11 +346,13 @@ describe('Widget', () => {
           emit(EVENT.hoverStart);
           expect(widget.hovered).toBe(true);
           expect(onHoverStart).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledWith(defaultEvent);
           expect(onHoverEnd).toHaveBeenCalledTimes(0);
 
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
           expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverEnd).toHaveBeenCalledWith(defaultEvent);
           expect(onHoverStart).toHaveBeenCalledTimes(1);
         });
 
@@ -579,6 +583,25 @@ describe('Widget', () => {
     });
 
     describe('Methods', () => {
+      describe('activate', () => {
+        it('should switch active state to "true"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          expect(widget.active).toBe(false);
+          widget.activate();
+          expect(widget.active).toBe(true);
+        });
+      });
+
+      describe('deactivate', () => {
+        it('should switch active state to "false"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          widget.activate();
+          expect(widget.active).toBe(true);
+          widget.deactivate();
+          expect(widget.active).toBe(false);
+        });
+      });
+
       describe('focus', () => {
         it('should trigger focus at element', () => {
           const widget = new Widget({ focusStateEnabled: true });

@@ -14,7 +14,7 @@ QUnit.testStart(function() {
 });
 
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 

@@ -1,104 +1,207 @@
-/* eslint-disable */
-import Component from './common/component';
-import type { DataGridForComponentWrapper } from '../ui/grids/data_grid/common/types';
+/* eslint-disable @typescript-eslint/ban-types */
+import { getPathParts } from '../../core/utils/data';
+import Component, { ComponentWrapperProps } from './common/component';
+import type { DataGridForComponentWrapper, GridInstance } from '../ui/grids/data_grid/common/types';
 import gridCore from '../../ui/data_grid/ui.data_grid.core';
-import { updatePropsImmutable } from "./utils/update-props-immutable";
-import { TemplateComponent } from './common/types';
+import { updatePropsImmutable } from './utils/update_props_immutable';
+import type { TemplateComponent, Option } from './common/types';
+import type { ExcelCellInfo, Export, OptionChangedEvent } from '../../ui/data_grid';
+
+import { themeReadyCallback } from '../../ui/themes_callback';
+import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
+
+let dataGridClass: { defaultOptions: (options: unknown) => void } | null = null;
+
+/* istanbul ignore next: temporary workaround */
+// TODO remove when defaultOptionRules initialization problem will be fixed
+componentRegistratorCallbacks.add((name, componentClass) => {
+  if (name === 'dxDataGrid') {
+    dataGridClass = componentClass;
+  }
+});
 
 export default class DataGridWrapper extends Component {
-    _onInitialized!: Function;
+  static registerModule = gridCore.registerModule.bind(gridCore);
 
-    _fireContentReady() {}
+  _onInitialized!: Function;
 
-    static registerModule = gridCore.registerModule.bind(gridCore);
+  _skipInvalidate = false;
 
-    beginUpdate() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+  // TODO remove when defaultOptionRules initialization problem will be fixed
+  constructor(element: Element, options: ComponentWrapperProps) {
+    /* istanbul ignore next: temporary workaround */
+    super(element, (dataGridClass?.defaultOptions({}), options));
+  }
 
-        super.beginUpdate();
-        gridInstance?.beginUpdate();
+  state(state?: Record<string, unknown>): Record<string, unknown> | undefined {
+    const internalInstance = this._getInternalInstance();
+
+    if (internalInstance) {
+      if (state === undefined) {
+        return internalInstance.state();
+      }
+      internalInstance.state(state);
+    }
+    return undefined;
+  }
+
+  getController(name: string): unknown {
+    return this._getInternalInstance()?.getController(name);
+  }
+
+  getView(name: string): unknown {
+    return this._getInternalInstance()?.getView(name);
+  }
+
+  beginUpdate(): void {
+    super.beginUpdate();
+    this._getInternalInstance()?.beginUpdate();
+  }
+
+  endUpdate(): void {
+    super.endUpdate();
+    this._getInternalInstance()?.endUpdate();
+  }
+
+  isReady(): boolean {
+    return this._getInternalInstance()?.isReady();
+  }
+
+  _getInternalInstance(): GridInstance {
+    return (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+  }
+
+  _fireContentReady(): void {}
+
+  _wrapKeyDownHandler(handler: Function): Function {
+    return handler;
+  }
+
+  _optionChanging(fullName: string, prevValue: unknown, value: unknown): void {
+    super._optionChanging(fullName, prevValue, value);
+    if (this.viewRef && prevValue !== value) {
+      const name = getPathParts(fullName)[0];
+      const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
+
+      if (name === 'editing' && name !== fullName) {
+        // T751778
+        // TODO remove when silent assign will be removed from editing
+        updatePropsImmutable(prevProps, this.option(), name, name);
+      }
+      updatePropsImmutable(prevProps, this.option(), name, fullName);
+
+      (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
+    }
+  }
+
+  _optionChanged(e: Option): void {
+    const internalInstance = this._getInternalInstance();
+    if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
+      internalInstance.option('dataSource', e.value as string);
+    }
+    super._optionChanged(e);
+  }
+
+  _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
+    return templateOption as (TemplateComponent | undefined);
+  }
+
+  _initializeComponent(): void {
+    const options = this.option();
+    this._onInitialized = options.onInitialized as Function;
+    options.onInitialized = null;
+    super._initializeComponent();
+  }
+
+  _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
+    // eslint-disable-next-line no-param-reassign
+    options.onInitialized = this._onInitialized;
+
+    const exportOptions = options.export as Export;
+    const originalCustomizeExcelCell = exportOptions?.customizeExcelCell;
+
+    if (originalCustomizeExcelCell) {
+      exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (e as any).component = this;
+        return originalCustomizeExcelCell(e);
+      };
     }
 
-    endUpdate() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+    const { onInitialized } = options;
 
-        super.endUpdate();
-        gridInstance?.endUpdate();
+    if (onInitialized) {
+      // eslint-disable-next-line no-param-reassign
+      options.onInitialized = (e: { component: Component }): void => {
+        e.component = this;
+        (onInitialized as Function)(e);
+      };
     }
 
-    isReady() {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+    return super._patchOptionValues(options);
+  }
 
-        return gridInstance?.isReady();
+  _renderWrapper(props: Record<string, unknown>): void {
+    const isFirstRender = !this._isNodeReplaced;
+    super._renderWrapper(props);
+    if (isFirstRender) {
+      this._getInternalInstance().on('optionChanged', this._internalOptionChangedHandler.bind(this));
     }
+  }
 
-    getView(name) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
+  _internalOptionChangedHandler(e: OptionChangedEvent): void {
+    const isSecondLevelOption = e.name !== e.fullName;
 
-        return gridInstance?.getView(name);
-    }
-
-    getController(name) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.getController(name);
-    }
-
-    state(state) {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance();
-
-        return gridInstance?.state(state);
-    }
-
-    _wrapKeyDownHandler(handler) {
-        return handler;
-    }
-
-    _optionChanging(fullName: string, value: unknown, prevValue: unknown): void {
-        super._optionChanging(fullName, value, prevValue);
-        if(this.viewRef) {
-            const name = fullName.split(/[.[]/)[0];
-            const prevProps = { ...(this.viewRef as DataGridForComponentWrapper).prevProps };
-            updatePropsImmutable(prevProps, this.option(), name, fullName);
-            (this.viewRef as DataGridForComponentWrapper).prevProps = prevProps;
+    if (isSecondLevelOption && e.value !== e.previousValue) {
+      if (e.fullName.startsWith('columns[')) {
+        if (this.option(e.fullName) !== e.value) {
+          this._skipInvalidate = true;
+          this._notifyOptionChanged(e.fullName, e.value, e.previousValue);
+          this._skipInvalidate = false;
         }
+      } else {
+        this._skipInvalidate = true;
+        this._options.silent(e.fullName, e.previousValue);
+        this.option(e.fullName, e.value);
+        this._skipInvalidate = false;
+      }
     }
+  }
 
-    _optionChanged(e): void {
-        const gridInstance = (this.viewRef as DataGridForComponentWrapper)?.getComponentInstance?.();
-        if (e.fullName === 'dataSource' && e.value === gridInstance?.option('dataSource')) {
-            gridInstance?.option('dataSource', e.value);
-        }
-        super._optionChanged(e);
-    }
+  _invalidate(): void {
+    if (this._skipInvalidate) return;
 
-    _createTemplateComponent(templateOption: unknown): TemplateComponent | undefined {
-        return templateOption as (TemplateComponent | undefined);
-    }
+    super._invalidate();
+  }
 
-    _initializeComponent(): void {
-        const options = this.option();
-        this._onInitialized = options.onInitialized as Function;
-        options.onInitialized = null;
-        super._initializeComponent();
-    }
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
-    _patchOptionValues(options) {
-        options.onInitialized = this._onInitialized;
-        return super._patchOptionValues(options);
-    }
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    this._optionsByReference['focusedRowKey'] = true;
+    this._optionsByReference['editing.editRowKey'] = true;
+    this._optionsByReference['editing.changes'] = true;
+  }
 
-    _setOptionsByReference() {
-        super._setOptionsByReference();
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
 
-        this._optionsByReference['focusedRowKey'] = true;
-        this._optionsByReference['editing.editRowKey'] = true;
-        this._optionsByReference['editing.changes'] = true;
-    }
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
+  }
 
-    _setDeprecatedOptions() {
-        super._setDeprecatedOptions();
-
-        this._deprecatedOptions['useKeyboard'] = { since: '19.2', alias: 'keyboardNavigation.enabled' };
-    }
+  _getAdditionalProps(): string[] {
+    return super._getAdditionalProps().concat([
+      'onInitialized',
+      'onColumnsChanging', // for dashboards
+      'integrationOptions',
+      'adaptColumnWidthByRatio',
+      'useLegacyKeyboardNavigation',
+      'templatesRenderAsynchronously',
+      'forceApplyBindings',
+      'nestedComponentOptions',
+    ]);
+  }
 }
+
+themeReadyCallback.add();

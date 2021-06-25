@@ -56,7 +56,7 @@ class ScrollableTestHelper {
 
   scrollByHandlerMock?: jest.Mock;
 
-  scrollBarHandlers?: { name: string; postfix?: string }[];
+  scrollBarHandlers?: { name: string }[];
 
   actionHandlers: { [key: string]: any };
 
@@ -219,7 +219,7 @@ class ScrollableTestHelper {
   }
 
   initScrollbarSettings(additionalProps:
-  { [key: string]: any } = { translateOffset: 0, props: {} }): void {
+  { [key: string]: any } = { props: {} }): void {
     const { vScrollLocation = -50, hScrollLocation = -50, ...restProps } = additionalProps.props;
 
     const scrollbars = this.getScrollbars();
@@ -237,7 +237,6 @@ class ScrollableTestHelper {
       scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
       scrollbar.scrollRef = React.createRef();
       scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
-      scrollbar.translateOffset = additionalProps.translateOffset;
 
       Object.assign(scrollbar, {
         props: {

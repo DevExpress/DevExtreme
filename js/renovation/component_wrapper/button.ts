@@ -5,6 +5,7 @@ import Component from './common/component';
 import type { Button } from '../ui/button';
 
 export default class ButtonWrapper extends Component {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get _validationGroupConfig(): any {
     return ValidationEngine.getGroupConfig(this._findGroup());
   }
@@ -19,15 +20,26 @@ export default class ButtonWrapper extends Component {
     return props;
   }
 
+  get _templatesInfo(): Record<string, string> {
+    return { template: 'content' };
+  }
+
+  _toggleActiveState(_: HTMLElement, value: boolean): void {
+    const button = this.viewRef as Button;
+    value ? button.activate() : button.deactivate();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _getSubmitAction(): any {
     let needValidate = true;
     let validationStatus = 'valid';
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (this as any)._createAction(({ event, submitInput }) => {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
-        if (validationGroup) {
+        if (validationGroup !== undefined && validationGroup !== '') {
           const { status, complete } = validationGroup.validate();
 
           validationStatus = status;
@@ -77,8 +89,13 @@ export default class ButtonWrapper extends Component {
     return super._patchOptionValues({ ...options, templateData: options._templateData });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _findGroup(): any {
     const $element = this.$element();
-    return this.option('validationGroup') || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+    const validationGroup = this.option('validationGroup');
+    return validationGroup !== undefined && validationGroup !== ''
+      ? validationGroup
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }

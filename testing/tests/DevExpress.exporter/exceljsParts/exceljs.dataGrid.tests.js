@@ -11,7 +11,7 @@ import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { isDefined } from 'core/utils/type';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import 'generic_light.css!';
 
@@ -76,12 +76,13 @@ const moduleConfig = {
         const topLeft = { row: 2, column: 3 };
 
         const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft, loadPanel = { enabled: false } } = options || {};
 
             const result = {
                 component: dataGrid,
                 worksheet: context.worksheet,
                 topLeftCell: topLeftCell,
+                loadPanel: loadPanel,
                 customizeCell: (eventArgs) => {
                     if(isDefined(expectedCustomizeCellArgs)) {
                         helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
@@ -749,7 +750,7 @@ const moduleConfig = {
                 columns: [{
                     dataField: 'f1'
                 }],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -758,7 +759,6 @@ const moduleConfig = {
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
-
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -780,7 +780,7 @@ const moduleConfig = {
                     dataField: 'f1',
                     encodeHtml: false
                 }],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -807,7 +807,7 @@ const moduleConfig = {
             const ds = [{ f1: '@123', f2: '=123', f3: '-123', f4: '+123' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -843,7 +843,7 @@ const moduleConfig = {
                     pageIndex: 2
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -873,7 +873,7 @@ const moduleConfig = {
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -904,7 +904,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 rtlEnabled: true,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -934,7 +934,7 @@ const moduleConfig = {
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -977,7 +977,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 rowTemplate: (container) => { $(container).append('<tbody class=\'dx-row\'><tr><td>row</td><td>template</td></tr></tbody>'); },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1015,7 +1015,7 @@ const moduleConfig = {
                     { type: 'buttons', width: 250, buttons: ['refresh'] }
                 ],
                 editing: { mode: 'row', allowUpdating: true, allowDeleting: true, allowAdding: true },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1056,7 +1056,7 @@ const moduleConfig = {
                 selection: {
                     mode: 'multiple'
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1088,7 +1088,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: false }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1126,7 +1126,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: false }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1162,7 +1162,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: true }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1198,7 +1198,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             exportDataGrid({
@@ -1227,7 +1227,7 @@ const moduleConfig = {
                 dataSource: ds,
                 wordWrapEnabled: true,
                 columns: [ 'f1', { dataField: 'f2', alignment: 'right' }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             exportDataGrid({
@@ -1250,7 +1250,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 wordWrapEnabled: true
             }).dxDataGrid('instance');
 
@@ -1283,7 +1283,7 @@ const moduleConfig = {
                     { dataField: 'f1', dataType: 'string' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1319,7 +1319,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1347,7 +1347,7 @@ const moduleConfig = {
                 }],
                 wordWrapEnabled: true,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1372,7 +1372,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -1408,7 +1408,7 @@ const moduleConfig = {
                     { dataType: 'string', calculateCellValue: () => 'str1' },
                     { dataType: 'string', calculateCellValue: () => 'str2' }
                 ],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -1444,7 +1444,7 @@ const moduleConfig = {
                     { dataType: 'string', calculateCellValue: (rowData) => rowData.id }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1479,7 +1479,7 @@ const moduleConfig = {
                     { dataField: 'fieldNotExist', calculateCellValue: rowData => rowData.field1 + '_notExists' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1514,7 +1514,7 @@ const moduleConfig = {
                 }],
                 wordWrapEnabled: false,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1549,7 +1549,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1581,7 +1581,7 @@ const moduleConfig = {
                     { dataType: 'number', calculateCellValue: () => Number.NEGATIVE_INFINITY }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -1624,7 +1624,7 @@ const moduleConfig = {
                     { dataType: 'number', calculateCellValue: rowData => rowData.id }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1656,7 +1656,7 @@ const moduleConfig = {
                     dataType: 'boolean'
                 }],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
 
@@ -1694,7 +1694,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
 
@@ -1727,7 +1727,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1772,7 +1772,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1832,7 +1832,7 @@ const moduleConfig = {
                         columns: [{ dataField: 'f1', dataType: 'datetime', format: format.format }],
                         dataSource: ds,
                         showColumnHeaders: false,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
@@ -1871,7 +1871,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1913,7 +1913,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1941,7 +1941,7 @@ const moduleConfig = {
                     dataType: 'object'
                 }],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1978,7 +1978,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'percent', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2016,7 +2016,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'fixedPoint', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2054,7 +2054,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'decimal', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2092,7 +2092,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'exponential', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2130,7 +2130,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'largeNumber', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2168,7 +2168,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'thousands', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2206,7 +2206,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'millions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2244,7 +2244,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'billions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2282,7 +2282,7 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'trillions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2321,7 +2321,7 @@ const moduleConfig = {
                     { dataField: 'f6', dataType: 'number', format: { type: 'currency', precision: 5 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2380,7 +2380,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2430,7 +2430,7 @@ const moduleConfig = {
                     visible: true
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2469,7 +2469,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2511,7 +2511,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 wordWrapEnabled: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2554,7 +2554,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2596,7 +2596,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2638,7 +2638,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 500, allowExporting: false },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2680,7 +2680,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2724,7 +2724,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250, fixed: true, fixedPosition: 'left' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2768,7 +2768,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2809,7 +2809,7 @@ const moduleConfig = {
                     { dataField: 'f2', caption: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2850,7 +2850,7 @@ const moduleConfig = {
                             { caption: 'f2', dataField: 'f2', dataType: 'string' }
                         ],
                         remoteOperations: remoteOperations,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
@@ -2890,7 +2890,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2925,7 +2925,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2957,7 +2957,7 @@ const moduleConfig = {
                     { dataField: 'f2', caption: 'f2', width: 150 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3002,7 +3002,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3035,7 +3035,7 @@ const moduleConfig = {
                 ],
                 wordWrapEnabled: true,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3078,7 +3078,7 @@ const moduleConfig = {
                 wordWrapEnabled: true,
                 dataSource: ds,
                 rtlEnabled: true,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3117,7 +3117,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -3152,7 +3152,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3187,7 +3187,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0], ds[1]]
             }).dxDataGrid('instance');
@@ -3224,7 +3224,7 @@ const moduleConfig = {
                     { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -3264,7 +3264,7 @@ const moduleConfig = {
                     { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3300,7 +3300,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3345,7 +3345,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3391,7 +3391,7 @@ const moduleConfig = {
                         groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max', customizeText: (cell) => 'custom' }]
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3434,7 +3434,7 @@ const moduleConfig = {
                         ]
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3487,7 +3487,7 @@ const moduleConfig = {
                     },
                     showColumnHeaders: false,
                     rtlEnabled: true,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3542,7 +3542,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3598,7 +3598,7 @@ const moduleConfig = {
                     },
                     selectedRowKeys: [ds[1]],
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3644,7 +3644,7 @@ const moduleConfig = {
                     },
                     dataSource: ds,
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3695,7 +3695,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3745,7 +3745,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3810,7 +3810,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3887,7 +3887,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3951,7 +3951,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4009,7 +4009,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4061,7 +4061,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4113,7 +4113,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4162,7 +4162,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4211,7 +4211,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4260,7 +4260,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4316,7 +4316,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4375,7 +4375,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4430,7 +4430,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4485,7 +4485,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4540,7 +4540,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4592,7 +4592,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4647,7 +4647,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4700,7 +4700,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4749,7 +4749,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4791,7 +4791,7 @@ const moduleConfig = {
                 wordWrapEnabled: false,
                 rtlEnabled: true,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -4841,7 +4841,7 @@ const moduleConfig = {
                 },
                 wordWrapEnabled: true,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -4889,7 +4889,7 @@ const moduleConfig = {
                     ]
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
 
@@ -4937,7 +4937,7 @@ const moduleConfig = {
                         { column: 'f1', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -4985,7 +4985,7 @@ const moduleConfig = {
                         { column: 'f2', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5032,7 +5032,7 @@ const moduleConfig = {
                         { column: 'f3', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5080,7 +5080,7 @@ const moduleConfig = {
                         { column: 'f1', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5128,7 +5128,7 @@ const moduleConfig = {
                         { column: 'f2', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5176,7 +5176,7 @@ const moduleConfig = {
                         { column: 'f3', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5233,7 +5233,7 @@ const moduleConfig = {
                     scrolling: {
                         columnRenderingMode
                     },
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -5276,7 +5276,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5315,7 +5315,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5357,7 +5357,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5405,7 +5405,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5458,7 +5458,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5521,7 +5521,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5577,7 +5577,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5620,7 +5620,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5662,7 +5662,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5704,7 +5704,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5748,7 +5748,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5795,7 +5795,7 @@ const moduleConfig = {
                     { dataField: 'f4', visible: false, width: 150 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5838,7 +5838,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5881,7 +5881,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5930,7 +5930,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5983,7 +5983,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6040,7 +6040,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6093,7 +6093,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6142,7 +6142,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6199,7 +6199,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6252,7 +6252,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6301,7 +6301,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6358,7 +6358,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6411,7 +6411,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6464,7 +6464,7 @@ QUnit.module('Deprecated warnings', moduleConfig, () => {
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: ds,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -6493,7 +6493,7 @@ QUnit.module('OutlineLevel', moduleConfig, () => {
                 { dataField: 'f1', groupIndex: 0 },
                 { dataField: 'f2' },
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -6519,7 +6519,7 @@ QUnit.module('OutlineLevel', moduleConfig, () => {
                 { dataField: 'f1', groupIndex: 0 },
                 { dataField: 'f2' },
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -6545,4 +6545,21 @@ ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, () => $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'));
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: true },
+        loadingTimeout: null
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: false },
+        loadingTimeout: null
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: 'auto' },
+        loadingTimeout: null
+    }, 'worksheet');

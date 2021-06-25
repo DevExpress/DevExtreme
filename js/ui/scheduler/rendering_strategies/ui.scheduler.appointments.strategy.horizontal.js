@@ -1,5 +1,6 @@
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 import dateUtils from '../../../core/utils/date';
+import { ExpressionUtils } from '../expressionUtils';
 
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
 const MIN_APPOINTMENT_HEIGHT = 35;
@@ -14,7 +15,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
     calculateAppointmentWidth(appointment, position) {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
         const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
 
@@ -102,7 +103,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        return this.instance.fire('getField', 'allDay', appointmentData);
+        return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
     }
 
     needSeparateAppointment() {

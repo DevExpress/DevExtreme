@@ -1233,6 +1233,7 @@ export default {
             }
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
+            shiftGroup(options.position, that._axisElementsGroup);
 
             (isHorizontal ? [TOP, BOTTOM] : [LEFT, RIGHT]).forEach(side => {
                 shiftGroup(side, constantLinesGroups.above);

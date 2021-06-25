@@ -99,7 +99,7 @@ const createDataGrid = ({
     {
       // name: 'calculated', TODO
       dataField: 'calculated',
-      calculateCellValue: (data): number => data.number + 1,
+      calculateCellValue: (data): number => (data as { number: number }).number + 1,
       setCellValue: (newData, value): void => {
         newData.number = value - 1;
       },

@@ -1,24 +1,41 @@
-import { createInstances } from 'ui/scheduler/instanceFactory';
-import { getResourceManager, ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+
+export const getObserver = (key) => {
+    return {
+        fire: (command) => {
+            switch(command) {
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        },
+        key
+    };
+};
 
 export const initFactoryInstance = (resourceGetter) => {
-    createInstances({
-        scheduler: {
-            isVirtualScrolling: () => false
-        }
+    const key = createFactoryInstances({
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => {}
     });
 
-    getResourceManager().createResourcesTree = (groups) => {
+    getResourceManager(key).createResourcesTree = (groups) => {
         return new ResourceManager({}).createResourcesTree(groups);
     };
 
-    getResourceManager().getResourceTreeLeaves = (tree, appointmentResources) => {
+    getResourceManager(key).getResourceTreeLeaves = (tree, appointmentResources) => {
         const resources = typeof resourceGetter === 'function'
             ? resourceGetter()
             : resourceGetter;
         const resultResources = resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
         return new ResourceManager(resultResources).getResourceTreeLeaves(tree, appointmentResources);
     };
+
+    return getObserver(key);
 };
 
 export const stubInvokeMethod = function(instance, options) {
@@ -50,6 +67,12 @@ export const stubInvokeMethod = function(instance, options) {
             }
 
             return date;
+        }
+        if(subscribe === 'getResourceManager') {
+            return getResourceManager(options.key || 0);
+        }
+        if(subscribe === 'getAppointmentDataProvider') {
+            return getAppointmentDataProvider(options.key || 0);
         }
     });
 };

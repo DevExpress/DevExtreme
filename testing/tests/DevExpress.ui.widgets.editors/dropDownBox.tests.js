@@ -49,8 +49,8 @@ const moduleConfig = {
 };
 
 QUnit.module('common', moduleConfig, () => {
-    QUnit.test('the widget should work without the dataSource', function(assert) {
-        this.$element.dxDropDownBox({ value: 1 });
+    QUnit.test('the widget should display custom value without the dataSource', function(assert) {
+        this.$element.dxDropDownBox({ value: 1, acceptCustomValue: true });
         const $input = this.$element.find('.dx-texteditor-input');
         const instance = this.$element.dxDropDownBox('instance');
 
@@ -59,6 +59,26 @@ QUnit.module('common', moduleConfig, () => {
         assert.equal($input.val(), 1, 'input value is correct');
 
         instance.option('value', 'Test');
+        assert.equal(instance.option('value'), 'Test', 'value is correct');
+        assert.equal(instance.option('text'), 'Test', 'text is correct');
+        assert.equal($input.val(), 'Test', 'input value is correct');
+    });
+
+    QUnit.test('the widget should keep value', function(assert) {
+        this.$element.dxDropDownBox({ value: 1 });
+        const $input = this.$element.find('.dx-texteditor-input');
+        const instance = this.$element.dxDropDownBox('instance');
+
+        assert.equal(instance.option('value'), 1, 'value is correct');
+        assert.equal(instance.option('text'), '', 'text is correct');
+        assert.equal($input.val(), '', 'input value is correct');
+
+        instance.option('value', 'Test');
+        assert.equal(instance.option('value'), 'Test', 'value is correct');
+        assert.equal(instance.option('text'), '', 'text is correct');
+        assert.equal($input.val(), '', 'input value is correct');
+
+        instance.option('dataSource', ['Test', 'Data']);
         assert.equal(instance.option('value'), 'Test', 'value is correct');
         assert.equal(instance.option('text'), 'Test', 'text is correct');
         assert.equal($input.val(), 'Test', 'input value is correct');
@@ -88,7 +108,8 @@ QUnit.module('common', moduleConfig, () => {
 
     QUnit.test('it should be possible to restore value after reset', function(assert) {
         const instance = new DropDownBox(this.$element, {
-            value: 2
+            value: 2,
+            acceptCustomValue: true
         });
 
         const $input = this.$element.find('.dx-texteditor-input');

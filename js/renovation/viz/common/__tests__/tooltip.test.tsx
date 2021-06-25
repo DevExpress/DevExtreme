@@ -84,6 +84,13 @@ describe('Render', () => {
   };
 
   const props = {
+    fontStyles: {
+      fill: 'customized_font_color',
+      fontFamily: 'test_family_color',
+      opacity: 0.4,
+      fontSize: 15,
+      fontWeight: 600,
+    },
     textSize: {
       width: 40, height: 30, x: 1, y: 2,
     },
@@ -868,6 +875,45 @@ describe('Logic', () => {
     });
 
     afterEach(() => jest.resetAllMocks);
+
+    describe('fontStyles', () => {
+      it('should build font styles', () => {
+        const tooltip = new Tooltip({
+          data: { valueText: 'value_text' },
+          color: 'test_color',
+          border,
+          font: {
+            family: 'family',
+            size: 1,
+            weight: 2,
+            opacity: 0.1,
+          },
+        });
+        expect(tooltip.fontStyles).toEqual({
+          fill: 'customized_font_color',
+          fontFamily: 'family',
+          fontSize: '1',
+          fontWeight: '2',
+          opacity: '0.1',
+        });
+      });
+
+      it('should ignore undefined styles', () => {
+        const tooltip = new Tooltip({
+          data: { valueText: 'value_text' },
+          font: {
+          },
+        });
+
+        (prepareData as jest.Mock).mockReturnValue({
+          text: 'customized_tooltip_text',
+          color: 'customized_color',
+          borderColor: 'customized_border_color',
+        });
+
+        expect(tooltip.fontStyles).toEqual({ });
+      });
+    });
 
     describe('textSizeWithPaddings', () => {
       it('should return text size with paddings of tooltip', () => {
