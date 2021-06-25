@@ -510,6 +510,11 @@ declare global {
 }
 declare module DevExpress {
   /**
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
+  /**
    * [descr:fx]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -532,11 +537,6 @@ declare module DevExpress {
      */
     stop(element: Element, jumpToEnd: boolean): void;
   };
-  /**
-    * [descr:devices]
-    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-    */
-   export const devices: DevicesObject;
   /**
    * [descr:animationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -815,6 +815,16 @@ declare module DevExpress {
     real(): Device;
     isSimulator(): boolean;
   }
+  module DOMComponent {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    interface DOMComponentInstance extends DOMComponent<Properties> {}
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type Properties = DOMComponentOptions<DOMComponentInstance>;
+  }
   /**
    * [descr:DOMComponent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -858,16 +868,6 @@ declare module DevExpress {
       previousValue: unknown
     );
     _templateManager: DevExpress.core.TemplateManager;
-  }
-  module DOMComponent {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    interface DOMComponentInstance extends DOMComponent<Properties> {}
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1199,11 +1199,6 @@ declare module DevExpress {
         };
   }
   /**
-   * [descr:registerComponent(name, componentClass)]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export function registerComponent(name: string, componentClass: any): void;
-  /**
    * [descr:registerComponent(name, namespace, componentClass)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1212,6 +1207,11 @@ declare module DevExpress {
     namespace: any,
     componentClass: any
   ): void;
+  /**
+   * [descr:registerComponent(name, componentClass)]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export function registerComponent(name: string, componentClass: any): void;
   /**
    * [descr:setTemplateEngine(name)]
    */
@@ -2449,13 +2449,13 @@ declare module DevExpress.data {
         };
   }
   /**
-   * [descr:Utils.query(array)]
-   */
-  export function query(array: Array<any>): Query;
-  /**
    * [descr:Utils.query(url, queryOptions)]
    */
   export function query(url: string, queryOptions: any): Query;
+  /**
+   * [descr:Utils.query(array)]
+   */
+  export function query(array: Array<any>): Query;
   /**
    * [descr:Query]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2840,17 +2840,6 @@ declare module DevExpress.events {
     readonly event?: DxEvent;
   }
   /**
-   * [descr:events.off(element)]
-   */
-  export function off(element: Element | Array<Element>): void;
-  /**
-   * [descr:events.off(element, eventName)]
-   */
-  export function off(
-    element: Element | Array<Element>,
-    eventName: string
-  ): void;
-  /**
    * [descr:events.off(element, eventName, handler)]
    */
   export function off(
@@ -2859,12 +2848,11 @@ declare module DevExpress.events {
     handler: Function
   ): void;
   /**
-   * [descr:events.off(element, eventName, selector)]
+   * [descr:events.off(element, eventName)]
    */
   export function off(
     element: Element | Array<Element>,
-    eventName: string,
-    selector: string
+    eventName: string
   ): void;
   /**
    * [descr:events.off(element, eventName, selector, handler)]
@@ -2874,6 +2862,18 @@ declare module DevExpress.events {
     eventName: string,
     selector: string,
     handler: Function
+  ): void;
+  /**
+   * [descr:events.off(element)]
+   */
+  export function off(element: Element | Array<Element>): void;
+  /**
+   * [descr:events.off(element, eventName, selector)]
+   */
+  export function off(
+    element: Element | Array<Element>,
+    eventName: string,
+    selector: string
   ): void;
   /**
    * [descr:events.on(element, eventName, data, handler)]
@@ -2912,23 +2912,6 @@ declare module DevExpress.events {
     handler: Function
   ): void;
   /**
-   * [descr:events.one(element, eventName, data, handler)]
-   */
-  export function one(
-    element: Element | Array<Element>,
-    eventName: string,
-    data: any,
-    handler: Function
-  ): void;
-  /**
-   * [descr:events.one(element, eventName, handler)]
-   */
-  export function one(
-    element: Element | Array<Element>,
-    eventName: string,
-    handler: Function
-  ): void;
-  /**
    * [descr:events.one(element, eventName, selector, data, handler)]
    */
   export function one(
@@ -2945,6 +2928,23 @@ declare module DevExpress.events {
     element: Element | Array<Element>,
     eventName: string,
     selector: string,
+    handler: Function
+  ): void;
+  /**
+   * [descr:events.one(element, eventName, handler)]
+   */
+  export function one(
+    element: Element | Array<Element>,
+    eventName: string,
+    handler: Function
+  ): void;
+  /**
+   * [descr:events.one(element, eventName, data, handler)]
+   */
+  export function one(
+    element: Element | Array<Element>,
+    eventName: string,
+    data: any,
     handler: Function
   ): void;
   /**
@@ -3750,13 +3750,6 @@ declare module DevExpress.ui {
      */
     xs?: number;
   }
-  /**
-   * [descr:CollectionWidget]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export class CollectionWidget<TProperties> extends Widget<TProperties> {
-    getDataSource(): DevExpress.data.DataSource;
-  }
   module CollectionWidget {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3765,6 +3758,13 @@ declare module DevExpress.ui {
       readonly addedItems: Array<T>;
       readonly removedItems: Array<T>;
     }
+  }
+  /**
+   * [descr:CollectionWidget]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export class CollectionWidget<TProperties> extends Widget<TProperties> {
+    getDataSource(): DevExpress.data.DataSource;
   }
   /**
    * [descr:CollectionWidgetItem]
@@ -4092,23 +4092,6 @@ declare module DevExpress.ui {
      */
     scrollSpeed?: number;
   }
-  /**
-   * [descr:dxAccordion]
-   */
-  export class dxAccordion extends CollectionWidget<dxAccordionOptions> {
-    /**
-     * [descr:dxAccordion.collapseItem(index)]
-     */
-    collapseItem(index: number): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxAccordion.expandItem(index)]
-     */
-    expandItem(index: number): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxAccordion.updateDimensions()]
-     */
-    updateDimensions(): DevExpress.core.utils.DxPromise<void>;
-  }
   module dxAccordion {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxAccordion>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxAccordion>;
@@ -4134,6 +4117,23 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent =
       DevExpress.events.EventInfo<dxAccordion> &
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+  }
+  /**
+   * [descr:dxAccordion]
+   */
+  export class dxAccordion extends CollectionWidget<dxAccordionOptions> {
+    /**
+     * [descr:dxAccordion.collapseItem(index)]
+     */
+    collapseItem(index: number): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxAccordion.expandItem(index)]
+     */
+    expandItem(index: number): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxAccordion.updateDimensions()]
+     */
+    updateDimensions(): DevExpress.core.utils.DxPromise<void>;
   }
   /**
    * [descr:dxAccordionItem]
@@ -4422,10 +4422,6 @@ declare module DevExpress.ui {
      */
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
-  /**
-   * [descr:dxBox]
-   */
-  export class dxBox extends CollectionWidget<dxBoxOptions> {}
   module dxBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxBox>;
@@ -4443,6 +4439,10 @@ declare module DevExpress.ui {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxBoxOptions;
   }
+  /**
+   * [descr:dxBox]
+   */
+  export class dxBox extends CollectionWidget<dxBoxOptions> {}
   /**
    * [descr:dxBoxItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4496,10 +4496,6 @@ declare module DevExpress.ui {
      */
     items?: Array<string | dxBoxItem | any>;
   }
-  /**
-   * [descr:dxButton]
-   */
-  export class dxButton extends Widget<dxButtonOptions> {}
   module dxButton {
     export type ClickEvent = DevExpress.events.NativeEventInfo<dxButton> & {
       validationGroup?: any;
@@ -4516,6 +4512,10 @@ declare module DevExpress.ui {
       readonly icon?: string;
     };
   }
+  /**
+   * [descr:dxButton]
+   */
+  export class dxButton extends Widget<dxButtonOptions> {}
   /**
    * [descr:dxButtonGroup]
    */
@@ -4765,10 +4765,6 @@ declare module DevExpress.ui {
      */
     zoomLevel?: 'century' | 'decade' | 'month' | 'year';
   }
-  /**
-   * [descr:dxCheckBox]
-   */
-  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
   module dxCheckBox {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCheckBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxCheckBox>;
@@ -4781,6 +4777,10 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxCheckBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
+  /**
+   * [descr:dxCheckBox]
+   */
+  export class dxCheckBox extends Editor<dxCheckBoxOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4811,10 +4811,6 @@ declare module DevExpress.ui {
      */
     value?: boolean | undefined;
   }
-  /**
-   * [descr:dxColorBox]
-   */
-  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {}
   module dxColorBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxColorBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxColorBox>;
@@ -4841,6 +4837,10 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxColorBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
+  /**
+   * [descr:dxColorBox]
+   */
+  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5021,170 +5021,6 @@ declare module DevExpress.ui {
      * [descr:dxContextMenuOptions.visible]
      */
     visible?: boolean;
-  }
-  /**
-   * [descr:dxDataGrid]
-   */
-  export class dxDataGrid
-    extends Widget<dxDataGridOptions>
-    implements GridBase
-  {
-    /**
-     * [descr:dxDataGrid.addColumn(columnOptions)]
-     */
-    addColumn(columnOptions: any | string): void;
-    /**
-     * [descr:dxDataGrid.addRow()]
-     */
-    addRow(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxDataGrid.clearGrouping()]
-     */
-    clearGrouping(): void;
-    /**
-     * [descr:dxDataGrid.collapseAll(groupIndex)]
-     */
-    collapseAll(groupIndex?: number): void;
-    /**
-     * [descr:dxDataGrid.collapseRow(key)]
-     */
-    collapseRow(key: any): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxDataGrid.expandAll(groupIndex)]
-     */
-    expandAll(groupIndex?: number): void;
-    /**
-     * [descr:dxDataGrid.expandRow(key)]
-     */
-    expandRow(key: any): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxDataGrid.exportToExcel(selectionOnly)]
-     * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
-     */
-    exportToExcel(selectionOnly: boolean): void;
-    /**
-     * [descr:dxDataGrid.getSelectedRowKeys()]
-     */
-    getSelectedRowKeys(): Array<any> & DevExpress.core.utils.DxPromise<any>;
-    /**
-     * [descr:dxDataGrid.getSelectedRowsData()]
-     */
-    getSelectedRowsData(): Array<any> & DevExpress.core.utils.DxPromise<any>;
-    /**
-     * [descr:dxDataGrid.getTotalSummaryValue(summaryItemName)]
-     */
-    getTotalSummaryValue(summaryItemName: string): any;
-    /**
-     * [descr:dxDataGrid.getVisibleColumns()]
-     */
-    getVisibleColumns(): Array<DevExpress.ui.dxDataGrid.Column>;
-    /**
-     * [descr:dxDataGrid.getVisibleColumns(headerLevel)]
-     */
-    getVisibleColumns(
-      headerLevel: number
-    ): Array<DevExpress.ui.dxDataGrid.Column>;
-    /**
-     * [descr:dxDataGrid.getVisibleRows()]
-     */
-    getVisibleRows(): Array<DevExpress.ui.dxDataGrid.RowObject>;
-    /**
-     * [descr:dxDataGrid.isRowExpanded(key)]
-     */
-    isRowExpanded(key: any): boolean;
-    /**
-     * [descr:dxDataGrid.isRowSelected(data)]
-     */
-    isRowSelected(data: any): boolean;
-    isRowSelected(key: any): boolean;
-    /**
-     * [descr:dxDataGrid.totalCount()]
-     */
-    totalCount(): number;
-
-    beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
-    cancelEditData(): void;
-    cellValue(rowIndex: number, dataField: string): any;
-    cellValue(rowIndex: number, dataField: string, value: any): void;
-    cellValue(rowIndex: number, visibleColumnIndex: number): any;
-    cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
-    clearFilter(): void;
-    clearFilter(filterName: string): void;
-    clearSelection(): void;
-    clearSorting(): void;
-    closeEditCell(): void;
-    collapseAdaptiveDetailRow(): void;
-    columnCount(): number;
-    columnOption(id: number | string): any;
-    columnOption(id: number | string, optionName: string): any;
-    columnOption(
-      id: number | string,
-      optionName: string,
-      optionValue: any
-    ): void;
-    columnOption(id: number | string, options: any): void;
-    deleteColumn(id: number | string): void;
-    deleteRow(rowIndex: number): void;
-    deselectAll(): DevExpress.core.utils.DxPromise<void>;
-    deselectRows(keys: Array<any>): DevExpress.core.utils.DxPromise<any>;
-    editCell(rowIndex: number, dataField: string): void;
-    editCell(rowIndex: number, visibleColumnIndex: number): void;
-    editRow(rowIndex: number): void;
-    endCustomLoading(): void;
-    expandAdaptiveDetailRow(key: any): void;
-    filter(): any;
-    filter(filterExpr: any): void;
-    focus(): void;
-    focus(element: DevExpress.core.UserDefinedElement): void;
-    getCellElement(
-      rowIndex: number,
-      dataField: string
-    ): DevExpress.core.DxElement | undefined;
-    getCellElement(
-      rowIndex: number,
-      visibleColumnIndex: number
-    ): DevExpress.core.DxElement | undefined;
-    getCombinedFilter(): any;
-    getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DevExpress.data.DataSource;
-    getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(
-      rowIndex: number
-    ): DevExpress.core.UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
-    getVisibleColumnIndex(id: number | string): number;
-    hasEditData(): boolean;
-    hideColumnChooser(): void;
-    isAdaptiveDetailRowExpanded(key: any): boolean;
-    isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
-    keyOf(obj: any): any;
-    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
-    pageCount(): number;
-    pageIndex(): number;
-    pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
-    pageSize(): number;
-    pageSize(value: number): void;
-    refresh(): DevExpress.core.utils.DxPromise<void>;
-    refresh(changesOnly: boolean): DevExpress.core.utils.DxPromise<void>;
-    repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): DevExpress.core.utils.DxPromise<void>;
-    searchByText(text: string): void;
-    selectAll(): DevExpress.core.utils.DxPromise<void>;
-    selectRows(
-      keys: Array<any>,
-      preserve: boolean
-    ): DevExpress.core.utils.DxPromise<any>;
-    selectRowsByIndexes(
-      indexes: Array<number>
-    ): DevExpress.core.utils.DxPromise<any>;
-    showColumnChooser(): void;
-    state(): any;
-    state(state: any): void;
-    undeleteRow(rowIndex: number): void;
-    updateDimensions(): void;
   }
   module dxDataGrid {
     export type AdaptiveDetailRowPreparingEvent =
@@ -7420,6 +7256,170 @@ declare module DevExpress.ui {
     export interface ToolbarPreparingInfo {
       toolbarOptions: dxToolbarOptions;
     }
+  }
+  /**
+   * [descr:dxDataGrid]
+   */
+  export class dxDataGrid
+    extends Widget<dxDataGridOptions>
+    implements GridBase
+  {
+    /**
+     * [descr:dxDataGrid.addColumn(columnOptions)]
+     */
+    addColumn(columnOptions: any | string): void;
+    /**
+     * [descr:dxDataGrid.addRow()]
+     */
+    addRow(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxDataGrid.clearGrouping()]
+     */
+    clearGrouping(): void;
+    /**
+     * [descr:dxDataGrid.collapseAll(groupIndex)]
+     */
+    collapseAll(groupIndex?: number): void;
+    /**
+     * [descr:dxDataGrid.collapseRow(key)]
+     */
+    collapseRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxDataGrid.expandAll(groupIndex)]
+     */
+    expandAll(groupIndex?: number): void;
+    /**
+     * [descr:dxDataGrid.expandRow(key)]
+     */
+    expandRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxDataGrid.exportToExcel(selectionOnly)]
+     * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
+     */
+    exportToExcel(selectionOnly: boolean): void;
+    /**
+     * [descr:dxDataGrid.getSelectedRowKeys()]
+     */
+    getSelectedRowKeys(): Array<any> & DevExpress.core.utils.DxPromise<any>;
+    /**
+     * [descr:dxDataGrid.getSelectedRowsData()]
+     */
+    getSelectedRowsData(): Array<any> & DevExpress.core.utils.DxPromise<any>;
+    /**
+     * [descr:dxDataGrid.getTotalSummaryValue(summaryItemName)]
+     */
+    getTotalSummaryValue(summaryItemName: string): any;
+    /**
+     * [descr:dxDataGrid.getVisibleColumns()]
+     */
+    getVisibleColumns(): Array<DevExpress.ui.dxDataGrid.Column>;
+    /**
+     * [descr:dxDataGrid.getVisibleColumns(headerLevel)]
+     */
+    getVisibleColumns(
+      headerLevel: number
+    ): Array<DevExpress.ui.dxDataGrid.Column>;
+    /**
+     * [descr:dxDataGrid.getVisibleRows()]
+     */
+    getVisibleRows(): Array<DevExpress.ui.dxDataGrid.RowObject>;
+    /**
+     * [descr:dxDataGrid.isRowExpanded(key)]
+     */
+    isRowExpanded(key: any): boolean;
+    /**
+     * [descr:dxDataGrid.isRowSelected(data)]
+     */
+    isRowSelected(data: any): boolean;
+    isRowSelected(key: any): boolean;
+    /**
+     * [descr:dxDataGrid.totalCount()]
+     */
+    totalCount(): number;
+
+    beginCustomLoading(messageText: string): void;
+    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+    cancelEditData(): void;
+    cellValue(rowIndex: number, dataField: string): any;
+    cellValue(rowIndex: number, dataField: string, value: any): void;
+    cellValue(rowIndex: number, visibleColumnIndex: number): any;
+    cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
+    clearFilter(): void;
+    clearFilter(filterName: string): void;
+    clearSelection(): void;
+    clearSorting(): void;
+    closeEditCell(): void;
+    collapseAdaptiveDetailRow(): void;
+    columnCount(): number;
+    columnOption(id: number | string): any;
+    columnOption(id: number | string, optionName: string): any;
+    columnOption(
+      id: number | string,
+      optionName: string,
+      optionValue: any
+    ): void;
+    columnOption(id: number | string, options: any): void;
+    deleteColumn(id: number | string): void;
+    deleteRow(rowIndex: number): void;
+    deselectAll(): DevExpress.core.utils.DxPromise<void>;
+    deselectRows(keys: Array<any>): DevExpress.core.utils.DxPromise<any>;
+    editCell(rowIndex: number, dataField: string): void;
+    editCell(rowIndex: number, visibleColumnIndex: number): void;
+    editRow(rowIndex: number): void;
+    endCustomLoading(): void;
+    expandAdaptiveDetailRow(key: any): void;
+    filter(): any;
+    filter(filterExpr: any): void;
+    focus(): void;
+    focus(element: DevExpress.core.UserDefinedElement): void;
+    getCellElement(
+      rowIndex: number,
+      dataField: string
+    ): DevExpress.core.DxElement | undefined;
+    getCellElement(
+      rowIndex: number,
+      visibleColumnIndex: number
+    ): DevExpress.core.DxElement | undefined;
+    getCombinedFilter(): any;
+    getCombinedFilter(returnDataField: boolean): any;
+    getDataSource(): DevExpress.data.DataSource;
+    getKeyByRowIndex(rowIndex: number): any;
+    getRowElement(
+      rowIndex: number
+    ): DevExpress.core.UserDefinedElementsArray | undefined;
+    getRowIndexByKey(key: any | string | number): number;
+    getScrollable(): dxScrollable;
+    getVisibleColumnIndex(id: number | string): number;
+    hasEditData(): boolean;
+    hideColumnChooser(): void;
+    isAdaptiveDetailRowExpanded(key: any): boolean;
+    isRowFocused(key: any): boolean;
+    isRowSelected(key: any): boolean;
+    keyOf(obj: any): any;
+    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    pageCount(): number;
+    pageIndex(): number;
+    pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
+    pageSize(): number;
+    pageSize(value: number): void;
+    refresh(): DevExpress.core.utils.DxPromise<void>;
+    refresh(changesOnly: boolean): DevExpress.core.utils.DxPromise<void>;
+    repaintRows(rowIndexes: Array<number>): void;
+    saveEditData(): DevExpress.core.utils.DxPromise<void>;
+    searchByText(text: string): void;
+    selectAll(): DevExpress.core.utils.DxPromise<void>;
+    selectRows(
+      keys: Array<any>,
+      preserve: boolean
+    ): DevExpress.core.utils.DxPromise<any>;
+    selectRowsByIndexes(
+      indexes: Array<number>
+    ): DevExpress.core.utils.DxPromise<any>;
+    showColumnChooser(): void;
+    state(): any;
+    state(state: any): void;
+    undeleteRow(rowIndex: number): void;
+    updateDimensions(): void;
   }
   /**
    * @deprecated 
@@ -9919,28 +9919,6 @@ declare module DevExpress.ui {
      */
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
   }
-  /**
-   * [descr:dxDropDownButton]
-   */
-  export class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
-    /**
-     * [descr:dxDropDownButton.close()]
-     */
-    close(): DevExpress.core.utils.DxPromise<void>;
-    getDataSource(): DevExpress.data.DataSource;
-    /**
-     * [descr:dxDropDownButton.open()]
-     */
-    open(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxDropDownButton.toggle()]
-     */
-    toggle(): DevExpress.core.utils.DxPromise<void>;
-    /**
-     * [descr:dxDropDownButton.toggle(visibility)]
-     */
-    toggle(visibility: boolean): DevExpress.core.utils.DxPromise<void>;
-  }
   module dxDropDownButton {
     export type ButtonClickEvent =
       DevExpress.events.NativeEventInfo<dxDropDownButton> & {
@@ -9965,6 +9943,28 @@ declare module DevExpress.ui {
         readonly item: any;
         readonly previousItem: any;
       };
+  }
+  /**
+   * [descr:dxDropDownButton]
+   */
+  export class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
+    /**
+     * [descr:dxDropDownButton.close()]
+     */
+    close(): DevExpress.core.utils.DxPromise<void>;
+    getDataSource(): DevExpress.data.DataSource;
+    /**
+     * [descr:dxDropDownButton.open()]
+     */
+    open(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxDropDownButton.toggle()]
+     */
+    toggle(): DevExpress.core.utils.DxPromise<void>;
+    /**
+     * [descr:dxDropDownButton.toggle(visibility)]
+     */
+    toggle(visibility: boolean): DevExpress.core.utils.DxPromise<void>;
   }
   /**
    * [descr:dxDropDownButtonItem]
@@ -10112,6 +10112,15 @@ declare module DevExpress.ui {
      */
     useItemTextAsTitle?: boolean;
   }
+  module dxDropDownEditor {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface DropDownButtonTemplateDataModel {
+      readonly text?: string;
+      readonly icon?: string;
+    }
+  }
   /**
    * [descr:dxDropDownEditor]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -10133,15 +10142,6 @@ declare module DevExpress.ui {
      * [descr:dxDropDownEditor.open()]
      */
     open(): void;
-  }
-  module dxDropDownEditor {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface DropDownButtonTemplateDataModel {
-      readonly text?: string;
-      readonly icon?: string;
-    }
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -10779,43 +10779,6 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | (() => string | DevExpress.core.UserDefinedElement);
   }
-  /**
-   * [descr:dxFileUploader]
-   */
-  export class dxFileUploader extends Editor<dxFileUploaderOptions> {
-    /**
-     * [descr:dxFileUploader.upload()]
-     */
-    upload(): void;
-    /**
-     * [descr:dxFileUploader.upload(fileIndex)]
-     */
-    upload(fileIndex: number): void;
-    /**
-     * [descr:dxFileUploader.upload(file)]
-     */
-    upload(file: File): void;
-    /**
-     * [descr:dxFileUploader.abortUpload()]
-     */
-    abortUpload(): void;
-    /**
-     * [descr:dxFileUploader.abortUpload(fileIndex)]
-     */
-    abortUpload(fileIndex: number): void;
-    /**
-     * [descr:dxFileUploader.abortUpload(file)]
-     */
-    abortUpload(file: File): void;
-    /**
-     * [descr:dxFileUploader.removeFile(fileIndex)]
-     */
-    removeFile(fileIndex: number): void;
-    /**
-     * [descr:dxFileUploader.removeFile(file)]
-     */
-    removeFile(file: File): void;
-  }
   module dxFileUploader {
     export type BeforeSendEvent =
       DevExpress.events.EventInfo<dxFileUploader> & {
@@ -10878,6 +10841,43 @@ declare module DevExpress.ui {
         readonly value?: Array<File>;
         readonly previousValue?: Array<File>;
       };
+  }
+  /**
+   * [descr:dxFileUploader]
+   */
+  export class dxFileUploader extends Editor<dxFileUploaderOptions> {
+    /**
+     * [descr:dxFileUploader.upload()]
+     */
+    upload(): void;
+    /**
+     * [descr:dxFileUploader.upload(fileIndex)]
+     */
+    upload(fileIndex: number): void;
+    /**
+     * [descr:dxFileUploader.upload(file)]
+     */
+    upload(file: File): void;
+    /**
+     * [descr:dxFileUploader.abortUpload()]
+     */
+    abortUpload(): void;
+    /**
+     * [descr:dxFileUploader.abortUpload(fileIndex)]
+     */
+    abortUpload(fileIndex: number): void;
+    /**
+     * [descr:dxFileUploader.abortUpload(file)]
+     */
+    abortUpload(file: File): void;
+    /**
+     * [descr:dxFileUploader.removeFile(fileIndex)]
+     */
+    removeFile(fileIndex: number): void;
+    /**
+     * [descr:dxFileUploader.removeFile(file)]
+     */
+    removeFile(file: File): void;
   }
   /**
    * @deprecated use Properties instead
@@ -11078,15 +11078,6 @@ declare module DevExpress.ui {
      */
     value?: Array<File>;
   }
-  /**
-   * [descr:dxFilterBuilder]
-   */
-  export class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
-    /**
-     * [descr:dxFilterBuilder.getFilterExpression()]
-     */
-    getFilterExpression(): string | Array<any> | Function;
-  }
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
@@ -11142,6 +11133,15 @@ declare module DevExpress.ui {
         readonly value?: any;
         readonly previousValue?: any;
       };
+  }
+  /**
+   * [descr:dxFilterBuilder]
+   */
+  export class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
+    /**
+     * [descr:dxFilterBuilder.getFilterExpression()]
+     */
+    getFilterExpression(): string | Array<any> | Function;
   }
   /**
    * [descr:dxFilterBuilderCustomOperation]
@@ -12084,99 +12084,6 @@ declare module DevExpress.ui {
      */
     wrapAround?: boolean;
   }
-  /**
-   * [descr:dxGantt]
-   */
-  export class dxGantt extends Widget<dxGanttOptions> {
-    /**
-     * [descr:dxGantt.getTaskData(key)]
-     */
-    getTaskData(key: any): any;
-    /**
-     * [descr:dxGantt.getDependencyData(key)]
-     */
-    getDependencyData(key: any): any;
-    /**
-     * [descr:dxGantt.getResourceData(key)]
-     */
-    getResourceData(key: any): any;
-    /**
-     * [descr:dxGantt.getResourceAssignmentData(key)]
-     */
-    getResourceAssignmentData(key: any): any;
-    /**
-     * [descr:dxGantt.insertTask(data)]
-     */
-    insertTask(data: any): void;
-    /**
-     * [descr:dxGantt.deleteTask(key)]
-     */
-    deleteTask(key: any): void;
-    /**
-     * [descr:dxGantt.updateTask(key, data)]
-     */
-    updateTask(key: any, data: any): void;
-    /**
-     * [descr:dxGantt.insertDependency(data)]
-     */
-    insertDependency(data: any): void;
-    /**
-     * [descr:dxGantt.deleteDependency(key)]
-     */
-    deleteDependency(key: any): void;
-    /**
-     * [descr:dxGantt.insertResource(data, taskKeys)]
-     */
-    insertResource(data: any, taskKeys?: Array<any>): void;
-    /**
-     * [descr:dxGantt.deleteResource(key)]
-     */
-    deleteResource(key: any): void;
-    /**
-     * [descr:dxGantt.assignResourceToTask(resourceKey, taskKey)]
-     */
-    assignResourceToTask(resourceKey: any, taskKey: any): void;
-    /**
-     * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
-     */
-    unassignResourceFromTask(resourceKey: any, taskKey: any): void;
-    /**
-     * [descr:dxGantt.getTaskResources(key)]
-     */
-    getTaskResources(key: any): Array<any>;
-    /**
-     * [descr:dxGantt.getVisibleTaskKeys()]
-     */
-    getVisibleTaskKeys(): Array<any>;
-    /**
-     * [descr:dxGantt.getVisibleDependencyKeys()]
-     */
-    getVisibleDependencyKeys(): Array<any>;
-    /**
-     * [descr:dxGantt.getVisibleResourceKeys()]
-     */
-    getVisibleResourceKeys(): Array<any>;
-    /**
-     * [descr:dxGantt.getVisibleResourceAssignmentKeys()]
-     */
-    getVisibleResourceAssignmentKeys(): Array<any>;
-    /**
-     * [descr:dxGantt.updateDimensions()]
-     */
-    updateDimensions(): void;
-    /**
-     * [descr:dxGantt.scrollToDate(date)]
-     */
-    scrollToDate(date: Date | Number | string): void;
-    /**
-     * [descr:dxGantt.exportToPdf(options)]
-     */
-    exportToPdf(options: any): DevExpress.core.utils.DxPromise<any>;
-    /**
-     * [descr:dxGantt.showResourceManagerDialog()]
-     */
-    showResourceManagerDialog(): void;
-  }
   module dxGantt {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxGantt>;
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
@@ -12327,6 +12234,99 @@ declare module DevExpress.ui {
       readonly start: Date;
       readonly end: Date;
     };
+  }
+  /**
+   * [descr:dxGantt]
+   */
+  export class dxGantt extends Widget<dxGanttOptions> {
+    /**
+     * [descr:dxGantt.getTaskData(key)]
+     */
+    getTaskData(key: any): any;
+    /**
+     * [descr:dxGantt.getDependencyData(key)]
+     */
+    getDependencyData(key: any): any;
+    /**
+     * [descr:dxGantt.getResourceData(key)]
+     */
+    getResourceData(key: any): any;
+    /**
+     * [descr:dxGantt.getResourceAssignmentData(key)]
+     */
+    getResourceAssignmentData(key: any): any;
+    /**
+     * [descr:dxGantt.insertTask(data)]
+     */
+    insertTask(data: any): void;
+    /**
+     * [descr:dxGantt.deleteTask(key)]
+     */
+    deleteTask(key: any): void;
+    /**
+     * [descr:dxGantt.updateTask(key, data)]
+     */
+    updateTask(key: any, data: any): void;
+    /**
+     * [descr:dxGantt.insertDependency(data)]
+     */
+    insertDependency(data: any): void;
+    /**
+     * [descr:dxGantt.deleteDependency(key)]
+     */
+    deleteDependency(key: any): void;
+    /**
+     * [descr:dxGantt.insertResource(data, taskKeys)]
+     */
+    insertResource(data: any, taskKeys?: Array<any>): void;
+    /**
+     * [descr:dxGantt.deleteResource(key)]
+     */
+    deleteResource(key: any): void;
+    /**
+     * [descr:dxGantt.assignResourceToTask(resourceKey, taskKey)]
+     */
+    assignResourceToTask(resourceKey: any, taskKey: any): void;
+    /**
+     * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
+     */
+    unassignResourceFromTask(resourceKey: any, taskKey: any): void;
+    /**
+     * [descr:dxGantt.getTaskResources(key)]
+     */
+    getTaskResources(key: any): Array<any>;
+    /**
+     * [descr:dxGantt.getVisibleTaskKeys()]
+     */
+    getVisibleTaskKeys(): Array<any>;
+    /**
+     * [descr:dxGantt.getVisibleDependencyKeys()]
+     */
+    getVisibleDependencyKeys(): Array<any>;
+    /**
+     * [descr:dxGantt.getVisibleResourceKeys()]
+     */
+    getVisibleResourceKeys(): Array<any>;
+    /**
+     * [descr:dxGantt.getVisibleResourceAssignmentKeys()]
+     */
+    getVisibleResourceAssignmentKeys(): Array<any>;
+    /**
+     * [descr:dxGantt.updateDimensions()]
+     */
+    updateDimensions(): void;
+    /**
+     * [descr:dxGantt.scrollToDate(date)]
+     */
+    scrollToDate(date: Date | Number | string): void;
+    /**
+     * [descr:dxGantt.exportToPdf(options)]
+     */
+    exportToPdf(options: any): DevExpress.core.utils.DxPromise<any>;
+    /**
+     * [descr:dxGantt.showResourceManagerDialog()]
+     */
+    showResourceManagerDialog(): void;
   }
   /**
    * [descr:dxGanttContextMenu]
@@ -13203,7 +13203,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxHtmlEditorTableResizing]
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxHtmlEditorTableResizing {
     /**
@@ -13798,10 +13798,6 @@ declare module DevExpress.ui {
      */
     useNativeScrolling?: boolean;
   }
-  /**
-   * [descr:dxLoadIndicator]
-   */
-  export class dxLoadIndicator extends Widget<dxLoadIndicatorOptions> {}
   module dxLoadIndicator {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxLoadIndicator>;
@@ -13813,6 +13809,10 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxLoadIndicatorOptions;
   }
+  /**
+   * [descr:dxLoadIndicator]
+   */
+  export class dxLoadIndicator extends Widget<dxLoadIndicatorOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -14159,6 +14159,32 @@ declare module DevExpress.ui {
      */
     dropDownOptions?: DevExpress.ui.dxPopover.Properties;
   }
+  module dxMap {
+    export type ClickEvent = DevExpress.events.NativeEventInfo<dxMap>;
+    export type DisposingEvent = DevExpress.events.EventInfo<dxMap>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxMap>;
+    export type MarkerAddedEvent = DevExpress.events.EventInfo<dxMap> & {
+      readonly options: any;
+      originalMarker: any;
+    };
+    export type MarkerRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
+      readonly options?: any;
+    };
+    export type OptionChangedEvent = DevExpress.events.EventInfo<dxMap> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties = dxMapOptions;
+    export type ReadyEvent = DevExpress.events.EventInfo<dxMap> & {
+      originalMap: any;
+    };
+    export type RouteAddedEvent = DevExpress.events.EventInfo<dxMap> & {
+      readonly options: any;
+      originalRoute: any;
+    };
+    export type RouteRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
+      readonly options?: any;
+    };
+  }
   /**
    * [descr:dxMap]
    */
@@ -14185,32 +14211,6 @@ declare module DevExpress.ui {
     removeRoute(
       route: any | number | Array<any>
     ): DevExpress.core.utils.DxPromise<void>;
-  }
-  module dxMap {
-    export type ClickEvent = DevExpress.events.NativeEventInfo<dxMap>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxMap>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxMap>;
-    export type MarkerAddedEvent = DevExpress.events.EventInfo<dxMap> & {
-      readonly options: any;
-      originalMarker: any;
-    };
-    export type MarkerRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
-      readonly options?: any;
-    };
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxMap> &
-      DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxMapOptions;
-    export type ReadyEvent = DevExpress.events.EventInfo<dxMap> & {
-      originalMap: any;
-    };
-    export type RouteAddedEvent = DevExpress.events.EventInfo<dxMap> & {
-      readonly options: any;
-      originalRoute: any;
-    };
-    export type RouteRemovedEvent = DevExpress.events.EventInfo<dxMap> & {
-      readonly options?: any;
-    };
   }
   /**
    * @deprecated use Properties instead
@@ -14378,10 +14378,6 @@ declare module DevExpress.ui {
      */
     zoom?: number;
   }
-  /**
-   * [descr:dxMenu]
-   */
-  export class dxMenu extends dxMenuBase<dxMenuOptions> {}
   module dxMenu {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxMenu>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxMenu>;
@@ -14412,6 +14408,10 @@ declare module DevExpress.ui {
       readonly rootItem?: DevExpress.core.DxElement;
     };
   }
+  /**
+   * [descr:dxMenu]
+   */
+  export class dxMenu extends dxMenuBase<dxMenuOptions> {}
   /**
    * [descr:dxMenuBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -15058,6 +15058,25 @@ declare module DevExpress.ui {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxPivotGridOptions;
   }
+  module dxPivotGridFieldChooser {
+    export type ContentReadyEvent =
+      DevExpress.events.EventInfo<dxPivotGridFieldChooser>;
+    export type ContextMenuPreparingEvent =
+      DevExpress.events.EventInfo<dxPivotGridFieldChooser> & {
+        readonly area?: string;
+        readonly field?: DevExpress.data.PivotGridDataSourceField;
+        readonly event?: DevExpress.events.DxEvent;
+        items?: Array<any>;
+      };
+    export type DisposingEvent =
+      DevExpress.events.EventInfo<dxPivotGridFieldChooser>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxPivotGridFieldChooser>;
+    export type OptionChangedEvent =
+      DevExpress.events.EventInfo<dxPivotGridFieldChooser> &
+        DevExpress.events.ChangedOptionInfo;
+    export type Properties = dxPivotGridFieldChooserOptions;
+  }
   /**
    * [descr:dxPivotGridFieldChooser]
    */
@@ -15078,25 +15097,6 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridFieldChooser.updateDimensions()]
      */
     updateDimensions(): void;
-  }
-  module dxPivotGridFieldChooser {
-    export type ContentReadyEvent =
-      DevExpress.events.EventInfo<dxPivotGridFieldChooser>;
-    export type ContextMenuPreparingEvent =
-      DevExpress.events.EventInfo<dxPivotGridFieldChooser> & {
-        readonly area?: string;
-        readonly field?: DevExpress.data.PivotGridDataSourceField;
-        readonly event?: DevExpress.events.DxEvent;
-        items?: Array<any>;
-      };
-    export type DisposingEvent =
-      DevExpress.events.EventInfo<dxPivotGridFieldChooser>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxPivotGridFieldChooser>;
-    export type OptionChangedEvent =
-      DevExpress.events.EventInfo<dxPivotGridFieldChooser> &
-        DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxPivotGridFieldChooserOptions;
   }
   /**
    * @deprecated use Properties instead
@@ -15744,20 +15744,6 @@ declare module DevExpress.ui {
      */
     value(postProcessed: boolean): any;
   }
-  /**
-   * [descr:dxPopover]
-   */
-  export class dxPopover<
-    TProperties = DevExpress.ui.dxPopover.Properties
-  > extends dxPopup<TProperties> {
-    show(): DevExpress.core.utils.DxPromise<boolean>;
-    /**
-     * [descr:dxPopover.show(target)]
-     */
-    show(
-      target: string | DevExpress.core.UserDefinedElement
-    ): DevExpress.core.utils.DxPromise<boolean>;
-  }
   module dxPopover {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxPopover>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxPopover>;
@@ -15777,6 +15763,20 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
+  }
+  /**
+   * [descr:dxPopover]
+   */
+  export class dxPopover<
+    TProperties = DevExpress.ui.dxPopover.Properties
+  > extends dxPopup<TProperties> {
+    show(): DevExpress.core.utils.DxPromise<boolean>;
+    /**
+     * [descr:dxPopover.show(target)]
+     */
+    show(
+      target: string | DevExpress.core.UserDefinedElement
+    ): DevExpress.core.utils.DxPromise<boolean>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -15862,12 +15862,6 @@ declare module DevExpress.ui {
      */
     width?: number | string | (() => number | string);
   }
-  /**
-   * [descr:dxPopup]
-   */
-  export class dxPopup<
-    TProperties = DevExpress.ui.dxPopup.Properties
-  > extends dxOverlay<TProperties> {}
   module dxPopup {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxPopup>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxPopup>;
@@ -15900,6 +15894,12 @@ declare module DevExpress.ui {
       readonly titleElement: DevExpress.core.DxElement;
     }
   }
+  /**
+   * [descr:dxPopup]
+   */
+  export class dxPopup<
+    TProperties = DevExpress.ui.dxPopup.Properties
+  > extends dxOverlay<TProperties> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -16058,10 +16058,6 @@ declare module DevExpress.ui {
       | 'dxButtonGroup'
       | 'dxDropDownButton';
   }
-  /**
-   * [descr:dxProgressBar]
-   */
-  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {}
   module dxProgressBar {
     export type CompleteEvent =
       DevExpress.events.NativeEventInfo<dxProgressBar>;
@@ -16077,6 +16073,10 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxProgressBar> &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
+  /**
+   * [descr:dxProgressBar]
+   */
+  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -16299,10 +16299,6 @@ declare module DevExpress.ui {
      */
     width?: number | string | (() => number | string);
   }
-  /**
-   * [descr:dxResponsiveBox]
-   */
-  export class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> {}
   module dxResponsiveBox {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxResponsiveBox>;
@@ -16326,6 +16322,10 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxResponsiveBoxOptions;
   }
+  /**
+   * [descr:dxResponsiveBox]
+   */
+  export class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> {}
   /**
    * [descr:dxResponsiveBoxItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18296,12 +18296,6 @@ declare module DevExpress.ui {
      */
     swipeEnabled?: boolean;
   }
-  /**
-   * [descr:dxTabs]
-   */
-  export class dxTabs<
-    TProperties = DevExpress.ui.dxTabs.Properties
-  > extends CollectionWidget<TProperties> {}
   module dxTabs {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTabs>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxTabs>;
@@ -18325,6 +18319,12 @@ declare module DevExpress.ui {
      */
     interface TabsInstance extends dxTabs<Properties> {}
   }
+  /**
+   * [descr:dxTabs]
+   */
+  export class dxTabs<
+    TProperties = DevExpress.ui.dxTabs.Properties
+  > extends CollectionWidget<TProperties> {}
   /**
    * [descr:dxTabsItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18391,10 +18391,6 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
   }
-  /**
-   * [descr:dxTagBox]
-   */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
   module dxTagBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxTagBox>;
@@ -18438,6 +18434,10 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxTagBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
+  /**
+   * [descr:dxTagBox]
+   */
+  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18564,12 +18564,6 @@ declare module DevExpress.ui {
      */
     spellcheck?: boolean;
   }
-  /**
-   * [descr:dxTextBox]
-   */
-  export class dxTextBox<
-    TProperties = DevExpress.ui.dxTextBox.Properties
-  > extends dxTextEditor<TProperties> {}
   module dxTextBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxTextBox>;
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTextBox>;
@@ -18597,6 +18591,12 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxTextBox> &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
+  /**
+   * [descr:dxTextBox]
+   */
+  export class dxTextBox<
+    TProperties = DevExpress.ui.dxTextBox.Properties
+  > extends dxTextEditor<TProperties> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18787,15 +18787,6 @@ declare module DevExpress.ui {
      */
     valueChangeEvent?: string;
   }
-  /**
-   * [descr:dxTileView]
-   */
-  export class dxTileView extends CollectionWidget<dxTileViewOptions> {
-    /**
-     * [descr:dxTileView.scrollPosition()]
-     */
-    scrollPosition(): number;
-  }
   module dxTileView {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTileView>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxTileView>;
@@ -18814,6 +18805,15 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTileView> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxTileViewOptions;
+  }
+  /**
+   * [descr:dxTileView]
+   */
+  export class dxTileView extends CollectionWidget<dxTileViewOptions> {
+    /**
+     * [descr:dxTileView.scrollPosition()]
+     */
+    scrollPosition(): number;
   }
   /**
    * [descr:dxTileViewItem]
@@ -18885,10 +18885,6 @@ declare module DevExpress.ui {
      */
     showScrollbar?: boolean;
   }
-  /**
-   * [descr:dxToast]
-   */
-  export class dxToast extends dxOverlay<dxToastOptions> {}
   module dxToast {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxToast>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxToast>;
@@ -18903,6 +18899,10 @@ declare module DevExpress.ui {
     export type ShowingEvent = DevExpress.events.EventInfo<dxToast>;
     export type ShownEvent = DevExpress.events.EventInfo<dxToast>;
   }
+  /**
+   * [descr:dxToast]
+   */
+  export class dxToast extends dxOverlay<dxToastOptions> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -18976,10 +18976,6 @@ declare module DevExpress.ui {
      */
     width?: number | string | (() => number | string);
   }
-  /**
-   * [descr:dxToolbar]
-   */
-  export class dxToolbar extends CollectionWidget<dxToolbarOptions> {}
   module dxToolbar {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxToolbar>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxToolbar>;
@@ -18997,6 +18993,10 @@ declare module DevExpress.ui {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxToolbarOptions;
   }
+  /**
+   * [descr:dxToolbar]
+   */
+  export class dxToolbar extends CollectionWidget<dxToolbarOptions> {}
   /**
    * [descr:dxToolbarItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -19077,10 +19077,6 @@ declare module DevExpress.ui {
      */
     height?: number | string | (() => number | string);
   }
-  /**
-   * [descr:dxTooltip]
-   */
-  export class dxTooltip extends dxPopover<dxTooltipOptions> {}
   module dxTooltip {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTooltip>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxTooltip>;
@@ -19095,6 +19091,10 @@ declare module DevExpress.ui {
     export type ShowingEvent = DevExpress.events.EventInfo<dxTooltip>;
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
+  /**
+   * [descr:dxTooltip]
+   */
+  export class dxTooltip extends dxPopover<dxTooltipOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20053,6 +20053,69 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
+  module dxTreeView {
+    export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeView>;
+    export type DisposingEvent = DevExpress.events.EventInfo<dxTreeView>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxTreeView>;
+    export type ItemClickEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number | any;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemCollapsedEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemContextMenuEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number | any;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemExpandedEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemHoldEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemRenderedEvent =
+      DevExpress.events.NativeEventInfo<dxTreeView> & {
+        readonly itemData?: any;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemIndex?: number;
+        readonly node?: dxTreeViewNode;
+      };
+    export type ItemSelectionChangedEvent =
+      DevExpress.events.EventInfo<dxTreeView> & {
+        readonly node?: dxTreeViewNode;
+        readonly itemElement?: DevExpress.core.DxElement;
+        readonly itemData?: any;
+        readonly itemIndex?: number;
+      };
+    export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeView> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties = dxTreeViewOptions;
+    export type SelectAllValueChangedEvent =
+      DevExpress.events.EventInfo<dxTreeView> & {
+        readonly value?: boolean | undefined;
+      };
+    export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
+  }
   /**
    * [descr:dxTreeView]
    */
@@ -20149,69 +20212,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeView.scrollToItem(key)]
      */
     scrollToItem(key: any): DevExpress.core.utils.DxPromise<void>;
-  }
-  module dxTreeView {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeView>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxTreeView>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxTreeView>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number | any;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemCollapsedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number | any;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemExpandedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemHoldEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: dxTreeViewNode;
-      };
-    export type ItemSelectionChangedEvent =
-      DevExpress.events.EventInfo<dxTreeView> & {
-        readonly node?: dxTreeViewNode;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemData?: any;
-        readonly itemIndex?: number;
-      };
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeView> &
-      DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxTreeViewOptions;
-    export type SelectAllValueChangedEvent =
-      DevExpress.events.EventInfo<dxTreeView> & {
-        readonly value?: boolean | undefined;
-      };
-    export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
   }
   /**
    * [descr:dxTreeViewItem]
@@ -20661,18 +20661,6 @@ declare module DevExpress.ui {
      */
     value?: any;
   }
-  /**
-   * [descr:Editor]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export class Editor<
-    TProperties = DevExpress.ui.Editor.Properties
-  > extends Widget<TProperties> {
-    /**
-     * [descr:Editor.reset()]
-     */
-    reset(): void;
-  }
   module Editor {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20689,6 +20677,18 @@ declare module DevExpress.ui {
       readonly previousValue?: any;
       readonly value?: any;
     }
+  }
+  /**
+   * [descr:Editor]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export class Editor<
+    TProperties = DevExpress.ui.Editor.Properties
+  > extends Widget<TProperties> {
+    /**
+     * [descr:Editor.reset()]
+     */
+    reset(): void;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -22178,6 +22178,27 @@ declare module DevExpress.viz {
      */
     interactive?: boolean;
   }
+  module BaseGauge {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type GaugeIndicatorType =
+      | 'circle'
+      | 'rangeBar'
+      | 'rectangle'
+      | 'rectangleNeedle'
+      | 'rhombus'
+      | 'textCloud'
+      | 'triangleMarker'
+      | 'triangleNeedle'
+      | 'twoColorNeedle';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface TooltipInfo {
+      target: any;
+    }
+  }
   /**
    * [descr:BaseGauge]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -22199,27 +22220,6 @@ declare module DevExpress.viz {
      * [descr:BaseGauge.value(value)]
      */
     value(value: number): void;
-  }
-  module BaseGauge {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type GaugeIndicatorType =
-      | 'circle'
-      | 'rangeBar'
-      | 'rectangle'
-      | 'rectangleNeedle'
-      | 'rhombus'
-      | 'textCloud'
-      | 'triangleMarker'
-      | 'triangleNeedle'
-      | 'twoColorNeedle';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface TooltipInfo {
-      target: any;
-    }
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -22966,6 +22966,39 @@ declare module DevExpress.viz {
      */
     interactive?: boolean;
   }
+  module BaseWidget {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface ExportInfo {
+      readonly fileName: string;
+      readonly format: string;
+    }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface FileSavingEventInfo<T> {
+      readonly component: T;
+      readonly element: DevExpress.core.DxElement;
+      readonly fileName: string;
+      readonly format: string;
+      readonly data: Blob;
+    }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface IncidentInfo {
+      readonly target: any;
+    }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type WordWrapType = 'normal' | 'breakWord' | 'none';
+  }
   /**
    * [descr:BaseWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -23007,39 +23040,6 @@ declare module DevExpress.viz {
      * [descr:BaseWidget.svg()]
      */
     svg(): string;
-  }
-  module BaseWidget {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ExportInfo {
-      readonly fileName: string;
-      readonly format: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface FileSavingEventInfo<T> {
-      readonly component: T;
-      readonly element: DevExpress.core.DxElement;
-      readonly fileName: string;
-      readonly format: string;
-      readonly data: Blob;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface IncidentInfo {
-      readonly target: any;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type WordWrapType = 'normal' | 'breakWord' | 'none';
   }
   /**
    * [descr:BaseWidgetAnnotationConfig]
@@ -23833,13 +23833,13 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * [descr:viz.currentPalette()]
-   */
-  export function currentPalette(): string;
-  /**
    * [descr:viz.currentPalette(paletteName)]
    */
   export function currentPalette(paletteName: string): void;
+  /**
+   * [descr:viz.currentPalette()]
+   */
+  export function currentPalette(): string;
   /**
    * [descr:viz.currentTheme()]
    */
@@ -23856,19 +23856,6 @@ declare module DevExpress.viz {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
-  /**
-   * [descr:dxBarGauge]
-   */
-  export class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
-    /**
-     * [descr:dxBarGauge.values()]
-     */
-    values(): Array<number>;
-    /**
-     * [descr:dxBarGauge.values(newValues)]
-     */
-    values(values: Array<number>): void;
-  }
   module dxBarGauge {
     export type DisposingEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBarGauge>;
@@ -23895,6 +23882,19 @@ declare module DevExpress.viz {
     }
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBarGauge> &
       TooltipInfo;
+  }
+  /**
+   * [descr:dxBarGauge]
+   */
+  export class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
+    /**
+     * [descr:dxBarGauge.values()]
+     */
+    values(): Array<number>;
+    /**
+     * [descr:dxBarGauge.values(newValues)]
+     */
+    values(values: Array<number>): void;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24087,10 +24087,6 @@ declare module DevExpress.viz {
      */
     interactive?: boolean;
   }
-  /**
-   * [descr:dxBullet]
-   */
-  export class dxBullet extends BaseSparkline<dxBulletOptions> {}
   module dxBullet {
     export type DisposingEvent = DevExpress.events.EventInfo<dxBullet>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxBullet>;
@@ -24109,6 +24105,10 @@ declare module DevExpress.viz {
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxBullet>;
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBullet>;
   }
+  /**
+   * [descr:dxBullet]
+   */
+  export class dxBullet extends BaseSparkline<dxBulletOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24150,34 +24150,6 @@ declare module DevExpress.viz {
      * [descr:dxBulletOptions.value]
      */
     value?: number;
-  }
-  /**
-   * [descr:dxChart]
-   */
-  export class dxChart extends BaseChart<dxChartOptions> {
-    /**
-     * [descr:dxChart.getArgumentAxis()]
-     */
-    getArgumentAxis(): chartAxisObject;
-    /**
-     * [descr:dxChart.getValueAxis()]
-     */
-    getValueAxis(): chartAxisObject;
-    /**
-     * [descr:dxChart.getValueAxis(name)]
-     */
-    getValueAxis(name: string): chartAxisObject;
-    /**
-     * [descr:dxChart.resetVisualRange()]
-     */
-    resetVisualRange(): void;
-    /**
-     * [descr:dxChart.zoomArgument(startValue,endValue)]
-     */
-    zoomArgument(
-      startValue: number | Date | string,
-      endValue: number | Date | string
-    ): void;
   }
   module dxChart {
     export type ArgumentAxisClickEvent =
@@ -24255,6 +24227,34 @@ declare module DevExpress.viz {
         readonly range: VizRange;
         readonly actionType?: 'zoom' | 'pan';
       };
+  }
+  /**
+   * [descr:dxChart]
+   */
+  export class dxChart extends BaseChart<dxChartOptions> {
+    /**
+     * [descr:dxChart.getArgumentAxis()]
+     */
+    getArgumentAxis(): chartAxisObject;
+    /**
+     * [descr:dxChart.getValueAxis()]
+     */
+    getValueAxis(): chartAxisObject;
+    /**
+     * [descr:dxChart.getValueAxis(name)]
+     */
+    getValueAxis(name: string): chartAxisObject;
+    /**
+     * [descr:dxChart.resetVisualRange()]
+     */
+    resetVisualRange(): void;
+    /**
+     * [descr:dxChart.zoomArgument(startValue,endValue)]
+     */
+    zoomArgument(
+      startValue: number | Date | string,
+      endValue: number | Date | string
+    ): void;
   }
   /**
    * [descr:dxChartAnnotationConfig]
@@ -27875,24 +27875,6 @@ declare module DevExpress.viz {
      */
     indentFromTick?: number;
   }
-  /**
-   * [descr:dxFunnel]
-   */
-  export class dxFunnel extends BaseWidget<dxFunnelOptions> {
-    /**
-     * [descr:dxFunnel.clearSelection()]
-     */
-    clearSelection(): void;
-    /**
-     * [descr:dxFunnel.getAllItems()]
-     */
-    getAllItems(): Array<dxFunnelItem>;
-    getDataSource(): DevExpress.data.DataSource;
-    /**
-     * [descr:dxFunnel.hideTooltip()]
-     */
-    hideTooltip(): void;
-  }
   module dxFunnel {
     export type DisposingEvent = DevExpress.events.EventInfo<dxFunnel>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxFunnel>;
@@ -27922,6 +27904,24 @@ declare module DevExpress.viz {
     export type Properties = dxFunnelOptions;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
+  }
+  /**
+   * [descr:dxFunnel]
+   */
+  export class dxFunnel extends BaseWidget<dxFunnelOptions> {
+    /**
+     * [descr:dxFunnel.clearSelection()]
+     */
+    clearSelection(): void;
+    /**
+     * [descr:dxFunnel.getAllItems()]
+     */
+    getAllItems(): Array<dxFunnelItem>;
+    getDataSource(): DevExpress.data.DataSource;
+    /**
+     * [descr:dxFunnel.hideTooltip()]
+     */
+    hideTooltip(): void;
   }
   /**
    * [descr:dxFunnelItem]
@@ -28356,10 +28356,6 @@ declare module DevExpress.viz {
       percentText?: string;
     }) => any;
   }
-  /**
-   * [descr:dxLinearGauge]
-   */
-  export class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> {}
   module dxLinearGauge {
     export type DisposingEvent = DevExpress.events.EventInfo<dxLinearGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxLinearGauge>;
@@ -28383,6 +28379,10 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxLinearGauge> &
       DevExpress.viz.BaseGauge.TooltipInfo;
   }
+  /**
+   * [descr:dxLinearGauge]
+   */
+  export class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> {}
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28473,15 +28473,6 @@ declare module DevExpress.viz {
      */
     indentFromTick?: number;
   }
-  /**
-   * [descr:dxPieChart]
-   */
-  export class dxPieChart extends BaseChart<dxPieChartOptions> {
-    /**
-     * [descr:dxPieChart.getInnerRadius()]
-     */
-    getInnerRadius(): number;
-  }
   module dxPieChart {
     export type DisposingEvent = DevExpress.events.EventInfo<dxPieChart>;
     export type DoneEvent = DevExpress.events.EventInfo<dxPieChart>;
@@ -28525,6 +28516,15 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
+  }
+  /**
+   * [descr:dxPieChart]
+   */
+  export class dxPieChart extends BaseChart<dxPieChartOptions> {
+    /**
+     * [descr:dxPieChart.getInnerRadius()]
+     */
+    getInnerRadius(): number;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29017,19 +29017,6 @@ declare module DevExpress.viz {
      */
     valueField?: string;
   }
-  /**
-   * [descr:dxPolarChart]
-   */
-  export class dxPolarChart extends BaseChart<dxPolarChartOptions> {
-    /**
-     * [descr:dxPolarChart.getValueAxis()]
-     */
-    getValueAxis(): chartAxisObject;
-    /**
-     * [descr:dxPolarChart.resetVisualRange()]
-     */
-    resetVisualRange(): void;
-  }
   module dxPolarChart {
     export type ArgumentAxisClickEvent =
       DevExpress.events.NativeEventInfo<dxPolarChart> & {
@@ -29106,6 +29093,19 @@ declare module DevExpress.viz {
         readonly range: VizRange;
         readonly actionType: 'zoom' | 'pan';
       };
+  }
+  /**
+   * [descr:dxPolarChart]
+   */
+  export class dxPolarChart extends BaseChart<dxPolarChartOptions> {
+    /**
+     * [descr:dxPolarChart.getValueAxis()]
+     */
+    getValueAxis(): chartAxisObject;
+    /**
+     * [descr:dxPolarChart.resetVisualRange()]
+     */
+    resetVisualRange(): void;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30603,25 +30603,6 @@ declare module DevExpress.viz {
      */
     visible?: boolean;
   }
-  /**
-   * [descr:dxRangeSelector]
-   */
-  export class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
-    getDataSource(): DevExpress.data.DataSource;
-    /**
-     * [descr:dxRangeSelector.getValue()]
-     */
-    getValue(): Array<number | string | Date>;
-    render(): void;
-    /**
-     * [descr:dxRangeSelector.render(skipChartAnimation)]
-     */
-    render(skipChartAnimation: boolean): void;
-    /**
-     * [descr:dxRangeSelector.setValue(value)]
-     */
-    setValue(value: Array<number | string | Date> | VizRange): void;
-  }
   module dxRangeSelector {
     export type DisposingEvent = DevExpress.events.EventInfo<dxRangeSelector>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxRangeSelector>;
@@ -30644,6 +30625,25 @@ declare module DevExpress.viz {
         readonly value: Array<number | string | Date>;
         readonly previousValue: Array<number | string | Date>;
       };
+  }
+  /**
+   * [descr:dxRangeSelector]
+   */
+  export class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
+    getDataSource(): DevExpress.data.DataSource;
+    /**
+     * [descr:dxRangeSelector.getValue()]
+     */
+    getValue(): Array<number | string | Date>;
+    render(): void;
+    /**
+     * [descr:dxRangeSelector.render(skipChartAnimation)]
+     */
+    render(skipChartAnimation: boolean): void;
+    /**
+     * [descr:dxRangeSelector.setValue(value)]
+     */
+    setValue(value: Array<number | string | Date> | VizRange): void;
   }
   /**
    * @deprecated use Properties instead
@@ -31832,36 +31832,6 @@ declare module DevExpress.viz {
      */
     winlossThreshold?: number;
   }
-  /**
-   * [descr:dxTreeMap]
-   */
-  export class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
-    /**
-     * [descr:dxTreeMap.clearSelection()]
-     */
-    clearSelection(): void;
-    /**
-     * [descr:dxTreeMap.drillUp()]
-     */
-    drillUp(): void;
-    /**
-     * [descr:dxTreeMap.getCurrentNode()]
-     */
-    getCurrentNode(): dxTreeMapNode;
-    getDataSource(): DevExpress.data.DataSource;
-    /**
-     * [descr:dxTreeMap.getRootNode()]
-     */
-    getRootNode(): dxTreeMapNode;
-    /**
-     * [descr:dxTreeMap.hideTooltip()]
-     */
-    hideTooltip(): void;
-    /**
-     * [descr:dxTreeMap.resetDrillDown()]
-     */
-    resetDrillDown(): void;
-  }
   module dxTreeMap {
     export type ClickEvent = DevExpress.events.NativeEventInfo<dxTreeMap> & {
       readonly node: dxTreeMapNode;
@@ -31900,6 +31870,36 @@ declare module DevExpress.viz {
     export type Properties = dxTreeMapOptions;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
+  }
+  /**
+   * [descr:dxTreeMap]
+   */
+  export class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
+    /**
+     * [descr:dxTreeMap.clearSelection()]
+     */
+    clearSelection(): void;
+    /**
+     * [descr:dxTreeMap.drillUp()]
+     */
+    drillUp(): void;
+    /**
+     * [descr:dxTreeMap.getCurrentNode()]
+     */
+    getCurrentNode(): dxTreeMapNode;
+    getDataSource(): DevExpress.data.DataSource;
+    /**
+     * [descr:dxTreeMap.getRootNode()]
+     */
+    getRootNode(): dxTreeMapNode;
+    /**
+     * [descr:dxTreeMap.hideTooltip()]
+     */
+    hideTooltip(): void;
+    /**
+     * [descr:dxTreeMap.resetDrillDown()]
+     */
+    resetDrillDown(): void;
   }
   /**
    * [descr:dxTreeMapNode]
