@@ -1,7 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
-import { DataGridRowExporter } from './data_grid_row_exporter';
+import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -31,11 +31,11 @@ function exportDataGrid(doc, dataGrid, options) {
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 prevRowInfo = currentRowInfo;
-                currentRowInfo = DataGridRowExporter.createRowInfo({ dataProvider, rowIndex, prevRowInfo });
+                currentRowInfo = createRowInfo({ dataProvider, rowIndex, prevRowInfo });
 
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
-                    const pdfCell = DataGridRowExporter.createPdfCell(cellInfo);
+                    const pdfCell = createPdfCell(cellInfo);
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellInfo.value }, pdfCell });
                     }

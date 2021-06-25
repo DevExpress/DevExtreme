@@ -1,41 +1,38 @@
 import { isDefined } from '../../core/utils/type';
 
-const DataGridRowExporter = {
-    createRowInfo: function({ dataProvider, rowIndex, prevRowInfo }) {
-        const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
-        let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
-        if(rowType === 'groupFooter' && prevRowInfo?.rowType === 'groupFooter') {
-            indentLevel = prevRowInfo.indentLevel - 1;
-        }
-        const startNewTableWithIndent = (prevRowInfo?.indentLevel !== undefined) && prevRowInfo.indentLevel !== indentLevel;
-        const columns = dataProvider.getColumns();
+function createRowInfo({ dataProvider, rowIndex, prevRowInfo }) {
+    const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
+    let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
+    if(rowType === 'groupFooter' && prevRowInfo?.rowType === 'groupFooter') {
+        indentLevel = prevRowInfo.indentLevel - 1;
+    }
+    const startNewTableWithIndent = (prevRowInfo?.indentLevel !== undefined) && prevRowInfo.indentLevel !== indentLevel;
+    const columns = dataProvider.getColumns();
 
-        const rowInfo = {
-            rowType: rowType,
-            indentLevel: indentLevel,
-            startNewTableWithIndent,
-            cellsInfo: [],
-            rowIndex
-        };
+    const rowInfo = {
+        rowType: rowType,
+        indentLevel: indentLevel,
+        startNewTableWithIndent,
+        cellsInfo: [],
+        rowIndex
+    };
 
-        fillRowCellsInfo({ rowInfo, dataProvider, columns });
+    _fillRowCellsInfo({ rowInfo, dataProvider, columns });
 
-        return rowInfo;
-    },
+    return rowInfo;
+}
 
-    createPdfCell: function(cellInfo) {
-        return {
-            text: cellInfo.text,
-            rowSpan: cellInfo.rowSpan,
-            colSpan: cellInfo.colSpan,
-            drawLeftBorder: cellInfo.drawLeftBorder,
-            drawRightBorder: cellInfo.drawRightBorder,
-        };
-    },
+function createPdfCell(cellInfo) {
+    return {
+        text: cellInfo.text,
+        rowSpan: cellInfo.rowSpan,
+        colSpan: cellInfo.colSpan,
+        drawLeftBorder: cellInfo.drawLeftBorder,
+        drawRightBorder: cellInfo.drawRightBorder,
+    };
+}
 
-};
-
-function createCellInfo({ rowInfo, dataProvider, cellIndex }) {
+function _createCellInfo({ rowInfo, dataProvider, cellIndex }) {
     const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
     const cellInfo = {
         value: cellData.value,
@@ -69,9 +66,9 @@ function createCellInfo({ rowInfo, dataProvider, cellIndex }) {
     return cellInfo;
 }
 
-function fillRowCellsInfo({ rowInfo, dataProvider, columns }) {
+function _fillRowCellsInfo({ rowInfo, dataProvider, columns }) {
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-        rowInfo.cellsInfo.push(createCellInfo({ rowInfo, dataProvider, cellIndex }));
+        rowInfo.cellsInfo.push(_createCellInfo({ rowInfo, dataProvider, cellIndex }));
     }
 
     if(rowInfo.rowType === 'group') {
@@ -88,4 +85,4 @@ function fillRowCellsInfo({ rowInfo, dataProvider, columns }) {
     }
 }
 
-export { DataGridRowExporter };
+export { createRowInfo, createPdfCell };
