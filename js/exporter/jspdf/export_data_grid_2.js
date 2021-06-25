@@ -14,6 +14,17 @@ function _getFullOptions(options) {
     return fullOptions;
 }
 
+function getRowInfo(dataProvider, rowIndex, prevRowInfo) {
+    const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
+    let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
+    if(rowType === 'groupFooter' && prevRowInfo?.rowType === 'groupFooter') {
+        indentLevel = prevRowInfo.indentLevel - 1;
+    }
+    const startNewTableWithIndent = (prevRowInfo?.indentLevel !== undefined) && prevRowInfo.indentLevel !== indentLevel;
+
+    return { rowType, indentLevel, startNewTableWithIndent };
+}
+
 function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(options));
 
@@ -22,21 +33,16 @@ function exportDataGrid(doc, dataGrid, options) {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
-            const rowsGroups = [];
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
 
             const dataRowsCount = dataProvider.getRowsCount();
+            let currentRowInfo;
+            let prevRowInfo;
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
-                let groupLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
-                if(rowType === 'groupFooter') {
-                    const prevRowGroup = rowsGroups[rowsGroups.length - 1];
-                    if(prevRowGroup.rowType === 'groupFooter') {
-                        groupLevel = prevRowGroup.groupLevel - 1;
-                    }
-                }
+                prevRowInfo = currentRowInfo;
+                currentRowInfo = getRowInfo(dataProvider, rowIndex, prevRowInfo);
 
                 const currentRow = [];
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
@@ -45,7 +51,7 @@ function exportDataGrid(doc, dataGrid, options) {
                         text: cellData.value
                     };
 
-                    if(rowType === 'header') {
+                    if(currentRowInfo.rowType === 'header') {
                         const cellMerging = dataProvider.getCellMerging(rowIndex, cellIndex);
                         if(cellMerging && cellMerging.rowspan > 0) {
                             pdfCell.rowSpan = cellMerging.rowspan;
@@ -53,7 +59,7 @@ function exportDataGrid(doc, dataGrid, options) {
                         if(cellMerging && cellMerging.colspan > 0) {
                             pdfCell.colSpan = cellMerging.colspan;
                         }
-                    } else if(rowType === 'group') {
+                    } else if(currentRowInfo.rowType === 'group') {
                         pdfCell.drawLeftBorder = false;
                         pdfCell.drawRightBorder = false;
 
@@ -76,7 +82,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     currentRow.push(pdfCell);
                 }
 
-                if(rowType === 'group') {
+                if(currentRowInfo.rowType === 'group') {
                     currentRow[0].drawLeftBorder = true;
 
                     if(currentRow[0].colSpan === currentRow.length - 1) {
@@ -89,16 +95,15 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
                 }
 
-                rowsGroups.push({ rowType, groupLevel });
-                const startNewTableWithIndent = rowsGroups.length >= 2 && rowsGroups[rowsGroups.length - 1].groupLevel !== rowsGroups[rowsGroups.length - 2].groupLevel;
-                if(startNewTableWithIndent) {
-                    const indent = rowsGroups[rowsGroups.length - 1].groupLevel * options.indent;
+                if(currentRowInfo.startNewTableWithIndent) {
+                    const indent = currentRowInfo.indentLevel * options.indent;
                     const prevTable = pdfGrid._currentHorizontalTables[0];
                     const firstColumnWidth = options.columnWidths[0] - indent;
                     const tableTopLeft = {
                         x: options.topLeft.x + indent,
                         y: prevTable.rect.y + prevTable.rect.h
                     };
+                    // TODO: should it be controlled from onRowExporting ?
                     pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
