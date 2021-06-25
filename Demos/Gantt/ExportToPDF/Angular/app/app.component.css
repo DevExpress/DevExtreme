@@ -1,0 +1,37 @@
+#gantt {
+    height: 700px;
+}
+
+::ng-deep .options {
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
+}
+
+::ng-deep .column {
+    width: 40%;
+    display: inline-block;
+    margin: 15px 3%;
+    text-align: left;
+    vertical-align: top;
+}
+
+::ng-deep .option {
+    padding: 5px 0;
+}
+
+::ng-deep .label, .value {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+::ng-deep .label {
+    width: 180px;
+}
+
+::ng-deep .value {
+    width: 30%;
+}
+::ng-deep .caption {
+    font-size: 18px;
+    font-weight: 500;
+}

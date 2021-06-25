@@ -1,0 +1,120 @@
+<dx-gantt
+    taskListWidth="500"
+    scaleType="weeks"
+    height="700"
+    [rootValue]="-1">
+
+    <dxo-toolbar>
+        <dxi-item name="undo"></dxi-item>
+        <dxi-item name="redo"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="zoomIn"></dxi-item>
+        <dxi-item name="zoomOut"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item
+            widget="dxButton"
+            [options]="exportButtonOptions">
+        </dxi-item>
+    </dxo-toolbar>
+
+    <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+    <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+    <dxo-resources [dataSource]="resources"></dxo-resources>
+    <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
+
+    <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
+    <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+    <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+
+    <dxo-editing [enabled]="true"></dxo-editing>
+</dx-gantt>
+
+<div class='options'>
+    <div class='column'>
+        <div class="caption">Export Options</div>
+        <div class='option'>
+            <div class='label'>Document format:</div>
+            <div class='value'>
+                <dx-select-box 
+                    id="formatBox"
+                    [items]="formats" 
+                    [(value)]="formatBoxValue">
+                </dx-select-box>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>Landscape orientation:</div>
+            <div class='value'>
+                <dx-check-box [(value)]="landscapeCheckBoxValue"></dx-check-box>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>Export mode:</div>
+            <div class='value'>
+                <dx-select-box 
+                    [items]="exportModes" 
+                    [(value)]="exportModeBoxValue">
+                </dx-select-box>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>Date range:</div>
+            <div class='value'>
+                <dx-select-box 
+                    [items]="dateRanges" 
+                    [(value)]="dateRangeBoxValue"
+                    (onValueChanged)="onDateRangeBoxSelectionChanged($event)">
+                </dx-select-box>
+            </div>
+        </div>
+    </div>
+    <div class='column'>
+        <div class="caption">Task Filter Options</div>
+        <div class='option'>
+            <div class='label'>Start task (index):</div>
+            <div class='value'>
+                <dx-number-box
+                    [disabled]="customRangeDisabled"
+                    [(value)]="startTaskIndex"
+                    [min]="0"
+                    [max]="endTaskIndex"
+                    [showSpinButtons]="true">
+                </dx-number-box>               
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>End task (index):</div>
+            <div class='value'>
+                <dx-number-box
+                    [disabled]="customRangeDisabled"
+                    [(value)]="endTaskIndex"
+                    [min]="startTaskIndex"
+                    [max]="tasks.length - 1"
+                    [showSpinButtons]="true">
+                </dx-number-box>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>Start date:</div>
+            <div class='value'>
+                <dx-date-box
+                    [disabled]="customRangeDisabled"
+                    [(value)]="startDate"
+                    [max]="endDate"
+                    type="date">
+                </dx-date-box>
+            </div>
+        </div>
+        <div class='option'>
+            <div class='label'>End date:</div>
+            <div class='value'>
+                <dx-date-box
+                    [disabled]="customRangeDisabled"
+                    [(value)]="endDate"
+                    [min]="startDate"
+                    type="date">
+                </dx-date-box>
+            </div>
+        </div>
+    </div>
+</div>
