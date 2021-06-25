@@ -43,7 +43,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
@@ -72,7 +72,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
@@ -125,7 +125,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
@@ -178,7 +178,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
@@ -231,7 +231,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
@@ -284,7 +284,7 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
-        this.instance._updateTreeListDataSource();
+        this.instance._ganttTreeList.updateDataSource();
         this.clock.tick();
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
