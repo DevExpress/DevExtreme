@@ -127,7 +127,7 @@ module('Table resizing integration', {
             const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
             const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
 
-            assert.strictEqual($resizeFrame.length, 1.01, 'Frame is created for table');
+            assert.strictEqual($resizeFrame.length, 1, 'Frame is created for table');
             assert.strictEqual($columnResizerElements.length, 4, 'Column resizers are created for every column separator');
             assert.strictEqual($rowResizerElements.length, 3, 'Row resizers are created for every row separator');
             assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
@@ -155,7 +155,7 @@ module('Table resizing integration', {
 
             const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
 
-            assert.strictEqual($draggableElements.length, 1.01, 'Column resizers draggable elements are created after the pointerDown event');
+            assert.strictEqual($draggableElements.length, 1, 'Column resizers draggable elements are created after the pointerDown event');
         });
 
         test('Draggable element should be disposed after drag', function(assert) {
@@ -218,7 +218,7 @@ module('Table resizing integration', {
 
             const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
-            assert.strictEqual($resizeFrame.length, 1.01, 'Frame is created');
+            assert.strictEqual($resizeFrame.length, 1, 'Frame is created');
         });
     });
 
