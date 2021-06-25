@@ -221,36 +221,34 @@ const LoadPanelTests = {
             QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
                 assert.expect(5);
                 const done = assert.async();
+                setWindow(undefined, false);
                 const component = getComponent(componentOptions);
                 const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
 
                 let isFirstCall = true;
-                setWindow({}, false);
 
-                try {
-                    exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
-                        if(isFirstCall) {
-                            const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
 
-                            const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
+                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                    if(isFirstCall) {
+                        const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
 
-                            isFirstCall = false;
-                        }
-                    } }).then(() => {
                         const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
                         assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
 
-                        const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
-                        assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel exist');
-                        assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+                        isFirstCall = false;
+                    }
+                } }).then(() => {
+                    const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
 
-                        done();
-                    });
-                } finally {
+                    const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel exist');
+                    assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+
                     setWindow(window);
-                }
+                    done();
+                });
             });
 
 
