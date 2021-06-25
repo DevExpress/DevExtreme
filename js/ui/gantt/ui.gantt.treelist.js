@@ -60,13 +60,11 @@ export class GanttTreeList {
     }
 
     _onRowCollapsed(e) {
-        this._gantt._ganttView.changeTaskExpanded(e.key, false);
-        this._gantt._sizeHelper.adjustHeight();
+        this._gantt._onTreeListRowExpandChanged(e, false);
     }
 
     _onRowExpanded(e) {
-        this._gantt._ganttView.changeTaskExpanded(e.key, true);
-        this._gantt._sizeHelper.adjustHeight();
+        this._gantt._onTreeListRowExpandChanged(e, true);
     }
 
     _onRowPrepared(e) {

@@ -369,20 +369,44 @@ class Gantt extends Widget {
         this._ganttView.executeCoreCommand(id);
     }
     _expandAll() {
-        this._treeList.forEachNode(node => {
-            if(node.children && node.children.length) {
-                this._treeList.expandRow(node.key);
-                this._ganttView.changeTaskExpanded(node.key, true);
-            }
-        });
+        this._changeExpandAll(true);
     }
     _collapseAll() {
+        this._changeExpandAll(false);
+    }
+    _changeExpandAll(expanded) {
+        const keysToExpand = [ ];
         this._treeList.forEachNode(node => {
-            if(node.children && node.children.length) {
-                this._treeList.collapseRow(node.key);
-                this._ganttView.changeTaskExpanded(node.key, false);
+            if(node.children?.length) {
+                keysToExpand.push(node.key);
             }
         });
+
+        let promise;
+        this._lockRowExpandEvent = keysToExpand.length > 0;
+        const state = keysToExpand.reduce((previous, key, index) => {
+            previous[key] = expanded;
+            const action = expanded ? this._treeList.expandRow : this._treeList.collapseRow;
+            const isLast = index === keysToExpand.length - 1;
+            if(isLast) {
+                promise = action(key);
+            } else {
+                action(key);
+            }
+            return previous;
+        }, {});
+
+        promise?.then(() => {
+            this._ganttView._ganttViewCore.applyTasksExpandedState(state);
+            this._sizeHelper.adjustHeight();
+            delete this._lockRowExpandEvent;
+        });
+    }
+    _onTreeListRowExpandChanged(e, expanded) {
+        if(!this._lockRowExpandEvent) {
+            this._ganttView.changeTaskExpanded(e.key, expanded);
+            this._sizeHelper.adjustHeight();
+        }
     }
 
     getTaskResources(key) {
