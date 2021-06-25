@@ -3,6 +3,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import browser from 'core/utils/browser';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
@@ -484,6 +485,19 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             scheduler.appointmentPopup.clickDoneButton();
 
             assert.expect(2);
+        });
+
+        test('Recurrence rule with UNTIL date in UTC format should apply correctly to local dates', function(assert) {
+            const dates = getRecurrenceProcessor().generateDates(
+                {
+                    rule: 'FREQ=DAILY;UNTIL=20210625T075959Z',
+                    start: new Date(2021, 5, 24, 1, 30),
+                    min: new Date(2021, 5, 20),
+                    max: new Date(2021, 5, 26)
+                }
+            );
+
+            assert.deepEqual(dates, [new Date(2021, 5, 24, 1, 30)], 'Should be only one date');
         });
     });
 }
