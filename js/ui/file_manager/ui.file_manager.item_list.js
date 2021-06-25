@@ -37,8 +37,7 @@ class FileManagerItemListBase extends Widget {
             onError: this._createActionByOption('onError'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
-            onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened'),
-            onContextMenuShowing: this._createActionByOption('onContextMenuShowing')
+            onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened')
         };
     }
 
@@ -53,8 +52,7 @@ class FileManagerItemListBase extends Widget {
             onError: null,
             onSelectionChanged: null,
             onFocusedItemChanged: null,
-            onSelectedItemOpened: null,
-            onContextMenuShowing: null
+            onSelectedItemOpened: null
         });
     }
 
@@ -80,7 +78,6 @@ class FileManagerItemListBase extends Widget {
             case 'onSelectedItemOpened':
             case 'onSelectionChanged':
             case 'onFocusedItemChanged':
-            case 'onContextMenuShowing':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -91,6 +88,9 @@ class FileManagerItemListBase extends Widget {
     _getItems() {
         return this._getItemsInternal().done(itemInfos => {
             this._itemCount = itemInfos.length;
+            if(this._itemCount === 0) {
+                this._resetFocus();
+            }
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
             this._hasParentDirectoryItem = !!parentDirectoryItem;
@@ -118,10 +118,6 @@ class FileManagerItemListBase extends Widget {
 
     _raiseSelectedItemOpened(fileItemInfo) {
         this._actions.onSelectedItemOpened({ fileItemInfo });
-    }
-
-    _raiseContextMenuShowing() {
-        this._actions.onContextMenuShowing();
     }
 
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
@@ -155,6 +151,10 @@ class FileManagerItemListBase extends Widget {
         this._lockFocusedItemProcessing = false;
 
         this._raiseFocusedItemChanged(args);
+    }
+
+    _resetFocus() {
+
     }
 
     _getItemThumbnail(fileInfo) {

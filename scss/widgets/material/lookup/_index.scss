@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -25,7 +26,7 @@
     }
 
     .dx-lookup-arrow {
-      right: $material-base-icon-size / 2;
+      right: math.div($material-base-icon-size, 2);
     }
 
     &.dx-invalid {
@@ -44,7 +45,7 @@
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-arrow {
-        left: $material-base-icon-size / 2;
+        left: math.div($material-base-icon-size, 2);
         right: auto;
       }
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -95,7 +96,7 @@
   border-left-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
-    height: $material-toolbar-height / 2;
+    height: math.div($material-toolbar-height, 2);
   }
 }
 

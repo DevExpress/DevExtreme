@@ -36,6 +36,7 @@ class FileManagerEditingControl extends Widget {
                 getDirectories: this._controller.getDirectories.bind(this._controller),
                 getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             },
+            rtlEnabled: this.option('rtlEnabled'),
             onDialogClosed: this._onDialogClosed.bind(this)
         });
 
@@ -267,12 +268,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
+        if(!itemInfo) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         const itemName = itemInfos[0].fileItem.name;
         const itemCount = itemInfos.length;
         return this._showDialog(this._dialogManager.getDeleteItemDialog(), { itemName, itemCount })
@@ -281,12 +288,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getMoveDialog(itemInfos))
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getCopyDialog(itemInfos))
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
@@ -298,6 +311,9 @@ class FileManagerEditingControl extends Widget {
 
     _download(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._controller.downloadItems(itemInfos);
     }
 
@@ -393,6 +409,10 @@ class FileManagerEditingControl extends Widget {
         }
     }
 
+    updateDialogRtl(value) {
+        this._dialogManager.updateDialogRtl(value);
+    }
+
     _getItemThumbnail(item) {
         const itemThumbnailGetter = this.option('getItemThumbnail');
         if(!itemThumbnailGetter) {
@@ -406,7 +426,6 @@ class FileManagerEditingControl extends Widget {
         this._actions = {
             onSuccess: this._createActionByOption('onSuccess'),
             onError: this._createActionByOption('onError'),
-            onCreating: this._createActionByOption('onCreating'),
         };
     }
 
@@ -418,8 +437,7 @@ class FileManagerEditingControl extends Widget {
             notificationControl: null,
             getItemThumbnail: null,
             onSuccess: null,
-            onError: null,
-            onCreating: null
+            onError: null
         });
     }
 
@@ -440,7 +458,6 @@ class FileManagerEditingControl extends Widget {
                 break;
             case 'onSuccess':
             case 'onError':
-            case 'onCreating':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:

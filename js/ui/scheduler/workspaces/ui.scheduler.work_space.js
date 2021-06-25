@@ -43,6 +43,7 @@ import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
+import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -1425,7 +1426,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
             let endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
 
-            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+            while(!isDateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = endDate;
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
             }
@@ -1440,10 +1441,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getStartViewDate() {
         return this.option('startDate');
-    }
-
-    _dateInRange(date, startDate, endDate, diff) {
-        return diff > 0 ? dateUtils.dateInRange(date, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(date, endDate, startDate, 'date');
     }
 
     _getIntervalDuration() {
@@ -2742,12 +2739,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellData = this.getCellData($(this._getDroppableCell()));
         const allDay = cellData.allDay;
         const startDate = cellData.startDate;
-        const endDate = startDate && this.invoke('calculateAppointmentEndDate', allDay, startDate);
+        const endDate = cellData.endDate;
 
         return {
-            startDate: startDate,
-            endDate: endDate,
-            allDay: allDay,
+            startDate,
+            endDate,
+            allDay,
             groups: cellData.groups
         };
     }
@@ -3239,13 +3236,25 @@ class SchedulerWorkSpace extends WidgetObserver {
         const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
         const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
-        this._createDragBehaviorBase($element, getItemData, getItemSettings);
+        const options = {
+            getItemData,
+            getItemSettings,
+        };
+
+        this._createDragBehaviorBase($element, options);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
+    _createDragBehaviorBase($element, options) {
         let dragElement;
         const dragBehavior = this.dragBehavior;
         let itemData;
+        const {
+            getItemData,
+            getItemSettings,
+            isSetCursorOffset,
+            initialPosition,
+            ...restOptions
+        } = options;
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
@@ -3271,7 +3280,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
 
                         event.data.itemElement = dragElement;
-                        event.data.initialPosition = locate($(dragElement));
+                        event.data.initialPosition = initialPosition || locate($(dragElement));
                         event.data.itemData = itemData;
                         event.data.itemSettings = settings;
 

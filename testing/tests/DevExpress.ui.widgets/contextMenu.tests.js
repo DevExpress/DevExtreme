@@ -1,9 +1,11 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import support from 'core/utils/support';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
 import contextMenuEvent from 'events/contextmenu';
+import holdEvent from 'events/hold';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1433,6 +1435,34 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         $('#menuTarget').trigger(contextMenuEvent);
         assert.ok(contextMenuEvent.isDefaultPrevented(), 'default prevented');
+    });
+
+    QUnit.test('context menu should prevent default behavior if it shows on touch', function(assert) {
+        const originalTouch = support.touch;
+        const originalIsSimulator = devices.isSimulator;
+
+        try {
+            support.touch = true;
+            devices.isSimulator = function() { return true; };
+
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 'item 1' }],
+                target: '#menuTarget',
+                visible: false
+            });
+
+            $('#menuTarget').trigger(holdEvent.name);
+
+            const $itemsContainer = instance.itemsContainer();
+            const $rootItem = $itemsContainer.find('.' + DX_SUBMENU_CLASS).eq(0);
+            const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse', target: $rootItem.get(0) });
+            $('#menuTarget').trigger(contextMenuEvent);
+
+            assert.ok(contextMenuEvent.isDefaultPrevented(), 'default prevented');
+        } finally {
+            support.touch = originalTouch;
+            devices.isSimulator = originalIsSimulator;
+        }
     });
 
     QUnit.test('onItemClick should fire for submenus', function(assert) {

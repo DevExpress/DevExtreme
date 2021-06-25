@@ -65,7 +65,8 @@ class FileSystemProviderBase {
         return result;
     }
     _createFileItem(dataObj, pathInfo) {
-        const fileItem = new FileSystemItem(pathInfo, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
+        const key = this._keyGetter(dataObj);
+        const fileItem = new FileSystemItem(pathInfo, this._nameGetter(dataObj), !!this._isDirGetter(dataObj), key);
 
         fileItem.size = this._sizeGetter(dataObj);
         if(fileItem.size === undefined) {
@@ -81,8 +82,7 @@ class FileSystemProviderBase {
             fileItem.hasSubDirectories = this._hasSubDirs(dataObj);
         }
 
-        fileItem.key = this._keyGetter(dataObj);
-        if(!fileItem.key) {
+        if(!key) {
             fileItem.key = fileItem.relativeName;
         }
 

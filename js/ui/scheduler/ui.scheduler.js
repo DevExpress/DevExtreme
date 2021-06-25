@@ -1707,7 +1707,7 @@ class Scheduler extends Widget {
         const currentView = this.option('currentView');
         const that = this;
 
-        this._currentView = currentView;
+        this._currentView = null;
 
         each(views, function(_, view) {
             const isViewIsObject = isObject(view);
@@ -1719,6 +1719,15 @@ class Scheduler extends Widget {
                 return false;
             }
         });
+
+        if(!this._currentView) {
+            const isCurrentViewValid = !!VIEWS_CONFIG[currentView];
+            if(isCurrentViewValid) {
+                this._currentView = currentView;
+            } else {
+                this._currentView = views[0];
+            }
+        }
     }
 
     _validateCellDuration() {

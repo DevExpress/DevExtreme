@@ -2279,3 +2279,19 @@ module('reordering with dataSource', () => {
         assert.equal(widget.option('items')[0].text, 'item 2', 'items wew changed');
     });
 });
+
+module('internal methods', () => {
+    test('getItemElement, getNormalizedIndex and getIndex methods should not call "get" in item model (T996102)', function(assert) {
+        const getCallSpy = sinon.spy();
+        this.items = [{ get: getCallSpy }];
+        this.$element = $('#cmp');
+        this.instance = new TestComponent(this.$element, {
+            items: this.items,
+        });
+
+        this.instance._editStrategy.getItemElement(this.items[0]);
+        this.instance._editStrategy.getNormalizedIndex(this.items[0]);
+        this.instance._editStrategy.getIndex(this.items[0]);
+        assert.strictEqual(getCallSpy.callCount, 0);
+    });
+});

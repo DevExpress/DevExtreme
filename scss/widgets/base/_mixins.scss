@@ -1,5 +1,7 @@
 // stylelint-disable selector-class-pattern
 
+@use "sass:math";
+
 @mixin dx-clearfix-mixin() {
   &::before,
   &::after {
@@ -128,7 +130,7 @@
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$indicator-size / 2;
+  margin-top: math.div(-$indicator-size, 2);
   width: $indicator-size;
   height: $indicator-size;
 }

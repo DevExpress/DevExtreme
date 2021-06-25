@@ -1537,7 +1537,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        const $popupContainer = that.headerFilterView.getPopupContainer()._container();
+        const $popupContainer = that.headerFilterView.getPopupContainer().$overlayContent();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContainer.is(':visible'), 'visible popup');
@@ -1564,7 +1564,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContainer = that.headerFilterView.getPopupContainer()._container();
+        $popupContainer = that.headerFilterView.getPopupContainer().$overlayContent();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContainer.is(':visible'), 'visible popup');
@@ -1587,7 +1587,7 @@ QUnit.module('Header Filter', {
 
 
         // assert
-        $popupContainer = that.headerFilterView.getPopupContainer()._container();
+        $popupContainer = that.headerFilterView.getPopupContainer().$overlayContent();
 
         assert.equal($('body').children('.dx-header-filter-menu').length, 1, 'has wrapper header filter menu');
         assert.ok($popupContainer.is(':visible'), 'visible popup');

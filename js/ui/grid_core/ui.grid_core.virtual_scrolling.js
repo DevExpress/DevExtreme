@@ -817,8 +817,8 @@ export default {
                                     const rowElement = component.getRowElement(rowIndex);
                                     const $rowElement = rowElement && rowElement[0] && $(rowElement[0]);
                                     let top = $rowElement && $rowElement.position().top;
-
-                                    const allowedTopOffset = browser.mozilla || browser.msie ? 1 : 0; // T884308
+                                    const isChromeLatest = browser.chrome && browser.version >= 91;
+                                    const allowedTopOffset = browser.mozilla || browser.msie || isChromeLatest ? 1 : 0; // T884308
                                     if(top > allowedTopOffset) {
                                         top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });

@@ -1074,9 +1074,6 @@ export const MockAxis = function(renderOptions) {
                 ticks: []
             };
         },
-        dataVisualRangeIsReduced: function() {
-            return true;
-        },
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
         },

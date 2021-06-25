@@ -17,7 +17,7 @@ const moduleSetup = {
 QUnit.module('markup', moduleSetup, () => {
     QUnit.test('element and overlay wrapper should have invalid message class', function(assert) {
         assert.ok(this._$validationMessage.hasClass('dx-invalid-message'), 'element has correct class');
-        assert.ok(this._validationMessage._wrapper().hasClass('dx-invalid-message'), 'overlay wrapper has correct class');
+        assert.ok(this._validationMessage.$wrapper().hasClass('dx-invalid-message'), 'overlay wrapper has correct class');
     });
 
     QUnit.test('mode option change should toggle overlay wrapper class', function(assert) {

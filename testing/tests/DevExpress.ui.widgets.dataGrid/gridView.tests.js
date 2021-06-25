@@ -391,7 +391,7 @@ QUnit.module('Grid view', {
 
         // act
         gridView.render(testElement, {});
-        gridView.optionChanged({ name: 'showBorders', value: true });
+        gridView.option('showBorders', true);
 
         // assert
         assert.equal(testElement.find('.dx-datagrid-borders').length, 1, 'borders class');
@@ -2035,7 +2035,6 @@ QUnit.module('Synchronize columns', {
         this.columnsController.beginUpdate();
 
         this.option('summary', []);
-        this.dataController.optionChanged({ name: 'summary', fullName: 'summary', value: [] });
         this.columnOption('field1', 'groupIndex', 0);
 
         this.columnsController.endUpdate();

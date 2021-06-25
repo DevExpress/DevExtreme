@@ -1,4 +1,3 @@
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'data/array_store';
@@ -1147,63 +1146,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     const realSetTimeout = window.setTimeout;
-
-    QUnit.test('ungrouping after grouping should works correctly if row rendering mode is virtual', function(assert) {
-        if(browser.msie) {
-            assert.ok(true, 'This test is unstable in IE/Edge');
-            return;
-        }
-        this.clock.restore();
-        const done = assert.async();
-        // arrange, act
-        const array = [];
-
-        for(let i = 1; i <= 25; i++) {
-            array.push({ id: i, group: 'group' + (i % 8 + 1) });
-        }
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
-            loadingTimeout: undefined,
-            keyExpr: 'id',
-            dataSource: array,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                updateTimeout: 0,
-                useNative: false
-            },
-            grouping: {
-                autoExpandAll: false,
-            },
-            groupPanel: {
-                visible: true
-            },
-            paging: {
-                pageSize: 10
-            }
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.getScrollable().scrollTo({ top: 500 });
-        dataGrid.columnOption('group', 'groupIndex', 0);
-
-        // assert
-        let visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 8, 'visible row count');
-        assert.deepEqual(visibleRows[0].key, ['group1'], 'first visible row key');
-        assert.deepEqual(visibleRows[7].key, ['group8'], 'last visible row key');
-
-        // act
-        realSetTimeout(function() {
-            dataGrid.columnOption('group', 'groupIndex', undefined);
-
-            // assert
-            visibleRows = dataGrid.getVisibleRows();
-            assert.deepEqual(visibleRows[0].key, 1, 'first visible row key');
-            done();
-        });
-    });
 
     // T644981
     QUnit.test('ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual', function(assert) {
@@ -3213,6 +3155,58 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
+    });
+
+    // T996914
+    QUnit.test('The scrollLeft of the footer view should be restored immediately when scrolling vertically', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: generateDataSource(1000),
+            height: 300,
+            width: 200,
+            columnAutoWidth: true,
+            columns: [{
+                dataField: 'id',
+                width: 150
+            }, {
+                dataField: 'name',
+                width: 150
+            }],
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                updateTimeout: 300 // by default
+            },
+            summary: {
+                totalItems: [
+                    {
+                        column: 'name', summaryType: 'count'
+                    }
+                ]
+            }
+        });
+
+        this.clock.tick(200);
+
+        const scrollable = dataGrid.getScrollable();
+
+        // act
+        scrollable.scrollTo({ left: 500 });
+        $(scrollable._container()).trigger('scroll');
+
+        this.clock.tick();
+
+        // assert
+        const footerScrollLeft = dataGrid.getView('footerView').element().children().scrollLeft();
+        assert.ok(footerScrollLeft > 0, 'scrollLeft of the footer');
+
+        // act
+        scrollable.scrollTo({ top: 1000 });
+        $(scrollable._container()).trigger('scroll');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getView('footerView').element().children().scrollLeft(), footerScrollLeft, 'scrollLeft restored');
     });
 });
 

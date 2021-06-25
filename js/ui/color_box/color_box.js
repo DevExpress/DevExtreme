@@ -152,7 +152,7 @@ const ColorBox = DropDownEditor.inherit({
     },
 
     _createColorView: function() {
-        this._popup.overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
+        this._popup.$overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
         const $colorView = $('<div>').appendTo(this._popup.$content());
 

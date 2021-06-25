@@ -1,6 +1,8 @@
 // adduse
 
 
+@use "sass:math";
+
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
@@ -8,8 +10,8 @@ $list-style-outer-width: $list-style-margin + $list-style-width;
 $max-indent: 9;
 $resize-handle-size: 11px;
 $touch-resize-handle-size: 15px;
-$half-resize-handle-size: $resize-handle-size / 2;
-$half-touch-resize-handle-size: $touch-resize-handle-size / 2;
+$half-resize-handle-size: math.div($resize-handle-size, 2);
+$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
 
 $transparent-border: 1px solid transparent;
 

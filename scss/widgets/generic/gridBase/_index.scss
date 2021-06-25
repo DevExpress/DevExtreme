@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -27,6 +28,8 @@ $generic-grid-base-drag-header-border: 1px solid $datagrid-drag-header-border-co
 $generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $generic-grid-base-checkbox-icon-size: 16px;
+$generic-grid-base-checkbox-indeterminate-icon-size: 6px;
+
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {
@@ -285,7 +288,13 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
-        font-size: 6px;
+        &::before {
+          height: $generic-grid-base-checkbox-indeterminate-icon-size;
+          width: $generic-grid-base-checkbox-indeterminate-icon-size;
+          margin-top: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
+          margin-left: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
+          border-radius: 0;
+        }
       }
     }
   }

@@ -968,5 +968,14 @@ module.exports = function() {
 
             assert.equal(errorHandler.callCount, 0, 'warning was not rised');
         });
+        QUnit.test('getTimeSeparator should depend on current locale', function(assert) {
+            try {
+                localization.locale('da');
+                const formattedText = localization.formatDate(new Date(2021, 1, 1, 12, 34), 'shorttime');
+                assert.ok(formattedText.indexOf(dateLocalization.getTimeSeparator()) > 0);
+            } finally {
+                localization.locale('en');
+            }
+        });
     });
 };

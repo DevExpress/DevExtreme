@@ -1228,9 +1228,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._selectAllEnabled()) {
             const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
 
-            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', undefined);
+            selectAllCheckbox.option('onValueChanged', undefined);
             selectAllCheckbox.option('value', this._dataAdapter.isAllSelected());
-            selectAllCheckbox._setOptionWithoutOptionChange('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
+            selectAllCheckbox.option('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
         }
     },
 

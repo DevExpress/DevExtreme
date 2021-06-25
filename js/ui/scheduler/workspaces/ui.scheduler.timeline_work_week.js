@@ -1,7 +1,12 @@
 import registerComponent from '../../../core/component_registrator';
 import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import dateUtils from '../../../core/utils/date';
-import workWeekUtils from './utils.work_week';
+import {
+    getWeekendsCount,
+    isDataOnWeekend,
+    getFirstDayOfWeek,
+    getFirstViewDate,
+} from './utils/work_week';
 const toMs = dateUtils.dateToMilliseconds;
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -11,8 +16,8 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     constructor(...args) {
         super(...args);
 
-        this._getWeekendsCount = workWeekUtils.getWeekendsCount;
-        this._isSkippedData = workWeekUtils.isDataOnWeekend;
+        this._getWeekendsCount = getWeekendsCount;
+        this._isSkippedData = isDataOnWeekend;
     }
 
     _getElementClass() {
@@ -24,10 +29,10 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     }
 
     _firstDayOfWeek() {
-        return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
+        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
-    _isSkippedData() { return workWeekUtils.isDataOnWeekend; }
+    _isSkippedData() { return isDataOnWeekend; }
 
     _incrementDate(date) {
         const day = date.getDay();
@@ -43,7 +48,7 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     }
 
     _setFirstViewDate() {
-        this._firstViewDate = workWeekUtils.getFirstViewDate(this.option('currentDate'), this._firstDayOfWeek());
+        this._firstViewDate = getFirstViewDate(this._getViewStartByOptions(), this._firstDayOfWeek());
         this._setStartDayHour(this._firstViewDate);
     }
 }

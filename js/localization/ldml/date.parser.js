@@ -18,6 +18,10 @@ const monthRegExpGenerator = function(count, dateParts) {
 };
 
 const PATTERN_REGEXPS = {
+    ':': function(count, dateParts) {
+        const countSuffix = count > 1 ? `{${count}}` : '';
+        return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
+    },
     y: function(count) {
         return '[0-9]+';
     },

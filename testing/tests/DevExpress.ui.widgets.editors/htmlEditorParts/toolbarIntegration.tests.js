@@ -4,7 +4,7 @@ import 'ui/html_editor';
 import fx from 'animation/fx';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { checkLink, prepareTableValue } from './utils.js';
+import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -794,5 +794,29 @@ testModule('Toolbar integration', {
         $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
             .first()
             .trigger('dxclick');
+    });
+
+    test('Add a variable via toolbar', function(assert) {
+        fx.off = false;
+        const done = assert.async();
+        const expectedValue = '<p><span class="dx-variable" data-var-start-esc-char="%" data-var-end-esc-char="%" data-var-value="test"><span contenteditable="false">%test%</span></span></p>';
+        $('#htmlEditor').dxHtmlEditor({
+            toolbar: { items: ['variable'] },
+            variables: {
+                dataSource: ['test'],
+                escapeChar: '%'
+            },
+            onValueChanged: ({ value }) => {
+                assert.strictEqual(prepareEmbedValue(value), expectedValue);
+                done();
+            }
+        });
+
+        $('#htmlEditor')
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
+        this.clock.tick();
     });
 });

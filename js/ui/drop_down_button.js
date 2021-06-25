@@ -411,7 +411,7 @@ const DropDownButton = Widget.inherit({
         this.$element().append($popup);
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
-        this._popup._wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
         this._popup.on('hiding', this._popupHidingHandler.bind(this));
         this._popup.on('showing', this._popupShowingHandler.bind(this));
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');

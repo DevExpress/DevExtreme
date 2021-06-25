@@ -931,23 +931,19 @@ export default {
             max: true
         },
 
-        adjust(alignToBounds) {
+        adjust() {
             const that = this;
             const seriesData = that._seriesData;
-            let viewport = { min: seriesData.min, max: seriesData.max };
-
-            if(!alignToBounds) {
-                viewport = that._series.filter(s => s.isVisible()).reduce((range, s) => {
-                    const seriesRange = s.getViewport();
-                    range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
-                    range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
-                    if(s.showZero) {
-                        range = new Range(range);
-                        range.correctValueZeroLevel();
-                    }
-                    return range;
-                }, {});
-            }
+            const viewport = that._series.filter(s => s.isVisible()).reduce((range, s) => {
+                const seriesRange = s.getViewport();
+                range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
+                if(s.showZero) {
+                    range = new Range(range);
+                    range.correctValueZeroLevel();
+                }
+                return range;
+            }, {});
 
             if(isDefined(viewport.min) && isDefined(viewport.max)) {
                 seriesData.minVisible = viewport.min;

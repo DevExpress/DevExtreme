@@ -714,7 +714,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         isEditRow: function(rowIndex) {
             const editMode = getEditMode(this);
-            return this._getVisibleEditRowIndex() === rowIndex && ROW_BASED_MODES.indexOf(editMode) !== -1;
+            return ROW_BASED_MODES.indexOf(editMode) !== -1 && this._isEditRowByIndex(rowIndex);
         },
 
         _setEditRowKey: function(value, silent) {
@@ -746,8 +746,19 @@ const EditingController = modules.ViewController.inherit((function() {
             return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP ? this._getVisibleEditRowIndex() : -1;
         },
 
+        _isEditRowByIndex(rowIndex) {
+            const key = this._dataController.getKeyByRowIndex(rowIndex);
+            // Vitik: performance optimization equalByValue take O(1)
+            const isKeyEqual = isDefined(key) && equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key);
+            if(isKeyEqual) {
+                // Vitik: performance optimization _getVisibleEditRowIndex take O(n)
+                return this._getVisibleEditRowIndex() === rowIndex;
+            }
+            return isKeyEqual;
+        },
+
         isEditCell: function(visibleRowIndex, columnIndex) {
-            return this._getVisibleEditRowIndex() === visibleRowIndex && this._getVisibleEditColumnIndex() === columnIndex;
+            return this._isEditRowByIndex(visibleRowIndex) && this._getVisibleEditColumnIndex() === columnIndex;
         },
 
         getPopupContent: function() {
@@ -2995,15 +3006,16 @@ export default {
                     const columnIndex = that._getColumnIndexByElement($targetElement);
                     const row = that._dataController.items()[e.rowIndex];
                     const allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.isNewRow;
-                    const column = that._columnsController.getVisibleColumns()[columnIndex];
-                    const allowEditing = allowUpdating && column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex));
-                    const startEditAction = that.option('editing.startEditAction') || 'click';
+                    const column = this._columnsController.getVisibleColumns()[columnIndex];
+                    const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
+                    const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);
+                    const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 
-                    if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
+                    if(eventName === 'click' && startEditAction === 'dblClick' && !isEditedCell) {
                         editingController.closeEditCell();
                     }
 

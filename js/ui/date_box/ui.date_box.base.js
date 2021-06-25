@@ -347,7 +347,7 @@ const DateBox = DropDownEditor.inherit({
 
     _renderPopup: function() {
         this.callBase();
-        this._popup._wrapper().addClass(DATEBOX_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
     },
 
@@ -371,7 +371,7 @@ const DateBox = DropDownEditor.inherit({
             $element.removeClass(DATEBOX_WRAPPER_CLASS + '-' + item);
         }).bind(this));
 
-        this._popup._wrapper()
+        this._popup.$wrapper()
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this.option('type'))
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType);
     },
@@ -757,9 +757,22 @@ const DateBox = DropDownEditor.inherit({
         return dateSerialization.serializeDate(date, serializationFormat);
     },
 
-    reset: function() {
+    _clearValue: function() {
+        const value = this.option('value');
+
         this.callBase();
-        this._updateValue(this.dateOption('value'));
+        if(value === null) {
+            this._applyCustomValidation(null);
+        }
+    },
+
+    reset: function() {
+        const value = this.option('value');
+
+        this.callBase();
+        if(value === null) {
+            this._applyInternalValidation(null);
+        }
     }
 });
 

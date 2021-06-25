@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -29,7 +30,7 @@
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 14px;
-$treelist-select-all-checkbox-margin-top: floor((round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size) / 2);
+$treelist-select-all-checkbox-margin-top: floor(math.div(round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size, 2));
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $generic-grid-base-cell-padding;
@@ -118,7 +119,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
 
   .dx-checkbox {
     top: 50%;
-    margin-top: -$generic-grid-base-checkbox-icon-size / 2;
+    margin-top: math.div(-$generic-grid-base-checkbox-icon-size, 2);
   }
 }
 

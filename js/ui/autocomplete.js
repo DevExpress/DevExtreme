@@ -132,7 +132,10 @@ const Autocomplete = DropDownList.inherit({
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: 'none'
+            pageLoadMode: 'none',
+            onSelectionChanged: (e) => {
+                this._setSelectedItem(e.addedItems[0]);
+            }
         });
     },
 

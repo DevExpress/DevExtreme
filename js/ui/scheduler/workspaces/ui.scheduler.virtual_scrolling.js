@@ -3,8 +3,8 @@ import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 
-const ROW_HEIGHT = 50;
-const CELL_WIDTH = 150;
+const DEFAULT_CELL_HEIGHT = 50;
+const MIN_CELL_WIDTH = 1;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -19,8 +19,8 @@ const DefaultScrollingType = scrollingTypes.vertical;
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
-        this._rowHeight = ROW_HEIGHT;
-        this._cellWidth = CELL_WIDTH;
+        this._rowHeight = this.getCellHeight();
+        this._cellWidth = this.getCellWidth();
         this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
@@ -107,6 +107,25 @@ export default class VirtualScrollingDispatcher {
     get horizontalScrollingAllowed() {
         return this.scrollingType === scrollingTypes.horizontal ||
             this.scrollingType === scrollingTypes.both;
+    }
+
+    getCellHeight() {
+        const cellHeight = this.workspace.getCellHeight(false);
+        const result = cellHeight > 0
+            ? cellHeight
+            : DEFAULT_CELL_HEIGHT;
+
+        return Math.floor(result);
+    }
+
+    getCellWidth() {
+        const cellWidth = this.workspace.getCellWidth() ||
+            this.workspace.getCellMinWidth();
+        const result = cellWidth > 0
+            ? cellWidth
+            : MIN_CELL_WIDTH;
+
+        return Math.floor(result);
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
@@ -218,18 +237,24 @@ export default class VirtualScrollingDispatcher {
     }
 
     updateDimensions() {
-        const cellHeight = this.workspace.getCellHeight(false);
-        const cellWidth = this.workspace.getCellWidth();
-
-        const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
-
-        if(needUpdate) {
+        const cellHeight = this.getCellHeight(false);
+        const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
+        if(needUpdateVertical) {
             this.rowHeight = cellHeight;
+
+            this.verticalVirtualScrolling?.reinitState(cellHeight);
+        }
+
+        const cellWidth = this.getCellWidth();
+        const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
+        if(needUpdateHorizontal) {
             this.cellWidth = cellWidth;
 
-            this._createVirtualScrolling();
+            this.horizontalVirtualScrolling?.reinitState(cellWidth);
+        }
 
-            this.renderer._renderDateTable();
+        if(needUpdateVertical || needUpdateHorizontal) {
+            this.renderer._renderGrid();
         }
     }
 }
@@ -240,12 +265,17 @@ class VirtualScrollingBase {
         this._state = this.defaultState;
         this._viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
+        this._itemSizeChanged = false;
 
         this.updateState(0);
     }
 
     get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
+    set itemSize(value) {
+        this._itemSizeChanged = this._itemSize !== value;
+        this._itemSize = value;
+    }
     get state() { return this._state; }
     set state(value) { this._state = value; }
 
@@ -348,6 +378,17 @@ class VirtualScrollingBase {
         return true;
     }
 
+    reinitState(itemSize) {
+        const { position } = this;
+
+        this.itemSize = itemSize;
+
+        this.updateState(0);
+        if(position > 0) {
+            this.updateState(position);
+        }
+    }
+
     _calcItemInfoBefore(position) {
         let virtualItemCountBefore = Math.floor(position / this.itemSize);
 
@@ -427,12 +468,18 @@ class VirtualScrollingBase {
 
         const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
         const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-        const needAddItems = isAppend || isPrepend;
 
+        const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
         if(needAddItems) {
-            state.virtualItemSizeBefore = virtualItemSizeBefore;
-            state.virtualItemSizeAfter = virtualItemSizeAfter;
+            this._updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter);
         }
+    }
+
+    _updateStateVirtualItemSizes(virtualItemSizeBefore, virtualItemSizeAfter) {
+        const { state } = this;
+
+        state.virtualItemSizeBefore = virtualItemSizeBefore;
+        state.virtualItemSizeAfter = virtualItemSizeAfter;
     }
 }
 
@@ -502,11 +549,11 @@ class Renderer {
     get workspace() { return this._workspace; }
 
     updateRender() {
-        this._renderDateTable();
+        this._renderGrid();
         this._renderAppointments();
     }
 
-    _renderDateTable() {
+    _renderGrid() {
         this.workspace.renderRWorkspace(false);
     }
 

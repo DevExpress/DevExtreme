@@ -48,7 +48,7 @@ const ValidationMessage = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(INVALID_MESSAGE);
-        this._wrapper().addClass(INVALID_MESSAGE);
+        this.$wrapper().addClass(INVALID_MESSAGE);
         this._toggleModeClass();
         this._updateContentId();
     },
@@ -76,7 +76,7 @@ const ValidationMessage = Overlay.inherit({
 
     _toggleModeClass() {
         const mode = this.option('mode');
-        this._wrapper()
+        this.$wrapper()
             .toggleClass(INVALID_MESSAGE_AUTO, mode === 'auto')
             .toggleClass(INVALID_MESSAGE_ALWAYS, mode === 'always');
     },

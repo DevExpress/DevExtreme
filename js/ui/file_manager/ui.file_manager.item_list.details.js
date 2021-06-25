@@ -295,7 +295,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         e.items = this._contextMenu.createContextMenuItems(fileItems, null, item);
-        this._raiseContextMenuShowing();
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
@@ -337,6 +336,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 sortIndex: 0
             });
         }
+    }
+
+    _resetFocus() {
+        this._setFocusedItemKey(undefined);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
@@ -386,7 +389,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
             const selectedItems = [];
             const selectedKeys = [];
-            if(fileItemInfo) {
+            if(fileItemInfo && !this._isParentDirectoryItem(fileItemInfo)) {
                 selectedItems.push(fileItemInfo.fileItem);
                 selectedKeys.push(fileItemInfo.fileItem.key);
             }
@@ -413,7 +416,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _setFocusedItemKey(itemKey) {
-        this._filesView.option('focusedRowKey', itemKey);
+        this._filesView?.option('focusedRowKey', itemKey);
     }
 
     clearSelection() {

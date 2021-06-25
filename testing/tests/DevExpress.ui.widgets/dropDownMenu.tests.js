@@ -94,7 +94,7 @@ const testRendering = function(usePopover) {
             try {
                 ddMenu._popupOptions = function() {
                     return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
-                        assert.ok(this._$content.find('.' + DROP_DOWN_MENU_LIST_CLASS).length, 'List is already rendered');
+                        assert.ok(this.$overlayContent().find('.' + DROP_DOWN_MENU_LIST_CLASS).length, 'List is already rendered');
                     }
                     });
                 };
@@ -362,7 +362,7 @@ QUnit.module('render', moduleConfig(), () => {
             opened: true
         });
         const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = $(popoverInstance.content());
+        const $content = popoverInstance.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
@@ -376,7 +376,7 @@ QUnit.module('render', moduleConfig(), () => {
         $dropDownMenu.dxDropDownMenu('option', 'container', $container);
 
         const popoverInstance = $dropDownMenu.find('.dx-popup').dxPopover('instance');
-        const $content = $(popoverInstance.content());
+        const $content = popoverInstance.$content();
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });

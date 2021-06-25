@@ -216,7 +216,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._isProgressDrawerOpened()) {
             return;
         }
-        this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
+        this._getNotificationPopup().$wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
         this._getNotificationPopup().option('contentTemplate', content);
         if(!this._getNotificationPopup().option('visible')) {
             this._getNotificationPopup().show();
