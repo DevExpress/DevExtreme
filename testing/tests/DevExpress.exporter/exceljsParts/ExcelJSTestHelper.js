@@ -47,7 +47,11 @@ class ExcelJSTestHelper {
             if(tolerance && isFinite(expected)) {
                 assert.roughEqual(actual, expected, tolerance, message);
             } else {
-                assert.equal(actual, expected, message);
+                if(isFinite(expected)) {
+                    assert.roughEqual(actual, expected, 0.02, message);
+                } else {
+                    assert.equal(actual, expected, message);
+                }
             }
         }
     }
