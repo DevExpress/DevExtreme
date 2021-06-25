@@ -36,6 +36,18 @@ QUnit.module('Actions', moduleConfig, () => {
         this.clock.tick();
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
     });
+    test('expand/collapse All', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        this.instance._collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        this.clock.tick();
+        this.instance._expandAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, data.tasks.length - 1);
+    });
     test('collapse and expand after inserting', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);

@@ -236,10 +236,12 @@ QUnit.test('Scale is rendered', function(assert) {
 
     const scale = axisModule.Axis.getCall(0).returnValue;
     const scaleGroup = this.renderer.g.getCall(6).returnValue;
+    const labelsAxesGroup = this.renderer.g.getCall(7).returnValue;
     const axisArguments = axisModule.Axis.getCall(0).args[0];
 
     assert.deepEqual(axisArguments.renderer, this.renderer, 'scale params: renderer');
     assert.deepEqual(axisArguments.axesContainerGroup, scaleGroup, 'scale params: group');
+    assert.deepEqual(axisArguments.labelsAxesGroup, labelsAxesGroup, 'scale params: labels');
     assert.deepEqual(axisArguments.axisType, 'testAxes', 'scale params: type');
     assert.deepEqual(axisArguments.drawingType, 'testDrawing', 'scale params: drawingType');
     assert.deepEqual(axisArguments.widgetClass, 'dxg', 'scale params: dxg');
@@ -469,7 +471,7 @@ QUnit.test('Subvalue indicators are rendered', function(assert) {
         assert.strictEqual(target.renderer, gauge._renderer, 'renderer is passed');
         assert.strictEqual(target.translator, gauge._translator, 'translator is passed');
 
-        const subvalueIndicatorsContainer = gauge._renderer.g.getCall(7).returnValue;
+        const subvalueIndicatorsContainer = gauge._renderer.g.getCall(8).returnValue;
         assert.strictEqual(target.owner, subvalueIndicatorsContainer, 'root element is passed');
         assert.deepEqual(subvalueIndicatorsContainer.attr.firstCall.args[0], { class: 'dxg-subvalue-indicators' });
         assert.strictEqual(subvalueIndicatorsContainer.linkOn.callCount, 1);

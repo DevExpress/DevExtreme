@@ -200,8 +200,16 @@ class RadioGroup extends Editor {
         }
     }
 
+    _getSelectedItemKeys(value = this.option('value')) {
+        const isNullSelectable = this.option('valueExpr') !== 'this';
+        const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
+
+        return shouldSelectValue ? [value] : [];
+    }
+
     _setSelection(currentValue) {
-        this._setCollectionWidgetOption('selectedItemKeys', [this._unwrappedValue(currentValue)]);
+        const value = this._unwrappedValue(currentValue);
+        this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
     }
 
     _optionChanged(args) {
@@ -271,15 +279,12 @@ class RadioGroup extends Editor {
         this._areRadiosCreated = new Deferred();
         const $radios = $('<div>').appendTo(this.$element());
         const {
-            value,
             displayExpr,
             accessKey,
             focusStateEnabled,
             itemTemplate,
-            tabIndex,
-            valueExpr
+            tabIndex
         } = this.option();
-        const isNullSelectable = valueExpr !== 'this';
 
         this._createComponent($radios, RadioCollection, {
             onInitialized: ({ component }) => {
@@ -299,7 +304,7 @@ class RadioGroup extends Editor {
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: 'single',
-            selectedItemKeys: isNullSelectable || isDefined(value) ? [value] : [],
+            selectedItemKeys: this._getSelectedItemKeys(),
             tabIndex
         });
         this._areRadiosCreated.resolve();

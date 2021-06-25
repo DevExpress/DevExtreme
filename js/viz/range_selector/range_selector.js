@@ -29,6 +29,7 @@ import { Tracker } from './tracker';
 import { RangeView } from './range_view';
 import { SeriesDataSource } from './series_data_source';
 import { tickGenerator } from '../axes/tick_generator';
+import constants from '../axes/axes_constants';
 import baseWidgetModule from '../core/base_widget';
 
 const _max = Math.max;
@@ -574,6 +575,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
         const rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
         const slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
         const scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        const labelsAxesGroup = renderer.g().attr({ 'class': 'dxrs-scale-elements', 'clip-path': that._clipRect.id }).append(root);
         const scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
         const trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
@@ -581,6 +583,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
+            labelsAxesGroup: labelsAxesGroup,
             updateSelectedRange: function(range, e) { that.setValue(convertVisualRangeObject(range), e); },
             incidentOccurred: that._incidentOccurred
         });
@@ -1027,12 +1030,37 @@ function getTickStartPositionShift(length) {
     return length % 2 === 1 ? -_floor(length / 2) : -length / 2;
 }
 
+function checkShiftedLabels(majorTicks, boxes, minSpacing, alignment) {
+    function checkLabelsOverlapping(nearestLabelsIndexes) {
+        if(nearestLabelsIndexes.length === 2 &&
+            constants.areLabelsOverlap(boxes[nearestLabelsIndexes[0]], boxes[nearestLabelsIndexes[1]], minSpacing, alignment)) {
+            majorTicks[nearestLabelsIndexes[0]].removeLabel();
+        }
+    }
+    function getTwoVisibleLabels(startIndex) {
+        const labels = [];
+
+        for(let i = startIndex; labels.length < 2 && i < majorTicks.length; i++) {
+            majorTicks[i].label && labels.push(i);
+        }
+
+        return labels;
+    }
+
+    if(majorTicks.length < 3) {
+        return;
+    }
+
+    checkLabelsOverlapping(getTwoVisibleLabels(0));
+    checkLabelsOverlapping(getTwoVisibleLabels(majorTicks.length - 2).reverse());
+}
 function AxisWrapper(params) {
     const that = this;
     that._axis = new Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
         scaleBreaksGroup: params.scaleBreaksGroup,
+        labelsAxesGroup: params.labelsAxesGroup,
         incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
         axisType: 'xyAxes',
@@ -1045,6 +1073,7 @@ function AxisWrapper(params) {
     that._updateSelectedRangeCallback = params.updateSelectedRange;
     that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
     that._axis.getTickStartPositionShift = getTickStartPositionShift;
+    that._axis._checkShiftedLabels = checkShiftedLabels;
 }
 
 AxisWrapper.prototype = {

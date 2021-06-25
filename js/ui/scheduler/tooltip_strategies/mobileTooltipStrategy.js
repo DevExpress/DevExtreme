@@ -1,4 +1,4 @@
-import { Overlay } from '../../overlay';
+import Overlay from '../../overlay/ui.overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
 import { getWindow } from '../../../core/utils/window';
 import $ from '../../../core/renderer';

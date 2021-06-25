@@ -188,7 +188,7 @@ export class GanttContextMenuBar extends Bar {
                     this._owner._executeCoreCommand(e.itemData.commandId);
                 } else {
                     if(e.itemData.name !== undefined) {
-                        this._owner._raiseCustomCommand(e.itemData.name);
+                        this._owner._actionsManager.raiseCustomCommand(e.itemData.name);
                     }
                 }
             }
@@ -227,6 +227,7 @@ export class GanttContextMenuBar extends Bar {
     show(point, items) {
         this._menu.option('items', items || this._items);
         this._menu.option('position.offset', { x: point.x, y: point.y });
+        this._menu.option('position.collision', 'fit');
         this._menu.show();
     }
 

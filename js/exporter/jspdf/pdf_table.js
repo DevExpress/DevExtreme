@@ -44,7 +44,7 @@ export class PdfTable {
         this.rowHeights.push(rowHeight);
         for(let i = 0; i < cells.length; i++) {
             const currentCell = cells[i];
-            if(currentCell.drawLeftBorder === false) {
+            if(currentCell.drawLeftBorder === false && !isDefined(currentCell.colSpan)) { // TODO
                 if(i >= 1) {
                     cells[i - 1].drawRightBorder = false;
                 }
@@ -69,7 +69,7 @@ export class PdfTable {
                 throw 'column width is required'; // TODO
             }
 
-            cells[i]._rect = {
+            currentCell._rect = {
                 x: this.getCellX(i),
                 y: this.getCellY(this.rows.length - 1),
                 w: columnWidth,

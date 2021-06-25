@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -88,7 +89,7 @@
     padding: 0 $material-list-item-horizontal-padding;
 
     .dx-checkbox {
-      padding: ($material-list-item-height - $material-checkbox-size) / 2 0;
+      padding: math.div($material-list-item-height - $material-checkbox-size, 2) 0;
     }
   }
 }

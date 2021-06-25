@@ -149,6 +149,38 @@ export default function() {
                 .trigger('dxclick');
         });
 
+        test('adaptive menu should be hidden after selecting formatting', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: '<p>test</p>',
+                toolbar: {
+                    items: [{
+                        name: 'header',
+                        acceptedValues: [false, 1, 2, 3, 4, 5],
+                        options: {
+                            opened: true
+                        },
+                        locateInMenu: 'always'
+                    }],
+                    multiline: false
+                },
+                onValueChanged: (e) => {
+                    assert.ok($(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).is(':hidden'));
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(0, 2);
+
+            $('#htmlEditor')
+                .find(`.${DROPDOWNMENU_CLASS}`)
+                .trigger('dxclick');
+
+            $(`.${LIST_ITEM_CLASS}`)
+                .last()
+                .trigger('dxclick');
+        });
+
         test('Add a link via dialog', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor').dxHtmlEditor({

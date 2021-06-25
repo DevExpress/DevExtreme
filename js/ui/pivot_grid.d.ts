@@ -197,7 +197,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       layout?: 0 | 1 | 2,
       /**
        * @docid
-       * @default searchTimeout
+       * @default 500
        */
       searchTimeout?: number,
       /**
@@ -319,7 +319,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number,
       /**
        * @docid
-       * @default searchTimeout
+       * @default 500
        */
       searchTimeout?: number,
       /**

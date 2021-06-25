@@ -8,6 +8,8 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
+import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
+import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 
 import 'generic_light.css!';
 
@@ -1346,3 +1348,5 @@ QUnit.module('Table splitting', moduleConfig, () => {
 });
 
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

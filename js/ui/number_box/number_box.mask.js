@@ -70,7 +70,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         if(!this._preventNestedFocusEvent(e)) {
             this.clearCaretTimeout();
             this._caretTimeout = setTimeout(function() {
-                this._caretTimeout = null;
+                this._caretTimeout = undefined;
                 const caret = this._caret();
 
                 if(caret.start === caret.end && this._useMaskBehavior()) {
@@ -166,11 +166,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _shouldMoveCaret: function(text, caret) {
         const decimalSeparator = number.getDecimalSeparator();
         const isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
-        const isZeroNext = text.charAt(caret.end) === '0';
         const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.') && isDecimalSeparatorNext;
-        const zeroToZeroReplace = this._lastKey === '0' && isZeroNext;
 
-        return moveToFloat || zeroToZeroReplace;
+        return moveToFloat;
     },
 
     _getInputVal: function() {
@@ -567,6 +565,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.on($input, addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
+                    this._caretTimeout = undefined;
                     this._caret(getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
                 }.bind(this), CARET_TIMEOUT_DURATION);
             }
@@ -579,7 +578,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     clearCaretTimeout: function() {
         clearTimeout(this._caretTimeout);
-        this._caretTimeout = null;
+        this._caretTimeout = undefined;
     },
 
     _forceRefreshInputValue: function() {

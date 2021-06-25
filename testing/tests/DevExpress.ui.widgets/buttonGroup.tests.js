@@ -163,6 +163,19 @@ QUnit.module('option changed', {
         assert.deepEqual(templateMock.getCall(1).args[0], item2, 'full item should be passed to the template');
     });
 
+    QUnit.test('custom item property should not be passed to default buttonTemplate', function(assert) {
+        const item1 = { text: 'button 1', icon: 'box', custom: 1 };
+        const item2 = { text: 'button 2', icon: 'box', custom: 2 };
+        this.createButtonGroup({
+            items: [item1, item2]
+        });
+
+        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton('instance'));
+
+        assert.deepEqual(buttons[0].option('_templateData'), {}, 'full item should be passed to the template');
+        assert.deepEqual(buttons[1].option('_templateData'), {}, 'full item should be passed to the template');
+    });
+
     QUnit.test('item.template should have higher priority than the buttonTemplate option', function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{

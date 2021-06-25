@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/checkBox";
 
 // adduse
-
 
 $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
@@ -73,8 +73,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     height: $material-checkbox-ripple-size;
     top: 50%;
     left: 50%;
-    margin-top: -$material-checkbox-ripple-size / 2;
-    margin-left: -$material-checkbox-ripple-size / 2;
+    margin-top: math.div(-$material-checkbox-ripple-size, 2);
+    margin-left: math.div(-$material-checkbox-ripple-size, 2);
     border-radius: 50%;
     display: block;
     position: absolute;

@@ -66,6 +66,10 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     this._effects[0].update([this.props.template, this.props.model]);
   }
 
+  // NOTE: Prevent nodes clearing on unmount.
+  //       Nodes will be destroyed by inferno on markup update
+  componentWillUnmount(): void { }
+
   render(): JSX.Element | null {
     return null;
   }
