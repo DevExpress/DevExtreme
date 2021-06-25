@@ -518,7 +518,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
     columnResizingMode?: 'nextColumn' | 'widget';
     /**
      * @docid
-     * @type boolean|Enums.Mode
+     * @type number|Enums.Mode
      * @default undefined
      * @public
      */
@@ -4401,17 +4401,14 @@ declare class dxDataGrid extends Widget implements GridBase {
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxDataGridColumn = Column;
+export type Column = dxDataGridColumn;
 
 /**
- * @docid dxDataGridColumn
- * @inherits GridBaseColumn
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
  */
-export interface Column extends ColumnBase {
+export interface dxDataGridColumn extends ColumnBase {
     /**
      * @docid dxDataGridColumn.allowExporting
      * @default true
@@ -4541,17 +4538,13 @@ export interface Column extends ColumnBase {
 
 /**
  * @public
- * @namespace DevExpress.ui
- * @deprecated
  */
-export type dxDataGridColumnButton = ColumnButton;
+export type ColumnButton = dxDataGridColumnButton;
 /**
- * @docid dxDataGridColumnButton
- * @inherits GridBaseColumnButton
- * @prevFileNamespace DevExpress.ui
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use the DataGrid's ColumnButton type instead
  */
-export interface ColumnButton extends ColumnButtonBase {
+export interface dxDataGridColumnButton extends ColumnButtonBase {
     /**
      * @docid dxDataGridColumnButton.name
      * @type Enums.GridColumnButtonName|string

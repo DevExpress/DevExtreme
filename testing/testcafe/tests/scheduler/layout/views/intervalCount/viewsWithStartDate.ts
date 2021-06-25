@@ -55,7 +55,7 @@ fixture`Layout: Views: IntervalCount with StartDate`
 
       .doubleClick(scheduler.getDateTableCell(0, 0))
 
-      .expect(await takeScreenshot(`start-date-in-${view}-with-appointment-form.png`))
+      .expect(await takeScreenshot(`start-date-in-${view}-with-form.png`))
       .ok()
 
       .expect(compareResults.isValid())

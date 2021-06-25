@@ -285,7 +285,7 @@ Tooltip.prototype = {
     },
 
     isCursorOnTooltip: function(x, y) {
-        if(this._options.interactive && this.isEnabled()) {
+        if(this._options.interactive) {
             const box = this.plaque.getBBox();
             return x > box.x && x < box.x + box.width && y > box.y && y < box.y + box.height;
         }
