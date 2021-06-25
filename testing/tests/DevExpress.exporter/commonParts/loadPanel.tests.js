@@ -2,7 +2,7 @@ import $ from 'core/renderer';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
-import { getWindow } from 'core/utils/window';
+import { getWindow, setWindow } from 'core/utils/window';
 
 const LOAD_PANEL_CLASS = 'dx-loadpanel';
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
@@ -217,6 +217,42 @@ const LoadPanelTests = {
                     done();
                 });
             });
+
+            QUnit.test('loadPanel: { enabled: true }, hasWindow(): false', function(assert) {
+                assert.expect(5);
+                const done = assert.async();
+                const component = getComponent(componentOptions);
+                const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
+
+                let isFirstCall = true;
+                setWindow({}, false);
+
+                try {
+                    exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                        if(isFirstCall) {
+                            const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
+                            assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
+
+                            const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                            assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
+
+                            isFirstCall = false;
+                        }
+                    } }).then(() => {
+                        const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
+
+                        const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($builtInLoadPanel.length, componentLoadPanelEnabledOption ? 1 : 0, 'builtin loadpanel exist');
+                        assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+
+                        done();
+                    });
+                } finally {
+                    setWindow(window);
+                }
+            });
+
 
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
                 QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {

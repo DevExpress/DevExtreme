@@ -4,6 +4,7 @@ import { ExportFormat } from './export_format';
 import { MergedRangesManager } from './export_merged_ranges_manager';
 import { extend } from '../../core/utils/extend';
 import { ExportLoadPanel } from '../common/export_load_panel';
+import { hasWindow } from '../../core/utils/window';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -114,14 +115,14 @@ export const Export = {
         const internalComponent = component._getInternalInstance?.() || component;
         const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
 
-        if(loadPanel.enabled) {
+        component.option('loadPanel.enabled', false);
+        if(loadPanel.enabled && hasWindow()) {
             const $targetElement = helpers._getLoadPanelTargetElement(component);
             const $container = helpers._getLoadPanelContainer(component);
 
             this._loadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
             this._loadPanel.show();
         }
-        component.option('loadPanel.enabled', false);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -185,7 +186,7 @@ export const Export = {
             }).always(() => {
                 component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
 
-                if(loadPanel.enabled) {
+                if(loadPanel.enabled && hasWindow()) {
                     this._loadPanel.dispose();
                 }
             });
