@@ -5658,7 +5658,7 @@ QUnit.module('DateBox number and string value support', {
     });
 
     // T506146
-    QUnit.test('enter value with big year if dateSerializationFormat is defined', function(assert) {
+    QUnit.skip('enter value with big year if dateSerializationFormat is defined', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = true;
 
@@ -5678,7 +5678,7 @@ QUnit.module('DateBox number and string value support', {
         }
     });
 
-    QUnit.test('enter value with big year if dateSerializationFormat is defined and forceIsoDateParsing is disabled', function(assert) {
+    QUnit.skip('enter value with big year if dateSerializationFormat is defined and forceIsoDateParsing is disabled', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = false;
 
