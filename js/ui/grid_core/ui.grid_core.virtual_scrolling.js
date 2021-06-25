@@ -19,7 +19,6 @@ const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
-const SCROLLING_MODE_STANDARD = 'standard';
 const LOAD_TIMEOUT = 300;
 const NEW_SCROLLING_MODE = 'scrolling.newMode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
@@ -34,13 +33,7 @@ const isAppendMode = function(that) {
 
 const isVirtualRowRendering = function(that) {
     const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
-    if(that.option(NEW_SCROLLING_MODE) && (isVirtualMode(that) || isAppendMode(that))) {
-        return true;
-    } else if(rowRenderingMode === SCROLLING_MODE_VIRTUAL) {
-        return true;
-    } else if(rowRenderingMode === SCROLLING_MODE_STANDARD) {
-        return false;
-    }
+    return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
 };
 
 const correctCount = function(items, count, fromEnd, isItemCountableFunc) {
@@ -759,7 +752,8 @@ export const virtualScrollingModule = {
             data: (function() {
                 const members = {
                     _refreshDataSource: function() {
-                        if(this.option(NEW_SCROLLING_MODE) && !isVirtualRowRendering(this)) {
+                        const shouldEnableVirtualRowRenderingMode = this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this)) && !isVirtualRowRendering(this);
+                        if(shouldEnableVirtualRowRenderingMode) {
                             this._silentOption(ROW_RENDERING_MODE_OPTION, SCROLLING_MODE_VIRTUAL);
                         }
                         const baseResult = this.callBase.apply(this, arguments) || new Deferred().resolve().promise();
