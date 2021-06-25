@@ -196,11 +196,11 @@ export default class dxSlideOut extends CollectionWidget {
     /**
      * @docid
      * @publicName toggleMenuVisibility(showing)
-     * @param1 showing:boolean
+     * @param1 showing:Boolean|undefined
      * @return Promise<void>
      * @public
      */
-    toggleMenuVisibility(showing: boolean): DxPromise<void>;
+    toggleMenuVisibility(showing?: boolean): DxPromise<void>;
 }
 
 /**

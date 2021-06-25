@@ -23,7 +23,7 @@ const enableNativeScroll = ClientFunction(() => {
 
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        const pngName = `day-view-interval-orientation=${groupOrientation}-allDay=${showAllDayPanel}-interval=${intervalCount}.png`;
+        const pngName = `day-orientation=${groupOrientation}-allDay=${showAllDayPanel}-interval=${intervalCount}.png`;
 
         await t
           .expect(await takeScreenshot(pngName, scheduler.element))

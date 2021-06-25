@@ -1,10 +1,10 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {
@@ -29,8 +29,8 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   ['day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `genericGroups-base-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+        .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });
 
@@ -38,7 +38,7 @@ const createScheduler = async (view: string, groupOrientation: string): Promise<
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `genericGroups-timeline-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
-    }).before(() => createScheduler(view, groupOrientation));
+        .expect(await compareScreenshot(t, `generic-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();
+    }).before(async () => createScheduler(view, groupOrientation));
   });
 });

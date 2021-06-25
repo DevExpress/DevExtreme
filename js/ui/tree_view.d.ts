@@ -587,6 +587,12 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      * @default undefined
      * @public
      */
+    id?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
     parentId?: number | string;
     /**
      * @docid

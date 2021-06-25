@@ -1,5 +1,5 @@
 import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import dxDataGrid, { Column } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
@@ -11,8 +11,9 @@ export interface PdfDataGridCell {
     /**
      * @docid
      * @public
+     * @type dxDataGridColumn
      */
-    column?: dxDataGridColumn;
+    column?: Column;
     /**
      * @docid
      * @public

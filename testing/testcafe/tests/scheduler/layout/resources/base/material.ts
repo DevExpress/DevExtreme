@@ -1,11 +1,11 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import Scheduler from '../../../model/scheduler';
-import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import Scheduler from '../../../../../model/scheduler';
+import url from '../../../../../helpers/getPageUrl';
+import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 
 fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, '../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../containerMaterial.html'));
 
 test('Scheduler should have correct height in month view (T927862)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -43,8 +43,8 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `material-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });
 
@@ -56,7 +56,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]): Promis
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `material-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `material-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });

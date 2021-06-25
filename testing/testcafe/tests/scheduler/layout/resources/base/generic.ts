@@ -1,11 +1,11 @@
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
-import createWidget from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
-import { createDataSetForScreenShotTests } from './utils';
+import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
+import { createDataSetForScreenShotTests } from '../../utils';
 
 fixture`Scheduler: Generic theme layout`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
   await createWidget('dxScheduler', {
@@ -42,8 +42,8 @@ const resources = [{
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });
 
@@ -55,7 +55,7 @@ const resources = [{
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
-    }).before(() => createScheduler(view, resourcesValue));
+      await t.expect(await compareScreenshot(t, `generic-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(async () => createScheduler(view, resourcesValue));
   });
 });

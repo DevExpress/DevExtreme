@@ -116,7 +116,7 @@ QUnit.module('Markup', moduleConfig, () => {
         this.instance.insertTask(data);
         this.clock.tick();
         $('.dx-gantt .dx-row').css({ height: '63px' });
-        this.instance._updateGanttRowHeights();
+        this.instance._sizeHelper.updateGanttRowHeights();
         assert.equal(testTasks.length, 1, 'first new task was created in ds');
         let rowHeight = this.instance._getGanttViewOption('rowHeight');
         let treeListRowElement = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).last().get(0);
@@ -125,7 +125,7 @@ QUnit.module('Markup', moduleConfig, () => {
         this.instance.insertTask(data);
         this.clock.tick();
         $('.dx-gantt .dx-row').css({ height: '63px' });
-        this.instance._updateGanttRowHeights();
+        this.instance._sizeHelper.updateGanttRowHeights();
         this.clock.tick();
         assert.equal(testTasks.length, 2, 'second new task was created in ds');
         rowHeight = this.instance._getGanttViewOption('rowHeight');

@@ -42,6 +42,29 @@ QUnit.module('Context Menu', moduleConfig, () => {
         $cellElement.trigger('contextmenu');
         assert.equal(getContextMenuElement().length, 2, 'menu is visible after right click in tree list');
     });
+    test('shown at correct position', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.clock.tick();
+        const oldTop = $('#qunit-fixture').css('top');
+        const oldLeft = $('#qunit-fixture').css('left');
+        $('#qunit-fixture').css('top', '0');
+        $('#qunit-fixture').css('left', '0');
+
+        const getContextMenuElement = () => {
+            return $('body').find(Consts.OVERLAY_WRAPPER_SELECTOR).find(Consts.CONTEXT_MENU_SELECTOR);
+        };
+        assert.equal(getContextMenuElement().length, 0, 'menu is hidden on create');
+        const boundsMax = $(window).height();
+        const positionTop = boundsMax + 1;
+        this.instance._showPopupMenu({ position: { x: 0, y: positionTop } });
+        const contextMenuElement = getContextMenuElement();
+        assert.equal(contextMenuElement.length, 1, 'menu is visible after right click');
+        assert.roughEqual(contextMenuElement.position().top, boundsMax - contextMenuElement.height(), 0.9, 'menu has been shown at correct position');
+        this.clock.tick();
+        $('#qunit-fixture').css('top', oldTop);
+        $('#qunit-fixture').css('left', oldLeft);
+
+    });
     test('enabled', function(assert) {
         this.createInstance(extend(options.tasksOnlyOptions, { contextMenu: { enabled: false } }));
         this.clock.tick();
