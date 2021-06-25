@@ -7422,15 +7422,15 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridColumn = DevExpress.ui.dxDataGrid.Column;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridColumnButton = DevExpress.ui.dxDataGrid.ColumnButton;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridEditing = DevExpress.ui.dxDataGrid.Editing;
   /**
@@ -7633,15 +7633,15 @@ declare module DevExpress.ui {
     summary?: DevExpress.ui.dxDataGrid.Summary;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridRowObject = DevExpress.ui.dxDataGrid.RowObject;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
   /**
@@ -13203,7 +13203,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxHtmlEditorTableResizing]
-   * @deprecated Warning! This type is used for internal purposes. Do not import it directly.
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxHtmlEditorTableResizing {
     /**
@@ -19845,23 +19845,23 @@ declare module DevExpress.ui {
         DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListColumn = DevExpress.ui.dxTreeList.Column;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListColumnButton = DevExpress.ui.dxTreeList.ColumnButton;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
   /**
@@ -20038,19 +20038,19 @@ declare module DevExpress.ui {
     selection?: DevExpress.ui.dxTreeList.Selection;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
   /**
@@ -21118,19 +21118,19 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumn = DevExpress.ui.dxDataGrid.ColumnBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditing = DevExpress.ui.dxDataGrid.EditingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -21495,15 +21495,15 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
