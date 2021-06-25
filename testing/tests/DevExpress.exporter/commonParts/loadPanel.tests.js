@@ -172,8 +172,8 @@ const LoadPanelTests = {
                             $loadPanelContainer = component.$element();
                         }
 
-                        assert.deepEqual(exportLoadPanel.option('position')(), { of: $targetElement }, 'loadPanel.position');
-                        assert.strictEqual(exportLoadPanel.option('container').get(0), $loadPanelContainer.get(0), 'loadPanel.container');
+                        assert.deepEqual($(exportLoadPanel.option('position')().of).get(0), $targetElement.get(0), 'loadPanel.position');
+                        assert.deepEqual(exportLoadPanel.option('container').get(0), $loadPanelContainer.get(0), 'loadPanel.container');
                         isFirstCall = false;
                     }
                 } }).then(() => {
