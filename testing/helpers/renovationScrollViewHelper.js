@@ -1,6 +1,7 @@
 const RenovatedScrollView = require('renovation/ui/scroll_view/scroll_view.j.js');
 // eslint-disable-next-line spellcheck/spell-checker
 const reRender = require('inferno').rerender;
+const Deferred = require('core/utils/deferred').Deferred;
 
 // default export not supported
 exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
@@ -78,7 +79,10 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
     }
 
     update() {
-        return super.update.apply(this, arguments);
+        super.update.apply(this, arguments);
+
+
+        return new Deferred().resolve();
     }
 };
 
