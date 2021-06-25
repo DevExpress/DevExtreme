@@ -12,7 +12,7 @@ class ExportLoadPanel {
         this._$targetElement = $targetElement;
         this._$container = $container;
 
-        this._loadPanel = this.render(component, options);
+        this._loadPanel = component._createComponent($('<div>').addClass(EXPORT_LOAD_PANEL_CLASS).appendTo(this._$container), LoadPanel, this.getOptions(options));
     }
 
     getDefaultOptions() {
@@ -44,10 +44,6 @@ class ExportLoadPanel {
         }
 
         return extend(this.getDefaultOptions(), options);
-    }
-
-    render(component, options) {
-        return component._createComponent($('<div>').addClass(EXPORT_LOAD_PANEL_CLASS).appendTo(this._$container), LoadPanel, this.getOptions(options));
     }
 
     show() {
