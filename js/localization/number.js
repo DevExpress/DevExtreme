@@ -228,10 +228,18 @@ const numberLocalization = dependencyInjector({
         const fromFirstDigit = toStandard ? digits[1] : '0';
         const toFirstDigit = toStandard ? '0' : digits[1];
         const fromLastDigit = toStandard ? digits[0] : '9';
-        const regExp = new RegExp('[' + fromFirstDigit + '-' + fromLastDigit + ']', 'g');
+        // const regExp = new RegExp('[' + fromFirstDigit + '-' + fromLastDigit + ']', 'g');
 
-        return value.replace(regExp, char => {
-            return String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)));
+        const digitsPattern = '[' + fromFirstDigit + '-' + fromLastDigit + ']';
+
+        const regExp = new RegExp(`{${digitsPattern}|${digitsPattern}}|${digitsPattern}`, 'g');
+
+        return value.replace(regExp, match => {
+            if(match.includes('{') || match.includes('}')) {
+                return match;
+            } else {
+                return String.fromCharCode(match.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)));
+            }
         });
     },
 
