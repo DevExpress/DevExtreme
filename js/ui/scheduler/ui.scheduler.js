@@ -1732,12 +1732,13 @@ class Scheduler extends Widget {
         appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         if(isPopupEditing) {
-            // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = appointment.source();
-
+            // debugger
             this._appointmentPopup.show(newRawAppointment, {
                 isDoneButtonVisible: true,
-                isExcludeFromSeries: true
+                isExcludeFromSeries: true,
+
+                initialAppointment: appointment.source(),
+                targetAppointment: rawAppointment,
             });
             this._editAppointmentData = rawAppointment;
 

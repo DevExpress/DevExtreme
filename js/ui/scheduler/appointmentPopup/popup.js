@@ -56,7 +56,7 @@ export default class AppointmentPopup {
     get cellDuration() { return this.scheduler.option('cellDuration'); }
 
     show(appointment = {}, config = {}) {
-        const { isDoneButtonVisible, isNew, isExcludeFromSeries } = config;
+        const { isDoneButtonVisible, isNew, isExcludeFromSeries, initialAppointment, targetAppointment } = config;
 
         if(isEmptyObject(appointment)) {
             const startDate = this.currentDate;
@@ -67,6 +67,8 @@ export default class AppointmentPopup {
         this.state.appointment.data = appointment;
         this.state.isNew = !!isNew;
         this.state.isExcludeFromSeries = !!isExcludeFromSeries;
+        this.state.initialAppointment = initialAppointment;
+        this.state.targetAppointment = targetAppointment;
 
         if(!this._popup) {
             const popupConfig = this._createPopupConfig();
@@ -85,11 +87,9 @@ export default class AppointmentPopup {
         return this._popup ? this._popup.option('visible') : false;
     }
 
-    ///#DEBUG
     getPopup() {
         return this._popup;
     }
-    ///#ENDDEBUG
 
     dispose() {
         if(this._$popup) {
@@ -342,8 +342,8 @@ export default class AppointmentPopup {
             const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
-            const oldData = this.scheduler._editAppointmentData;
-            const recData = this.scheduler._updatedRecAppointment;
+            // const oldData = this.scheduler._editAppointmentData;
+            // const recData = this.scheduler._updatedRecAppointment;
 
             if(state.isEmptyText && adapter.text === '') {
                 delete appointment.text; // TODO
@@ -358,32 +358,14 @@ export default class AppointmentPopup {
                 delete appointment.repeat; // TODO
             }
 
-            // if(this.state.isNew) {
-            //     this.scheduler.addAppointment(appointment)
-            //         .done(deferred.resolve);
-            // }
-
             if(!this.state.isNew && !this.state.isExcludeFromSeries) {
-                this.scheduler.updateAppointment(oldData, appointment).done(deferred.resolve);
+                this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
             } else {
                 if(this.state.isExcludeFromSeries) {
-                    this.scheduler.updateAppointment(oldData, recData);
-                    // delete this.scheduler._updatedRecAppointment;
+                    this.scheduler.updateAppointment(this.state.targetAppointment, this.state.initialAppointment);
                 }
                 this.scheduler.addAppointment(appointment).done(deferred.resolve);
             }
-
-            // if(oldData && !recData) {
-            //     this.scheduler.updateAppointment(oldData, appointment)
-            //         .done(deferred.resolve);
-            // } else {
-            //     if(recData) {
-            //         this.scheduler.updateAppointment(oldData, recData);
-            //         delete this.scheduler._updatedRecAppointment;
-            //     }
-            //     this.scheduler.addAppointment(appointment)
-            //         .done(deferred.resolve);
-            // }
 
             deferred.done(() => {
                 this._hideLoadPanel();
