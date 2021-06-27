@@ -34,7 +34,7 @@ import { custom as customDialog } from '../dialog';
 import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
-import AppointmentPopup from './appointmentPopup/popup';
+import { AppointmentPopup, ACTION_TO_APPOINTMENT } from './appointmentPopup/popup';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
@@ -1680,8 +1680,6 @@ class Scheduler extends Widget {
     }
 
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
-        delete this._updatedRecAppointment;
-
         const recurrenceRule = ExpressionUtils.getField(this.key, 'recurrenceRule', targetAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
@@ -1732,13 +1730,13 @@ class Scheduler extends Widget {
         appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         if(isPopupEditing) {
-            // debugger
             this._appointmentPopup.show(newRawAppointment, {
-                isDoneButtonVisible: true,
-                isExcludeFromSeries: true,
-
-                initialAppointment: appointment.source(),
-                targetAppointment: rawAppointment,
+                isToolbarVisible: true,
+                action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
+                excludeInfo: {
+                    sourceAppointment: rawAppointment,
+                    updatedAppointment: appointment.source()
+                }
             });
             this._editAppointmentData = rawAppointment;
 
@@ -2005,7 +2003,7 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    getAppointmentPopup() {
+    getAppointmentPopup() { // TOTO remove
         return this._appointmentPopup.getPopup();
     }
 
@@ -2127,14 +2125,16 @@ class Scheduler extends Widget {
         if(isCreateAppointment) {
             delete this._editAppointmentData; // TODO
             this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
-                isDoneButtonVisible: true,
-                isNew: true
+                isToolbarVisible: true,
+                action: ACTION_TO_APPOINTMENT.CREATE
             });
         } else {
             this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
                 this._editAppointmentData = rawAppointment; // TODO
+
                 this._appointmentPopup.show(rawAppointment, {
-                    isDoneButtonVisible: this._editing.allowUpdating
+                    isToolbarVisible: this._editing.allowUpdating,
+                    action: ACTION_TO_APPOINTMENT.UPDATE,
                 });
             }, false, true);
         }

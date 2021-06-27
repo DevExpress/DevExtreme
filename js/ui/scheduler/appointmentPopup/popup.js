@@ -31,7 +31,13 @@ const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
 
 const DAY_IN_MS = toMs('day');
 
-export default class AppointmentPopup {
+export const ACTION_TO_APPOINTMENT = {
+    CREATE: 0,
+    UPDATE: 1,
+    EXCLUDE_FROM_SERIES: 2,
+};
+
+export class AppointmentPopup {
     constructor(scheduler) {
         this.scheduler = scheduler;
 
@@ -39,6 +45,7 @@ export default class AppointmentPopup {
         this._appointmentForm = null;
 
         this.state = {
+            action: null,
             lastEditData: null,
             saveChangesLocker: false,
             appointment: {
@@ -46,8 +53,6 @@ export default class AppointmentPopup {
                 isEmptyText: false,
                 isEmptyDescription: false
             },
-            isNew: false,
-            isExcludeFromSeries: false
         };
     }
 
@@ -56,26 +61,26 @@ export default class AppointmentPopup {
     get cellDuration() { return this.scheduler.option('cellDuration'); }
 
     show(appointment = {}, config = {}) {
-        const { isDoneButtonVisible, isNew, isExcludeFromSeries, initialAppointment, targetAppointment } = config;
+        const { isToolbarVisible, action, excludeInfo } = config;
 
         if(isEmptyObject(appointment)) {
             const startDate = this.currentDate;
             const endDate = new Date(startDate.getTime() + this.cellDuration * toMs('minute'));
+
             ExpressionUtils.setField(this.key, 'startDate', appointment, startDate);
             ExpressionUtils.setField(this.key, 'endDate', appointment, endDate);
         }
+
         this.state.appointment.data = appointment;
-        this.state.isNew = !!isNew;
-        this.state.isExcludeFromSeries = !!isExcludeFromSeries;
-        this.state.initialAppointment = initialAppointment;
-        this.state.targetAppointment = targetAppointment;
+        this.state.action = action;
+        this.state.excludeInfo = excludeInfo;
 
         if(!this._popup) {
             const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
         }
 
-        this._popup.option('toolbarItems', this._createPopupToolbarItems(isDoneButtonVisible));
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(isToolbarVisible));
         this._popup.show();
     }
 
@@ -303,11 +308,11 @@ export default class AppointmentPopup {
         }
     }
 
-    _createPopupToolbarItems(isDoneButtonVisible) {
+    _createPopupToolbarItems(isToolbarVisible) {
         const result = [];
         const isIOs = devices.current().platform === 'ios';
 
-        if(isDoneButtonVisible) {
+        if(isToolbarVisible) {
             result.push({
                 shortcut: 'done',
                 options: { text: messageLocalization.format('Done') },
@@ -337,13 +342,9 @@ export default class AppointmentPopup {
                 return;
             }
 
-            // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
             const formData = this._appointmentForm.option('formData');
             const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
-
-            // const oldData = this.scheduler._editAppointmentData;
-            // const recData = this.scheduler._updatedRecAppointment;
 
             if(state.isEmptyText && adapter.text === '') {
                 delete appointment.text; // TODO
@@ -358,13 +359,17 @@ export default class AppointmentPopup {
                 delete appointment.repeat; // TODO
             }
 
-            if(!this.state.isNew && !this.state.isExcludeFromSeries) {
-                this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
-            } else {
-                if(this.state.isExcludeFromSeries) {
-                    this.scheduler.updateAppointment(this.state.targetAppointment, this.state.initialAppointment);
-                }
-                this.scheduler.addAppointment(appointment).done(deferred.resolve);
+            switch(this.state.action) {
+                case ACTION_TO_APPOINTMENT.CREATE:
+                    this.scheduler.addAppointment(appointment).done(deferred.resolve);
+                    break;
+                case ACTION_TO_APPOINTMENT.UPDATE:
+                    this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
+                    break;
+                case ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES:
+                    this.scheduler.updateAppointment(this.state.excludeInfo.sourceAppointment, this.state.excludeInfo.updatedAppointment);
+                    this.scheduler.addAppointment(appointment).done(deferred.resolve);
+                    break;
             }
 
             deferred.done(() => {
