@@ -555,6 +555,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
+        !newItems.length && this.option('selectedItems', []);
         const items = this.option('items');
         if(this._initialized && items && this._shouldAppendItems()) {
             this._renderedItemsCount = items.length;
