@@ -2122,6 +2122,10 @@ class Scheduler extends Widget {
 
         const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
+        if(isEmptyObject(rawAppointment)) {
+            rawAppointment = this.createPopupAppointment();
+        }
+
         if(isCreateAppointment) {
             delete this._editAppointmentData; // TODO
             this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
@@ -2138,6 +2142,19 @@ class Scheduler extends Widget {
                 });
             }, false, true);
         }
+    }
+
+    createPopupAppointment() {
+        const result = {};
+        const toMs = dateUtils.dateToMilliseconds;
+
+        const startDate = this.option('currentDate');
+        const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
+
+        ExpressionUtils.setField(this.key, 'startDate', result, startDate);
+        ExpressionUtils.setField(this.key, 'endDate', result, endDate);
+
+        return result;
     }
 
     hideAppointmentPopup(saveChanges) {

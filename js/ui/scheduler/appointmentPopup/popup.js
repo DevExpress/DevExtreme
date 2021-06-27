@@ -4,7 +4,7 @@ import dateUtils from '../../../core/utils/date';
 import { Deferred, when } from '../../../core/utils/deferred';
 import { extend } from '../../../core/utils/extend';
 import { each } from '../../../core/utils/iterator';
-import { isDefined, isEmptyObject } from '../../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { triggerResizeEvent } from '../../../events/visibility_change';
 import messageLocalization from '../../../localization/message';
@@ -57,19 +57,9 @@ export class AppointmentPopup {
     }
 
     get key() { return this.scheduler.key; }
-    get currentDate() { return this.scheduler.option('currentDate'); }
-    get cellDuration() { return this.scheduler.option('cellDuration'); }
 
-    show(appointment = {}, config = {}) {
+    show(appointment, config) {
         const { isToolbarVisible, action, excludeInfo } = config;
-
-        if(isEmptyObject(appointment)) {
-            const startDate = this.currentDate;
-            const endDate = new Date(startDate.getTime() + this.cellDuration * toMs('minute'));
-
-            ExpressionUtils.setField(this.key, 'startDate', appointment, startDate);
-            ExpressionUtils.setField(this.key, 'endDate', appointment, endDate);
-        }
 
         this.state.appointment.data = appointment;
         this.state.action = action;
