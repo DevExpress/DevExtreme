@@ -105,7 +105,7 @@ export default SelectionStrategy.inherit({
 
         filteredItems = filteredItems.filter(localFilter);
 
-        if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length)) {
+        if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length) || !filteredItems.length) {
             deferred.resolve(filteredItems);
         } else {
             deferred = this._loadFilteredData(combinedFilter, localFilter, null, isSelectAll);
