@@ -243,8 +243,8 @@ export class AppointmentPopup {
 
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
-        AppointmentForm.updateFormData(this._appointmentForm, formData, this.scheduler.getDataAccessors().expr);
-        AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
+        AppointmentForm.updateFormData(formData, this.scheduler.getDataAccessors().expr);
+        AppointmentForm.setEditorsType(startDateExpr, endDateExpr, allDay);
     }
 
     _isDeviceMobile() {
@@ -286,12 +286,13 @@ export class AppointmentPopup {
     }
 
     updatePopupFullScreenMode() {
-        if(!this._appointmentForm) {
-            return;
-        }
-        const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler.getDataAccessors().expr);
-        if(this.isVisible()) {
-            this.changeSize(isRecurrence);
+        if(this._appointmentForm) {
+            const formData = this._appointmentForm.option('formData');
+            const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
+
+            if(this.isVisible()) {
+                this.changeSize(isRecurrence);
+            }
         }
     }
 
