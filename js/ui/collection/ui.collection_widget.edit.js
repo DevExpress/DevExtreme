@@ -394,10 +394,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             this._setOptionWithoutOptionChange('selectedItems', []);
             this._syncSelectionOptions('selectedItems');
         } else if(this.option('selectionMode') === 'single') {
-            let newSelection = this.option('selectedItems');
-            const oldSelection = this._selection.options.selectedItemKeys;
-            const key = this._selection.options.key();
-            newSelection = newSelection.filter((el) => !oldSelection.includes(el[key]));
+            const newSelection = this.option('selectedItems');
 
             if(newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && this.option('items') && this.option('items').length) {
                 const currentSelection = this._selection.getSelectedItems();
