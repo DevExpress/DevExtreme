@@ -2028,10 +2028,6 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    getAppointmentPopup() { // TODO remove
-        return this._appointmentPopup.getPopup();
-    }
-
     ///#DEBUG
     getAppointmentDetailsForm() { // TODO for tests
         return this._appointmentPopup._appointmentForm;
@@ -2184,7 +2180,7 @@ class Scheduler extends Widget {
     }
 
     hideAppointmentPopup(saveChanges) {
-        if(this._appointmentPopup && this._appointmentPopup.isVisible()) {
+        if(this._appointmentPopup?.isVisible()) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }
