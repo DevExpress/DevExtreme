@@ -1,3 +1,4 @@
+import $ from '../../../core/renderer';
 import Form from '../../form';
 import dateSerialization from '../../../core/utils/date_serialization';
 import messageLocalization from '../../../localization/message';
@@ -70,10 +71,11 @@ const SchedulerAppointmentForm = {
     _appointmentForm: {},
     _lockDateShiftFlag: false,
 
-    create: function(componentCreator, $container, isReadOnly, formData) {
-        this._appointmentForm = componentCreator($container, Form, {
+    create: function(componentCreator, formData) {
+        const element = $('<div>');
+
+        this._appointmentForm = componentCreator(element, Form, {
             items: this._editors,
-            readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
             colCount: 'auto',
@@ -81,7 +83,7 @@ const SchedulerAppointmentForm = {
                 lg: 2,
                 xs: 1
             },
-            formData: formData,
+            formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
             screenByWidth: (width) => {
@@ -279,8 +281,9 @@ const SchedulerAppointmentForm = {
         ];
     },
 
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing) {
         const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
+        const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
         changeSize(recurrenceEditorVisibility);
         this._editors = [
@@ -291,27 +294,26 @@ const SchedulerAppointmentForm = {
                     lg: 2,
                     xs: 1
                 },
-                colSpan: recurrenceEditorVisibility ? 1 : 2,
+                colSpan,
                 items: this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
             },
             {
                 itemType: 'group',
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
-                colSpan: recurrenceEditorVisibility ? 1 : 2,
-                items: this._createRecurrenceEditor(dataExprs, schedulerInst, readOnly),
+                colSpan,
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst),
             }
         ];
 
         return this._editors;
     },
 
-    _createRecurrenceEditor(dataExprs, schedulerInst, readOnly) {
+    _createRecurrenceEditor(dataExprs, schedulerInst) {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
             editorOptions: {
-                readOnly: readOnly,
                 firstDayOfWeek: schedulerInst.getFirstDayOfWeek(),
             },
             label: {

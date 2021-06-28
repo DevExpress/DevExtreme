@@ -139,10 +139,9 @@ export class AppointmentPopup {
         });
     }
 
-    _createPopupContent() {
-        const formElement = $('<div>');
-        this._appointmentForm = this._createForm(formElement);
-        return formElement;
+    _createPopupContent() { // TODO
+        this._appointmentForm = this._createForm();
+        return this._appointmentForm.$element();
     }
 
     _createAppointmentFormData(rawAppointment) {
@@ -155,13 +154,12 @@ export class AppointmentPopup {
         return result;
     }
 
-    _createForm(element) {
+    _createForm() {
         const { expr } = this.scheduler.getDataAccessors();
         const resources = this.scheduler.getResources();
         const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
         const rawAppointment = this.state.appointment.data;
         const formData = this._createAppointmentFormData(rawAppointment);
-        const readOnly = this._isReadOnly(rawAppointment);
 
         AppointmentForm.prepareAppointmentFormEditors(
             expr,
@@ -169,8 +167,7 @@ export class AppointmentPopup {
             this.triggerResize.bind(this),
             this.changeSize.bind(this),
             formData,
-            allowTimeZoneEditing,
-            readOnly
+            allowTimeZoneEditing
         );
 
         if(resources && resources.length) {
@@ -180,8 +177,6 @@ export class AppointmentPopup {
 
         return AppointmentForm.create(
             (element, component, options) => this.scheduler.createComponent(element, component, options),
-            element,
-            readOnly,
             formData,
         );
     }
