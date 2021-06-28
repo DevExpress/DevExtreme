@@ -107,7 +107,7 @@ export default SelectionStrategy.inherit({
 
         this.options.selectedItemKeys.forEach((elementKey, index) => {
             if(keys.includes(elementKey) && !filteredItems.map((item) => {
-                return key === undefined ? item[key] : item;
+                return key === undefined ? item?.key : item;
             }).includes(elementKey)) {
                 filteredItems.push(this.options.selectedItems[index]);
             }
