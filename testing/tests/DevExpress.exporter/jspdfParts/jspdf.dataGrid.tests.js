@@ -39,7 +39,7 @@ const moduleConfig = {
 };
 
 const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
+    const { keepColumnWidths = true, selectedRowsOnly = false, loadPanel = { enabled: false }, autoTableOptions = {}, customizeCell = () => {} } = options || {};
 
     let flatArrayExpectedCells;
     if(isDefined(expectedCustomizeCellArgs)) {
@@ -54,6 +54,7 @@ const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
     result.keepColumnWidths = keepColumnWidths;
     result.selectedRowsOnly = selectedRowsOnly;
     result.autoTableOptions = autoTableOptions;
+    result.loadPanel = loadPanel;
     result.customizeCell = (eventArgs) => {
         customizeCell(eventArgs);
         if(isDefined(flatArrayExpectedCells)) {
@@ -4496,6 +4497,23 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: true },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: false },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: 'auto' },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
 
 
