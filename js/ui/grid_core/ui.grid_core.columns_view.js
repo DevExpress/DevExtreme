@@ -828,8 +828,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _wrapTableInScrollContainer: function($table) {
         const $scrollContainer = $('<div>');
+        const useNative = this.option('scrolling.useNative');
 
-        if(this.option('scrolling.useNative') === false || (this.option('scrolling.useNative') === 'auto' && !nativeScrolling)) {
+        if(useNative === false || (useNative === 'auto' && !nativeScrolling)) {
             $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
         }
 
