@@ -1253,7 +1253,7 @@ class Scheduler extends Widget {
             ? MobileTooltipStrategy
             : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
-        this._appointmentPopup = new AppointmentPopup(this);
+        this._appointmentPopup = this.createAppointmentPopup();
 
         if(this._isLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(getResourceManager(this.key).loadedResources);
@@ -1266,6 +1266,36 @@ class Scheduler extends Widget {
                 this._reloadDataSource();
             });
         }
+    }
+
+    createAppointmentPopup() {
+        const scheduler = {
+            getKey: () => this.key,
+            getElement: () => this.$element(),
+            createComponent: (element, component, options) => this._createComponent(element, component, options),
+            focus: () => this.focus(),
+            getResourceManager: () => this.fire('getResourceManager'),
+            getResources: () => this.option('resources'),
+
+            getEditingConfig: () => this._editing,
+
+            getDataAccessors: () => this._dataAccessors,
+            getAppointmentFormOpening: () => this._actions['onAppointmentFormOpening'],
+            processActionResult: (arg, canceled) => this._processActionResult(arg, canceled),
+
+            addAppointment: (appointment) => this.addAppointment(appointment),
+            updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
+
+            getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
+            getStartDayHour: () => this.option('startDayHour'),
+            getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+
+            updateScrollPosition: (startDate, resourceItem, inAllDayRow) => {
+                this._workSpace.updateScrollPosition(startDate, resourceItem, inAllDayRow);
+            }
+        };
+
+        return new AppointmentPopup(scheduler);
     }
 
     _getAppointmentTooltipOptions() {

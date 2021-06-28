@@ -56,21 +56,19 @@ export class AppointmentPopup {
         };
     }
 
-    get key() { return this.scheduler.key; }
+    get key() { return this.scheduler.getKey(); }
 
     show(appointment, config) {
-        const { isToolbarVisible, action, excludeInfo } = config;
-
         this.state.appointment.data = appointment;
-        this.state.action = action;
-        this.state.excludeInfo = excludeInfo;
+        this.state.action = config.action;
+        this.state.excludeInfo = config.excludeInfo;
 
         if(!this._popup) {
             const popupConfig = this._createPopupConfig();
             this._popup = this._createPopup(popupConfig);
         }
 
-        this._popup.option('toolbarItems', this._createPopupToolbarItems(isToolbarVisible));
+        this._popup.option('toolbarItems', this._createPopupToolbarItems(config.isToolbarVisible));
         this._popup.show();
     }
 
@@ -96,9 +94,9 @@ export class AppointmentPopup {
     _createPopup(options) {
         const popupElement = $('<div>')
             .addClass(APPOINTMENT_POPUP_CLASS)
-            .appendTo(this.scheduler.$element());
+            .appendTo(this.scheduler.getElement());
 
-        return this.scheduler._createComponent(popupElement, Popup, options);
+        return this.scheduler.createComponent(popupElement, Popup, options);
     }
 
     _createPopupConfig() {
@@ -107,10 +105,8 @@ export class AppointmentPopup {
             maxHeight: '100%',
             showCloseButton: false,
             showTitle: false,
-            onHiding: () => { this.scheduler.focus(); },
-            contentTemplate: () => {
-                return this._createPopupContent();
-            },
+            onHiding: () => this.scheduler.focus(),
+            contentTemplate: () => this._createPopupContent(),
             onShowing: e => this._onShowing(e),
             defaultOptionsRules: [
                 {
@@ -133,8 +129,8 @@ export class AppointmentPopup {
             cancel: false
         };
 
-        this.scheduler._actions['onAppointmentFormOpening'](arg);
-        this.scheduler._processActionResult(arg, canceled => {
+        this.scheduler.getAppointmentFormOpening()(arg);
+        this.scheduler.processActionResult(arg, canceled => {
             if(canceled) {
                 e.cancel = true;
             } else {
@@ -152,7 +148,7 @@ export class AppointmentPopup {
     _createAppointmentFormData(rawAppointment) {
         const appointment = this._createAppointmentAdapter(rawAppointment);
         const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
-        const resourceManager = this.scheduler.fire('getResourceManager');
+        const resourceManager = this.scheduler.getResourceManager();
 
         each(resourceManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
@@ -160,8 +156,8 @@ export class AppointmentPopup {
     }
 
     _createForm(element) {
-        const { expr } = this.scheduler._dataAccessors;
-        const resources = this.scheduler.option('resources');
+        const { expr } = this.scheduler.getDataAccessors();
+        const resources = this.scheduler.getResources();
         const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
         const rawAppointment = this.state.appointment.data;
         const formData = this._createAppointmentFormData(rawAppointment);
@@ -178,12 +174,12 @@ export class AppointmentPopup {
         );
 
         if(resources && resources.length) {
-            const resourceManager = this.scheduler.fire('getResourceManager');
+            const resourceManager = this.scheduler.getResourceManager();
             AppointmentForm.concatResources(resourceManager.getEditors());
         }
 
         return AppointmentForm.create(
-            this.scheduler._createComponent.bind(this.scheduler),
+            (element, component, options) => this.scheduler.createComponent(element, component, options),
             element,
             readOnly,
             formData,
@@ -191,8 +187,7 @@ export class AppointmentPopup {
     }
 
     _getAllowTimeZoneEditing() {
-        const scheduler = this.scheduler;
-        return scheduler.option('editing.allowTimeZoneEditing');
+        return this.scheduler.getEditingConfig().allowTimeZoneEditing;
     }
 
     _isReadOnly(rawAppointment) {
@@ -202,9 +197,7 @@ export class AppointmentPopup {
             return true;
         }
 
-        return this.scheduler._editAppointmentData
-            ? !this.scheduler._editing.allowUpdating
-            : false;
+        return !this.scheduler.getEditingConfig().allowUpdating;
     }
 
     _createAppointmentAdapter(rawAppointment) {
@@ -242,11 +235,11 @@ export class AppointmentPopup {
             ExpressionUtils.setField(this.key, 'endDate', formData, endDate);
         }
 
-        const { startDateExpr, endDateExpr } = this.scheduler._dataAccessors.expr;
+        const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
-        AppointmentForm.updateFormData(this._appointmentForm, formData, this.scheduler._dataAccessors.expr);
+        AppointmentForm.updateFormData(this._appointmentForm, formData, this.scheduler.getDataAccessors().expr);
         AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 
@@ -292,7 +285,7 @@ export class AppointmentPopup {
         if(!this._appointmentForm) {
             return;
         }
-        const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
+        const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler.getDataAccessors().expr);
         if(this.isVisible()) {
             this.changeSize(isRecurrence);
         }
@@ -390,9 +383,9 @@ export class AppointmentPopup {
                     const endTime = endDate.getTime();
 
                     const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
-                    const resourceManager = this.scheduler.fire('getResourceManager');
+                    const resourceManager = this.scheduler.getResourceManager();
 
-                    this.scheduler._workSpace.updateScrollPosition(
+                    this.scheduler.updateScrollPosition(
                         startDate,
                         resourceManager.getResourcesFromItem(this.state.lastEditData, true),
                         inAllDayRow,
