@@ -31,6 +31,7 @@ export default class TableResizingModule extends BaseModule {
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
         this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
         this._quillContainer = this.editorInstance._getQuillContainer();
+        this._tableData = [];
 
         if(this.enabled) {
             this.editorInstance.addContentInitializedCallback(() => {
@@ -81,16 +82,31 @@ export default class TableResizingModule extends BaseModule {
         };
     }
 
+    _getFrameForTable($table) {
+        let result;
+
+        each(this._tableResizeFrames, (_, frame) => {
+            if(frame.$table.get(0) === $table.get(0)) {
+                result = frame;
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+
     _resizeHandler() {
         this._windowResizeTimeout = setTimeout(() => {
             const $tables = this._findTables();
             each($tables, (index, table) => {
                 const $table = $(table);
+                const frame = this._tableResizeFrames[index];
                 const actualTableWidth = $table.outerWidth();
-                const lastTableWidth = this._getWidthAttrValue($table);
+                const lastTableWidth = this._tableLastWidth(frame);
                 if(Math.abs(actualTableWidth - lastTableWidth) > 1) {
-                    $table.attr('width', actualTableWidth + 'px');
-                    this._updateColumnsWidth($table);
+                    this._tableLastWidth(frame, actualTableWidth);
+                    this._updateColumnsWidth($table, index);
                 }
             });
             this._updateFramesPositions();
@@ -107,10 +123,28 @@ export default class TableResizingModule extends BaseModule {
         return attrValue ? parseInt(attrValue.replace('px', '')) : undefined;
     }
 
+    _tableLastWidth(frame, newValue) {
+        if(isDefined(newValue)) {
+            frame.lastWidth = newValue;
+        } else {
+            return frame?.lastWidth;
+        }
+    }
+
     _fixTablesWidths($tables) {
-        each($tables, (_, table) => {
+        each($tables, (index, table) => {
             const $table = $(table);
             const $columnElements = this._getTableDeterminantElements($table, 'horizontal');
+
+            if(!this._tableResizeFrames[index]) {
+                this._tableResizeFrames[index] = { lastWidth: undefined };
+            }
+            const frame = this._getFrameForTable[$table];
+
+            if(!frame) {
+                this._tableResizeFrames.push({ $table: $table });
+            }
+
             if($columnElements.eq(0).attr('width')) {
                 let columnsSum = 0;
 
@@ -122,24 +156,29 @@ export default class TableResizingModule extends BaseModule {
 
                 $table.css('width', 'initial');
 
-                const tableWidth = $table.attr('width') ? parseInt($table.attr('width')) : $table.outerWidth();
+                const tableWidth = this._tableLastWidth(frame) ?? $table.outerWidth();
 
-                $table.attr('width', Math.max(columnsSum, tableWidth) + 'px');
+                this._tableLastWidth(frame, Math.max(columnsSum, tableWidth));
             }
         });
     }
 
     _createResizeFrames($tables) {
-        $tables.each((index, $item) => {
-            const $table = $($item);
+        $tables.each((index, table) => {
+            const $table = $(table);
+            const $lastTable = this._tableResizeFrames[index]?.$table;
+            const $tableLastWidth = this._tableResizeFrames[index].lastWidth;
             this._tableResizeFrames[index] = {
-                $frame: this._createTableResizeFrame($item),
+                $frame: this._createTableResizeFrame(table),
                 $table: $table,
                 index: index,
+                lastWidth: (table === $lastTable?.get(0)) ? $tableLastWidth : undefined,
                 columnsCount: this._getTableDeterminantElements($table, 'horizontal').length,
                 rowsCount: this._getTableDeterminantElements($table, 'vertical').length
             };
         });
+
+        this._tableResizeFrames.length = $tables.length;
     }
 
     _isTableChanges() {
@@ -162,13 +201,16 @@ export default class TableResizingModule extends BaseModule {
         return result;
     }
 
-    _removeResizeFrames() {
+    _removeResizeFrames(clearArray) {
         each(this._tableResizeFrames, (index, $item) => {
             this._detachSeparatorEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
             $item.$frame.remove();
         });
 
-        this._tableResizeFrames = [];
+        if(clearArray) {
+            this._tableResizeFrames = [];
+        }
+
     }
 
     _detachSeparatorEvents($lineSeparators) {
@@ -396,7 +438,7 @@ export default class TableResizingModule extends BaseModule {
                 this._dragStartHandler(options);
             },
             onDragEnd: () => {
-                options.frame.$table.attr('width', options.frame.$table.outerWidth() + 'px');
+                this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
             }
@@ -416,9 +458,16 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _updateColumnsWidth($table) {
+    _updateColumnsWidth($table, frameIndex) {
         const determinantElements = this._getTableDeterminantElements($table);
-        const tableWidth = this._getWidthAttrValue($table) || $table.outerWidth();
+        let frame = this._tableResizeFrames[frameIndex];
+
+        if(!frame) {
+            this._tableResizeFrames[frameIndex] = {};
+        }
+
+        frame = this._tableResizeFrames[frameIndex];
+        const tableWidth = this._tableLastWidth(frame) || $table.outerWidth();
         const columnsWidths = [];
         let columnSum = 0;
         let ratio;
@@ -439,7 +488,7 @@ export default class TableResizingModule extends BaseModule {
             ratio = -1;
         }
 
-        $table.attr('width', (ratio > 0 ? tableWidth : minWidthForColumns) + 'px');
+        this._tableLastWidth(frame, ratio > 0 ? tableWidth : minWidthForColumns);
 
         each(determinantElements, (index) => {
             const $lineElements = this._getLineElements($table, index);
@@ -457,13 +506,13 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _updateTablesColumnsWidth($tables) {
-        each($tables, (_, table) => {
-            this._updateColumnsWidth($(table));
+        each($tables, (index, table) => {
+            this._updateColumnsWidth($(table), index);
         });
     }
 
     clean() {
-        this._removeResizeFrames();
+        this._removeResizeFrames(true);
         this._detachEvents();
 
         _windowResizeCallbacks.remove(this._resizeHandler);
