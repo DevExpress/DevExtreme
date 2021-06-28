@@ -824,7 +824,7 @@ const JSPdfSummariesTests = {
                     ],
                     summary: {
                         groupItems: [
-                            { column: 'f1', summaryType: 'count' },
+                            { column: 'f1', summaryType: 'max' },
                             { column: 'f4', summaryType: 'max', alignByColumn: true, showInGroupFooter: true },
                             { column: 'f5', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
                         ]
@@ -855,8 +855,8 @@ const JSPdfSummariesTests = {
                     'text,Max: f4,20,215,{baseline:middle}', 'setLineWidth,1', 'rect,20,207,240,16',
                     'text,Max: f5,260,215,{baseline:middle}', 'setLineWidth,1', 'rect,260,207,100,16' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 100 ], onRowExporting }).then(() => {
-                    doc.save();
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
+                    // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
