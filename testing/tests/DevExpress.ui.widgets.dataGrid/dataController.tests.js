@@ -6,6 +6,7 @@ import { errors as dataErrors } from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';
@@ -4731,7 +4732,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
-    QUnit.test('New mode. rowRenderingMode should be set to \'virtual\' by default when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
@@ -4743,7 +4744,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.dataController.init();
 
         // assert
-        assert.strictEqual(this.option('scrolling.rowRenderingMode'), 'virtual', 'rowRenderingMode is virtual');
+        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
     });
 
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
@@ -5409,7 +5410,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
     });
 
-    QUnit.test('New mode. rowRenderingMode should be set to \'virtual\' by default when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
@@ -5421,7 +5422,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.dataController.init();
 
         // assert
-        assert.strictEqual(this.option('scrolling.rowRenderingMode'), 'virtual', 'rowRenderingMode is virtual');
+        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
     });
 
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
