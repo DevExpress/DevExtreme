@@ -1010,14 +1010,12 @@
           {
             "Title": "Integrated Field Chooser",
             "Name": "IntegratedFieldChooser",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Visual_Elements/#Field_Chooser",
             "Widget": "PivotGrid",
             "DemoType": "Web"
           },
           {
             "Title": "Standalone Field Chooser",
             "Name": "StandaloneFieldChooser",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Visual_Elements/#Field_Chooser",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
