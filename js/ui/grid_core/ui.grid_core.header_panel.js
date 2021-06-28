@@ -159,6 +159,8 @@ const HeaderPanel = ColumnsView.inherit({
             args.handled = true;
         }
         if(args.name === 'toolbar') {
+            const optionName = args.fullName.replace(/^toolbar\./, '');
+
             if(parts.length <= 2) {
                 // toolbar and toolbar.items case
                 const toolbarOptions = this._getToolbarOptions();
@@ -166,11 +168,9 @@ const HeaderPanel = ColumnsView.inherit({
             } else if(parts.length === 3) {
                 // toolbar.items[i] case
                 const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
-                const optionName = args.fullName.replace(/^toolbar./, '');
                 this._toolbar.option(optionName, normalizedItem);
             } else if(parts.length >= 4) {
                 // toolbar.items[i].prop case
-                const optionName = args.fullName.replace(/^toolbar./, '');
                 this._toolbar.option(optionName, args.value);
             }
         }
