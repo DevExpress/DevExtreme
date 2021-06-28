@@ -1260,7 +1260,7 @@ class Diagram extends Widget {
     }
     _onShowContextMenu(x, y, isTouchMode, selection) {
         if(this._contextMenu) {
-            this._contextMenu.isTouchMode = isTouchMode;
+            this._contextMenu._isTouchMode = isTouchMode;
             this._contextMenu._show(x, y, selection);
         }
     }
