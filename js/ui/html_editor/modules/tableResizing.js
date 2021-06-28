@@ -152,9 +152,9 @@ export default class TableResizingModule extends BaseModule {
         if($tables.length !== this._tableResizeFrames.length) {
             result = true;
         } else {
-            each($tables, (_, table) => {
+            each($tables, (index, table) => {
                 const $table = $(table);
-                const frame = this._getFrameForTable($table);
+                const frame = this._tableResizeFrames[index];
 
                 if(!frame || frame.columnsCount !== this._getTableDeterminantElements($table, 'horizontal').length || frame.rowsCount !== this._getTableDeterminantElements($table, 'vertical').length) {
                     result = true;
@@ -162,19 +162,6 @@ export default class TableResizingModule extends BaseModule {
                 }
             });
         }
-        return result;
-    }
-
-    _getFrameForTable($table) {
-        let result;
-
-        each(this._tableResizeFrames, (_, frame) => {
-            if(frame.$table.get(0) === $table.get(0)) {
-                result = frame;
-                return false;
-            }
-        });
-
         return result;
     }
 
