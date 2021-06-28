@@ -195,7 +195,7 @@ const SliderHandle = Widget.inherit({
         }
 
         const value = this.option('value');
-        this._tooltip.$content().html(this._getFormattedValue(value));
+        this._tooltip.$content().text(this._getFormattedValue(value));
         this._fitTooltip();
     },
 

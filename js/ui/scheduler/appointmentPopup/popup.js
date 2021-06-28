@@ -11,6 +11,8 @@ import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
 import { AppointmentForm } from './form';
 import { hide as hideLoading, show as showLoading } from '../loading';
+import { createAppointmentAdapter } from '../appointmentAdapter';
+import { ExpressionUtils } from '../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -47,12 +49,16 @@ export default class AppointmentPopup {
         };
     }
 
+    get key() { return this.scheduler.key; }
+    get currentDate() { return this.scheduler.option('currentDate'); }
+    get cellDuration() { return this.scheduler.option('cellDuration'); }
+
     show(data = {}, isDoneButtonVisible) {
         if(isEmptyObject(data)) {
-            const startDate = this.scheduler.option('currentDate');
-            const endDate = new Date(startDate.getTime() + this.scheduler.option('cellDuration') * toMs('minute'));
-            this.scheduler.fire('setField', 'startDate', data, startDate);
-            this.scheduler.fire('setField', 'endDate', data, endDate);
+            const startDate = this.currentDate;
+            const endDate = new Date(startDate.getTime() + this.cellDuration * toMs('minute'));
+            ExpressionUtils.setField(this.key, 'startDate', data, startDate);
+            ExpressionUtils.setField(this.key, 'endDate', data, endDate);
         }
         this.state.appointment.data = data;
 
@@ -189,15 +195,19 @@ export default class AppointmentPopup {
     }
 
     _isReadOnly(rawAppointment) {
-        const adapter = this.scheduler.createAppointmentAdapter(rawAppointment);
+        const adapter = this._createAppointmentAdapter(rawAppointment);
+
         if(rawAppointment && adapter.disabled) {
             return true;
         }
-        return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
+
+        return this.scheduler._editAppointmentData
+            ? !this.scheduler._editing.allowUpdating
+            : false;
     }
 
     _createAppointmentAdapter(rawAppointment) {
-        return this.scheduler.createAppointmentAdapter(rawAppointment);
+        return createAppointmentAdapter(this.key, rawAppointment);
     }
 
     _updateForm() {
@@ -225,10 +235,10 @@ export default class AppointmentPopup {
         const formData = appointment.source();
 
         if(startDate) {
-            this.scheduler.fire('setField', 'startDate', formData, startDate);
+            ExpressionUtils.setField(this.key, 'startDate', formData, startDate);
         }
         if(endDate) {
-            this.scheduler.fire('setField', 'endDate', formData, endDate);
+            ExpressionUtils.setField(this.key, 'endDate', formData, endDate);
         }
 
         const { startDateExpr, endDateExpr } = this.scheduler._dataAccessors.expr;
@@ -323,7 +333,7 @@ export default class AppointmentPopup {
 
             // const formData = objectUtils.deepExtendArraySafe({}, this._appointmentForm.option('formData'), true);
             const formData = this._appointmentForm.option('formData');
-            const adapter = this.scheduler.createAppointmentAdapter(formData);
+            const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
             const oldData = this.scheduler._editAppointmentData;
@@ -375,7 +385,7 @@ export default class AppointmentPopup {
         if(this._tryLockSaveChanges()) {
             when(this.saveChanges(true)).done(() => {
                 if(this.state.lastEditData) {
-                    const adapter = this.scheduler.createAppointmentAdapter(this.state.lastEditData);
+                    const adapter = this._createAppointmentAdapter(this.state.lastEditData);
 
                     const { startDate, endDate, allDay } = adapter;
 

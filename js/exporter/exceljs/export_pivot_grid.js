@@ -27,8 +27,12 @@ const helpers = {
         || (dataProvider.isRowAreaCell(rowIndex, cellIndex) && !mergeRowFieldValues && !!rowspan));
     },
 
-    _renderLoadPanel(component) {
-        component._renderLoadPanel(component._dataArea.groupElement(), component.$element());
+    _getLoadPanelTargetElement(component) {
+        return component._dataArea.groupElement();
+    },
+
+    _getLoadPanelContainer(component) {
+        return component.$element();
     },
 
     _trySetAutoFilter: noop,

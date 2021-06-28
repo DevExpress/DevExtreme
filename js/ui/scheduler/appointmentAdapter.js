@@ -3,6 +3,7 @@ import errors from '../widget/ui.errors';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import { getRecurrenceProcessor } from './recurrence';
 import { getTimeZoneCalculator } from './instanceFactory';
+import { ExpressionUtils } from './expressionUtils';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -17,7 +18,8 @@ const PROPERTY_NAMES = {
     disabled: 'disabled'
 };
 class AppointmentAdapter {
-    constructor(rawAppointment, options) {
+    constructor(key, rawAppointment, options) {
+        this.key = key;
         this.rawAppointment = rawAppointment;
         this.options = options;
     }
@@ -97,7 +99,7 @@ class AppointmentAdapter {
     }
 
     get timeZoneCalculator() {
-        return getTimeZoneCalculator(this.options.key);
+        return getTimeZoneCalculator(this.key);
     }
 
     get isRecurrent() {
@@ -105,11 +107,11 @@ class AppointmentAdapter {
     }
 
     getField(property) {
-        return this.options.getField(this.rawAppointment, property);
+        return ExpressionUtils.getField(this.key, property, this.rawAppointment);
     }
 
     setField(property, value) {
-        return this.options.setField(this.rawAppointment, property, value);
+        return ExpressionUtils.setField(this.key, property, this.rawAppointment, value);
     }
 
     calculateStartDate(pathTimeZoneConversion) {
@@ -136,12 +138,17 @@ class AppointmentAdapter {
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(deepExtendArraySafe({}, this.rawAppointment), this.options);
+        const result = new AppointmentAdapter(
+            this.key,
+            deepExtendArraySafe({}, this.rawAppointment),
+            options
+        );
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
             result.endDate = result.calculateEndDate(options.pathTimeZone);
         }
+
         return result;
     }
 
@@ -160,3 +167,7 @@ class AppointmentAdapter {
 }
 
 export default AppointmentAdapter;
+
+export const createAppointmentAdapter = (key, rawAppointment, options) => {
+    return new AppointmentAdapter(key, rawAppointment, options);
+};

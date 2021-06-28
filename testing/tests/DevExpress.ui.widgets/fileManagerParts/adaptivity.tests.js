@@ -89,7 +89,9 @@ QUnit.module('Adaptivity', moduleConfig, () => {
     });
 
     test('dialog size corrent on different window size', function(assert) {
-        this.wrapper.getToolbarButton('Copy').trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
 
         const $dialog = $('.dx-filemanager-dialog-folder-chooser:visible');
@@ -106,6 +108,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
 
         assert.ok($dialog.get(0).offsetWidth <= dialogWidth, 'dialog width decreased');
         assert.ok($dialog.get(0).offsetHeight <= dialogHeight, 'dialog height decreased');
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
     });
 
     test('splitter should be disabled on small screens', function(assert) {

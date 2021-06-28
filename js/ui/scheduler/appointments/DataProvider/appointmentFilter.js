@@ -9,6 +9,7 @@ import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import timeZoneUtils from '../../utils.timeZone';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -161,6 +162,8 @@ export class AppointmentFilterBaseStrategy {
 
     get strategyName() { return FilterStrategies.standard; }
 
+    get key() { return this.options.key; }
+
     // TODO - Use DI to get appropriate services
     get scheduler() { return this.options.scheduler; } // TODO get rid
     get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
@@ -206,7 +209,7 @@ export class AppointmentFilterBaseStrategy {
 
     // TODO: Get rid of it after rework filtering
     getRecurrenceException(rawAppointment) {
-        const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
         const recurrenceException = appointment.recurrenceException;
 
         if(recurrenceException) {
