@@ -105,6 +105,13 @@ export default SelectionStrategy.inherit({
 
         filteredItems = filteredItems.filter(localFilter);
 
+        this.options.selectedItemKeys.forEach((elementKey, index) => {
+            if(keys.includes(elementKey) && !filteredItems.map((item) => {
+                return key ? item[key] : item;
+            }).includes(elementKey)) {
+                filteredItems.push(this.options.selectedItems[index]);
+            }
+        });
         if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length)) {
             deferred.resolve(filteredItems);
         } else {
