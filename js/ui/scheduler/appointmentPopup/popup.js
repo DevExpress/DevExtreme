@@ -197,6 +197,10 @@ export class AppointmentPopup {
             return true;
         }
 
+        if(this.state.action === ACTION_TO_APPOINTMENT.CREATE) {
+            return false;
+        }
+
         return !this.scheduler.getEditingConfig().allowUpdating;
     }
 
