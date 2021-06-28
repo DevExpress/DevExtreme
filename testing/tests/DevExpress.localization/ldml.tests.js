@@ -412,4 +412,19 @@ QUnit.module('number formatter', () => {
         }
 
     });
+
+    QUnit.test('getRegExpInfo should return correct regex for not separated patterns', function(assert) {
+        const regExpInfo = getRegExpInfo('yyyyMMdd');
+        const result1 = regExpInfo.regexp.exec('19990211');
+
+        assert.equal(result1[1], '1999');
+        assert.equal(result1[2], '02');
+        assert.equal(result1[3], '11');
+
+        const result2 = regExpInfo.regexp.exec('20151209');
+
+        assert.equal(result2[1], '2015');
+        assert.equal(result2[2], '12');
+        assert.equal(result2[3], '09');
+    });
 });
