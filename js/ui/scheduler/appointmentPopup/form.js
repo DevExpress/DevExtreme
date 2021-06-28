@@ -280,7 +280,7 @@ const SchedulerAppointmentForm = {
     },
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
-        const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
+        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
 
         changeSize(recurrenceEditorVisibility);
         this._editors = [
