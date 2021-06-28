@@ -909,12 +909,13 @@ module('Table resizing integration', {
             tableModule.insertColumn();
             tableModule.insertColumn();
             tableModule.insertColumn();
+            tableModule.insertColumn();
 
             this.clock.tick(TIME_TO_WAIT);
 
             $table = this.$element.find('table');
 
-            assert.roughEqual($table.outerWidth(), startTableWidth, 1.01, 'Table width is not changed');
+            assert.roughEqual($table.outerWidth(), startTableWidth, 2.01, 'Table width is not changed');
         });
 
         test('Column resizers should be updated after a some columns insert', function(assert) {
