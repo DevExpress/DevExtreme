@@ -6013,4 +6013,69 @@ QUnit.module('validation', {
             assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
         });
     });
+
+    ['change', 'input', 'keydown', 'keyup', 'focusout', 'blur'].forEach(valueChangeEvent => {
+        QUnit.test(`enter handler should raise custom validation when valueChangeEvent=${valueChangeEvent}(T999607)`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.keyboard
+                .type('1/1/2021')
+                .press('enter')
+                .change();
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'custom', 'validation callback is failed');
+        });
+
+        QUnit.test(`enter handler should raise custom validation after invalid character remove when valueChangeEvent=${valueChangeEvent}`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: () => false
+                }]
+            });
+
+            this.keyboard
+                .type('1/1/2021')
+                .press('enter')
+                .change()
+                .type('d')
+                .change()
+                .press('backspace')
+                .press('enter')
+                .change();
+
+            assert.notOk(this.dateBox.option('isValid'), 'dateBox is invalid');
+            assert.strictEqual(this.dateBox.option('validationError').message, 'custom', 'validation callback is failed');
+        });
+
+        QUnit.test(`custom validation should be raised only once after enter press when valueChangeEvent=${valueChangeEvent}`, function(assert) {
+            this.dateBox.option({ valueChangeEvent });
+            const validationCallbackStub = sinon.stub();
+
+            this.keyboard.type('1/1/2021');
+            this.$dateBox.dxValidator({
+                validationRules: [{
+                    reevaluate: true,
+                    type: 'custom',
+                    message: 'custom',
+                    validationCallback: validationCallbackStub
+                }]
+            });
+            this.keyboard
+                .press('enter')
+                .change();
+
+            assert.ok(validationCallbackStub.calledOnce, 'custom validation was called only once');
+        });
+    });
 });
