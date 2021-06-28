@@ -304,39 +304,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         };
     }
 
-    getVisibleBounds() {
-        const isRtl = this.option('rtlEnabled');
-
-        const result = {};
-        const $scrollable = this.getScrollable().$element();
-        const cellWidth = this.getCellWidth();
-        const scrollableOffset = isRtl ? (this.getScrollableOuterWidth() - this.getScrollableScrollLeft()) : this.getScrollableScrollLeft();
-        const scrolledCellCount = scrollableOffset / cellWidth;
-        const visibleCellCount = $scrollable.width() / cellWidth;
-        const totalCellCount = isRtl ? scrolledCellCount - visibleCellCount : scrolledCellCount + visibleCellCount;
-        let leftDate = this._getDateByIndex(scrolledCellCount);
-        let rightDate = this._getDateByIndex(totalCellCount);
-
-        if(isRtl) {
-            leftDate = this._getDateByIndex(totalCellCount);
-            rightDate = this._getDateByIndex(scrolledCellCount);
-        }
-
-        result.left = {
-            hours: leftDate.getHours(),
-            minutes: leftDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(leftDate)
-        };
-
-        result.right = {
-            hours: rightDate.getHours(),
-            minutes: rightDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(rightDate)
-        };
-
-        return result;
-    }
-
     getIntervalDuration(allDay) {
         return this.getCellDuration();
     }
