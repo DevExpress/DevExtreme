@@ -195,14 +195,7 @@ export class ViewDataGenerator {
             horizontalGroupCount,
             cellCountInGroupRow,
             groupOrientation,
-            getDateHeaderDate,
         } = options;
-
-        const dates = [];
-
-        for(let dateIndex = 0; dateIndex < cellCountInGroupRow; dateIndex += 1) {
-            dates.push(getDateHeaderDate(dateIndex));
-        }
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const columnCount = completeViewDataMap[index].length;
@@ -222,8 +215,8 @@ export class ViewDataGenerator {
             ...restProps
         }, index) => ({
             ...restProps,
-            startDate: dates[index % cellCountInGroupRow],
-            text: getDateHeaderText(index % cellCountInGroupRow),
+            startDate,
+            text: getDateHeaderText(index % cellCountInGroupRow, startDate),
             today: dateUtils.sameDate(startDate, today),
             colSpan,
             isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),

@@ -643,7 +643,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             totalCellCount: cellCount,
             groupCount,
             getDateHeaderText: this._getHeaderText.bind(this),
-            getDateHeaderDate: this._getDateByIndex.bind(this),
             getTimeCellDate: this._getTimeCellDate.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
@@ -1101,11 +1100,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._interval;
     }
 
-    _getHeaderText(headerIndex) {
-        return dateLocalization.format(this._getDateForHeaderText(headerIndex), this._getFormat());
+    _getHeaderText(headerIndex, date) {
+        return dateLocalization.format(this._getDateForHeaderText(headerIndex, date), this._getFormat());
     }
 
-    _getDateForHeaderText(index) {
+    _getDateForHeaderText(index, date) {
+        if(!timeZoneUtils.isTimezoneChangeInDate(date)) {
+            return date;
+        }
+
         return this._getDateByIndex(index);
     }
 
@@ -3084,7 +3087,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks) {
-        const text = this._getHeaderText(panelCellIndex);
+        const validTemplateIndex = this.isGroupedByDate()
+            ? Math.floor(templateIndex / this._getGroupCount())
+            : templateIndex;
+        const completeDateHeaderMap = this.viewDataProvider.completeDateHeaderMap;
+
+        const {
+            text, startDate: date,
+        } = completeDateHeaderMap[completeDateHeaderMap.length - 1][validTemplateIndex];
         const $cell = $('<th>')
             .addClass(this._getHeaderPanelCellClass(panelCellIndex))
             .attr('title', text);
@@ -3092,8 +3102,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(cellTemplate?.render) {
             templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
                 model: {
-                    text: text,
-                    date: this._getDateByIndex(panelCellIndex),
+                    text,
+                    date,
                     ...this._getGroupsForDateHeaderTemplate(templateIndex),
                 },
                 index: templateIndex,

@@ -61,28 +61,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getDateForHeaderText(index) {
-        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
-
-        return this._getDateByIndexCore(startViewDate, index);
-    }
-
-    _getDateByIndexCore(date, index) {
-        const result = new Date(date);
-        const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(date.getTime() + index * this._getInterval() + dayIndex * this._getHiddenInterval());
-
-        return result;
-    }
-
-    _getDateByIndex(index) {
-        const startViewDate = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
-
-        const result = this._getDateByIndexCore(startViewDate, index);
-
-        if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
-            result.setDate(result.getDate() - 1);
+    _getDateForHeaderText(index, date) {
+        if(!timeZoneUtils.isTimezoneChangeInDate(date)) {
+            return date;
         }
+
+        const result = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
+
+        const validIndex = index % this._getCellCountInDay();
+        result.setTime(result.getTime() + validIndex * this._getInterval());
 
         return result;
     }
