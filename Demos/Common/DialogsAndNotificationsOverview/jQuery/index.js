@@ -65,7 +65,7 @@ $(function(){
     }
   
     $.each(houses, function(index, house) {
-        var template = $(_.template($("#property-item").html(), house));
+        var template = $(_.template($("#property-item").html())(house));
         
         template.find("#popover" + house.ID)
             .dxPopover($.extend(popoverOptions, {
