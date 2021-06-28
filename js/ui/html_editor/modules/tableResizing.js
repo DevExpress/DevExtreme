@@ -16,8 +16,6 @@ const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 const DEFAULT_MIN_COLUMN_WIDTH = 40;
 
-const TIMEOUT = 100;
-
 const DRAGGABLE_ELEMENT_OFFSET = 2;
 
 const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
@@ -33,11 +31,9 @@ export default class TableResizingModule extends BaseModule {
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
         this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
         this._quillContainer = this.editorInstance._getQuillContainer();
-        this._quillInstance = quill;
 
         if(this.enabled) {
-            this._attachResizerTimeout = setTimeout(() => {
-
+            this.editorInstance.addContentInitializedCallback(() => {
                 const $tables = this._findTables();
                 if($tables.length) {
                     this._fixTablesWidths($tables);
@@ -47,7 +43,7 @@ export default class TableResizingModule extends BaseModule {
                 }
 
                 this._attachEvents();
-            }, TIMEOUT);
+            });
 
             this.addCleanCallback(this.clean.bind(this));
             this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
@@ -57,31 +53,32 @@ export default class TableResizingModule extends BaseModule {
     _attachEvents() {
         eventsEngine.on(this.editorInstance._getContent(), SCROLL_EVENT, this._updateFramesPositions.bind(this));
 
-        this._quillTextChangeHandler = this._getQuillTextChangeHandler.bind(this);
-        this._quillInstance.on('text-change', this._quillTextChangeHandler);
+        this.quill.on('text-change', this._getQuillTextChangeHandler());
     }
 
     _detachEvents() {
         eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
-        this._quillInstance.off('text-change', this._quillTextChangeHandler);
+        this.quill.off('text-change', this._quillTextChangeHandler);
     }
 
     _getQuillTextChangeHandler(delta, oldContent, source) {
-        if(this._isTableChanges()) {
-            this._removeResizeFrames();
-            const $tables = this._findTables();
+        return (delta, oldContent, source) => {
+            if(this._isTableChanges()) {
 
-            if(source === 'api') {
-                this._fixTablesWidths($tables);
+                const $tables = this._findTables();
+                this._removeResizeFrames();
+                if(source === 'api') {
+                    this._fixTablesWidths($tables);
+                }
+
+                this._updateTablesColumnsWidth($tables);
+                this._createResizeFrames($tables);
+                this._updateFramesPositions();
+                this._updateFramesSeparators();
+            } else {
+                this._updateFramesPositions();
             }
-
-            this._updateTablesColumnsWidth($tables);
-            this._createResizeFrames($tables);
-            this._updateFramesPositions();
-            this._updateFramesSeparators();
-        } else {
-            this._updateFramesPositions();
-        }
+        };
     }
 
     _resizeHandler() {
