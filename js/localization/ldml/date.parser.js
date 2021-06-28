@@ -14,7 +14,7 @@ const monthRegExpGenerator = function(count, dateParts) {
             }).join('|');
         }).join('|');
     }
-    return '0?[1-9]|1[012]';
+    return count === 2 ? '1[012]|0?[1-9]' : '0?[1-9]|1[012]';
 };
 
 const PATTERN_REGEXPS = {
@@ -40,7 +40,7 @@ const PATTERN_REGEXPS = {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format').join('|');
     },
     d: function(count) {
-        return '0?[1-9]|[12][0-9]|3[01]';
+        return count === 1 ? '0?[1-9]|[12][0-9]|3[01]' : '3[01]|[12][0-9]|0?[1-9]';
     },
     H: function(count) {
         return '0?[0-9]|1[0-9]|2[0-3]';

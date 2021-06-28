@@ -413,12 +413,32 @@ QUnit.module('number formatter', () => {
 
     });
 
-    QUnit.test('getRegExpInfo should return correct regex for not separated patterns', function(assert) {
-        const regExpInfo = getRegExpInfo('yyyyMMdd');
-        const result1 = regExpInfo.regexp.exec('19990211');
-        const result2 = regExpInfo.regexp.exec('20151209');
+    QUnit.test('getRegExpInfo should return correct regex for not separated patterns(T1008667)', function(assert) {
+        let regExpInfo = getRegExpInfo('yyyyMMdd');
+        let result1 = regExpInfo.regexp.exec('19990211');
+        let result2 = regExpInfo.regexp.exec('20151209');
+        let result3 = regExpInfo.regexp.exec('2015011');
 
         assert.deepEqual(result1, ['19990211', '1999', '02', '11']);
         assert.deepEqual(result2, ['20151209', '2015', '12', '09']);
+        assert.deepEqual(result3, ['2015011', '2015', '01', '1']);
+
+        regExpInfo = getRegExpInfo('ddMMyyyy');
+        result1 = regExpInfo.regexp.exec('11121212');
+        result2 = regExpInfo.regexp.exec('3152021');
+        result3 = regExpInfo.regexp.exec('19012021');
+
+        assert.deepEqual(result1, ['11121212', '11', '12', '1212']);
+        assert.deepEqual(result2, ['3152021', '31', '5', '2021']);
+        assert.deepEqual(result3, ['19012021', '19', '01', '2021']);
+
+        regExpInfo = getRegExpInfo('MMddyyyy');
+        result1 = regExpInfo.regexp.exec('12212121');
+        result2 = regExpInfo.regexp.exec('3152021');
+        result3 = regExpInfo.regexp.exec('11092021');
+
+        assert.deepEqual(result1, ['12212121', '12', '21', '2121']);
+        assert.deepEqual(result2, ['3152021', '3', '15', '2021']);
+        assert.deepEqual(result3, ['11092021', '11', '09', '2021']);
     });
 });
