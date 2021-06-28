@@ -2033,7 +2033,7 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    getAppointmentPopup() { // TOTO remove
+    getAppointmentPopup() { // TODO remove
         return this._appointmentPopup.getPopup();
     }
 
@@ -2147,6 +2147,7 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+
         const appointment = createAppointmentAdapter(this.key, (rawTargetedAppointment || rawAppointment));
         const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
