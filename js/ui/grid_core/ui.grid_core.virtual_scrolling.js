@@ -510,19 +510,31 @@ const VirtualScrollingRowsViewExtender = (function() {
             const visibleRows = dataController.getVisibleRows();
             let itemSize = 0;
             let firstCountableItem = true;
+            let lastLoadIndex = -1;
+
             for(let i = 0; i < rowHeights.length; i++) {
                 const currentItem = visibleRows[i];
                 if(!isDefined(currentItem)) {
                     continue;
                 }
-                if(isItemCountableByDataSource(currentItem, dataSource)) {
-                    if(firstCountableItem) {
-                        firstCountableItem = false;
-                    } else {
-                        correctedRowHeights.push(itemSize);
+
+                if(this.option(NEW_SCROLLING_MODE)) {
+                    if(lastLoadIndex !== currentItem.loadIndex) {
+                        itemSize > 0 && correctedRowHeights.push(itemSize);
                         itemSize = 0;
                     }
+                    lastLoadIndex = currentItem.loadIndex;
+                } else {
+                    if(isItemCountableByDataSource(currentItem, dataSource)) {
+                        if(firstCountableItem) {
+                            firstCountableItem = false;
+                        } else {
+                            correctedRowHeights.push(itemSize);
+                            itemSize = 0;
+                        }
+                    }
                 }
+
                 itemSize += rowHeights[i];
             }
             itemSize > 0 && correctedRowHeights.push(itemSize);
@@ -976,14 +988,52 @@ export const virtualScrollingModule = {
                     _updateLoadViewportParams: function() {
                         this._loadViewportParams = this._rowsScrollController.getViewportParams();
                     },
+                    _processItems: function(items) {
+                        items = this.callBase.apply(this, arguments);
+
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            let currentIndex = this.pageIndex() * this.pageSize();
+                            const dataSource = this._dataSource;
+                            let lastCountable;
+
+                            items.forEach(item => {
+                                const rowType = item.rowType;
+                                const itemCountable = isItemCountableByDataSource(item, dataSource);
+
+                                if(isDefined(lastCountable)) {
+                                    if(rowType === 'group') {
+                                        if(lastCountable || itemCountable) {
+                                            currentIndex++;
+                                        }
+                                    } else if(itemCountable) {
+                                        if(lastCountable) {
+                                            currentIndex++;
+                                        }
+                                    }
+                                }
+                                item.loadIndex = currentIndex;
+                                lastCountable = itemCountable;
+                            });
+                        }
+
+                        return items;
+                    },
                     _afterProcessItems: function(items) {
                         this._uncountableItemCount = 0;
                         if(isDefined(this._loadViewportParams)) {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
-                            const { skipForCurrentPage } = this.getLoadPageParams();
 
-                            return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            let result = items;
+                            if(items.length) {
+                                const { skipForCurrentPage } = this.getLoadPageParams();
+                                const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
+
+                                result = items.filter(it => it.loadIndex >= startLoadIndex && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                            }
+
+                            // return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            return result;
                         }
 
                         return this.callBase.apply(this, arguments);
