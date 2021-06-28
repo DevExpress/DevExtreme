@@ -48,12 +48,6 @@ $reduced-icon-offset: null !default;
   }
 }
 
-.dx-scheduler-win-no-touch {
-  .dx-scheduler-appointment {
-    touch-action: none;
-  }
-}
-
 .dx-scheduler-appointment-content-date {
   opacity: 0.7;
   display: inline-block;

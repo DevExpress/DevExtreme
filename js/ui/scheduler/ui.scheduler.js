@@ -5,7 +5,6 @@ import $ from '../../core/renderer';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
-import browser from '../../core/utils/browser';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
 import { compileGetter, compileSetter } from '../../core/utils/data';
@@ -15,7 +14,6 @@ import dateSerialization from '../../core/utils/date_serialization';
 import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { touch } from '../../core/utils/support';
 import {
     isDefined,
     isString,
@@ -74,7 +72,6 @@ const MINUTES_IN_HOUR = 60;
 const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
-const WIDGET_WIN_NO_TOUCH_CLASS = `${WIDGET_CLASS}-win-no-touch`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
 const WIDGET_SMALL_WIDTH = 400;
 
@@ -951,9 +948,7 @@ class Scheduler extends Widget {
 
         this._initDataSource();
 
-        this.$element()
-            .addClass(WIDGET_CLASS)
-            .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
+        this.$element().addClass(WIDGET_CLASS);
 
         this._initEditing();
 
