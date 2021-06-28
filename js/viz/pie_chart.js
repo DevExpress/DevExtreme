@@ -105,16 +105,23 @@ const dxPieChart = BaseChart.inherit({
         });
     },
 
+    _optionChangesOrder: ['CENTER_TEMPLATE'],
+
     _optionChangesMap: {
         diameter: 'REINIT',
         minDiameter: 'REINIT',
-        sizeGroup: 'REINIT'
+        sizeGroup: 'REINIT',
+        centerTemplate: 'CENTER_TEMPLATE'
+    },
+
+    _change_CENTER_TEMPLATE() {
+        this._renderExtraElements();
     },
 
     _disposeCore: function() {
         pieSizeEqualizer.remove(this);
         this.callBase();
-        this._centerTemplateGroup && this._centerTemplateGroup.linkOff().dispose();
+        this._centerTemplateGroup.linkOff().dispose();
     },
 
     _groupSeries: function() {
@@ -318,23 +325,21 @@ const dxPieChart = BaseChart.inherit({
     _createHtmlStructure() {
         this.callBase();
 
-        if(this.option('centerTemplate')) {
-            this._centerTemplateGroup = this._renderer.g()
-                .attr({ class: 'dxc-hole-template' })
-                .linkOn(this._renderer.root, 'center-template')
-                .css(patchFontOptions(this._themeManager._font))
-                .linkAppend();
-        }
+        this._centerTemplateGroup = this._renderer.g()
+            .attr({ class: 'dxc-hole-template' })
+            .linkOn(this._renderer.root, 'center-template')
+            .css(patchFontOptions(this._themeManager._font))
+            .linkAppend();
     },
 
     _renderExtraElements() {
         let template = this.option('centerTemplate');
-        const centerTemplateGroup = this._centerTemplateGroup;
+        const centerTemplateGroup = this._centerTemplateGroup.clear();
 
-        if(!centerTemplateGroup) {
+        if(!template) {
             return;
         }
-        centerTemplateGroup.clear().attr({ visibility: 'hidden' });
+        centerTemplateGroup.attr({ visibility: 'hidden' });
 
         template = this._getTemplate(template);
 

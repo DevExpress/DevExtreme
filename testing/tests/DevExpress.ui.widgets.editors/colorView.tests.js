@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import Color from 'color';
-import Browser from 'core/utils/browser';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
@@ -681,11 +680,6 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('Markup should be updated when value was changed', function(assert) {
-        if(Browser.msie && Browser.version <= 9) {
-            assert.ok(true);
-            return;
-        }
-
         const colorView = showColorView.call(this, {
             value: 'rgba(94, 169, 219, 0.62)',
             editAlphaChannel: true

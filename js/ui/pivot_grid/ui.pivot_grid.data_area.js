@@ -45,7 +45,7 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    processScroll: function(useNativeScrolling, horizontalScroll, verticalScroll) {
+    processScroll: function(useNativeScrolling, rtlEnabled, horizontalScroll, verticalScroll) {
         let direction = 'both';
         if(horizontalScroll && !verticalScroll) {
             direction = 'horizontal';
@@ -55,6 +55,7 @@ export const DataArea = AreaItem.inherit({
 
         this._groupElement.css('borderTopWidth', 0)
             .dxScrollable({
+                rtlEnabled,
                 useNative: !!useNativeScrolling,
                 useSimulatedScrollbar: !useNativeScrolling,
                 direction,

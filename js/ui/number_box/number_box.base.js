@@ -115,7 +115,6 @@ const NumberBoxBase = TextEditor.inherit({
         return (
             browser.chrome && version >= 66
             || browser.safari && version >= 12
-            || browser.msie && version >= 75
         );
     },
 
@@ -178,7 +177,7 @@ const NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         const char = getChar(e);
-        const validCharRegExp = /[\d.,eE\-+]|Subtract/; // Workaround for IE (T592690)
+        const validCharRegExp = /[\d.,eE\-+]/;
         const isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {

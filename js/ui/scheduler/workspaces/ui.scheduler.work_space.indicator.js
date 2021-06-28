@@ -5,7 +5,8 @@ import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
+import { getTimeZoneCalculator } from '../instanceFactory';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -14,7 +15,7 @@ const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getTimeZoneCalculator() {
-        return this.invoke('getTimeZoneCalculator');
+        return getTimeZoneCalculator(this.option('key'));
     }
     _getToday() {
         const todayDate = this.option('indicatorTime') || new Date();
@@ -28,7 +29,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const today = this._getToday();
             const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-            return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+            return dateUtils.dateInRange(today, this._startViewDate, new Date(endViewDate.getTime() + toMs('day')));
         }
         return false;
     }
@@ -139,7 +140,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _getIndicatorDuration() {
         const today = this._getToday();
-        const firstViewDate = new Date(this._firstViewDate);
+        const firstViewDate = new Date(this._startViewDate);
         let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
             timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day'));
@@ -151,7 +152,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     getIndicationHeight() {
         const today = this._getToday();
         const cellHeight = this.getCellHeight();
-        const date = new Date(this._firstViewDate);
+        const date = new Date(this._startViewDate);
 
         if(this.isIndicationOnView()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());

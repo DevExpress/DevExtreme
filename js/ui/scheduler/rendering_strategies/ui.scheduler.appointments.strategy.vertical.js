@@ -3,6 +3,8 @@ import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
 import dateUtils from '../../../core/utils/date';
 import timeZoneUtils from './../utils.timeZone';
+import { ExpressionUtils } from '../expressionUtils';
+import { createAppointmentAdapter } from '../appointmentAdapter';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -51,7 +53,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = this.instance.createAppointmentAdapter(appointment);
+        const adapter = createAppointmentAdapter(this.key, appointment);
 
         const allDay = this.isAllDay(appointment);
         const isRecurring = !!adapter.recurrenceRule;
@@ -190,7 +192,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 width: width,
                 appointmentReduced: 'tail',
                 rowIndex: 0,
-                cellIndex: appointmentSettings.cellIndex + cellsDiff,
+                columnIndex: appointmentSettings.columnIndex + cellsDiff,
             }));
         }
 
@@ -266,7 +268,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        const allDay = this.instance.fire('getField', 'allDay', appointmentData);
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointmentData);
 
         if(allDay) {
             return true;
@@ -303,7 +305,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
         const startDate = position.info.appointment.startDate;
         const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
         const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / toMs('minute');
 

@@ -25,7 +25,7 @@ async function createDataGridWithPager(): Promise<any> {
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'))
   .beforeEach(createDataGridWithPager)
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');

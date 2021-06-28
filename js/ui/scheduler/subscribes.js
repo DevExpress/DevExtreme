@@ -1,25 +1,34 @@
 import $ from '../../core/renderer';
-import { wrapToArray, inArray } from '../../core/utils/array';
-import { isDefined, isPlainObject } from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import { isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
 import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
-import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
-import utils from './utils';
-import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
+import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
+import { utils } from './utils';
+import {
+    getResourceManager,
+    getAppointmentDataProvider,
+    getTimeZoneCalculator
+} from './instanceFactory';
+import { createAppointmentAdapter } from './appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
-    getTimeZoneCalculator: function() {
-        return this.timeZoneCalculator;
+    getResourceManager: function() {
+        return getResourceManager(this.key);
     },
+
+    getAppointmentDataProvider: function() {
+        return getAppointmentDataProvider(this.key);
+    },
+
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -33,6 +42,10 @@ const subscribes = {
 
     getOption: function(name) {
         return this.option(name);
+    },
+
+    getWorkspaceOption: function(name) {
+        return this.getWorkSpace().option(name);
     },
 
     isVirtualScrolling: function() {
@@ -61,11 +74,12 @@ const subscribes = {
     },
 
     showAddAppointmentPopup: function(cellData, cellGroups) {
-        const appointmentAdapter = this.createAppointmentAdapter({});
+        const appointmentAdapter = createAppointmentAdapter(this.key, {});
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         appointmentAdapter.allDay = cellData.allDay;
-        appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-        appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+        appointmentAdapter.startDate = timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        appointmentAdapter.endDate = timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
         const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
         this.showAppointmentPopup(resultAppointment, true);
@@ -94,8 +108,8 @@ const subscribes = {
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const appointment = this.createAppointmentAdapter(rawAppointment);
-        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
+        const targetedAppointment = createAppointmentAdapter(this.key, extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
         const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();
@@ -126,49 +140,18 @@ const subscribes = {
         this.hideAppointmentTooltip();
     },
 
-    getAppointmentColor: function(options) {
-        const resourcesManager = this._resourcesManager;
-        const resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
-        let response = new Deferred().resolve().promise();
-
-        if(resourceForPainting) {
-            const field = getResourceFieldExpr(resourceForPainting);
-            const groupIndex = options.groupIndex;
-            const groups = this._workSpace._getCellGroups(groupIndex);
-            const resourceValues = wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
-            let groupId = resourceValues.length ? resourceValues[0] : undefined;
-
-            for(let i = 0; i < groups.length; i++) {
-                if(groups[i].name === field) {
-                    groupId = groups[i].id;
-                    break;
-                }
-            }
-
-            response = resourcesManager.getResourceColor(field, groupId);
-        }
-        return response;
-    },
-
     getHeaderHeight: function() {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
-    getResourcesFromItem: function(itemData) {
-        return this._resourcesManager.getResourcesFromItem(itemData);
-    },
-
-    appointmentTakesSeveralDays: function(appointment) {
-        return this._appointmentModel.appointmentTakesSeveralDays(appointment);
-    },
-
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
-        const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
+        const appointmentAdapter = createAppointmentAdapter(this.key, appointmentRaw);
+        const targetedAdapter = createAppointmentAdapter(this.key, (targetedAppointmentRaw || appointmentRaw));
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         // TODO pull out time zone converting from appointment adapter for knockout(T947938)
-        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
-        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+        const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 
@@ -417,93 +400,12 @@ const subscribes = {
         }).bind(this));
     },
 
-    getField: function(field, obj) {
-        if(!isDefined(this._dataAccessors.getter[field])) {
-            return;
-        }
-
-        return this._dataAccessors.getter[field](obj);
-    },
-
-    setField: function(field, obj, value) {
-        if(!isDefined(this._dataAccessors.setter[field])) {
-            return;
-        }
-
-        const splitExprStr = this.option(field + 'Expr').split('.');
-        const rootField = splitExprStr[0];
-
-        if(obj[rootField] === undefined && splitExprStr.length > 1) {
-            const emptyChain = (function(arr) {
-                const result = {};
-                let tmp = result;
-                const arrLength = arr.length - 1;
-
-                for(let i = 1; i < arrLength; i++) {
-                    tmp = tmp[arr[i]] = {};
-                }
-
-                return result;
-            })(splitExprStr);
-
-            obj[rootField] = emptyChain;
-        }
-
-        this._dataAccessors.setter[field](obj, value);
-        return obj;
-    },
-
     renderAppointments: function() {
         this._renderAppointments();
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
-    },
-
-    createResourcesTree: function() {
-        return this._resourcesManager.createResourcesTree(this._loadedResources);
-    },
-
-    getResourceTreeLeaves: function(tree, appointmentResources) {
-        return this._resourcesManager.getResourceTreeLeaves(tree, appointmentResources);
-    },
-
-    createReducedResourcesTree: function() {
-        const tree = this._resourcesManager.createResourcesTree(this._loadedResources);
-
-        return this._resourcesManager.reduceResourcesTree(tree, this.getFilteredItems());
-    },
-
-    groupAppointmentsByResources: function(appointments) {
-        let result = { '0': appointments };
-        const groups = this._getCurrentViewOption('groups');
-
-        if(groups && groups.length && this._resourcesManager.getResourcesData().length) {
-            result = this._resourcesManager.groupAppointmentsByResources(appointments, this._loadedResources);
-        }
-
-        let totalResourceCount = 0;
-
-        each(this._loadedResources, function(i, resource) {
-            if(!i) {
-                totalResourceCount = resource.items.length;
-            } else {
-                totalResourceCount *= resource.items.length;
-            }
-        });
-
-        for(let j = 0; j < totalResourceCount; j++) {
-            const index = j.toString();
-
-            if(result[index]) {
-                continue;
-            }
-
-            result[index] = [];
-        }
-
-        return result;
     },
 
     getLayoutManager: function() {
@@ -603,14 +505,6 @@ const subscribes = {
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
         return result;
-    },
-
-    replaceWrongEndDate: function(appointment, startDate, endDate) {
-        this._appointmentModel.replaceWrongEndDate(appointment, startDate, endDate);
-    },
-
-    calculateAppointmentEndDate: function(isAllDay, startDate) {
-        return this._appointmentModel._calculateAppointmentEndDate(isAllDay, startDate);
     },
 
     getEndDayHour: function() {

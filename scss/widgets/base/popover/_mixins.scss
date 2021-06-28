@@ -1,13 +1,14 @@
+@use "sass:math";
 
 @mixin dx-popover-arrow-size($width) {
   $sqrt-2: 1.4142;
   $popover-arrow-width: $width;
-  $popover-arrow-heiht: $popover-arrow-width / 2;
+  $popover-arrow-heiht: math.div($popover-arrow-width, 2);
 
   .dx-popover-wrapper {
     .dx-popover-arrow::after {
-      width: $popover-arrow-width / $sqrt-2;
-      height: $popover-arrow-width / $sqrt-2;
+      width: math.div($popover-arrow-width, $sqrt-2);
+      height: math.div($popover-arrow-width, $sqrt-2);
     }
 
     &.dx-position-top,

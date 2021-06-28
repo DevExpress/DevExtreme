@@ -10,7 +10,7 @@ export default class List extends Widget {
 
   name = 'dxGallery';
 
-  constructor(id: string|Selector) {
+  constructor(id: string | Selector) {
     super(id);
 
     this.indicatorItems = this.element.find(`.${CLASS.indicatorItem}`);

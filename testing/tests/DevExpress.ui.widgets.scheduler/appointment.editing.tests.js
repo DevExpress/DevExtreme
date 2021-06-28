@@ -447,6 +447,7 @@ module('Integration: Appointment editing', {
                             }],
                             currentView: view,
                             groups: ['ownerId'],
+                            width: 1000,
                         });
 
                         const appointment = {
@@ -553,6 +554,7 @@ module('Integration: Appointment editing', {
                             }],
                             currentView: view,
                             groups: ['ownerId'],
+                            width: 1000,
                         });
 
                         const appointment = {

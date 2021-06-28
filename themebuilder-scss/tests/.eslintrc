@@ -1,12 +1,11 @@
 {
     "extends": [
-        "devextreme/typescript",
         "devextreme/jest"
     ],
     "env": {
         "node": true
     },
     "parserOptions": {
-        "project": "themebuilder-scss/tests/tsconfig.json",
+        "project": "themebuilder-scss/tests/tsconfig.json"
     }
 }

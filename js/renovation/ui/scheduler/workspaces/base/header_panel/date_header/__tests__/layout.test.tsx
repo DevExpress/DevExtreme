@@ -13,8 +13,8 @@ import { DateHeaderCell } from '../cell';
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
 describe('DateHeaderLayout', () => {
-  describe('Render', () => {
-    const dateHeaderMap: any = [[{
+  const dateHeaderData: any = {
+    dataMap: [[{
       startDate: new Date(2020, 6, 9),
       endDate: new Date(2020, 6, 10),
       today: true,
@@ -38,20 +38,26 @@ describe('DateHeaderLayout', () => {
       isLastGroupCell: true,
       colSpan: 34,
       key: '1',
-    }]];
+    }]],
+    leftVirtualCellCount: 1,
+    leftVirtualCellWidth: 2,
+    rightVirtualCellCount: 3,
+    rightVirtualCellWidth: 4,
+  };
 
+  describe('Render', () => {
     const render = (viewModel) => shallow(
       <LayoutView
         {...viewModel}
         props={{
-          ...(new DateHeaderLayoutProps()),
-          dateHeaderMap,
+          ...new DateHeaderLayoutProps(),
+          dateHeaderData,
           ...viewModel.props,
         }}
       /> as any,
     );
 
-    it('should render components correctly', () => {
+    it('should render row and pass correct props to it', () => {
       const layout = render({});
 
       const row = layout.find(Row);
@@ -60,6 +66,17 @@ describe('DateHeaderLayout', () => {
         .toBe(true);
       expect(row)
         .toHaveLength(1);
+
+      expect(row.props())
+        .toEqual({
+          children: expect.anything(),
+          className: 'dx-scheduler-header-row',
+          leftVirtualCellCount: 1,
+          leftVirtualCellWidth: 2,
+          rightVirtualCellCount: 3,
+          rightVirtualCellWidth: 4,
+          isHeaderRow: true,
+        });
     });
 
     it('should render cells and pass correct props to them in basic case', () => {
@@ -71,7 +88,7 @@ describe('DateHeaderLayout', () => {
         .toHaveLength(2);
 
       const firstCell = cells.at(0);
-      const firstCellData = dateHeaderMap[0][0];
+      const firstCellData = dateHeaderData.dataMap[0][0];
 
       expect(firstCell.props())
         .toMatchObject({
@@ -93,7 +110,7 @@ describe('DateHeaderLayout', () => {
         .toBe(firstCellData.key);
 
       const secondCell = cells.at(1);
-      const secondCellData = dateHeaderMap[0][1];
+      const secondCellData = dateHeaderData.dataMap[0][1];
 
       expect(secondCell.props())
         .toMatchObject({
@@ -146,6 +163,7 @@ describe('DateHeaderLayout', () => {
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
             groupByDate: false,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)
@@ -161,6 +179,7 @@ describe('DateHeaderLayout', () => {
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
             groupByDate: true,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)
@@ -176,6 +195,7 @@ describe('DateHeaderLayout', () => {
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
             groupByDate: false,
+            dateHeaderData,
           });
 
           expect(layout.isHorizontalGrouping)

@@ -6,6 +6,7 @@ import { isNumeric, isObject } from '../../../core/utils/type';
 import { current as currentTheme } from '../../themes';
 
 import timeZoneUtils from '../utils.timeZone';
+import { ExpressionUtils } from '../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -19,6 +20,7 @@ const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 class BaseRenderingStrategy {
     constructor(instance) {
         this.instance = instance;
+        this.key = this.instance.key;
         this._initPositioningStrategy();
     }
 
@@ -127,7 +129,7 @@ class BaseRenderingStrategy {
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
             let initialRowIndex = position[j].rowIndex;
-            let initialCellIndex = position[j].cellIndex;
+            let initialColumnIndex = position[j].columnIndex;
 
             if((this._needVerifyItemSize() || allDay)) {
                 const currentMaxAllowedPosition = position[j].hMax;
@@ -140,7 +142,7 @@ class BaseRenderingStrategy {
                     appointmentReduced = 'head';
 
                     initialRowIndex = position[j].rowIndex;
-                    initialCellIndex = position[j].cellIndex;
+                    initialColumnIndex = position[j].columnIndex;
 
                     resultWidth = this._reduceMultiWeekAppointment(
                         width,
@@ -169,7 +171,7 @@ class BaseRenderingStrategy {
                 width: resultWidth,
                 allDay: allDay,
                 rowIndex: initialRowIndex,
-                cellIndex: initialCellIndex,
+                columnIndex: initialColumnIndex,
                 appointmentReduced: appointmentReduced,
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
@@ -250,10 +252,10 @@ class BaseRenderingStrategy {
         const result = [];
 
         const round = value => Math.round(value * 100) / 100;
-        const createItem = (rowIndex, cellIndex, top, left, bottom, right, position, allDay) => {
+        const createItem = (rowIndex, columnIndex, top, left, bottom, right, position, allDay) => {
             return {
                 i: rowIndex,
-                j: cellIndex,
+                j: columnIndex,
                 top: round(top),
                 left: round(left),
                 bottom: round(bottom),
@@ -264,10 +266,10 @@ class BaseRenderingStrategy {
         };
 
         for(let rowIndex = 0, rowCount = positionList.length; rowIndex < rowCount; rowIndex++) {
-            for(let cellIndex = 0, cellCount = positionList[rowIndex].length; cellIndex < cellCount; cellIndex++) {
-                const { top, left, height, width, cellPosition, allDay } = positionList[rowIndex][cellIndex];
+            for(let columnIndex = 0, cellCount = positionList[rowIndex].length; columnIndex < cellCount; columnIndex++) {
+                const { top, left, height, width, cellPosition, allDay } = positionList[rowIndex][columnIndex];
 
-                result.push(createItem(rowIndex, cellIndex, top, left, top + height, left + width, cellPosition, allDay));
+                result.push(createItem(rowIndex, columnIndex, top, left, top + height, left + width, cellPosition, allDay));
             }
         }
 
@@ -485,7 +487,7 @@ class BaseRenderingStrategy {
             for(let k = 1; k < compactCount; k++) {
                 const compactPart = extend(true, {}, item);
                 compactPart.left = this._getCompactLeftCoordinate(item.left, k);
-                compactPart.cellIndex = compactPart.cellIndex + k;
+                compactPart.columnIndex = compactPart.columnIndex + k;
                 compactPart.sortedIndex = null;
                 result.push(compactPart);
             }
@@ -505,7 +507,7 @@ class BaseRenderingStrategy {
         }
 
         const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
         if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
@@ -550,9 +552,9 @@ class BaseRenderingStrategy {
     }
 
     _generateAppointmentCollectorIndex({
-        groupIndex, rowIndex, cellIndex,
+        groupIndex, rowIndex, columnIndex,
     }, isAllDay) {
-        return `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`;
+        return `${groupIndex}-${rowIndex}-${columnIndex}-${isAllDay}`;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

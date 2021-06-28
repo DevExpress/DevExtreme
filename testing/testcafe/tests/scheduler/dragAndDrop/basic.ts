@@ -15,7 +15,7 @@ fixture`Drag-and-drop appointments in the Scheduler basic views`
     .expect(draggableAppointment.size.height).eql('50px')
     .expect(draggableAppointment.date.time)
     .eql('11:00 AM - 11:30 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [view],
   currentView: view,
   dataSource,
@@ -30,7 +30,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
     .expect(draggableAppointment.size.height).eql('19px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['month'],
   currentView: 'month',
   dataSource,
@@ -43,7 +43,7 @@ test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   await t
     .drag(draggableAppointment.element, 250, -50, { speed: 0.2 })
     .expect(draggableAppointment.isAllDay).eql(true);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource: [{
@@ -62,7 +62,7 @@ test('Drag-n-drop when browser has vertical scroll', async (t) => {
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(25, 0), { speed: 0.2 })
     .expect(draggableAppointment.date.time).eql('9:30 PM - 10:00 PM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource: [{
@@ -95,7 +95,7 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
     .eql('4:00 AM - 6:00 AM')
     .expect(collector.element.exists)
     .notOk();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   firstDayOfWeek: 2,

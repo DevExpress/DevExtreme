@@ -17,7 +17,7 @@ test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (
     .expect(draggableAppointment.element.exists).ok()
     .expect(draggableAppointment.isAllDay)
     .ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource,
   groupByDate: true,
 }));

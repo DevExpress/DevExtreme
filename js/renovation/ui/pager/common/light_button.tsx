@@ -50,6 +50,6 @@ export class LightButton extends JSXComponent<LightButtonProps, 'onClick'>() {
   }
 
   @Effect() subscribeToClick(): EffectReturn {
-    return subscribeToClickEvent(this.widgetRef.current!, this.props.onClick);
+    return subscribeToClickEvent(this.widgetRef.current, this.props.onClick);
   }
 }

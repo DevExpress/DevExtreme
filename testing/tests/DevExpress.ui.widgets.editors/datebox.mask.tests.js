@@ -49,11 +49,7 @@ const simulateIMEInput = function(eventsData) {
         })
     }));
 
-    this.$input.trigger($.Event('compositionend', {
-        originalEvent: $.Event('compositionend', {
-            data: eventsData.compositionEndData // for msie
-        })
-    }));
+    this.$input.trigger($.Event('compositionend'));
 };
 
 const setupModule = {
@@ -1134,22 +1130,17 @@ module('Empty dateBox', {
         });
     });
 
-    [
-        'space',
-        'spaceIE' // IE11 support (T972456)
-    ].forEach((key) => {
-        test(`${key} keydown event should be prevented`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
-                return;
-            }
+    test('space keydown event should be prevented', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
 
-            const value = new Date(2020, 5, 5);
-            this.instance.option({ value });
-            this.keyboard.keyDown(key);
+        const value = new Date(2020, 5, 5);
+        this.instance.option({ value });
+        this.keyboard.keyDown('space');
 
-            assert.ok(this.keyboard.event.isDefaultPrevented(), `${key} key keydown prevented`);
-        });
+        assert.ok(this.keyboard.event.isDefaultPrevented(), 'space key keydown prevented');
     });
 });
 

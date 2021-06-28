@@ -218,7 +218,7 @@ QUnit.module('rendering', moduleConfig, () => {
         assert.strictEqual($draggingElement.children().get(0).style.height, '30px', 'height style exists in dragging item');
     });
 
-    QUnit.test('While dragging cursor should be \'grabbing/pointer\'', function(assert) {
+    QUnit.test('While dragging cursor should be \'grabbing\'', function(assert) {
         // arrange
         this.createSortable({});
 
@@ -226,8 +226,7 @@ QUnit.module('rendering', moduleConfig, () => {
         pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
 
         // assert
-        const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
-        assert.equal($('.dx-sortable-dragging').children().first().css('cursor'), cursor, `cursor is ${cursor}`);
+        assert.equal($('.dx-sortable-dragging').children().first().css('cursor'), 'grabbing', 'cursor is grabbing');
     });
 
     QUnit.test('The selector is specific enough to override the style applied to handle element', function(assert) {
@@ -242,15 +241,15 @@ QUnit.module('rendering', moduleConfig, () => {
         pointerMock(this.$element.find('.default').eq(0)).start().down().move(10, 0);
 
         // assert
-        const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
-        assert.equal($('.dx-sortable-dragging').find('.default').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
+        assert.equal($('.dx-sortable-dragging').find('.default').eq(0).css('cursor'), 'grabbing', 'cursor is grabbing');
     });
 
     QUnit.test('Elements should have \'user-select: auto\' style (T862255)', function(assert) {
+        // arrange
         this.createSortable();
 
-        const userSelect = browser.msie ? 'text' : 'auto';
-        assert.equal(this.$element.find('.draggable').eq(0).css('user-select'), userSelect, `user-select is ${userSelect}`);
+        // assert
+        assert.equal(this.$element.find('.draggable').eq(0).css('user-select'), 'auto', 'user-select is auto');
     });
 });
 
@@ -430,11 +429,10 @@ QUnit.module('allowReordering', moduleConfig, () => {
             // assert
             const $gestureCover = $('.dx-gesture-cover');
             const $cloneElement = $('.dx-viewport').find('.dx-sortable-dragging');
-            const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
 
             assert.strictEqual($cloneElement.length, 1, 'has dragging element');
             assert.strictEqual($gestureCover.length, 1, 'has gesture cover');
-            assert.strictEqual($gestureCover.css('cursor'), cursor, 'gesture cover cursor');
+            assert.strictEqual($gestureCover.css('cursor'), 'grabbing', 'gesture cover cursor');
         } finally {
             viewPort.value(origViewPort);
         }

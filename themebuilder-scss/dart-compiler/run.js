@@ -4,6 +4,7 @@ const { spawn } = require('child_process');
 const { join } = require('path');
 
 const log = (message) => {
+    // eslint-disable-next-line no-console
     if(process.env.THEMEBUILDER_DEBUG) console.log(message.toString());
 };
 

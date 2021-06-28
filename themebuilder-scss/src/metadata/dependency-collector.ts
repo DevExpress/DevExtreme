@@ -6,7 +6,12 @@ import cabinet from 'filing-cabinet';
 import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
 
+export const filePathMap = new Map();
 const stylesRegex = /\sSTYLE (.*)/;
+const busyCache = {
+  widget: '',
+  dependencies: {},
+};
 
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
@@ -18,7 +23,7 @@ export default class DependencyCollector {
   static getWidgetFromAst(ast: SyntaxTree): string {
     if (ast.comments?.length) {
       const styleComment = ast.comments
-        .find((comment: AstComment): boolean => comment.value.indexOf('STYLE') >= 0);
+        .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
@@ -32,6 +37,11 @@ export default class DependencyCollector {
     const fullArray = currentWidget ? [...widgetsArray, currentWidget] : widgetsArray;
 
     return [...new Set(fullArray)];
+  }
+
+  static isArraysEqual(array1: string[], array2: string[]): boolean {
+    return array1.length === array2.length
+    && array1.every((value, index) => value === array2[index]);
   }
 
   treeProcessor(node: ScriptsDependencyTree): string[] {
@@ -61,21 +71,25 @@ export default class DependencyCollector {
 
   getFullDependencyTree(filePath: string): ScriptsDependencyTree {
     let cacheItem = this.scriptsCache[filePath];
+    const filePathInProcess = filePathMap.get(filePath);
 
-    if (cacheItem === undefined) {
-      const deps = precinct.paperwork(filePath, {
+    if (!filePathInProcess && cacheItem === undefined) {
+      filePathMap.set(filePath, busyCache);
+
+      const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
-      })
-        .map((relativeDependency: string): string => cabinet({
-          partial: relativeDependency,
-          directory: '../js',
-          filename: filePath,
-          ast: precinct.ast,
-        }))
+      });
+
+      const deps = result.map((relativeDependency: string): string => cabinet({
+        partial: relativeDependency,
+        directory: '../js',
+        filename: filePath,
+        ast: precinct.ast,
+      }))
         .filter((path: string): boolean => path !== null
-          && existsSync(path)
-          && !path.includes('node_modules')
-          && !path.includes('viz'));
+            && existsSync(path)
+            && !path.includes('node_modules')
+            && !path.includes('viz'));
 
       cacheItem = {
         widget: DependencyCollector.getWidgetFromAst(precinct.ast),
@@ -83,7 +97,10 @@ export default class DependencyCollector {
       };
 
       deps.forEach((absolutePath: string) => {
-        cacheItem.dependencies[absolutePath] = this.getFullDependencyTree(absolutePath);
+        const node = this.getFullDependencyTree(absolutePath);
+        if (node) {
+          cacheItem.dependencies[absolutePath] = node;
+        }
       });
 
       this.scriptsCache[filePath] = cacheItem;
@@ -92,16 +109,11 @@ export default class DependencyCollector {
     return cacheItem;
   }
 
-  static isArraysEqual(array1: string[], array2: string[]): boolean {
-    return array1.length === array2.length
-    && array1.every((value, index) => value === array2[index]);
-  }
-
   validate(): void {
     this.themes.forEach((theme) => {
       const indexFileName = `../scss/widgets/${theme}/_index.scss`;
       const indexContent = readFileSync(indexFileName, 'utf8');
-      const indexPublicWidgetsList = (new WidgetsHandler([], '', {}))
+      const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
         .map((item: WidgetItem): string => item.widgetName.toLowerCase())
         .sort();

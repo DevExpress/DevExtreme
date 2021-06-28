@@ -33,7 +33,7 @@ fixture`Resize appointments in the Scheduler basic views`
     .eql('100px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [view],
   currentView: view,
   dataSource,
@@ -66,7 +66,7 @@ test('Resize in the "month" view', async (t) => {
     .eql('200px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['month'],
   currentView: 'month',
   dataSource,
@@ -87,7 +87,7 @@ test('Resize should work correctly with startDateExpr (T944693)', async (t) => {
     .eql('100px')
     .expect(resizableAppointment.date.time)
     .eql('11:00 AM - 12:00 PM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   startDateExpr: 'start',

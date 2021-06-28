@@ -1,14 +1,14 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../../base/header_panel/layout';
 import { TimelineDateHeaderLayout } from './date_header/layout';
+import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel';
 
 export const viewFunction = ({
   props: {
-    dateHeaderMap,
+    dateHeaderData,
     groupByDate,
     groups,
     groupOrientation,
@@ -22,7 +22,7 @@ export const viewFunction = ({
 }: TimelineHeaderPanelLayout): JSX.Element => (
   <HeaderPanelLayout
     dateHeaderTemplate={TimelineDateHeaderLayout}
-    dateHeaderMap={dateHeaderMap}
+    dateHeaderData={dateHeaderData}
     groupByDate={groupByDate}
     groups={groups}
     groupOrientation={groupOrientation}
@@ -35,12 +35,9 @@ export const viewFunction = ({
   />
 );
 
-@ComponentBindings()
-export class TimelineHeaderPanelLayoutProps extends HeaderPanelLayoutProps {}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
+  jQuery: { register: true, component: HeaderPanel },
 })
-export class TimelineHeaderPanelLayout extends JSXComponent(TimelineHeaderPanelLayoutProps) {}
+export class TimelineHeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dateHeaderData'>() {}

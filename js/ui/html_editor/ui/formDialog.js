@@ -3,13 +3,8 @@ import { extend } from '../../../core/utils/extend';
 
 import Popup from '../../popup';
 import Form from '../../form';
-import domAdapter from '../../../core/dom_adapter';
-import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
-import browser from '../../../core/utils/browser';
-
-const getActiveElement = domAdapter.getActiveElement;
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
@@ -68,7 +63,6 @@ class FormDialog {
 
                 this._renderForm($formContainer, {
                     onEditorEnterKey: ({ component, dataField, event }) => {
-                        this._updateEditorValue(component, dataField);
                         this.hide(component.option('formData'), event);
                     },
                     customizeItem: (item) => {
@@ -109,17 +103,6 @@ class FormDialog {
                 }
             ]
         }, this._popupUserConfig);
-    }
-
-    _updateEditorValue(component, dataField) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            const editor = component.getEditor(dataField);
-            const activeElement = getActiveElement();
-
-            if(editor.$element().find(activeElement).length) {
-                resetActiveElement();
-            }
-        }
     }
 
     _renderForm($container, options) {

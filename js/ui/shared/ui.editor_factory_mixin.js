@@ -35,7 +35,7 @@ const EditorFactoryMixin = (function() {
     };
 
     const checkEnterBug = function() {
-        return browser.msie || browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
+        return browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
     const getTextEditorConfig = function(options) {
@@ -161,10 +161,9 @@ const EditorFactoryMixin = (function() {
             const stopWatch = options.row.watch(() => {
                 dataSource = options.lookup.dataSource(options.row);
                 return dataSource && dataSource.filter;
-            }, () => {
-                selectBox.option('dataSource', dataSource);
-            }, (row) => {
+            }, (newValue, row) => {
                 options.row = row;
+                selectBox.option('dataSource', dataSource);
             });
         }
     }

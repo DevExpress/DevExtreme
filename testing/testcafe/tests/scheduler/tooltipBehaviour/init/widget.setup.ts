@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { extend } from '../../../../../../js/core/utils/extend';
 import createWidget from '../../../../helpers/createWidget';
 
-export const createScheduler = (options = {}): Promise<void> => createWidget('dxScheduler', extend({
+export const createScheduler = async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
   views: ['day'],
   dataSource: [],
   width: 600,
@@ -14,7 +14,7 @@ export const createScheduler = (options = {}): Promise<void> => createWidget('dx
   currentDate: new Date(2019, 3, 1),
 }, options));
 
-export const scroll = (horizontal: number, vertical: number): Promise<void> => ClientFunction(
+export const scroll = async (horizontal: number, vertical: number): Promise<void> => ClientFunction(
   () => { window.scroll(horizontal, vertical); },
   { dependencies: { horizontal, vertical } },
 )();

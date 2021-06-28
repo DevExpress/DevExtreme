@@ -25,6 +25,7 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import browser from 'core/utils/browser';
+import { getWindow } from 'core/utils/window';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 QUnit.module('Initialization', baseModuleConfig, () => {
@@ -914,6 +915,64 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.roughEqual($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 0.51, 'last column width');
     });
 
+    QUnit.test('cell content with auto width should not be wrapper to second line on zoom (T998665)', function(assert) {
+        if($.fn.jquery.split('.')[0] === '2') {
+            assert.ok(true, 'test is not actual for jquery 2');
+            return;
+        }
+        // arrange, act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 70,
+            loadingTimeout: null,
+            dataSource: [{
+                'Zipcode': 90013,
+                Employee: 'You have not been granted permission to edit the following fields on this item: Risk Owner'
+            }, {
+                'Zipcode': 90014,
+                Employee: 'You have not been granted permission to edit the following fields on this item: Risk Owner'
+            }],
+            showBorders: true,
+            wordWrapEnabled: true,
+            scrolling: {
+                useNative: true
+            },
+            columns: [{
+                dataField: 'Zipcode',
+                width: 'auto'
+            }, {
+                dataField: 'Employee',
+                width: 'auto'
+            }]
+        }).dxDataGrid('instance');
+
+        // act
+        $('#container').css('zoom', 0.9);
+        dataGrid.updateDimensions(true);
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 1)).height() < 35, 'cell content is not wrapperd');
+    });
+
+    QUnit.test('dimensions should be updated on browser zoom (T998665)', function(assert) {
+        const window = getWindow();
+        const originalDevicePixelRatio = window.devicePixelRatio;
+
+        window.devicePixelRatio = 1;
+
+        // arrange, act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+        }).dxDataGrid('instance');
+        sinon.spy(dataGrid.getController('resizing'), '_updateDimensionsCore');
+
+        window.devicePixelRatio = 1.5;
+        resizeCallbacks.fire();
+
+        // assert
+        assert.ok(dataGrid.getController('resizing')._updateDimensionsCore.calledOnce, '_updateDimensionsCore is called');
+
+        window.devicePixelRatio = originalDevicePixelRatio;
+    });
+
     // T344125
     QUnit.test('column width does not changed after changing grid\'s width when columnAutoWidth enabled', function(assert) {
         // arrange, act
@@ -1381,8 +1440,8 @@ QUnit.module('columnWidth auto option', {
     });
 
     QUnit.test('column with width 0 should be applied', function(assert) {
-        if(browser.safari || (browser.msie && parseInt(browser.version) <= 11)) {
-            assert.ok(true, 'IE 11 and Safari works wrong with width 0');
+        if(browser.safari) {
+            assert.ok(true, 'Safari works wrong with width 0');
             return;
         }
         const dataGrid = $('#dataGrid').dxDataGrid({

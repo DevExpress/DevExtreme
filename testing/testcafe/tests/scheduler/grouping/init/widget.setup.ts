@@ -13,7 +13,7 @@ const priorityData = [
   },
 ];
 
-export default (options = {}): Promise<void> => createWidget('dxScheduler', extend({
+export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
   views: ['week'],
   dataSource: [],
   resources: [

@@ -36,7 +36,7 @@ export default abstract class DropDownList extends TextBox {
 
   async isOpened(): Promise<boolean> {
     const isPopupRendered = this.isPopupRendered();
-    if (!(await isPopupRendered)) {
+    if (!await isPopupRendered) {
       return isPopupRendered;
     }
 

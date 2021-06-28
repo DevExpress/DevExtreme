@@ -1,7 +1,15 @@
+// eslint-disable-next-line import/named
+import { dxElementWrapper } from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 
-export const addAttributes = ($element, attributes): void => {
-  each(attributes, (_, { name, value }) => {
+export const addAttributes = (
+  $element: dxElementWrapper,
+  attributes: {
+    name: string;
+    value: string | number | null;
+  }[],
+): void => {
+  each(attributes, (_: never, { name, value }) => {
     if (name === 'class') {
       $element.addClass(value);
     } else {
@@ -11,15 +19,18 @@ export const addAttributes = ($element, attributes): void => {
 };
 
 export function getAriaName(name: string): string {
-  return (name === 'role' || name === 'id')
+  return name === 'role' || name === 'id'
     ? name
     : `aria-${name}`;
 }
 
-export const removeDifferentElements = ($children, $newChildren): void => {
-  each($newChildren, (__, element) => {
+export const removeDifferentElements = (
+  $children: dxElementWrapper,
+  $newChildren: dxElementWrapper,
+): void => {
+  each($newChildren, (__: never, element: Element) => {
     let hasComponent = false;
-    each($children, (_, oldElement) => {
+    each($children, (_: never, oldElement: Element) => {
       if (element === oldElement) {
         hasComponent = true;
       }

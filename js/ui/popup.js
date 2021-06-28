@@ -23,7 +23,7 @@ import { getWindow, hasWindow } from '../core/utils/window';
 import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
-import Overlay from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
 
@@ -59,7 +59,6 @@ const BUTTON_NORMAL_TYPE = 'normal';
 const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 
-const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
@@ -542,9 +541,7 @@ const Popup = Overlay.inherit({
 
         if(this._isAutoHeight() && this.option('autoResizeEnabled')) {
             if(isAutoWidth || IS_OLD_SAFARI) {
-                if(!IS_IE11) {
-                    currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
-                }
+                currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
             } else {
                 currentHeightStrategyClass = HEIGHT_STRATEGIES.flex;
             }
@@ -620,17 +617,8 @@ const Popup = Overlay.inherit({
         };
     },
 
-    _shouldFixBodyPosition: function() {
+    _isAllWindowCovered: function() {
         return this.callBase() || this.option('fullScreen');
-    },
-
-    _toggleSafariFullScreen: function(value) {
-        const toggleFullScreenBeforeShown = this._shouldFixBodyPosition() && value && !this._isShown;
-        if(toggleFullScreenBeforeShown) {
-            this._bodyScrollTop = value ? window.pageYOffset : undefined;
-        } else {
-            this._toggleSafariScrolling(!value);
-        }
     },
 
     _renderDimensions: function() {
@@ -714,8 +702,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'fullScreen':
                 this._toggleFullScreenClass(args.value);
-
-                this._toggleSafariFullScreen(args.value);
+                this._toggleSafariScrolling();
 
                 this._renderGeometry();
 

@@ -22,7 +22,7 @@ describe('RectSvgElement', () => {
 
   describe('View', () => {
     it('should pass parsed props and ref', () => {
-      const rect = shallow(<RectSvgComponent {...viewModel as any} /> as JSX.Element);
+      const rect = shallow(<RectSvgComponent {...viewModel as any} />);
 
       expect(rect.props()).toMatchObject({ ...parsedProps });
       expect(rect.instance()).toBe(rectRef.current);
@@ -30,7 +30,7 @@ describe('RectSvgElement', () => {
 
     it('should pass transform and dash style', () => {
       jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
-      const rect = shallow(<RectSvgComponent {...viewModel as any} /> as JSX.Element);
+      const rect = shallow(<RectSvgComponent {...viewModel as any} />);
 
       expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
       expect(utilsModule.getGraphicExtraProps)

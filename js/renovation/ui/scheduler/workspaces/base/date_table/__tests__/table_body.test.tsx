@@ -26,6 +26,8 @@ describe('DateTableBody', () => {
           today: true,
           otherMonth: true,
           firstDayOfMonth: true,
+          isSelected: true,
+          isFocused: false,
         }], [{
           startDate: new Date(2020, 6, 9, 1),
           endDate: new Date(2020, 6, 9, 1, 30),
@@ -39,6 +41,8 @@ describe('DateTableBody', () => {
           today: false,
           otherMonth: false,
           firstDayOfMonth: true,
+          isSelected: true,
+          isFocused: true,
         }], [{
           startDate: new Date(2020, 6, 9, 2),
           endDate: new Date(2020, 6, 9, 2, 30),
@@ -52,6 +56,8 @@ describe('DateTableBody', () => {
           today: false,
           otherMonth: false,
           firstDayOfMonth: false,
+          isSelected: false,
+          isFocused: false,
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
         groupIndex: 1,
@@ -59,6 +65,7 @@ describe('DateTableBody', () => {
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
       leftVirtualCellCount: 2,
+      rightVirtualCellCount: 21,
     };
     const cellTemplate = () => null;
 
@@ -90,6 +97,8 @@ describe('DateTableBody', () => {
             className: 'dx-scheduler-date-table-row',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 2,
+            rightVirtualCellCount: 21,
           });
       });
     });
@@ -119,6 +128,8 @@ describe('DateTableBody', () => {
           isFirstGroupCell,
           isLastGroupCell,
           key,
+          isFocused,
+          isSelected,
         } = data;
 
         expect(cell.props())
@@ -135,6 +146,8 @@ describe('DateTableBody', () => {
             isFirstGroupCell,
             isLastGroupCell,
             dataCellTemplate,
+            isFocused,
+            isSelected,
           });
         expect(cell.key())
           .toBe(key.toString());

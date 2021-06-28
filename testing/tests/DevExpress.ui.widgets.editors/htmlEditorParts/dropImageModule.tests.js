@@ -101,13 +101,4 @@ QUnit.module('DropImage module', moduleConfig, () => {
         assert.notOk(event.isDefaultPrevented(), 'Doesn\'t prevent default behavior');
         assert.equal(this.insertEmbedStub.callCount, 0, 'File isn\'t inserted');
     });
-
-    test('dragover event', function(assert) {
-        new DropImage(this.quillMock, this.options);
-
-        const event = $.Event('dragover');
-        this.$element.trigger(event);
-
-        assert.equal(event.isDefaultPrevented(), !!browser.msie, 'It should be prevented for MS browsers');
-    });
 });

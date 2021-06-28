@@ -11,7 +11,6 @@ import Calendar from 'ui/calendar';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
-import browser from 'core/utils/browser';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import { normalizeKeyName } from 'events/utils/index';
@@ -538,12 +537,6 @@ QUnit.module('Views initial positions', {
     });
 
     QUnit.test('calendar views position in RTL', function(assert) {
-        if('chrome' in window && browser.msie) {
-            // Chrome DevTools device emulation
-            assert.ok(true, 'This test is not relevant for chrome dev tools device emulation');
-            return;
-        }
-
         this.reinit({ rtlEnabled: true });
 
         const $view = $(getCurrentViewInstance(this.instance).$element());

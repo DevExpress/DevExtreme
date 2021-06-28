@@ -24,7 +24,7 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
     .ok();
 
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-after-drag.png')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource,
   startDayHour: 1,
   recurrenceEditMode: 'series',

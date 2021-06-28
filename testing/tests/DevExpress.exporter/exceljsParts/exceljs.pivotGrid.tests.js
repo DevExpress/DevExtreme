@@ -65,7 +65,7 @@ const moduleConfig = {
 
 QUnit.module('Scenarios', moduleConfig, () => {
     const topLeft = { row: 2, column: 3 };
-    const epsilon = browser.chrome ? 1.15 : 4;
+    const epsilon = browser.chrome ? 1.55 : 4;
 
     const toExcelWidth = (width) => {
         const excelWidth = parseFloat(width) / Export.__internals.MAX_DIGIT_WIDTH_IN_PIXELS;
@@ -74,11 +74,12 @@ QUnit.module('Scenarios', moduleConfig, () => {
 
     const getOptions = (context, pivotGrid, expectedCustomizeCellArgs, options) => {
         const { keepColumnWidths = true, selectedRowsOnly = false,
-            mergeRowFieldValues = true, mergeColumnFieldValues = true, topLeftCell = topLeft, customizeCell } = options || {};
+            mergeRowFieldValues = true, mergeColumnFieldValues = true, topLeftCell = topLeft, loadPanel = { enabled: false }, customizeCell } = options || {};
 
         const result = {
             component: pivotGrid,
             worksheet: context.worksheet,
+            loadPanel: loadPanel,
             topLeftCell: topLeftCell,
             customizeCell: (eventArgs) => {
                 if(isDefined(expectedCustomizeCellArgs)) {
@@ -6184,13 +6185,27 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
-LoadPanelTests.runTests(moduleConfig, exportPivotGrid, () => $('#pivotGrid').dxPivotGrid({
-    fields: [
-        { area: 'row', dataField: 'row1', dataType: 'string' },
-        { area: 'column', dataField: 'col1', dataType: 'string' },
-        { area: 'data', summaryType: 'count', dataType: 'number' }
-    ],
-    store: [
-        { row1: 'A', col1: 'a' },
-    ]
-}).dxPivotGrid('instance'), 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
+    {
+        fields: [
+            { area: 'row', dataField: 'row1', dataType: 'string' },
+            { area: 'column', dataField: 'col1', dataType: 'string' },
+            { area: 'data', summaryType: 'count', dataType: 'number' }
+        ],
+        store: [
+            { row1: 'A', col1: 'a' },
+        ],
+        loadPanel: { enabled: true },
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, (options) => $('#pivotGrid').dxPivotGrid(options).dxPivotGrid('instance'),
+    {
+        fields: [
+            { area: 'row', dataField: 'row1', dataType: 'string' },
+            { area: 'column', dataField: 'col1', dataType: 'string' },
+            { area: 'data', summaryType: 'count', dataType: 'number' }
+        ],
+        store: [
+            { row1: 'A', col1: 'a' },
+        ],
+        loadPanel: { enabled: false },
+    }, 'worksheet');

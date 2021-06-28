@@ -34,13 +34,13 @@ export class InkRippleProps {
 })
 export class InkRipple extends JSXComponent(InkRippleProps) {
   @Method()
-  hideWave(event): void {
-    hideWave(this.getConfig, event);
+  hideWave(opts: Event | { element?: HTMLElement; event: Event }): void {
+    hideWave(this.getConfig, opts);
   }
 
   @Method()
-  showWave(event): void {
-    showWave(this.getConfig, event);
+  showWave(opts: Event | { element?: HTMLElement; event: Event; wave?: number }): void {
+    showWave(this.getConfig, opts);
   }
 
   get getConfig(): InkRippleConfig {

@@ -101,7 +101,7 @@ export const renderDateParts = (text, regExpInfo) => {
             caret: { start: start, end: end },
             pattern: pattern,
             text: result[i],
-            limits: getLimits.bind(this, pattern[0]),
+            limits: (...args) => getLimits(pattern[0], ...args),
             setter: PATTERN_SETTERS[pattern[0]] || noop,
             getter: getter
         });

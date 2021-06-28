@@ -266,6 +266,30 @@ describe('Button', () => {
           expect(button.widgetRef.current?.focus).toHaveBeenCalledWith();
         });
       });
+
+      describe('Methods', () => {
+        describe('activate', () => {
+          it('should call widget\'s activate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { activate: jest.fn() } } as any;
+            button.activate();
+
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledWith();
+          });
+        });
+
+        describe('deactivate', () => {
+          it('should call widget\'s deactivate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { deactivate: jest.fn() } } as any;
+            button.deactivate();
+
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledWith();
+          });
+        });
+      });
     });
 
     describe('Events', () => {
@@ -273,7 +297,8 @@ describe('Button', () => {
         describe('Key down', () => {
           it('should call onKeyDown callback by Widget key down', () => {
             const onKeyDown = jest.fn(() => ({ cancel: true }));
-            const options = {};
+            const originalEvent = {} as Event & { cancel: boolean };
+            const options = { keyName: '', which: '', originalEvent };
             const button = new Button({ onKeyDown });
             button.onWidgetKeyDown(options);
             expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -283,7 +308,8 @@ describe('Button', () => {
           it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
             const onKeyDown = jest.fn(() => ({ cancel: true }));
             const onClick = jest.fn();
-            const options = { keyName: 'enter' };
+            const originalEvent = {} as Event & { cancel: boolean };
+            const options = { keyName: 'enter', which: 'enter', originalEvent };
             const button = new Button({ onKeyDown, onClick });
             button.onWidgetKeyDown(options);
             expect(onKeyDown).toBeCalled();
@@ -292,11 +318,13 @@ describe('Button', () => {
 
           it('should prevent default key down event and simulate click by space/enter keys', () => {
             const onClick = jest.fn();
+            const originalEvent = {
+              preventDefault: jest.fn(),
+            } as unknown as Event & { cancel: boolean };
             const options = {
               keyName: 'enter',
-              originalEvent: {
-                preventDefault: jest.fn(),
-              },
+              which: 'enter',
+              originalEvent,
             };
             const button = new Button({ onClick, validationGroup: 'vGroup' });
             button.onWidgetKeyDown(options);
@@ -310,7 +338,8 @@ describe('Button', () => {
           it('should not simulate click by common keys down', () => {
             const onClick = jest.fn();
             const button = new Button({ onClick, validationGroup: 'vGroup' });
-            button.onWidgetKeyDown({ keyName: 'A' });
+            const originalEvent = {} as Event & { cancel: boolean };
+            button.onWidgetKeyDown({ keyName: 'A', which: 'A', originalEvent });
             expect(onClick).not.toBeCalled();
           });
         });
@@ -411,6 +440,10 @@ describe('Button', () => {
           expect(new Button({ icon: 'icon' }).aria)
             .toEqual({ label: 'icon', role: 'button' });
         });
+
+        it('should return text value if it is specified', () => {
+          expect(new Button({ text: 'text' }).aria).toEqual({ label: 'text', role: 'button' });
+        });
       });
 
       describe('cssClasses', () => {
@@ -487,7 +520,7 @@ describe('Button', () => {
           expect(new Button({ type: 'back' }).iconSource).toBe('back');
         });
 
-        it('should return empty string if the icon property value is empty', () => {
+        it('should return "back" if icon property is empty and type is "back"', () => {
           expect(new Button({}).iconSource).toBe('');
         });
 
@@ -525,8 +558,7 @@ describe('Button', () => {
 
       beforeEach(() => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => false);
+        (devices.isSimulator as Mock).mockImplementation(() => false);
         (current as Mock).mockImplementation(() => 'generic');
       });
 
@@ -555,7 +587,7 @@ describe('Button', () => {
         });
 
         it('should be false on simulator', () => {
-          (devices as any).isSimulator.mockImplementation(() => true);
+          (devices.isSimulator as Mock).mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });

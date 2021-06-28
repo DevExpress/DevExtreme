@@ -298,6 +298,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return isFunction(visible) ? visible.call(button, { component: options.component, row: options.row, column: options.column }) : visible;
         },
 
+        _isButtonDisabled: function(button, options) {
+            const disabled = button.disabled;
+
+            return isFunction(disabled) ? disabled.call(button, { component: options.component, row: options.row, column: options.column }) : !!disabled;
+        },
+
         _getButtonConfig: function(button, options) {
             const config = isObject(button) ? button : {};
             const buttonName = getButtonName(button);
@@ -547,8 +553,19 @@ const EditingController = modules.ViewController.inherit((function() {
             return -1;
         },
 
+        _isEditRowByIndex(rowIndex) {
+            const key = this._dataController.getKeyByRowIndex(rowIndex);
+            // Vitik: performance optimization equalByValue take O(1)
+            const isKeyEqual = isDefined(key) && equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key);
+            if(isKeyEqual) {
+                // Vitik: performance optimization _getVisibleEditRowIndex take O(n)
+                return this._getVisibleEditRowIndex() === rowIndex;
+            }
+            return isKeyEqual;
+        },
+
         isEditCell: function(visibleRowIndex, columnIndex) {
-            return this._getVisibleEditRowIndex() === visibleRowIndex && this._getVisibleEditColumnIndex() === columnIndex;
+            return this._isEditRowByIndex(visibleRowIndex) && this._getVisibleEditColumnIndex() === columnIndex;
         },
 
         getPopupContent: noop,
@@ -1930,11 +1947,16 @@ const EditingController = modules.ViewController.inherit((function() {
                     $button.attr('title', button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
-                    button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
-                    e.event.preventDefault();
-                    e.event.stopPropagation();
-                }));
+                if(this._isButtonDisabled(button, options)) {
+                    $button.addClass('dx-state-disabled');
+                } else {
+                    eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
+                        button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                    }));
+                }
+
                 $container.append($button, '&nbsp;');
             }
         },
@@ -2246,14 +2268,15 @@ export const editingModule = {
                     const row = this._dataController.items()[e.rowIndex];
                     const allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.isNewRow;
                     const column = this._columnsController.getVisibleColumns()[columnIndex];
-                    const allowEditing = allowUpdating && column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex));
+                    const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
+                    const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);
                     const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 
-                    if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
+                    if(eventName === 'click' && startEditAction === 'dblClick' && !isEditedCell) {
                         editingController.closeEditCell();
                     }
 

@@ -12,6 +12,8 @@ export interface ViewCellData {
   isLastGroupCell: boolean;
   key: number;
   firstDayOfMonth?: boolean;
+  isSelected?: boolean;
+  isFocused?: boolean;
 }
 
 export interface DateHeaderCellData extends ViewCellData {
@@ -119,4 +121,16 @@ interface ResourceCellTemplateData {
 
 export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
+}
+
+export interface DateHeaderData {
+  dataMap: DateHeaderCellData[][];
+  leftVirtualCellWidth: number;
+  rightVirtualCellWidth: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  weekDayLeftVirtualCellWidth?: number;
+  weekDayRightVirtualCellWidth?: number;
+  weekDayLeftVirtualCellCount?: number;
+  weekDayRightVirtualCellCount?: number;
 }

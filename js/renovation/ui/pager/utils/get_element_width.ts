@@ -4,7 +4,7 @@ import { toNumber } from '../../../utils/type_conversion';
 export function getElementStyle(
   name: keyof CSSStyleDeclaration, element: Element | null | undefined,
 ): number {
-  const computedStyle = getElementComputedStyle(element) || {};
+  const computedStyle = getElementComputedStyle(element) ?? {};
   return toNumber(computedStyle[name]);
 }
 

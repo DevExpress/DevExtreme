@@ -3,6 +3,7 @@ import React, { createRef, forwardRef } from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
+import { AbstractFunction } from '../../../common/types';
 import { createTestRef } from '../../../test_utils/create_ref';
 import { PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../content';
 import { PageIndexSelector } from '../pages/page_index_selector';
@@ -11,7 +12,7 @@ import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 
-let mockInstance;
+let mockInstance: Record<string, AbstractFunction> = {};
 
 jest.mock('../../../../ui/shared/accessibility', () => ({
   registerKeyboardAction: jest.fn((_, instance) => {

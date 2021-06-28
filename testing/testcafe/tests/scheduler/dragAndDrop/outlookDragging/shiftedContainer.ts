@@ -31,7 +31,7 @@ test('Basic drag-n-drop movements in shifted container', async (t) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Website Re-Design Plan',
     startDate: new Date(2021, 2, 22, 10),

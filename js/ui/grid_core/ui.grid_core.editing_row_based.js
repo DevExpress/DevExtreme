@@ -51,7 +51,7 @@ export const editingRowBasedModule = {
                 },
 
                 isEditRow: function(rowIndex) {
-                    return this._getVisibleEditRowIndex() === rowIndex && this.isRowBasedEditMode();
+                    return this.isRowBasedEditMode() && this._isEditRowByIndex(rowIndex);
                 },
 
                 _cancelSaving: function() {

@@ -4,6 +4,8 @@ import {
 
 @ComponentBindings()
 export class BaseWidgetProps {
+  @OneWay() className?: string = '';
+
   @OneWay() accessKey?: string;
 
   @OneWay() activeStateEnabled?: boolean = false;
@@ -18,8 +20,10 @@ export class BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = false;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onClick?: (e: any) => void;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Event() onKeyDown?: (e: any) => any;
 
   @OneWay() rtlEnabled?: boolean;

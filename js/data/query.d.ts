@@ -14,7 +14,6 @@ export interface Query {
      * @param2 step:function
      * @param3 finalize:function
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     aggregate(seed: any, step: Function, finalize: Function): DxPromise<any>;
@@ -23,7 +22,6 @@ export interface Query {
      * @publicName aggregate(step)
      * @param1 step:function
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     aggregate(step: Function): DxPromise<any>;
@@ -31,7 +29,6 @@ export interface Query {
      * @docid
      * @publicName avg()
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     avg(): DxPromise<number>;
@@ -40,7 +37,6 @@ export interface Query {
      * @publicName avg(getter)
      * @param1 getter:object
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     avg(getter: any): DxPromise<number>;
@@ -48,7 +44,6 @@ export interface Query {
      * @docid
      * @publicName count()
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     count(): DxPromise<number>;
@@ -56,7 +51,6 @@ export interface Query {
      * @docid
      * @publicName enumerate()
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     enumerate(): DxPromise<any>;
@@ -65,7 +59,6 @@ export interface Query {
      * @publicName filter(criteria)
      * @param1 criteria:Array<any>
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     filter(criteria: Array<any>): Query;
@@ -74,7 +67,6 @@ export interface Query {
      * @publicName filter(predicate)
      * @param1 predicate:function
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     filter(predicate: Function): Query;
@@ -83,7 +75,6 @@ export interface Query {
      * @publicName groupBy(getter)
      * @param1 getter:object
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     groupBy(getter: any): Query;
@@ -91,7 +82,6 @@ export interface Query {
      * @docid
      * @publicName max()
      * @return Promise<number,Date>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     max(): DxPromise<number | Date>;
@@ -100,7 +90,6 @@ export interface Query {
      * @publicName max(getter)
      * @param1 getter:object
      * @return Promise<number,Date>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     max(getter: any): DxPromise<number | Date>;
@@ -108,7 +97,6 @@ export interface Query {
      * @docid
      * @publicName min()
      * @return Promise<number,Date>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     min(): DxPromise<number | Date>;
@@ -117,7 +105,6 @@ export interface Query {
      * @publicName min(getter)
      * @param1 getter:object
      * @return Promise<number,Date>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     min(getter: any): DxPromise<number | Date>;
@@ -126,7 +113,6 @@ export interface Query {
      * @publicName select(getter)
      * @param1 getter:object
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     select(getter: any): Query;
@@ -136,7 +122,6 @@ export interface Query {
      * @param1 skip:number
      * @param2 take:number|undefined
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     slice(skip: number, take?: number): Query;
@@ -145,7 +130,6 @@ export interface Query {
      * @publicName sortBy(getter)
      * @param1 getter:object
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     sortBy(getter: any): Query;
@@ -155,7 +139,6 @@ export interface Query {
      * @param1 getter:object
      * @param2 desc:boolean
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     sortBy(getter: any, desc: boolean): Query;
@@ -163,7 +146,6 @@ export interface Query {
      * @docid
      * @publicName sum()
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     sum(): DxPromise<number>;
@@ -172,7 +154,6 @@ export interface Query {
      * @publicName sum(getter)
      * @param1 getter:object
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     sum(getter: any): DxPromise<number>;
@@ -181,7 +162,6 @@ export interface Query {
      * @publicName thenBy(getter)
      * @param1 getter:object
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     thenBy(getter: any): Query;
@@ -191,7 +171,6 @@ export interface Query {
      * @param1 getter:object
      * @param2 desc:boolean
      * @return Query
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     thenBy(getter: any, desc: boolean): Query;
@@ -199,7 +178,6 @@ export interface Query {
      * @docid
      * @publicName toArray()
      * @return Array<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     toArray(): Array<any>;
@@ -213,7 +191,6 @@ export interface Query {
  * @namespace DevExpress.data
  * @module data/query
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 declare function query(array: Array<any>): Query;
@@ -227,7 +204,6 @@ declare function query(array: Array<any>): Query;
  * @namespace DevExpress.data
  * @module data/query
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 declare function query(url: string, queryOptions: any): Query;

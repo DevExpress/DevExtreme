@@ -367,6 +367,10 @@ export const ListBase = CollectionWidget.inherit({
         return this.option('grouped');
     },
 
+    _getGroupContainerByIndex: function(groupIndex) {
+        return this._itemContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
+    },
+
     _dataSourceFromUrlLoadMode: function() {
         return 'raw';
     },
@@ -1040,6 +1044,10 @@ export const ListBase = CollectionWidget.inherit({
         const $item = this._editStrategy.getItemElement(itemElement);
 
         this._scrollView.scrollToElement($item);
+    },
+
+    _dimensionChanged: function() {
+        this.updateDimensions();
     }
 
 }).include(DataConverterMixin);

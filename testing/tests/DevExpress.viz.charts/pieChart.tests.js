@@ -449,8 +449,22 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         renderSpy.lastCall.args[0].onRendered();
 
-        const templateGroup = chart._renderer.g.returnValues[14];
+        const templateGroup = chart._renderer.g.returnValues[15];
         assert.strictEqual(templateGroup.stub('move').callCount, 1);
+    });
+
+    // t998109
+    QUnit.test('centerTemplate changing', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplate = sinon.spy();
+
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}]
+        });
+
+        chart.option('centerTemplate', centerTemplate);
+        assert.strictEqual(centerTemplate.callCount, 1);
     });
 
     QUnit.test('Async tempaltes rendering. called group visibilty', function(assert) {
@@ -465,7 +479,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             centerTemplate: $.noop
         });
 
-        const templateGroup = chart._renderer.g.returnValues[14];
+        const templateGroup = chart._renderer.g.returnValues[15];
         assert.strictEqual(templateGroup.stub('attr').callCount, 2);
         assert.deepEqual(templateGroup.stub('attr').getCall(1).args[0], { visibility: 'hidden' });
 
@@ -484,7 +498,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             centerTemplate: centerTemplateSpy
         });
 
-        const templateGroup = chart._renderer.g.returnValues[14];
+        const templateGroup = chart._renderer.g.returnValues[15];
 
         assert.deepEqual(templateGroup.attr.getCall(0).args, [{ class: 'dxc-hole-template' }]);
         assert.strictEqual(centerTemplateSpy.callCount, 1);
@@ -501,7 +515,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}],
             centerTemplate: centerTemplateSpy
         });
-        const templateGroup = chart._renderer.g.returnValues[14];
+        const templateGroup = chart._renderer.g.returnValues[15];
 
         chart.render({ force: true });
 

@@ -3,7 +3,6 @@ import DropDownButton from 'ui/drop_down_button';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 
@@ -819,11 +818,6 @@ QUnit.module('list integration', {}, () => {
     });
 
     QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
-        if(browser.msie && browser.version <= 11) {
-            assert.ok(true, 'IE has some problems with getBoundingClientRect');
-            return;
-        }
-
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,
@@ -2124,11 +2118,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('esc on list should close the popup', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         this.keyboard
             .press('right')
             .press('enter')
@@ -2154,11 +2143,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('left on list should close the popup', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         this.keyboard
             .press('right')
             .press('enter')
@@ -2174,11 +2158,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('right on list should close the popup', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         this.keyboard
             .press('right')
             .press('enter')
@@ -2202,11 +2181,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('selection of the item should return focus to the button group', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         this.keyboard
             .press('right')
             .press('down')
@@ -2231,11 +2205,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('tab on list should close the popup', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         this.keyboard
             .press('right')
             .press('down')

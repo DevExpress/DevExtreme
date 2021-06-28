@@ -5,7 +5,6 @@ import { ExportLoadPanel } from './exporter/export_load_panel';
 /**
  * @docid
  * @namespace DevExpress.pdfExporter
- * @prevFileNamespace DevExpress
  * @type object
  */
 export interface PdfDataGridCell {
@@ -31,12 +30,10 @@ export interface PdfDataGridCell {
     groupSummaryItems?: Array<{
       /**
        * @docid
-       * @prevFileNamespace DevExpress
        */
       name?: string,
       /**
        * @docid
-       * @prevFileNamespace DevExpress
        */
       value?: any
     }>;
@@ -115,7 +112,6 @@ export interface PdfExportDataGridProps {
  * @namespace DevExpress.pdfExporter
  * @module pdf_exporter
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
 export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>;

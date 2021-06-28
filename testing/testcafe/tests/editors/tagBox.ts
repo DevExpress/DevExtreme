@@ -2,7 +2,7 @@ import url from '../../helpers/getPageUrl';
 import TagBox from '../../model/tagBox';
 import createWidget from '../../helpers/createWidget';
 
-function createTagBox(): Promise<void> {
+async function createTagBox(): Promise<void> {
   return createWidget('dxTagBox', {
     items: ['item1', 'item2', 'item3'],
     showSelectionControls: true,

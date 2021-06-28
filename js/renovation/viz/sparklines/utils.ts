@@ -53,7 +53,7 @@ const generateDefaultCustomizeTooltipCallback = (
 
   return (customizeObject: SparklineTooltipData): CustomizedOptions => {
     let html = '';
-    const vt = customizeObject.valueTexts || [];
+    const vt = customizeObject.valueTexts ?? [];
     for (let i = 0; i < vt.length; i += 2) {
       html += `<tr><td>${vt[i]}</td><td style='width: 15px'></td><td style='text-align: ${rtlEnabled ? 'left' : 'right'}'>${vt[i + 1]}</td></tr>`;
     }
@@ -71,9 +71,14 @@ export const generateCustomizeTooltipCallback = (
 
   if (isFunction(customizeTooltip)) {
     return (customizeObject: SparklineTooltipData): CustomizedOptions => {
-      let res = customizeTooltip.call(customizeObject, customizeObject) ?? { };
+      let res = customizeTooltip.call(customizeObject,
+        customizeObject as Record<string, unknown>) ?? { };
       if (!('html' in res) && !('text' in res)) {
-        res = { ...res, ...defaultCustomizeTooltip.call(customizeObject, customizeObject) };
+        res = {
+          ...res,
+          ...defaultCustomizeTooltip.call(customizeObject,
+            customizeObject as Record<string, unknown>),
+        };
       }
       return res;
     };

@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
-import Component from './component';
+import { Component } from './component';
 import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';

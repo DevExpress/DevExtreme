@@ -12,7 +12,7 @@ import { ColumnsView } from '../grid_core/ui.grid_core.columns_view';
 import AggregateCalculator from './aggregate_calculator';
 import dataQuery from '../../data/query';
 import storeHelper from '../../data/store_helper';
-import dataUtils from '../../data/utils';
+import { normalizeSortingInfo } from '../../data/utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -77,6 +77,7 @@ export const FooterView = ColumnsView.inherit((function() {
         },
 
         _renderCore: function(change) {
+            let needUpdateScrollLeft = false;
             const totalItem = this._dataController.footerItems()[0];
 
             if(!change || !change.columnIndices) {
@@ -84,10 +85,13 @@ export const FooterView = ColumnsView.inherit((function() {
                     .empty()
                     .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
                     .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option('wordWrapEnabled'));
+
+                needUpdateScrollLeft = true;
             }
 
             if(totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
                 this._updateContent(this._renderTable({ change: change }), change);
+                needUpdateScrollLeft && this._updateScrollLeftPosition();
             }
         },
 
@@ -337,7 +341,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
         },
         _handleDataLoadedCore: function(options) {
             const that = this;
-            const groups = dataUtils.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
+            const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
             const remoteOperations = options.remoteOperations || {};
             const summary = that.summaryGetter()(remoteOperations);
             let totalAggregates;

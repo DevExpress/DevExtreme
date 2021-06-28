@@ -562,7 +562,7 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
                 { value: 2, text: 'B' },
                 { value: 3, text: 'C' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             bindingOptions: {
                 'selection.mode': 'mode'
             },

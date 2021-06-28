@@ -52,9 +52,8 @@ ResultItem[] => {
 
   propsEnumerator(oldProps).forEach(processItem);
   Object.keys(props)
-    .filter((propName) => (
-      !Object.prototype.hasOwnProperty.call(oldProps, propName)
-      && oldProps[propName] !== props[propName]))
+    .filter((propName) => !Object.prototype.hasOwnProperty.call(oldProps, propName)
+      && oldProps[propName] !== props[propName])
     .forEach((propName) => {
       resultPaths.push({
         path: propName,

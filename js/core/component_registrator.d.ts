@@ -6,7 +6,6 @@
  * @module core/component_registrator
  * @namespace DevExpress
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
 export default function registerComponent(name: string, componentClass: any): void;
 
@@ -19,6 +18,5 @@ export default function registerComponent(name: string, componentClass: any): vo
  * @module core/component_registrator
  * @namespace DevExpress
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
 export default function registerComponent(name: string, namespace: any, componentClass: any): void;

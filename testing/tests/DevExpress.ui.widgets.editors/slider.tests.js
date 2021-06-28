@@ -2,7 +2,6 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import 'generic_light.css!';
 import config from 'core/config';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
@@ -73,9 +72,7 @@ const handlePositionAgainstTrackBar = ($handle) => {
 
 module('render', moduleOptions, () => {
     test('default size', function(assert) {
-        const $element = $('#widget').dxSlider({
-            useInkRipple: false
-        });
+        const $element = $('#widget').dxSlider();
 
         assert.ok($element.outerWidth() > 0, 'outer width of the element must be more than zero');
     });
@@ -104,8 +101,7 @@ module('render', moduleOptions, () => {
             max: 100,
             min: 0,
             width: setUpWidth,
-            height: setUpHeight,
-            useInkRipple: false
+            height: setUpHeight
         });
         const slider = $slider.dxSlider('instance');
         const initialWidth = $slider.width();
@@ -127,8 +123,7 @@ module('render', moduleOptions, () => {
         const $slider = $('#slider').dxSlider({
             max: 100,
             min: 0,
-            width: setUpWidth,
-            useInkRipple: false
+            width: setUpWidth
         });
         const slider = $slider.dxSlider('instance');
 
@@ -142,8 +137,7 @@ module('render', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         }).css('width', 500 + 2 * SLIDER_PADDING);
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -162,8 +156,7 @@ module('render', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         }).css('width', 500);
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -187,8 +180,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 100,
-            width: 500,
-            useInkRipple: false
+            width: 500
         });
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -206,8 +198,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 100,
-            width: 500,
-            useInkRipple: false
+            width: 500
         });
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -226,8 +217,7 @@ module('render', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         }).css('width', 500);
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -257,8 +247,7 @@ module('render', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 500,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         }).css('width', 500);
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
@@ -284,8 +273,7 @@ module('render', moduleOptions, () => {
             min: 0,
             value: 0,
             step: 250,
-            width: 500,
-            useInkRipple: false
+            width: 500
         });
 
         const $handle = $element.find('.' + SLIDER_HANDLE_CLASS);
@@ -303,8 +291,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            width: 500 + 2 * SLIDER_PADDING,
-            useInkRipple: false
+            width: 500 + 2 * SLIDER_PADDING
         });
         const instance = $element.dxSlider('instance');
 
@@ -320,8 +307,7 @@ module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            width: 500 + 2 * SLIDER_PADDING,
-            useInkRipple: false
+            width: 500 + 2 * SLIDER_PADDING
         });
         const instance = $element.dxSlider('instance');
 
@@ -338,7 +324,6 @@ module('render', moduleOptions, () => {
             min: 0,
             value: 0,
             width: 500 + 2 * SLIDER_PADDING,
-            useInkRipple: false,
             onOptionChanged: ({ component, name }) =>
                 name === 'value' && component.option('step', 2000)
         });
@@ -395,8 +380,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
 
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -411,8 +395,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: false,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -440,8 +423,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
         const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
@@ -468,8 +450,7 @@ module('slider with tooltip', () => {
                 enabled: true,
                 showMode: 'always',
                 position: 'top'
-            },
-            useInkRipple: false
+            }
         });
 
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -501,8 +482,7 @@ module('slider with tooltip', () => {
             max: 100,
             min: 0,
             value: 50,
-            tooltip: { enabled: true, showMode: 'always', position: 'top' },
-            useInkRipple: false
+            tooltip: { enabled: true, showMode: 'always', position: 'top' }
         });
 
         const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
@@ -531,8 +511,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
 
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -559,8 +538,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'onhover'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -578,8 +556,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'onHover'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -602,8 +579,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'onhover'
-            },
-            useInkRipple: false
+            }
         });
 
         $slider.dxSlider({
@@ -623,8 +599,7 @@ module('slider with tooltip', () => {
         $slider.css('position', 'absolute');
 
         $slider.dxSlider({
-            visible: false,
-            useInkRipple: false
+            visible: false
         });
         $slider.dxSlider({
             tooltip: {
@@ -653,19 +628,13 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
 
         assert.ok(!hideTopOverlayCallback.hasCallback());
     });
 
     test('tooltip renders correct after value length changed', function(assert) {
-        if(browser.msie) {
-            assert.expect(0);
-            return;
-        }
-
         const originalFX = fx.off;
         try {
             fx.off = true;
@@ -678,8 +647,7 @@ module('slider with tooltip', () => {
                     enabled: true,
                     position: 'top',
                     showMode: 'always'
-                },
-                useInkRipple: false
+                }
             });
 
             $slider.dxSlider('option', 'value', 500000);
@@ -708,8 +676,7 @@ module('slider with tooltip', () => {
                 enabled: true,
                 position: 'top',
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const instance = $slider.dxSlider('instance');
 
@@ -730,8 +697,7 @@ module('slider with tooltip', () => {
                 enabled: true,
                 position: 'bottom',
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const $tooltipContent = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
         const tooltipRightBorder = $tooltipContent.offset().left + $tooltipContent.outerWidth() - $slider.offset().left;
@@ -748,8 +714,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
 
         resizeCallbacks.fire();
@@ -768,8 +733,7 @@ module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
 
         const $arrow = $slider.find('.dx-popover-arrow');
@@ -795,8 +759,7 @@ module('\'tooltip.format\' option', () => {
                 format: function(value) {
                     return '$' + value;
                 }
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
         const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
@@ -816,8 +779,7 @@ module('\'tooltip.format\' option', () => {
                 enabled: true,
                 showMode: 'always',
                 format: { type: 'fixedpoint', precision: 1 }
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -841,8 +803,7 @@ module('\'tooltip.format\' option', () => {
                 format: function(value) {
                     return '(' + value + ')';
                 }
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -868,8 +829,7 @@ module('\'tooltip.format\' option', () => {
                 enabled: true,
                 showMode: 'always',
                 format: null
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
         const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
@@ -889,8 +849,7 @@ module('\'tooltip.format\' option', () => {
                 format: function(index) {
                     return values[index - 1];
                 }
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
         const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
@@ -907,8 +866,7 @@ module('labels', moduleOptions, () => {
             max: 100,
             label: {
                 visible: true
-            },
-            useInkRipple: false
+            }
         });
         let $sliderLabels = $slider.find('.' + SLIDER_LABEL_CLASS);
 
@@ -925,8 +883,7 @@ module('labels', moduleOptions, () => {
         const $slider = $('#slider').dxSlider({
             label: {
                 visible: true
-            },
-            useInkRipple: false
+            }
         });
 
         $slider.dxSlider({
@@ -963,7 +920,6 @@ module('events', () => {
                 min: 0,
                 value: 100,
                 onValueChanged: this.valueChangedHandler,
-                useInkRipple: false,
                 width: 500
             });
             this.instance = this.$element.dxSlider('instance');
@@ -1037,8 +993,7 @@ module('events', () => {
             value: 0,
             onValueChanged: function() {
                 assert.ok(true, 'action fired');
-            },
-            useInkRipple: false
+            }
         }).css('width', 500);
 
         pointerMock($slider).start().move(250 + $slider.offset().left).down();
@@ -1046,16 +1001,14 @@ module('events', () => {
 
     test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
         const slider = $('#slider').dxSlider({
-            onValueChanged: function() { assert.ok(true); },
-            useInkRipple: false
+            onValueChanged: function() { assert.ok(true); }
         }).dxSlider('instance');
         slider.option('value', true);
     });
 
     test('T269867 - handle should not have active state if the \'activeStateEnabled\' option is false', function(assert) {
         const $element = $('#slider').dxSlider({
-            activeStateEnabled: false,
-            useInkRipple: false
+            activeStateEnabled: false
         });
         const $handle = $element.find('.dx-slider-handle');
 
@@ -1069,8 +1022,7 @@ module('focus policy', moduleOptions, () => {
         assert.expect(1);
 
         const $slider = $('#slider').dxSlider({
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
 
@@ -1085,8 +1037,7 @@ module('keyboard navigation', moduleOptions, () => {
             min: 10,
             max: 90,
             value: 50,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1107,8 +1058,7 @@ module('keyboard navigation', moduleOptions, () => {
             max: 90,
             value: 50,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1135,8 +1085,7 @@ module('keyboard navigation', moduleOptions, () => {
             max: 90,
             value: 50,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1167,8 +1116,7 @@ module('keyboard navigation', moduleOptions, () => {
             max: 50,
             value: 25,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1190,8 +1138,7 @@ module('keyboard navigation', moduleOptions, () => {
             max: 90,
             value: 50,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1219,8 +1166,7 @@ module('keyboard navigation', moduleOptions, () => {
             max: 90,
             value: 50,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1277,8 +1223,7 @@ module('regression tests', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 100,
             min: 0,
-            value: 20,
-            useInkRipple: false
+            value: 20
         }).css('width', 100 + SLIDER_PADDING * 2);
         const instance = $element.dxSlider('instance');
         const range = $element.find('.' + SLIDER_RANGE_CLASS);
@@ -1294,8 +1239,7 @@ module('regression tests', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 600,
             min: 100,
-            value: 200,
-            useInkRipple: false
+            value: 200
         }).css('width', 500);
 
         const slider = $element.dxSlider('instance');
@@ -1308,8 +1252,7 @@ module('regression tests', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             max: 10,
             min: 0,
-            value: 5,
-            useInkRipple: false
+            value: 5
         });
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1324,8 +1267,7 @@ module('regression tests', moduleOptions, () => {
             min: 0,
             value: 50,
             max: 100,
-            disabled: true,
-            useInkRipple: false
+            disabled: true
         });
         const slider = $element.dxSlider('instance');
 
@@ -1338,8 +1280,7 @@ module('regression tests', moduleOptions, () => {
         const $element = $('#slider').dxSlider({
             min: 0,
             value: 50,
-            max: 100,
-            useInkRipple: false
+            max: 100
         });
         const slider = $element.dxSlider('instance');
 
@@ -1354,8 +1295,7 @@ module('regression tests', moduleOptions, () => {
             .dxSlider({
                 max: 500,
                 min: 0,
-                value: 250,
-                useInkRipple: false
+                value: 250
             });
 
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1373,8 +1313,7 @@ module('regression tests', moduleOptions, () => {
         $element.dxSlider({
             max: 100,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         });
 
         const slider = $element.dxSlider('instance');
@@ -1394,8 +1333,7 @@ module('regression tests', moduleOptions, () => {
         $element.dxSlider({
             max: 100,
             min: 0,
-            value: 0,
-            useInkRipple: false
+            value: 0
         });
 
         const slider = $element.dxSlider('instance');
@@ -1423,8 +1361,7 @@ module('regression tests', moduleOptions, () => {
             .dxSlider({
                 max: 500,
                 min: 0,
-                value: 250,
-                useInkRipple: false
+                value: 250
             });
         const slider = $element.dxSlider('instance');
 
@@ -1451,8 +1388,7 @@ module('regression tests', moduleOptions, () => {
             .dxSlider({
                 max: 1,
                 min: -1,
-                value: 0,
-                useInkRipple: false
+                value: 0
             });
         const slider = $element.dxSlider('instance');
 
@@ -1483,8 +1419,7 @@ module('regression tests', moduleOptions, () => {
                 max: 2,
                 min: 0.5,
                 value: 0.5,
-                step: 1,
-                useInkRipple: false
+                step: 1
             });
         const slider = $element.dxSlider('instance');
 
@@ -1503,8 +1438,7 @@ module('regression tests', moduleOptions, () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         }).dxSlider('instance');
 
         slider.repaint();
@@ -1561,8 +1495,7 @@ module('RTL', moduleOptions, () => {
             max: 100,
             min: 0,
             value: 0,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         });
 
         const slider = $element.dxSlider('instance');
@@ -1581,8 +1514,7 @@ module('RTL', moduleOptions, () => {
             max: 500,
             min: 0,
             value: 0,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         }).css('width', 500 + 2 * SLIDER_PADDING);
 
         const $range = $element.find('.' + SLIDER_RANGE_CLASS);
@@ -1605,8 +1537,7 @@ module('visibility change', () => {
             max: 100,
             min: 0,
             value: 50,
-            tooltip: { enabled: true, showMode: 'always', position: 'top' },
-            useInkRipple: false
+            tooltip: { enabled: true, showMode: 'always', position: 'top' }
         });
 
         $parent.show();

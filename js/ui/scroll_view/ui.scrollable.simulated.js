@@ -25,7 +25,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
@@ -579,7 +578,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {

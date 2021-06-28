@@ -15,7 +15,7 @@ test('Multi-day appointment should not overlap other appointments when specific 
     .expect(appointment.size.height).eql('350px')
     .expect(appointment.size.width)
     .eql('93px');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource: simpleData,
 }));
 
@@ -26,7 +26,7 @@ test('Simple appointment should not overlap allDay appointment when specific wid
   await t
     .expect(scheduler.getAppointmentCollectorCount()).eql(0)
     .expect(await element.getBoundingClientRectProperty('top')).eql(114);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource: allDayData,
 }));
 
@@ -37,6 +37,6 @@ test('Crossing allDay appointments should not overlap each other (T893674)', asy
 
   await t
     .expect(await firstAppointment.element.getBoundingClientRectProperty('top')).notEql(await secondAppointment.element.getBoundingClientRectProperty('top'));
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource: allDayData,
 }));

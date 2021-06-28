@@ -9,8 +9,7 @@ import 'ui/text_box/ui.text_editor';
 
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
-const IE_NUMPAD_MINUS_KEY = 'Subtract';
-const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // IE prevent browser text selection on double click if caret was moved
+const CARET_TIMEOUT_DURATION = 0;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -32,6 +31,19 @@ const moduleConfig = {
 };
 
 QUnit.module('format: api value changing', moduleConfig, () => {
+    QUnit.test('zero should be typed as another digits (T997851)', function(assert) {
+        this.instance.option({
+            format: '#,##0.##',
+            value: 100000
+        });
+
+        this.input.focus();
+        this.keyboard.caret(1);
+
+        this.keyboard.type('000');
+        assert.strictEqual(this.input.val(), '100,000,000', 'input text is correct');
+    });
+
     QUnit.test('number type of input should be converted to tel on mobile device when inputMode is unsupported', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'mobile' });
         const realBrowser = browser;
@@ -42,7 +54,6 @@ QUnit.module('format: api value changing', moduleConfig, () => {
             browser.version = '50.0';
             browser.chrome = false;
             browser.safari = false;
-            browser.msie = false;
 
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
@@ -57,7 +68,6 @@ QUnit.module('format: api value changing', moduleConfig, () => {
         } finally {
             browser.chrome = realBrowser.chrome;
             browser.safari = realBrowser.safari;
-            browser.msie = realBrowser.msie;
             browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
@@ -273,8 +283,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
     });
 
     QUnit.test('pressing numpad minus button should revert the number', function(assert) {
-        const isIE = browser.msie;
-        const keyName = isIE ? IE_NUMPAD_MINUS_KEY : '-';
+        const keyName = '-';
 
         this.instance.option({
             format: '#.000',
@@ -285,11 +294,8 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
             .caret(3)
             .keyDown(keyName)
             .keyPress(keyName)
-            .keyUp(keyName);
-
-        if(!isIE) {
-            this.keyboard.input();
-        }
+            .keyUp(keyName)
+            .input();
 
         assert.equal(this.input.val(), '-123.456', 'value is correct');
         assert.equal(this.instance.option('value'), 123.456, 'value should not be changed before valueChange event');
@@ -351,9 +357,7 @@ QUnit.module('format: sign and minus button', moduleConfig, () => {
     });
 
     QUnit.test('pressing minus button should revert selected number', function(assert) {
-        if(!browser.msie) {
-            this.clock.restore();
-        }
+        this.clock.restore();
 
         this.instance.option({
             format: '$ #0.00',
@@ -903,7 +907,6 @@ QUnit.module('format: text input', moduleConfig, () => {
 
         this.input.focus();
         this.clock.tick(CARET_TIMEOUT_DURATION);
-
         this.keyboard.caret(1);
         this.clock.tick(CARET_TIMEOUT_DURATION);
         this.keyboard.type('-');
@@ -1016,22 +1019,6 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.equal(this.input.val(), '1.5', 'value is correct');
     });
 
-    QUnit.test('valueChanged event fires on value apply', function(assert) {
-        if(!browser.msie) {
-            // You can remove this test once issue noted below will resolved
-            // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
-            assert.ok(true, 'It is IE and Edge specific test');
-            return;
-        }
-
-        const valueChangedSpy = sinon.spy();
-
-        this.instance.on('valueChanged', valueChangedSpy);
-        this.keyboard.caret(0).type('123').press('enter');
-
-        assert.ok(valueChangedSpy.calledOnce, 'valueChanged event called once');
-    });
-
     QUnit.test('onValueChanged should have change event as a parameter', function(assert) {
         const valueChangedHandler = sinon.spy();
         this.instance.option('onValueChanged', valueChangedHandler);
@@ -1117,12 +1104,9 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
 
     QUnit.test('paste of value should call valueChanged event on keyup', function(assert) {
         const valueChangedStub = sinon.stub();
-        const originalIE = browser.msie;
         const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
-            browser.msie = false;
-
             $element.dxNumberBox({
                 valueChangeEvent: 'keyup',
                 format: '#,##0.00',
@@ -1139,40 +1123,6 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
 
             assert.ok(valueChangedStub.calledOnce, 'valueChanged event was called');
         } finally {
-            browser.msie = originalIE;
-            $element.remove();
-        }
-    });
-
-
-    QUnit.test('paste of value should call valueChanged event on keyup in IE', function(assert) {
-        const valueChangedStub = sinon.stub();
-        const originalIE = browser.msie;
-        const originalVersion = browser.version;
-        const $element = $('<div>').appendTo('#qunit-fixture');
-
-        try {
-            browser.msie = true;
-            browser.version = '11.0';
-
-            $element.dxNumberBox({
-                valueChangeEvent: 'keyup',
-                format: '#,##0.00',
-                value: null,
-                onValueChanged: valueChangedStub
-            });
-
-            const $input = $element.find('.' + INPUT_CLASS);
-            const kb = keyboardMock($input);
-            kb.paste('1.00');
-            $input.val('1.00');
-            kb.input('1.00', null);
-            kb.keyUp('v');
-
-            assert.ok(valueChangedStub.calledOnce, 'valueChanged event was called');
-        } finally {
-            browser.msie = originalIE;
-            browser.version = originalVersion;
             $element.remove();
         }
     });
@@ -1992,62 +1942,26 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
         });
 
         this.input.focus();
-        if(browser.msie) {
-            const currentCaret = this.keyboard.caret();
-            assert.ok(currentCaret.start !== 6 && currentCaret.end !== 6, 'caret position during timeout, it has different values for IE11 and Edge');
-        }
 
         this.clock.tick(CARET_TIMEOUT_DURATION);
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret is just before decimal separator');
     });
 
-    QUnit.testInActiveWindow('caret should not change position on focus after fast double click for IE', function(assert) {
-        if(!browser.msie) {
-            assert.expect(0);
-            return;
-        }
+    QUnit.test('caret should be moved to the integer part end on input click if format contains stub in the end (T996477)', function(assert) {
         this.instance.option({
-            format: '#0.## kg',
-            value: 1.23
+            format: '#0 \'9\'',
+            value: 0
         });
 
         this.input.focus();
-        this.keyboard.caret(0);
-
-        this.input.trigger('dxdblclick');
         this.clock.tick(CARET_TIMEOUT_DURATION);
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret is right after focus and dblclick');
-
-        this.input.trigger('focusout');
-        this.clock.tick();
-
-        this.inputElement.selectionStart = this.inputElement.selectionEnd = 0; // this.keyboard.caret(0) trigger excess focusin event
-        this.input.trigger('dxclick');
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret position during timeout');
-
-        this.input.trigger('dxdblclick');
-        this.clock.tick(CARET_TIMEOUT_DURATION);
-        assert.deepEqual(this.keyboard.caret(), {
-            start: 0,
-            end: 0
-        }, 'caret is right after focus by click and dblclick');
-    });
-
-    QUnit.testInActiveWindow('numberbox should not prevent all value selection after focus by keyboard navigation for IE', function(assert) {
-        if(!browser.msie) {
-            assert.expect(0);
-            return;
+        for(let i = 0; i < 2; ++i) {
+            this.keyboard.caret(3);
+            this.input.trigger('dxclick');
+            this.clock.tick(CARET_TIMEOUT_DURATION);
         }
-        this.instance.option({
-            format: '#0.## kg',
-            value: 1.23
-        });
 
-        this.input.focus();
-        this.keyboard.caret({ start: 0, end: 4 });
-        this.clock.tick(CARET_TIMEOUT_DURATION);
-
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 4 }, 'all numberbox value is selected');
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
     });
 });
 

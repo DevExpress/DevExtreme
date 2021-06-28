@@ -340,13 +340,12 @@ QUnit.test('isAlreadyShown method, tooltip is hide', function(assert) {
     assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
 });
 
-// deprecated option
-QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', function(assert) {
+QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
     const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
-    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'dropDownAppointment' }));
+    tooltip.show('target', dataList, extend(this.extraOptions, { appointmentTooltipTemplate: 'appointmentTooltipTemplate' }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
@@ -354,15 +353,15 @@ QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', functio
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
 });
 
-QUnit.test('dropDownAppointmentTemplate equal to custom template', function(assert) {
+QUnit.test('appointmentTooltipTemplate equal to custom template', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
     const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
-    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'custom_template' }));
+    tooltip.show('target', dataList, extend(this.extraOptions, { appointmentTooltipTemplate: 'custom_template' }));
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
-    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['dropDownAppointment'] instanceof FunctionTemplate);
-    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'dropDownAppointmentTemplate');
+    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
+    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
 });

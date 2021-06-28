@@ -74,6 +74,17 @@ describe('DateTableCellBase', () => {
       expect(renderedTemplate.props())
         .toEqual(contentTemplateProps);
     });
+
+    it('should pass aria-label to the root', () => {
+      const cell = render({
+        props: {
+          ariaLabel: 'Custom aria label',
+        },
+      });
+
+      expect(cell.prop('aria-label'))
+        .toBe('Custom aria label');
+    });
   });
 
   describe('Logic', () => {

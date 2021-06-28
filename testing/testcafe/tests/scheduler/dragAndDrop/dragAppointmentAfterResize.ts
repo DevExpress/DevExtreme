@@ -52,7 +52,7 @@ fixture`Drag-n-drop appointment after resize(T835545)`
       .expect(positionBeforeDrag.top)
       .eql(await element.clientTop);
   },
-).before(() => createScheduler({
+).before(async () => createScheduler({
   views: [view],
   currentView: view,
   startDayHour: 9,

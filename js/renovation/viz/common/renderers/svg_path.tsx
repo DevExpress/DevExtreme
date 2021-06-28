@@ -47,7 +47,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PathSvgElementProps extends SvgGraphicsProps {
-  @OneWay() points?: Point[]|number[]|number[][];
+  @OneWay() points?: Point[] | number[] | number[][];
 
   @OneWay() type: PathType = 'line';
 

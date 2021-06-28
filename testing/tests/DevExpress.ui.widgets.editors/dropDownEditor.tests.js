@@ -5,16 +5,15 @@ import eventsEngine from 'events/core/events_engine';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import browser from 'core/utils/browser';
 import support from 'core/utils/support';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
-import Overlay from 'ui/overlay';
+import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import { logger } from 'core/utils/console';
+import dxButton from 'ui/button';
 
 import 'generic_light.css!';
-
 QUnit.testStart(function() {
     const markup =
         `<div id="dropDownEditorLazy"></div>
@@ -365,11 +364,9 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
         const isDesktop = devices.real().deviceType === 'desktop';
-        const isIE11OrLower = browser.msie && parseInt(browser.version) <= 11;
 
-        if(!isDesktop || isIE11OrLower) {
-            const message = isIE11OrLower ? 'test is ignored in IE11 because it failes on farm' : 'blur preventing unnecessary on mobile devices';
-            assert.ok(true, message);
+        if(!isDesktop) {
+            assert.ok(true, 'blur preventing unnecessary on mobile devices');
             return;
         }
 
@@ -1140,23 +1137,28 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
 
-    ['readOnly', 'disabled'].forEach((prop) => {
-        [false, true].forEach((propValue) => {
-            QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
-                const dropDownButtonTemplate = sinon.spy(() => {
-                    return '<div>Template</div>';
+    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
+
+    // NOTE: Renovated button rerenders on each property changing
+    if(!isRenovation) {
+        ['readOnly', 'disabled'].forEach((prop) => {
+            [false, true].forEach((propValue) => {
+                QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
+                    const dropDownButtonTemplate = sinon.spy(() => {
+                        return '<div>Template</div>';
+                    });
+
+                    const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                        dropDownButtonTemplate,
+                        [prop]: propValue
+                    }).dxDropDownEditor('instance');
+
+                    editor.option(prop, !propValue);
+                    assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
                 });
-
-                const editor = $('#dropDownEditorLazy').dxDropDownEditor({
-                    dropDownButtonTemplate,
-                    [prop]: propValue
-                }).dxDropDownEditor('instance');
-
-                editor.option(prop, !propValue);
-                assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
             });
         });
-    });
+    }
 });
 
 QUnit.module('options', () => {

@@ -6,7 +6,7 @@ import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointment_form';
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointmentPopup/form';
 import {
     initTestMarkup,
     createWrapper,
@@ -267,7 +267,7 @@ module('Integration: Appointments in Month view', {
                             ]
                         }
                     ],
-                    width: 600
+                    width: 1000
                 }, this.clock);
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);

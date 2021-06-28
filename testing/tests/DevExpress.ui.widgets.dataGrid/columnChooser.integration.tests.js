@@ -107,4 +107,5 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok(!$overlayWrapper.find('.dx-checkbox').length, 'There aren\'t checkboxes in columnChooser');
     });
 
+
 });

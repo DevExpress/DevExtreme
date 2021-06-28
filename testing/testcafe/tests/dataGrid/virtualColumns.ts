@@ -4,7 +4,7 @@ import DataGrid from '../../model/dataGrid';
 
 fixture.disablePageReloads`Virtual Columns`
   .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('DataGrid should not scroll back to the focused cell after horizontal scrolling if \'columnRenderingMode\' is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -14,7 +14,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   await t.expect(dataGrid.getScrollLeft()).eql(50);
   await dataGrid.scrollTo({ x: 100 });
   await t.expect(dataGrid.getScrollLeft()).eql(100);
-}).before(() => {
+}).before(async () => {
   const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items = [];
 

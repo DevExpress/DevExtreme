@@ -4304,8 +4304,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     [
         { key: 'ArrowDown', delta: 1 },
         { key: 'ArrowUp', delta: -1 },
-        { key: 'Down', delta: 1 }, // IE11 (T945185)
-        { key: 'Up', delta: -1 } // IE11 (T945185)
     ].forEach(({ key, delta }) => {
         QUnit.test(`${key} should change value if drop down is closed (T844170)`, function(assert) {
             const initialValue = 1;

@@ -9,7 +9,7 @@ const CLASS = {
 export default class FilterPanel extends FocusableElement {
   widgetName: string;
 
-  constructor(element: Selector, widgetName) {
+  constructor(element: Selector, widgetName: string) {
     super(element);
     this.widgetName = widgetName;
   }

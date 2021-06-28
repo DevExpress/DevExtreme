@@ -17,15 +17,8 @@ if(Quill) {
 
             const widgetName = this.editorInstance.NAME;
 
-            eventsEngine.on(this.quill.root, addNamespace('dragover', widgetName), this._dragOverHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('drop', widgetName), this._dropHandler.bind(this));
             eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
-        }
-
-        _dragOverHandler(e) {
-            if(browser.msie) {
-                e.preventDefault();
-            }
         }
 
         _dropHandler(e) {
@@ -57,11 +50,7 @@ if(Quill) {
                         return;
                     }
 
-                    if(browser.msie) {
-                        setTimeout(() => { this._addImage(imageData); });
-                    } else {
-                        this._addImage(imageData);
-                    }
+                    this._addImage(imageData);
                 });
             }
         }

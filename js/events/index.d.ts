@@ -7,7 +7,6 @@ export interface EventType { }
 /**
  * @docid
  * @type EventObject|jQuery.Event
- * @prevFileNamespace DevExpress.events
  */
 export type DxEvent = {} extends EventType ? EventObject : EventType;
 
@@ -57,31 +56,26 @@ export type dxEvent = EventObject;
 /**
  * @docid
  * @section commonObjectStructures
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export class EventObject {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     target: Element;
@@ -89,7 +83,6 @@ export class EventObject {
      * @docid
      * @publicName isDefaultPrevented()
      * @return boolean
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     isDefaultPrevented(): boolean;
@@ -97,7 +90,6 @@ export class EventObject {
      * @docid
      * @publicName isImmediatePropagationStopped()
      * @return boolean
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     isImmediatePropagationStopped(): boolean;
@@ -105,28 +97,24 @@ export class EventObject {
      * @docid
      * @publicName isPropagationStopped()
      * @return boolean
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     isPropagationStopped(): boolean;
     /**
      * @docid
      * @publicName preventDefault()
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     preventDefault(): void;
     /**
      * @docid
      * @publicName stopImmediatePropagation()
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     stopImmediatePropagation(): void;
     /**
      * @docid
      * @publicName stopPropagation()
-     * @prevFileNamespace DevExpress.events
      * @public
      */
     stopPropagation(): void;
@@ -136,7 +124,6 @@ export class EventObject {
  * @docid
  * @type EventObject|jQuery.Event
  * @hidden
- * @prevFileNamespace DevExpress.events
  * @deprecated DxEvent
  */
 export type event = DxEvent;
@@ -148,7 +135,6 @@ export type event = DxEvent;
  * @param2 extraParameters:object
  * @return boolean
  * @hidden
- * @prevFileNamespace DevExpress.events
  */
 export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
@@ -159,7 +145,6 @@ export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
  * @param1 element:Element|Array<Element>
  * @module events
  * @export off
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function off(element: Element | Array<Element>): void;
@@ -172,7 +157,6 @@ export function off(element: Element | Array<Element>): void;
  * @param2 eventName:string
  * @module events
  * @export off
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string): void;
@@ -186,7 +170,6 @@ export function off(element: Element | Array<Element>, eventName: string): void;
  * @param3 handler:function
  * @module events
  * @export off
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -200,7 +183,6 @@ export function off(element: Element | Array<Element>, eventName: string, handle
  * @param3 selector:string
  * @module events
  * @export off
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
@@ -215,7 +197,6 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @param4 handler:function
  * @module events
  * @export off
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -230,7 +211,6 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @param4 handler:function
  * @module events
  * @export on
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -244,7 +224,6 @@ export function on(element: Element | Array<Element>, eventName: string, data: a
  * @param3 handler:function
  * @module events
  * @export on
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -260,7 +239,6 @@ export function on(element: Element | Array<Element>, eventName: string, handler
  * @param5 handler:function
  * @module events
  * @export on
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -275,7 +253,6 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @param4 handler:function
  * @module events
  * @export on
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -290,7 +267,6 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @param4 handler:function
  * @module events
  * @export one
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -304,7 +280,6 @@ export function one(element: Element | Array<Element>, eventName: string, data: 
  * @param3 handler:function
  * @module events
  * @export one
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -320,7 +295,6 @@ export function one(element: Element | Array<Element>, eventName: string, handle
  * @param5 handler:function
  * @module events
  * @export one
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -335,7 +309,6 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @param4 handler:function
  * @module events
  * @export one
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -348,7 +321,6 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @param2 event:string|event
  * @module events
  * @export trigger
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
@@ -362,7 +334,6 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @param3 extraParameters:object
  * @module events
  * @export trigger
- * @prevFileNamespace DevExpress.events
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
@@ -376,7 +347,6 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @module events
  * @export triggerHandler
  * @hidden
- * @prevFileNamespace DevExpress.events
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
 
@@ -390,6 +360,5 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @module events
  * @export triggerHandler
  * @hidden
- * @prevFileNamespace DevExpress.events
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

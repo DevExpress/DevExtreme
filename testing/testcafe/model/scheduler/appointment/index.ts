@@ -1,3 +1,5 @@
+import { ClientFunction } from 'testcafe';
+
 const CLASS = {
   appointment: 'dx-scheduler-appointment',
   appointmentContentDate: 'dx-scheduler-appointment-content-date',
@@ -47,5 +49,18 @@ export default class Appointment {
 
     this.isFocused = this.element.hasClass(CLASS.stateFocused);
     this.isAllDay = this.element.hasClass(CLASS.allDay);
+  }
+
+  getColor(): Promise<string> {
+    const appointment = this.element;
+
+    return ClientFunction(
+      () => getComputedStyle(appointment() as any).backgroundColor,
+      {
+        dependencies: {
+          appointment,
+        },
+      },
+    )();
   }
 }

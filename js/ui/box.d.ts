@@ -1,10 +1,8 @@
-import {
-    UserDefinedElement
-} from '../core/element';
-
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
+
+import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -52,7 +50,6 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @docid
      * @type Enums.BoxAlign
      * @default 'start'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
@@ -60,29 +57,25 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @docid
      * @type Enums.BoxCrossAlign
      * @default 'start'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.BoxDirection
      * @default 'row'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     direction?: 'col' | 'row';
     /**
      * @docid
      * @fires dxBoxOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxBoxItem | any>;
@@ -92,13 +85,10 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @inherits CollectionWidget
  * @module ui/box
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxBox extends CollectionWidget {
-    constructor(element: UserDefinedElement, options?: dxBoxOptions)
-}
+export default class dxBox extends CollectionWidget<dxBoxOptions> { }
 
 /**
  * @docid
@@ -111,28 +101,24 @@ export interface dxBoxItem extends CollectionWidgetItem {
      * @docid
      * @type number | Enums.Mode
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseSize?: number | 'auto';
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     box?: dxBoxOptions;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     ratio?: number;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shrink?: number;

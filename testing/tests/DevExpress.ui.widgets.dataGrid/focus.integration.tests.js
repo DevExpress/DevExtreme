@@ -30,7 +30,6 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import pointerEvents from 'events/pointer';
 import fx from 'animation/fx';
 import commonUtils from 'core/utils/common';
@@ -40,6 +39,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import ArrayStore from 'data/array_store';
+import DataGrid from 'ui/data_grid';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -68,13 +68,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         this.clock.tick();
 
-        const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+        const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
         assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(92, 149, 197)', 'focused grouped row has correct background color in rtl mode');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
     });
-
     QUnit.testInActiveWindow('DataGrid - focused row changing should not affect on focused row in master detail (T818808)', function(assert) {
         // arrange
         const detailGridWrapper = new DataGridWrapper('.detail-grid');
@@ -326,7 +325,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowIndex: 0,
             onOptionChanged: function(e) {
                 if(e.name === 'focusedRowIndex' && e.value < 0) {
-                    e.component.option('focusedRowIndex', 0);
+                    if(DataGrid.IS_RENOVATED_WIDGET) {
+                        setTimeout(() => {
+                            e.component.option('focusedRowIndex', 0);
+                        });
+                    } else {
+                        e.component.option('focusedRowIndex', 0);
+                    }
                 }
             }
         }).dxDataGrid('instance');
@@ -480,7 +485,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
@@ -1098,7 +1103,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(contentReadyCallCount, 1, 'contentReady is not raised on row click');
         assert.strictEqual(dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex is assigned');
         assert.strictEqual(dataGrid.option('focusedColumnIndex'), 0, 'focusedColumnIndex is assigned');
-        assert.strictEqual(dataGrid.option('focusedRowKey'), undefined, 'focusedRowKey is not assigned');
+        assert.strictEqual(dataGrid.option('focusedRowKey'), null, 'focusedRowKey is not assigned');
     });
 
     QUnit.test('onFocusedRowChanged event should fire only once if paging and init phase', function(assert) {
@@ -1447,8 +1452,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
 
+        assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
         assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'columns[0].filterValue', 'option fullName');
         assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'filterValue', 'option fullName');
         assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterType', 'option fullName');
@@ -1501,8 +1506,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.pageIndex(), 2, 'page is changed');
         assert.ok($(dataGrid.getRowElement(dataGrid.getRowIndexByKey(6))).hasClass('dx-row-focused'), 'focused row is visible');
     });
-});
 
+});
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
     // T809900
     QUnit.testInActiveWindow('Focus should not return to cell from filter row after filtering', function(assert) {
@@ -1723,59 +1728,61 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         });
     });
 
-    QUnit.testInActiveWindow('New mode. The modified cell frame should not be rendered for an unmodified cell in a new row in Batch', function(assert) {
-        // arrange
-        const getData = function() {
-            const items = [];
-            for(let i = 0; i < 100; i++) {
-                items.push({
-                    ID: i + 1,
-                    Name: `Name ${i + 1}`,
-                    Description: `Description ${i + 1}`
-                });
-            }
-            return items;
-        };
+    ['virtual', 'infinite'].forEach(mode => {
+        QUnit.testInActiveWindow(`New mode (${mode}). The modified cell frame should not be rendered for an unmodified cell in a new row in Batch`, function(assert) {
+            // arrange
+            const getData = function() {
+                const items = [];
+                for(let i = 0; i < 100; i++) {
+                    items.push({
+                        ID: i + 1,
+                        Name: `Name ${i + 1}`,
+                        Description: `Description ${i + 1}`
+                    });
+                }
+                return items;
+            };
 
-        const dataGrid = createDataGrid({
-            dataSource: getData(),
-            keyExpr: 'id',
-            remoteOperations: true,
-            height: 300,
-            scrolling: {
-                mode: 'virtual',
-                rowRenderingMode: 'virtual',
-                newMode: true
-            },
-            columns: ['Name', 'Description']
+            const dataGrid = createDataGrid({
+                dataSource: getData(),
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 300,
+                scrolling: {
+                    mode: mode,
+                    rowRenderingMode: 'virtual',
+                    newMode: true
+                },
+                columns: ['Name', 'Description']
+            });
+
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.addRow();
+            this.clock.tick();
+            dataGrid.cellValue(0, 0, 'test');
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
+
+            // act
+            $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
         });
-
-        this.clock.tick();
-
-        // act
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.addRow();
-        this.clock.tick();
-        dataGrid.cellValue(0, 0, 'test');
-        this.clock.tick();
-
-        // assert
-        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'the first cell is modified');
-
-        // act
-        $(dataGrid.getCellElement(0, 1)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'the second cell is not modified');
-
-        // act
-        $(dataGrid.getCellElement(1, 0)).trigger('dxpointerdown').trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass('dx-cell-modified'), 'the third cell is not modified');
     });
 });
 
@@ -2503,9 +2510,19 @@ QUnit.module('View\'s focus', {
         assert.ok($cell0.hasClass('dx-focused'), 'cell is focused');
     });
 
-    ['Batch', 'Cell'].forEach(editMode => {
-        ['left', 'right'].forEach(arrowKey => {
-            [0, 1, 2].forEach(rowIndex => {
+    [
+        'Batch',
+        'Cell'
+    ].forEach(editMode => {
+        [
+            'left',
+            'right'
+        ].forEach(arrowKey => {
+            [
+                0,
+                1,
+                2
+            ].forEach(rowIndex => {
                 let rowPosition;
                 switch(rowIndex) {
                     case 0: rowPosition = 'first';
@@ -2515,7 +2532,7 @@ QUnit.module('View\'s focus', {
                     case 2: rowPosition = 'last';
                         break;
                 }
-                QUnit.test(`${editMode} - Modified cell value should not be reset when the ${arrowKey} arrow key is pressed in the ${rowPosition} row and fast editing is enabled (T916159)`, function(assert) {
+                QUnit.testInActiveWindow(`${editMode} - Modified cell value should not be reset when the ${arrowKey} arrow key is pressed in the ${rowPosition} row and fast editing is enabled (T916159)`, function(assert) {
                     // arrange
                     this.dataGrid.dispose();
                     const dataGrid = createDataGrid({

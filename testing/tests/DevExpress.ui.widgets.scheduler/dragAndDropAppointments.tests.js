@@ -15,7 +15,6 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     CLASSES,
-    isIE11,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
@@ -1113,11 +1112,6 @@ module('appointmentDragging customization', $.extend({}, {
     [true, false].forEach(createDraggableFirst => {
         [true, false].forEach(allDay => {
             const testAppointmentDraggingFromSchedulerWithScroll = (assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 const group = 'testGroup';
 
                 const appointmentDragging = {
@@ -1369,7 +1363,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.deepEqual(dataSource[2], {
             text: 'Test',
             startDate: new Date(2018, 4, 21, 9, 0),
-            endDate: new Date(2018, 4, 21, 9, 30)
+            endDate: new Date(2018, 4, 21, 16, 0)
         }, 'added appointment data');
     });
 
@@ -2765,11 +2759,6 @@ module('Appointment dragging', {
 
             // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
             test('Task dragging', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -2798,11 +2787,6 @@ module('Appointment dragging', {
 
             [false, true].forEach(function(forceIsoDateParsing) {
                 test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, function(assert) {
-                    if(isIE11) {
-                        assert.ok('This test is not for IE11');
-                        return;
-                    }
-
                     const defaultForceIsoDateParsing = config().forceIsoDateParsing;
 
                     try {
@@ -2851,11 +2835,6 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging from group', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -2892,11 +2871,6 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -2960,11 +2934,6 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -3018,11 +2987,6 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
@@ -3068,11 +3032,6 @@ module('Appointment dragging', {
             });
 
             test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', function(assert) {
-                if(isIE11) {
-                    assert.ok('This test is not for IE11');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,

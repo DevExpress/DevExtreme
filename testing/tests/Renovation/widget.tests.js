@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'renovation/ui/common/widget.j';
+import eventsEngine from 'events/core/events_engine';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -116,7 +117,17 @@ QUnit.module('Container', moduleConfig, () => {
         widget.dispose();
 
         assert.strictEqual($('#component').length, 1, 'container is not removed');
-        assert.strictEqual($('#component').attr('class'), undefined, 'class attribute is empty');
+        assert.strictEqual($('#component').attr('class'), '', 'class attribute is empty');
+    });
+
+    QUnit.test('should not remove container on dxremove event', function(assert) {
+        const widget = this.Widget({}).dxWidget('instance');
+        const $el = widget.$element();
+
+        eventsEngine.trigger($el, 'dxremove');
+
+        assert.strictEqual($('#component').length, 1, 'container is not removed');
+        assert.strictEqual($('#component')[0], $el[0]);
     });
 
     QUnit.test('should remove container on remove call', function(assert) {

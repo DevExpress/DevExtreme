@@ -7,7 +7,7 @@ import messageLocalization from '../../../../../localization/message';
 import { createTestRef } from '../../../../test_utils/create_ref';
 
 jest.mock('../../../../utils/get_computed_style');
-jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
+jest.mock('../../../editors/number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
 jest.mock('../../../../../localization/message', () => ({
   getFormatter: jest.fn(),
 }));
@@ -43,9 +43,8 @@ describe('Small pager pages', () => {
       tree, pageIndexNumberBox, span, maxPage,
     } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
-
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40, rootElementRef: pageIndexRef,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({
@@ -57,8 +56,9 @@ describe('Small pager pages', () => {
     it('updateWidth effect', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
       const component = new PagesSmall({ pageCount: 100 });
-      const numberBoxElement = {};
-      component.pageIndexRef = { current: numberBoxElement } as RefObject<HTMLDivElement>;
+      const numberBoxElement = { };
+      const rootElement = { querySelector: () => numberBoxElement } as unknown as HTMLDivElement;
+      component.pageIndexRef = { current: rootElement } as RefObject<HTMLDivElement>;
       component.updateWidth();
       expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
       expect(component.width).toBe(19 + 10 * 3);
@@ -85,11 +85,16 @@ describe('Small pager pages', () => {
       expect(pageIndexChangeHandler).toBeCalledWith(2);
     });
 
-    it('pagesCountText', () => {
+    it('pagesCountText if appropriate property is not specified', () => {
       (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'of');
       const component = new PagesSmall({ pageCount: 100 });
       expect(component.pagesCountText).toBe('of');
       expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-pagesCountText');
+    });
+
+    it('pagesCountText', () => {
+      const component = new PagesSmall({ pageCount: 100, pagesCountText: 'from' });
+      expect(component.pagesCountText).toBe('from');
     });
 
     it('valueChange', () => {

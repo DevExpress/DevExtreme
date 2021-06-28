@@ -5,7 +5,6 @@ import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
@@ -14,7 +13,7 @@ import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import errors from 'core/errors';
-import Overlay from 'ui/overlay';
+import Overlay from 'ui/overlay/ui.overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from 'ui/widget/selectors';
@@ -22,6 +21,7 @@ import swatch from 'ui/widget/swatch_container';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
+import browser from 'core/utils/browser';
 
 QUnit.testStart(function() {
     const markup =
@@ -121,7 +121,9 @@ const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
 const RESIZABLE_HANDLE_CORNER_BR_CLASS = 'dx-resizable-handle-corner-bottom-right';
 
+const IS_SAFARI = !!browser.safari;
 const VIEWPORT_CLASS = 'dx-viewport';
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
 
@@ -166,7 +168,7 @@ testModule('render', moduleConfig, () => {
 
         assert.ok($(toSelector(OVERLAY_CONTENT_CLASS)).length);
 
-        instance._dispose();
+        instance.dispose();
         assert.ok(!$(toSelector(OVERLAY_CONTENT_CLASS)).length);
     });
 
@@ -892,35 +894,6 @@ testModule('position', moduleConfig, () => {
         assert.strictEqual($overlayWrapper.css('position'), 'absolute');
     });
 
-    test('position of overlay is correct when position.of is window', function(assert) {
-        $('#overlay').dxOverlay({
-            visible: true,
-            position: {
-                my: 'center',
-                at: 'center',
-                of: window
-            }
-        });
-
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
-        assert.strictEqual($overlayWrapper.css('position'), devices.real().ios ? 'absolute' : 'fixed');
-    });
-
-    test('position of overlay is correct when position.of is window and shading is false', function(assert) {
-        $('#overlay').dxOverlay({
-            visible: true,
-            shading: false,
-            position: {
-                my: 'center',
-                at: 'center',
-                of: window
-            }
-        });
-
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
-        assert.strictEqual($overlayWrapper.css('position'), devices.real().ios ? 'absolute' : 'fixed');
-    });
-
     test('wrapper should have 100% width and height when shading is disabled', function(assert) {
         $('#overlay').dxOverlay({
             visible: true,
@@ -974,12 +947,15 @@ testModule('position', moduleConfig, () => {
     });
 
     test('position as function', function(assert) {
-        const instance = $('#overlay').dxOverlay({
+        const overlay = $('#overlay').dxOverlay({
             visible: true,
-            position: function() { return { of: 'body' }; }
+            position: function() { return { my: 'left', at: 'left', of: 'body', offset: '7 0' }; }
         }).dxOverlay('instance');
 
-        assert.strictEqual(instance._position.of, 'body');
+
+        const $content = overlay.$content();
+
+        assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
     });
 
     test('overlay wrapper should have correct dimensions even when there is "target" property in window', function(assert) {
@@ -1043,20 +1019,6 @@ testModule('shading', moduleConfig, () => {
         assert.strictEqual(locate($wrapper).top, 0);
     });
 
-    test('shading height should change after iOS address bar resize (T653828)', function(assert) {
-        if(devices.real().platform !== 'ios' || devices.real().deviceType === 'desktop') {
-            assert.ok(true);
-            return;
-        }
-
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-
-        const $wrapper = overlay.$wrapper();
-        assert.strictEqual($wrapper.css('minHeight').replace('px', ''), String(window.innerHeight), 'overlay wrapper has right min-height style');
-    });
-
     test('shading color should be customized by option', function(assert) {
         const overlay = $('#overlay').dxOverlay({
             shading: true,
@@ -1069,26 +1031,6 @@ testModule('shading', moduleConfig, () => {
 
         overlay.option('shading', false);
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css('backgroundColor')));
-    });
-
-    test('overlay should adjust height on iOS after positioning (T742021)', function(assert) {
-        assert.expect(1);
-        if(devices.real().platform !== 'ios' || devices.real().deviceType === 'desktop') {
-            assert.ok(true);
-            return;
-        }
-
-        const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
-        sinon.stub(
-            overlay,
-            '_fixHeightAfterSafariAddressBarResizing',
-            () => {
-                const $wrapper = overlay.$wrapper();
-                assert.strictEqual($wrapper.css('position'), 'absolute', 'overlay wrapper should have a position');
-            }
-        );
-
-        overlay.show();
     });
 });
 
@@ -1190,6 +1132,32 @@ testModule('dimensions', moduleConfig, () => {
 
         instance.option('minHeight', 200);
         assert.strictEqual($content.height(), 200);
+    });
+
+    test('overlay wrapper dimensions should be equal to document client dimensions when container is window', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        const documentElement = document.documentElement;
+        assert.roughEqual($wrapper.height(), window.innerHeight, 1.01, 'wrapper height is equal to document client height');
+        assert.roughEqual($wrapper.width(), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
+    });
+
+    test('overlay wrapper should cover all window without scrollbar when container is window', function(assert) {
+        $('#qunit-fixture').prepend($('<div>').css({ height: 2000 }));
+
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        const $wrapper = overlay.$wrapper();
+
+        const documentElement = document.documentElement;
+        assert.roughEqual($wrapper.height(), documentElement.clientHeight, 1.01, 'wrapper height is equal to document client height');
+        assert.roughEqual($wrapper.width(), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
     });
 });
 
@@ -2248,10 +2216,10 @@ testModule('container', moduleConfig, () => {
             visible: true
         }).dxOverlay('instance');
 
-        const wrapperElement = overlay.$wrapper().get(0);
+        const $wrapper = overlay.$wrapper();
         overlay.option('container', null);
-        assert.strictEqual(wrapperElement.style.width, '', 'width is restored after container option value changed to window');
-        assert.strictEqual(wrapperElement.style.height, '', 'height is restored after container option value changed to window');
+        assert.strictEqual($wrapper.width(), $(window).width(), 'width is restored after container option value changed to window');
+        assert.strictEqual($wrapper.height(), $(window).height(), 'height is restored after container option value changed to window');
     });
 
     test('content should not be moved to container', function(assert) {
@@ -3335,10 +3303,6 @@ testModule('keyboard navigation', {
     });
 
     test('overlay have focus on show click', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
 
         const $overlayContent = this.$overlayContent;
 
@@ -3384,11 +3348,6 @@ testModule('focus policy', {
     }
 }, () => {
     test('elements under overlay with shader have not to get focus by tab', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             visible: true,
             shading: true,
@@ -3977,5 +3936,161 @@ testModule('renderGeometry', {
             assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
             assert.notOk(isDimensionChanged);
         }
+    });
+});
+
+QUnit.module('prevent safari scrolling on ios devices', {
+    beforeEach: function() {
+        fx.off = true;
+        this.originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
+        this.instance = $('#overlay').dxOverlay().dxOverlay('instance');
+        devices.real({ platform: 'ios', deviceType: 'phone' });
+        this.$body = $('body');
+        this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+    },
+    afterEach: function() {
+        this.instance.dispose();
+        devices.real(this.originalDevice);
+        window.scrollTo(0, 0);
+        this.$additionalElement.remove();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS if container is window and shading is enabled on overlay init', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.dispose();
+        $('#overlay').dxOverlay({ visible: true });
+
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+    });
+
+    QUnit.test('window should not be scrolled when PREVENT_SAFARI_SCROLLING_CLASS is added to the body on popup init', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+        window.scrollTo(0, 200);
+        this.instance.dispose();
+        $('#overlay').dxOverlay({ visible: true });
+
+        assert.strictEqual(window.pageYOffset, 0, 'window is not scrolled');
+    });
+
+    QUnit.test('window should not be scrolled when PREVENT_SAFARI_SCROLLING_CLASS is added to the body', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        window.scrollTo(0, 200);
+        this.instance.show();
+
+        assert.strictEqual(window.pageYOffset, 0, 'window is not scrolled');
+    });
+
+    QUnit.test('window should be scrolled to initial position when PREVENT_SAFARI_SCROLLING_CLASS is removed from the body', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        const pageYOffset = 200;
+        window.scrollTo(0, pageYOffset);
+        this.instance.show();
+        this.instance.hide();
+
+        assert.strictEqual(window.pageYOffset, pageYOffset, 'window is scrolled to initial position');
+    });
+
+    QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS only when overlay is visible', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'no class because overlay is not visible');
+
+        this.instance.show();
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added after overlay show');
+
+        this.instance.hide();
+        assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed after overlay hide');
+    });
+
+    QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS if container is window and shading is enabled', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.show();
+
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+    });
+
+    [true, false].forEach(visible => {
+        QUnit.test(`PREVENT_SAFARI_SCROLLING_CLASS should be removed on dispose if visible=${visible}`, function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.show();
+
+            this.instance.dispose();
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class was removed on dispose');
+        });
+    });
+
+    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "shading" option change', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.show();
+        this.instance.option('shading', false);
+
+        assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "shading" is disabled');
+
+        this.instance.option('shading', true);
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "shading" is enabled');
+    });
+
+    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "position.of" option change', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.show();
+        this.instance.option('position.of', 'body');
+
+        assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "container" is not window');
+
+        this.instance.option('position.of', window);
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
+    });
+
+    QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "container" option change', function(assert) {
+        if(!IS_SAFARI) {
+            assert.expect(0);
+            return;
+        }
+
+        this.instance.show();
+        this.instance.option('container', 'body');
+
+        assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "container" is not window');
+
+        this.instance.option('container', undefined);
+        assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
     });
 });

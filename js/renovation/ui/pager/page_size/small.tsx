@@ -2,7 +2,7 @@ import {
   ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref, RefObject,
 } from '@devextreme-generator/declarations';
 
-import { SelectBox } from '../../select_box';
+import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
@@ -45,6 +45,6 @@ export class PageSizeSmall
   }
 
   @Effect({ run: 'always' }) updateWidth(): void {
-    this.minWidth = getElementMinWidth(this.props.parentRef.current!) || this.minWidth;
+    this.minWidth = getElementMinWidth(this.props.parentRef.current) || this.minWidth;
   }
 }

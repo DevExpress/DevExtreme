@@ -27,7 +27,7 @@ test('Vertical selection between two workspace cells should focus cells between 
     .resizeWindow(1200, 800)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(3, 0))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count).eql(4);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{ name: '2 Days', type: 'day', intervalCount: 2 }],
   currentDate: new Date(2015, 1, 9),
   currentView: 'day',
@@ -42,7 +42,7 @@ test('Horizontal selection between two workspace cells should focus cells betwee
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 3))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
     .eql(4);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['timelineWeek'],
   currentDate: new Date(2015, 1, 9),
   currentView: 'timelineWeek',
@@ -56,4 +56,25 @@ test('Horizontal selection between two workspace cells should focus cells betwee
       text: '2', id: 2,
     }],
   }],
+}));
+
+test('Vertical grouping should work correctly when there is one group', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.dateTableCells.count)
+    .eql(336);
+}).before(async () => createWidget('dxScheduler', {
+  views: [{
+    type: 'week',
+    groupOrientation: 'vertical',
+  }],
+  currentView: 'week',
+  dataSource: [],
+  groups: ['priorityId'],
+  resources: [{
+    field: 'priorityId',
+    dataSource: [{ id: 1, color: 'black' }],
+  }],
+  height: 600,
 }));

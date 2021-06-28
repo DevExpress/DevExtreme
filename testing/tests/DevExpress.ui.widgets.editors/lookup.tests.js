@@ -2530,11 +2530,9 @@ QUnit.module('focus policy', {
 }, () => {
     QUnit.testInActiveWindow('T338144 - focused element should not be reset after popup is reopened if the \'searchEnabled\' is false', function(assert) {
         const isDesktop = devices.real().deviceType === 'desktop';
-        const isIE11OrLower = browser.msie && parseInt(browser.version) <= 11;
 
-        if(!isDesktop || isIE11OrLower) {
-            const message = isIE11OrLower ? 'test is ignored in IE11 because it failes on farm' : 'test does not actual for mobile devices';
-            assert.ok(true, message);
+        if(!isDesktop) {
+            assert.ok(true, 'test does not actual for mobile devices');
             return;
         }
 
