@@ -1204,29 +1204,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getCellPositionByIndex(index, groupIndex, inAllDayRow) {
+    _getCellPositionByIndex(index, inAllDayRow) {
         const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow);
 
-        return this._getCellPositionWithCache(
-            $cell,
+        return this._getCellPosition(
             cellCoordinates,
-            groupIndex,
             inAllDayRow && !this._isVerticalGroupedWorkSpace(),
         );
-    }
-
-    _getCellPositionWithCache($cell, cellCoordinates, groupIndex, inAllDayPanel) {
-        const result = this._getCellPosition(cellCoordinates, inAllDayPanel);
-
-        this.setCellDataCache(cellCoordinates, groupIndex, $cell);
-
-        if(result) {
-            result.rowIndex = cellCoordinates.rowIndex;
-            result.columnIndex = cellCoordinates.columnIndex;
-        }
-
-        return result;
     }
 
     _getCellPosition(cellCoordinates, isAllDayPanel) {
@@ -1247,6 +1231,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.option('rtlEnabled')) {
             validPosition.left += position.width;
+        }
+
+        if(validPosition) {
+            validPosition.rowIndex = cellCoordinates.rowIndex;
+            validPosition.columnIndex = cellCoordinates.columnIndex;
         }
 
         return validPosition;
@@ -1466,11 +1455,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             return undefined;
         }
 
-        const $cell = this._dom_getDateCell(positionByMap);
-        const position = this._getCellPositionWithCache(
-            $cell,
+        const position = this._getCellPosition(
             positionByMap,
-            validGroupIndex,
             inAllDayRow && !this._isVerticalGroupedWorkSpace(),
         );
 
