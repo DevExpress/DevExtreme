@@ -40,7 +40,7 @@
     "jszip": "^2.0.0 || ^3.0.0",
     "rrule": "2.6.6",
     "showdown": "^1.9.1",
-    "turndown": "^7.0.0"
+    "turndown": "~7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
