@@ -3020,7 +3020,16 @@ QUnit.module('dxPivotGrid', {
                 $(scrollable._container()).trigger('scroll');
             }
 
-            QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader (T984139). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+            function filterPivotGrid(pivotGrid, filterValue, area) {
+                const ds = pivotGrid.getDataSource();
+                const fieldIndex = area === 'row' ? 1 : 0;
+                const fields = ds.fields();
+                fields[fieldIndex].filterValues = filterValue;
+                ds.fields(fields);
+                ds.load();
+            }
+
+            QUnit.test(`PivotGrid -> scrollTo() -> expandHeader -> collapseHeader -> filter -> clearFilter (T984139, T1010175). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
                 const store = [];
                 for(let i = 0; i < 200; i++) {
                     store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3068,9 +3077,17 @@ QUnit.module('dxPivotGrid', {
                 this.clock.tick(100);
                 checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after collapsing');
                 assert.strictEqual(getExpandedCells().length, 0);
+
+                filterPivotGrid(pivotGrid, [11], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, '11', '11', 'after filtering');
+
+                filterPivotGrid(pivotGrid, [], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after clearing filter');
             });
 
-            QUnit.test(`PivotGrid -> scrollTo() -> subField.visible=false -> subField.visible=true (T984139). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+            QUnit.test(`PivotGrid -> scrollTo() -> subField.visible=false -> subField.visible=true -> filter -> clearFilter (T984139, T1010175). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
                 const store = [];
                 for(let i = 0; i < 200; i++) {
                     store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3117,6 +3134,14 @@ QUnit.module('dxPivotGrid', {
                 useNative && triggerScrollEvent(scrollable, this.clock);
                 this.clock.tick(100);
                 checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after changing visible to a true value');
+
+                filterPivotGrid(pivotGrid, [11], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, '11', '11', 'after filtering');
+
+                filterPivotGrid(pivotGrid, [], area);
+                this.clock.tick(100);
+                checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, expectedColHeaderCellText, 'after clearing filter');
             });
         });
     });
