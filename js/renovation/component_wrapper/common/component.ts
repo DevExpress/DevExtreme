@@ -182,7 +182,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _render(): void { } // NOTE: Inherited from DOM_Component
 
-  _dispose(): void {
+  _removeWidget(): void {
     const containerNode = this.$element()[0];
     const { parentNode } = containerNode;
 
@@ -195,7 +195,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       delete parentNode.$V;
     }
     delete containerNode.$V;
+  }
 
+  _dispose(): void {
+    this._removeWidget();
     super._dispose();
   }
 
@@ -491,6 +494,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   repaint(): void {
     this._isNodeReplaced = false;
     this._shouldRaiseContentReady = true;
+    this._removeWidget();
     this._refresh();
   }
 
