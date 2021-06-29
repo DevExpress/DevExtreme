@@ -43,7 +43,8 @@ const getTimeCellDate = (rowIndex, date, startViewDate, cellDuration, startDayHo
         return date;
     }
 
-    const result = new Date(startViewDate);
+    const startViewDateWithoutDST = timeZoneUtils.getDateWithoutTimezoneChange(startViewDate);
+    const result = new Date(startViewDateWithoutDST);
     const timeCellDuration = Math.round(cellDuration);
 
     const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);

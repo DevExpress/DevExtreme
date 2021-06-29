@@ -3119,6 +3119,20 @@ class SchedulerWorkSpace extends WidgetObserver {
             return { groupIndex, groups };
         };
 
+        const getData = (rowIndex, field) => {
+            let allDayPanelsCount = 0;
+            if(this.isAllDayPanelVisible) {
+                allDayPanelsCount = 1;
+            }
+            if(this.isGroupedAllDayPanel()) {
+                allDayPanelsCount = Math.ceil((rowIndex + 1) / this._getRowCount());
+            }
+
+            const validRowIndex = rowIndex + allDayPanelsCount;
+
+            return this.viewDataProvider.completeTimePanelMap[validRowIndex][field];
+        };
+
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
             rowCount: this._getTimePanelRowCount() * repeatCount,
@@ -3126,26 +3140,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option('timeCellTemplate'),
-            getCellText: (rowIndex) => {
-                let allDayPanelsCount = 0;
-                if(this.isGroupedAllDayPanel()) {
-                    allDayPanelsCount = Math.ceil((rowIndex + 1) / this._getRowCount());
-                }
-
-                const validRowIndex = rowIndex + allDayPanelsCount;
-
-                return this.viewDataProvider.completeTimePanelMap[validRowIndex].text;
-            },
-            getCellDate: (rowIndex) => {
-                let allDayPanelsCount = 0;
-                if(this.isGroupedAllDayPanel()) {
-                    allDayPanelsCount = Math.ceil((rowIndex + 1) / this._getRowCount());
-                }
-
-                const validRowIndex = rowIndex + allDayPanelsCount;
-
-                return this.viewDataProvider.completeTimePanelMap[validRowIndex].startDate;
-            },
+            getCellText: (rowIndex) => getData(rowIndex, 'text'),
+            getCellDate: (rowIndex) => getData(rowIndex, 'startDate'),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined,
             getTemplateData: getTimeCellGroups.bind(this),
