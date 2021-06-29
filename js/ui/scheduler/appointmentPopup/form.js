@@ -90,8 +90,6 @@ const SchedulerAppointmentForm = {
                 return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
             }
         });
-
-        return this._appointmentForm;
     },
 
     _dateBoxValueChanged: function(args, dateExpr, isNeedCorrect) {
@@ -285,6 +283,13 @@ const SchedulerAppointmentForm = {
         const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
+        const resourceManager = schedulerInst.getResourceManager();
+
+        const mainItems = [
+            ...this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
+            ...resourceManager.getEditors()
+        ];
+
         changeSize(recurrenceEditorVisibility);
         this._editors = [
             {
@@ -295,9 +300,8 @@ const SchedulerAppointmentForm = {
                     xs: 1
                 },
                 colSpan,
-                items: this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
-            },
-            {
+                items: mainItems,
+            }, {
                 itemType: 'group',
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
@@ -321,10 +325,6 @@ const SchedulerAppointmentForm = {
                 visible: false
             }
         }];
-    },
-
-    concatResources: function(resources) {
-        this._editors[0].items = this._editors[0].items.concat(resources);
     },
 
     setEditorsType: function(startDateExpr, endDateExpr, allDay) {

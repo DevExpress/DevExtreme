@@ -42,7 +42,6 @@ export class AppointmentPopup {
         this.scheduler = scheduler;
 
         this._popup = null;
-        this._appointmentForm = null;
 
         this.state = {
             action: null,
@@ -57,6 +56,10 @@ export class AppointmentPopup {
     }
 
     get key() { return this.scheduler.getKey(); }
+
+    get _appointmentForm() { // TODO
+        return AppointmentForm._appointmentForm;
+    }
 
     show(appointment, config) {
         this.state.appointment.data = appointment;
@@ -123,7 +126,7 @@ export class AppointmentPopup {
         this._updateForm();
 
         const arg = {
-            form: this._appointmentForm,
+            form: AppointmentForm._appointmentForm,
             popup: this._popup,
             appointmentData: this.state.appointment.data,
             cancel: false
@@ -140,8 +143,8 @@ export class AppointmentPopup {
     }
 
     _createPopupContent() { // TODO
-        this._appointmentForm = this._createForm();
-        return this._appointmentForm.$element();
+        this._createForm();
+        return AppointmentForm._appointmentForm.$element();
     }
 
     _createAppointmentFormData(rawAppointment) {
@@ -156,7 +159,6 @@ export class AppointmentPopup {
 
     _createForm() {
         const { expr } = this.scheduler.getDataAccessors();
-        const resources = this.scheduler.getResources();
         const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
         const rawAppointment = this.state.appointment.data;
         const formData = this._createAppointmentFormData(rawAppointment);
@@ -170,12 +172,7 @@ export class AppointmentPopup {
             allowTimeZoneEditing
         );
 
-        if(resources && resources.length) {
-            const resourceManager = this.scheduler.getResourceManager();
-            AppointmentForm.concatResources(resourceManager.getEditors());
-        }
-
-        return AppointmentForm.create(
+        AppointmentForm.create(
             (element, component, options) => this.scheduler.createComponent(element, component, options),
             formData,
         );
@@ -236,7 +233,7 @@ export class AppointmentPopup {
 
         const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
-        this._appointmentForm.option('readOnly', this._isReadOnly(data));
+        AppointmentForm._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(formData, this.scheduler.getDataAccessors().expr);
         AppointmentForm.setEditorsType(startDateExpr, endDateExpr, allDay);
@@ -281,8 +278,8 @@ export class AppointmentPopup {
     }
 
     updatePopupFullScreenMode() {
-        if(this._appointmentForm) {
-            const formData = this._appointmentForm.option('formData');
+        if(AppointmentForm._appointmentForm) {
+            const formData = AppointmentForm._appointmentForm.option('formData');
             const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
 
             if(this.isVisible()) {
@@ -313,7 +310,7 @@ export class AppointmentPopup {
 
     saveChanges(showLoadPanel) {
         const deferred = new Deferred();
-        const validation = this._appointmentForm.validate();
+        const validation = AppointmentForm._appointmentForm.validate();
         const state = this.state.appointment;
 
         showLoadPanel && this._showLoadPanel();
@@ -325,7 +322,7 @@ export class AppointmentPopup {
                 return;
             }
 
-            const formData = this._appointmentForm.option('formData');
+            const formData = AppointmentForm._appointmentForm.option('formData');
             const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 

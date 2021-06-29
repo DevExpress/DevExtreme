@@ -1270,7 +1270,6 @@ class Scheduler extends Widget {
             createComponent: (element, component, options) => this._createComponent(element, component, options),
             focus: () => this.focus(),
             getResourceManager: () => this.fire('getResourceManager'),
-            getResources: () => this.option('resources'),
 
             getEditingConfig: () => this._editing,
 
