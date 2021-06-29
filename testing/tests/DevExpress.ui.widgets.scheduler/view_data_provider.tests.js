@@ -1014,12 +1014,6 @@ module('View Data Provider', {
                 verticalGroupCount: 1,
                 horizontalGroupCount: 2,
                 getDateHeaderText: (index) => index,
-                getDateHeaderDate: (index) => {
-                    const date = new Date(baseStartDate);
-                    date.setDate(10 + index);
-
-                    return date;
-                },
                 getTimeCellDate: (rowIndex) => {
                     const date = new Date(baseStartDate);
                     date.setHours(rowIndex);
@@ -1305,7 +1299,7 @@ module('View Data Provider', {
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 10),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
