@@ -268,7 +268,7 @@ export default class TableResizingModule extends BaseModule {
         if(direction === 'vertical') {
             return {
                 lineResizerClass: DX_ROW_RESIZER_CLASS,
-                getSizeFunction: 'outerHeight',
+                sizeFunction: 'outerHeight',
                 positionCoordinate: 'top',
                 positionStyleProperty: 'height',
                 positionCoordinateName: 'y'
@@ -276,12 +276,16 @@ export default class TableResizingModule extends BaseModule {
         } else {
             return {
                 lineResizerClass: DX_COLUMN_RESIZER_CLASS,
-                getSizeFunction: 'outerWidth',
+                sizeFunction: 'outerWidth',
                 positionCoordinate: this.editorInstance.option('rtlEnabled') ? 'right' : 'left',
                 positionStyleProperty: 'width',
                 positionCoordinateName: 'x'
             };
         }
+    }
+
+    _getSize($element, directionInfo) {
+        return $element[directionInfo.sizeFunction]();
     }
 
     _updateFrameSeparators(frame, direction) {
@@ -296,7 +300,7 @@ export default class TableResizingModule extends BaseModule {
 
         let currentPosition = 0;
         for(let i = 0; i <= determinantElementsSeparatorsCount; i++) {
-            currentPosition += $determinantElements.eq(i)[directionInfo.getSizeFunction]();
+            currentPosition += this._getSize($determinantElements.eq(i), directionInfo);
 
             if(!isDefined(lineSeparators[i])) {
                 lineSeparators[i] = $('<div>')
@@ -346,10 +350,10 @@ export default class TableResizingModule extends BaseModule {
         const directionInfo = this._getDirectionInfo(direction);
 
         this._fixColumnsWidth(frame.$table);
-        this._startLineSize = parseInt($($determinantElements[index])[directionInfo.getSizeFunction]());
+        this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
-            this._nextLineSize = parseInt($($determinantElements[index + 1])[directionInfo.getSizeFunction]());
+            this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
         } else if(direction === 'horizontal') {
             frame.$table.css('width', 'initial');
         }
@@ -454,7 +458,7 @@ export default class TableResizingModule extends BaseModule {
 
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
-            $(element).attr('width', columnWidth >= DEFAULT_MIN_COLUMN_WIDTH ? columnWidth : DEFAULT_MIN_COLUMN_WIDTH);
+            $(element).attr('width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH) + 'px');
         });
     }
 
