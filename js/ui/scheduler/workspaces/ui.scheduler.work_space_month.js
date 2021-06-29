@@ -228,7 +228,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getCellPositionByIndex(index, groupIndex) {
-        const position = super._getCellPositionByIndex(index, groupIndex);
+        const position = super._getCellPositionByIndex(index);
         const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
         let calculatedTopOffset;
         if(!this._isVerticalGroupedWorkSpace()) {
