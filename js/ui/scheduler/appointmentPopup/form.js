@@ -68,7 +68,7 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
 };
 
 const SchedulerAppointmentForm = {
-    _appointmentForm: {},
+    _appointmentForm: null,
     _lockDateShiftFlag: false,
 
     create(componentCreator, formData) {
