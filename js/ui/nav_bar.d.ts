@@ -63,6 +63,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @module ui/nav_bar
  * @export default
  * @namespace DevExpress.ui
+ * @deprecated dxTabs
  * @public
  */
 export default class dxNavBar extends dxTabs {
