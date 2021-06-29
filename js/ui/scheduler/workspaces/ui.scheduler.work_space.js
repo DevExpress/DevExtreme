@@ -1105,14 +1105,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getDateForHeaderText(index, date) {
-        if(!timeZoneUtils.isTimezoneChangeInDate(date)) {
-            return date;
-        }
-
-        return this._getDateByIndex(index);
+        return date;
     }
 
-    _getDateByIndex() { return abstract(); }
     _getFormat() { return abstract(); }
 
     getWorkArea() {

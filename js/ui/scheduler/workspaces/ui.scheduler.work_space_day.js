@@ -26,10 +26,6 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         );
     }
 
-    _getDateByIndex(headerIndex, date) {
-        return date;
-    }
-
     _renderDateHeader() {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }

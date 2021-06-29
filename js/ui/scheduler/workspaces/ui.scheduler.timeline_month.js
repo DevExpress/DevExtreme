@@ -79,10 +79,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return this._formatWeekdayAndDay;
     }
 
-    _getDateByIndex(headerIndex, date) {
-        return date;
-    }
-
     _getInterval() {
         return DAY_IN_MILLISECONDS;
     }

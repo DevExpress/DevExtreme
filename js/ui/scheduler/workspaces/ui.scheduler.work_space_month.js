@@ -43,10 +43,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return DAYS_IN_WEEK;
     }
 
-    _getDateByIndex(headerIndex, date) {
-        return date;
-    }
-
     _getFormat() {
         return this._formatWeekday;
     }

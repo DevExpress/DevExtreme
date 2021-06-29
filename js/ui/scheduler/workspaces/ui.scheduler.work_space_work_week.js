@@ -30,10 +30,6 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
-    _getDateByIndex(headerIndex, date) {
-        return date;
-    }
-
     _calculateStartViewDate() {
         return calculateStartViewDate(
             this.option('currentDate'),
