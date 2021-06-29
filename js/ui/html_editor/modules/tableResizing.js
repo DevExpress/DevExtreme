@@ -84,7 +84,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getFrameForTable($table) {
-        return this._framesForTables($table.get(0));
+        return this._framesForTables?.get($table.get(0));
     }
 
     _resizeHandler() {
@@ -130,7 +130,7 @@ export default class TableResizingModule extends BaseModule {
             if(!this._tableResizeFrames[index]) {
                 this._tableResizeFrames[index] = { lastWidth: undefined };
             }
-            const frame = this._getFrameForTable[$table];
+            const frame = this._getFrameForTable($table);
 
             if(!frame) {
                 this._tableResizeFrames.push({ $table: $table });
