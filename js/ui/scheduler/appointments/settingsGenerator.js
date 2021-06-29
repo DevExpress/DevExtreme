@@ -1,11 +1,11 @@
-import dateUtils from '../../core/utils/date';
-import { isEmptyObject } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { getRecurrenceProcessor } from './recurrence';
-import timeZoneUtils from './utils.timeZone.js';
-import { createResourcesTree } from './resources/utils';
-import { getTimeZoneCalculator } from './instanceFactory';
-import { createAppointmentAdapter } from './appointmentAdapter';
+import dateUtils from '../../../core/utils/date';
+import { isEmptyObject } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { getRecurrenceProcessor } from '../recurrence';
+import timeZoneUtils from '../utils.timeZone.js';
+import { createResourcesTree } from '../resources/utils';
+import { getTimeZoneCalculator } from '../instanceFactory';
+import { createAppointmentAdapter } from '../appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
