@@ -2,8 +2,7 @@ import dateUtils from '../../../../core/utils/date';
 import {
     getCalculatedFirstDayOfWeek,
     isDateInRange,
-    setStartDayHour,
-    getDateByCellIndices as getDateByCellIndicesBase,
+    setOptionHour,
 } from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
@@ -48,15 +47,9 @@ export const calculateStartViewDate = (
 
     const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
 };
 
 export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
     return rowIndex * columnCount + columnIndex;
-};
-
-export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
-    const date = getDateByCellIndicesBase(options, rowIndex, columnIndex);
-
-    return setStartDayHour(date, options.startDayHour);
 };

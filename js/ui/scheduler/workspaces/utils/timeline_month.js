@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { setStartDayHour } from './base';
+import { setOptionHour } from './base';
 import { getViewStartByOptions } from './month';
 
 export const calculateStartViewDate = (currentDate, startDayHour, startDate, intervalCount) => {
@@ -10,5 +10,5 @@ export const calculateStartViewDate = (currentDate, startDayHour, startDate, int
         dateUtils.getFirstMonthDate(startDate),
     ));
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
 };

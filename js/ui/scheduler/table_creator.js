@@ -76,6 +76,8 @@ class SchedulerTableCreator {
                     dataKey && elementData(td, dataKey, dataValue);
                 }
 
+                options.setAdditionalClasses?.($(td), dataValue);
+
                 if(options.cellTemplate && options.cellTemplate.render) {
                     const additionalTemplateData = options.getTemplateData
                         ? options.getTemplateData(rowIndex)
