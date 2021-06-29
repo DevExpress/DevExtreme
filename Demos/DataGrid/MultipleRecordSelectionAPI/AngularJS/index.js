@@ -1,7 +1,7 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.selectedItemsText = "Nobody has been selected",
+    $scope.selectedItemsText = "Nobody has been selected";
     $scope.selectedPrefix = null;
     $scope.clearButtonDisabled = true;
     

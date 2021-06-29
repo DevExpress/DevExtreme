@@ -18,7 +18,7 @@ if(!/localhost/.test(document.location.host)) {
 export class AppComponent {
     employees: Employee[];
     prefix: string;
-    selectedRows: number[];
+    selectedRows: number[] = [];
     selectionChangedBySelectbox: boolean;
 
     constructor(service: Service) {
@@ -50,7 +50,7 @@ export class AppComponent {
     }
 }
 
-@Pipe({ name: 'stringifyEmplyees' })
+@Pipe({ name: 'stringifyEmployees' })
 export class StringifyEmployeesPipe implements PipeTransform {
     transform(employees: Employee[]) {
         return employees.map(employee =>  employee.FirstName + " " + employee.LastName ).join(", ");

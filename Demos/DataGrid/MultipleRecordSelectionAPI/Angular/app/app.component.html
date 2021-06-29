@@ -32,7 +32,7 @@
     <div class="selected-data">
         <span class="caption">Selected Records:</span>
         <span>
-            {{grid.selectedRowKeys ? (grid.instance.getSelectedRowsData() | stringifyEmplyees) : 'Nobody has been selected'}}
+            {{grid.selectedRowKeys.length ? (grid.instance.getSelectedRowsData() | stringifyEmployees) : 'Nobody has been selected'}}
         </span>
     </div>
 </div>
