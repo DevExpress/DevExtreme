@@ -220,22 +220,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    _getCellPositionByIndex(index, groupIndex) {
-        const position = super._getCellPositionByIndex(index);
-        const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
-        let calculatedTopOffset;
-        if(!this._isVerticalGroupedWorkSpace()) {
-            calculatedTopOffset = this.getCellHeight() * rowIndex;
-        } else {
-            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
-        }
-
-        if(calculatedTopOffset) {
-            position.top = calculatedTopOffset;
-        }
-        return position;
-    }
-
     _getHeaderDate() {
         return this._getViewStartByOptions();
     }
