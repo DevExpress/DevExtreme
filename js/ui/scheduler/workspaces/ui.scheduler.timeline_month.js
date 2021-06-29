@@ -79,13 +79,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return this._formatWeekdayAndDay;
     }
 
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
-    }
-
     _getInterval() {
         return DAY_IN_MILLISECONDS;
     }
@@ -125,6 +118,14 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             this.option('intervalCount'),
             dateUtils.getFirstMonthDate(this.option('startDate')),
         );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions(true);
+        return {
+            ...options,
+            getDateForHeaderText: (_, date) => date,
+        };
     }
 }
 

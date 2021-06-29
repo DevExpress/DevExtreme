@@ -32,7 +32,7 @@ import { custom as customDialog } from '../dialog';
 import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
-import AppointmentPopup from './appointmentPopup/popup';
+import { AppointmentPopup, ACTION_TO_APPOINTMENT } from './appointmentPopup/popup';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
@@ -54,7 +54,7 @@ import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { AppointmentTooltipInfo } from './dataStructures';
-import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
+import { AppointmentSettingsGenerator } from './appointments/settingsGenerator';
 import { utils } from './utils';
 import {
     createFactoryInstances,
@@ -1248,7 +1248,7 @@ class Scheduler extends Widget {
             ? MobileTooltipStrategy
             : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
-        this._appointmentPopup = new AppointmentPopup(this);
+        this._appointmentPopup = this.createAppointmentPopup();
 
         if(this._isLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(getResourceManager(this.key).loadedResources);
@@ -1261,6 +1261,36 @@ class Scheduler extends Widget {
                 this._reloadDataSource();
             });
         }
+    }
+
+    createAppointmentPopup() {
+        const scheduler = {
+            getKey: () => this.key,
+            getElement: () => this.$element(),
+            createComponent: (element, component, options) => this._createComponent(element, component, options),
+            focus: () => this.focus(),
+            getResourceManager: () => this.fire('getResourceManager'),
+            getResources: () => this.option('resources'),
+
+            getEditingConfig: () => this._editing,
+
+            getDataAccessors: () => this._dataAccessors,
+            getAppointmentFormOpening: () => this._actions['onAppointmentFormOpening'],
+            processActionResult: (arg, canceled) => this._processActionResult(arg, canceled),
+
+            addAppointment: (appointment) => this.addAppointment(appointment),
+            updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
+
+            getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
+            getStartDayHour: () => this.option('startDayHour'),
+            getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+
+            updateScrollPosition: (startDate, resourceItem, inAllDayRow) => {
+                this._workSpace.updateScrollPosition(startDate, resourceItem, inAllDayRow);
+            }
+        };
+
+        return new AppointmentPopup(scheduler);
     }
 
     _getAppointmentTooltipOptions() {
@@ -1675,8 +1705,6 @@ class Scheduler extends Widget {
     }
 
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
-        delete this._updatedRecAppointment;
-
         const recurrenceRule = ExpressionUtils.getField(this.key, 'recurrenceRule', targetAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
@@ -1727,10 +1755,14 @@ class Scheduler extends Widget {
         appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         if(isPopupEditing) {
-            // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = appointment.source();
-
-            this._appointmentPopup.show(newRawAppointment, true);
+            this._appointmentPopup.show(newRawAppointment, {
+                isToolbarVisible: true,
+                action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
+                excludeInfo: {
+                    sourceAppointment: rawAppointment,
+                    updatedAppointment: appointment.source()
+                }
+            });
             this._editAppointmentData = rawAppointment;
 
         } else {
@@ -1996,7 +2028,7 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    getAppointmentPopup() {
+    getAppointmentPopup() { // TODO remove
         return this._appointmentPopup.getPopup();
     }
 
@@ -2110,18 +2142,45 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+
         const appointment = createAppointmentAdapter(this.key, (rawTargetedAppointment || rawAppointment));
         const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
-        this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
-            if(createNewAppointment || isEmptyObject(rawAppointment)) {
-                delete this._editAppointmentData;
-                this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
-            } else {
-                this._editAppointmentData = rawAppointment;
-                this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
-            }
-        }, false, true);
+        const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
+
+        if(isEmptyObject(rawAppointment)) {
+            rawAppointment = this.createPopupAppointment();
+        }
+
+        if(isCreateAppointment) {
+            delete this._editAppointmentData; // TODO
+            this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
+                isToolbarVisible: true,
+                action: ACTION_TO_APPOINTMENT.CREATE
+            });
+        } else {
+            this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
+                this._editAppointmentData = rawAppointment; // TODO
+
+                this._appointmentPopup.show(rawAppointment, {
+                    isToolbarVisible: this._editing.allowUpdating,
+                    action: ACTION_TO_APPOINTMENT.UPDATE,
+                });
+            }, false, true);
+        }
+    }
+
+    createPopupAppointment() {
+        const result = {};
+        const toMs = dateUtils.dateToMilliseconds;
+
+        const startDate = this.option('currentDate');
+        const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
+
+        ExpressionUtils.setField(this.key, 'startDate', result, startDate);
+        ExpressionUtils.setField(this.key, 'endDate', result, endDate);
+
+        return result;
     }
 
     hideAppointmentPopup(saveChanges) {

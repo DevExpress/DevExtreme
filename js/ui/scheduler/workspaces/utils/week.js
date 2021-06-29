@@ -1,6 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import dateLocalization from '../../../../localization/date';
-import { getCalculatedFirstDayOfWeek, getViewStartByOptions, setStartDayHour } from './base';
+import { getCalculatedFirstDayOfWeek, getViewStartByOptions, setOptionHour } from './base';
 
 export const getIntervalDuration = (intervalCount) => {
     return dateUtils.dateToMilliseconds('day') * 7 * intervalCount;
@@ -23,7 +23,7 @@ export const calculateStartViewDate = (
 
     const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
 };
 
 export const calculateViewStartDate = (startDateOption, firstDayOfWeek) => {

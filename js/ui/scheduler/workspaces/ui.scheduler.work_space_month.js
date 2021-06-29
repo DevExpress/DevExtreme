@@ -1,4 +1,3 @@
-import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
@@ -41,13 +40,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getCellCount() {
         return DAYS_IN_WEEK;
-    }
-
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
     }
 
     _getFormat() {
@@ -228,22 +220,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    _getCellPositionByIndex(index, groupIndex) {
-        const position = super._getCellPositionByIndex(index, groupIndex);
-        const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
-        let calculatedTopOffset;
-        if(!this._isVerticalGroupedWorkSpace()) {
-            calculatedTopOffset = this.getCellHeight() * rowIndex;
-        } else {
-            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
-        }
-
-        if(calculatedTopOffset) {
-            position.top = calculatedTopOffset;
-        }
-        return position;
-    }
-
     _getHeaderDate() {
         return this._getViewStartByOptions();
     }
@@ -323,10 +299,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _renderTimePanel() { return noop(); }
     _renderAllDayPanel() { return noop(); }
 
-    _prepareCellData(rowIndex, columnIndex, cell) {
-        const data = super._prepareCellData(rowIndex, columnIndex, cell);
-        const $cell = $(cell);
-
+    _setMonthClassesToCell($cell, data) {
         $cell
             .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
             .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
@@ -349,6 +322,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             return this._getCellText(rowIndex, validColumnIndex);
         };
         options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
+        options.setAdditionalClasses = this._setMonthClassesToCell.bind(this),
+
         super._renderTableBody(options);
     }
 }

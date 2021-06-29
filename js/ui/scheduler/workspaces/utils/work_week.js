@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { getViewStartByOptions, setStartDayHour } from './base';
+import { getViewStartByOptions, setOptionHour } from './base';
 const MONDAY_INDEX = 1;
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
@@ -35,5 +35,5 @@ export const calculateStartViewDate = (
     const firstViewDate = dateUtils.getFirstWeekDate(viewStart, getFirstDayOfWeek(firstDayOfWeekOption));
     const normalizedDate = dateUtils.normalizeDateByWeek(firstViewDate, viewStart);
 
-    return setStartDayHour(normalizedDate, startDayHour);
+    return setOptionHour(normalizedDate, startDayHour);
 };

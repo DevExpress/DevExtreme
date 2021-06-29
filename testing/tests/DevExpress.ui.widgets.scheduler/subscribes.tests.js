@@ -4,7 +4,7 @@ import 'ui/scheduler/ui.scheduler';
 import {
     AppointmentSettingsGeneratorBaseStrategy,
     AppointmentSettingsGeneratorVirtualStrategy
-} from 'ui/scheduler/appointmentSettingsGenerator';
+} from 'ui/scheduler/appointments/settingsGenerator';
 import { getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import $ from 'jquery';
