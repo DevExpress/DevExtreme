@@ -31,10 +31,10 @@
     "devexpress-diagram": "2.0.30",
     "devexpress-gantt": "2.0.38",
     "jszip": "^2.0.0 || ^3.0.0",
-    "devextreme-quill": "~1.1.2",
+    "devextreme-quill": "~1.1.4",
     "rrule": "2.6.6",
     "showdown": "^1.9.1",
-    "turndown": "^7.0.0",
+    "turndown": "~7.0.0",
     "preact": "^10.4.5"
   },
   "devDependencies": {

@@ -9241,6 +9241,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxNavBar]
+     * @deprecated [depNote:dxNavBar]
      */
     export class dxNavBar extends dxTabs {
         constructor(element: Element, options?: dxNavBarOptions)
@@ -10816,6 +10817,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxSlideOut]
+     * @deprecated [depNote:dxSlideOut]
      */
     export class dxSlideOut extends CollectionWidget {
         constructor(element: Element, options?: dxSlideOutOptions)
@@ -10869,6 +10871,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxSlideOutView]
+     * @deprecated [depNote:dxSlideOutView]
      */
     export class dxSlideOutView extends Widget {
         constructor(element: Element, options?: dxSlideOutViewOptions)
