@@ -175,7 +175,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @module ui/slide_out
  * @export default
  * @namespace DevExpress.ui
- * @deprecated Use dxDrawer widget instead
+ * @deprecated dxDrawer
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {

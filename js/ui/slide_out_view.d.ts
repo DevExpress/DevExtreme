@@ -76,7 +76,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @module ui/slide_out_view
  * @export default
  * @namespace DevExpress.ui
- * @deprecated Use dxDrawer widget instead
+ * @deprecated dxDrawer
  * @public
  */
 export default class dxSlideOutView extends Widget {
