@@ -23,7 +23,7 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return '[0-9]+?';
+        return count === 2 ? '[0-9]{2}' : `[0-9]{${count},5}?`;
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
@@ -40,7 +40,7 @@ const PATTERN_REGEXPS = {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format').join('|');
     },
     d: function(count) {
-        return count === 1 ? '0?[1-9]|[12][0-9]|3[01]' : '3[01]|[12][0-9]|0?[1-9]';
+        return count === 2 ? '3[01]|[12][0-9]|0[1-9]' : '0?[1-9]|[12][0-9]|3[01]';
     },
     H: function(count) {
         return '0?[0-9]|1[0-9]|2[0-3]';
