@@ -1149,6 +1149,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isDateAndTimeView: this.isDateAndTimeView,
             groups: this.option('groups'),
             tableAllDay: this._getTableAllDay(),
+            firstDayOfWeek: this._firstDayOfWeek(),
         };
     }
 

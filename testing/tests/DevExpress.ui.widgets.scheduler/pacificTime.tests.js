@@ -1,7 +1,6 @@
 import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
-import browser from 'core/utils/browser';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
@@ -16,7 +15,7 @@ const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will h
 
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
-if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
+if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
     testStart(() => initTestMarkup());
     const moduleConfig = {
         beforeEach() {

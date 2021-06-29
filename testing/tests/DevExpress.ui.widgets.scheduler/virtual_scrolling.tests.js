@@ -5,19 +5,13 @@ import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
-import browser from 'core/utils/browser';
 
 const {
     module
 } = QUnit;
 
 const test = (description, callback) => {
-    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
-    const testFunc = isIE11
-        ? QUnit.skip
-        : QUnit.test;
-
-    return testFunc(description, sinon.test(callback));
+    return QUnit.test(description, sinon.test(callback));
 };
 
 module('Virtual Scrolling', {
