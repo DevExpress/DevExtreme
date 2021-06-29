@@ -126,3 +126,10 @@ export const getGroupCount = (groups) => { // TODO replace with viewDataProvider
 
     return result;
 };
+
+export const getGroupsObjectFromGroupsArray = (groupsArray) => {
+    return groupsArray.reduce((currentGroups, { name, id }) => ({
+        ...currentGroups,
+        [name]: id,
+    }), {});
+};
