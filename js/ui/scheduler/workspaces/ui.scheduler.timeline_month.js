@@ -119,6 +119,14 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             dateUtils.getFirstMonthDate(this.option('startDate')),
         );
     }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions(true);
+        return {
+            ...options,
+            getDateForHeaderText: (_, date) => date,
+        };
+    }
 }
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);

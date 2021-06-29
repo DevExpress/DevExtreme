@@ -112,3 +112,10 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
 
     return currentDate;
 };
+
+export const getHeaderCellText = (
+    headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
+) => {
+    const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
+    return dateLocalization.format(validDate, headerCellTextFormat);
+};

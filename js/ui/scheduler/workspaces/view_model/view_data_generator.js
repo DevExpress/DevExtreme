@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
+import { getHeaderCellText } from '../utils/base';
 
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
@@ -189,12 +190,17 @@ export class ViewDataGenerator {
 
     _generateHeaderDateRow(options, completeViewDataMap) {
         const {
-            getDateHeaderText,
             today,
             groupByDate,
             horizontalGroupCount,
             cellCountInGroupRow,
             groupOrientation,
+            headerCellTextFormat,
+            getDateForHeaderText,
+            interval,
+            startViewDate,
+            startDayHour,
+            cellCountInDay,
         } = options;
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
@@ -213,15 +219,30 @@ export class ViewDataGenerator {
             isFirstGroupCell,
             isLastGroupCell,
             ...restProps
-        }, index) => ({
-            ...restProps,
-            startDate,
-            text: getDateHeaderText(index % cellCountInGroupRow, startDate),
-            today: dateUtils.sameDate(startDate, today),
-            colSpan,
-            isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
-            isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
-        }));
+        }, index) => {
+            const text = getHeaderCellText(
+                index % cellCountInGroupRow,
+                startDate,
+                headerCellTextFormat,
+                getDateForHeaderText,
+                {
+                    interval,
+                    startViewDate,
+                    startDayHour,
+                    cellCountInDay,
+                },
+            );
+
+            return ({
+                ...restProps,
+                startDate,
+                text,
+                today: dateUtils.sameDate(startDate, today),
+                colSpan,
+                isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
+                isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+            });
+        });
     }
 
     _getCompleteTimePanelMap(options, completeViewDataMap) {

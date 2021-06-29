@@ -13,9 +13,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getStartViewDateWithoutDST } from './utils/base';
-
-import timeZoneUtils from '../utils.timeZone';
+import { getDateForHeaderText } from './utils/timeline_week';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 
@@ -59,19 +57,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             groupCount = groupCount || 1;
             return this._getRowCount() * groupCount;
         }
-    }
-
-    _getDateForHeaderText(index, date) {
-        if(!timeZoneUtils.isTimezoneChangeInDate(date)) {
-            return date;
-        }
-
-        const result = getStartViewDateWithoutDST(this.getStartViewDate(), this.option('startDayHour'));
-
-        const validIndex = index % this._getCellCountInDay();
-        result.setTime(result.getTime() + validIndex * this._getInterval());
-
-        return result;
     }
 
     _getFormat() {
@@ -348,6 +333,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
+            getDateForHeaderText,
         };
     }
 

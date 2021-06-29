@@ -642,7 +642,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             totalRowCount: rowCount,
             totalCellCount: cellCount,
             groupCount,
-            getDateHeaderText: this._getHeaderText.bind(this),
             getTimeCellDate: this._getTimeCellDate.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
@@ -658,6 +657,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
             rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
+            headerCellTextFormat: this._getFormat(),
+            getDateForHeaderText: (_, date) => date,
+            interval: this._getInterval(),
+            startViewDate: this.getStartViewDate(),
+            startDayHour: this.option('startDayHour'),
+            cellCountInDay: this._getCellCountInDay(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -1098,14 +1103,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._interval = this.option('hoursInterval') * HOUR_MS;
         }
         return this._interval;
-    }
-
-    _getHeaderText(headerIndex, date) {
-        return dateLocalization.format(this._getDateForHeaderText(headerIndex, date), this._getFormat());
-    }
-
-    _getDateForHeaderText(index, date) {
-        return date;
     }
 
     _getFormat() { return abstract(); }
