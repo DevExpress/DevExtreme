@@ -50,8 +50,9 @@ export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount)
     return columnIndex * rowCount + rowIndex;
 };
 
-const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay) => {
-    const weekendCount = Math.floor(columnIndex / (5 * columnsInDay));
+const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay, firstDayOfWeek) => {
+    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
+    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
 
     return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
 };
@@ -82,6 +83,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         cellCountInDay,
         rowCount,
         columnCount,
+        firstDayOfWeek,
     } = options;
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
@@ -96,7 +98,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
 
     const offsetByCount = isWorkView
-        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay)
+        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
         : 0;
 
     const startViewDateTime = startViewDate.getTime();
