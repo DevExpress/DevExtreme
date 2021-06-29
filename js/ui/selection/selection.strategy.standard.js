@@ -105,14 +105,21 @@ export default SelectionStrategy.inherit({
 
         filteredItems = filteredItems.filter(localFilter);
 
-        this.options.selectedItemKeys.forEach((elementKey, index) => {
-            if(keys.includes(elementKey) && !filteredItems.map((item) => {
-                return key === undefined && typeof item === 'object' ? item?.key : item;
-            }).includes(elementKey)) {
-                filteredItems.push(this.options.selectedItems[index]);
+        const filteredItemsKeys = filteredItems.map((item) => this.options.keyOf(this.options.getItemData(item)));
+        const selectedItemsInFilteredItems = keys.filter(itemKey => filteredItemsKeys.includes(itemKey));
+
+        const itemsFromKeys = [];
+        keys.forEach((key) => {
+            const index = this.options.selectedItemKeys.indexOf(key);
+            if(index >= 0) {
+                itemsFromKeys.push(this.options.selectedItems[index]);
             }
         });
-        if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length)) {
+        const filteredItemsFromKeys = dataQuery(itemsFromKeys).filter(filter).toArray();
+
+        const shouldLoadFilteredData = selectedItemsInFilteredItems.length < filteredItemsFromKeys.length;
+
+        if(deselectedItems.length || (!isSelectAll && (filteredItems.length === keys.length || !shouldLoadFilteredData))) {
             deferred.resolve(filteredItems);
         } else {
             deferred = this._loadFilteredData(combinedFilter, localFilter, null, isSelectAll);
