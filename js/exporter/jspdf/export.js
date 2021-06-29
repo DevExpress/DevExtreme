@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
 import messageLocalization from '../../localization/message';
+import { ExportLoadPanel } from '../common/export_load_panel';
 import { hasWindow } from '../../core/utils/window';
 
 export const Export = {
@@ -62,21 +63,6 @@ export const Export = {
         };
     },
 
-    _setLoadPanelOptions: function(component, options) {
-        if(!hasWindow()) {
-            return;
-        }
-
-        component._setOptionWithoutOptionChange('loadPanel', options);
-
-        this._renderLoadPanel(component);
-    },
-
-    _renderLoadPanel: function(component) {
-        const rowsView = component.getView('rowsView');
-        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
-    },
-
     export: function(options) {
         const {
             jsPDFDocument,
@@ -89,12 +75,15 @@ export const Export = {
         } = options;
 
         const internalComponent = component._getInternalInstance?.() || component;
-        const initialLoadPanelOptions = extend({}, internalComponent.option('loadPanel'));
-        if('animation' in internalComponent.option('loadPanel')) {
-            loadPanel.animation = null;
-        }
+        const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
 
-        this._setLoadPanelOptions(internalComponent, loadPanel);
+        component.option('loadPanel.enabled', false);
+        if(loadPanel.enabled && hasWindow()) {
+            const rowsView = component.getView('rowsView');
+
+            this._loadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
+            this._loadPanel.show();
+        }
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
@@ -169,7 +158,11 @@ export const Export = {
 
                 resolve();
             }).always(() => {
-                this._setLoadPanelOptions(internalComponent, initialLoadPanelOptions);
+                component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
+
+                if(loadPanel.enabled && hasWindow()) {
+                    this._loadPanel.dispose();
+                }
             });
         });
     },

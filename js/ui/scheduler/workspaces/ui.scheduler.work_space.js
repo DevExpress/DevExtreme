@@ -417,7 +417,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _focusOutHandler() {
         super._focusOutHandler.apply(this, arguments);
 
-        if(!this._contextMenuHandled) {
+        if(!this._contextMenuHandled && !this._disposed) {
             this.cellsSelectionState.releaseSelectedAndFocusedCells();
 
             this.viewDataProvider.updateViewData(this.generateRenderOptions());
@@ -1186,6 +1186,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startViewDate: this.getStartViewDate(),
             rowCount: this._getRowCount(),
             columnCount: this._getCellCount(),
+            firstDayOfWeek: this._firstDayOfWeek(),
         };
     }
 

@@ -196,20 +196,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _setTableSizes() {
-        const cellHeight = this.getCellHeight();
         const minHeight = this._getWorkSpaceMinHeight();
-        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
-            ? this._getGroupCount()
-            : 1;
 
-        // WA for IE: virtual scrolling does not work correctly if we do not set this height
-        let height = cellHeight * verticalGroupCount;
-        if(height < minHeight) {
-            height = minHeight;
-        }
-
-        this._$sidebarTable.height(height);
-        this._$dateTable.height(height);
+        this._$sidebarTable.height(minHeight);
+        this._$dateTable.height(minHeight);
 
         super._setTableSizes();
 
@@ -312,39 +302,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             left: left,
             cellPosition: left
         };
-    }
-
-    getVisibleBounds() {
-        const isRtl = this.option('rtlEnabled');
-
-        const result = {};
-        const $scrollable = this.getScrollable().$element();
-        const cellWidth = this.getCellWidth();
-        const scrollableOffset = isRtl ? (this.getScrollableOuterWidth() - this.getScrollableScrollLeft()) : this.getScrollableScrollLeft();
-        const scrolledCellCount = scrollableOffset / cellWidth;
-        const visibleCellCount = $scrollable.width() / cellWidth;
-        const totalCellCount = isRtl ? scrolledCellCount - visibleCellCount : scrolledCellCount + visibleCellCount;
-        let leftDate = this._getDateByIndex(scrolledCellCount);
-        let rightDate = this._getDateByIndex(totalCellCount);
-
-        if(isRtl) {
-            leftDate = this._getDateByIndex(totalCellCount);
-            rightDate = this._getDateByIndex(scrolledCellCount);
-        }
-
-        result.left = {
-            hours: leftDate.getHours(),
-            minutes: leftDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(leftDate)
-        };
-
-        result.right = {
-            hours: rightDate.getHours(),
-            minutes: rightDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(rightDate)
-        };
-
-        return result;
     }
 
     getIntervalDuration(allDay) {

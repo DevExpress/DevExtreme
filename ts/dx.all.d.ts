@@ -12250,7 +12250,6 @@ declare module DevExpress.ui {
       DevExpress.events.Cancelable &
         DevExpress.events.EventInfo<dxGantt> & {
           readonly values: Array<any>;
-          readonly key: any;
         };
     export type ResourceUnassignedEvent =
       DevExpress.events.EventInfo<dxGantt> & {
@@ -12352,6 +12351,7 @@ declare module DevExpress.ui {
       | 'zoomOut'
       | 'deleteDependency'
       | 'taskDetails'
+      | 'resourceManager'
     >;
   }
   /**
@@ -12373,6 +12373,7 @@ declare module DevExpress.ui {
       | 'zoomOut'
       | 'deleteDependency'
       | 'taskDetails'
+      | 'resourceManager'
       | string;
   }
   /**

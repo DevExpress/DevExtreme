@@ -38,7 +38,7 @@ const baseConfig = {
 };
 
 module('Integration: collector', baseConfig, () => {
-    test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment(T882652)', function(assert) {
+    test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment (T882652)', function(assert) {
         const data = [{
             text: '1',
             startDate: new Date(2017, 4, 16, 9, 30),
