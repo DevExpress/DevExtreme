@@ -130,18 +130,23 @@ export default class ComponentWrapper extends DOMComponent {
     super.dispose();
   }
 
-  _dispose() {
+  _removeWidget() {
     const containerNode = this.$element()[0];
-    const parentNode = containerNode.parentNode;
-    parentNode.$V = containerNode.$V;
-    containerNode.$V = null;
-    render(
-      this._disposeMethodCalled ? createElement(
-        containerNode.tagName, 
-        this.elementAttr
-      ) : null,
-      parentNode);
-    delete parentNode.$V;
+    const { parentNode } = containerNode;
+
+    if (parentNode) {
+      parentNode.$V = containerNode.$V;
+      render(null, parentNode);
+      parentNode.appendChild(containerNode);
+      containerNode.innerHTML = '';
+
+      delete parentNode.$V;
+    }
+    delete containerNode.$V;
+  }
+
+  _dispose() {
+    this._removeWidget();
     super._dispose();
   }
 
@@ -379,6 +384,7 @@ export default class ComponentWrapper extends DOMComponent {
   // Public API
   repaint() {
     this._isNodeReplaced = false;
+    this._removeWidget();
     this._refresh();
   }
 
