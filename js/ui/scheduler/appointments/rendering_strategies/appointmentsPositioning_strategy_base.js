@@ -1,4 +1,4 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDefined } from '../../../../core/utils/type';
 
 const COLLECTOR_DEFAULT_WIDTH = 24;
 const COLLECTOR_DEFAULT_OFFSET = 3;

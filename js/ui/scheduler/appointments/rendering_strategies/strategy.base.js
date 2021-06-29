@@ -1,12 +1,12 @@
-import BasePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.base';
-import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.adaptive';
-import { extend } from '../../../core/utils/extend';
-import dateUtils from '../../../core/utils/date';
-import { isNumeric, isObject } from '../../../core/utils/type';
-import { current as currentTheme } from '../../themes';
+import BasePositioningStrategy from './appointmentsPositioning_strategy_base';
+import AdaptivePositioningStrategy from './appointmentsPositioning_strategy_adaptive';
+import { extend } from '../../../../core/utils/extend';
+import dateUtils from '../../../../core/utils/date';
+import { isNumeric, isObject } from '../../../../core/utils/type';
+import { current as currentTheme } from '../../../themes';
 
-import timeZoneUtils from '../utils.timeZone';
-import { ExpressionUtils } from '../expressionUtils';
+import timeZoneUtils from '../../utils.timeZone';
+import { ExpressionUtils } from '../../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
