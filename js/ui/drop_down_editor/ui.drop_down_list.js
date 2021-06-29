@@ -640,6 +640,14 @@ const DropDownList = DropDownEditor.inherit({
         return addNamespace(SEARCH_EVENT, this.NAME + 'Search');
     },
 
+    _getCompositionStartEvent: function() {
+        return addNamespace('compositionstart', this.NAME + 'CompositionStart');
+    },
+
+    _getCompositionEndEvent: function() {
+        return addNamespace('compositionend', this.NAME + 'CompositionEnd');
+    },
+
     _getSetFocusPolicyEvent: function() {
         return addNamespace('input', this.NAME + 'FocusPolicy');
     },
@@ -650,6 +658,11 @@ const DropDownList = DropDownEditor.inherit({
 
         if(this._shouldRenderSearchEvent()) {
             eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
+            eventsEngine.on(this._input(), this._getCompositionEndEvent(), () => {
+                this._isTextCompositionInProgress(undefined);
+                this._searchHandler();
+            });
         }
     },
 
@@ -660,11 +673,25 @@ const DropDownList = DropDownEditor.inherit({
     _refreshEvents: function() {
         eventsEngine.off(this._input(), this._getSearchEvent());
         eventsEngine.off(this._input(), this._getSetFocusPolicyEvent());
+        eventsEngine.off(this._input(), this._getCompositionStartEvent());
+        eventsEngine.off(this._input(), this._getCompositionEndEvent());
 
         this.callBase();
     },
 
+    _isTextCompositionInProgress: function(value) {
+        if(arguments.length) {
+            this._isTextComposition = value;
+        } else {
+            return this._isTextComposition;
+        }
+    },
+
     _searchHandler: function() {
+        if(this._isTextCompositionInProgress()) {
+            return;
+        }
+
         if(!this._isMinSearchLengthExceeded()) {
             this._searchCanceled();
             return;
