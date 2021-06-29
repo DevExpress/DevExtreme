@@ -158,7 +158,9 @@ export default class TableResizingModule extends BaseModule {
 
                 const tableWidth = this._tableLastWidth(frame) ?? $table.outerWidth();
 
-                this._tableLastWidth(frame, Math.max(columnsSum, tableWidth));
+                if(frame) {
+                    this._tableLastWidth(frame, Math.max(columnsSum, tableWidth));
+                }
             }
         });
     }
@@ -172,7 +174,7 @@ export default class TableResizingModule extends BaseModule {
                 $frame: this._createTableResizeFrame(table),
                 $table: $table,
                 index: index,
-                lastWidth: (table === $lastTable?.get(0)) ? $tableLastWidth : undefined,
+                lastWidth: ($lastTable && table === $lastTable.get(0)) ? $tableLastWidth : undefined,
                 columnsCount: this._getTableDeterminantElements($table, 'horizontal').length,
                 rowsCount: this._getTableDeterminantElements($table, 'vertical').length
             };
