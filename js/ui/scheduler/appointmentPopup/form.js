@@ -129,7 +129,7 @@ const SchedulerAppointmentForm = {
 
     _createDateBoxItems: function(dataExprs, schedulerInst, allowTimeZoneEditing) {
         const colSpan = allowTimeZoneEditing ? 2 : 1;
-        const firstDayOfWeek = schedulerInst.option('firstDayOfWeek');
+        const firstDayOfWeek = schedulerInst.getFirstDayOfWeek();
         return [
             this._createDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate',
                 (args) => {
@@ -204,8 +204,8 @@ const SchedulerAppointmentForm = {
                                     startDateEditor.option('value', allDayStartDate);
                                     endDateEditor.option('value', this._getAllDayEndDate(allDayStartDate));
                                 } else {
-                                    const startDateWithStartHour = this._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
-                                    const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
+                                    const startDateWithStartHour = this._getStartDateWithStartHour(startDate, schedulerInst.getStartDayHour());
+                                    const endDate = schedulerInst.getCalculatedEndDate(startDateWithStartHour);
                                     startDateEditor.option('value', startDateWithStartHour);
                                     endDateEditor.option('value', endDate);
                                 }
@@ -301,7 +301,7 @@ const SchedulerAppointmentForm = {
             editorType: 'dxRecurrenceEditor',
             editorOptions: {
                 readOnly: readOnly,
-                firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
+                firstDayOfWeek: schedulerInst.getFirstDayOfWeek(),
             },
             label: {
                 text: ' ',
