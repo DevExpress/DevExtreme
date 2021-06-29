@@ -1,7 +1,8 @@
-import dateUtils from '../../../core/utils/date';
-import { each } from '../../../core/utils/iterator';
-import { merge } from '../../../core/utils/array';
-import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
+import dateUtils from '../../../../core/utils/date';
+import { each } from '../../../../core/utils/iterator';
+import { merge } from '../../../../core/utils/array';
+import BaseRenderingStrategy from './strategy.base';
+import { ExpressionUtils } from '../../expressionUtils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {
@@ -187,8 +188,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
             }
 
             each(currentAppointments, function(index, appointment) {
-                const startDate = this.instance.fire('getField', 'startDate', appointment);
-                const endDate = this.instance.fire('getField', 'endDate', appointment);
+                const startDate = ExpressionUtils.getField(this.key, 'startDate', appointment);
+                const endDate = ExpressionUtils.getField(this.key, 'endDate', appointment);
 
                 this.instance.fire('getAppointmentDataProvider').replaceWrongEndDate(appointment, startDate, endDate);
 
@@ -215,7 +216,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
                 for(let j = 0; j < appointmentCount; j++) {
                     const appointmentData = currentAppointments[j].settings || currentAppointments[j];
                     const appointmentIsLong = this.instance.fire('getAppointmentDataProvider').appointmentTakesSeveralDays(currentAppointments[j]);
-                    const appointmentIsRecurrence = this.instance.fire('getField', 'recurrenceRule', currentAppointments[j]);
+                    const appointmentIsRecurrence = ExpressionUtils.getField(this.key, 'recurrenceRule', currentAppointments[j]);
 
                     if(this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {
                         groupResult[i] += 1;

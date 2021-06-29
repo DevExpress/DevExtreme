@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment, isIE11 } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 import eventsEngine from 'events/core/events_engine';
@@ -2061,11 +2061,6 @@ module('Resource Cell Template', () => {
 
 module('Markup', () => {
     test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
-        if(isIE11) {
-            assert.ok(true, 'This test is not for IE11');
-            return;
-        }
-
         const scheduler = createWrapper({
             width: 600,
             views: [{

@@ -371,64 +371,6 @@ QUnit.module('Timeline Day', {
     }
 });
 
-QUnit.test('Get visible bounds', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 5, 30),
-        height: 400,
-        width: 950
-    });
-
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(0);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 0, minutes: 0, date: new Date(2015, 5, 30) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 2, minutes: 0, date: new Date(2015, 5, 30) }, 'Right bound is OK');
-});
-
-QUnit.test('Get visible bounds if scroll position is not null', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 5, 30),
-        height: 400,
-        width: 950
-    });
-
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(1000);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 5, 30) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 5, 30) }, 'Right bound is OK');
-});
-
-QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 2, 2),
-        height: 400,
-        width: 850,
-        hoursInterval: 1.5
-    });
-
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(1000);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 7, minutes: 30, date: new Date(2015, 2, 2) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 13, minutes: 30, date: new Date(2015, 2, 2) }, 'Right bound is OK');
-});
-
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
         const key = createFactoryInstances({
@@ -445,25 +387,6 @@ QUnit.module('Timeline Day, groupOrientation = horizontal', {
 
         this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
     }
-});
-
-QUnit.test('Get visible bounds, groupOrientation = horizontal', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 5, 30),
-        height: 400,
-        width: 950
-    });
-
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(0);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 0, minutes: 0, date: new Date(2015, 5, 30) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 2, minutes: 0, date: new Date(2015, 5, 30) }, 'Right bound is OK');
 });
 
 QUnit.test('Sidebar should not be visible in grouped mode, groupOrientation = horizontal', function(assert) {
@@ -597,74 +520,6 @@ QUnit.test('Timeline should find cell coordinates by date depend on start/end da
 
     assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(11).position().top, 'Cell coordinates are right');
     assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(11).position().left, 'Cell coordinates are right');
-});
-
-QUnit.test('Get visible bounds for timelineWeek on init', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 2, 2),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        height: 400,
-        width: 850
-    });
-
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(0);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 1, minutes: 0, date: new Date(2015, 2, 2) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 3, minutes: 0, date: new Date(2015, 2, 2) }, 'Right bound is OK');
-});
-
-QUnit.test('Get visible bounds for timelineWeek', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 2, 2),
-        firstDayOfWeek: 1,
-        height: 400,
-        width: 850
-    });
-    const scrollable = this.instance.getScrollable();
-
-    triggerShownEvent(this.instance.$element());
-
-    scrollable.scrollBy(10600);
-
-    const bounds = this.instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 2, 3) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 2, 3) }, 'Right bound is OK');
-});
-
-QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
-    const key = createFactoryInstances({
-        getIsVirtualScrolling: () => false,
-        getDataAccessors: () => {}
-    });
-    const observer = getObserver(key);
-
-    const instance = $('#scheduler-timeline-rtl').dxSchedulerTimelineWeek({
-        width: 850,
-        rtlEnabled: true,
-        currentDate: new Date(2015, 2, 2),
-        firstDayOfWeek: 1,
-        height: 400,
-        observer
-    }).dxSchedulerTimelineWeek('instance');
-
-    const scrollable = instance.getScrollable();
-
-    triggerShownEvent(instance.$element());
-
-    scrollable.scrollBy(-10600);
-
-    const bounds = instance.getVisibleBounds();
-
-    assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 2, 3) }, 'Left bound is OK');
-    assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 2, 3) }, 'Right bound is OK');
 });
 
 QUnit.module('Timeline Month', {

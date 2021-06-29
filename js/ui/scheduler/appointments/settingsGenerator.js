@@ -1,10 +1,11 @@
-import dateUtils from '../../core/utils/date';
-import { isEmptyObject } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-import { getRecurrenceProcessor } from './recurrence';
-import timeZoneUtils from './utils.timeZone.js';
-import { createResourcesTree } from './resources/utils';
-import { getTimeZoneCalculator } from './instanceFactory';
+import dateUtils from '../../../core/utils/date';
+import { isEmptyObject } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { getRecurrenceProcessor } from '../recurrence';
+import timeZoneUtils from '../utils.timeZone.js';
+import { createResourcesTree } from '../resources/utils';
+import { getTimeZoneCalculator } from '../instanceFactory';
+import { createAppointmentAdapter } from '../appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -34,8 +35,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     get viewDataProvider() { return this.workspace.viewDataProvider; }
 
     create(rawAppointment) {
-        const { scheduler } = this;
-        const appointment = scheduler.createAppointmentAdapter(rawAppointment);
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
         const resourceManager = this.scheduler.fire('getResourceManager');
         const itemResources = resourceManager.getResourcesFromItem(rawAppointment);
         const itemGroupIndices = this._getGroupIndices(itemResources, resourceManager);

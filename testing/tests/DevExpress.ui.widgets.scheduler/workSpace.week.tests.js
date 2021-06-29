@@ -625,7 +625,7 @@ module('Work Space Work Week', () => {
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
             this.instance.option('startDayHour', 5);
-            this.instance.option('firstDayOfWeek', 7);
+            this.instance.option('firstDayOfWeek', 5);
 
             const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(14).position().top, 1, 'Cell coordinates are right');

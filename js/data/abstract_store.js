@@ -3,7 +3,7 @@ const abstract = Class.abstract;
 import { EventsStrategy } from '../core/events_strategy';
 import { each } from '../core/utils/iterator';
 import { errors, handleError } from './errors';
-import dataUtils from './utils';
+import { processRequestResultLock } from './utils';
 import { compileGetter } from '../core/utils/data';
 import storeHelper from './store_helper';
 const queryByOptions = storeHelper.queryByOptions;
@@ -100,7 +100,7 @@ const Store = Class.inherit({
             const that = this;
             const args = arguments;
 
-            dataUtils.processRequestResultLock
+            processRequestResultLock
                 .promise()
                 .done(function() {
                     result.resolveWith(that, args);

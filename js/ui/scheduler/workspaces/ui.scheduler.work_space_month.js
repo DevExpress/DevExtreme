@@ -1,4 +1,3 @@
-import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
@@ -31,10 +30,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return false;
     }
 
-    _toggleFixedScrollableClass() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
-    }
-
     _getElementClass() {
         return MONTH_CLASS;
     }
@@ -45,13 +40,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getCellCount() {
         return DAYS_IN_WEEK;
-    }
-
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
     }
 
     _getFormat() {
@@ -112,23 +100,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         };
     }
 
-    _createWorkSpaceElements() {
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._createWorkSpaceScrollableElements();
-        } else {
-            super._createWorkSpaceElements();
-        }
-    }
-
     _needCreateCrossScrolling() {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
     }
-
-    _renderTimePanel() { return noop(); }
-    _renderAllDayPanel() { return noop(); }
-    _getTableAllDay() { return noop(); }
-    _toggleAllDayVisibility() { return noop(); }
-    _changeAllDayVisibility() { return noop(); }
 
     _setVisibilityDates() {
         const date = this._getViewStartByOptions();
@@ -179,18 +153,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _updateIndex(index) {
         return index;
-    }
-
-    _prepareCellData(rowIndex, columnIndex, cell) {
-        const data = super._prepareCellData(rowIndex, columnIndex, cell);
-        const $cell = $(cell);
-
-        $cell
-            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
-            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
-            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
-
-        return data;
     }
 
     _isCurrentDate(cellDate) {
@@ -258,22 +220,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    _getCellPositionByIndex(index, groupIndex) {
-        const position = super._getCellPositionByIndex(index, groupIndex);
-        const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
-        let calculatedTopOffset;
-        if(!this._isVerticalGroupedWorkSpace()) {
-            calculatedTopOffset = this.getCellHeight() * rowIndex;
-        } else {
-            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
-        }
-
-        if(calculatedTopOffset) {
-            position.top = calculatedTopOffset;
-        }
-        return position;
-    }
-
     _getHeaderDate() {
         return this._getViewStartByOptions();
     }
@@ -283,8 +229,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     scrollToTime() { return noop(); }
-
-    _createAllDayPanelElements() {}
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
@@ -328,7 +272,44 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return options;
     }
 
-    // TODO: Remove along with old render
+    // -------------
+    // We need these methods for now but they are useless for renovation
+    // -------------
+
+    _toggleFixedScrollableClass() {
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
+    }
+
+    _createWorkSpaceElements() {
+        if(this._isVerticalGroupedWorkSpace()) {
+            this._createWorkSpaceScrollableElements();
+        } else {
+            super._createWorkSpaceElements();
+        }
+    }
+
+    _getTableAllDay() { return noop(); } //
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
+
+    // --------------
+    // These methods should be deleted when we get rid of old render
+    // --------------
+
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
+
+    _setMonthClassesToCell($cell, data) {
+        $cell
+            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
+            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
+            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
+
+        return data;
+    }
+
+    _createAllDayPanelElements() {}
+
     _renderTableBody(options) {
         options.getCellText = (rowIndex, columnIndex) => {
             let validColumnIndex;
@@ -341,6 +322,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             return this._getCellText(rowIndex, validColumnIndex);
         };
         options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
+        options.setAdditionalClasses = this._setMonthClassesToCell.bind(this),
+
         super._renderTableBody(options);
     }
 }

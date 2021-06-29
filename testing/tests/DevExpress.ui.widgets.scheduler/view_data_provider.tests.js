@@ -1013,13 +1013,6 @@ module('View Data Provider', {
                 totalRowCount: 2,
                 verticalGroupCount: 1,
                 horizontalGroupCount: 2,
-                getDateHeaderText: (index) => index,
-                getDateHeaderDate: (index) => {
-                    const date = new Date(baseStartDate);
-                    date.setDate(10 + index);
-
-                    return date;
-                },
                 getTimeCellDate: (rowIndex) => {
                     const date = new Date(baseStartDate);
                     date.setHours(rowIndex);
@@ -1051,6 +1044,8 @@ module('View Data Provider', {
                 }],
                 isAllDayPanelVisible: false,
                 isGroupedByDate: false,
+                headerCellTextFormat: 'shorttime',
+                getDateForHeaderText: (_, date) => date,
             };
 
             module('groupedDataMap', () => {
@@ -1240,7 +1235,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 0,
-                    text: 0,
+                    text: '12:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
@@ -1251,7 +1246,7 @@ module('View Data Provider', {
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 1,
-                    text: 1,
+                    text: '12:00 AM',
                     today: false,
                 }, {
                     colSpan: 1,
@@ -1262,7 +1257,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
-                    text: 0,
+                    text: '12:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
@@ -1273,7 +1268,7 @@ module('View Data Provider', {
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 3,
-                    text: 1,
+                    text: '12:00 AM',
                     today: false,
                 }]];
 
@@ -1301,18 +1296,18 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
                     key: 0,
-                    text: 0,
+                    text: '12:00 AM',
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 10),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
                     key: 1,
-                    text: 1,
+                    text: '12:00 AM',
                     today: true,
                 }]];
 
@@ -1364,7 +1359,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 0,
-                    text: 0,
+                    text: '12:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
@@ -1375,7 +1370,7 @@ module('View Data Provider', {
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 1,
-                    text: 1,
+                    text: '12:00 AM',
                     today: false,
                 }, {
                     colSpan: 1,
@@ -1386,7 +1381,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
-                    text: 0,
+                    text: '12:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
@@ -1397,7 +1392,7 @@ module('View Data Provider', {
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 3,
-                    text: 1,
+                    text: '12:00 AM',
                     today: false,
                 }]];
 

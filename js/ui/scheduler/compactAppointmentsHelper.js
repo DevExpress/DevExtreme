@@ -8,6 +8,7 @@ import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
+import { createAppointmentAdapter } from './appointmentAdapter';
 
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -20,6 +21,7 @@ const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 export class CompactAppointmentsHelper {
     constructor(instance) {
         this.instance = instance;
+        this.key = this.instance.key;
         this.elements = [];
     }
 
@@ -49,7 +51,7 @@ export class CompactAppointmentsHelper {
 
     _createTooltipInfos(items) {
         return items.data.map((appointment, index) => {
-            const targetedAdapter = this.instance.createAppointmentAdapter(appointment).clone();
+            const targetedAdapter = createAppointmentAdapter(this.key, appointment).clone();
 
             if(items.settings?.length > 0) {
                 const { info } = items.settings[index];
