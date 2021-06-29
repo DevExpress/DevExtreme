@@ -170,3 +170,14 @@ export const getHeaderCellText = (
     const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
     return dateLocalization.format(validDate, headerCellTextFormat);
 };
+
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
