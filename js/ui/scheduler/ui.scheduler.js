@@ -465,8 +465,25 @@ class Scheduler extends Widget {
         ]);
     }
 
-    _getAppointmentSettingsGenerator() {
-        return new AppointmentSettingsGenerator(this);
+    _getAppointmentSettingsGenerator(rawAppointment) {
+        return new AppointmentSettingsGenerator({
+            rawAppointment,
+            key: this.key,
+            timeZoneCalculator: getTimeZoneCalculator(this.key),
+            resourceManager: getResourceManager(this.key),
+            appointmentTakesAllDay: this.appointmentTakesAllDay(rawAppointment),
+            timeZone: this.option('timeZone'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
+            viewStartDayHour: this._getCurrentViewOption('startDayHour'),
+            layoutManager: this.getLayoutManager(),
+            isVirtualScrolling: this.isVirtualScrolling(),
+            viewDataProvider: this.getWorkSpace().viewDataProvider,
+            supportAllDayRow: this.getWorkSpace().supportAllDayRow(),
+            dateRange: this.getWorkSpace().getDateRange(),
+            intervalDuration: this.getWorkSpace().getIntervalDuration(),
+            allDayIntervalDuration: this.getWorkSpace().getIntervalDuration(true),
+            workspace: this.getWorkSpace()
+        });
     }
 
     _postponeDataSourceLoading(promise) {
