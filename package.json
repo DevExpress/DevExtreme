@@ -30,9 +30,9 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/vdom": "1.2.2",
-    "devexpress-diagram": "2.1.19",
+    "devexpress-diagram": "2.1.20",
     "devexpress-gantt": "2.1.42",
-    "devextreme-quill": "~1.1.2",
+    "devextreme-quill": "~1.1.4",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
@@ -40,7 +40,7 @@
     "jszip": "^2.0.0 || ^3.0.0",
     "rrule": "2.6.6",
     "showdown": "^1.9.1",
-    "turndown": "^7.0.0"
+    "turndown": "~7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
