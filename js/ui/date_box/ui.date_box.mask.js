@@ -325,10 +325,6 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _prepareRegExpInfo() {
         this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
-        const regExp = this._regExpInfo.regexp;
-        const flags = regExp.flags;
-        const convertedRegExp = numberLocalization.convertDigits(this._regExpInfo.regexp.source, false);
-        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
     },
 
     _initMaskState() {
@@ -358,7 +354,8 @@ const DateBoxMask = DateBoxBase.inherit({
         const text = this.option('text') || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._regExpInfo);
+            const convertedText = numberLocalization.convertDigits(text, true);
+            this._dateParts = renderDateParts(convertedText, this._regExpInfo);
             if(!this._input().is(':hidden')) {
                 this._selectNextPart();
             }
