@@ -67,32 +67,16 @@ const createDateBoxEditor = (dataField, colSpan, firstDayOfWeek, label, onValueC
     };
 };
 
-const SchedulerAppointmentForm = {
-    _appointmentForm: null,
-    _lockDateShiftFlag: false,
+export class AppointmentForm {
+    constructor(scheduler) {
+        this.schedulerInst = scheduler;
+        this._appointmentForm = null;
+        this._lockDateShiftFlag = false;
 
-    create(componentCreator, formData) {
-        const element = $('<div>');
+        // this.create();
+    }
 
-        this._appointmentForm = componentCreator(element, Form, {
-            items: this._editors,
-            showValidationSummary: true,
-            scrollingEnabled: true,
-            colCount: 'auto',
-            colCountByScreen: {
-                lg: 2,
-                xs: 1
-            },
-            formData,
-            showColonAfterLabel: false,
-            labelLocation: 'top',
-            screenByWidth: (width) => {
-                return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
-            }
-        });
-    },
-
-    prepareAppointmentFormEditors(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
+    create(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
         const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
 
@@ -143,22 +127,22 @@ const SchedulerAppointmentForm = {
                 return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
             }
         });
-    },
+    }
 
-    _dateBoxValueChanged: function(args, dateExpr, isNeedCorrect) {
+    _dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
         validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
         const value = dateSerialization.deserializeDate(args.value);
         const previousValue = dateSerialization.deserializeDate(args.previousValue);
         const dateEditor = this._appointmentForm.getEditor(dateExpr);
         const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
-        if(!this._appointmentForm._lockDateShiftFlag && dateValue && value && isNeedCorrect(dateValue, value)) {
+        if(!this._lockDateShiftFlag && dateValue && value && isNeedCorrect(dateValue, value)) {
             const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
             dateEditor.option('value', new Date(value.getTime() + duration));
         }
-    },
+    }
 
-    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, visible = false) {
+    _createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, visible = false) {
         const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
 
         return {
@@ -184,9 +168,9 @@ const SchedulerAppointmentForm = {
             },
             visible
         };
-    },
+    }
 
-    _createDateBoxItems: function(dataExprs, schedulerInst, allowTimeZoneEditing) {
+    _createDateBoxItems(dataExprs, schedulerInst, allowTimeZoneEditing) {
         const colSpan = allowTimeZoneEditing ? 2 : 1;
         const firstDayOfWeek = schedulerInst.getFirstDayOfWeek();
 
@@ -215,9 +199,9 @@ const SchedulerAppointmentForm = {
 
             this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, allowTimeZoneEditing)
         ];
-    },
+    }
 
-    _changeFormItemDateType: function(itemPath, isAllDay) {
+    _changeFormItemDateType(itemPath, isAllDay) {
         const itemEditorOptions = this._appointmentForm.itemOption(itemPath).editorOptions;
 
         const type = isAllDay ? 'date' : 'datetime';
@@ -225,9 +209,9 @@ const SchedulerAppointmentForm = {
         const newEditorOption = { ...itemEditorOptions, type };
 
         this._appointmentForm.itemOption(itemPath, 'editorOptions', newEditorOption);
-    },
+    }
 
-    _createMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
+    _createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing) {
         return [
             {
                 dataField: dataExprs.textExpr,
@@ -268,7 +252,7 @@ const SchedulerAppointmentForm = {
                             const endDateEditor = this._appointmentForm.getEditor(dataExprs.endDateExpr);
                             const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                            if(!this._appointmentForm._lockDateShiftFlag && startDate) {
+                            if(!this._lockDateShiftFlag && startDate) {
                                 if(value) {
                                     const allDayStartDate = getAllDayStartDate(startDate);
                                     startDateEditor.option('value', allDayStartDate);
@@ -330,7 +314,7 @@ const SchedulerAppointmentForm = {
                 colSpan: 2
             }
         ];
-    },
+    }
 
     _createRecurrenceEditor(dataExprs, schedulerInst) {
         return [{
@@ -344,9 +328,9 @@ const SchedulerAppointmentForm = {
                 visible: false
             }
         }];
-    },
+    }
 
-    setEditorsType: function(startDateExpr, endDateExpr, allDay) {
+    setEditorsType(startDateExpr, endDateExpr, allDay) {
         const startDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Main}.${startDateExpr}`;
         const endDateItemPath = `${APPOINTMENT_FORM_GROUP_NAMES.Recurrence}.${endDateExpr}`;
 
@@ -362,7 +346,7 @@ const SchedulerAppointmentForm = {
             this._appointmentForm.itemOption(startDateItemPath, 'editorOptions', startDateEditorOptions);
             this._appointmentForm.itemOption(endDateItemPath, 'editorOptions', endDateEditorOptions);
         }
-    },
+    }
 
     updateTimeZoneEditorDataSource(date, expression) {
         const timeZoneDataSource = new DataSource({
@@ -374,23 +358,23 @@ const SchedulerAppointmentForm = {
         const options = { dataSource: timeZoneDataSource };
 
         this.setEditorOptions(expression, 'Main', options);
-    },
+    }
 
     updateRecurrenceEditorStartDate(date, expression) {
         const options = { startDate: date };
 
         this.setEditorOptions(expression, 'Recurrence', options);
-    },
+    }
 
     setEditorOptions(name, groupName, options) {
         const editorPath = `${APPOINTMENT_FORM_GROUP_NAMES.groupName}.${name}`;
         const editor = this._appointmentForm.itemOption(editorPath);
 
         editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
-    },
+    }
 
-    updateFormData: function(formData, dataExprs) {
-        this._appointmentForm._lockDateShiftFlag = true;
+    updateFormData(formData, dataExprs) {
+        this._lockDateShiftFlag = true;
 
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
@@ -400,10 +384,6 @@ const SchedulerAppointmentForm = {
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
         this._appointmentForm.option('formData', formData);
-        this._appointmentForm._lockDateShiftFlag = false;
+        this._lockDateShiftFlag = false;
     }
-};
-
-export {
-    SchedulerAppointmentForm as AppointmentForm
-};
+}

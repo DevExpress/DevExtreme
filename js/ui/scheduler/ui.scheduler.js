@@ -33,6 +33,7 @@ import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
 import { AppointmentPopup, ACTION_TO_APPOINTMENT } from './appointmentPopup/popup';
+import { AppointmentForm } from './appointmentPopup/form';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
@@ -1289,7 +1290,9 @@ class Scheduler extends Widget {
             }
         };
 
-        return new AppointmentPopup(scheduler);
+        const form = new AppointmentForm(scheduler);
+
+        return new AppointmentPopup(scheduler, form);
     }
 
     _getAppointmentTooltipOptions() {

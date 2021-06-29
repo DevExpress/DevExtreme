@@ -9,7 +9,6 @@ import { getWindow, hasWindow } from '../../../core/utils/window';
 import { triggerResizeEvent } from '../../../events/visibility_change';
 import messageLocalization from '../../../localization/message';
 import Popup from '../../popup';
-import { AppointmentForm } from './form';
 import { hide as hideLoading, show as showLoading } from '../loading';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { ExpressionUtils } from '../expressionUtils';
@@ -38,8 +37,9 @@ export const ACTION_TO_APPOINTMENT = {
 };
 
 export class AppointmentPopup {
-    constructor(scheduler) {
+    constructor(scheduler, form) {
         this.scheduler = scheduler;
+        this.form = form;
 
         this._popup = null;
 
@@ -58,7 +58,7 @@ export class AppointmentPopup {
     get key() { return this.scheduler.getKey(); }
 
     get _appointmentForm() { // TODO
-        return AppointmentForm._appointmentForm;
+        return this.form._appointmentForm;
     }
 
     show(appointment, config) {
@@ -126,7 +126,7 @@ export class AppointmentPopup {
         this._updateForm();
 
         const arg = {
-            form: AppointmentForm._appointmentForm,
+            form: this.form._appointmentForm,
             popup: this._popup,
             appointmentData: this.state.appointment.data,
             cancel: false
@@ -144,7 +144,7 @@ export class AppointmentPopup {
 
     _createPopupContent() { // TODO
         this._createForm();
-        return AppointmentForm._appointmentForm.$element();
+        return this.form._appointmentForm.$element();
     }
 
     _createAppointmentFormData(rawAppointment) {
@@ -163,7 +163,7 @@ export class AppointmentPopup {
         const rawAppointment = this.state.appointment.data;
         const formData = this._createAppointmentFormData(rawAppointment);
 
-        AppointmentForm.prepareAppointmentFormEditors(
+        this.form.create(
             expr,
             this.scheduler,
             this.triggerResize.bind(this),
@@ -229,10 +229,10 @@ export class AppointmentPopup {
 
         const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
-        AppointmentForm._appointmentForm.option('readOnly', this._isReadOnly(data));
+        this.form._appointmentForm.option('readOnly', this._isReadOnly(data));
 
-        AppointmentForm.updateFormData(formData, this.scheduler.getDataAccessors().expr);
-        AppointmentForm.setEditorsType(startDateExpr, endDateExpr, allDay);
+        this.form.updateFormData(formData, this.scheduler.getDataAccessors().expr);
+        this.form.setEditorsType(startDateExpr, endDateExpr, allDay);
     }
 
     _isDeviceMobile() {
@@ -274,8 +274,8 @@ export class AppointmentPopup {
     }
 
     updatePopupFullScreenMode() {
-        if(AppointmentForm._appointmentForm) {
-            const formData = AppointmentForm._appointmentForm.option('formData');
+        if(this.form._appointmentForm) {
+            const formData = this.form._appointmentForm.option('formData');
             const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
 
             if(this.isVisible()) {
@@ -306,7 +306,7 @@ export class AppointmentPopup {
 
     saveChanges(showLoadPanel) {
         const deferred = new Deferred();
-        const validation = AppointmentForm._appointmentForm.validate();
+        const validation = this.form._appointmentForm.validate();
         const state = this.state.appointment;
 
         showLoadPanel && this._showLoadPanel();
@@ -318,7 +318,7 @@ export class AppointmentPopup {
                 return;
             }
 
-            const formData = AppointmentForm._appointmentForm.option('formData');
+            const formData = this.form._appointmentForm.option('formData');
             const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
