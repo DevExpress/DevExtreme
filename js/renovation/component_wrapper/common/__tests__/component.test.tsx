@@ -65,6 +65,23 @@ describe('Misc cases', () => {
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
   });
 
+  it('on repaint should clean effects', () => {
+    const subscribeEffect = jest.fn();
+    const unsubscribeEffect = jest.fn();
+    const instance = $('#component').dxTestWidget({
+      subscribeEffect,
+      unsubscribeEffect,
+    }).dxTestWidget('instance');
+
+    expect(subscribeEffect).toHaveBeenCalledTimes(1);
+    expect(unsubscribeEffect).toHaveBeenCalledTimes(0);
+
+    instance.repaint();
+
+    expect(subscribeEffect).toHaveBeenCalledTimes(2);
+    expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
+  });
+
   it('should not throw error on disposing nested widget when call "empty()" on parent node', () => {
     const $component = $('#component');
 
