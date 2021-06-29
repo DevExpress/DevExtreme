@@ -408,7 +408,7 @@ export default class TableResizingModule extends BaseModule {
         if(options.direction === 'vertical') {
             result.boundary = options.frame.$table;
             result.boundOffset = {
-                bottom: hasWindow() ? -$(getWindow()).height() : -$(this._quillContainer).outerHeight,
+                bottom: hasWindow() ? -$(getWindow()).height() : -$(this._quillContainer).outerHeight(),
                 top: 0,
                 left: 0,
                 right: 0
