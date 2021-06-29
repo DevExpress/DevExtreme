@@ -84,16 +84,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getFrameForTable($table) {
-        let result;
-
-        each(this._tableResizeFrames, (_, frame) => {
-            if(frame.$table.get(0) === $table.get(0)) {
-                result = frame;
-                return false;
-            }
-        });
-
-        return result;
+        return this._framesForTables($table.get(0));
     }
 
     _resizeHandler() {
@@ -166,6 +157,8 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _createResizeFrames($tables) {
+        this._framesForTables = new Map();
+
         $tables.each((index, table) => {
             const $table = $(table);
             const $lastTable = this._tableResizeFrames[index]?.$table;
@@ -178,6 +171,8 @@ export default class TableResizingModule extends BaseModule {
                 columnsCount: this._getTableDeterminantElements($table, 'horizontal').length,
                 rowsCount: this._getTableDeterminantElements($table, 'vertical').length
             };
+
+            this._framesForTables.set(table, this._tableResizeFrames[index]);
         });
 
         this._tableResizeFrames.length = $tables.length;
@@ -211,10 +206,11 @@ export default class TableResizingModule extends BaseModule {
             $item.$frame.remove();
         });
 
+        this._framesForTables?.clear();
+
         if(clearArray) {
             this._tableResizeFrames = [];
         }
-
     }
 
     _detachSeparatorEvents($lineSeparators) {
