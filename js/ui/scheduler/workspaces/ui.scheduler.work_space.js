@@ -160,10 +160,6 @@ class ScrollSemaphore {
     }
 }
 
-const formatWeekday = function(date) {
-    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
-};
-
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
@@ -1988,14 +1984,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _supportCompactDropDownAppointments() {
         return true;
-    }
-
-    _formatWeekday(date) {
-        return formatWeekday(date);
-    }
-
-    _formatWeekdayAndDay(date) {
-        return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
     }
 
     removeDroppableCellClass($cellElement) {

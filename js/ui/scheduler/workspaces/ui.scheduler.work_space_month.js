@@ -11,6 +11,7 @@ import {
     getViewStartByOptions,
     calculateCellIndex,
 } from './utils/month';
+import { formatWeekday } from './utils/base';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -43,7 +44,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getFormat() {
-        return this._formatWeekday;
+        return formatWeekday;
     }
 
     _getInterval() {

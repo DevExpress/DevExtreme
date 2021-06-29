@@ -170,3 +170,11 @@ export const getHeaderCellText = (
     const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
     return dateLocalization.format(validDate, headerCellTextFormat);
 };
+
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
