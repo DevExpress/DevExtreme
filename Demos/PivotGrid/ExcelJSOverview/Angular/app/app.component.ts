@@ -3,14 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
 import { Service, Sale } from './app.service';
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import ExcelJS from 'exceljs';
-import saveAs from 'file-saver';
-/*
-  // Use this import for codeSandBox
-  import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
-  import * as FileSaver from 'file-saver';
-*/
 
 if(!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -56,7 +51,7 @@ export class AppComponent {
   }
   
   onExporting(e) {
-    const workbook = new ExcelJS.Workbook();
+    const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
     
     exportPivotGrid({

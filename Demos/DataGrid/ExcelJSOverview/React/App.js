@@ -1,13 +1,8 @@
 ﻿import React from 'react';
 import DataGrid, { Column, Export, Selection, GroupPanel, Grouping } from 'devextreme-react/data-grid';
-import ExcelJS from 'exceljs';
-import saveAs from 'file-saver';
-/*
-  // Use this import for codeSandBox
-  import FileSaver from 'file-saver';
-*/
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
-
 import service from './data.js';
 
 class App extends React.Component {
@@ -44,7 +39,7 @@ class App extends React.Component {
   }
 
   onExporting(e) {
-    const workbook = new ExcelJS.Workbook();
+    const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Main sheet');
 
     exportDataGrid({

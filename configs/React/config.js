@@ -57,7 +57,7 @@ window.config = {
 
     /** exceljs&file-saver */
     'exceljs': 'npm:exceljs/dist/exceljs.js',
-    'file-saver': 'npm:file-saver/FileSaver.js',
+    'file-saver': 'npm:file-saver/dist/FileSaver.js',
     /**/
 
     /** jspdf&jspdf-autotable */

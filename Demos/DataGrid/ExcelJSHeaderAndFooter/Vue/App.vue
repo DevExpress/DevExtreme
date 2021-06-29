@@ -55,12 +55,8 @@
 <script>
 
 import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
-import ExcelJS from 'exceljs';
-import saveAs from 'file-saver';
-/*
-  // Use this import for codeSandBox
-  import FileSaver from 'file-saver';
-*/
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import { countries } from './data.js';
 
@@ -81,7 +77,7 @@ export default {
   },
   methods: {
     onExporting(e) {
-      const workbook = new ExcelJS.Workbook();
+      const workbook = new Workbook();
       const worksheet = workbook.addWorksheet('CountriesPopulation');
 
       exportDataGrid({

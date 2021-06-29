@@ -2,12 +2,8 @@
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import ExcelJS from 'exceljs';
-import saveAs from 'file-saver';
-/*
-  // Use this import for codeSandBox
-  import FileSaver from 'file-saver';
-*/
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import 'devextreme/data/odata/store';
 
@@ -72,7 +68,7 @@ class App extends React.Component {
 
   exportGrids = () => {
     const context = this;
-    const workbook = new ExcelJS.Workbook();
+    const workbook = new Workbook();
     const priceSheet = workbook.addWorksheet('Price');
     const ratingSheet = workbook.addWorksheet('Rating');
 

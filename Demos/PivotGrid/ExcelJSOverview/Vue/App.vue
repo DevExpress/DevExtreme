@@ -18,13 +18,9 @@ import DxPivotGrid, {
   DxFieldChooser
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import ExcelJS from 'exceljs';
-import saveAs from 'file-saver';
-/*
-  // Use this import for codeSandBox
-  import FileSaver from 'file-saver';
-*/
 import { sales } from './data.js';
 
 export default {
@@ -65,7 +61,7 @@ export default {
   },
   methods: {
     onExporting(e) {
-      const workbook = new ExcelJS.Workbook();
+      const workbook = new Workbook();
       const worksheet = workbook.addWorksheet('Sales');
 
       exportPivotGrid({
