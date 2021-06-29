@@ -71,10 +71,63 @@ const SchedulerAppointmentForm = {
     _appointmentForm: {},
     _lockDateShiftFlag: false,
 
-    create: function(componentCreator, formData) {
+    create(componentCreator, formData) {
         const element = $('<div>');
 
         this._appointmentForm = componentCreator(element, Form, {
+            items: this._editors,
+            showValidationSummary: true,
+            scrollingEnabled: true,
+            colCount: 'auto',
+            colCountByScreen: {
+                lg: 2,
+                xs: 1
+            },
+            formData,
+            showColonAfterLabel: false,
+            labelLocation: 'top',
+            screenByWidth: (width) => {
+                return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
+            }
+        });
+    },
+
+    prepareAppointmentFormEditors(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
+        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
+        const colSpan = recurrenceEditorVisibility ? 1 : 2;
+
+        const resourceManager = schedulerInst.getResourceManager();
+
+        const mainItems = [
+            ...this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
+            ...resourceManager.getEditors()
+        ];
+
+        changeSize(recurrenceEditorVisibility);
+        this._editors = [
+            {
+                itemType: 'group',
+                name: APPOINTMENT_FORM_GROUP_NAMES.Main,
+                colCountByScreen: {
+                    lg: 2,
+                    xs: 1
+                },
+                colSpan,
+                items: mainItems,
+            }, {
+                itemType: 'group',
+                name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
+                visible: recurrenceEditorVisibility,
+                colSpan,
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst),
+            }
+        ];
+
+        // TODO
+
+        const element = $('<div>');
+
+        this._appointmentForm = schedulerInst.createComponent(element, Form, {
             items: this._editors,
             showValidationSummary: true,
             scrollingEnabled: true,
@@ -277,40 +330,6 @@ const SchedulerAppointmentForm = {
                 colSpan: 2
             }
         ];
-    },
-
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing) {
-        const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
-        const colSpan = recurrenceEditorVisibility ? 1 : 2;
-
-        const resourceManager = schedulerInst.getResourceManager();
-
-        const mainItems = [
-            ...this._createMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowTimeZoneEditing),
-            ...resourceManager.getEditors()
-        ];
-
-        changeSize(recurrenceEditorVisibility);
-        this._editors = [
-            {
-                itemType: 'group',
-                name: APPOINTMENT_FORM_GROUP_NAMES.Main,
-                colCountByScreen: {
-                    lg: 2,
-                    xs: 1
-                },
-                colSpan,
-                items: mainItems,
-            }, {
-                itemType: 'group',
-                name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
-                visible: recurrenceEditorVisibility,
-                colSpan,
-                items: this._createRecurrenceEditor(dataExprs, schedulerInst),
-            }
-        ];
-
-        return this._editors;
     },
 
     _createRecurrenceEditor(dataExprs, schedulerInst) {

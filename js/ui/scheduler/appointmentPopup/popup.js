@@ -169,12 +169,8 @@ export class AppointmentPopup {
             this.triggerResize.bind(this),
             this.changeSize.bind(this),
             formData,
-            allowTimeZoneEditing
-        );
-
-        AppointmentForm.create(
-            (element, component, options) => this.scheduler.createComponent(element, component, options),
-            formData,
+            allowTimeZoneEditing,
+            formData
         );
     }
 
