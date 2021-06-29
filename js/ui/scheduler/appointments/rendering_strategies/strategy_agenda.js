@@ -1,8 +1,8 @@
-import dateUtils from '../../../core/utils/date';
-import { each } from '../../../core/utils/iterator';
-import { merge } from '../../../core/utils/array';
-import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
-import { ExpressionUtils } from '../expressionUtils';
+import dateUtils from '../../../../core/utils/date';
+import { each } from '../../../../core/utils/iterator';
+import { merge } from '../../../../core/utils/array';
+import BaseRenderingStrategy from './strategy.base';
+import { ExpressionUtils } from '../../expressionUtils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {

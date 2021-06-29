@@ -54,7 +54,7 @@ import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { AppointmentTooltipInfo } from './dataStructures';
-import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
+import { AppointmentSettingsGenerator } from './appointments/settingsGenerator';
 import { utils } from './utils';
 import {
     createFactoryInstances,
