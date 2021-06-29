@@ -42,13 +42,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return DAYS_IN_WEEK;
     }
 
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
-    }
-
     _getFormat() {
         return this._formatWeekday;
     }

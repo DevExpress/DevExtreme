@@ -163,3 +163,10 @@ export const prepareAllDayCellData = (options, rowIndex, columnIndex) => {
         allDay: true,
     };
 };
+
+export const getHeaderCellText = (
+    headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
+) => {
+    const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
+    return dateLocalization.format(validDate, headerCellTextFormat);
+};

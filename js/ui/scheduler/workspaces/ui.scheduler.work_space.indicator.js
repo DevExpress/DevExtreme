@@ -189,7 +189,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _isCurrentTimeHeaderCell(headerIndex) {
         if(this.isIndicationOnView()) {
-            const date = this._getDateByIndex(headerIndex);
+            const completeDateHeaderMap = this.viewDataProvider.completeDateHeaderMap;
+            const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
+
             return dateUtils.sameDate(date, this._getToday());
         }
 

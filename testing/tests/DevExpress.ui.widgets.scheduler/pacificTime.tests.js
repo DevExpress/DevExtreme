@@ -223,13 +223,26 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             '4:00 PM', '', '5:00 PM', '', '6:00 PM', '', '7:00 PM', '', '8:00 PM', '', '9:00 PM', '', '10:00 PM', '', '11:00 PM', ''
         ];
 
-        const testCases = [
-            { view: 'week', times: expectedShortTimes },
-            { view: 'day', times: expectedShortTimes },
-            { view: 'timelineDay', times: expectedAllTimes },
-            { view: 'timelineWeek', times: expectedAllTimes }
-        ];
+        const expectedHeaderDateResults = (() => {
+            const result = [];
+            let startHours = 0;
+            let currentDate = new Date(summerDSTDate);
 
+            while(currentDate.getDate() < 9) {
+                result.push(new Date(currentDate));
+                startHours += 0.5;
+                currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
+
+                if(startHours === 2 || startHours === 2.5) {
+                    const validStartHour = startHours - 1;
+                    currentDate = new Date(new Date(summerDSTDate).setHours(validStartHour - (validStartHour % 1), validStartHour % 1 * 60));
+                }
+            }
+
+            return result;
+        })();
+
+        // TODO: dates should be the same in different views
         const expectedDateResults = (() => {
             const result = [];
             let startHours = 0;
@@ -244,6 +257,13 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             return result;
         })();
 
+        const testCases = [
+            { view: 'week', times: expectedShortTimes, dates: expectedDateResults },
+            { view: 'day', times: expectedShortTimes, dates: expectedDateResults },
+            { view: 'timelineDay', times: expectedAllTimes, dates: expectedHeaderDateResults },
+            { view: 'timelineWeek', times: expectedAllTimes, dates: expectedHeaderDateResults }
+        ];
+
         [true, false].forEach((renovateRender) => {
             module('timeCellTemplate', () => {
                 testCases.forEach(testCase => {
@@ -254,7 +274,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                             dataSource: [],
                             timeCellTemplate: arg => {
                                 if(index < expectedAllTimes.length) {
-                                    assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                    assert.equal(arg.date.valueOf(), testCase.dates[index].valueOf(), 'arg.date should be valid');
                                     assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
 
                                     index++;
@@ -274,7 +294,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
                         let index = 0;
 
-                        const validExpectedDateResults = expectedDateResults.slice(4);
+                        const validExpectedDateResults = testCase.dates.slice(4);
                         const times = testCase.times.slice(4);
 
                         createWrapper({
