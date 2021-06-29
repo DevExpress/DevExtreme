@@ -201,9 +201,11 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _removeResizeFrames(clearArray) {
-        each(this._tableResizeFrames, (index, $item) => {
-            this._detachSeparatorEvents($item.$frame.find(`.${DX_COLUMN_RESIZER_CLASS}, .${DX_ROW_RESIZER_CLASS}`));
-            $item.$frame.remove();
+        each(this._tableResizeFrames, (index, resizeFrame) => {
+            if(resizeFrame.$frame) {
+                this._detachSeparatorEvents(resizeFrame.$frame?.find('.' + DX_COLUMN_RESIZER_CLASS + ', .' + DX_ROW_RESIZER_CLASS));
+                resizeFrame.$frame.remove();
+            }
         });
 
         this._framesForTables?.clear();
