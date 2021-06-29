@@ -111,10 +111,16 @@ export class CollectionWidgetItem {
 export class ToolbarItem extends CollectionWidgetItem {
   // js\ui\toolbar.d.ts - export interface dxToolbarItem extends CollectionWidgetItem {
 
-  /*
+  @OneWay()
   cssClass?: string;
+
+  @OneWay()
   locateInMenu?: 'always' | 'auto' | 'never';
+
+  @OneWay()
   location?: 'after' | 'before' | 'center';
+
+  /*
   menuItemTemplate?: template | (() => string | UserDefinedElement);
   options?: any;
   showText?: 'always' | 'inMenu';
