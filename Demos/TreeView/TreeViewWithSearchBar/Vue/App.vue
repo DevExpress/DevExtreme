@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       products: products,
-      options: ['contains', 'startswith'],
+      options: ['contains', 'startswith', 'equals'],
       searchMode: 'contains'
     };
   }

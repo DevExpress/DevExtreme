@@ -16,6 +16,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         bindingOptions: {
             value: "searchMode"
         },
-    	items: ["contains", "startswith"]
+    	items: ["contains", "startswith", "equals"]
     };
 });

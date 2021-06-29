@@ -6,7 +6,7 @@ $(function(){
     }).dxTreeView("instance");
 
     $("#searchMode").dxSelectBox({
-        items: ["contains", "startswith"],
+        items: ["contains", "startswith", "equals"],
         value: "contains",
         onValueChanged: function(data) {
             treeView.option("searchMode", data.value);

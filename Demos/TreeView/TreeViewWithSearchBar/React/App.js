@@ -5,7 +5,7 @@ import SelectBox from 'devextreme-react/select-box';
 
 import { products } from './data.js';
 
-const options = ['contains', 'startswith'];
+const options = ['contains', 'startswith', 'equals'];
 
 class App extends React.Component {
   constructor(props) {
