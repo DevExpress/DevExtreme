@@ -1,4 +1,4 @@
-import HorizontalMonthLineAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal_month_line';
+import HorizontalMonthLineAppointmentsStrategy from './strategy_horizontal_month_line';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
