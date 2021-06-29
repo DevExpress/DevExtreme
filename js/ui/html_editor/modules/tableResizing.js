@@ -15,6 +15,7 @@ const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
 const DEFAULT_MIN_COLUMN_WIDTH = 40;
+const DEFAULT_MIN_ROW_HEIGHT = DEFAULT_MIN_COLUMN_WIDTH / 2;
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
 
@@ -29,7 +30,7 @@ export default class TableResizingModule extends BaseModule {
         this.enabled = !!options.enabled;
         this._tableResizeFrames = [];
         this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
-        this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_COLUMN_WIDTH / 2;
+        this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_ROW_HEIGHT;
         this._quillContainer = this.editorInstance._getQuillContainer();
         this._tableData = [];
 
@@ -64,7 +65,7 @@ export default class TableResizingModule extends BaseModule {
 
     _getQuillTextChangeHandler(delta, oldContent, source) {
         return (delta, oldContent, source) => {
-            if(this._isTableChanges()) {
+            if(this._isTableChanging()) {
 
                 const $tables = this._findTables();
                 this._removeResizeFrames();
@@ -95,7 +96,6 @@ export default class TableResizingModule extends BaseModule {
         return result;
     }
 
-
     _resizeHandler() {
         this._windowResizeTimeout = setTimeout(() => {
             const $tables = this._findTables();
@@ -120,7 +120,7 @@ export default class TableResizingModule extends BaseModule {
 
     _getWidthAttrValue($element) {
         const attrValue = $element.attr('width');
-        return attrValue ? parseInt(attrValue.replace('px', '')) : undefined;
+        return attrValue ? parseInt(attrValue) : undefined;
     }
 
     _tableLastWidth(frame, newValue) {
@@ -183,7 +183,7 @@ export default class TableResizingModule extends BaseModule {
         this._tableResizeFrames.length = $tables.length;
     }
 
-    _isTableChanges() {
+    _isTableChanging() {
         const $tables = this._findTables();
 
         let result = false;
@@ -193,8 +193,10 @@ export default class TableResizingModule extends BaseModule {
             each($tables, (index, table) => {
                 const $table = $(table);
                 const frame = this._tableResizeFrames[index];
+                const isColumnsCountChanged = frame?.columnsCount !== this._getTableDeterminantElements($table, 'horizontal').length;
+                const isRowCountChanged = frame?.rowsCount !== this._getTableDeterminantElements($table, 'vertical').length;
 
-                if(!frame || frame.columnsCount !== this._getTableDeterminantElements($table, 'horizontal').length || frame.rowsCount !== this._getTableDeterminantElements($table, 'vertical').length) {
+                if(isColumnsCountChanged || isRowCountChanged) {
                     result = true;
                     return false;
                 }

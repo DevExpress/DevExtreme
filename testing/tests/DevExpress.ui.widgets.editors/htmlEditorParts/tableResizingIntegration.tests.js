@@ -262,7 +262,7 @@ module('Table resizing integration', {
 
         test('Resizing should works correctly after widgets content vertical scrolling', function(assert) {
             this.createWidget({
-                value: '1<br>' + tableMarkup + '1<br>' + '1<br>' + '1<br>' + '1<br>' + '1<br>',
+                value: `1<br> ${tableMarkup} 1<br>1<br>1<br>1<br>1<br>`,
                 height: 80
             });
             this.clock.tick(TIME_TO_WAIT);
@@ -376,7 +376,7 @@ module('Table resizing integration', {
         });
 
 
-        test('minColumnWidth option should works for zero value', function(assert) {
+        test('minColumnWidth option should work for zero value', function(assert) {
             this.createWidget({ width: 430, tableResizing: { enabled: true, minColumnWidth: 0 } });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -578,7 +578,7 @@ module('Table resizing integration', {
     });
 
     module('Resizers boundaries', {}, () => {
-        test('Boundary should has bottom boundary offset we use vertical drag', function(assert) {
+        test('Boundary should have bottom boundary offset we use vertical drag', function(assert) {
             this.createWidget({ width: 430, tableResizing: { enabled: true } });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -1138,7 +1138,7 @@ module('Table resizing integration', {
             checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
         });
 
-        test('Table should has a correct width if it has not anough place after insert rows', function(assert) {
+        test('Table should have a correct width if it has not anough place after insert rows', function(assert) {
             assert.expect(17);
 
             const minColumnWidth = 40;
