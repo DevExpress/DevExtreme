@@ -17,7 +17,7 @@ import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
 import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import { ScrollableProps } from './scrollable_props';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './types';
