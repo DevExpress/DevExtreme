@@ -32,7 +32,6 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 
 QUnit.module('rendering', () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -488,7 +487,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 constructor(direction) {
                     this._direction = direction;
                     this._isVerticalDirection = this._direction === 'vertical';
-                    this.$scrollable = this._getScrollable();
+                    this.scrollable = this._getScrollable();
                     this.$textArea = this._getTextArea();
                     this.$textAreaInput = this.$textArea.find(`.${INPUT_CLASS}`);
                     if(!this._isVerticalDirection) {
@@ -504,7 +503,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                         useNative: false,
                         direction: this._direction,
                         showScrollbar: 'always',
-                    });
+                    }).dxScrollable('instance');
                 }
 
                 _getTextArea() {
@@ -519,16 +518,12 @@ QUnit.module('TextArea in simulated scrollable', () => {
                     return this.$textAreaInput.get(0)[`scroll${prop}`] - this.$textAreaInput.get(0)[`client${prop}`];
                 }
 
-                getScrollableContainer() {
-                    return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-                }
-
-                setPosition($element, scrollPosition) {
-                    this._isVerticalDirection ? $element.scrollTop(scrollPosition) : $element.scrollLeft(scrollPosition);
+                setTextAreaScrollPosition(scrollPosition) {
+                    this.$textAreaInput.get(0)[this._isVerticalDirection ? 'scrollTop' : 'scrollLeft'] = scrollPosition;
                 }
 
                 checkAsserts(assert, expectedOffset) {
-                    const $container = this.getScrollableContainer();
+                    const $container = $(this.scrollable.container());
 
                     if(this._isVerticalDirection) {
                         assert.strictEqual($container.scrollTop(), expectedOffset, 'scrollTop()');
@@ -544,9 +539,8 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 100);
+                helper.scrollable.scrollTo(100);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
@@ -559,10 +553,9 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 50);
-                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue);
+                helper.scrollable.scrollTo(50);
+                helper.setTextAreaScrollPosition(helper.maxScrollValue);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
@@ -575,10 +568,9 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 100);
-                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue / 2);
+                helper.scrollable.scrollTo(100);
+                helper.setTextAreaScrollPosition(helper.maxScrollValue / 2);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
@@ -588,7 +580,6 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
             });
-
         });
     }
 });
