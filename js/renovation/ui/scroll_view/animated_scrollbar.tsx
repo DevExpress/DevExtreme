@@ -248,10 +248,16 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation));
-    }
+      const boundaryLocation = this.getLocationWithinRange(this.props.scrollLocation);
 
-    this.scrollComplete();
+      this.moveTo(boundaryLocation);
+
+      if (this.props.scrollLocation === boundaryLocation) {
+        this.scrollComplete();
+      }
+    } else {
+      this.scrollComplete();
+    }
   }
 
   get isBounceAnimator(): boolean {
