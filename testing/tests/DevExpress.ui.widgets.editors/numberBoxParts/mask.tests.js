@@ -2006,7 +2006,7 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
         assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1 + 1, '+ 1 -> format after typing');
     });
 
-    QUnit.test('custom formatter can be passed right to "format" property', function(assert) {
+    QUnit.test('custom formatter can be passed right to "format" property (T1010539)', function(assert) {
         let callCount = 0;
         this.instance.option({
             format: () => {
