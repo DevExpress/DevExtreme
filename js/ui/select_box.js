@@ -746,7 +746,7 @@ const SelectBox = DropDownList.inherit({
         this._wasSearchValue = value;
     },
 
-    _searchHandler: function(e) {
+    _searchHandler: function() {
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
@@ -756,7 +756,7 @@ const SelectBox = DropDownList.inherit({
             this._wasSearch(true);
         }
 
-        this.callBase(e);
+        this.callBase(arguments);
     },
 
     _dataSourceFiltered: function(searchValue) {
