@@ -23,7 +23,7 @@ export interface TextItem {
   height?: number;
   line?: number;
   inherits?: boolean;
-  style?: { [key: string]: any };
+  style?: Record<string, string>;
   className?: string;
   tspan?: SVGTSpanElement;
   stroke?: SVGTSpanElement;
@@ -168,8 +168,8 @@ export const combinePathParam = (segments: Segment[]): string => {
 };
 
 function prepareConstSegment(constSeg: Segment, type: PathType): void {
-  const x: any = constSeg[constSeg.length - 2];
-  const y: any = constSeg[constSeg.length - 1];
+  const x = constSeg[constSeg.length - 2] as number | undefined;
+  const y = constSeg[constSeg.length - 1] as number | undefined;
 
   if (type === 'line' || type === 'area') {
     constSeg[0] = 'L';
@@ -244,13 +244,13 @@ export const getElementBBox = (element: Element): SVGRect => {
 };
 
 function maxLengthFontSize(fontSize1?: number, fontSize2?: number): number {
-  const height1 = fontSize1 || DEFAULT_FONT_SIZE;
-  const height2 = fontSize2 || DEFAULT_FONT_SIZE;
+  const height1 = fontSize1 ?? DEFAULT_FONT_SIZE;
+  const height2 = fontSize2 ?? DEFAULT_FONT_SIZE;
 
   return height1 > height2 ? height1 : height2;
 }
 
-function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: any, parentClassName: string): number {
+function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: Record<string, string>, parentClassName: string): number {
   const realStyle = (node as HTMLElement).style;
 
   if (isDefined((node as Text).wholeText)) {
@@ -264,7 +264,7 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
   } else if ((node as Element).tagName === 'BR') {
     ++line;
   } else if (domAdapter.isElementNode(node)) {
-    const style = extend({}, parentStyle);
+    const style = extend({}, parentStyle) as Record<string, string>;
     switch ((node as Element).tagName) {
       case 'B':
       case 'STRONG':
@@ -300,7 +300,7 @@ function adjustLineHeights(items: TextItem[]): void {
     if (item.line === currentItem.line) {
       // T177039
       currentItem.height = maxLengthFontSize(currentItem.height, item.height);
-      currentItem.inherits = currentItem.inherits || item.height === 0;
+      currentItem.inherits = !!currentItem.inherits || item.height === 0;
       item.height = NaN;
     } else {
       currentItem = item;
@@ -312,8 +312,8 @@ export const removeExtraAttrs = (html: string): string => {
   const findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi;
   const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
-  return html.replace(findTagAttrs, (_, p1, p2, p3) => {
-    p2 = (p2?.match(findStyleAndClassAttrs) || []).map((str: string) => str).join(' ');
+  return html.replace(findTagAttrs, (_, p1: string, p2: string, p3: string) => {
+    p2 = (p2?.match(findStyleAndClassAttrs) ?? []).map((str: string) => str).join(' ');
     return p1 + p2 + p3;
   });
 };
@@ -342,18 +342,17 @@ export const getTextWidth = (text: TextItem): number => {
   return value.length && tspan ? tspan.getSubStringLength(0, value.length) : 0;
 };
 
-export const setTextNodeAttribute = (item: TextItem, name: string, value: any): void => {
+export const setTextNodeAttribute = (item: TextItem, name: string, value: string): void => {
   item.tspan?.setAttribute(name, value);
   item.stroke?.setAttribute(name, value);
 };
 
 export const getItemLineHeight = (item: TextItem, defaultValue: number): number => (
-  item.inherits ? maxLengthFontSize(item.height, defaultValue) : item.height || defaultValue
+  item.inherits ? maxLengthFontSize(item.height, defaultValue) : Number(item.height) || defaultValue
 );
 
-export const getLineHeight = (styles: { [key: string]: any } | undefined): number => (
-  // eslint-disable-next-line no-restricted-globals
-  styles && !isNaN(parseFloat(styles[KEY_FONT_SIZE])) ? parseFloat(styles[KEY_FONT_SIZE]) : DEFAULT_FONT_SIZE
+export const getLineHeight = (styles: Record<string, unknown>): number => (
+  styles && !Number.isNaN(parseFloat(styles[KEY_FONT_SIZE] as string)) ? parseFloat(styles[KEY_FONT_SIZE] as string) : DEFAULT_FONT_SIZE
 );
 
 export const textsAreEqual = (newItems: TextItem[], renderedItems?: TextItem[]): boolean => {
@@ -381,16 +380,16 @@ function getTransformation(props: SvgGraphicsProps, x?: number, y?: number): str
   } = props;
   const transformations: string[] = [];
   const transDir = sharpDirection === 'backward' ? -1 : 1;
-  const strokeOdd = (strokeWidth || 0) % 2;
+  const strokeOdd = (strokeWidth ?? 0) % 2;
   const correctionX = strokeOdd && (sharp === 'h' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
   const correctionY = strokeOdd && (sharp === 'v' || sharp === true) ? SHARPING_CORRECTION * transDir : 0;
 
   if (translateX || translateY || correctionX || correctionY) {
-    transformations.push(`translate(${(translateX || 0) + correctionX},${(translateY || 0) + correctionY})`);
+    transformations.push(`translate(${(translateX ?? 0) + correctionX},${(translateY ?? 0) + correctionY})`);
   }
 
   if (rotate) {
-    transformations.push(`rotate(${rotate},${rotateX || x || 0},${rotateY || y || 0})`);
+    transformations.push(`rotate(${rotate},${(Number(rotateX) || x) ?? 0},${(Number(rotateY) || y) ?? 0})`);
   }
 
   const scaleXDefined = isDefined(scaleX);
@@ -409,7 +408,7 @@ function getDashStyle(props: SvgGraphicsProps): string | undefined {
     return undefined;
   }
 
-  const sw = strokeWidth || 1;
+  const sw = Number(strokeWidth) || 1;
   const value = normalizeEnum(dashStyle);
   let dashArray: unknown[] = [];
   dashArray = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '')

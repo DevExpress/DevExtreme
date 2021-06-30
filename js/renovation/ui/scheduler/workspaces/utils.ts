@@ -31,7 +31,7 @@ const addToStyle = (
   value: string,
   style?: CSSAttributes,
 ): CSSAttributes => {
-  const nextStyle = style || {};
+  const nextStyle = style ?? {};
   const result = { ...nextStyle };
 
   result[attr] = value || nextStyle[attr];

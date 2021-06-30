@@ -1,9 +1,57 @@
 export class CellsSelectionController {
-    getCellFromNextRowPosition(currentCellPosition, direction, edgeIndices) {
+    handleArrowClick(options) {
         const {
-            cellIndex,
+            key,
+            focusedCellPosition,
+            edgeIndices,
+            getCellDataByPosition,
+            isAllDayPanelCell,
+        } = options;
+
+        let nextCellIndices;
+
+        switch(key) {
+            case 'down':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    focusedCellPosition, 'next', edgeIndices,
+                );
+                break;
+            case 'up':
+                nextCellIndices = this.getCellFromNextRowPosition(
+                    focusedCellPosition, 'prev', edgeIndices,
+                );
+                break;
+            case 'left':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'prev',
+                });
+                break;
+            case 'right':
+                nextCellIndices = this.getCellFromNextColumnPosition({
+                    ...options,
+                    direction: 'next',
+                });
+                break;
+        }
+
+        const currentCellData = getCellDataByPosition(
+            nextCellIndices.rowIndex,
+            nextCellIndices.columnIndex,
+            isAllDayPanelCell,
+        );
+
+        return this.moveToCell({
+            ...options,
+            currentCellData,
+        });
+    }
+
+    getCellFromNextRowPosition(focusedCellPosition, direction, edgeIndices) {
+        const {
+            columnIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
 
         const deltaPosition = direction === 'next' ? 1 : -1;
         const nextRowIndex = rowIndex + deltaPosition;
@@ -13,53 +61,54 @@ export class CellsSelectionController {
             : rowIndex;
 
         return {
-            cellIndex,
+            columnIndex,
             rowIndex: validRowIndex,
         };
     }
 
     getCellFromNextColumnPosition(options) {
         const {
-            currentCellPosition,
+            focusedCellPosition,
             direction,
             edgeIndices,
             isRTL,
             isGroupedByDate,
             groupCount,
             isMultiSelection,
+            isDateAndTimeView,
         } = options;
         const {
-            cellIndex,
+            columnIndex,
             rowIndex,
-        } = currentCellPosition;
+        } = focusedCellPosition;
         const {
-            firstCellIndex,
-            lastCellIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
         } = edgeIndices;
 
         const step = isGroupedByDate && isMultiSelection ? groupCount : 1;
         const sign = isRTL ? -1 : 1;
-        const deltaCellIndex = direction === 'next' ? sign * step : -1 * sign * step;
-        const nextCellIndex = cellIndex + deltaCellIndex;
+        const deltaColumnIndex = direction === 'next' ? sign * step : -1 * sign * step;
+        const nextColumnIndex = columnIndex + deltaColumnIndex;
 
-        const isValidCellIndex = nextCellIndex >= firstCellIndex
-            && nextCellIndex <= lastCellIndex;
+        const isValidColumnIndex = nextColumnIndex >= firstColumnIndex
+            && nextColumnIndex <= lastColumnIndex;
 
-        if(isValidCellIndex) {
+        if(isValidColumnIndex) {
             return {
-                cellIndex: nextCellIndex,
+                columnIndex: nextColumnIndex,
                 rowIndex,
             };
         }
 
-        return this._processEdgeCell({
-            nextCellIndex,
+        return isDateAndTimeView ? focusedCellPosition : this._processEdgeCell({
+            nextColumnIndex,
             rowIndex,
-            cellIndex,
-            firstCellIndex,
-            lastCellIndex,
+            columnIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
             step,
@@ -68,42 +117,83 @@ export class CellsSelectionController {
 
     _processEdgeCell(options) {
         const {
-            nextCellIndex,
+            nextColumnIndex,
             rowIndex,
-            cellIndex,
-            firstCellIndex,
-            lastCellIndex,
+            columnIndex,
+            firstColumnIndex,
+            lastColumnIndex,
             firstRowIndex,
             lastRowIndex,
             step,
         } = options;
 
-        let validCellIndex = nextCellIndex;
+        let validColumnIndex = nextColumnIndex;
         let validRowIndex = rowIndex;
-        const isLeftEdgeCell = nextCellIndex < firstCellIndex;
-        const isRightEdgeCell = nextCellIndex > lastCellIndex;
+        const isLeftEdgeCell = nextColumnIndex < firstColumnIndex;
+        const isRightEdgeCell = nextColumnIndex > lastColumnIndex;
 
         if(isLeftEdgeCell) {
-            const cellIndexInNextRow = lastCellIndex - (step - cellIndex % step - 1);
+            const columnIndexInNextRow = lastColumnIndex - (step - columnIndex % step - 1);
             const nextRowIndex = rowIndex - 1;
             const isValidRowIndex = nextRowIndex >= firstRowIndex;
 
             validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
+            validColumnIndex = isValidRowIndex ? columnIndexInNextRow : columnIndex;
         }
 
         if(isRightEdgeCell) {
-            const cellIndexInNextRow = firstCellIndex + cellIndex % step;
+            const columnIndexInNextRow = firstColumnIndex + columnIndex % step;
             const nextRowIndex = rowIndex + 1;
             const isValidRowIndex = nextRowIndex <= lastRowIndex;
 
             validRowIndex = isValidRowIndex ? nextRowIndex : rowIndex;
-            validCellIndex = isValidRowIndex ? cellIndexInNextRow : cellIndex;
+            validColumnIndex = isValidRowIndex ? columnIndexInNextRow : columnIndex;
         }
 
         return {
-            cellIndex: validCellIndex,
+            columnIndex: validColumnIndex,
             rowIndex: validRowIndex,
         };
+    }
+
+    moveToCell(options) {
+        const {
+            isMultiSelection,
+            isMultiSelectionAllowed,
+            focusedCellData,
+            currentCellData,
+        } = options;
+
+        const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
+
+        const nextFocusedCellData = isValidMultiSelection
+            ? this._getNextCellData(currentCellData, focusedCellData)
+            : currentCellData;
+
+        return nextFocusedCellData;
+    }
+
+    _getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell) {
+        if(isVirtualCell) {
+            return focusedCellData;
+        }
+
+        const isValidNextFocusedCell = this._isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+
+        return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
+    }
+
+    _isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+        if(!focusedCellData) {
+            return true;
+        }
+
+        const { groupIndex, allDay } = focusedCellData;
+        const {
+            groupIndex: nextGroupIndex,
+            allDay: nextAllDay,
+        } = nextFocusedCellData;
+
+        return groupIndex === nextGroupIndex && allDay === nextAllDay;
     }
 }

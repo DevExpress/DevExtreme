@@ -21,7 +21,7 @@ type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageCoun
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class InfoText extends JSXComponent<InfoTextPropsType>() {
   get infoText(): string {
-    return this.props.infoText || messageLocalization.getFormatter('dxPager-infoText')();
+    return (this.props.infoText ?? '') || messageLocalization.getFormatter('dxPager-infoText')();
   }
 
   get text(): string {

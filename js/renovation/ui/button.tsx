@@ -23,7 +23,7 @@ import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return.d';
+import { EffectReturn } from '../utils/effect_return';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -35,7 +35,7 @@ const getCssClasses = (model: ButtonProps): string => {
   const classesMap = {
     'dx-button': true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
-    [`dx-button-${type || 'normal'}`]: true,
+    [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
@@ -45,9 +45,9 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template: ButtonTemplate, text, templateData,
+    children, iconPosition, template: ButtonTemplate, text,
   } = viewModel.props;
-  const renderText = !ButtonTemplate && !children && text;
+  const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
   const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition} />;
@@ -76,7 +76,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className="dx-button-content" ref={viewModel.contentRef}>
-        {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
+        {ButtonTemplate && (<ButtonTemplate data={viewModel.buttonTemplateData} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
@@ -97,11 +97,11 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
 
 @ComponentBindings()
 export class ButtonProps extends BaseWidgetProps {
-  @OneWay() activeStateEnabled?: boolean = true;
+  @OneWay() activeStateEnabled = true;
 
-  @OneWay() hoverStateEnabled?: boolean = true;
+  @OneWay() hoverStateEnabled = true;
 
-  @OneWay() icon?: string = '';
+  @OneWay() icon = '';
 
   @OneWay() iconPosition?: string = 'left';
 
@@ -114,19 +114,19 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() pressed?: boolean;
 
-  @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+  @OneWay() stylingMode: 'outlined' | 'text' | 'contained' = 'contained';
 
   @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
-  @OneWay() type?: string = 'normal';
+  @OneWay() type: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
-  @OneWay() useInkRipple?: boolean = false;
+  @OneWay() useInkRipple = false;
 
-  @OneWay() useSubmitBehavior?: boolean = false;
+  @OneWay() useSubmitBehavior = false;
 
   @OneWay() validationGroup?: string = undefined;
 
@@ -162,6 +162,16 @@ export class Button extends JSXComponent(ButtonProps) {
   @Method()
   focus(): void {
     this.widgetRef.current!.focus();
+  }
+
+  @Method()
+  activate(): void {
+    this.widgetRef.current!.activate();
+  }
+
+  @Method()
+  deactivate(): void {
+    this.widgetRef.current!.deactivate();
   }
 
   @Effect()
@@ -203,18 +213,22 @@ export class Button extends JSXComponent(ButtonProps) {
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
-  onWidgetKeyDown(options): Event | undefined {
+  onWidgetKeyDown(e: {
+    originalEvent: Event & { cancel: boolean };
+    keyName: string;
+    which: string;
+  }): Event | undefined {
     const { onKeyDown } = this.props;
-    const { originalEvent, keyName, which } = options;
+    const { originalEvent, keyName, which } = e;
 
-    const result = onKeyDown?.(options);
+    const result: Event & { cancel: boolean } = onKeyDown?.(e);
     if (result?.cancel) {
       return result;
     }
 
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-      originalEvent.preventDefault();
-      this.onWidgetClick(originalEvent);
+      (originalEvent as Event).preventDefault();
+      this.onWidgetClick(originalEvent as Event);
     }
 
     return undefined;
@@ -223,7 +237,7 @@ export class Button extends JSXComponent(ButtonProps) {
   get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
-    let label = text || icon;
+    let label = (text ?? '') || icon;
 
     if (!text && icon && getImageSourceType(icon) === 'image') {
       label = !icon.includes('base64') ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
@@ -242,7 +256,11 @@ export class Button extends JSXComponent(ButtonProps) {
   get iconSource(): string {
     const { icon, type } = this.props;
 
-    return icon || type === 'back' ? icon || 'back' : '';
+    if (icon || type === 'back') {
+      return (icon ?? '') || 'back';
+    }
+
+    return '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
@@ -252,5 +270,10 @@ export class Button extends JSXComponent(ButtonProps) {
       useHoldAnimation: false,
       waveSizeCoefficient: 1,
     } : {};
+  }
+
+  get buttonTemplateData(): Record<string, unknown> {
+    const { icon, text, templateData } = this.props;
+    return { icon, text, ...templateData };
   }
 }

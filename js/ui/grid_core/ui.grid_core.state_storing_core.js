@@ -2,7 +2,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { getWindow } from '../../core/utils/window';
 import modules from './ui.grid_core.modules';
 import errors from '../widget/ui.errors';
-import browser from '../../core/utils/browser';
 import { sessionStorage } from '../../core/utils/storage';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -30,11 +29,7 @@ export const StateStoringController = modules.ViewController.inherit((function()
         const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 
         if(!storage) {
-            if(getWindow().location.protocol === 'file:' && browser.msie) {
-                throw new Error('E1038');
-            } else {
-                throw new Error('E1007');
-            }
+            throw new Error('E1007');
         }
 
         return storage;

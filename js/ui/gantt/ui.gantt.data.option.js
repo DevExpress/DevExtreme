@@ -1,4 +1,4 @@
-import Component from '../../core/component';
+import { Component } from '../../core/component';
 import DataHelperMixin from '../../data_helper';
 
 class DataOption extends Component {
@@ -77,6 +77,12 @@ class DataOption extends Component {
     }
     _getItems() {
         return this._getStore()._array || this._dataSource.items();
+    }
+    _reloadDataSource() {
+        const isArray = !!this._getStore()._array;
+        if(!isArray) {
+            this._dataSource.load();
+        }
     }
 }
 DataOption.include(DataHelperMixin);

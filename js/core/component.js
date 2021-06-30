@@ -11,6 +11,7 @@ import { name as publicComponentName } from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';
 import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
+import { getPathParts } from './utils/data';
 
 const getEventName = (actionName) => {
     return actionName.charAt(2).toLowerCase() + actionName.substr(3);
@@ -20,7 +21,7 @@ const isInnerOption = (optionName) => {
     return optionName.indexOf('_', 0) === 0;
 };
 
-const Component = Class.inherit({
+export const Component = Class.inherit({
     _setDeprecatedOptions() {
         this._deprecatedOptions = {};
     },
@@ -226,7 +227,7 @@ const Component = Class.inherit({
             for(let i = 0; i < optionNames.length; i++) {
                 const name = optionNames[i];
                 const args = {
-                    name: name.split(/[.[]/)[0],
+                    name: getPathParts(name)[0],
                     fullName: name,
                     value: value,
                     previousValue: previousValue
@@ -381,4 +382,11 @@ const Component = Class.inherit({
     }
 });
 
-export default Component;
+/**
+ * @name Component
+ * @module core/component
+ * @export Component
+ * @namespace DevExpress
+ * @hidden
+ * @wrappable
+ */

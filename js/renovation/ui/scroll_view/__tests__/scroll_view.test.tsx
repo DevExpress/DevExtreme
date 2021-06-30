@@ -74,6 +74,8 @@ describe('ScrollView', () => {
       { name: 'content', calledWith: [] },
       { name: 'update', calledWith: [] },
       { name: 'release', calledWith: [] },
+      { name: 'startLoading', calledWith: [] },
+      { name: 'finishLoading', calledWith: [] },
     ]).describe('Method: %o', (methodInfo) => {
       it(`${methodInfo.name}() method should call according scrollable method`, () => {
         const viewModel = new ScrollView({ });

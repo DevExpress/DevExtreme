@@ -35,11 +35,13 @@ export const viewFunction = ({
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;
     itemTemplate?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueChange?: EventCallback<any>;
   };
 }
@@ -97,7 +99,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     } = this.props.componentProps;
 
     const properties = ({
-      rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
+      rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {

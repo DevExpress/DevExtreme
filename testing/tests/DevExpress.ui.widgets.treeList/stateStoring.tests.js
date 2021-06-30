@@ -34,7 +34,7 @@ QUnit.module('State Storing', {
                     columns: [{ dataField: 'name', dataType: 'string' }, { dataField: 'age', dataType: 'number' }],
                     keyExpr: 'id',
                     parentIdExpr: 'parentId',
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     scrolling: {
                         mode: 'virtual'
                     }

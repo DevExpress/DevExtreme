@@ -420,7 +420,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
-    const svgElement = this.widgetRef.current?.svg() || undefined;
+    const svgElement = this.widgetRef.current?.svg() ?? undefined;
     this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;
   }
 
@@ -483,7 +483,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     this.tooltipVisible = true;
   }
 
-  pointerOutHandler({ pageX, pageY }): void {
+  pointerOutHandler({ pageX, pageY }: { pageX: number; pageY: number }): void {
     const { left, top } = this.offsetState;
     const x = Math.floor(pageX - left);
     const y = Math.floor(pageY - top);

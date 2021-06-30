@@ -25,14 +25,13 @@ export function addInfoHeader(
   if (source.startsWith(encoding)) {
     return `${encoding}\n${header}${source.replace(`${encoding}\n`, '')}`;
   }
-  return header + css;
+  return `${header}${css}`;
 }
 
 export async function cleanCss(css: string): Promise<string> {
   const promiseOptions: Options = { returnPromise: true };
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const options = { ...commonOptions as OptionsPromise, ...promiseOptions };
-  const cleaner = new CleanCSS(options);
+  const options = { ...commonOptions, ...promiseOptions };
+  const cleaner = new CleanCSS(options as OptionsPromise);
   return (await cleaner.minify(css)).styles;
 }
 

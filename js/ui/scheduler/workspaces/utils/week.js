@@ -1,0 +1,33 @@
+import dateUtils from '../../../../core/utils/date';
+import dateLocalization from '../../../../localization/date';
+import { getCalculatedFirstDayOfWeek, getViewStartByOptions, setOptionHour } from './base';
+
+export const getIntervalDuration = (intervalCount) => {
+    return dateUtils.dateToMilliseconds('day') * 7 * intervalCount;
+};
+
+export const calculateStartViewDate = (
+    currentDate,
+    startDayHour,
+    startDate,
+    intervalDuration,
+    firstDayOfWeekOption,
+) => {
+    const firstDayOfWeek = getCalculatedFirstDayOfWeek(firstDayOfWeekOption);
+    const viewStart = getViewStartByOptions(
+        startDate,
+        currentDate,
+        intervalDuration,
+        startDate,
+    );
+
+    const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
+
+    return setOptionHour(firstViewDate, startDayHour);
+};
+
+export const calculateViewStartDate = (startDateOption, firstDayOfWeek) => {
+    const validFirstDayOfWeek = firstDayOfWeek || dateLocalization.firstDayOfWeekIndex();
+
+    return dateUtils.getFirstWeekDate(startDateOption, validFirstDayOfWeek);
+};

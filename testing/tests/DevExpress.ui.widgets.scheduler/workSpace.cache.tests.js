@@ -2,10 +2,10 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createInstances } from 'ui/scheduler/instanceFactory.js';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -20,14 +20,14 @@ testStart(function() {
 module('Work Space cellData Cache', {
     beforeEach: function() {
 
-        createInstances({
-            scheduler: {
-                isVirtualScrolling: () => false
-            }
+        const key = createFactoryInstances({
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {}
         });
+        const observer = getObserver(key);
 
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ observer }).dxSchedulerWorkSpaceWeek('instance');
+        stubInvokeMethod(this.instance, { key });
     }
 }, () => {
     test('Workspace should be able to cache cellData', function(assert) {
@@ -36,7 +36,7 @@ module('Work Space cellData Cache', {
         const getCellDataStub = sinon.stub(this.instance, 'getCellData').returns($cell);
         const cellCoordinates = {
             rowIndex: 1,
-            cellIndex: 0
+            columnIndex: 0
         };
 
         try {
@@ -44,7 +44,7 @@ module('Work Space cellData Cache', {
 
             cache = this.instance.cache;
 
-            assert.deepEqual(cache.get('{"rowIndex":1,"cellIndex":0,"groupIndex":0}'), {
+            assert.deepEqual(cache.get('{"rowIndex":1,"columnIndex":0,"groupIndex":0}'), {
                 startDate: 2015,
                 endDate: 2016
             }, 'Cache is OK');
@@ -61,7 +61,7 @@ module('Work Space cellData Cache', {
         try {
             const appointment = {
                 rowIndex: 1,
-                cellIndex: 0,
+                columnIndex: 0,
                 groupIndex: 0
             };
             const geometry = {
@@ -91,7 +91,7 @@ module('Work Space cellData Cache', {
     test('getCellDataByCoordinates return cached cell data', function(assert) {
         const appointment = {
             rowIndex: 1,
-            cellIndex: 0,
+            columnIndex: 0,
             groupIndex: 0
         };
         const geometry = {
@@ -136,7 +136,7 @@ module('Work Space cellData Cache', {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {
-            cellIndex: 0,
+            columnIndex: 0,
             rowIndex: 0,
             groupIndex: 0
         };
@@ -225,7 +225,7 @@ module('Work Space cellData Cache', {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {
-            cellIndex: 0,
+            columnIndex: 0,
             rowIndex: 0,
             groupIndex: 0
         };

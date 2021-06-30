@@ -295,8 +295,10 @@ export interface dxPopupToolbarItem {
  */
 export default class dxPopup<TProperties = Properties> extends dxOverlay<TProperties> {}
 
+interface PopupInstance extends dxPopup<Properties> { }
+
 /** @public */
-export type Properties = dxPopupOptions<dxPopup<Properties>>;
+export type Properties = dxPopupOptions<PopupInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

@@ -29,9 +29,9 @@ const getOutParameters = (
   themeName: string,
   config: ConfigSettings,
 ): ConfigSettings => {
-  let outputFile = config.outputFile || '';
-  let outColorScheme = config.outputColorScheme || '';
-  let fileFormat = config.outputFormat || extname(outputFile).substr(1);
+  let outputFile = config.outputFile ?? '';
+  let outColorScheme = config.outputColorScheme ?? '';
+  let fileFormat = (config.outputFormat ?? '') || extname(outputFile).substr(1);
 
   const makeSwatch = !!config.makeSwatch;
   const base = !!config.base;
@@ -126,7 +126,7 @@ const normalizePath = (path: string): string => path + (!path.endsWith('/') ? '/
 
 const parseConfig = (config: ConfigSettings): void => {
   const { command } = config;
-  const metadataFilePath = config.inputFile || '';
+  const metadataFilePath = config.inputFile ?? '';
   const themeInfo = getThemeAndColorScheme(config);
   const bootstrapConfig = getBootstrapConfig(metadataFilePath);
   const output = getOutParameters(command, themeInfo.themeName, config);

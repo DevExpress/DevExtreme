@@ -4,7 +4,7 @@ export const getCurrentDate = (
   currentDate: Date,
   startDate?: Date,
 ): Date => {
-  const validCurrentDate = startDate || currentDate;
+  const validCurrentDate = startDate ?? currentDate;
 
   return dateUtils.trimTime(validCurrentDate);
 };
@@ -14,7 +14,7 @@ export const getFirstDayOfWeek = (
   firstDayOfWeek: number,
 ): number => {
   const isFirstDayOfWeekInIncludedDays = includedDays.includes(firstDayOfWeek);
-  const sortedIncludedDays = includedDays.slice().sort();
+  const sortedIncludedDays = includedDays.slice().sort((a, b) => a - b);
 
   return isFirstDayOfWeekInIncludedDays
     ? firstDayOfWeek

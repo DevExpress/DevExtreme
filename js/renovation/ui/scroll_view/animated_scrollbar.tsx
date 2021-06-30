@@ -7,7 +7,9 @@ import {
   ComponentBindings,
   Method,
   Event,
+  Effect,
 } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { BaseWidgetProps } from '../common/base_props';
 import { isDefined } from '../../../core/utils/type';
 
@@ -133,12 +135,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   reachedMin(): boolean {
-    return this.scrollbar.reachedMin();
+    return this.props.scrollLocation <= this.getMinOffset();
   }
 
   @Method()
   reachedMax(): boolean {
-    return this.scrollbar.reachedMax();
+    return this.props.scrollLocation >= this.getMaxOffset();
   }
 
   @Method()
@@ -176,6 +178,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.releaseHandler();
   }
 
+  @Effect({ run: 'once' })
+  disposeAnimationFrame(): DisposeEffectReturn {
+    return (): void => { this.cancel(); };
+  }
+
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {
     this.animator = animatorName;
 
@@ -186,7 +193,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       if (!thumbScrolling && crossThumbScrolling) {
         this.velocity = 0;
       } else {
-        this.velocity = receivedVelocity || 0;
+        this.velocity = receivedVelocity ?? 0;
       }
 
       this.suppressInertia(thumbScrolling);
@@ -223,8 +230,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   step(): void {
-    if (!this.props.bounceEnabled
-      && !inRange(this.props.scrollLocation, this.getMinOffset(), this.getMaxOffset())) {
+    if (!this.props.bounceEnabled && (this.reachedMin() || this.reachedMax())) {
       this.velocity = 0;
     }
 
@@ -242,10 +248,16 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation));
-    }
+      const boundaryLocation = this.getLocationWithinRange(this.props.scrollLocation);
 
-    this.scrollComplete();
+      this.moveTo(boundaryLocation);
+
+      if (this.props.scrollLocation === boundaryLocation) {
+        this.scrollComplete();
+      }
+    } else {
+      this.scrollComplete();
+    }
   }
 
   get isBounceAnimator(): boolean {
@@ -310,6 +322,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.scrollComplete();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollbar(): any { // technical limitation in the generator
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.scrollbarRef.current!;

@@ -57,3 +57,24 @@ test('Horizontal selection between two workspace cells should focus cells betwee
     }],
   }],
 }));
+
+test('Vertical grouping should work correctly when there is one group', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.dateTableCells.count)
+    .eql(336);
+}).before(async () => createWidget('dxScheduler', {
+  views: [{
+    type: 'week',
+    groupOrientation: 'vertical',
+  }],
+  currentView: 'week',
+  dataSource: [],
+  groups: ['priorityId'],
+  resources: [{
+    field: 'priorityId',
+    dataSource: [{ id: 1, color: 'black' }],
+  }],
+  height: 600,
+}));

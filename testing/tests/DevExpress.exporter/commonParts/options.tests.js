@@ -1,4 +1,4 @@
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
 import { extend } from 'core/utils/extend';
 
 export function runCommonOptionTests(_getFullOptions, getComponent, document) {

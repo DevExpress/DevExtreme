@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -18,7 +19,6 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pager";
-
 
 $generic-grid-base-border-hidden: 1px solid transparent;
 $generic-grid-base-row-border: 1px solid transparent;
@@ -290,8 +290,8 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
         &::before {
           height: $generic-grid-base-checkbox-indeterminate-icon-size;
           width: $generic-grid-base-checkbox-indeterminate-icon-size;
-          margin-top: -$generic-grid-base-checkbox-indeterminate-icon-size / 2;
-          margin-left: -$generic-grid-base-checkbox-indeterminate-icon-size / 2;
+          margin-top: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
+          margin-left: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
           border-radius: 0;
         }
       }
@@ -392,6 +392,14 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
       .dx-command-edit {
         width: $generic-grid-base-command-edit-column-width;
         min-width: $generic-grid-base-command-edit-column-width;
+
+        .dx-link.dx-state-disabled {
+          opacity: $datagrid-text-link-disabled-opacity;
+
+          &.dx-link-icon {
+            opacity: $datagrid-icon-link-disabled-opacity;
+          }
+        }
       }
 
       .dx-command-expand {

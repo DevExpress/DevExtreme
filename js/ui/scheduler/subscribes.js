@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { inArray } from '../../core/utils/array';
-import { isDefined, isPlainObject } from '../../core/utils/type';
+import { isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
@@ -10,14 +10,25 @@ import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
-import utils from './utils';
+import { utils } from './utils';
+import {
+    getResourceManager,
+    getAppointmentDataProvider,
+    getTimeZoneCalculator
+} from './instanceFactory';
+import { createAppointmentAdapter } from './appointmentAdapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
-    getTimeZoneCalculator: function() {
-        return this.timeZoneCalculator;
+    getResourceManager: function() {
+        return getResourceManager(this.key);
     },
+
+    getAppointmentDataProvider: function() {
+        return getAppointmentDataProvider(this.key);
+    },
+
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -63,11 +74,12 @@ const subscribes = {
     },
 
     showAddAppointmentPopup: function(cellData, cellGroups) {
-        const appointmentAdapter = this.createAppointmentAdapter({});
+        const appointmentAdapter = createAppointmentAdapter(this.key, {});
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         appointmentAdapter.allDay = cellData.allDay;
-        appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-        appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+        appointmentAdapter.startDate = timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        appointmentAdapter.endDate = timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
 
         const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
         this.showAppointmentPopup(resultAppointment, true);
@@ -96,8 +108,8 @@ const subscribes = {
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const appointment = this.createAppointmentAdapter(rawAppointment);
-        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
+        const appointment = createAppointmentAdapter(this.key, rawAppointment);
+        const targetedAppointment = createAppointmentAdapter(this.key, extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
         const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();
@@ -133,12 +145,13 @@ const subscribes = {
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
-        const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
+        const appointmentAdapter = createAppointmentAdapter(this.key, appointmentRaw);
+        const targetedAdapter = createAppointmentAdapter(this.key, (targetedAppointmentRaw || appointmentRaw));
+        const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         // TODO pull out time zone converting from appointment adapter for knockout(T947938)
-        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
-        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+        const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 
@@ -385,42 +398,6 @@ const subscribes = {
             $el.dxResizable('instance').option('area', area);
 
         }).bind(this));
-    },
-
-    getField: function(field, obj) {
-        if(!isDefined(this._dataAccessors.getter[field])) {
-            return;
-        }
-
-        return this._dataAccessors.getter[field](obj);
-    },
-
-    setField: function(field, obj, value) {
-        if(!isDefined(this._dataAccessors.setter[field])) {
-            return;
-        }
-
-        const splitExprStr = this.option(field + 'Expr').split('.');
-        const rootField = splitExprStr[0];
-
-        if(obj[rootField] === undefined && splitExprStr.length > 1) {
-            const emptyChain = (function(arr) {
-                const result = {};
-                let tmp = result;
-                const arrLength = arr.length - 1;
-
-                for(let i = 1; i < arrLength; i++) {
-                    tmp = tmp[arr[i]] = {};
-                }
-
-                return result;
-            })(splitExprStr);
-
-            obj[rootField] = emptyChain;
-        }
-
-        this._dataAccessors.setter[field](obj, value);
-        return obj;
     },
 
     renderAppointments: function() {

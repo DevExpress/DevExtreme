@@ -25,10 +25,9 @@ export default class DartClient {
     this.client.setTimeout(100);
 
     return new Promise((resolve) => {
-      this.setClientErrorHandlers(async () => {
+      this.setClientErrorHandlers(() => {
         this.isServerAvailable = false;
-        await this.dispose();
-        resolve();
+        this.dispose().finally(resolve);
       });
 
       this.client.connect(this.serverPort, '127.0.0.1', () => {
@@ -46,7 +45,7 @@ export default class DartClient {
     return new Promise((resolve) => {
       let data = '';
 
-      this.addClientEventListener('data', (d) => {
+      this.addClientEventListener('data', (d: Buffer | string) => {
         data += d.toString();
       });
 
@@ -63,9 +62,10 @@ export default class DartClient {
       const errorHandler = (e?: Error): void => {
         log('Dart client error on write', e);
         this.client.end();
-        this.dispose();
-        resolve({
-          error: `${e.name}: ${e.message}`,
+        this.dispose().finally(() => {
+          resolve({
+            error: `${e.name}: ${e.message}`,
+          });
         });
       };
 
@@ -81,7 +81,10 @@ export default class DartClient {
     });
   }
 
-  private addClientEventListener(name: string, handler: (e?: Error) => void): void {
+  private addClientEventListener(
+    name: string,
+    handler: (e?: Error | string | Buffer) => void,
+  ): void {
     this.eventListeners.push({ name, handler });
     this.client.on(name, handler);
   }

@@ -11,7 +11,7 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
@@ -1944,11 +1944,6 @@ QUnit.module('Customize keyboard navigation', {
     });
 
     testInDesktop('Editing navigation mode for a number cell if \'format\', \'keyboardNavigation.editOnKeyPress\' are set and \'cell\' edit mode', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
-
         // arrange
         this.options = {
             editing: {

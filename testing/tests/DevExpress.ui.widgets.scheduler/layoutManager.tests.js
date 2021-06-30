@@ -7,10 +7,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
 
 import AppointmentLayoutManager from 'ui/scheduler/appointments.layout_manager';
-import BaseAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.base';
-import VerticalAppointmentStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
-import HorizontalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
-import HorizontalMonthLineAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
+import BaseAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy.base';
+import VerticalAppointmentStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
+import HorizontalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal';
+import HorizontalMonthLineAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month_line';
 import Color from 'color';
 import dataUtils from 'core/element_data';
 import CustomStore from 'data/custom_store';

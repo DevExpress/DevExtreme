@@ -32,7 +32,6 @@ import $ from 'jquery';
 import { EdmLiteral } from 'data/odata/utils';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import fx from 'animation/fx';
@@ -73,13 +72,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(subMenu._isVisible(), 'submenu exists');
 
         // act
-        if(browser.msie && browser.version <= 11) {
-            const event = document.createEvent('Event');
-            event.initEvent('blur', true, true);
-            $menu[0].dispatchEvent(event);
-        } else {
-            $menu.blur();
-        }
+        $menu.blur();
 
         // assert
         assert.notOk(subMenu._isVisible(), 'submenu is hidden');

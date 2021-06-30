@@ -35,7 +35,7 @@ export class ScrollableSimulatedProps extends ScrollableProps {
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;

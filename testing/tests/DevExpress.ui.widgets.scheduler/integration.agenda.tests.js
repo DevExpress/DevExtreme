@@ -3,13 +3,13 @@ import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
-import AgendaAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.agenda';
+import AgendaAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_agenda';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
-import { getAppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const {
     module,
@@ -1545,7 +1545,7 @@ module('Integration: Agenda', moduleConfig, () => {
             dataSource: data
         });
 
-        const { filteredItems } = getAppointmentDataProvider();
+        const { filteredItems } = getAppointmentDataProvider(instance.key);
 
         assert.equal(filteredItems.length, 1, 'Filtered items amount is correct');
         assert.deepEqual(filteredItems[0], data[2], 'Filtered item is correct');

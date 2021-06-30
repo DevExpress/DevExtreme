@@ -1,4 +1,4 @@
-import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
+import { ComponentBindings, OneWay, Event } from '@devextreme-generator/declarations';
 import { GridBaseView } from './types';
 
 @ComponentBindings()
@@ -8,4 +8,6 @@ export class GridBaseViewProps {
   @OneWay() className!: string;
 
   @OneWay() role!: string;
+
+  @Event() onRendered?: () => void;
 }

@@ -3,11 +3,13 @@ import { jsPDF } from 'jspdf';
 
 import { isFunction, isObject } from 'core/utils/type';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
+import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
+import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
 
 import 'generic_light.css!';
 
@@ -84,7 +86,7 @@ function createMockPdfDoc() {
 }
 
 function createDataGrid(options) {
-    options.loadingTimeout = undefined;
+    options.loadingTimeout = null;
     return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
 }
 
@@ -1346,3 +1348,5 @@ QUnit.module('Table splitting', moduleConfig, () => {
 });
 
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

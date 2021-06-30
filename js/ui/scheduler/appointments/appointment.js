@@ -23,7 +23,8 @@ import {
     APPOINTMENT_CONTENT_CLASSES
 } from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
-import { getResourceManager } from '../resources/resourceManager';
+import { ExpressionUtils } from '../expressionUtils';
+import { getResourceManager } from '../instanceFactory';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -135,7 +136,9 @@ export class Appointment extends DOMComponent {
         this._renderDirection();
 
         this.$element().data('dxAppointmentStartDate', this.option('startDate'));
-        this.$element().attr('title', this.invoke('getField', 'text', this.rawAppointment));
+
+        const text = ExpressionUtils.getField(this.option('key'), 'text', this.rawAppointment);
+        this.$element().attr('title', text);
         this.$element().attr('role', 'button');
 
         this._renderRecurrenceClass();
@@ -145,7 +148,8 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const deferredColor = getResourceManager().getAppointmentColor({
+        const resourceManager = getResourceManager(this.option('key'));
+        const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
             groups: this.option('groups'),
@@ -213,7 +217,7 @@ export class Appointment extends DOMComponent {
     }
 
     _getEndDate() {
-        const result = this.invoke('getField', 'endDate', this.rawAppointment);
+        const result = ExpressionUtils.getField(this.option('key'), 'endDate', this.rawAppointment);
         if(result) {
             return new Date(result);
         }
@@ -229,7 +233,7 @@ export class Appointment extends DOMComponent {
     }
 
     _renderRecurrenceClass() {
-        const rule = this.invoke('getField', 'recurrenceRule', this.rawAppointment);
+        const rule = ExpressionUtils.getField(this.option('key'), 'recurrenceRule', this.rawAppointment);
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);

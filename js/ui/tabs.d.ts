@@ -142,8 +142,10 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
+interface TabsInstance extends dxTabs<Properties> { }
+
 /** @public */
-export type Properties = dxTabsOptions<dxTabs<Properties>>;
+export type Properties = dxTabsOptions<TabsInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;

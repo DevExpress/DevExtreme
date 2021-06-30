@@ -2,7 +2,7 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -15,7 +15,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -46,12 +46,12 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            createInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false,
-                    getAppointmentDurationInMinutes: () => 60
-                }
+            const key = createFactoryInstances({
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+                appointmentDuration: 60
             });
+            const observer = getObserver(key);
 
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
@@ -59,13 +59,14 @@ module('Renovated Render', {
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
+                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {
@@ -77,7 +78,7 @@ module('Renovated Render', {
             test('should work in basic case', function(assert) {
                 this.createInstance();
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -140,7 +141,7 @@ module('Renovated Render', {
                             isLastGroupCell: true,
                             key: 0,
                         },
-                        position: { cellIndex: 0, rowIndex: 0 }
+                        position: { columnIndex: 0, rowIndex: 0 }
                     }],
                     dateTableMap: [
                         [{
@@ -155,7 +156,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -168,7 +169,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -190,7 +191,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -292,7 +293,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29),
@@ -305,7 +306,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }
                     ],
                     dateTableMap: [
@@ -322,7 +323,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 0,
                             },
-                            position: { cellIndex: 0, rowIndex: 0 }
+                            position: { columnIndex: 0, rowIndex: 0 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -336,7 +337,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { cellIndex: 1, rowIndex: 0 }
+                            position: { columnIndex: 1, rowIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -350,7 +351,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 2,
                             },
-                            position: { cellIndex: 0, rowIndex: 1 }
+                            position: { columnIndex: 0, rowIndex: 1 }
                         }, {
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -364,7 +365,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { cellIndex: 1, rowIndex: 1 }
+                            position: { columnIndex: 1, rowIndex: 1 }
                         }]
                     ]
                 };
@@ -388,7 +389,7 @@ module('Renovated Render', {
                     }
                 ]);
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData } = this.instance.viewDataProvider;
 
@@ -554,7 +555,7 @@ module('Renovated Render', {
                 ]);
                 this.instance.option('groupOrientation', 'vertical');
 
-                this.instance.viewDataProvider.update();
+                this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
                 const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
@@ -652,7 +653,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 0, cellIndex: 0 }
+                            position: { rowIndex: 0, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -666,7 +667,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 0,
                             },
-                            position: { rowIndex: 1, cellIndex: 0 }
+                            position: { rowIndex: 1, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -680,7 +681,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 1,
                             },
-                            position: { rowIndex: 2, cellIndex: 0 }
+                            position: { rowIndex: 2, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 allDay: true,
@@ -693,7 +694,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 3, cellIndex: 0 }
+                            position: { rowIndex: 3, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 0),
@@ -707,7 +708,7 @@ module('Renovated Render', {
                                 isLastGroupCell: false,
                                 key: 2,
                             },
-                            position: { rowIndex: 4, cellIndex: 0 }
+                            position: { rowIndex: 4, columnIndex: 0 }
                         }], [{
                             cellData: {
                                 startDate: new Date(2020, 6, 29, 0, 30),
@@ -721,7 +722,7 @@ module('Renovated Render', {
                                 isLastGroupCell: true,
                                 key: 3,
                             },
-                            position: { rowIndex: 5, cellIndex: 0 }
+                            position: { rowIndex: 5, columnIndex: 0 }
                         }]
                     ]
                 };
@@ -740,7 +741,7 @@ module('Renovated Render', {
             showAllDayPanel: false,
         }, WORKSPACE_WEEK.class);
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -755,7 +756,7 @@ module('Renovated Render', {
             endDayHour: 0
         }, 'dxSchedulerWorkSpaceMonth');
 
-        this.instance.viewDataProvider.update();
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
         const { viewData } = this.instance.viewDataProvider;
         const { dateTable } = viewData.groupedData[0];
@@ -815,7 +816,7 @@ module('Renovated Render', {
             endDayHour: 24,
         }, WORKSPACE_MONTH.class);
 
-        this.instance.viewDataProvider.update(true);
+        this.instance.viewDataProvider.update(this.instance.generateRenderOptions(), true);
 
         const { viewData } = this.instance.viewDataProvider;
         const { allDayPanel } = viewData.groupedData[0];
@@ -949,13 +950,12 @@ module('Renovated Render', {
     test('getDataByDroppableCell should work correctly', function(assert) {
         this.createInstance();
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(1).addClass('dx-scheduler-date-table-droppable-cell');
-
+        this.instance.$element().find('.' + CELL_CLASS).eq(0).addClass('dx-scheduler-date-table-droppable-cell');
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: new Date(2020, 6, 29, 1, 30),
+            startDate: new Date(2020, 6, 29, 0, 0),
+            endDate: new Date(2020, 6, 29, 0, 30),
             groups: undefined,
         }, 'Cell Data is correct');
     });

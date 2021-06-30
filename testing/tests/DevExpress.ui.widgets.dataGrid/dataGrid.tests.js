@@ -1845,6 +1845,24 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(dataGrid._disposed, 'DataGrid is disposed');
     });
 
+    QUnit.test('Set the same options after reset (T1010114)', function(assert) {
+        const editing = {
+            mode: 'row',
+            useIcons: true
+        };
+        const dataGrid = createDataGrid({
+            editing,
+            dataSource: [{ id: 1 }]
+        });
+        this.clock.tick();
+
+        dataGrid.resetOption('editing');
+        dataGrid.option('editing', editing);
+
+        // assert
+        assert.ok(dataGrid.option('editing').changes, 'Custom and default options are merged');
+    });
+
     // T243908
     QUnit.test('onContentReady after hide column', function(assert) {
 
@@ -2635,6 +2653,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(!dataGrid.getController('data').isLoading(), 'is not loading');
     });
 
+    QUnit.test('getSelectedRowKeys in onInitialized', function(assert) {
+        // arrange, act
+        let initializedComponent;
+        const dataGrid = createDataGrid({
+            onInitialized: function(e) {
+                assert.deepEqual(e.component.getSelectedRowKeys(), [], 'selectedRowKeys');
+                initializedComponent = e.component;
+            },
+            dataSource: [{ id: 1111 }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(initializedComponent, dataGrid, 'component in onInitialized callback is correct');
+    });
+
     // T461925
     QUnit.test('columnOption in onInitialized', function(assert) {
         // arrange, act
@@ -2658,6 +2693,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($commandColumnCells.eq(0).index(), 0, 'command cell 1 in first td');
         assert.equal($commandColumnCells.eq(1).index(), 0, 'command cell 2 in first td');
         assert.equal($commandColumnCells.eq(2).index(), 0, 'command cell 3 in first td');
+    });
+
+    QUnit.test('onColumnsChanging should be fired if change column option', function(assert) {
+        const onColumnsChanging = sinon.spy();
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            onColumnsChanging,
+            dataSource: [],
+            columns: ['id', 'name']
+        });
+        onColumnsChanging.reset();
+
+        // act
+        dataGrid.columnOption('name', 'visible', false);
+
+        // assert
+        assert.ok(onColumnsChanging.calledOnce, 'onColumnsChanging is called once');
     });
 
     QUnit.test('Repaint row', function(assert) {
@@ -3280,6 +3332,151 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(visibleColumns[0].dataField, 'field1', 'dataField of the first column in the second row');
         assert.strictEqual(visibleColumns[1].dataField, 'field2', 'dataField of the second column in the second row');
         assert.strictEqual(visibleColumns[2].dataField, 'field3', 'dataField of the third column in the second row');
+    });
+
+    QUnit.test('navigateToRow should return promise', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ 'id': 0 }, { 'id': 1 }, { 'id': 2 }, { 'id': 3 }],
+            keyExpr: 'id',
+            paging: {
+                pageSize: 2
+            }
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(3);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    QUnit.test('navigateToRow should return promise: remoteOperations is true', function(assert) {
+        // arrange
+        let items = [];
+        let deferred;
+        const dataStore = new ArrayStore([ { 'id': 0 }, { 'id': 1 }, { 'id': 2 }, { 'id': 3 } ]);
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            remoteOperations: true,
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    deferred = $.Deferred();
+
+                    dataStore.load(loadOptions).done(function(data) {
+                        items = data;
+                    });
+
+                    return deferred.promise();
+                }
+            },
+            paging: {
+                pageSize: 2
+            }
+        });
+
+        // act
+        deferred.resolve(items, { totalCount: 4 }); // resolve first page that is already visible
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'visible row count is correct');
+
+        // act
+        const d = dataGrid.navigateToRow(3);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'page isn\'t resolved yet');
+
+        // act
+        deferred.resolve(items); // search for item's index
+        deferred.resolve(items, { totalCount: 3 }); // search for item's page
+        deferred.resolve(items, { totalCount: 4 }); // resolve second page
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'page is resolved');
+    });
+
+    QUnit.test('navigateToRow should return promise: one large page', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 20
+            },
+            scrolling: {
+                useNative: true
+            },
+            height: 100
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(15);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
+
+        // act
+        $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    QUnit.test('navigateToRow should return promise: virtual scrolling', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 20
+            },
+            scrolling: {
+                useNative: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            height: 100
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(18);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
+
+        // act
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
     });
 });
 

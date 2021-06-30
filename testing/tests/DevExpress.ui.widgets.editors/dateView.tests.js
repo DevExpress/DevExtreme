@@ -149,7 +149,7 @@ QUnit.module('dateViewRoller', {
         const instance = element.dxDateViewRoller('instance');
         const content = element.find('.dx-scrollable-content');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.equal(content.position().top, -itemHeight);
@@ -164,7 +164,7 @@ QUnit.module('dateViewRoller', {
         const instance = element.dxDateViewRoller('instance');
         const content = element.find('.dx-scrollable-content');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 4).wait(500).up();
         assert.strictEqual(content.position().top, -itemHeight * 4);
@@ -224,7 +224,7 @@ QUnit.module('dateViewRoller', {
         const $content = element.find('.dx-scrollable-content');
         const $container = element.find('.dx-scrollable-container');
         const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
-        const pointer = pointerMock(instance._$container);
+        const pointer = pointerMock(instance.container());
 
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.deepEqual(translator.locate($content), { top: 0, left: 0 });
@@ -283,22 +283,29 @@ QUnit.module('dateView', {
     });
     QUnit.test('default value set correctly', function(assert) {
         const value = new Date(2015, 5, 5, 5, 5);
+        const clock = sinon.useFakeTimers();
 
-        const $dateView = $('<div>').appendTo('#qunit-fixture').dxDateView({
-            value: value,
-            min: new Date(2014, 1, 1, 1, 1),
-            type: 'datetime'
-        });
+        try {
+            const $dateView = $('<div>').appendTo('#qunit-fixture').dxDateView({
+                value: value,
+                min: new Date(2014, 1, 1, 1, 1),
+                type: 'datetime'
+            });
 
-        triggerShownEvent('#qunit-fixture');
+            triggerShownEvent('#qunit-fixture');
+            clock.tick();
 
-        const instance = $dateView.dxDateView('instance');
+            const instance = $dateView.dxDateView('instance');
 
-        assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
-        assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
-        assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
-        assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
-        assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+            assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
+            assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
+            assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
+            assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
+            assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+        } finally {
+            clock.restore();
+        }
+
     });
 
     QUnit.test('render default', function(assert) {
@@ -314,7 +321,7 @@ QUnit.module('dateView', {
         triggerShownEvent('#qunit-fixture');
 
         $.each(this.instance._rollers, function(type) {
-            const pointer = pointerMock(this._$container);
+            const pointer = pointerMock(this.container());
             pointer.start().down().move(0, -20).up();
 
             assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');

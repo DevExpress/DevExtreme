@@ -2,10 +2,10 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
-import { createInstances } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
@@ -22,14 +22,14 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
-            createInstances({
-                scheduler: {
-                    isVirtualScrolling: () => false
-                }
+            const key = createFactoryInstances({
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
             });
+            const observer = getObserver(key);
 
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
-            stubInvokeMethod(this.instance);
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ observer }).dxSchedulerWorkSpaceMonth('instance');
+            stubInvokeMethod(this.instance, { key });
         }
     }, () => {
         [true, false].forEach((renovateRender) => {
@@ -123,7 +123,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 5, 0),
                 endDate: new Date(2015, 1, 24, 0, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -141,7 +140,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 10, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -160,7 +158,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 5, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -251,7 +248,6 @@ module('Work Space Month', () => {
                 assert.deepEqual($cell.data('dxCellData'), {
                     startDate: new Date(2016, 2, 14, 5, 0),
                     endDate: new Date(2016, 2, 15, 0, 0),
-                    allDay: undefined,
                     groupIndex: 0,
                 }, 'data of the cell is right');
             } finally {
@@ -284,13 +280,20 @@ module('Work Space Month', () => {
 
     module('it with grouping by date', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                observer
             }).dxSchedulerWorkSpaceMonth('instance');
 
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
 
             this.instance.option('groups', [{
                 name: 'one',
@@ -319,13 +322,20 @@ module('Work Space Month', () => {
 
     module('it with horizontal grouping', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+            });
+            const observer = getObserver(key);
+
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
-                crossScrollingEnabled: true
+                crossScrollingEnabled: true,
+                observer
             }).dxSchedulerWorkSpaceMonth('instance');
 
-            stubInvokeMethod(this.instance);
+            stubInvokeMethod(this.instance, { key });
 
             this.instance.option('groups', [{
                 name: 'one',
@@ -359,9 +369,15 @@ module('Work Space Month', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
+            const key = createFactoryInstances({
+                getIsVirtualScrolling: () => false,
+                getDataAccessors: () => {},
+            });
+            const observer = getObserver(key);
+
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth(options).dxSchedulerWorkSpaceMonth('instance');
-                stubInvokeMethod(this.instance);
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ ...options, observer }).dxSchedulerWorkSpaceMonth('instance');
+                stubInvokeMethod(this.instance, { key });
             };
         }
     }, () => {

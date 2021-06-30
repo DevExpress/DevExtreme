@@ -5,19 +5,13 @@ import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
-import browser from 'core/utils/browser';
 
 const {
     module
 } = QUnit;
 
 const test = (description, callback) => {
-    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
-    const testFunc = isIE11
-        ? QUnit.skip
-        : QUnit.test;
-
-    return testFunc(description, sinon.test(callback));
+    return QUnit.test(description, sinon.test(callback));
 };
 
 module('Virtual Scrolling', {
@@ -30,7 +24,8 @@ module('Virtual Scrolling', {
                 totalRowCount: 100,
                 totalCellCount: 200,
                 scrolling: {
-                    orientation: 'both'
+                    orientation: 'both',
+                    mode: 'virtual',
                 }
             }, settings);
 
@@ -45,7 +40,7 @@ module('Virtual Scrolling', {
                 _options: {
                     dataCellTemplate: noop,
                     groupByDate: false,
-                    'scrolling.orientation': settings.scrolling.orientation
+                    scrolling: settings.scrolling,
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
@@ -253,30 +248,34 @@ module('Virtual Scrolling', {
         module('Options', () => {
             [
                 {
-                    scrollingOrientation: 'vertical',
+                    scrolling: { orientation: 'vertical', mode: 'virtual' },
                     expectScrolling: {
                         vertical: true,
                         horizontal: false
                     }
                 }, {
-                    scrollingOrientation: 'horizontal',
+                    scrolling: { orientation: 'horizontal', mode: 'virtual' },
                     expectScrolling: {
                         vertical: false,
                         horizontal: true
                     }
                 }, {
-                    scrollingOrientation: 'both',
+                    scrolling: { orientation: 'both', mode: 'virtual' },
                     expectScrolling: {
                         vertical: true,
                         horizontal: true
                     }
-                }
+                }, {
+                    scrolling: { mode: 'standard' },
+                    expectScrolling: {
+                        vertical: false,
+                        horizontal: false
+                    }
+                },
             ].forEach(option => {
-                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrollingOrientation} `, function(assert) {
+                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrolling.orientation || option.scrolling.mode} `, function(assert) {
                     this.prepareInstance({
-                        scrolling: {
-                            orientation: option.scrollingOrientation
-                        }
+                        scrolling: option.scrolling,
                     });
 
                     assert.equal(!!this.horizontalVirtualScrolling, option.expectScrolling.horizontal);

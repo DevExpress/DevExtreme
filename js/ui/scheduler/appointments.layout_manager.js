@@ -1,10 +1,9 @@
 import { equalByValue } from '../../core/utils/common';
-import VerticalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.vertical';
-import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
-import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
-import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
-import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
-import { getAppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import VerticalAppointmentsStrategy from './appointments/rendering_strategies/strategy_vertical';
+import HorizontalAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal';
+import HorizontalMonthLineAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month_line';
+import HorizontalMonthAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month';
+import AgendaAppointmentsStrategy from './appointments/rendering_strategies/strategy_agenda';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -60,12 +59,8 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.leftVirtualCellsCount
-            : 0;
-        const virtualRowCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.topVirtualRowsCount
-            : 0;
+        const virtualCellCount = virtualScrollingDispatcher.leftVirtualCellsCount;
+        const virtualRowCount = virtualScrollingDispatcher.topVirtualRowsCount;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -89,7 +84,7 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const appointmentDataProvider = getAppointmentDataProvider();
+        const appointmentDataProvider = this.instance.fire('getAppointmentDataProvider');
 
         const updatedData = appointmentDataProvider.getUpdatedAppointment();
         return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
@@ -107,12 +102,12 @@ class AppointmentLayoutManager {
         const createSettingsToCompare = (settings, index) => {
             const virtualCellCount = settings.virtualCellCount || 0;
             const virtualRowCount = settings.virtualRowCount || 0;
-            const cellIndex = settings[index].cellIndex + virtualCellCount;
+            const columnIndex = settings[index].columnIndex + virtualCellCount;
             const rowIndex = settings[index].rowIndex + virtualRowCount;
 
             return {
                 ...settings[index],
-                cellIndex: cellIndex,
+                columnIndex,
                 rowIndex: rowIndex,
                 virtualCellCount: -1,
                 virtualRowCount: -1

@@ -7,6 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
+  DxMouseEvent,
   ScrollableDirection,
   ScrollOffset,
 } from './types.d';
@@ -21,7 +22,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
-import { ScrollableWrapper } from '../../component_wrapper/scrollable';
+import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
@@ -37,7 +38,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
   } = viewModel;
@@ -103,6 +104,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
+        onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
         scrollByContent={scrollByContent}
@@ -119,7 +121,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
@@ -153,6 +155,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   content(): HTMLDivElement {
     return this.scrollableRef.content();
+  }
+
+  @Method()
+  container(): HTMLDivElement {
+    return this.scrollableRef.container();
   }
 
   @Method()
@@ -231,11 +238,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
-  validate(event: Event): boolean {
+  @Method()
+  startLoading(): void {
+    this.scrollableRef.startLoading();
+  }
+
+  @Method()
+  finishLoading(): void {
+    this.scrollableRef.finishLoading();
+  }
+
+  validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event);
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;

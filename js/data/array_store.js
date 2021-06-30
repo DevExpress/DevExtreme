@@ -1,4 +1,4 @@
-import dataUtils from './utils';
+import { rejectedPromise, trivialPromise } from './utils';
 import Query from './query';
 import { errors } from './errors';
 import Store from './abstract_store';
@@ -32,10 +32,10 @@ const ArrayStore = Store.inherit({
         const index = indexByKey(this, this._array, key);
 
         if(index === -1) {
-            return dataUtils.rejectedPromise(errors.Error('E4009'));
+            return rejectedPromise(errors.Error('E4009'));
         }
 
-        return dataUtils.trivialPromise(this._array[index]);
+        return trivialPromise(this._array[index]);
     },
 
     _insertImpl: function(values) {

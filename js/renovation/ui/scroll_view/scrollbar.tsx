@@ -142,16 +142,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  reachedMin(): boolean {
-    return this.props.scrollLocation <= this.minOffset;
-  }
-
-  @Method()
-  reachedMax(): boolean {
-    return this.props.scrollLocation >= this.maxOffset;
-  }
-
-  @Method()
   getLocationWithinRange(value: number): number {
     return Math.max(Math.min(value, this.maxOffset), this.minOffset);
   }
@@ -168,7 +158,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   initHandler(event: DxMouseEvent, crossThumbScrolling: boolean): void {
-    this.stopScrolling();
+    this.cancelScrolling();
     this.prepareThumbScrolling(event, crossThumbScrolling);
   }
 
@@ -406,7 +396,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollStep(distance);
   }
 
-  stopScrolling(): void {
+  cancelScrolling(): void {
     this.hide();
     this.onAnimatorCancel();
   }

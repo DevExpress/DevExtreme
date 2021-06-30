@@ -74,7 +74,7 @@ export default class CompileManager {
         version,
       };
     } catch (e) {
-      throw new Error(`Compilation failed. bundle: ${bundleOptions}, file: ${e.file} line: ${e.line} ${e.message}`);
+      throw new Error(`Compilation failed. bundle: ${bundleOptions.file}, file: ${e.file} line: ${e.line} ${e.message}`);
     }
   }
 }

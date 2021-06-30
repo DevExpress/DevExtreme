@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getWrappedDataSource } from 'ui/scheduler/resources/utils';
+import { getWrappedDataSource, createResourcesTree } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -272,7 +272,7 @@ QUnit.test('resourcesManager.getDataAccessors should return dataAccessors (use f
     assert.equal(resourceGetter(item), 1, 'setter & getter is ok');
 });
 
-QUnit.test('resourcesManager.getResourceTreeLeaves should work correctly when resource.field is expr', function(assert) {
+QUnit.test('getResourceTreeLeaves should work correctly when resource.field is expr', function(assert) {
     const done = assert.async();
 
     this.createInstance([{
@@ -301,7 +301,7 @@ QUnit.test('resourcesManager.getResourceTreeLeaves should work correctly when re
     });
 
     this.instance.loadResources(['outer.roomId', 'ownerId']).done($.proxy(function(groups) {
-        const tree = this.instance.createResourcesTree(groups);
+        const tree = createResourcesTree(groups);
         const result = this.instance.getResourceTreeLeaves(tree, resourcesFromItem);
 
         assert.deepEqual(result, [2, 3], 'Leaves are OK');
@@ -627,7 +627,7 @@ QUnit.test('Reduce resource tree depend on existing appointments', function(asse
     }];
 
     this.instance.loadResources(['o', 'r', 'a']).done($.proxy(function(groups) {
-        const tree = this.instance.createResourcesTree(groups);
+        const tree = createResourcesTree(groups);
         const reducedTree = this.instance.reduceResourcesTree(tree, appointments);
 
         assert.equal(reducedTree.length, 1, 'reducedTree has 1 item');

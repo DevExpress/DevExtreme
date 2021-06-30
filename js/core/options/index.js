@@ -1,7 +1,7 @@
 import { isFunction, isObject, type } from '../utils/type';
 import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
-import { clone } from '../utils/object';
+import { getPathParts } from '../utils/data';
 import { getFieldName, getParentName, convertRulesToOptions, getNestedOptionValue } from './utils';
 import { extend } from '../utils/extend';
 
@@ -196,12 +196,12 @@ export class Options {
 
     reset(name) {
         if(name) {
-            const fullPath = name.replace(/\[([^\]])\]/g, '.$1').split('.');
+            const fullPath = getPathParts(name);
             const value = fullPath.reduce(
                 (value, field) => value ? value[field] : this.initial(field), null
             );
 
-            const defaultValue = isObject(value) ? clone(value) : value;
+            const defaultValue = isObject(value) ? { ...value } : value;
 
             this._optionManager.set(name, defaultValue, false);
         }

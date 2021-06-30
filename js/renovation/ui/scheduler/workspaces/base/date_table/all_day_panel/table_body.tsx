@@ -30,6 +30,8 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
       index: cellIndex,
       isFirstGroupCell,
       isLastGroupCell,
+      isSelected,
+      isFocused,
       key,
     }) => (
       <Cell
@@ -42,6 +44,8 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
         index={cellIndex}
         dataCellTemplate={viewModel.props.dataCellTemplate}
         key={key}
+        isSelected={isSelected}
+        isFocused={isFocused}
       />
     ))}
   </Row>

@@ -168,7 +168,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
             const $focusedElement = $(':focus');
-            const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
+            const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
             eventsEngine.off($rowsView, 'focusin', rowsViewFocusHandler);
             eventsEngine.on($rowsView, 'focusin', rowsViewFocusHandler);
@@ -1106,7 +1106,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const editingController = this._editingController;
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
 
-            if(!this.option('repaintChangesOnly') && isCellEditMode && editingController.hasChanges()) {
+            if(isCellEditMode && editingController.hasChanges()) {
                 editingController._focusEditingCell();
                 return;
             }

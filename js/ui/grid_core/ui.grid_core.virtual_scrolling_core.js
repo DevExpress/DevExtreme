@@ -25,9 +25,7 @@ export function _setPixelRatioFn(value) {
 ///#ENDDEBUG
 
 export function getContentHeightLimit(browser) {
-    if(browser.msie) {
-        return 4000000;
-    } else if(browser.mozilla) {
+    if(browser.mozilla) {
         return 8000000;
     }
 
