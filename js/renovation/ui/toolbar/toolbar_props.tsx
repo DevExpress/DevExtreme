@@ -49,6 +49,8 @@ export class CollectionWidgetItem {
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item>text2</Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
   @OneWay()
   text?: string;
 
@@ -60,6 +62,8 @@ export class CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item disabled>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
   disabled?: boolean;
@@ -74,6 +78,8 @@ export class CollectionWidgetItem {
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item><h1>text3<h1></Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
   @OneWay()
   html?: string;
 
@@ -85,6 +91,8 @@ export class CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item visible={false}>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
   visible?: boolean;
@@ -100,6 +108,8 @@ export class CollectionWidgetItem {
   // - react (for demo purposes only, will be available in future releases):
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item>put here your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   // @OneWay()
   // template?:
@@ -124,6 +134,8 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item cssClass={'my_class'}>your markup</Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
   @OneWay()
   cssClass?: string;
 
@@ -136,6 +148,8 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item locateInMenu={'always'}>your markup</Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
   @OneWay()
   locateInMenu?: 'always' | 'auto' | 'never';
 
@@ -147,6 +161,8 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item location={'before'}>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
   location?: 'after' | 'before' | 'center';
@@ -165,6 +181,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
   widget?: 'dxButton' | 'dxCheckBox' | 'dxTextBox';
@@ -180,6 +197,8 @@ export class ToolbarItem extends CollectionWidgetItem {
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
   //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
   @Nested()
   options?: ToolbarButtonProps;
 
@@ -192,6 +211,8 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - react (for demo purposes only, will be available in future releases):
   // it is not a 'native' way, use this instead:
   // <Toolbar> <Item><Button text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
   showText?: 'always' | 'inMenu';
