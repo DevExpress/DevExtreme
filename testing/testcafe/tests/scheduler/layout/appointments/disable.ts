@@ -10,22 +10,22 @@ test('Appointment popup should be readOnly if appointment is disabled', async (t
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.expect(await takeScreenshot('disabled-appointments-in-grid'));
+  await t.expect(await takeScreenshot('disabled-appointments-in-grid.png'));
 
   await t.doubleClick(scheduler.getAppointment('A').element, { speed: 0.1 })
-    .expect(await takeScreenshot('enabled-appointment'));
+    .expect(await takeScreenshot('enabled-appointment.png'));
   await t.click(scheduler.appointmentPopup.cancelButton);
 
   await t.doubleClick(scheduler.getAppointment('B').element, { speed: 0.1 })
-    .expect(await takeScreenshot('disabled-appointment'));
+    .expect(await takeScreenshot('disabled-appointment.png'));
   await t.click(scheduler.appointmentPopup.cancelButton);
 
   await t.doubleClick(scheduler.getAppointment('C').element, { speed: 0.1 })
-    .expect(await takeScreenshot('enabled-by-function-appointment'));
+    .expect(await takeScreenshot('enabled-by-function-appointment.png'));
   await t.click(scheduler.appointmentPopup.cancelButton);
 
   await t.doubleClick(scheduler.getAppointment('D').element, { speed: 0.1 })
-    .expect(await takeScreenshot('disabled-by-function-appointment'));
+    .expect(await takeScreenshot('disabled-by-function-appointment.png'));
   await t.click(scheduler.appointmentPopup.cancelButton);
 
   await t.expect(compareResults.isValid())
