@@ -133,12 +133,12 @@ describe('Button', () => {
       mount(viewFunction({
         props: {
           template,
+        },
+        buttonTemplateData: {
           text: 'button',
           icon: 'icon',
-          templateData: {
-            templateField1: 'field1',
-            templateField2: 'field2',
-          },
+          templateField1: 'field1',
+          templateField2: 'field2',
         },
       } as any) as any);
 
@@ -161,7 +161,8 @@ describe('Button', () => {
         };
       }) => <div className="custom-content">{`${text}_text`}</div>;
       const button = mount(viewFunction({
-        props: { template, text: 'button', icon: 'icon' },
+        props: { template },
+        buttonTemplateData: { text: 'button', icon: 'icon' },
       } as any) as any);
 
       const buttonContent = button.find('.dx-button-content');
@@ -548,6 +549,20 @@ describe('Button', () => {
         it('should return config for the back button', () => {
           expect(new Button({ type: 'back' }).inkRippleConfig)
             .toEqual(rippleConfig);
+        });
+      });
+
+      describe('buttonTemplateData', () => {
+        it('should return icon and text as is', () => {
+          expect(new Button({ icon: 'icon', text: 'text' }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text' });
+        });
+
+        it('should add templateData fields', () => {
+          const templateData = { customData: 'data ' };
+
+          expect(new Button({ icon: 'icon', text: 'text', templateData }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text', ...templateData });
         });
       });
     });

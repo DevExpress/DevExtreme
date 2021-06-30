@@ -1,6 +1,6 @@
-import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
-import dateUtils from '../../../core/utils/date';
-import { ExpressionUtils } from '../expressionUtils';
+import BaseAppointmentsStrategy from './strategy.base';
+import dateUtils from '../../../../core/utils/date';
+import { ExpressionUtils } from '../../expressionUtils';
 
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
 const MIN_APPOINTMENT_HEIGHT = 35;

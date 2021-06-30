@@ -1,10 +1,10 @@
-import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
-import { extend } from '../../../core/utils/extend';
-import { isNumeric } from '../../../core/utils/type';
-import dateUtils from '../../../core/utils/date';
-import timeZoneUtils from './../utils.timeZone';
-import { ExpressionUtils } from '../expressionUtils';
-import { createAppointmentAdapter } from '../appointmentAdapter';
+import BaseAppointmentsStrategy from './strategy.base';
+import { extend } from '../../../../core/utils/extend';
+import { isNumeric } from '../../../../core/utils/type';
+import dateUtils from '../../../../core/utils/date';
+import timeZoneUtils from '../../utils.timeZone';
+import { ExpressionUtils } from '../../expressionUtils';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;

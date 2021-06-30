@@ -116,8 +116,6 @@ class SchedulerAgenda extends WorkSpace {
         return this.option('agendaDuration');
     }
 
-    _getDateByIndex() { return noop(); }
-
     _getFormat() {
         return 'd ddd';
     }

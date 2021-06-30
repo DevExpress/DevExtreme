@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
+import { getHeaderCellText } from '../utils/base';
 
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
@@ -189,30 +190,26 @@ export class ViewDataGenerator {
 
     _generateHeaderDateRow(options, completeViewDataMap) {
         const {
-            getDateHeaderText,
             today,
             groupByDate,
             horizontalGroupCount,
             cellCountInGroupRow,
             groupOrientation,
-            getDateHeaderDate,
+            headerCellTextFormat,
+            getDateForHeaderText,
+            interval,
+            startViewDate,
+            startDayHour,
+            cellCountInDay,
         } = options;
 
-        const dates = [];
-
-        for(let dateIndex = 0; dateIndex < cellCountInGroupRow; dateIndex += 1) {
-            dates.push(getDateHeaderDate(dateIndex));
-        }
-
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const columnCount = completeViewDataMap[index].length;
-        const dateHeaderColumnCount = groupByDate
-            ? columnCount / horizontalGroupCount
-            : columnCount;
         const colSpan = groupByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
+        const slicedByColumnsData = groupByDate
+            ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
+            : completeViewDataMap[index];
 
         return slicedByColumnsData.map(({
             startDate,
@@ -220,15 +217,30 @@ export class ViewDataGenerator {
             isFirstGroupCell,
             isLastGroupCell,
             ...restProps
-        }, index) => ({
-            ...restProps,
-            startDate: dates[index % cellCountInGroupRow],
-            text: getDateHeaderText(index % cellCountInGroupRow),
-            today: dateUtils.sameDate(startDate, today),
-            colSpan,
-            isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
-            isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
-        }));
+        }, index) => {
+            const text = getHeaderCellText(
+                index % cellCountInGroupRow,
+                startDate,
+                headerCellTextFormat,
+                getDateForHeaderText,
+                {
+                    interval,
+                    startViewDate,
+                    startDayHour,
+                    cellCountInDay,
+                },
+            );
+
+            return ({
+                ...restProps,
+                startDate,
+                text,
+                today: dateUtils.sameDate(startDate, today),
+                colSpan,
+                isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
+                isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+            });
+        });
     }
 
     _getCompleteTimePanelMap(options, completeViewDataMap) {
