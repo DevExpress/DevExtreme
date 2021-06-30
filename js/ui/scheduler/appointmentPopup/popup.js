@@ -142,7 +142,7 @@ export class AppointmentPopup {
         });
     }
 
-    _createPopupContent() { // TODO
+    _createPopupContent() {
         this._createForm();
         return this.form._appointmentForm.$element();
     }
@@ -229,7 +229,7 @@ export class AppointmentPopup {
 
         const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
 
-        this.form._appointmentForm.option('readOnly', this._isReadOnly(data));
+        this.form.readOnly = this._isReadOnly(data);
 
         this.form.updateFormData(formData, this.scheduler.getDataAccessors().expr);
         this.form.setEditorsType(startDateExpr, endDateExpr, allDay);

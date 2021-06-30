@@ -76,6 +76,16 @@ export class AppointmentForm {
         // this.create();
     }
 
+    set readOnly(value) {
+        this._appointmentForm.option('readOnly', value);
+        const { recurrenceRuleExpr } = this.schedulerInst.getDataAccessors().expr;
+
+        const recurrenceEditor = this._appointmentForm.getEditor(recurrenceRuleExpr);
+        if(recurrenceEditor) {
+            recurrenceEditor._recurrenceForm.option('readOnly', value);
+        }
+    }
+
     create(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
         const recurrenceEditorVisibility = !!appointmentData[dataExprs.recurrenceRuleExpr];
         const colSpan = recurrenceEditorVisibility ? 1 : 2;
@@ -88,7 +98,7 @@ export class AppointmentForm {
         ];
 
         changeSize(recurrenceEditorVisibility);
-        this._editors = [
+        const items = [
             {
                 itemType: 'group',
                 name: APPOINTMENT_FORM_GROUP_NAMES.Main,
@@ -107,12 +117,10 @@ export class AppointmentForm {
             }
         ];
 
-        // TODO
-
         const element = $('<div>');
 
         this._appointmentForm = schedulerInst.createComponent(element, Form, {
-            items: this._editors,
+            items,
             showValidationSummary: true,
             scrollingEnabled: true,
             colCount: 'auto',
@@ -374,6 +382,7 @@ export class AppointmentForm {
     }
 
     updateFormData(formData, dataExprs) {
+        // debugger;
         this._lockDateShiftFlag = true;
 
         const startDate = new Date(formData[dataExprs.startDateExpr]);

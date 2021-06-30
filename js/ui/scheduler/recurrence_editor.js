@@ -672,6 +672,11 @@ class RecurrenceEditor extends Editor {
 
     _optionChanged(args) {
         switch(args.name) {
+            case 'readOnly':
+                this._repeatCountEditor.option('readOnly', args.value);
+                this._weekEditor.option('readOnly', args.value);
+                super._optionChanged(args);
+                break;
             case 'value':
                 this._recurrenceRule.makeRules(args.value);
 
