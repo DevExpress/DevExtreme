@@ -170,3 +170,9 @@ export const getHeaderCellText = (
     const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
     return dateLocalization.format(validDate, headerCellTextFormat);
 };
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};
