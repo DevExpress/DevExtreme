@@ -16,9 +16,12 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
   // <Toolbar items={["text1"]}></Toolbar>
   // <Toolbar items={[{ text: 'item2' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar items={["text1"]}></Toolbar>
   // <Toolbar> <Item text={"text2"}/> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   @Nested() items?: (string | ToolbarItem | any)[];
@@ -96,7 +99,7 @@ export class CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'item2' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text2"}/> </Toolbar>
   //
   @OneWay()
@@ -108,7 +111,7 @@ export class CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text4', disabled: true }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text4"} disabled /> </Toolbar>
   //
   @OneWay()
@@ -120,7 +123,7 @@ export class CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ html: '<h1>text3<h1>' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item html={"<h1>text3<h1>"}/> </Toolbar>
   //
   @OneWay()
@@ -132,7 +135,7 @@ export class CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text5', visible: false }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text5"} visible={false} /> </Toolbar>
   //
   @OneWay()
@@ -146,7 +149,7 @@ export class CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text5', template: ???? }]} /> - how to use it?
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item>text5</Item> </Toolbar> - 'text5' DOM element is not created
   //
   // @OneWay()
@@ -169,7 +172,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text4', cssClass: 'my_class' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text1"} cssClass={'my_class'}/> </Toolbar>
   //
   @OneWay()
@@ -181,7 +184,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text2', locateInMenu: 'always' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text2"} locateInMenu={'always'}/> </Toolbar>
   //
   @OneWay()
@@ -193,17 +196,16 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - renoV syntax:
   // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
   //
-  // - react:
+  // - react (for demo purposes only, will be available in future releases):
   // <Toolbar> <Item text={"text3"} location={'before'}/> </Toolbar>
   //
   @OneWay()
   location?: 'after' | 'before' | 'center';
 
-  // @OneWay()
-  // menuItemTemplate?: template | (() => string | UserDefinedElement);
-
   /*
-  ? menuItemTemplate?: template | (() => string | UserDefinedElement);
+  TODO:
+
+  menuItemTemplate?: template | (() => string | UserDefinedElement);
   options?: any;
   showText?: 'always' | 'inMenu';
   widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox'
