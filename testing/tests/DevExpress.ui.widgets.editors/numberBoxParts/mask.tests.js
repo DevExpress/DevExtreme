@@ -2122,6 +2122,21 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
         assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1 + 1, '+ 1 -> format after typing');
     });
 
+    QUnit.test('custom formatter can be passed right to "format" property', function(assert) {
+        let callCount = 0;
+        this.instance.option({
+            format: () => {
+                callCount++;
+                return '';
+            }
+        });
+        const callCountAfterCreateLdmlPattern = callCount;
+
+        this.keyboard.type('1');
+
+        assert.strictEqual(callCount, callCountAfterCreateLdmlPattern + 1, 'formatter is called after typing');
+    });
+
     QUnit.test('editor should create a new LDML pattern for custom formatter after "format" option change', function(assert) {
         let counter = 0;
         const formatter = (val) => {
