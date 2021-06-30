@@ -202,13 +202,28 @@ export class ToolbarItem extends CollectionWidgetItem {
   @OneWay()
   location?: 'after' | 'before' | 'center';
 
+  //
+  // Use cases:
+  //
+  // - renoV syntax:
+  // <Toolbar items={[{ widget: 'dxButton' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item widget='dxButton'></Item> </Toolbar>
+  //
+  // TODO:
+  // - Error if used in TestComponent in playground\react with dxAutocomplete | dxDateBox |
+  //   dxMenu | dxSelectBox | dxTabs | dxButtonGroup | dxDropDownButton:
+  //   TypeError: (0 , _renderer.default)(...)[component] is not a function
+  //
+  @OneWay()
+  widget?: 'dxButton' | 'dxCheckBox' | 'dxTextBox';
+
   /*
   TODO:
 
   menuItemTemplate?: template | (() => string | UserDefinedElement);
   options?: any;
   showText?: 'always' | 'inMenu';
-  widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox'
-    | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
   */
 }
