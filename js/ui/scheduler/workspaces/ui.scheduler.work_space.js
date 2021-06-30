@@ -1186,15 +1186,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getCellPositionByIndex(index, inAllDayRow) {
-        const cellCoordinates = this._getCellCoordinatesByIndex(index);
-
-        return this._getCellPosition(
-            cellCoordinates,
-            inAllDayRow && !this._isVerticalGroupedWorkSpace(),
-        );
-    }
-
     _getCellPosition(cellCoordinates, isAllDayPanel) {
         const {
             dateTableCellsMeta,

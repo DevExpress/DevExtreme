@@ -14696,6 +14696,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxNavBar]
+   * @deprecated [depNote:dxNavBar]
    */
   export class dxNavBar extends dxTabs<dxNavBarOptions> {}
   module dxNavBar {
@@ -17561,6 +17562,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOut]
+   * @deprecated [depNote:dxSlideOut]
    */
   export class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
     /**
@@ -17701,6 +17703,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOutView]
+   * @deprecated [depNote:dxSlideOutView]
    */
   export class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**
