@@ -277,7 +277,7 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(0));
             const framePosition = getBoundingRect($resizeFrame.get(0));
 
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
+            assert.roughEqual(tablePosition.top, framePosition.top, 0.1, 'Frame top position is correrct');
         });
     });
 
@@ -1013,10 +1013,10 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(1));
             const framePosition = getBoundingRect($resizeFrame.get(1));
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.roughEqual(tablePosition.left, framePosition.left, 0.1, 'Left is correrct');
+            assert.roughEqual(tablePosition.top, framePosition.top, 0.1, 'Top is correrct');
+            assert.roughEqual(tablePosition.height, framePosition.height, 0.1, 'Height is correrct');
+            assert.roughEqual(tablePosition.width, framePosition.width, 0.1, 'Width is correrct');
         });
 
         test('Row resizers should be updated on the table structure update after resize', function(assert) {
