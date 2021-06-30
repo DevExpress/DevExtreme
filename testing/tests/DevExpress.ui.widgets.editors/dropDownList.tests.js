@@ -729,6 +729,17 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             assert.strictEqual(this.getListItemsCount(), 0, 'search is still in progress');
         });
 
+        QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅏ');
+            this.$input.trigger($.Event('compositionend'));
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'last input composite character is not in search value');
+        });
+
         QUnit.test('should search if composition is finished', function(assert) {
             this.$input.trigger($.Event('compositionstart'));
             this.keyboard.type('ㅇ');

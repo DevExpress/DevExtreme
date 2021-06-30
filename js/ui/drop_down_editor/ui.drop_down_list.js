@@ -654,14 +654,14 @@ const DropDownList = DropDownEditor.inherit({
 
     _renderEvents: function() {
         this.callBase();
-        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), () => { this._setFocusPolicy(); });
 
         if(this._shouldRenderSearchEvent()) {
-            eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getSearchEvent(), () => { this._searchHandler(); });
             eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
             eventsEngine.on(this._input(), this._getCompositionEndEvent(), () => {
                 this._isTextCompositionInProgress(undefined);
-                this._searchHandler();
+                this._searchHandler(this._searchValue());
             });
         }
     },
@@ -687,7 +687,7 @@ const DropDownList = DropDownEditor.inherit({
         }
     },
 
-    _searchHandler: function() {
+    _searchHandler: function(searchValue) {
         if(this._isTextCompositionInProgress()) {
             return;
         }
@@ -701,9 +701,12 @@ const DropDownList = DropDownEditor.inherit({
 
         if(searchTimeout) {
             this._clearSearchTimer();
-            this._searchTimer = setTimeout(this._searchDataSource.bind(this), searchTimeout);
+            this._searchTimer = setTimeout(
+                () => { this._searchDataSource(searchValue); },
+                searchTimeout
+            );
         } else {
-            this._searchDataSource();
+            this._searchDataSource(searchValue);
         }
     },
 
@@ -715,8 +718,8 @@ const DropDownList = DropDownEditor.inherit({
         this._refreshList();
     },
 
-    _searchDataSource: function() {
-        this._filterDataSource(this._searchValue());
+    _searchDataSource: function(searchValue = this._searchValue()) {
+        this._filterDataSource(searchValue);
     },
 
     _filterDataSource: function(searchValue) {
