@@ -34,7 +34,7 @@ const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
 function getMaxHorizontalScrollOffset(scrollable) {
-    return scrollable ? scrollable.scrollWidth() - scrollable.clientWidth() : 0;
+    return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
 
 export const rowsModule = {
@@ -266,18 +266,19 @@ export const rowsModule = {
                     that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
+                    let scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
 
                         if(isNativeScrolling) {
-                            e.scrollOffset.left = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                            scrollLeft = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
                         }
 
                         if(!this.isScrollbarVisible(true)) {
                             this._scrollLeft = -1;
                         }
                     }
-                    that.scrollChanged.fire(e.scrollOffset, that.name);
+                    that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
                 },
 
                 _renderScrollableCore: function($element) {
