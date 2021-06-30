@@ -15297,6 +15297,47 @@ QUnit.module('Editing with validation', {
             assert.deepEqual(validationCallback.getCall(0).args[0].data, { id: 1, name: 'test1', description: 'test2' }, 'correct data');
         });
     });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - _getOldData should return correct data when changes are specified initially`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true,
+                    changes: [
+                        {
+                            type: 'update',
+                            key: 1,
+                            data: { name: 'test1' }
+                        }
+                    ]
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }]
+                }, 'description']
+            });
+
+            this.editCell(0, 0);
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(this.editingController._getOldData(1), { id: 1, name: 'test', description: 'test2' }, 'correct data');
+        });
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
