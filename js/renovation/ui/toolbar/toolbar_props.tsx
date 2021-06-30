@@ -8,8 +8,6 @@ import { BaseWidgetProps } from '../common/base_props';
 
 @ComponentBindings()
 export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
-  @OneWay() itemHoldTimeout?: number;
-
   // Use cases (see ToolbarItem for more cases):
   //
   // - in a RenoV component:
@@ -26,65 +24,15 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
   @Nested() items?: (string | ToolbarItem)[]; // TODO: any
 
   /*
-  TODO: old API
+    TODO
 
-    dataSource
-    disabled
-    elementAttr
-    height
-    hint
-    hoverStateEnabled
-    itemComponent
-    itemHoldTimeout
-    itemRender
-    itemTemplate
-    menuItemComponent
-    menuItemRender
-    menuItemTemplate
-    noDataText
-    onContentReady
-    onDisposing
-    onInitialized
-    onItemClick
-    onItemContextMenu
-    onItemHold
-    onItemRendered
-    onOptionChanged
-    renderAs
-    rtlEnabled
-    visible
-    width
+    dataSource?: string | Array<string | dxToolbarItem | any> |
+      Store | DataSource | DataSourceOptions;
+    menuItemTemplate?: template |
+      ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
 
-    Methods:
+    CollectionWidgetOptions<dxToolbar> members
 
-    beginUpdate()
-    defaultOptions(rule)
-    dispose()
-    element()
-    endUpdate()
-    getDataSource()
-    getInstance(element)
-    instance()
-    off(eventName)
-    off(eventName, eventHandler)
-    on(eventName, eventHandler)
-    on(events)
-    option()
-    option(optionName)
-    option(optionName, optionValue)
-    option(options)
-    repaint()
-    resetOption(optionName)
-
-    Events:
-    contentReady
-    disposing
-    initialized
-    itemClick
-    itemContextMenu
-    itemHold
-    itemRendered
-    optionChanged
   */
 }
 
