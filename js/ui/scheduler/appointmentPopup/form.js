@@ -81,9 +81,7 @@ export class AppointmentForm {
         const { recurrenceRuleExpr } = this.schedulerInst.getDataAccessors().expr;
 
         const recurrenceEditor = this._appointmentForm.getEditor(recurrenceRuleExpr);
-        if(recurrenceEditor) {
-            recurrenceEditor._recurrenceForm.option('readOnly', value);
-        }
+        recurrenceEditor?._recurrenceForm?.option('readOnly', value);
     }
 
     create(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
