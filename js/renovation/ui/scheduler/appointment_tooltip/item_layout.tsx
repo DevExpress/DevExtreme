@@ -2,7 +2,6 @@ import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Event, JSXTemplate,
 } from '@devextreme-generator/declarations';
-import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
@@ -17,6 +16,7 @@ import { Button } from '../../button';
 import { TooltipItemContent } from './item_content';
 import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';
+import { EventCallback } from '../../common/event_callback';
 
 export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
   const ItemContentTemplate = viewModel.props.itemContentTemplate;
@@ -66,9 +66,9 @@ export class TooltipItemLayoutProps {
 
   @Template() itemContentTemplate?: JSXTemplate<AppointmentTooltipTemplate>;
 
-  @Event() onDelete: CheckAndDeleteAppointmentFn = noop;
+  @Event() onDelete?: CheckAndDeleteAppointmentFn;
 
-  @Event() onHide: () => void = noop;
+  @Event() onHide?: EventCallback;
 
   @OneWay() getTextAndFormatDate: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
@@ -92,9 +92,9 @@ export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
     } = this.props;
 
     return (e: { event: Event }): void => {
-      onHide();
+      onHide?.();
       e.event.stopPropagation();
-      onDelete(item.data, singleAppointment);
+      onDelete?.(item.data, singleAppointment);
     };
   }
 

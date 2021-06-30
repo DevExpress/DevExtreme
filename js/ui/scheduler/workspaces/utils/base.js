@@ -178,3 +178,9 @@ export const formatWeekday = function(date) {
 export const formatWeekdayAndDay = (date) => {
     return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
 };
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};
