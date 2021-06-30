@@ -3,8 +3,6 @@
 import {
   ComponentBindings, OneWay, Nested,
 } from '@devextreme-generator/declarations';
-import type { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
-import type { template } from '../../../core/templates/template';
 
 import { BaseWidgetProps } from '../common/base_props';
 
@@ -165,17 +163,44 @@ export class CollectionWidgetItem {
 export class ToolbarItem extends CollectionWidgetItem {
   // js\ui\toolbar.d.ts - export interface dxToolbarItem extends CollectionWidgetItem {
 
+  //
+  // Use cases:
+  //
+  // - renoV syntax:
+  // <Toolbar items={[{ text: 'text4', cssClass: 'my_class' }]} />
+  //
+  // - react:
+  // <Toolbar> <Item text={"text1"} cssClass={'my_class'}/> </Toolbar>
+  //
   @OneWay()
   cssClass?: string;
 
+  //
+  // Use cases:
+  //
+  // - renoV syntax:
+  // <Toolbar items={[{ text: 'text2', locateInMenu: 'always' }]} />
+  //
+  // - react:
+  // <Toolbar> <Item text={"text2"} locateInMenu={'always'}/> </Toolbar>
+  //
   @OneWay()
   locateInMenu?: 'always' | 'auto' | 'never';
 
+  //
+  // Use cases:
+  //
+  // - renoV syntax:
+  // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
+  //
+  // - react:
+  // <Toolbar> <Item text={"text3"} location={'before'}/> </Toolbar>
+  //
   @OneWay()
   location?: 'after' | 'before' | 'center';
 
-  @OneWay()
-  menuItemTemplate?: template | (() => string | UserDefinedElement);
+  // @OneWay()
+  // menuItemTemplate?: template | (() => string | UserDefinedElement);
 
   /*
   ? menuItemTemplate?: template | (() => string | UserDefinedElement);
