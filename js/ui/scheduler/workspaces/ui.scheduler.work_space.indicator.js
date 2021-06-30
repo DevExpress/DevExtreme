@@ -7,6 +7,7 @@ import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 import { getTimeZoneCalculator } from '../instanceFactory';
+import { getToday } from './utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -18,10 +19,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         return getTimeZoneCalculator(this.option('key'));
     }
     _getToday() {
-        const todayDate = this.option('indicatorTime') || new Date();
-        const timeZoneCalculator = this._getTimeZoneCalculator();
-
-        return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+        return getToday(this.option('indicatorTime'), this._getTimeZoneCalculator());
     }
 
     isIndicationOnView() {

@@ -181,3 +181,9 @@ export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
 
     return 0;
 };
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};

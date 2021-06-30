@@ -14,7 +14,7 @@ import {
 import type DomComponent from '../../../core/dom_component';
 import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { EventCallback } from './event_callback.d';
+import { EventCallback } from './event_callback';
 import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
