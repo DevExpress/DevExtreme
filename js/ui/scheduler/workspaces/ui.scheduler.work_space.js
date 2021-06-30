@@ -1531,13 +1531,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         ];
     }
 
-    getCellWidth() {
-        return this.cache.get('cellWidth', () => {
-            const cell = this._getCells().first().get(0);
-            return cell && getBoundingRect(cell).width;
-        });
-    }
-
     getCellMinWidth() {
         return DATE_TABLE_MIN_CELL_WIDTH;
     }
@@ -1565,21 +1558,28 @@ class SchedulerWorkSpace extends WidgetObserver {
         return width / (totalCellCount + cellCount - startIndex);
     }
 
-    getCellHeight(useCache = true) {
-        const callbackResult = () => {
-            const cell = this._getCells().first().get(0);
-            return cell && getBoundingRect(cell).height;
-        };
+    getCellHeight() {
+        const { dateTableCellsMeta } = this.getDOMElementsMetaData();
 
-        return useCache
-            ? this.cache.get('cellHeight', callbackResult)
-            : callbackResult();
+        return dateTableCellsMeta?.length
+            ? dateTableCellsMeta[0][0].height
+            : 0;
+    }
+
+    getCellWidth() {
+        const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+
+        return dateTableCellsMeta?.length
+            ? dateTableCellsMeta[0][0].width
+            : 0;
     }
 
     getAllDayHeight() {
-        const cell = this._getCells(true).first().get(0);
+        const { allDayPanelCellsMeta } = this.getDOMElementsMetaData();
 
-        return this._isShowAllDayPanel() ? cell && getBoundingRect(cell).height || 0 : 0;
+        return allDayPanelCellsMeta?.length
+            ? allDayPanelCellsMeta[0][0].height
+            : 0;
     }
 
     getAllDayOffset() {
@@ -1593,52 +1593,35 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedHorizontalPosition(groupIndex) {
-        const getMaxPosition = columnIndex => {
-            const cell = this._$dateTable
-                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
-                .first()
-                .find(`td:not(.${VIRTUAL_CELL_CLASS})`)
-                .get(columnIndex);
+        const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+        const firstRow = dateTableCellsMeta[0];
 
-            let maxPosition = $(cell).position().left;
-            if(!this.option('rtlEnabled')) {
-                maxPosition += getBoundingRect(cell).width;
-            }
+        if(!firstRow) return 0;
 
-            this._maxAllowedPosition[groupIndex] = Math.round(maxPosition);
-        };
+        const { columnIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
+        const cellPosition = firstRow[columnIndex];
 
-        if(!this._maxAllowedPosition[groupIndex]) {
-            const { columnIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
-            getMaxPosition(columnIndex);
-        }
-
-        return this._maxAllowedPosition[groupIndex];
+        return this.option('rtlEnabled')
+            ? cellPosition.left + cellPosition.width
+            : cellPosition.left;
     }
 
     getMaxAllowedVerticalPosition(groupIndex) {
-        const getMaxPosition = rowIndex => {
-            const row = this._$dateTable
-                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
-                .get(rowIndex);
+        const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
+        const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+        const lastGroupRow = dateTableCellsMeta[rowIndex];
 
-            let maxPosition = $(row).position().top + getBoundingRect(row).height;
+        if(!lastGroupRow) return 0;
 
-            // TODO remove while refactoring dual calculcations.
-            // Should decrease allDayPanel amount due to the dual calculation corrections.
-            if(this.isGroupedAllDayPanel()) {
-                maxPosition -= (groupIndex + 1) * this.getAllDayHeight();
-            }
+        let result = lastGroupRow.top + lastGroupRow.width;
 
-            this._maxAllowedVerticalPosition[groupIndex] = Math.round(maxPosition);
-        };
-
-        if(!this._maxAllowedVerticalPosition[groupIndex]) {
-            const { rowIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
-            getMaxPosition(rowIndex);
+        // TODO remove while refactoring dual calculcations.
+        // Should decrease allDayPanel amount due to the dual calculation corrections.
+        if(this.isGroupedAllDayPanel()) {
+            result -= (groupIndex + 1) * this.getAllDayHeight();
         }
 
-        return this._maxAllowedVerticalPosition[groupIndex];
+        return result;
     }
 
     // NOTE: refactor leftIndex calculation
