@@ -1026,8 +1026,12 @@ module('View Data Provider', {
                     const startDate = (new Date(baseStartDate));
                     startDate.setDate(10 + columnIndex);
 
+                    const hour = rowIndex + 5;
+
+                    startDate.setHours(hour);
+
                     const endDate = new Date(startDate);
-                    endDate.setHours(2);
+                    endDate.setHours(hour + 2);
 
                     return ({
                         value: {
@@ -1225,47 +1229,47 @@ module('View Data Provider', {
 
                 const expectedDateHeaderMap = [[{
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 10),
+                    startDate: new Date(2021, 0, 10, 5),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 0,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 11, 5),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 1,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: false,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 10),
+                    startDate: new Date(2021, 0, 10, 5),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 11, 5),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 3,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: false,
                 }]];
 
@@ -1286,26 +1290,26 @@ module('View Data Provider', {
 
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
+                    startDate: new Date(2021, 0, 10, 5),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
                     key: 0,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
-                    groupIndex: 1,
-                    groups: { groupId: 2 },
-                    index: 0,
+                    startDate: new Date(2021, 0, 11, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 1,
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
-                    key: 1,
-                    text: '12:00 AM',
-                    today: true,
+                    key: 2,
+                    text: '5:00 AM',
+                    today: false,
                 }]];
 
                 const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
@@ -1327,8 +1331,8 @@ module('View Data Provider', {
 
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
+                    startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 7),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1338,8 +1342,8 @@ module('View Data Provider', {
                     text: 'week header text',
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
+                    startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 7),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1349,47 +1353,47 @@ module('View Data Provider', {
                     text: 'week header text',
                 }], [{
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 10),
+                    startDate: new Date(2021, 0, 10, 5),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 0,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 11, 5),
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 1,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: false,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 10),
+                    startDate: new Date(2021, 0, 10, 5),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 11),
+                    startDate: new Date(2021, 0, 11, 5),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 3,
-                    text: '12:00 AM',
+                    text: '5:00 AM',
                     today: false,
                 }]];
 
