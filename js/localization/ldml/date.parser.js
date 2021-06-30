@@ -1,4 +1,5 @@
 import { escapeRegExp } from '../../core/utils/common';
+import { logger } from '../../core/utils/console';
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -23,7 +24,7 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return count === 2 ? '[0-9]{2}' : `[0-9]{${count},5}?`;
+        return '[0-9]+?';
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
@@ -177,6 +178,7 @@ export const getRegExpInfo = function(format, dateParts) {
     let regexpText = '';
     let stubText = '';
     let isEscaping;
+    let isSeparatedFormat = true;
     const patterns = [];
 
     const addPreviousStub = function() {
@@ -189,8 +191,14 @@ export const getRegExpInfo = function(format, dateParts) {
 
     for(let i = 0; i < format.length; i++) {
         const char = format[i];
+        const prevChar = format[i - 1];
         const isEscapeChar = char === '\'';
         const regexpPart = PATTERN_REGEXPS[char];
+        const prevCharRegexPart = PATTERN_REGEXPS[prevChar];
+
+        if(char !== ':' && prevChar !== ':' && regexpPart && prevCharRegexPart && char !== prevChar) {
+            isSeparatedFormat = false;
+        }
 
         if(isEscapeChar) {
             isEscaping = !isEscaping;
@@ -218,9 +226,13 @@ export const getRegExpInfo = function(format, dateParts) {
 
     addPreviousStub();
 
+    if(!isSeparatedFormat) {
+        logger.warn(`\`${format}\` is not separated format: ! Please use separators at the Date Time format! Not separated format provoke undefined behavior!`);
+    }
+
     return {
         patterns: patterns,
-        regexp: new RegExp('^' + regexpText + '$', 'i')
+        regexp: new RegExp('^' + regexpText + '$', 'i'),
     };
 };
 

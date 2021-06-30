@@ -8,6 +8,7 @@ const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
 const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
+const console = require('core/utils/console').logger;
 
 require('localization/currency');
 
@@ -413,11 +414,11 @@ QUnit.module('number formatter', () => {
 
     });
 
-    QUnit.test('getRegExpInfo should return correct regex for not separated patterns(T1008667)', function(assert) {
+    QUnit.test('getRegExpInfo should return correct regex for some of not separated `formats`(T1008667)', function(assert) {
         [
             {
                 format: 'yyyyMMdd',
-                data: [
+                date: [
                     ['19990211', '1999', '02', '11'],
                     ['20151209', '2015', '12', '09'],
                     ['20150101', '2015', '01', '01'],
@@ -426,7 +427,7 @@ QUnit.module('number formatter', () => {
             },
             {
                 format: 'ddMMyyyy',
-                data: [
+                date: [
                     ['11121212', '11', '12', '1212'],
                     ['3152021', '31', '5', '2021'],
                     ['19012021', '19', '01', '2021'],
@@ -435,7 +436,7 @@ QUnit.module('number formatter', () => {
             },
             {
                 format: 'MMddyyyy',
-                data: [
+                date: [
                     ['12212121', '12', '21', '2121'],
                     ['3152021', '3', '15', '2021'],
                     ['31520212', '3', '15', '20212'],
@@ -444,7 +445,7 @@ QUnit.module('number formatter', () => {
             },
             {
                 format: 'MMddyy',
-                data: [
+                date: [
                     ['122121', '12', '21', '21'],
                     ['31520', '3', '15', '20'],
                     ['110921', '11', '09', '21']
@@ -452,18 +453,44 @@ QUnit.module('number formatter', () => {
             },
             {
                 format: 'MMddyyy',
-                data: [
+                date: [
                     ['1221213', '12', '21', '213'],
                     ['315203', '3', '15', '203'],
                     ['1109213', '11', '09', '213']
                 ]
             }
-        ].forEach((data) => {
-            const regExpInfo = getRegExpInfo(data.format);
-            data.data.forEach(date => {
+        ].forEach((test) => {
+            const regExpInfo = getRegExpInfo(test.format);
+            test.date.forEach(date => {
                 const result = regExpInfo.regexp.exec(date[0]);
-                assert.deepEqual(result, [date[0], date[1], date[2], date[3]], `${data.format} - format ok`);
+                assert.deepEqual(result, [date[0], date[1], date[2], date[3]], `${test.format} - format ok`);
             });
+        });
+    });
+
+    QUnit.test('getRegExpInfo should write warning message if `format` is not separated', function(assert) {
+        const spy = sinon.spy(console, 'warn');
+        [
+            {
+                format: 'yyyyMMdd',
+                warn: true
+            },
+            {
+                format: ' yyyyMMdd ',
+                warn: true
+            },
+            {
+                format: 'yyyy MMdd',
+                warn: true
+            },
+            {
+                format: 'yyyy MM dd',
+                warn: false
+            }
+        ].forEach((test) => {
+            spy.callCount = 0;
+            getRegExpInfo(test.format);
+            assert.equal(spy.callCount, test.warn);
         });
     });
 });
