@@ -1325,8 +1325,11 @@ module('View Data Provider', {
                     ...dataGenerationRenderOptions,
                     isGenerateWeekDaysHeaderData: true,
                     getWeekDaysHeaderText: () => 'week header text',
-                    daysInView: 2,
+                    daysInView: 4,
                     cellCountInDay: 2,
+                    cellCount: 4,
+                    totalCellCount: 8,
+                    cellCountInGroupRow: 4,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1342,7 +1345,18 @@ module('View Data Provider', {
                     isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 0,
-                    text: 'week header text',
+                    text: 'Sun 10',
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 12, 5),
+                    endDate: new Date(2021, 0, 12, 7),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 'Tue 12',
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10, 5),
@@ -1352,8 +1366,19 @@ module('View Data Provider', {
                     index: 0,
                     isFirstGroupCell: false,
                     isLastGroupCell: false,
-                    key: 2,
-                    text: 'week header text',
+                    key: 4,
+                    text: 'Sun 10',
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 12, 5),
+                    endDate: new Date(2021, 0, 12, 7),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 2,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 6,
+                    text: 'Tue 12',
                 }], [{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10, 5),
@@ -1372,8 +1397,30 @@ module('View Data Provider', {
                     groups: { groupId: 1 },
                     index: 1,
                     isFirstGroupCell: false,
-                    isLastGroupCell: true,
+                    isLastGroupCell: false,
                     key: 1,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 12, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 13, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 3,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 3,
                     text: '5:00 AM',
                     today: false,
                 }, {
@@ -1384,8 +1431,8 @@ module('View Data Provider', {
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
-                    key: 2,
                     text: '5:00 AM',
+                    key: 4,
                     today: true,
                 }, {
                     colSpan: 1,
@@ -1394,8 +1441,30 @@ module('View Data Provider', {
                     groups: { groupId: 2, },
                     index: 1,
                     isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 5,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 12, 5),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 2,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 6,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 13, 5),
+                    groupIndex: 1,
+                    groups: { groupId: 2, },
+                    index: 3,
+                    isFirstGroupCell: false,
                     isLastGroupCell: true,
-                    key: 3,
+                    key: 7,
                     text: '5:00 AM',
                     today: false,
                 }]];
@@ -1404,6 +1473,96 @@ module('View Data Provider', {
 
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
+
+            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header and groupByDate is true', function(assert) {
+                const completeDateHeaderMapRenderOptions = {
+                    ...dataGenerationRenderOptions,
+                    isGenerateWeekDaysHeaderData: true,
+                    getWeekDaysHeaderText: () => 'week header text',
+                    daysInView: 2,
+                    cellCountInDay: 2,
+                    cellCount: 4,
+                    totalCellCount: 8,
+                    cellCountInGroupRow: 4,
+                    groupByDate: true,
+                };
+                const viewDataProvider = new ViewDataProvider();
+
+                viewDataProvider.update(completeDateHeaderMapRenderOptions, true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 4,
+                    startDate: new Date(2021, 0, 10, 5),
+                    endDate: new Date(2021, 0, 10, 7),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 'Sun 10',
+                }, {
+                    colSpan: 4,
+                    startDate: new Date(2021, 0, 12, 5),
+                    endDate: new Date(2021, 0, 12, 7),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 4,
+                    text: 'Tue 12',
+                }], [{
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 0,
+                    text: '5:00 AM',
+                    today: true,
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 11, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 2,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 12, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 4,
+                    text: '5:00 AM',
+                    today: false,
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 13, 5),
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 3,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 6,
+                    text: '5:00 AM',
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
 
             test('dateHeaderMap should be generated correctly', function(assert) {
                 const viewDataProvider = this.init('horizontal');
