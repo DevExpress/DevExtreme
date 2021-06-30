@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import {
-  ComponentBindings, OneWay, Nested,
+  ComponentBindings, OneWay, Nested, Event,
 } from '@devextreme-generator/declarations';
 
 import { BaseWidgetProps } from '../common/base_props';
@@ -12,7 +12,7 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
 
   // Use cases (see ToolbarItem for more cases):
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={["text1"]}></Toolbar>
   // <Toolbar items={[{ text: 'item2' }]} />
   //
@@ -23,8 +23,7 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
   // - TODO: prepare jquery, angular, vue code samples
   //
 
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  @Nested() items?: (string | ToolbarItem | any)[];
+  @Nested() items?: (string | ToolbarItem)[]; // TODO: any
 
   /*
   TODO: old API
@@ -96,11 +95,12 @@ export class CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ text: 'item2' }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text2"}/> </Toolbar>
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item>text2</Item> </Toolbar>
   //
   @OneWay()
   text?: string;
@@ -108,11 +108,11 @@ export class CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ text: 'text4', disabled: true }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text4"} disabled /> </Toolbar>
+  // <Toolbar> <Item disabled>your markup</Item> </Toolbar>
   //
   @OneWay()
   disabled?: boolean;
@@ -120,11 +120,12 @@ export class CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ html: '<h1>text3<h1>' }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item html={"<h1>text3<h1>"}/> </Toolbar>
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item><h1>text3<h1></Item> </Toolbar>
   //
   @OneWay()
   html?: string;
@@ -132,11 +133,11 @@ export class CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ text: 'text5', visible: false }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text5"} visible={false} /> </Toolbar>
+  // <Toolbar> <Item visible={false}>your markup</Item> </Toolbar>
   //
   @OneWay()
   visible?: boolean;
@@ -146,11 +147,12 @@ export class CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component (not 'native'):
   // <Toolbar items={[{ text: 'text5', template: ???? }]} /> - how to use it?
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item>text5</Item> </Toolbar> - 'text5' DOM element is not created
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item>put here your markup</Item> </Toolbar>
   //
   // @OneWay()
   // template?:
@@ -169,11 +171,11 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
-  // <Toolbar items={[{ text: 'text4', cssClass: 'my_class' }]} />
+  // - in a RenoV component:
+  // <Toolbar items={[{ cssClass: 'my_class' }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text1"} cssClass={'my_class'}/> </Toolbar>
+  // <Toolbar> <Item cssClass={'my_class'}>your markup</Item> </Toolbar>
   //
   @OneWay()
   cssClass?: string;
@@ -181,11 +183,11 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ text: 'text2', locateInMenu: 'always' }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text2"} locateInMenu={'always'}/> </Toolbar>
+  // <Toolbar> <Item locateInMenu={'always'}>your markup</Item> </Toolbar>
   //
   @OneWay()
   locateInMenu?: 'always' | 'auto' | 'never';
@@ -193,11 +195,11 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component:
   // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
   //
   // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text3"} location={'before'}/> </Toolbar>
+  // <Toolbar> <Item location={'before'}>your markup</Item> </Toolbar>
   //
   @OneWay()
   location?: 'after' | 'before' | 'center';
@@ -205,25 +207,89 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // Use cases:
   //
-  // - renoV syntax:
+  // - in a RenoV component (not 'native'):
   // <Toolbar items={[{ widget: 'dxButton' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item widget='dxButton'></Item> </Toolbar>
-  //
   // TODO:
   // - Error if used in TestComponent in playground\react with dxAutocomplete | dxDateBox |
   //   dxMenu | dxSelectBox | dxTabs | dxButtonGroup | dxDropDownButton:
   //   TypeError: (0 , _renderer.default)(...)[component] is not a function
   //
+  // - react (for demo purposes only, will be available in future releases):
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+  //
+  //
   @OneWay()
   widget?: 'dxButton' | 'dxCheckBox' | 'dxTextBox';
 
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
+  //
+  // TODO: any
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+  //
+  @Nested()
+  options?: ToolbarButtonProps;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // it is not a 'native' way, use this instead:
+  // <Toolbar> <Item><dxButton text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
+  //
+  @OneWay()
+  showText?: 'always' | 'inMenu';
+
   /*
   TODO:
-
   menuItemTemplate?: template | (() => string | UserDefinedElement);
-  options?: any;
-  showText?: 'always' | 'inMenu';
+  */
+}
+
+// it is not a 'native' way, use this instead:
+// <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+@ComponentBindings()
+export class ToolbarButtonProps {
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
+  //
+  @OneWay()
+  text?: string;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { type: 'danger' } }]} />
+  //
+  @OneWay()
+  type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[
+  //   { widget: 'dxButton', options: { text: 'my button', onClick: () => console.log('hi') } }
+  // ]} />
+  //
+  @Event()
+  onClick?:
+  | (() => void); // TODO: args, return value
+
+  /*
+  TODO: many props
   */
 }
