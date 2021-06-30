@@ -20,7 +20,6 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
   //
   // - TODO: prepare jquery, angular, vue code samples
   //
-
   @Nested() items?: (string | ToolbarItem)[]; // TODO: any
 
   /*
