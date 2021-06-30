@@ -1,8 +1,9 @@
 import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
+import { formatWeekdayAndDay } from './utils/base';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getFormat() {
-        return this._formatWeekdayAndDay;
+        return formatWeekdayAndDay;
     }
 
     generateRenderOptions() {

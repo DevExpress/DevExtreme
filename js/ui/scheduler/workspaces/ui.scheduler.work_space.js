@@ -7,7 +7,6 @@ import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
-import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
 import { addNamespace, isMouseEvent } from '../../../events/utils/index';
@@ -160,10 +159,6 @@ class ScrollSemaphore {
         }
     }
 }
-
-const formatWeekday = function(date) {
-    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
-};
 
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
@@ -1976,14 +1971,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _supportCompactDropDownAppointments() {
         return true;
-    }
-
-    _formatWeekday(date) {
-        return formatWeekday(date);
-    }
-
-    _formatWeekdayAndDay(date) {
-        return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
     }
 
     removeDroppableCellClass($cellElement) {

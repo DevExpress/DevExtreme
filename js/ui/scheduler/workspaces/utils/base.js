@@ -182,6 +182,14 @@ export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
     return 0;
 };
 
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
+
 export const getToday = (indicatorTime, timeZoneCalculator) => {
     const todayDate = indicatorTime || new Date();
 

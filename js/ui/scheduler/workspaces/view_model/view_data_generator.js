@@ -1,8 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { getHeaderCellText } from '../utils/base';
+import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
-
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
         const {
@@ -165,7 +164,6 @@ export class ViewDataGenerator {
             groupByDate,
             horizontalGroupCount,
             cellCountInDay,
-            getWeekDaysHeaderText,
             daysInView,
         } = options;
 
@@ -180,7 +178,7 @@ export class ViewDataGenerator {
             weekDaysRow.push({
                 ...cell,
                 colSpan,
-                text: getWeekDaysHeaderText(cell.startDate),
+                text: formatWeekdayAndDay(cell.startDate),
                 isFirstGroupCell: false,
                 isLastGroupCell: false,
             });
