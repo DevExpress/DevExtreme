@@ -1,10 +1,11 @@
 import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
 import dateLocalization from '../../../localization/date';
 import timeZoneUtils from '../utils.timeZone';
+import { formatWeekdayAndDay } from './utils/base';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getFormat() {
-        return this._formatWeekdayAndDay;
+        return formatWeekdayAndDay;
     }
 
     generateRenderOptions() {

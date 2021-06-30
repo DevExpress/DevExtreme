@@ -3723,6 +3723,7 @@ QUnit.module('datebox w/ time list', {
     });
 
     QUnit.test('All items in list should be present if value and min options are belong to different days', function(assert) {
+        const clock = sinon.useFakeTimers();
         sinon.stub(logger, 'warn');
         try {
             this.dateBox.option({
@@ -3745,6 +3746,7 @@ QUnit.module('datebox w/ time list', {
             assert.equal(items.length, 24, 'interval is correct');
             assert.equal(items.eq(0).text(), '12:45 AM', 'start time is correct');
         } finally {
+            clock.restore();
             logger.warn.restore();
         }
     });

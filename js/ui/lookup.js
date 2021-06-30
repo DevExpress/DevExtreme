@@ -838,7 +838,7 @@ const Lookup = DropDownList.inherit({
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option('valueChangeEvent'),
-                onValueChanged: this._searchHandler.bind(this)
+                onValueChanged: (e) => { this._searchHandler(e); }
             });
 
             this._registerSearchKeyHandlers();

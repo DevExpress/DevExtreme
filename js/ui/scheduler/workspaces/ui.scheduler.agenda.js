@@ -18,6 +18,7 @@ import {
 import { getPathToLeaf } from '../resources/utils';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { calculateStartViewDate } from './utils/agenda';
+import { formatWeekday } from './utils/base';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -376,7 +377,7 @@ class SchedulerAgenda extends WorkSpace {
                 if(options.getStartDate) {
                     date = options.getStartDate && options.getStartDate(rowIndex);
                     cellDateNumber = dateLocalization.format(date, 'd');
-                    cellDayName = dateLocalization.format(date, this._formatWeekday);
+                    cellDayName = dateLocalization.format(date, formatWeekday);
                 }
 
                 if(cellTemplateOpt && cellTemplateOpt.render) {

@@ -199,7 +199,7 @@ test('StartDate and endDate should have correct type after "allDay" and "repeat"
   currentDate: new Date(2021, 1, 1),
 }));
 
-test.only('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
+test('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
