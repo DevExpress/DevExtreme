@@ -13162,6 +13162,10 @@ declare module DevExpress.ui {
      */
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
+     * [descr:dxHtmlEditorOptions.tableResizing]
+     */
+    tableResizing?: dxHtmlEditorTableResizing;
+    /**
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
@@ -13197,6 +13201,24 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
+  }
+  /**
+   * [descr:dxHtmlEditorTableResizing]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorTableResizing {
+    /**
+     * [descr:dxHtmlEditorTableResizing.minColumnWidth]
+     */
+    minColumnWidth?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.minRowHeight]
+     */
+    minRowHeight?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.enabled]
+     */
+    enabled?: boolean;
   }
   /**
    * [descr:dxHtmlEditorToolbar]
@@ -14696,6 +14718,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxNavBar]
+   * @deprecated [depNote:dxNavBar]
    */
   export class dxNavBar extends dxTabs<dxNavBarOptions> {}
   module dxNavBar {
@@ -17561,6 +17584,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOut]
+   * @deprecated [depNote:dxSlideOut]
    */
   export class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
     /**
@@ -17701,6 +17725,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOutView]
+   * @deprecated [depNote:dxSlideOutView]
    */
   export class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**

@@ -16,6 +16,7 @@ import {
 import { getDateForHeaderText } from './utils/timeline_week';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import { formatWeekdayAndDay } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -330,7 +331,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
             getDateForHeaderText,
@@ -474,7 +474,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
             for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(currentDate);
+                const text = formatWeekdayAndDay(currentDate);
 
                 if(cellTemplate) {
                     const templateOptions = {

@@ -3,14 +3,18 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
-import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     calculateStartViewDate,
     getViewStartByOptions,
     calculateCellIndex,
+    getCellText,
+    isCurrentDate,
+    isOtherMonth,
+    isFirstCellInMonthWithIntervalCount,
 } from './utils/month';
+import { formatWeekday } from './utils/base';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -43,7 +47,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _getFormat() {
-        return this._formatWeekday;
+        return formatWeekday;
     }
 
     _getInterval() {
@@ -129,20 +133,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _getCellText(rowIndex, columnIndex) {
-        const date = this._getDate(rowIndex, columnIndex);
-
-        if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
-            return this._formatMonthAndDay(date);
-        }
-        return dateLocalization.format(date, 'dd');
-    }
-
-    _formatMonthAndDay(date) {
-        const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
-        return [monthName, dateLocalization.format(date, 'day')].join(' ');
-    }
-
     _getDate(week, day) {
         const result = new Date(this._startViewDate);
         const lastRowInDay = this._getRowCount();
@@ -155,16 +145,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return index;
     }
 
-    _isCurrentDate(cellDate) {
-        return dateUtils.sameDate(cellDate, this._getToday());
-    }
-
     _isFirstDayOfMonth(cellDate) {
         return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
-    }
-
-    _isOtherMonth(cellDate) {
-        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
     }
 
     isIndicationAvailable() {
@@ -249,10 +231,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     generateRenderOptions() {
         const options = super.generateRenderOptions();
-        options.cellDataGetters.push((_, rowIndex, columnIndex) => {
+        options.cellDataGetters.push((_, rowIndex, columnIndex, groupIndex, date) => {
             return {
                 value: {
-                    text: this._getCellText(rowIndex, columnIndex),
+                    text: getCellText(date, this.option('intervalCount')),
                 },
             };
         });
@@ -260,9 +242,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         const getCellMetaData = (_, rowIndex, columnIndex, groupIndex, startDate) => {
             return {
                 value: {
-                    today: this._isCurrentDate(startDate),
-                    otherMonth: this._isOtherMonth(startDate),
-                    firstDayOfMonth: this._isFirstDayOfMonth(startDate),
+                    today: isCurrentDate(startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
+                    otherMonth: isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate),
+                    firstDayOfMonth: isFirstCellInMonthWithIntervalCount(startDate, this.option('intervalCount')),
                 },
             };
         };
@@ -301,9 +283,18 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _setMonthClassesToCell($cell, data) {
         $cell
-            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
-            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
-            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
+            .toggleClass(
+                DATE_TABLE_CURRENT_DATE_CLASS,
+                isCurrentDate(data.startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
+            )
+            .toggleClass(
+                DATE_TABLE_FIRST_OF_MONTH_CLASS,
+                isFirstCellInMonthWithIntervalCount(data.startDate, this.option('intervalCount')),
+            )
+            .toggleClass(
+                DATE_TABLE_OTHER_MONTH_DATE_CLASS,
+                isOtherMonth(data.startDate, this._minVisibleDate, this._maxVisibleDate),
+            );
 
         return data;
     }
@@ -312,14 +303,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _renderTableBody(options) {
         options.getCellText = (rowIndex, columnIndex) => {
-            let validColumnIndex;
-            if(this.isGroupedByDate()) {
-                validColumnIndex = Math.floor(columnIndex / this._getGroupCount());
-            } else {
-                validColumnIndex = columnIndex % this._getCellCount();
-            }
+            const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 
-            return this._getCellText(rowIndex, validColumnIndex);
+            return getCellText(date, this.option('intervalCount'));
         };
         options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
         options.setAdditionalClasses = this._setMonthClassesToCell.bind(this),

@@ -5,6 +5,7 @@ import dateUtils from '../../../core/utils/date';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { calculateCellIndex, getViewStartByOptions } from './utils/month';
 import { calculateStartViewDate } from './utils/timeline_month';
+import { formatWeekdayAndDay } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
@@ -76,7 +77,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _getFormat() {
-        return this._formatWeekdayAndDay;
+        return formatWeekdayAndDay;
     }
 
     _getInterval() {

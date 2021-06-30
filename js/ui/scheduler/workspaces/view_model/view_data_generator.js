@@ -1,6 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { getHeaderCellText } from '../utils/base';
+import { formatWeekdayAndDay, getHeaderCellText } from '../utils/base';
 
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
@@ -164,7 +164,6 @@ export class ViewDataGenerator {
             groupByDate,
             horizontalGroupCount,
             cellCountInDay,
-            getWeekDaysHeaderText,
             daysInView,
         } = options;
 
@@ -179,7 +178,7 @@ export class ViewDataGenerator {
             weekDaysRow.push({
                 ...cell,
                 colSpan,
-                text: getWeekDaysHeaderText(cell.startDate),
+                text: formatWeekdayAndDay(cell.startDate),
                 isFirstGroupCell: false,
                 isLastGroupCell: false,
             });
@@ -204,14 +203,12 @@ export class ViewDataGenerator {
         } = options;
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const columnCount = completeViewDataMap[index].length;
-        const dateHeaderColumnCount = groupByDate
-            ? columnCount / horizontalGroupCount
-            : columnCount;
         const colSpan = groupByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
+        const slicedByColumnsData = groupByDate
+            ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
+            : completeViewDataMap[index];
 
         return slicedByColumnsData.map(({
             startDate,

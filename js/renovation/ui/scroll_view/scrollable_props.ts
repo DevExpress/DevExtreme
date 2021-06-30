@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay, Slot, Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()

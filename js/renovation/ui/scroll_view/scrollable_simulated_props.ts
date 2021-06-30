@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import {
   ScrollableProps,
 } from './scrollable_props';
