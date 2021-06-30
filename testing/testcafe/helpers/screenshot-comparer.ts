@@ -5,10 +5,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { PNG } from 'pngjs';
 
-const testRoot = './testing/testcafe/';
-const screenshotsPath = path.join(testRoot, '/screenshots');
-const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
-
 const screenshotComparerDefault = {
   highlightColor: { r: 0xff, g: 0, b: 0xff },
   maskRadius: 5,
@@ -25,6 +21,7 @@ const screenshotComparerDefault = {
   },
 };
 interface ComparerOptions {
+  path?: string;
   highlightColor: {
     r: number;
     g: number;
@@ -36,15 +33,15 @@ interface ComparerOptions {
   looksSameComparisonOptions: Parameters<typeof LooksSame.createDiff>[0];
 }
 
-function ensureArtifactsPath(): void {
+function ensureArtifactsPath(artifactsPath: string): void {
   if (!fs.existsSync(artifactsPath)) {
     fs.mkdirSync(artifactsPath, { recursive: true });
   }
 }
 
 function saveArtifacts({
-  screenshotFileName, etalonFileName,
-}: Record<'screenshotFileName' | 'etalonFileName', string>): void {
+  artifactsPath, screenshotFileName, etalonFileName,
+}: Record<'artifactsPath' | 'screenshotFileName' | 'etalonFileName', string>): void {
   function copyToArtifacts(sourcePath: string, postfix = ''): void {
     const fileName = path.basename(sourcePath, '.png');
     const targetPath = path.join(artifactsPath, `${fileName}${postfix}.png`);
@@ -270,16 +267,22 @@ export async function compareScreenshot(
   element: SelectorType = null,
   comparisonOptions?: Partial<ComparerOptions>,
 ): Promise<boolean> {
+  const { path: rootPath, ...configOptions } = (t as unknown as { testRun }).testRun.opts['screenshots-comparer'] as ComparerOptions;
+  const testRoot = rootPath ?? './testing';
+  const screenshotsPath = path.join(testRoot, '/screenshots');
+  const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
+
   const screenshotFileName = path.join(screenshotsPath, screenshotName.endsWith('.png') ? screenshotName : `${screenshotName}.png`);
   const etalonsPath = path.join(path.dirname((t as unknown as { testRun }).testRun.test.testFile.filename), 'etalons');
   const etalonFileName = path.join(etalonsPath, screenshotName);
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
   const options = {
     ...screenshotComparerDefault,
+    ...configOptions,
     ...comparisonOptions ?? {},
   } as ComparerOptions;
   try {
-    ensureArtifactsPath();
+    ensureArtifactsPath(artifactsPath);
     const { equal, screenshotBuffer } = await tryGetValidScreenshot({
       t, screenshotName, element, screenshotFileName, etalonFileName, maskFileName, options,
     });
@@ -292,12 +295,12 @@ export async function compareScreenshot(
       const maskBuffer = getMask(diffBuffer, maskFileName, options);
       fs.writeFileSync(diffFileName, diffBuffer);
       fs.writeFileSync(diffMaskFileName, maskBuffer);
-      saveArtifacts({ screenshotFileName, etalonFileName });
+      saveArtifacts({ artifactsPath, screenshotFileName, etalonFileName });
       return false;
     }
     return true;
   } catch (e) {
-    saveArtifacts({ screenshotFileName, etalonFileName });
+    saveArtifacts({ artifactsPath, screenshotFileName, etalonFileName });
     throw e;
   }
 }
