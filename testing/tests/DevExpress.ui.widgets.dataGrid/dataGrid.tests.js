@@ -1877,6 +1877,24 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(dataGrid._disposed, 'DataGrid is disposed');
     });
 
+    QUnit.test('Set the same options after reset (T1010114)', function(assert) {
+        const editing = {
+            mode: 'row',
+            useIcons: true
+        };
+        const dataGrid = createDataGrid({
+            editing,
+            dataSource: [{ id: 1 }]
+        });
+        this.clock.tick();
+
+        dataGrid.resetOption('editing');
+        dataGrid.option('editing', editing);
+
+        // assert
+        assert.ok(dataGrid.option('editing').changes, 'Custom and default options are merged');
+    });
+
     // T243908
     QUnit.test('onContentReady after hide column', function(assert) {
 
