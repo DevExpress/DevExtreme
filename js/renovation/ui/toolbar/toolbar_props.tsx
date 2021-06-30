@@ -163,7 +163,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // it is not a 'native' way, use this instead:
-  // <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
   //
   //
   @OneWay()
@@ -178,7 +178,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // it is not a 'native' way, use this instead:
-  // <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
   //
   @Nested()
   options?: ToolbarButtonProps;
@@ -191,7 +191,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // - react (for demo purposes only, will be available in future releases):
   // it is not a 'native' way, use this instead:
-  // <Toolbar> <Item><dxButton text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
+  // <Toolbar> <Item><Button text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
   //
   @OneWay()
   showText?: 'always' | 'inMenu';
@@ -203,7 +203,7 @@ export class ToolbarItem extends CollectionWidgetItem {
 }
 
 // it is not a 'native' way, use this instead:
-// <Toolbar> <Item><dxButton text="My Button" /></Item> </Toolbar>
+// <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
 @ComponentBindings()
 export class ToolbarButtonProps {
   //
