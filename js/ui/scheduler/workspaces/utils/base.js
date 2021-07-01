@@ -171,6 +171,17 @@ export const getHeaderCellText = (
     return dateLocalization.format(validDate, headerCellTextFormat);
 };
 
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
+
 export const formatWeekday = function(date) {
     return dateLocalization.getDayNames('abbreviated')[date.getDay()];
 };
