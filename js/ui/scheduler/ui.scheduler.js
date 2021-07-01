@@ -1588,7 +1588,7 @@ class Scheduler extends Widget {
             onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
             onVirtualScrollingUpdated: this._renderAppointments.bind(this),
             getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
-            onScrollEnd: () => this.updateResizableArea(),
+            onScrollEnd: () => this._appointments.updateResizableArea(),
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),

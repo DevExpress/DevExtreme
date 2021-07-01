@@ -1,10 +1,7 @@
 import $ from '../../core/renderer';
-import { inArray } from '../../core/utils/array';
 import { isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
-import { locate } from '../../animation/translator';
-import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
@@ -356,31 +353,6 @@ const subscribes = {
 
     getGroupTop: function(groupIndex) {
         return this._workSpace._getGroupTop(groupIndex);
-    },
-
-    updateResizableArea: function() {
-        const $allResizableElements = this.$element().find('.dx-scheduler-appointment.dx-resizable');
-
-        const horizontalResizables = grep($allResizableElements, function(el) {
-            const $el = $(el);
-            const resizableInst = $el.dxResizable('instance');
-            const area = resizableInst.option('area');
-
-            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
-        });
-
-        each(horizontalResizables, (function(_, el) {
-            const $el = $(el);
-            const position = locate($el);
-            const appointmentData = this._appointments._getItemData($el);
-
-            const area = this._appointments._calculateResizableArea({
-                left: position.left
-            }, appointmentData);
-
-            $el.dxResizable('instance').option('area', area);
-
-        }).bind(this));
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
