@@ -4,11 +4,7 @@ import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'localization/date';
 
-import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
-
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -24,26 +20,9 @@ testStart(function() {
 
 module('Work Space Day', {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-            appointmentDuration: 60
-        });
-        const observer = getObserver(key);
-
-        this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({ ...options, observer }).dxSchedulerWorkSpaceDay('instance');
-            this.instance.initDragBehavior();
-            this.instance._attachTablesEvents();
-            stubInvokeMethod(this.instance, { ...options, key });
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({}).dxSchedulerWorkSpaceDay('instance');
+        this.instance.initDragBehavior();
+        this.instance._attachTablesEvents();
     }
 }, () => {
     test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', function(assert) {
@@ -264,27 +243,16 @@ module('Work Space Day', {
 module('Work Space Day with grouping by date', () => {
     module('Default', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
                 intervalCount: 2,
                 showCurrentTimeIndicator: false,
-                observer
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }],
             }).dxSchedulerWorkSpaceDay('instance');
-
-            stubInvokeMethod(this.instance, { key });
-
-            this.instance.option('groups', [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }]);
         }
     }, () => {
         test('Get date range', function(assert) {
@@ -455,16 +423,8 @@ module('Work Space Day with grouping by date', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({ ...options, observer }).dxSchedulerWorkSpaceDay('instance');
-                stubInvokeMethod(this.instance, { key });
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
             };
         }
     }, () => {

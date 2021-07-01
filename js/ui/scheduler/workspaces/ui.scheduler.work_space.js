@@ -61,10 +61,10 @@ import {
     calculateCellIndex,
     prepareCellData,
     prepareAllDayCellData,
+    getDateByCellIndices,
+    validateDayHours,
     getStartViewDateTimeOffset,
-    getDateByCellIndices
 } from './utils/base';
-import { getTimeZoneCalculator } from '../instanceFactory';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
 
@@ -225,6 +225,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
 
     get isWorkView() { return false; }
+
+    get timeZoneCalculator() {
+        return this.option('timeZoneCalculator');
+    }
 
     _supportedKeys() {
         const clickHandler = function(e) {
@@ -484,7 +488,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         config.onEnd = () => {
-            this.notifyObserver('updateResizableArea', {});
+            this.option('onScrollEnd')();
         };
 
         return config;
@@ -785,7 +789,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _cellClickHandler() {
         if(this._showPopup) {
             delete this._showPopup;
-            this._showAddAppointmentPopup();
+            this._handleSelectedCellsClick();
         }
     }
 
@@ -809,7 +813,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _showAddAppointmentPopup() {
+    _handleSelectedCellsClick() {
         const selectedCells = this.cellsSelectionState.getSelectedCells();
 
         const firstCellData = selectedCells[0];
@@ -824,7 +828,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             result.allDay = lastCellData.allDay;
         }
 
-        this.invoke('showAddAppointmentPopup', result, lastCellData.groups);
+        this.option('onSelectedCellsClick')(result, lastCellData.groups);
     }
 
     _attachContextMenuEvent() {
@@ -867,7 +871,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const headerPanelHeight = this.getHeaderPanelHeight();
-        const headerHeight = this.invoke('getHeaderHeight');
+        const headerHeight = this.option('getHeaderHeight')();
         const allDayPanelHeight = this.isAllDayPanelVisible
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
@@ -1771,8 +1775,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateScrollPosition(date, groups, allDay = false) {
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
-        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
         const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
         if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
@@ -2345,15 +2348,25 @@ class SchedulerWorkSpace extends WidgetObserver {
             },
             renovateRender: true,
             height: undefined,
-            draggingMode: 'outlook'
+            draggingMode: 'outlook',
+            onScrollEnd: () => {},
+            getHeaderHeight: undefined,
+            onVirtualScrollingUpdated: undefined,
+            onSelectedCellsClick: () => {},
+            timeZoneCalculator: undefined,
+            schedulerHeight: undefined,
+            schedulerWidth: undefined,
         });
     }
 
     _optionChanged(args) {
         switch(args.name) {
             case 'startDayHour':
+                validateDayHours(args.value, this.option('endDayHour'));
+                this._cleanWorkSpace();
+                break;
             case 'endDayHour':
-                this.invoke('validateDayHours');
+                validateDayHours(this.option('startDayHour'), args.value);
                 this._cleanWorkSpace();
                 break;
             case 'dateCellTemplate':
@@ -2425,6 +2438,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 super._optionChanged(args);
                 this._dimensionChanged();
                 break;
+            case 'timeZoneCalculator':
             case 'resourceManager':
             case 'allowMultipleCellSelection':
                 break;
@@ -2444,6 +2458,10 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'renovateRender':
                 this.repaint();
+                break;
+            case 'schedulerHeight':
+            case 'schedulerWidth':
+                this.virtualScrollingDispatcher.updateDimensions(true);
                 break;
             default:
                 super._optionChanged(args);
@@ -2835,7 +2853,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateAppointments() {
-        this.invoke('renderAppointments');
+        this.option('onVirtualScrollingUpdated')();
         this.dragBehavior?.updateDragSource();
     }
 

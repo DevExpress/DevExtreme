@@ -242,7 +242,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         const getCellMetaData = (_, rowIndex, columnIndex, groupIndex, startDate) => {
             return {
                 value: {
-                    today: isCurrentDate(startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
+                    today: isCurrentDate(startDate, this.option('indicatorTime'), this.timeZoneCalculator),
                     otherMonth: isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate),
                     firstDayOfMonth: isFirstCellInMonthWithIntervalCount(startDate, this.option('intervalCount')),
                 },
@@ -285,7 +285,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         $cell
             .toggleClass(
                 DATE_TABLE_CURRENT_DATE_CLASS,
-                isCurrentDate(data.startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
+                isCurrentDate(data.startDate, this.option('indicatorTime'), this.timeZoneCalculator),
             )
             .toggleClass(
                 DATE_TABLE_FIRST_OF_MONTH_CLASS,

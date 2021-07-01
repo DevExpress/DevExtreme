@@ -41,6 +41,8 @@ module('Virtual Scrolling', {
                     dataCellTemplate: noop,
                     groupByDate: false,
                     scrolling: settings.scrolling,
+                    schedulerWidth: settings.width,
+                    schedulerHeight: settings.height,
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
@@ -59,15 +61,6 @@ module('Virtual Scrolling', {
                     };
                 },
                 getScrollable: () => this.scrollableMock,
-                invoke: (name, arg0) => {
-                    const options = {
-                        getOption: {
-                            width: settings.width,
-                            height: settings.height
-                        }
-                    };
-                    return options[name] && options[name][arg0];
-                },
                 _isVerticalGroupedWorkSpace: () => {
                     return false;
                 },

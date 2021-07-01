@@ -1,11 +1,7 @@
 import $ from '../../core/renderer';
-import { inArray } from '../../core/utils/array';
 import { isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
-import errors from '../widget/ui.errors';
-import { locate } from '../../animation/translator';
-import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
@@ -73,18 +69,6 @@ const subscribes = {
         this.hideAppointmentTooltip();
     },
 
-    showAddAppointmentPopup: function(cellData, cellGroups) {
-        const appointmentAdapter = createAppointmentAdapter(this.key, {});
-        const timeZoneCalculator = getTimeZoneCalculator(this.key);
-
-        appointmentAdapter.allDay = cellData.allDay;
-        appointmentAdapter.startDate = timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-        appointmentAdapter.endDate = timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
-
-        const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
-        this.showAppointmentPopup(resultAppointment, true);
-    },
-
     showEditAppointmentPopup: function(options) {
         const targetedData = this.getTargetedAppointment(options.data, options.target);
         this.showAppointmentPopup(options.data, false, targetedData);
@@ -138,10 +122,6 @@ const subscribes = {
         this.checkAndDeleteAppointment(options.data, targetedData);
 
         this.hideAppointmentTooltip();
-    },
-
-    getHeaderHeight: function() {
-        return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
@@ -375,35 +355,6 @@ const subscribes = {
         return this._workSpace._getGroupTop(groupIndex);
     },
 
-    updateResizableArea: function() {
-        const $allResizableElements = this.$element().find('.dx-scheduler-appointment.dx-resizable');
-
-        const horizontalResizables = grep($allResizableElements, function(el) {
-            const $el = $(el);
-            const resizableInst = $el.dxResizable('instance');
-            const area = resizableInst.option('area');
-
-            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
-        });
-
-        each(horizontalResizables, (function(_, el) {
-            const $el = $(el);
-            const position = locate($el);
-            const appointmentData = this._appointments._getItemData($el);
-
-            const area = this._appointments._calculateResizableArea({
-                left: position.left
-            }, appointmentData);
-
-            $el.dxResizable('instance').option('area', area);
-
-        }).bind(this));
-    },
-
-    renderAppointments: function() {
-        this._renderAppointments();
-    },
-
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
     },
@@ -517,15 +468,6 @@ const subscribes = {
 
     isAdaptive: function() {
         return this.option('adaptivityEnabled');
-    },
-
-    validateDayHours: function() {
-        const endDayHour = this._getCurrentViewOption('endDayHour');
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-
-        if(startDayHour >= endDayHour) {
-            throw errors.Error('E1058');
-        }
     },
 
     removeDroppableCellClass: function() {

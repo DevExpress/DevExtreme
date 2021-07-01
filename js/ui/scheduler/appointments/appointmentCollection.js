@@ -4,11 +4,11 @@ import eventsEngine from '../../../events/core/events_engine';
 import { data as elementData } from '../../../core/element_data';
 import { locate, move } from '../../../animation/translator';
 import dateUtils from '../../../core/utils/date';
-import { normalizeKey } from '../../../core/utils/common';
+import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge } from '../../../core/utils/array';
+import { merge, inArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -1045,6 +1045,31 @@ class SchedulerAppointments extends CollectionWidget {
 
             appointmentInstance.option('isDragSource', isDragSource);
         });
+    }
+
+    updateResizableArea() {
+        const $allResizableElements = this.$element().find('.dx-scheduler-appointment.dx-resizable');
+
+        const horizontalResizables = grep($allResizableElements, (el) => {
+            const $el = $(el);
+            const resizableInst = $el.dxResizable('instance');
+            const area = resizableInst.option('area');
+
+            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
+        });
+
+        each(horizontalResizables, ((_, el) => {
+            const $el = $(el);
+            const position = locate($el);
+            const appointmentData = this._getItemData($el);
+
+            const area = this._calculateResizableArea({
+                left: position.left
+            }, appointmentData);
+
+            $el.dxResizable('instance').option('area', area);
+
+        }));
     }
 
 }

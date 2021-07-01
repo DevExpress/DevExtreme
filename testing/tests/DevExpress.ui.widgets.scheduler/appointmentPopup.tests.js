@@ -1699,7 +1699,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
             dataSource: []
         });
 
-        scheduler.instance.fire('showAddAppointmentPopup', {
+        scheduler.instance.showAddAppointmentPopup({
             startDate: new Date(2015, 1, 1),
             endDate: new Date(2015, 1, 1, 1),
             allDay: true
@@ -1718,7 +1718,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
             dataSource: []
         });
 
-        scheduler.instance.fire('showAddAppointmentPopup', {
+        scheduler.instance.showAddAppointmentPopup({
             startDate: new Date(2015, 1, 1),
             endDate: new Date(2015, 1, 1, 1),
             allDay: true

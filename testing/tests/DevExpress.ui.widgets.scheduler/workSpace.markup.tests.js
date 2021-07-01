@@ -2,12 +2,9 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
-import { getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -45,46 +42,6 @@ const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWork
 const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
 
 const toSelector = cssClass => '.' + cssClass;
-
-const stubInvokeMethod = function(instance, options) {
-    options = options || {};
-    sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
-        if(subscribe === 'getTimezone') {
-            return options.tz || 3;
-        }
-        if(subscribe === 'getTimezoneOffset') {
-            return -180 * 60000;
-        }
-        if(subscribe === 'convertDateByTimezone') {
-            let date = new Date(arguments[1]);
-
-            const tz = options.tz;
-
-            if(tz) {
-                const tzOffset = new Date().getTimezoneOffset() * 60000;
-                const dateInUTC = date.getTime() + tzOffset;
-
-                date = new Date(dateInUTC + (tz * 3600000));
-            }
-
-            return date;
-        }
-        if(subscribe === 'getResourceManager') {
-            return getResourceManager(options.key);
-        }
-        if(subscribe === 'getAppointmentDataProvider') {
-            return getAppointmentDataProvider(options.key);
-        }
-    });
-};
 
 const checkRowsAndCells = function($element, assert, interval, start, end, groupCount) {
     interval = interval || 0.5;
@@ -139,14 +96,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-            });
-            const observer = getObserver(key);
-
-            this.instance = $('#scheduler-work-space')[view]({ observer })[view]('instance');
-            stubInvokeMethod(this.instance, { key });
+            this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
         }
     };
 
@@ -388,14 +338,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 
 const dayModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({ observer }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance, { key });
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({}).dxSchedulerWorkSpaceDay('instance');
     }
 };
 
@@ -563,23 +506,14 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
 
 const dayWithGroupingModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceDay({
             groupOrientation: 'vertical',
             showCurrentTimeIndicator: false,
             startDayHour: 8,
             showAllDayPanel: false,
             endDayHour: 20,
-            observer
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance, { key });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -677,17 +611,9 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 
 const weekModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: false,
-            observer
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance, { key });
     }
 };
 
@@ -871,22 +797,13 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
 
 const weekWithGroupingModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceWeek({
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
             endDayHour: 20,
-            observer
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance, { key });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -930,14 +847,7 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ observer }).dxSchedulerWorkSpaceWorkWeek('instance');
-        stubInvokeMethod(this.instance, { key });
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({}).dxSchedulerWorkSpaceWorkWeek('instance');
     }
 };
 
@@ -1164,14 +1074,7 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
 
 const monthModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({ observer }).dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance, { key });
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({}).dxSchedulerWorkSpaceMonth('instance');
     }
 };
 
@@ -1410,22 +1313,13 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
 
 const monthWithGroupingModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
         this.instance = $('#scheduler-work-space-grouped').dxSchedulerWorkSpaceMonth({
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
             endDayHour: 20,
-            observer
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance, { key });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -1550,16 +1444,9 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
 
 const scrollingModuleConfig = {
     beforeEach: function() {
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {},
-        });
-        const observer = getObserver(key);
-
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             crossScrollingEnabled: true,
             width: 100,
-            observer
         }).dxSchedulerWorkSpaceWeek('instance');
     }
 };
@@ -1637,12 +1524,6 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
 
         const groupClassesModuleConfig = {
             beforeEach: function() {
-                const key = createFactoryInstances({
-                    getIsVirtualScrolling: () => false,
-                    getDataAccessors: () => {},
-                });
-                const observer = getObserver(key);
-
                 this.createInstance = (workspaceClass, options = {}) => {
                     const instance = $('#scheduler-work-space')[workspaceClass]({
                         intervalCount: 3,
@@ -1651,10 +1532,8 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         endDayHour: 2,
                         currentDate: new Date(2020, 8, 27),
                         groupOrientation: 'horizontal',
-                        observer,
                         ...options,
                     })[workspaceClass]('instance');
-                    stubInvokeMethod(instance, { key });
 
                     return instance;
                 };
