@@ -93,7 +93,7 @@
 <script>
 import { DxDataGrid, DxColumn, DxExport, DxSelection, DxSummary, DxGroupPanel, DxGrouping, DxGroupItem, DxSortByGroupSummaryInfo, DxTotalItem } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import service from './data.js';
 

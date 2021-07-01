@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 import { Service, Employees } from './app.service';
 import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 
 if(!/localhost/.test(document.location.host)) {

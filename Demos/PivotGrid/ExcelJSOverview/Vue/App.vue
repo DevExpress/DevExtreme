@@ -19,7 +19,7 @@ import DxPivotGrid, {
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
 import { sales } from './data.js';
 
