@@ -150,6 +150,27 @@ QUnit.module('DateBox', commonEnvironment, () => {
         }
     });
 
+    QUnit.test('DateBox should not raise error when digits are not default arabic digits and Fractional Seconds in the "displayFormat"', function(assert) {
+        const originalCulture = Globalize.locale().locale;
+
+        try {
+            Globalize.locale('ar');
+
+            const $dateBox = $('#dateBox').dxDateBox({
+                value: new Date('December 17, 1995 03:24:50.12'),
+                useMaskBehavior: true,
+                displayFormat: 'HH:mm:ss.SS'
+            });
+
+            const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
+            assert.equal(date, '٠٣:٢٤:٥٠.١٢', 'date is localized');
+        } catch(e) {
+            assert.ok(false, 'Error occured: ' + e.message);
+        } finally {
+            Globalize.locale(originalCulture);
+        }
+    });
+
     QUnit.test('DateBox should not raise error when digits are Farsi digits', function(assert) {
         const originalCulture = Globalize.locale().locale;
 
