@@ -1920,6 +1920,39 @@ QUnit.module('Headers', {
         assert.roughEqual(parseFloat($cellElements.eq(0).css('line-height')), 19, 0.1, 'command column line-height');
         assert.roughEqual(parseFloat($cellElements.eq(1).css('line-height')), 19, 0.1, 'data column line-height');
     });
+
+    QUnit.test('Column caption should have correct max-width when sorting is disabled (T1009923)', function(assert) {
+        // arrange
+        const $testElement = $('#container').addClass('dx-widget');
+
+        this.options.sorting = { mode: 'none' };
+        this.columns.unshift({ caption: 'my field', dataField: 'field1', width: 50 });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        const $cellElements = dataGridMocks.getCells($testElement);
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.strictEqual($cellContent.css('max-width'), '100%', 'correct value');
+    });
+
+    QUnit.test('Column caption should have correct max-width when column is sorted (T1009923)', function(assert) {
+        // arrange
+        const $testElement = $('#container').addClass('dx-widget');
+
+        this.options.sorting = { mode: 'single' };
+        this.columns.unshift({ caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        const $cellElements = dataGridMocks.getCells($testElement);
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.strictEqual($cellContent.css('max-width'), 'calc(100% - 17px)', 'correct value');
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+    });
 });
 
 QUnit.module('Headers with grouping', {
@@ -2851,6 +2884,47 @@ QUnit.module('Multiple sorting', {
             textContentWidthDiff: 0,
             cellWidthDiff: -12
         });
+    });
+    QUnit.test('Column caption should have correct max-width when header filter is visible (T1009923)', function(assert) {
+        // arrange
+        const $testElement = $('#container').addClass('dx-widget');
+
+        const options = {
+            headerFilter: { visible: true },
+            columns: [{ caption: 'my field', dataField: 'field1', width: 50 }]
+        };
+        this.setupDataGrid(options);
+
+        // act
+        this.columnHeadersView.render($testElement);
+        const $cellElements = $testElement.find('.dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.strictEqual($cellContent.css('max-width'), 'calc(100% - 17px)', 'correct value');
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+    });
+
+    QUnit.test('Column caption should have correct max-width when header filter and sorting are enabled (T1009923)', function(assert) {
+        // arrange
+        const $testElement = $('#container').addClass('dx-widget');
+
+        const options = {
+            headerFilter: { visible: true },
+            sorting: { mode: 'multiple' },
+            columns: [{ caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }]
+        };
+        this.setupDataGrid(options);
+
+        // act
+        this.columnHeadersView.render($testElement);
+        const $cellElements = $testElement.find('.dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.strictEqual($cellContent.css('max-width'), 'calc(100% - 31px)', 'correct value');
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
     });
 });
 
