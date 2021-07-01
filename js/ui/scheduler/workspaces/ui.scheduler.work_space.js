@@ -1601,7 +1601,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { columnIndex } = this.viewDataProvider.getLastGroupCellPosition(groupIndex);
         const cellPosition = firstRow[columnIndex];
 
-        return this.option('rtlEnabled')
+        return !this.option('rtlEnabled')
             ? cellPosition.left + cellPosition.width
             : cellPosition.left;
     }
