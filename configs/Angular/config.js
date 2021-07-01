@@ -17,17 +17,19 @@ window.config = {
             "esModule": true
         },
         /**/
-
         /** vectormap */
         'devextreme/dist/js/vectormap-data/*': {
             'esModule': true
         },
-		
         /**/
-		
         'devextreme/localization.js': {
             "esModule": true
-        }
+        },
+        /** exceljs&file-saver */
+        'exceljs': {
+            "esModule": true
+        },
+        /**/
     },
     paths: {
         'npm:': '../../../../../node_modules/'
@@ -59,8 +61,8 @@ window.config = {
         /**/
 
         /** exceljs&file-saver */
-        'exceljs': 'npm:exceljs/dist/exceljs.js',
-        'file-saver': 'npm:file-saver/dist/FileSaver.js',
+        'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+        'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
         /**/
 
         /** jspdf&jspdf-autotable */
