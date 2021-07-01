@@ -1,1 +1,3 @@
-In&nbsp;those special cases when the built-in Virtual Mode fails, you can gain full control over data loading in&nbsp;the **createChildren** function.This function is&nbsp;called each time a&nbsp;user expands the TreeView node that has not been expanded before. In&nbsp;the **createChildren** function, you get data from a&nbsp;server or&nbsp;other sources and then form the collection of&nbsp;child nodes from this data.
+You can use the [createChildren](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#createChildren) function to specify custom logic to load data. This function is called each time a user expands a node that was not expanded before. The node's identifier is passed to the function as an argument. Send this identifier to the data service that should return data for child nodes.
+
+As an alternative, you can enable [virtual mode](/Demos/WidgetsGallery/Demo/TreeView/VirtualMode/) to use the default load logic.

@@ -3975,7 +3975,6 @@
               {
                 "Title": "Load Data on Demand",
                 "Name": "LoadDataOnDemand",
-                "DocUrl": "ApiReference/UI_Components/dxTreeView/Configuration/#createChildren",
                 "Widget": "TreeView",
                 "Modules": "whatwg-fetch",
                 "MvcAdditionalFiles": [
