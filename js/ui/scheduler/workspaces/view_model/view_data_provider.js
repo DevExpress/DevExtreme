@@ -1,6 +1,12 @@
 import dateUtils from '../../../../core/utils/date';
+import { VIEWS } from '../../constants';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { ViewDataGenerator } from './view_data_generator';
+import { ViewDataGeneratorMonth } from './view_data_generator_month';
+
+const getViewDataGeneratorByViewType = (viewType) => viewType === VIEWS.MONTH
+    ? new ViewDataGeneratorMonth()
+    : new ViewDataGenerator();
 
 export default class ViewDataProvider {
     constructor() {
@@ -12,16 +18,10 @@ export default class ViewDataProvider {
         this._groupedDataMapProvider = null;
     }
 
-    get viewDataGenerator() {
-        if(!this._viewDataGenerator) {
-            this._viewDataGenerator = new ViewDataGenerator();
-        }
-        return this._viewDataGenerator;
-    }
-
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
     update(renderOptions, isGenerateNewViewData) {
+        this.viewDataGenerator = getViewDataGeneratorByViewType(renderOptions.viewType);
         const viewDataGenerator = this.viewDataGenerator;
         this._options = renderOptions;
 

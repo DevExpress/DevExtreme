@@ -1,6 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
+import { getHeaderCellText, formatWeekdayAndDay, prepareCellData, prepareAllDayCellData } from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
@@ -518,15 +518,12 @@ export class ViewDataGenerator {
     }
 
     _generateViewCellsData(options, rowsCount) {
-        const {
-            cellCountInGroupRow,
-            cellDataGetters,
-        } = options;
+        const { cellCountInGroupRow } = options;
         const viewCellsData = [];
 
         for(let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCountInGroupRow,
+                options, false, rowIndex, cellCountInGroupRow,
             ));
         }
 
@@ -538,19 +535,14 @@ export class ViewDataGenerator {
             return null;
         }
 
-        return this._generateCellsRow(
-            options, [options.getAllDayCellData], 0, cellCount,
-        );
+        return this._generateCellsRow(options, true, 0, cellCount);
     }
 
-    _generateCellsRow(options, cellDataGetters, rowIndex, columnCount) {
+    _generateCellsRow(options, allDay, rowIndex, columnCount) {
         const cellsRow = [];
 
         for(let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
-            const cellDataValue = cellDataGetters.reduce((data, getter) => ({
-                ...data,
-                ...getter(undefined, rowIndex, columnIndex, 0, data.startDate).value,
-            }), {});
+            const cellDataValue = this.getCellData(rowIndex, columnIndex, options, allDay);
 
             cellDataValue.index = rowIndex * columnCount + columnIndex;
 
@@ -565,6 +557,12 @@ export class ViewDataGenerator {
         }
 
         return cellsRow;
+    }
+
+    getCellData(rowIndex, columnIndex, options, allDay) {
+        return allDay
+            ? prepareAllDayCellData(options, rowIndex, columnIndex)
+            : prepareCellData(options, rowIndex, columnIndex);
     }
 
     generateGroupedDataMap(viewDataMap) {

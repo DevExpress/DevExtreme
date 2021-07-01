@@ -83,8 +83,8 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         calculateCellIndex,
         interval,
         cellCountInDay,
-        rowCount,
-        columnCount,
+        rowCountBase,
+        columnCountBase,
         firstDayOfWeek,
     } = options;
 
@@ -96,7 +96,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
     }
 
-    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
 
     const offsetByCount = isWorkView
