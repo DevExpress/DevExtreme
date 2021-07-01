@@ -63,7 +63,7 @@ import {
     getStartViewDateTimeOffset,
 } from './utils/base';
 import { getTimeZoneCalculator } from '../instanceFactory';
-import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray } from '../resources/utils';
+import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
 
 const abstract = WidgetObserver.abstract;
@@ -940,18 +940,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getGroupCount() {
-        const groups = this.option('groups');
-        let result = 0;
-
-        for(let i = 0, len = groups.length; i < len; i++) {
-            if(!i) {
-                result = groups[i].items.length;
-            } else {
-                result *= groups[i].items.length;
-            }
-        }
-
-        return result;
+        return getGroupCount(this.option('groups'));
     }
 
     _getAllGroups() {
