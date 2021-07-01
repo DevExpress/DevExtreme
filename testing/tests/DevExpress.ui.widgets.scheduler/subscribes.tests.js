@@ -340,7 +340,7 @@ module('Subscribes', {
             allDayExpr: 'AllDay'
         });
 
-        this.instance.fire('showAddAppointmentPopup', {
+        this.showAddAppointmentPopup({
             startDate: new Date(2015, 1, 1),
             endDate: new Date(2015, 1, 1, 1),
             allDay: true

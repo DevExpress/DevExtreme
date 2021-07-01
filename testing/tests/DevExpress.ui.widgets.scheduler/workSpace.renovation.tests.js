@@ -871,7 +871,7 @@ module('Renovated Render', {
         });
     });
 
-    test('should call showAddAppointmentPopup with correct parameters', function(assert) {
+    test('should call onSelectedCellsClick with correct parameters', function(assert) {
         const onSelectedCellsClick = sinon.stub();
         this.createInstance({
             groupOrientation: 'vertical',
@@ -890,7 +890,7 @@ module('Renovated Render', {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
-        }, 'showAddAppointmentPopup has been called with correct parameters');
+        }, 'onSelectedCellsClick has been called with correct parameters');
     });
 
     test('getDataByDroppableCell should work correctly', function(assert) {

@@ -1213,23 +1213,20 @@ module('Workspace navigation', () => {
 
                 test('Popup should be shown when onCellClick', function(assert) {
                     assert.expect(1);
-
+                    const onSelectedCellsClick = sinon.stub();
 
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         onCellClick: function(e) {
                             e.cancel = true;
-                        }
+                        },
+                        onSelectedCellsClick,
                     }, 'dxSchedulerWorkSpaceMonth');
-                    const instance = $element.dxSchedulerWorkSpaceMonth('instance');
-
-                    const stub = sinon.stub(instance, 'notifyObserver').withArgs('showAddAppointmentPopup');
-
                     const $cell = $element.find('.' + CELL_CLASS).eq(1);
 
                     pointerMock($cell).start().click().click();
 
-                    assert.notOk(stub.called, 'showAddAppointmentPopup doesn\'t shown');
+                    assert.notOk(onSelectedCellsClick.called, 'onSelectedCellsClick isn\'t called');
                 });
 
                 test('onCellContextMenu should be fired after trigger context menu event', function(assert) {
