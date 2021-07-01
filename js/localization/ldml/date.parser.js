@@ -227,7 +227,7 @@ export const getRegExpInfo = function(format, dateParts) {
     addPreviousStub();
 
     if(!isSeparatedFormat) {
-        logger.warn(`\`${format}\` is not separated format! Please use separators at the Date Time format! Not separated format provoke undefined behavior!`);
+        logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: \`${format}\`.`);
     }
 
     return {
