@@ -133,20 +133,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _getDate(week, day) {
-        const result = new Date(this._startViewDate);
-        const lastRowInDay = this._getRowCount();
-
-        result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
-        return result;
-    }
-
     _updateIndex(index) {
         return index;
-    }
-
-    _isFirstDayOfMonth(cellDate) {
-        return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
     }
 
     isIndicationAvailable() {

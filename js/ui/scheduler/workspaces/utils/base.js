@@ -1,7 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
-import { getCellGroups, getGroupsObjectFromGroupsArray } from '../../resources/utils';
 import timeZoneUtils from '../../utils.timeZone';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
@@ -126,7 +125,7 @@ export const prepareCellData = (options, rowIndex, columnIndex) => {
     const {
         isDateAndTimeView,
         interval,
-        groups,
+        groupsList,
         tableAllDay,
         endDayHour,
     } = options;
@@ -143,10 +142,8 @@ export const prepareCellData = (options, rowIndex, columnIndex) => {
         groupIndex: 0,
     };
 
-    const groupsArray = getCellGroups(0, groups);
-
-    if(groupsArray.length) {
-        data.groups = getGroupsObjectFromGroupsArray(groupsArray);
+    if(groupsList.length > 0) {
+        data.groups = groupsList[0];
     }
 
     return data;
