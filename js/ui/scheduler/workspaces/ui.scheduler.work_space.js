@@ -7,7 +7,6 @@ import { getPublicElement } from '../../../core/element';
 import { extend } from '../../../core/utils/extend';
 import { getBoundingRect, getElementsFromPoint } from '../../../core/utils/position';
 import messageLocalization from '../../../localization/message';
-import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
 import { addNamespace, isMouseEvent } from '../../../events/utils/index';
@@ -63,6 +62,7 @@ import {
     prepareCellData,
     prepareAllDayCellData,
     getDateByCellIndices,
+    getStartViewDateTimeOffset,
 } from './utils/base';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray } from '../resources/utils';
@@ -640,7 +640,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             totalRowCount: rowCount,
             totalCellCount: cellCount,
             groupCount,
-            getTimeCellDate: this._getTimeCellDate.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
             groupsList: this._getAllGroups(),
@@ -661,6 +660,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startViewDate: this.getStartViewDate(),
             startDayHour: this.option('startDayHour'),
             cellCountInDay: this._getCellCountInDay(),
+            cellDuration: this.getCellDuration(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -912,27 +912,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._getCellCountInDay();
     }
 
-    _getCellCountInDay(skipRound) {
+    _getCellCountInDay() {
         const result = this._calculateDayDuration() / this.option('hoursInterval');
-        return skipRound ? result : Math.ceil(result);
+        return Math.ceil(result);
     }
 
     _calculateDayDuration() {
         return this.option('endDayHour') - this.option('startDayHour');
-    }
-
-    _getTimeCellDate(i) {
-        return this._getTimeCellDateCore(this.getStartViewDate(), i);
-    }
-
-    _getTimeCellDateCore(startViewDate, i) {
-        const result = new Date(startViewDate);
-        const timeCellDuration = Math.round(this.getCellDuration());
-        const cellCountInDay = this._getCellCountInDay(true);
-
-        result.setMilliseconds(result.getMilliseconds() + timeCellDuration * (i % cellCountInDay) - this._getTimeOffsetForStartViewDate());
-
-        return result;
     }
 
     _getTotalCellCount(groupCount) {
@@ -1477,7 +1463,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCellIndexByDate(date, inAllDayRow) {
         const timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : this._getInterval();
-        const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + this._getTimeOffsetForStartViewDate();
+        const startViewDateOffset = getStartViewDateTimeOffset(this.getStartViewDate(), this.option('startDayHour'));
+        const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + startViewDateOffset;
 
         let index = Math.floor(dateTimeStamp / timeInterval);
 
@@ -2018,18 +2005,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
             groupOrientation: this.option('groupOrientation'),
         });
-    }
-
-    _getTimeOffsetForStartViewDate() {
-        const startViewDate = this.getStartViewDate();
-        const startDayHour = Math.floor(this.option('startDayHour'));
-        const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
-
-        if(isDSTChange && startDayHour !== startViewDate.getHours()) {
-            return toMs('hour');
-        }
-
-        return 0;
     }
 
     _updateSelectedCellDataOption(selectedCellData) {
@@ -3104,16 +3079,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderTimePanel() {
         const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
-        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
-
-        const _getTimeText = (i) => {
-            // T410490: incorrectly displaying time slots on Linux
-            const index = i % this._getRowCount();
-            if(index % 2 === 0) {
-                return dateLocalization.format(this._getTimeCellDateCore(startViewDate, i), 'shorttime');
-            }
-            return '';
-        };
 
         const getTimeCellGroups = (rowIndex) => {
             if(!this._isVerticalGroupedWorkSpace()) {
@@ -3132,6 +3097,20 @@ class SchedulerWorkSpace extends WidgetObserver {
             return { groupIndex, groups };
         };
 
+        const getData = (rowIndex, field) => {
+            let allDayPanelsCount = 0;
+            if(this.isAllDayPanelVisible) {
+                allDayPanelsCount = 1;
+            }
+            if(this.isGroupedAllDayPanel()) {
+                allDayPanelsCount = Math.ceil((rowIndex + 1) / this._getRowCount());
+            }
+
+            const validRowIndex = rowIndex + allDayPanelsCount;
+
+            return this.viewDataProvider.completeTimePanelMap[validRowIndex][field];
+        };
+
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
             rowCount: this._getTimePanelRowCount() * repeatCount,
@@ -3139,8 +3118,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option('timeCellTemplate'),
-            getCellText: _getTimeText.bind(this),
-            getCellDate: this._getTimeCellDate.bind(this),
+            getCellText: (rowIndex) => getData(rowIndex, 'text'),
+            getCellDate: (rowIndex) => getData(rowIndex, 'startDate'),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined,
             getTemplateData: getTimeCellGroups.bind(this),

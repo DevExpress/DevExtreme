@@ -1,7 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { formatWeekdayAndDay, getHeaderCellText } from '../utils/base';
-
+import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
+import { getTimePanelCellText } from '../utils/week';
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
         const {
@@ -245,14 +245,10 @@ export class ViewDataGenerator {
     _getCompleteTimePanelMap(options, completeViewDataMap) {
         const {
             rowCountInGroup,
-            getTimeCellDate,
+            startViewDate,
+            cellDuration,
+            startDayHour,
         } = options;
-
-        const times = [];
-
-        for(let rowIndex = 0; rowIndex < rowCountInGroup; rowIndex += 1) {
-            times.push(getTimeCellDate(rowIndex));
-        }
 
         let allDayRowsCount = 0;
 
@@ -269,8 +265,9 @@ export class ViewDataGenerator {
 
             return {
                 ...restCellProps,
+                startDate,
                 allDay,
-                startDate: allDay ? startDate : times[timeIndex],
+                text: getTimePanelCellText(timeIndex, startDate, startViewDate, cellDuration, startDayHour),
             };
         });
     }
