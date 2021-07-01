@@ -28,7 +28,7 @@ export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxTooltip>;
+export type ShowingEvent = Cancelable & EventInfo<dxTooltip>;
 
 /** @public */
 export type ShownEvent = EventInfo<dxTooltip>;
