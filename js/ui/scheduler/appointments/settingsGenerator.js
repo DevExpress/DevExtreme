@@ -3,10 +3,8 @@ import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
 import timeZoneUtils from '../utils.timeZone.js';
-import { createResourcesTree } from '../resources/utils';
+import { createResourcesTree, getGroupCount } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getGroupCount } from '../workspaces/utils/base';
-
 
 const toMs = dateUtils.dateToMilliseconds;
 
