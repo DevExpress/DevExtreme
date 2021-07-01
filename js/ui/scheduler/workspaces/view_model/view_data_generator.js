@@ -5,6 +5,7 @@ import {
     formatWeekdayAndDay,
     getDateByCellIndices,
     setOptionHour,
+    calculateCellIndex,
 } from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
 export class ViewDataGenerator {
@@ -579,7 +580,7 @@ export class ViewDataGenerator {
             endDayHour,
         } = options;
 
-        const startDate = getDateByCellIndices(options, rowIndex, columnIndex);
+        const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
         const endDate = isDateAndTimeView
             ? this.calculateEndDate(startDate, interval)
             : setOptionHour(startDate, endDayHour);
@@ -615,6 +616,10 @@ export class ViewDataGenerator {
         result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
 
         return result;
+    }
+
+    _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
     }
 
     generateGroupedDataMap(viewDataMap) {

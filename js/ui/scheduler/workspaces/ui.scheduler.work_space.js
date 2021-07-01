@@ -2072,7 +2072,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     _oldRender_getAllDayCellData(groupIndex) {
         return (cell, rowIndex, columnIndex) => {
             const validColumnIndex = columnIndex % this._getCellCount();
-            let startDate = getDateByCellIndices(this._getDateGenerationOptions(), rowIndex, validColumnIndex);
+            const options = this._getDateGenerationOptions();
+            let startDate = getDateByCellIndices(
+                options, rowIndex, validColumnIndex, options.calculateCellIndex,
+            );
 
             startDate = dateUtils.trimTime(startDate);
 

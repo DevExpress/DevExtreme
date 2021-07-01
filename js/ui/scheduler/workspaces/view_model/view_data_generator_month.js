@@ -1,7 +1,7 @@
 import { getToday } from '../utils/base';
 import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
-import { getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
+import { calculateCellIndex, getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellData(rowIndex, columnIndex, options, allDay) {
@@ -30,5 +30,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
     isOtherMonth(cellDate, minDate, maxDate) {
         return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
+    }
+
+    _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
     }
 }

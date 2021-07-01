@@ -3,10 +3,23 @@ import { VIEWS } from '../../constants';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { ViewDataGenerator } from './view_data_generator';
 import { ViewDataGeneratorMonth } from './view_data_generator_month';
+import { ViewDataGeneratorTimelineMonth } from './view_data_generator_timeline_month';
 
-const getViewDataGeneratorByViewType = (viewType) => viewType === VIEWS.MONTH
-    ? new ViewDataGeneratorMonth()
-    : new ViewDataGenerator();
+const getViewDataGeneratorByViewType = (viewType) => {
+    switch(viewType) {
+        case VIEWS.DAY:
+        case VIEWS.WEEK:
+        case VIEWS.WORK_WEEK:
+        case VIEWS.TIMELINE_DAY:
+        case VIEWS.TIMELINE_WEEK:
+        case VIEWS.TIMELINE_WORK_WEEK:
+            return new ViewDataGenerator();
+        case VIEWS.MONTH:
+            return new ViewDataGeneratorMonth();
+        case VIEWS.TIMELINE_MONTH:
+            return new ViewDataGeneratorTimelineMonth();
+    }
+};
 
 export default class ViewDataProvider {
     constructor() {

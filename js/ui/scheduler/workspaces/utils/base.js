@@ -73,14 +73,13 @@ const getMillisecondsOffset = (cellIndex, interval, hiddenIntervalBase, cellCoun
     return interval * cellIndex + hiddenInterval;
 };
 
-export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
+export const getDateByCellIndices = (options, rowIndex, columnIndex, calculateCellIndex) => {
     let startViewDate = options.startViewDate;
     const {
         startDayHour,
         isWorkView,
         columnsInDay,
         hiddenInterval,
-        calculateCellIndex,
         interval,
         cellCountInDay,
         rowCountBase,
