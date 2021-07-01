@@ -2359,7 +2359,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             },
             renovateRender: true,
             height: undefined,
-            draggingMode: 'outlook'
+            draggingMode: 'outlook',
+            onScrollEnd: () => {},
+            getHeaderHeight: undefined,
+            onVirtualScrollingUpdated: undefined,
+            onSelectedCellsClick: () => {},
+            timeZoneCalculator: undefined,
+            schedulerHeight: undefined,
+            schedulerWidth: undefined,
         });
     }
 
