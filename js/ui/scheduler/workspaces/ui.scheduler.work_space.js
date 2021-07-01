@@ -1613,7 +1613,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(!lastGroupRow) return 0;
 
-        let result = lastGroupRow.top + lastGroupRow.width;
+        let result = lastGroupRow[0].top + lastGroupRow[0].height;
 
         // TODO remove while refactoring dual calculcations.
         // Should decrease allDayPanel amount due to the dual calculation corrections.
