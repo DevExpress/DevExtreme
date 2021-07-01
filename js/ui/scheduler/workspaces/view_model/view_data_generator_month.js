@@ -1,10 +1,7 @@
-import {
-    getCellText,
-    isCurrentDate,
-    isFirstCellInMonthWithIntervalCount,
-    isOtherMonth,
-} from '../utils/month';
+import { getToday } from '../utils/base';
 import { ViewDataGenerator } from './view_data_generator';
+import dateUtils from '../../../../core/utils/date';
+import { getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellData(rowIndex, columnIndex, options, allDay) {
@@ -19,11 +16,19 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
             minVisibleDate,
         } = options;
 
-        data.today = isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
-        data.otherMonth = isOtherMonth(startDate, minVisibleDate, maxVisibleDate);
+        data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
+        data.otherMonth = this.isOtherMonth(startDate, minVisibleDate, maxVisibleDate);
         data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
         data.text = getCellText(startDate, intervalCount);
 
         return data;
+    }
+
+    isCurrentDate(date, indicatorTime, timeZoneCalculator) {
+        return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
+    }
+
+    isOtherMonth(cellDate, minDate, maxDate) {
+        return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
     }
 }

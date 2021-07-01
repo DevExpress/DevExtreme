@@ -1,6 +1,11 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { getHeaderCellText, formatWeekdayAndDay, prepareCellData, prepareAllDayCellData } from '../utils/base';
+import {
+    getHeaderCellText,
+    formatWeekdayAndDay,
+    getDateByCellIndices,
+    setOptionHour,
+} from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
@@ -561,8 +566,55 @@ export class ViewDataGenerator {
 
     getCellData(rowIndex, columnIndex, options, allDay) {
         return allDay
-            ? prepareAllDayCellData(options, rowIndex, columnIndex)
-            : prepareCellData(options, rowIndex, columnIndex);
+            ? this.prepareAllDayCellData(options, rowIndex, columnIndex)
+            : this.prepareCellData(options, rowIndex, columnIndex);
+    }
+
+    prepareCellData(options, rowIndex, columnIndex) {
+        const {
+            isDateAndTimeView,
+            interval,
+            groupsList,
+            tableAllDay,
+            endDayHour,
+        } = options;
+
+        const startDate = getDateByCellIndices(options, rowIndex, columnIndex);
+        const endDate = isDateAndTimeView
+            ? this.calculateEndDate(startDate, interval)
+            : setOptionHour(startDate, endDayHour);
+
+        const data = {
+            startDate: startDate,
+            endDate: endDate,
+            allDay: tableAllDay,
+            groupIndex: 0,
+        };
+
+        if(groupsList.length > 0) {
+            data.groups = groupsList[0];
+        }
+
+        return data;
+    }
+
+    prepareAllDayCellData(options, rowIndex, columnIndex) {
+        const data = this.prepareCellData(options, rowIndex, columnIndex);
+        const startDate = dateUtils.trimTime(data.startDate);
+
+        return {
+            ...data,
+            startDate,
+            endDate: startDate,
+            allDay: true,
+        };
+    }
+
+    calculateEndDate(startDate, interval) {
+        const result = new Date(startDate);
+        result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
+
+        return result;
     }
 
     generateGroupedDataMap(viewDataMap) {

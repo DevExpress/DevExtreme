@@ -115,53 +115,6 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     return currentDate;
 };
 
-const calculateEndDate = (startDate, interval) => {
-    const result = new Date(startDate);
-    result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
-
-    return result;
-};
-
-export const prepareCellData = (options, rowIndex, columnIndex) => {
-    const {
-        isDateAndTimeView,
-        interval,
-        groupsList,
-        tableAllDay,
-        endDayHour,
-    } = options;
-
-    const startDate = getDateByCellIndices(options, rowIndex, columnIndex);
-    const endDate = isDateAndTimeView
-        ? calculateEndDate(startDate, interval)
-        : setOptionHour(startDate, endDayHour);
-
-    const data = {
-        startDate: startDate,
-        endDate: endDate,
-        allDay: tableAllDay,
-        groupIndex: 0,
-    };
-
-    if(groupsList.length > 0) {
-        data.groups = groupsList[0];
-    }
-
-    return data;
-};
-
-export const prepareAllDayCellData = (options, rowIndex, columnIndex) => {
-    const data = prepareCellData(options, rowIndex, columnIndex);
-    const startDate = dateUtils.trimTime(data.startDate);
-
-    return {
-        ...data,
-        startDate,
-        endDate: startDate,
-        allDay: true,
-    };
-};
-
 export const getHeaderCellText = (
     headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
 ) => {
