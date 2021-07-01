@@ -1,3 +1,4 @@
+import errors from '../../../../core/errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
@@ -169,4 +170,10 @@ export const getHeaderCellText = (
 ) => {
     const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
     return dateLocalization.format(validDate, headerCellTextFormat);
+};
+
+export const validateDayHours = (startDayHour, endDayHour) => {
+    if(startDayHour >= endDayHour) {
+        throw errors.Error('E1058');
+    }
 };

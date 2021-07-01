@@ -16,8 +16,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
 
-import { initFactoryInstance } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });
@@ -31,13 +29,11 @@ QUnit.module('DateTime indicator on Day View', {
     }
 }, () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance();
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             ...options,
-            observer
         }).dxSchedulerWorkSpaceDay('instance');
 
         return instance;
@@ -436,15 +432,12 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
     }
 }, () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance(options.resources);
-
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
             groupOrientation: 'vertical',
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             endDayHour: 14,
-            observer,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
 
@@ -587,13 +580,10 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
 
 QUnit.module('DateTime indicator on Week View', () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance(options.resources);
-
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
-            observer,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
 
@@ -711,8 +701,6 @@ QUnit.module('DateTime indicator on Week View', () => {
         indicatorCount: 0
     }].forEach(testCase => {
         QUnit.test(`Shader should have correct width on week view, ${testCase.testDescription}, (T923329)`, function(assert) {
-            const observer = initFactoryInstance();
-
             const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 currentDate: new Date(2017, 8, 5),
                 height: 600,
@@ -720,7 +708,6 @@ QUnit.module('DateTime indicator on Week View', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
-                observer
             }).dxSchedulerWorkSpaceWeek('instance');
 
             const $element = instance.$element();
@@ -799,7 +786,6 @@ QUnit.module('DateTime indicator on Week View', () => {
     });
 
     QUnit.test('DateTimeIndicator and shader should have correct positions, Week view with intervalCount, rtl mode', function(assert) {
-        const observer = initFactoryInstance();
         const workspace = $('#scheduler-work-space-rtl').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -807,7 +793,6 @@ QUnit.module('DateTime indicator on Week View', () => {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             rtlEnabled: true,
             intervalCount: 2,
-            observer
         }).dxSchedulerWorkSpaceWeek('instance');
 
         const $element = workspace.$element();
@@ -824,13 +809,10 @@ QUnit.module('DateTime indicator on Week View', () => {
 
 QUnit.module('DateTime indicator on grouped Week View', () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance(options.resources);
-
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
-            observer,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
 
@@ -948,13 +930,11 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
 
 QUnit.module('DateTime indicator on TimelineDay View', () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance();
         return $('#scheduler-work-space').dxSchedulerTimelineDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            observer,
             ...options,
         }).dxSchedulerTimelineDay('instance');
     };
@@ -1027,8 +1007,6 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
 
 QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () => {
     const createInstance = (options) => {
-        const observer = initFactoryInstance(options.resources);
-
         const instance = $('#scheduler-work-space').dxSchedulerTimelineDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -1037,7 +1015,6 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             endDayHour: 14,
             hoursInterval: 1,
             height: 307,
-            observer,
             ...options,
         }).dxSchedulerTimelineDay('instance');
 
@@ -1177,7 +1154,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
         indicatorCount: 0
     }].forEach(testCase => {
         QUnit.test(`Shader should have correct height & width on timelineWeek, ${testCase.testDescription}, (T923329)`, function(assert) {
-            const observer = initFactoryInstance();
             const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
                 currentDate: new Date(2017, 8, 5),
                 height: 307,
@@ -1185,7 +1161,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
-                observer
             }).dxSchedulerTimelineWeek('instance');
 
             const $element = instance.$element();
@@ -1219,7 +1194,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
         testDescription: 'indicatorTime is greater than endDayHour'
     }].forEach(testCase => {
         QUnit.test(`Shader should have correct height & width on timelineMonth, ${testCase.testDescription}, (T923329)`, function(assert) {
-            const observer = initFactoryInstance();
             const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
                 currentDate: new Date(2017, 8, 5),
                 height: 307,
@@ -1227,7 +1201,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
-                observer
             }).dxSchedulerTimelineMonth('instance');
             const $element = instance.$element();
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -1242,7 +1215,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineWeek view', function(assert) {
-        const observer = initFactoryInstance();
         const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -1250,7 +1222,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
             height: 307,
             indicatorTime: new Date(2017, 8, 5, 12, 30),
             hoursInterval: 1,
-            observer
         }).dxSchedulerTimelineWeek('instance');
 
         const $element = instance.$element();
@@ -1260,7 +1231,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
     });
 
     QUnit.test('Shader should have correct height & width, TimelineMonth view', function(assert) {
-        const observer = initFactoryInstance();
         const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -1268,7 +1238,6 @@ QUnit.module('DateTime indicator on other timelines', () => {
             height: 307,
             indicatorTime: new Date(2017, 8, 16, 12, 0),
             hoursInterval: 1,
-            observer
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();
@@ -1281,14 +1250,12 @@ QUnit.module('DateTime indicator on other timelines', () => {
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineMonth view', function(assert) {
-        const observer = initFactoryInstance();
         const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
             indicatorTime: new Date(2017, 8, 15, 12, 30),
-            observer
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();

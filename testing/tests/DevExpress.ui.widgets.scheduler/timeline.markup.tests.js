@@ -8,8 +8,6 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
-import { getResourceManager, createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -46,59 +44,10 @@ const checkHeaderCells = function($element, assert, interval, groupCount, viewDu
     });
 };
 
-const stubInvokeMethod = (instance, options) => {
-    sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'convertDateByTimezone') {
-            return arguments[1];
-        }
-        if(subscribe === 'getResourceManager') {
-            return getResourceManager(options.key);
-        }
-        if(subscribe === 'getAppointmentDataProvider') {
-            return getAppointmentDataProvider(options.key);
-        }
-    });
-};
-
-const initFactoryInstances = () => {
-    const key = createFactoryInstances({
-        getIsVirtualScrolling: () => false,
-        getDataAccessors: () => {}
-    });
-
-    const observer = {
-        fire: (name) => {
-            if(name === 'getResourceManager') {
-                return getResourceManager(key);
-            }
-            if(name === 'getAppointmentDataProvider') {
-                return getAppointmentDataProvider(key);
-            }
-        },
-        key
-    };
-
-    return observer;
-};
 
 const moduleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimeline({ observer }).dxSchedulerTimeline('instance');
-
-            stubInvokeMethod(this.instance, {
-                ...options,
-                key: observer.key
-            });
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
     }
 };
 
@@ -198,18 +147,7 @@ QUnit.module('Timeline markup', moduleConfig, () => {
 
 let timelineDayModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({ observer }).dxSchedulerTimelineDay('instance');
-
-            stubInvokeMethod(this.instance, {
-                ...options,
-                key: observer.key
-            });
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 };
 
@@ -373,25 +311,9 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
 
 timelineDayModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
-                currentDate: new Date(2015, 9, 16),
-                observer,
-
-            }).dxSchedulerTimelineDay('instance');
-
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
+            currentDate: new Date(2015, 9, 16),
+        }).dxSchedulerTimelineDay('instance');
     }
 };
 
@@ -474,26 +396,10 @@ QUnit.module('TimelineDay with intervalCount markup', timelineDayModuleConfig, (
 
 timelineDayModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
-                groupOrientation: 'horizontal',
-                observer,
-            }).dxSchedulerTimelineDay('instance');
-
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-
-            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
+            groupOrientation: 'horizontal',
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+        }).dxSchedulerTimelineDay('instance');
     }
 };
 
@@ -606,20 +512,7 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
 
 let timelineWeekModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({ observer }).dxSchedulerTimelineWeek('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({}).dxSchedulerTimelineWeek('instance');
     }
 };
 
@@ -724,27 +617,9 @@ QUnit.module('TimelineWeek markup', timelineWeekModuleConfig, () => {
 
 timelineWeekModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek(
-                {
-                    ...options,
-                    observer
-                }
-            ).dxSchedulerTimelineWeek('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance({
-            currentDate: new Date(2015, 9, 16)
-        });
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            currentDate: new Date(2015, 9, 16),
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 
@@ -801,26 +676,10 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
 
 timelineWeekModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
-                groupOrientation: 'horizontal',
-                observer
-            }).dxSchedulerTimelineWeek('instance');
-
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-
-            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            groupOrientation: 'horizontal',
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+        }).dxSchedulerTimelineWeek('instance');
     }
 };
 
@@ -901,20 +760,7 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
 
 let timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        this.createInstance = function(options) {
-            const observer = initFactoryInstances();
-
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({ observer }).dxSchedulerTimelineWorkWeek('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({}).dxSchedulerTimelineWorkWeek('instance');
     }
 };
 
@@ -982,22 +828,9 @@ QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
 
 timelineWorkWeekModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({ ...options, observer }).dxSchedulerTimelineWorkWeek('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance({
-            currentDate: new Date(2015, 9, 16)
-        });
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
+            currentDate: new Date(2015, 9, 16),
+        }).dxSchedulerTimelineWorkWeek('instance');
     }
 };
 
@@ -1058,22 +891,9 @@ QUnit.module('TimelineWorkWeek with intervalCount markup', timelineWorkWeekModul
 
 let timelineMonthModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({ ...options, observer }).dxSchedulerTimelineMonth('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance({
-            currentDate: new Date(2015, 9, 16)
-        });
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+            currentDate: new Date(2015, 9, 16),
+        }).dxSchedulerTimelineMonth('instance');
     }
 };
 
@@ -1164,22 +984,9 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
 
 timelineMonthModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({ ...options, observer }).dxSchedulerTimelineMonth('instance');
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-        };
-
-        this.createInstance({
-            currentDate: new Date(2015, 9, 16)
-        });
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+            currentDate: new Date(2015, 9, 16),
+        }).dxSchedulerTimelineMonth('instance');
     }
 };
 
@@ -1226,27 +1033,11 @@ QUnit.module('TimelineMonth with intervalCount', timelineMonthModuleConfig, () =
 
 timelineMonthModuleConfig = {
     beforeEach: function() {
-        const observer = initFactoryInstances();
-
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
-                groupOrientation: 'horizontal',
-                currentDate: new Date(2018, 3, 2),
-                observer
-            }).dxSchedulerTimelineMonth('instance');
-
-            stubInvokeMethod(
-                this.instance,
-                {
-                    ...options,
-                    key: observer.key
-                }
-            );
-
-            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+            groupOrientation: 'horizontal',
+            currentDate: new Date(2018, 3, 2),
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+        }).dxSchedulerTimelineMonth('instance');
     }
 };
 
@@ -1356,8 +1147,6 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
 
         const groupClassesModuleConfig = {
             beforeEach: function() {
-                const observer = initFactoryInstances();
-
                 this.createInstance = (workspaceClass, options = {}) => {
                     const instance = $('#scheduler-timeline')[workspaceClass]({
                         renovateRender: isRenovatedRender,
@@ -1366,17 +1155,8 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         currentDate: new Date(2020, 8, 27),
                         groupOrientation: 'horizontal',
                         intervalCount: 2,
-                        observer,
                         ...options,
                     })[workspaceClass]('instance');
-
-                    stubInvokeMethod(
-                        instance,
-                        {
-                            ...options,
-                            key: observer.key
-                        }
-                    );
 
                     return instance;
                 };

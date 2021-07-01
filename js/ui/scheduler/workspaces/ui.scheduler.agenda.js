@@ -16,7 +16,6 @@ import {
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
 import { getPathToLeaf } from '../resources/utils';
-import { getTimeZoneCalculator } from '../instanceFactory';
 import { calculateStartViewDate } from './utils/agenda';
 
 const { tableCreator } = tableCreatorModule;
@@ -518,8 +517,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     updateScrollPosition(date) {
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
-        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
         const startDateHour = newDate.getHours();

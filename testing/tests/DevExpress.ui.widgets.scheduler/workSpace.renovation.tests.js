@@ -2,7 +2,6 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -15,7 +14,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -46,27 +44,18 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
-                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {
@@ -925,22 +914,21 @@ module('Renovated Render', {
     });
 
     test('should call showAddAppointmentPopup with correct parameters', function(assert) {
+        const onSelectedCellsClick = sinon.stub();
         this.createInstance({
             groupOrientation: 'vertical',
             showAllDayPanel: false,
+            onSelectedCellsClick,
         });
         const $element = this.instance.$element();
 
         const keyboard = keyboardMock($element);
-        const invokeSpy = sinon.spy(noop);
-        this.instance.invoke = invokeSpy;
 
         $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(invokeSpy.getCall(0).args[1], {
+        assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
