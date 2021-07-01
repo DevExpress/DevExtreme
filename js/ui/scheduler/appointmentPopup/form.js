@@ -72,8 +72,6 @@ export class AppointmentForm {
         this.schedulerInst = scheduler;
         this._appointmentForm = null;
         this._lockDateShiftFlag = false;
-
-        // this.create();
     }
 
     set readOnly(value) {
@@ -380,7 +378,6 @@ export class AppointmentForm {
     }
 
     updateFormData(formData, dataExprs) {
-        // debugger;
         this._lockDateShiftFlag = true;
 
         const startDate = new Date(formData[dataExprs.startDateExpr]);
