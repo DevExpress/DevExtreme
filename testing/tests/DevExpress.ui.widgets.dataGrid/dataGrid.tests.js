@@ -2204,7 +2204,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
     });
 
-    QUnit.test('Change toolbar.items[i].prop in runtime', function(assert) {
+    QUnit.test('Change toolbar.items[i].prop at runtime', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -2252,7 +2252,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
     });
 
-    QUnit.test('Change toolbar.items[i] in runtime', function(assert) {
+    QUnit.test('Change toolbar.items[i] at runtime', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -2300,7 +2300,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
     });
 
-    QUnit.test('Change toolbar.items in runtime', function(assert) {
+    QUnit.test('Change toolbar.items at runtime', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -2354,7 +2354,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
     });
 
-    QUnit.test('Change toolbar in runtime', function(assert) {
+    QUnit.test('Change toolbar at runtime', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,

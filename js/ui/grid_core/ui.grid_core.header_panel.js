@@ -152,13 +152,13 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     optionChanged: function(args) {
-        const parts = getPathParts(args.fullName);
 
         if(args.name === 'onToolbarPreparing') {
             this._invalidate();
             args.handled = true;
         }
         if(args.name === 'toolbar') {
+            const parts = getPathParts(args.fullName);
             const optionName = args.fullName.replace(/^toolbar\./, '');
 
             if(parts.length <= 2) {
