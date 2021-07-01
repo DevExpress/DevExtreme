@@ -871,7 +871,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         const headerPanelHeight = this.getHeaderPanelHeight();
-        const headerHeight = this.option('getHeaderHeight');
+        const headerHeight = this.option('getHeaderHeight')();
         const allDayPanelHeight = this.isAllDayPanelVisible
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
