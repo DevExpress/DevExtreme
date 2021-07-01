@@ -21,7 +21,7 @@ import inflector from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 
 import '../text_box';
 import '../number_box';
@@ -342,26 +342,11 @@ const LayoutManager = Widget.inherit({
             that._prepareItemsWithMerging(colCount);
 
             const layoutItems = that._generateLayoutItems();
-            that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
-
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
             if(!windowUtils.hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
         }
-    },
-
-    _extendItemsWithDefaultTemplateOptions: function(targetItems, sourceItems) {
-        sourceItems.forEach(function(item) {
-            if(!item.merged) {
-                if(isDefined(item.disabled)) {
-                    targetItems[item.visibleIndex].disabled = item.disabled;
-                }
-                if(isDefined(item.visible)) {
-                    targetItems[item.visibleIndex].visible = item.visible;
-                }
-            }
-        });
     },
 
     _itemStateChangedHandler: function(e) {
@@ -553,6 +538,12 @@ const LayoutManager = Widget.inherit({
                         col: this._getColByIndex(i, colCount)
                     }
                 };
+                if(isDefined(item.disabled)) {
+                    generatedItem.disabled = item.disabled;
+                }
+                if(isDefined(item.visible)) {
+                    generatedItem.visible = item.visible;
+                }
                 if(isDefined(item.colSpan)) {
                     generatedItem.location.colspan = item.colSpan;
                 }
@@ -684,9 +675,14 @@ const LayoutManager = Widget.inherit({
 
         const editorElem = $editor.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
+        const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
 
-        if($validationTarget && $validationTarget.data('dx-validation-target')) {
+        if(validationTargetInstance) {
             that._renderValidator($validationTarget, item);
+
+            if(isMaterial()) {
+                that._addWrapperInvalidClass(validationTargetInstance);
+            }
         }
 
         that._renderHelpText(item, $editor, helpID);
@@ -942,10 +938,6 @@ const LayoutManager = Widget.inherit({
                 editorInstance.setAria('describedby', renderOptions.helpID);
                 editorInstance.setAria('labelledby', renderOptions.labelID);
                 editorInstance.setAria('required', renderOptions.isRequired);
-
-                if(themes.isMaterial()) {
-                    that._addWrapperInvalidClass(editorInstance);
-                }
 
                 if(renderOptions.dataField) {
                     that._bindDataField(editorInstance, renderOptions, $container);

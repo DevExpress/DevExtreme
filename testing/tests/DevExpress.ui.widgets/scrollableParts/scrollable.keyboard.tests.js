@@ -322,6 +322,38 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 
+
+    [true, false].forEach((bounceEnabled) => {
+        [true, false].forEach(ctrlKey => {
+            [true, false].forEach(metaKey => {
+                QUnit.test(`Handle ctrl key (T970904). bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
+                    if(devices.real().deviceType !== 'desktop') {
+                        assert.ok(true, 'scenario is relevant only for desktop');
+                        return;
+                    }
+
+                    const scrollable = $('#scrollable').dxScrollable({
+                        useNative: false,
+                        bounceEnabled
+                    }).dxScrollable('instance');
+
+                    const validateRes = scrollable._validate({
+                        type: 'dxmousewheel',
+                        delta: -100,
+                        ctrlKey,
+                        metaKey,
+                    });
+
+                    const expectedRes = (metaKey || ctrlKey)
+                        ? false
+                        : true;
+
+                    assert.equal(validateRes, expectedRes);
+                });
+            });
+        });
+    });
+
     [1, 1.5, 0.25].forEach((browserZoom) => {
         ['up', 'down', 'left', 'right'].forEach((key) => {
             QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {

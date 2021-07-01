@@ -24,6 +24,8 @@ export default class ResizingModule {
         this.editorInstance = options.editorInstance;
         this.allowedTargets = options.allowedTargets || ['image'];
         this.enabled = !!options.enabled;
+        this._hideFrameWithContext = this.hideFrame.bind(this);
+        this._framePositionChangedHandler = this._prepareFramePositionChangedHandler();
 
         if(this.enabled) {
             this._attachEvents();
@@ -33,11 +35,15 @@ export default class ResizingModule {
 
     _attachEvents() {
         eventsEngine.on(this.quill.root, addNamespace(ClickEvent, MODULE_NAMESPACE), this._clickHandler.bind(this));
-        eventsEngine.on(this.quill.root, SCROLL_EVENT, this._scrollHandler.bind(this));
+        eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
+        this.editorInstance.on('focusOut', this._hideFrameWithContext);
+        this.quill.on('text-change', this._framePositionChangedHandler);
     }
 
     _detachEvents() {
         eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
+        this.editorInstance.off('focusOut', this._hideFrameWithContext);
+        this.quill.off('text-change', this._framePositionChangedHandler);
     }
 
     _clickHandler(e) {
@@ -50,14 +56,23 @@ export default class ResizingModule {
 
             this.updateFramePosition();
             this.showFrame();
+            this._adjustSelection();
         } else if(this._$target) {
             this.hideFrame();
         }
     }
 
-    _scrollHandler(e) {
-        if(this._$target) {
-            this.updateFramePosition();
+    _prepareFramePositionChangedHandler(e) {
+        return () => {
+            if(this._$target) {
+                this.updateFramePosition();
+            }
+        };
+    }
+
+    _adjustSelection() {
+        if(!this.quill.getSelection()) {
+            this.quill.setSelection(0, 0);
         }
     }
 

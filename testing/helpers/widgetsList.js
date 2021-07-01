@@ -73,4 +73,17 @@ const widgetsList = {
     VectorMap: require('viz/vector_map')
 };
 
+const dropDownEditorsList = {
+    dxAutocomplete: require('ui/autocomplete'),
+    dxColorBox: require('ui/color_box'),
+    dxDateBox: require('ui/date_box'),
+    dxDropDownBox: require('ui/drop_down_box'),
+    dxDropDownButton: require('ui/drop_down_button'),
+    dxSelectBox: require('ui/select_box'),
+    dxTagBox: require('ui/tag_box'),
+    dxDropDownEditor: require('ui/drop_down_editor/ui.drop_down_editor.js'),
+    dxDropDownList: require('ui/drop_down_editor/ui.drop_down_list.js'),
+};
+
 exports.widgetsList = widgetsList;
+exports.dropDownEditorsList = dropDownEditorsList;

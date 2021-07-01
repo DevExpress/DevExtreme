@@ -1008,6 +1008,31 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         }, 'caret position has been correctly updated');
     });
 
+    test('image must be correctly updated if it is the first element', function(assert) {
+        this.options.items = ['image'];
+        this.quillMock.getSelection = () => { return { index: 0, length: 1 }; };
+        this.quillMock.getLength = () => 5;
+        this.quillMock.getFormat = () => { return { extendedImage: 'oldImage' }; };
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $src = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).eq(1);
+
+        keyboardMock($src)
+            .type('100')
+            .change()
+            .press('enter');
+
+        const { index: pasteIndex, type: formatName } = this.log[0];
+        assert.strictEqual(formatName, 'extendedImage', 'update an image');
+        assert.strictEqual(pasteIndex, 0, 'we should paste an image at the same position');
+        assert.deepEqual(this.log[1], {
+            setSelection: [1, 0]
+        }, 'caret position has been correctly updated');
+    });
+
     test('show link dialog', function(assert) {
         this.options.items = ['link'];
         new Toolbar(this.quillMock, this.options);

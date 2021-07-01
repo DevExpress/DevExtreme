@@ -38,9 +38,10 @@ export default class ClearButton extends TextEditorButton {
 
         eventsEngine.on($button, addNamespace(pointerDown, editorName),
             (e) => {
-                e.pointerType === 'mouse'
-                    ? e.preventDefault()
-                    : editor._clearValueHandler(e);
+                e.preventDefault();
+                if(e.pointerType !== 'mouse') {
+                    editor._clearValueHandler(e);
+                }
             }
         );
 

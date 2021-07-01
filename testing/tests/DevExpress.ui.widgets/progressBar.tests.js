@@ -146,6 +146,22 @@ QUnit.module('options', {
         assert.equal(firstCompleteActionFired, 1, 'first CompleteActionFired is fired');
         assert.equal(secondCompleteActionFired, 1, 'second CompleteActionFired is fired');
     });
+
+    QUnit.test('onValueChanged', function(assert) {
+        const handler = sinon.stub();
+        const $progressBar = this.$element.dxProgressBar({
+            onValueChanged: handler
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
+
+        progressBar.option('value', 20);
+
+        const data = handler.getCall(0).args[0];
+        assert.strictEqual(data.event, undefined, 'event is undefined');
+        assert.strictEqual(data.component, progressBar, 'component is correct');
+        assert.strictEqual(data.value, 20, 'value is correct');
+        assert.strictEqual(data.previousValue, 0, 'previousValue is correct');
+    });
 });
 
 QUnit.module('states', {

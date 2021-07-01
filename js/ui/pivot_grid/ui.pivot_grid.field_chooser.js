@@ -187,7 +187,9 @@ const FieldChooser = BaseFieldChooser.inherit({
                 func();
             });
             that._fireContentReadyAction();
-            that._options.silent('state', that._dataSource.state());
+            that._skipStateChange = true;
+            that.option('state', that._dataSource.state());
+            that._skipStateChange = false;
         };
 
         that._disposeDataSource();

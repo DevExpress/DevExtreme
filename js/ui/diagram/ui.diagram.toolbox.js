@@ -231,7 +231,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             const title = $target.attr('title');
             if(title) {
                 const $tooltip = $('<div>')
-                    .html(title)
+                    .text(title)
                     .appendTo($container);
                 this._createComponent($tooltip, Tooltip, {
                     target: $target.get(0),

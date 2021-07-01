@@ -795,7 +795,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
         const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
 
-        assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
+        assert.roughEqual(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 1.1, 'Content height is correct');
     });
 
     // T628787

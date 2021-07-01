@@ -37,6 +37,10 @@ const paramsConvert = function(params) {
             value = '';
         }
 
+        if(typeof value === 'function') {
+            value = value();
+        }
+
         result.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
     }
 

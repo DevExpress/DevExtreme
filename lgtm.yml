@@ -1,0 +1,7 @@
+extraction:
+  javascript:
+    index:
+      include:
+        - js
+        - themebuilder/data
+        - themebuilder/modules

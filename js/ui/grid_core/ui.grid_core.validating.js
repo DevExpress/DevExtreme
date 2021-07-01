@@ -402,7 +402,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
             return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
-                    && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
+                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
         validateCell: function(validator) {
@@ -651,35 +651,27 @@ module.exports = {
                     that.callBase.apply(that, arguments);
                 },
 
-                _getInvisibleColumns: function(editData) {
-                    const columnsController = this.getController('columns');
-                    let hasInvisibleRows;
-                    const invisibleColumns = columnsController.getInvisibleColumns();
-
-                    if(this.isCellOrBatchEditMode()) {
-                        hasInvisibleRows = editData.some((rowEditData) => {
-                            const rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
-
-                            return rowIndex < 0;
-                        });
-                    }
-
-                    return hasInvisibleRows ? columnsController.getColumns() : invisibleColumns;
-                },
-
                 _createInvisibleColumnValidators: function(editData) {
                     const validatingController = this.getController('validating');
                     const columnsController = this.getController('columns');
-                    const invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand);
+                    const columns = columnsController.getColumns();
+                    const invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand);
                     const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
                     const invisibleColumnValidators = [];
+                    const isCellVisible = (column, rowKey) => {
+                        return this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+                    };
 
                     invisibleColumns.push(...groupColumns);
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
-                        each(invisibleColumns, function(_, column) {
+                        each(columns, function(_, column) {
                             editData.forEach(function(options) {
                                 let data;
+                                if(isCellVisible(column, options.key)) {
+                                    return;
+                                }
+
                                 if(options.type === EDIT_DATA_INSERT_TYPE) {
                                     data = options.data;
                                 } else if(options.type === 'update') {
@@ -1149,8 +1141,6 @@ module.exports = {
                         const editingController = this.getController('editing');
                         const editData = rowOptions ? editingController.getEditDataByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1160,6 +1150,7 @@ module.exports = {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(editData && column && !validatingController.isCurrentValidatorProcessing({ rowKey: editData.key, columnIndex: column.index })) {
                                             return;
                                         }

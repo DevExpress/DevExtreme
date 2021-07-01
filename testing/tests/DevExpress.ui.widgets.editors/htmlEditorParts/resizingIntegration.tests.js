@@ -3,6 +3,8 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import { name as clickEvent } from 'events/click';
 
+import browser from 'core/utils/browser';
+
 import PointerMock from '../../../helpers/pointerMock.js';
 
 const { test, module } = QUnit;
@@ -160,5 +162,58 @@ module('Resizing integration', {
 
         assert.strictEqual(frameLeft + BORDER_PADDING_WIDTH, imageLeft, 'Frame positioned correctly by the left');
         assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
+    });
+
+    test('resizing frame should update its position after formatting', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+        const { top: initialTop, left: initialLeft } = $resizeFrame.offset();
+
+        this.instance.formatLine(0, 1, 'align', 'center');
+        const { top: currentTop, left: currentLeft } = $resizeFrame.offset();
+        assert.strictEqual(currentTop, initialTop, 'Resize frame save initial top position');
+        assert.notEqual(currentLeft, initialLeft, 'Resize frame updates left position');
+    });
+
+    test('resizing frame should become hidden when another element focused', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+
+        this.instance.focus();
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        $('<input>')
+            .appendTo('#qunit-fixture')
+            .trigger('focus');
+
+        assert.notOk($resizeFrame.is(':visible'), 'Resize frame isn\'t visible, image isn\'t resizable');
+    });
+
+    test('editor should have initial range after click on image', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+
+        if(browser.msie) {
+            this.instance.focus();
+        }
+
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const { index, length } = this.instance.getSelection();
+
+        assert.strictEqual(index, 0, 'by default - zero index');
+        assert.strictEqual(length, 0, 'by default - zero length');
     });
 });

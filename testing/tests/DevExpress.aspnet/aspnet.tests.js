@@ -333,6 +333,21 @@
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
 
+        testTemplate('null', '<% var a = null; %><%- a %>', '');
+        testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
+        testTemplate('empty', '<%-%>', 'undefined');
+        testTemplate('space', '<%- %>', 'undefined');
+        testTemplate('tab', '<%-\t%>', 'undefined');
+        testTemplate('new line', '<%-\n%>', 'undefined');
+        testTemplate('return', '<%-\r%>', 'undefined');
+        testTemplate('two spaces', '<%-  %>', 'undefined');
+        testTemplate('empty string', '<%- \'\' %>', '');
+        testTemplate('nonempty string', '<%- \'a\' %>', 'a');
+        testTemplate('WA from T954324, null', '<% var value = null; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, undefined', '<% var value = undefined; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
+
         QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
             testTemplate('disabled', '[%= 123 %]', '[%= 123 %]', false);

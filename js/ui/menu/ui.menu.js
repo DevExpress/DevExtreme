@@ -921,6 +921,11 @@ class Menu extends MenuBase {
     }
 
     _optionChanged(args) {
+        if(ACTIONS.indexOf(args.name) >= 0) {
+            this._initActions();
+            return;
+        }
+
         switch(args.name) {
             case 'orientation':
             case 'submenuDirection':
@@ -931,12 +936,6 @@ class Menu extends MenuBase {
                 break;
             case 'showSubmenuMode':
                 this._changeSubmenusOption(args.name, args.value);
-                break;
-            case 'onSubmenuShowing':
-            case 'onSubmenuShown':
-            case 'onSubmenuHiding':
-            case 'onSubmenuHidden':
-                this._initActions();
                 break;
             case 'adaptivityEnabled':
                 args.value ? this._initAdaptivity() : this._removeAdaptivity();

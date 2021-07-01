@@ -1348,7 +1348,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
 
         QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion(extend(config, {
-                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ]
+                items: [ { id: 0, title: 'item0', text: 'Any text' }, { id: 1, title: 'item1', text: 'Any text', visible: false } ],
             }));
             const instance = $element.dxAccordion('instance');
             const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
@@ -1365,6 +1365,62 @@ QUnit.module('optionChanged', moduleSetup, () => {
             item1 = item1GetterFunc();
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
             assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+        });
+
+        function checkItems_T992552($accordion, assert) {
+            const $items = $accordion.find(`.${ACCORDION_ITEM_CLASS}`);
+            assert.strictEqual($items.length, 2, '$items.length');
+
+            const item1 = $items.eq(0);
+            assert.roughEqual(item1.outerHeight(), 37, 1.001, 'items(0) has valid height');
+            assert.strictEqual(item1.is('.' + [ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join('.')), true, 'items(0) should have each of these classes');
+            assert.strictEqual(!item1.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_CLOSED_CLASS].join(', .')), true, 'items(0) should not have no one of these classes');
+            assert.strictEqual(item1.attr('aria-selected'), 'true', 'items(0) should have aria-selected=true');
+
+            const item2 = $items.eq(1);
+            assert.roughEqual(item2.outerHeight(), 21, 1.001, 'items(1) has valid height');
+            assert.strictEqual(item2.is('.' + [ACCORDION_ITEM_CLOSED_CLASS].join('.')), true, 'items(1) should have each of these classes');
+            assert.strictEqual(!item2.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join(', .')), true, 'items(1) should not have no one of these classes');
+            assert.strictEqual(item2.attr('aria-selected'), 'false', 'items(1) should have aria-selected=false');
+
+            const $bodyItems = $accordion.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+            assert.strictEqual($bodyItems.eq(0).attr('aria-hidden'), 'false', 'bodyItems(0) should have aria-hidden=false');
+
+            if(config.deferRendering) {
+                assert.strictEqual($bodyItems.length, 1, '$bodyItems.length');
+            } else {
+                assert.strictEqual($bodyItems.length, 2, '$bodyItems.length');
+                assert.strictEqual($bodyItems.eq(0).attr('aria-hidden'), 'false', 'bodyItems(0) should  have aria-hidden=false');
+                assert.strictEqual($bodyItems.eq(1).attr('aria-hidden'), 'true', 'bodyItems(1) should have aria-hidden=true');
+            }
+        }
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }, { title: 'item1', text: 'Any text' } ];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            checkItems_T992552($element, assert);
+        });
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 -> accordion.items=[item1, newItem2] (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }, { title: 'item1', text: 'Any text' } ];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            const instance = $element.dxAccordion('instance');
+
+            items[1] = { title: 'new title', text: 'new text' };
+            instance.option('items', items);
+
+            checkItems_T992552($element, assert);
+        });
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 -> items.push(newItem2) (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            const instance = $element.dxAccordion('instance');
+
+            items[1] = { title: 'new title', text: 'new text' };
+            instance.option('items', items);
+
+            checkItems_T992552($element, assert);
         });
     });
 });

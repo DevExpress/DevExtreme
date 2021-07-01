@@ -49,13 +49,13 @@ const ListEdit = ListBase.inherit({
         };
 
         const enter = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.enter.apply(this, arguments);
             }
         };
 
         const space = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.space.apply(this, arguments);
             }
         };
@@ -257,6 +257,15 @@ const ListEdit = ListBase.inherit({
         }
 
         this.callBase(...arguments);
+    },
+
+    _getItemContainer: function(changeData) {
+        if(this.option('grouped')) {
+            const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
+            return this._getGroupContainerByIndex(groupIndex);
+        } else {
+            return this.callBase(changeData);
+        }
     },
 
     _itemContextMenuHandler(e) {

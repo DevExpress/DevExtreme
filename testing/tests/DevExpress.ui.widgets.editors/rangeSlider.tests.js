@@ -3,6 +3,7 @@ import Tooltip from 'ui/tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/range_slider';
 import 'ui/number_box/number_box';
@@ -113,21 +114,6 @@ QUnit.module('render', moduleOptions, () => {
         assert.equal(range.position().left, 240);
         assert.equal(range.position().left + range.width(), 500);
         assert.equal(range.width(), 260);
-    });
-
-    QUnit.test('value change should have jQuery event', function(assert) {
-        const el = $('#slider').dxRangeSlider({
-            max: 500,
-            min: 0,
-            start: 0,
-            end: 500,
-            onValueChanged: function(args) {
-                assert.ok(args.event, 'Event present');
-            },
-            useInkRipple: false
-        }).css('width', 500);
-
-        pointerMock(el).start().move(240 + el.offset().left).down();
     });
 });
 
@@ -370,47 +356,6 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
 
         keyboard.keyDown('end');
         assert.equal(rangeSlider.option('end'), 90, 'value is correct after end press');
-    });
-
-    QUnit.test('correct event should be passed to valueChanged when it is raised by keyboard navigation', function(assert) {
-        assert.expect(12);
-
-        const $rangeSlider = $('#slider').dxRangeSlider({
-            min: 10,
-            max: 90,
-            start: 50,
-            end: 80,
-            step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed');
-            }
-        });
-
-        const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
-        const $leftHandle = $handles.eq(0);
-        const $rightHandle = $handles.eq(1);
-        let keyboard = keyboardMock($leftHandle);
-
-        $leftHandle.trigger('focusin');
-
-        keyboard.keyDown('right');
-        keyboard.keyDown('left');
-        keyboard.keyDown('home');
-        keyboard.keyDown('end');
-        keyboard.keyDown('pageUp');
-        keyboard.keyDown('pageDown');
-
-        keyboard = keyboardMock($rightHandle);
-        $rightHandle.trigger('focusin');
-
-        keyboard.keyDown('right');
-        keyboard.keyDown('left');
-        keyboard.keyDown('home');
-        keyboard.keyDown('end');
-        keyboard.keyDown('pageUp');
-        keyboard.keyDown('pageDown');
     });
 
     QUnit.test('pageUp/pageDown keys test', function(assert) {
@@ -1260,6 +1205,104 @@ QUnit.module('Validation', () => {
 
             const { value } = validatorStub.lastCall.args[0];
             assert.deepEqual(value, [10, 15], '\'value\' argument of the validation callback is correct');
+        });
+    });
+});
+
+QUnit.module('valueChanged handler should receive correct event parameter', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxRangeSlider({
+            min: 0,
+            max: 100,
+            start: 50,
+            end: 80,
+            width: 100,
+            focusStateEnabled: true,
+            useInkRipple: false,
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxRangeSlider('instance');
+        this.$handles = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
+        this.pointer = pointerMock(this.$wrapper);
+
+        this.testProgramChange = (assert) => {
+            const value = this.instance.option('value');
+            this.instance.option('value', [value[0] - 1, value[1] + 1]);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on value program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on handle swipe', function(assert) {
+        this.pointer
+            .start()
+            .down(this.$wrapper.offset().left + 50, this.$wrapper.offset().top)
+            .move(20);
+
+        this.checkEvent(assert, 'dxswipe', this.$wrapper);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on handle swipeend (correction after swipe on float step)', function(assert) {
+        this.pointer
+            .start()
+            .down(this.$wrapper.offset().left + 50, this.$wrapper.offset().top)
+            .move(9.666692444513187)
+            .swipeStart()
+            .swipeEnd();
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxswipeend', 'event type is correct');
+        assert.strictEqual(event.target, this.$wrapper.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on slider scale', function(assert) {
+        this.pointer.start().move(10 + this.$element.offset().left).down();
+
+        this.checkEvent(assert, 'dxpointerdown', this.$wrapper);
+        this.testProgramChange(assert);
+    });
+
+    [0, 1].forEach(handlerNumber => {
+        QUnit.module(`on ${handlerNumber === 0 ? 'left' : 'right'} handle`, {
+            beforeEach: function() {
+                this.$handle = this.$handles.eq(handlerNumber);
+                this.keyboard = keyboardMock(this.$handle);
+            }
+        }, () => {
+            ['right', 'left', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+                QUnit.test(`on ${key} press`, function(assert) {
+                    this.keyboard.press(key);
+
+                    this.checkEvent(assert, 'keydown', this.$handle, key);
+                    this.testProgramChange(assert);
+                });
+            });
         });
     });
 });

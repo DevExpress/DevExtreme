@@ -56,7 +56,7 @@ const RowDraggingExtender = {
             this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
         };
 
-        if(allowReordering && $content.length) {
+        if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
                 component: this.component,
                 contentTemplate: null,
@@ -70,7 +70,8 @@ const RowDraggingExtender = {
                     e.itemData = row && row.data;
 
                     const isDataRow = row && row.rowType === 'data';
-                    e.cancel = !isDataRow;
+
+                    e.cancel = !allowReordering || !isDataRow;
 
                     rowDragging.onDragStart?.(e);
                 },
@@ -95,7 +96,7 @@ const RowDraggingExtender = {
                 }
             }));
 
-            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
+            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, allowReordering && !rowDragging.showDragIcons);
         }
 
         return $content;

@@ -139,7 +139,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         return function(options, container) {
             const $container = $(container);
-            const columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex);
+            const columnIndex = that._columnsController.getVisibleIndex(column.index);
             const templateOptions = extend({}, cellOptions);
 
             const renderFormTemplate = function() {
@@ -780,7 +780,7 @@ module.exports = {
                     if(item && item.rowType === ADAPTIVE_ROW_TYPE) {
                         return this._adaptiveColumnsController.getItemContentByColumnIndex(columnIdentifier);
                     } else {
-                        return this.callBase(rowIndex, columnIdentifier);
+                        return this.callBase.apply(this, arguments);
                     }
                 },
 

@@ -39,6 +39,12 @@ const intersection = function(a, b) {
     return result;
 };
 
+const uniqueValues = function(data) {
+    return data.filter(function(item, position) {
+        return data.indexOf(item) === position;
+    });
+};
+
 const removeDuplicates = function(from, what) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];
@@ -134,6 +140,7 @@ exports.isEmpty = isEmpty;
 exports.wrapToArray = wrapToArray;
 exports.intersection = intersection;
 exports.removeDuplicates = removeDuplicates;
+exports.uniqueValues = uniqueValues;
 exports.normalizeIndexes = normalizeIndexes;
 exports.inArray = inArray;
 exports.merge = merge;

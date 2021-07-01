@@ -85,6 +85,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid dxPopoverOptions.target
      * @type string|Element|jQuery
+     * @default Window
      * @prevFileNamespace DevExpress.ui
      * @public
      */

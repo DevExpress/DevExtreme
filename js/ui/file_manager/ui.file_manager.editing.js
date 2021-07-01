@@ -40,6 +40,10 @@ class FileManagerEditingControl extends Widget {
         });
 
         this._fileUploader = this._createFileUploader();
+        const notificationControl = this.option('notificationControl');
+        if(notificationControl) {
+            this._initNotificationControl(notificationControl);
+        }
 
         this._createMetadataMap();
     }

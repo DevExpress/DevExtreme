@@ -102,8 +102,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
      * @docid dxScrollableOptions.useNative
-     * @default false [for](desktop)
-     * @default true [for](Mac)
+     * @default false [for](desktop except Mac)
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -149,19 +148,11 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid dxScrollablemethods.scrollBy
      * @publicName scrollBy(distance)
-     * @param1 distance:numeric
+     * @param1 distance:numeric|object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollBy(distance: number): void;
-    /**
-     * @docid dxScrollablemethods.scrollBy
-     * @publicName scrollBy(distanceObject)
-     * @param1 distanceObject:object
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    scrollBy(distanceObject: any): void;
+    scrollBy(distance: number | any): void;
     /**
      * @docid dxScrollablemethods.scrollHeight
      * @publicName scrollHeight()
@@ -189,22 +180,14 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid dxScrollablemethods.scrollTo
      * @publicName scrollTo(targetLocation)
-     * @param1 targetLocation:numeric
+     * @param1 targetLocation:numeric|object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollTo(targetLocation: number): void;
-    /**
-     * @docid dxScrollablemethods.scrollTo
-     * @publicName scrollTo(targetLocationObject)
-     * @param1 targetLocation:object
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    scrollTo(targetLocation: any): void;
+    scrollTo(targetLocation: number | any): void;
     /**
      * @docid dxScrollablemethods.scrollToElement
-     * @publicName scrollToElement(targetLocation)
+     * @publicName scrollToElement(element)
      * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

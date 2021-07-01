@@ -28,6 +28,10 @@ class TreeViewTestWrapper {
             options.onSelectionChanged = () => this.eventLog.push('selectionChanged');
         }
 
+        if(!options.onSelectAllValueChanged) {
+            options.onSelectAllValueChanged = () => this.eventLog.push('selectAllValueChanged');
+        }
+
         this.eventLog = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option('showCheckBoxesMode') === 'normal';

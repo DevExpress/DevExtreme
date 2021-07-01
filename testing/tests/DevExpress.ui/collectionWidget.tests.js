@@ -1196,6 +1196,24 @@ module('keyboard navigation', {
         assert.equal(itemClicked, 2, 'press space on item call item click action');
     }),
 
+    test('enter press should replace event target and currentTarget properties with item native element', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#cmp');
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ['0'],
+            onItemClick: handler
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('enter');
+        const event = handler.getCall(0).args[0].event;
+        assert.strictEqual(event.target, $item.get(0), 'event target is correct');
+        assert.strictEqual(event.currentTarget, $item.get(0), 'event target is correct');
+    }),
+
     test('default page scroll should be prevented for space key', function(assert) {
         assert.expect(1);
 
@@ -1608,6 +1626,36 @@ module('keyboard navigation', {
         this.clock.tick();
         keyboard.keyDown('right');
         assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), 'Last item must stay focused when we press \'right\' button on the keyboard');
+    });
+
+    [false, true].forEach((ctrlKey) => {
+        [false, true].forEach((metaKey) => {
+            ['up', 'down', 'left', 'right', 'pageup', 'pagedown', 'home', 'end'].forEach((key) => {
+                const commandKeyPressed = ctrlKey || metaKey;
+                test(`focused item is ${commandKeyPressed ? 'not' : ''} changed after pressing ${key} key with command key (metaKey: ${metaKey}, ctrlKey: ${ctrlKey})`, function(assert) {
+                    const $element = $('#cmp');
+                    const isSameItemFocused = commandKeyPressed;
+                    new TestComponent($element, {
+                        focusStateEnabled: true,
+                        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        selectedIndex: 3
+                    });
+
+                    const $items = $element.find('.item');
+                    const $item = $items.eq(3);
+                    const keyboard = keyboardMock($element);
+
+                    $element.trigger('focusin');
+                    $element.find('.item').eq(3).trigger('dxpointerdown');
+                    this.clock.tick();
+
+                    keyboard.keyDown(key, { ctrlKey, metaKey });
+                    assert.strictEqual($item.hasClass(FOCUSED_ITEM_CLASS), isSameItemFocused, `${isSameItemFocused ? 'same' : 'another'} item focused`);
+                    assert.strictEqual(keyboard.event.isDefaultPrevented(), !isSameItemFocused, `event is ${isSameItemFocused ? 'not' : ''} prevented`);
+                    assert.strictEqual(keyboard.event.isPropagationStopped(), !isSameItemFocused, `propogation is ${isSameItemFocused ? 'not' : ''} stopped`);
+                });
+            });
+        });
     });
 });
 

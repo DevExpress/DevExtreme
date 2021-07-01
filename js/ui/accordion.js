@@ -370,14 +370,6 @@ const Accordion = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _itemOptionChanged: function(item, property, value, oldValue) {
-        this.callBase(item, property, value, oldValue);
-
-        if(property === 'visible') {
-            this._updateItemHeightsWrapper(true);
-        }
-    },
-
     _tryParseItemPropertyName: function(fullName) {
         const matches = fullName.match(/.*\.(.*)/);
 
@@ -392,6 +384,13 @@ const Accordion = CollectionWidget.inherit({
                 this.callBase(args);
 
                 if(this._tryParseItemPropertyName(args.fullName) === 'title') {
+                    this._renderSelection(this._getSelectedItemIndices(), []);
+                }
+                if(this._tryParseItemPropertyName(args.fullName) === 'visible') {
+                    this._updateItemHeightsWrapper(true);
+                }
+                if(this.option('repaintChangesOnly') === true && args.fullName === 'items') {
+                    this._updateItemHeightsWrapper(true);
                     this._renderSelection(this._getSelectedItemIndices(), []);
                 }
                 break;

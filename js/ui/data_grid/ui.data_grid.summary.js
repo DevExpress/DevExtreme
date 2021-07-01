@@ -77,6 +77,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _renderCore: function(change) {
+            let needUpdateScrollLeft = false;
             const totalItem = this._dataController.footerItems()[0];
 
             if(!change || !change.columnIndices) {
@@ -84,16 +85,19 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
                     .empty()
                     .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
                     .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option('wordWrapEnabled'));
+
+                needUpdateScrollLeft = true;
             }
 
             if(totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
                 this._updateContent(this._renderTable({ change: change }), change);
+                needUpdateScrollLeft && this._updateScrollLeftPosition();
             }
         },
 
         _updateContent: function($newTable, change) {
             if(change && change.changeType === 'update' && change.columnIndices) {
-                const $row = this._getTableElement().find('.dx-row');
+                const $row = this.getTableElement().find('.dx-row');
                 const $newRow = $newTable.find('.dx-row');
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);

@@ -6,6 +6,7 @@ const dateLocalization = require('../../localization/date');
 const extend = require('../../core/utils/extend').extend;
 const Box = require('../box');
 const uiDateUtils = require('./ui.date_utils');
+const dateUtils = require('../../core/utils/date');
 
 const SHRINK_VIEW_SCREEN_WIDTH = 573;
 const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
@@ -22,12 +23,21 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         });
     },
 
+    _closeDropDownByEnter: function() {
+        return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
+    },
+
     getDisplayFormat: function(displayFormat) {
         return displayFormat || 'shortdateshorttime';
     },
 
     _is24HourFormat: function() {
         return dateLocalization.is24HourFormat(this.getDisplayFormat(this.dateBox.option('displayFormat')));
+    },
+
+    _getContouredValue: function() {
+        const viewDate = this.callBase();
+        return this._updateDateTime(viewDate);
     },
 
     _renderWidget: function() {
@@ -176,14 +186,18 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         }
     },
 
-    getValue: function() {
-        let date = this._widget.option('value');
+    _updateDateTime: function(date) {
         const time = this._timeView.option('value');
-
-        date = date ? new Date(date) : new Date();
         date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
         return date;
+    },
+
+    getValue: function() {
+        let date = this._widget.option('value');
+        date = date ? new Date(date) : new Date();
+
+        return this._updateDateTime(date);
     },
 
     dispose: function() {

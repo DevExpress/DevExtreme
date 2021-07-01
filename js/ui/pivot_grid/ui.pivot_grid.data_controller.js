@@ -477,7 +477,7 @@ exports.DataController = Class.inherit((function() {
                 const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
                 const dataField = dataFields[dataIndex];
 
-                if(columnInfo.isLast && dataField) {
+                if(columnInfo.isLast && dataField && dataField.visible !== false) {
                     let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
 
                     if(!Array.isArray(cell)) {
@@ -1063,9 +1063,6 @@ exports.DataController = Class.inherit((function() {
                 that._rowsInfo = rowsInfo;
 
                 if(that._rowsScrollController && that._columnsScrollController && that.changed && !that._dataSource.paginate()) {
-                    that._rowsScrollController.reset();
-                    that._columnsScrollController.reset();
-
                     that._lockChanged = true;
                     that._rowsScrollController.load();
                     that._columnsScrollController.load();

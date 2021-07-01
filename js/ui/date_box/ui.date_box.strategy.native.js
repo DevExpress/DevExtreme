@@ -1,10 +1,11 @@
-const noop = require('../../core/utils/common').noop;
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const support = require('../../core/utils/support');
-const inArray = require('../../core/utils/array').inArray;
-const dateUtils = require('./ui.date_utils');
-const dateSerialization = require('../../core/utils/date_serialization');
-const extend = require('../../core/utils/extend').extend;
+import { noop } from '../../core/utils/common';
+import DateBoxStrategy from './ui.date_box.strategy';
+import { inputType } from '../../core/utils/support';
+import { inArray } from '../../core/utils/array';
+import dateUtils from './ui.date_utils';
+import dateSerialization from '../../core/utils/date_serialization';
+import { extend } from '../../core/utils/extend';
+import devices from '../../core/devices';
 
 const NativeStrategy = DateBoxStrategy.inherit({
 
@@ -47,7 +48,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
 
         if(inArray(type, dateUtils.SUPPORTED_FORMATS) === -1) {
             type = 'date';
-        } else if(type === 'datetime' && !support.inputType(type)) {
+        } else if(type === 'datetime' && !inputType(type)) {
             type = 'datetime-local';
         }
 
@@ -56,7 +57,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
 
     customizeButtons: function() {
         const dropDownButton = this.dateBox.getButton('dropDown');
-        if(dropDownButton) {
+        if(devices.real().android && dropDownButton) {
             dropDownButton.on('click', function() {
                 this.dateBox._input().get(0).click();
             }.bind(this));

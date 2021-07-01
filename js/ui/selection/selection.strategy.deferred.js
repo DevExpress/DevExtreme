@@ -78,10 +78,25 @@ module.exports = SelectionStrategy.inherit({
         return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
     },
 
-    _getFilterByKey: function(key) {
+    _getKeyExpr: function() {
         const keyField = this.options.key();
-        let filter = [keyField, '=', key];
+        if(Array.isArray(keyField) && keyField.length === 1) {
+            return keyField[0];
+        }
+        return keyField;
+    },
 
+    _normalizeKey: function(key) {
+        const keyExpr = this.options.key();
+        if(Array.isArray(keyExpr) && keyExpr.length === 1) {
+            return key[keyExpr[0]];
+        }
+        return key;
+    },
+
+    _getFilterByKey: function(key) {
+        const keyField = this._getKeyExpr();
+        let filter = [keyField, '=', this._normalizeKey(key)];
 
         if(Array.isArray(keyField)) {
             filter = [];
@@ -211,14 +226,14 @@ module.exports = SelectionStrategy.inherit({
         if(filter.length === 2 && filter[0] === '!') {
             return this._isKeyFilter(filter[1]);
         }
-        const keyField = this.options.key();
+        const keyField = this._getKeyExpr();
 
         if(Array.isArray(keyField)) {
             if(filter.length !== keyField.length * 2 - 1) {
                 return false;
             }
             for(let i = 0; i < keyField.length; i++) {
-                if(i > 0 && filter[i] !== 'and') {
+                if(i > 0 && filter[i * 2 - 1] !== 'and') {
                     return false;
                 }
                 if(!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {

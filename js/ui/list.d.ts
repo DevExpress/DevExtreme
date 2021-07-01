@@ -351,7 +351,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid dxListOptions.pageLoadMode
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
-     * @default 'nextButton' [for](desktop)
+     * @default "nextButton" [for](desktop except Mac)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -469,8 +469,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     showSelectionControls?: boolean;
     /**
      * @docid dxListOptions.useNativeScrolling
-     * @default false [for](desktop)
-     * @default true [for](Mac)
+     * @default false [for](desktop except Mac)
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui

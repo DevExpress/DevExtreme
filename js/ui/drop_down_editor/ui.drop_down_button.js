@@ -9,7 +9,13 @@ const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 
 const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
-export default class ClearButton extends TextEditorButton {
+export default class DropDownButton extends TextEditorButton {
+    constructor(name, editor, options) {
+        super(name, editor, options);
+
+        this.currentTemplate = null;
+    }
+
     _attachEvents(instance) {
         const { editor } = this;
 
@@ -46,17 +52,17 @@ export default class ClearButton extends TextEditorButton {
         const { editor } = this;
         const visible = this._isVisible();
         const isReadOnly = editor.option('readOnly');
-        const template = editor._getTemplateByOption('dropDownButtonTemplate');
-
-        return {
+        const options = {
             focusStateEnabled: false,
             hoverStateEnabled: false,
             activeStateEnabled: false,
             useInkRipple: false,
             disabled: isReadOnly,
-            visible,
-            template
+            visible
         };
+
+        this._addTemplate(options);
+        return options;
     }
 
     _isVisible() {
@@ -70,8 +76,20 @@ export default class ClearButton extends TextEditorButton {
         $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
 
         if($element) {
-            $element.removeClass('dx-button');
-            $element.addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
+            $element
+                .removeClass('dx-button')
+                .addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
+        }
+    }
+
+    _isSameTemplate() {
+        return this.editor.option('dropDownButtonTemplate') === this.currentTemplate;
+    }
+
+    _addTemplate(options) {
+        if(!this._isSameTemplate()) {
+            options.template = this.editor._getTemplateByOption('dropDownButtonTemplate');
+            this.currentTemplate = this.editor.option('dropDownButtonTemplate');
         }
     }
 
@@ -83,8 +101,8 @@ export default class ClearButton extends TextEditorButton {
             const $editor = editor.$element();
             const options = this._getOptions();
 
-            instance && instance.option(options);
-            this._legacyRender($editor, instance && instance.$element(), options.visible);
+            instance?.option(options);
+            this._legacyRender($editor, instance?.$element(), options.visible);
         }
     }
 }

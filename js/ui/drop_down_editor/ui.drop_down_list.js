@@ -203,6 +203,10 @@ const DropDownList = DropDownEditor.inherit({
         });
     },
 
+    _isEditable: function() {
+        return this.callBase() || this.option('searchEnabled');
+    },
+
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption('focusStateEnabled')) {
             this._focusInput();
@@ -462,8 +466,6 @@ const DropDownList = DropDownEditor.inherit({
 
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
-
-    _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
         this._list._getAriaTarget = this._getAriaTarget.bind(this);

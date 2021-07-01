@@ -118,7 +118,7 @@ QUnit.module('Rendering input', moduleConfig, () => {
         });
 
         assert.equal(this.instance._input().val(), getExpectedResult(date, this.instance.option('mode'), '2012-11-26'));
-        assert.ok(!this.instance._input().attr('disabled'));
+        assert.ok(!this.instance._input().prop('disabled'));
     });
 
     QUnit.test('render type - datetime', function(assert) {
@@ -169,7 +169,7 @@ QUnit.module('Rendering input', moduleConfig, () => {
             type: 'datetime'
         });
 
-        assert.ok(this.instance._input().attr('disabled'));
+        assert.ok(this.instance._input().prop('disabled'));
     });
 
     QUnit.test('datebox should set min and max attributes to the native input (T258860)', function(assert) {

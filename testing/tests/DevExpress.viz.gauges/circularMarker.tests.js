@@ -171,11 +171,9 @@ QUnit.test('render', function(assert) {
     const tc = getTextCloudInfo({
         x: 200 + 80 * Math.cos(Math.PI * 3 / 4),
         y: 100 - 80 * Math.sin(Math.PI * 3 / 4),
-        textWidth: 40,
-        textHeight: 16,
+        cloudWidth: 56,
+        cloudHeight: 24,
         tailLength: 3,
-        horMargin: 8,
-        verMargin: 4,
         type: 'right-bottom'
     });
 

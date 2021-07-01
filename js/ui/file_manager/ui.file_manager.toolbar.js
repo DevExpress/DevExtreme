@@ -93,6 +93,26 @@ const DEFAULT_ITEM_CONFIGS = {
     }
 };
 
+const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
+    'visible',
+    'location',
+    'locateInMenu',
+    'disabled',
+    'showText'
+];
+
+const DEFAULT_ITEM_ALLOWED_OPTION_PROPERTIES = [
+    'accessKey',
+    'elementAttr',
+    'height',
+    'hint',
+    'icon',
+    'stylingMode',
+    'tabIndex',
+    'text',
+    'width'
+];
+
 const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'switchView' ];
 
 const REFRESH_ICON_MAP = {
@@ -249,15 +269,24 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(true, result, defaultConfig);
-            extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
+            let resultCssClass = result.cssClass || '';
+            extendAttributes(result, item, DEFAULT_ITEM_ALLOWED_PROPERTIES);
+            if(isDefined(item.options)) {
+                extendAttributes(result.options, item.options, DEFAULT_ITEM_ALLOWED_OPTION_PROPERTIES);
+            }
+            extendAttributes(result.options, item, ['text', 'icon']);
+
+            if(item.cssClass) {
+                resultCssClass = `${resultCssClass} ${item.cssClass}`;
+            }
+
+            if(resultCssClass) {
+                result.cssClass = resultCssClass;
+            }
 
             if(!isDefined(item.visible)) {
                 result._autoHide = true;
-            } else {
-                extendAttributes(result, item, ['disabled']);
             }
-
-            extendAttributes(result.options, item, ['text', 'icon']);
 
             if(result.widget === 'dxButton') {
                 if(result.showText === 'inMenu' && !isDefined(result.options.hint)) {
@@ -273,7 +302,7 @@ class FileManagerToolbar extends Widget {
             if(!result.widget) {
                 result.widget = 'dxButton';
             }
-            if(result.widget === 'dxButton' && !result.compactMode && !result.showText && result.options.icon && result.options.text) {
+            if(result.widget === 'dxButton' && !result.compactMode && !result.showText && result.options && result.options.icon && result.options.text) {
                 result.compactMode = {
                     showText: 'inMenu'
                 };
@@ -286,12 +315,13 @@ class FileManagerToolbar extends Widget {
 
         result.location = ensureDefined(result.location, 'before');
 
-        if(result.widget === 'dxButton') {
-            extend(true, result, { options: { stylingMode: 'text' } });
-        }
-
-        if(result.widget === 'dxSelectBox') {
-            extend(true, result, { options: { stylingMode: 'filled' } });
+        if(!isDefined(result.options?.stylingMode)) {
+            if(result.widget === 'dxButton') {
+                extend(true, result, { options: { stylingMode: 'text' } });
+            }
+            if(result.widget === 'dxSelectBox') {
+                extend(true, result, { options: { stylingMode: 'filled' } });
+            }
         }
 
         return result;

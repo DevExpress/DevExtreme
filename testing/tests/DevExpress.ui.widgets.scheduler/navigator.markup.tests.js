@@ -3,10 +3,7 @@ import SchedulerNavigator from 'ui/scheduler/ui.scheduler.navigator';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import noop from 'core/utils/common';
-import themes from 'ui/themes';
 import 'ui/scheduler/ui.scheduler';
-
-themes.setDefaultTimeout(0);
 
 QUnit.testStart(() => {
     const markup =
@@ -17,10 +14,8 @@ QUnit.testStart(() => {
 
 const moduleConfig = {
     beforeEach: function() {
-        devices.current({ platform: 'generic' });
         this.instance = $('#navigator').dxSchedulerNavigator().dxSchedulerNavigator('instance');
         this.instance.notifyObserver = noop.noop;
-        return new Promise((resolve) => themes.initialized(resolve));
     }
 };
 

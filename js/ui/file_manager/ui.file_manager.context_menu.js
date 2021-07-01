@@ -21,6 +21,17 @@ const DEFAULT_CONTEXT_MENU_ITEMS = {
     }
 };
 
+const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
+    'beginGroup',
+    'closeMenuOnClick',
+    'disabled',
+    'icon',
+    'selectable',
+    'selected',
+    'text',
+    'visible'
+];
+
 class FileManagerContextMenu extends Widget {
 
     _initMarkup() {
@@ -133,12 +144,10 @@ class FileManagerContextMenu extends Widget {
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
         result.originalItemData = item;
-        this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
+        this._extendAttributes(result, item, DEFAULT_ITEM_ALLOWED_PROPERTIES);
 
         if(!isDefined(result.visible)) {
             result._autoHide = true;
-        } else {
-            this._extendAttributes(result, item, ['visible', 'disabled']);
         }
 
         if(commandName && !result.name) {

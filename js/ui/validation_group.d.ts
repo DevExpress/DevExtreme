@@ -61,7 +61,7 @@ export interface dxValidationGroupResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
+    complete?: Promise<dxValidationGroupResult> & JQueryPromise<dxValidationGroupResult>;
     /**
      * @docid dxValidationGroupResult.isValid
      * @type boolean

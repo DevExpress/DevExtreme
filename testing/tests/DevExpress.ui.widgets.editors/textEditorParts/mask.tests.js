@@ -2140,6 +2140,40 @@ QUnit.module('Hidden input', {}, () => {
         const $hiddenInput = $textEditor.find('input[type=hidden]');
         assert.equal($hiddenInput.attr('name'), 'Editor with mask', 'name of hidden input');
     });
+
+    [
+        { useMaskedValue: true, value: '12-34-' },
+        { useMaskedValue: false, value: '1234' }
+    ].forEach(({ useMaskedValue, value }) => {
+        QUnit.test(`initial value of the hidden editor should correctly reflect actual value, useMaskedValue=${useMaskedValue}`, function(assert) {
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '00-00-00',
+                useMaskedValue,
+                value
+            });
+
+            const $hiddenInput = $textEditor.find('input[type=hidden]');
+            assert.strictEqual($hiddenInput.val(), value, 'submitted value should be equal to the actual value');
+        });
+
+        QUnit.testInActiveWindow(`value of the hidden editor should correctly reflect updated value, useMaskedValue=${useMaskedValue}`, function(assert) {
+            const $textEditor = $('#texteditor').dxTextEditor({
+                mask: '00-00-00',
+                useMaskedValue,
+                value
+            });
+            const instance = $textEditor.dxTextEditor('instance');
+
+            const $input = $textEditor.find('.dx-texteditor-input');
+            keyboardMock($input, true)
+                .caret(6)
+                .type('5')
+                .change();
+
+            const $hiddenInput = $textEditor.find('input[type=hidden]');
+            assert.strictEqual($hiddenInput.val(), instance.option('value'), 'submitted value should be equal to the actual value');
+        });
+    });
 });
 
 QUnit.module('Strategies', () => {

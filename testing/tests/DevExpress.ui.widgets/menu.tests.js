@@ -831,6 +831,36 @@ QUnit.module('Menu tests', {
         assert.equal(handlerHidden.callCount, 1);
     });
 
+    QUnit.test('Changing event handler via option affects submenu (T955742)', function(assert) {
+        const eventLog = [];
+
+        const menu = createMenu({ items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }] });
+        ['onItemClick', 'onSubmenuShowing', 'onSubmenuShown', 'onItemRendered', 'onSubmenuHidden', 'onSubmenuHiding'].forEach(e => {
+            menu.instance.option(e, function() { eventLog.push(e); });
+        });
+
+        const $item1 = $(menu.instance.itemElements().eq(0));
+        $item1.trigger('dxclick');
+
+        const $item11 = $(getSubMenuInstance($item1).itemElements().eq(0));
+        $item11.trigger('dxclick');
+        menu.instance._visibleSubmenu.hide();
+
+        const expectedLog = ['onItemClick',
+            'onItemRendered',
+            'onSubmenuShowing',
+            'onSubmenuShown',
+            'onItemClick',
+            'onItemRendered',
+            'onSubmenuShowing',
+            'onSubmenuShown',
+            'onSubmenuHiding',
+            'onSubmenuHiding',
+            'onSubmenuHidden',
+            'onSubmenuHidden'];
+        assert.deepEqual(eventLog, expectedLog);
+    });
+
     QUnit.test('only visible submenu should be hidden on outside click', function(assert) {
         const hiddenHandler = sinon.spy();
         const menu = createMenu({

@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import consoleUtils from 'core/utils/console';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -20,6 +21,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -194,7 +196,7 @@ QUnit.module('general', {}, () => {
 
         const $placeholder = element.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'placeholder is invisible');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'placeholder is invisible');
     });
 
     QUnit.testInActiveWindow('placeholder pointerup event (T181734)', function(assert) {
@@ -339,6 +341,25 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-state-focused'), 'input is still focused');
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
+    });
+
+    QUnit.testInActiveWindow('input should be focused even after focus from inner button move (T963822)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'test',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        actionButton.focus();
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is focused');
     });
 
     QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
@@ -678,16 +699,28 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.notOk($clearButton.is(':visible'), 'clear button was hidden');
     });
 
-    QUnit.test('click on clear button should not reset active focus (T241583)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+    ['mouse', 'touch'].forEach((pointerType) => { // T241583, T310102
+        const pointerAction = pointerType === 'mouse' ? 'click' : 'tap';
+        QUnit.test(`${pointerAction} on clear button should not reset active focus and clear the value`, function(assert) {
+            const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
+            const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+            const $input = $element.find(`.${INPUT_CLASS}`);
+            const instance = $element.dxTextEditor('instance');
 
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'mouse';
+            const dxPointerDown = $.Event('dxpointerdown');
+            dxPointerDown.pointerType = pointerType;
 
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
+            $clearButton.on('dxpointerdown', e => {
+                assert.ok(e.isDefaultPrevented(), 'prevent input blurring');
+            }).trigger(dxPointerDown);
+
+            if(pointerType === 'mouse') {
+                $clearButton.trigger('dxclick');
+            }
+
+            assert.strictEqual($input.val(), '', 'input is empty');
+            assert.strictEqual(instance.option('value'), '', 'value is cleared');
+        });
     });
 
     QUnit.test('click on clear button should raise input event (T521817)', function(assert) {
@@ -707,17 +740,6 @@ QUnit.module('options changing', moduleConfig, () => {
         pointerMock($clearButton).click();
 
         assert.equal(callCount, 1, 'onInput was called once');
-    });
-
-    QUnit.test('tap on clear button should reset value (T310102)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
-
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'touch';
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(!e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
     });
 
     QUnit.test('tap on clear button should not raise onValueChange event (T812448)', function(assert) {
@@ -1120,6 +1142,101 @@ QUnit.module('regressions', moduleConfig, () => {
 
         const $placeholder = $textEditor.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'display none was attached as inline style');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'display none was attached as inline style');
+    });
+
+    QUnit.test('Only editor input placeholder should change visibility depending on input text (T970003)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor();
+        const $input = $textEditor.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $textEditor.append($('<div>').attr('class', PLACEHOLDER_CLASS));
+        const $placeholders = $textEditor.find(`.${PLACEHOLDER_CLASS}`);
+
+        assert.notOk($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is visible');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder is visible');
+
+        keyboard
+            .focus()
+            .type('text')
+            .blur();
+
+        assert.ok($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is hidden');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder visibility is not changed');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#texteditor').dxTextEditor({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextEditor('instance');
+        this.$input = this.$element.find(`.${INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'change', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input if valueChangeEvent=input', function(assert) {
+        this.instance.option('valueChangeEvent', 'input');
+
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'input', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on focusout if valueChangeEvent=focusout', function(assert) {
+        this.instance.option('valueChangeEvent', 'focusout');
+
+        this.keyboard
+            .type('text')
+            .blur();
+
+        this.checkEvent(assert, 'focusout', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on keyup if valueChangeEvent=keyup', function(assert) {
+        this.instance.option('valueChangeEvent', 'keyup');
+
+        this.keyboard
+            .type('text')
+            .keyUp();
+
+
+        this.checkEvent(assert, 'keyup', this.$input);
+        this.testProgramChange(assert);
     });
 });

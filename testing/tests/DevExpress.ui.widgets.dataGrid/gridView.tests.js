@@ -1377,7 +1377,7 @@ QUnit.module('Synchronize columns', {
         gridView.update();
 
         // assert
-        assert.ok(that.rowsView._getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
+        assert.ok(that.rowsView.getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
     });
 
     QUnit.test('Columns synchronize with groupPanel', function(assert) {

@@ -115,7 +115,7 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
             case 'applyChangesMode':
                 break;
             case 'state':
-                if(!this._dataSource) {
+                if(this._skipStateChange || !this._dataSource) {
                     break;
                 }
 
