@@ -1,4 +1,4 @@
-import errors from '../../../../core/errors';
+import errors from '../../../widget/ui.errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
