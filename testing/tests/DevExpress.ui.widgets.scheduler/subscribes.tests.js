@@ -340,7 +340,7 @@ module('Subscribes', {
             allDayExpr: 'AllDay'
         });
 
-        this.showAddAppointmentPopup({
+        this.instance.showAddAppointmentPopup({
             startDate: new Date(2015, 1, 1),
             endDate: new Date(2015, 1, 1, 1),
             allDay: true
@@ -873,18 +873,6 @@ module('Subscribes', {
         });
 
         assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
-    });
-
-    test('\'getHeaderHeight\' should return correct value', function(assert) {
-        this.createInstance({
-            views: ['day'],
-            currentView: 'day',
-            dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
-        });
-
-        const headerHeight = this.instance.fire('getHeaderHeight');
-
-        assert.equal(headerHeight, 56, 'Header height is OK');
     });
 
     test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with scheduler configuration', function(assert) {
