@@ -177,3 +177,28 @@ export const validateDayHours = (startDayHour, endDayHour) => {
         throw errors.Error('E1058');
     }
 };
+
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
+
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};

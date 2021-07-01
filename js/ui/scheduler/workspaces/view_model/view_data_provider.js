@@ -29,8 +29,10 @@ export default class ViewDataProvider {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
             this.completeDateHeaderMap = viewDataGenerator
                 ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
-            this.completeTimePanelMap = viewDataGenerator
-                ._getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
+            if(renderOptions.isGenerateTimePanelData) {
+                this.completeTimePanelMap = viewDataGenerator
+                    ._getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
+            }
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
@@ -48,10 +50,12 @@ export default class ViewDataProvider {
         );
 
         this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
-        this.timePanelData = viewDataGenerator._generateTimePanelData(
-            this.completeTimePanelMap,
-            renderOptions,
-        );
+        if(renderOptions.isGenerateTimePanelData) {
+            this.timePanelData = viewDataGenerator._generateTimePanelData(
+                this.completeTimePanelMap,
+                renderOptions,
+            );
+        }
     }
 
     updateViewData(renderOptions) {

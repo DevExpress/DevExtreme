@@ -29,6 +29,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 
+const TIME_TO_WAIT = 500;
+
 const getPopup = (instance) => {
     return instance._popup;
 };
@@ -73,7 +75,7 @@ QUnit.module('focus policy', {
         }
 
         this.instance.option('opened', true);
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
         this.keyboard.keyDown('down');
         const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
         assert.equal(isRenderer(getList(this.instance).option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
@@ -682,21 +684,73 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         assert.equal(loadHandler.callCount, 2, 'dataSource loaded when full time is over after last input character');
     });
 
-    QUnit.test('dropDownList should search for a pasted value', function(assert) {
-        const $element = $('#dropDownList').dxDropDownList({
-            searchEnabled: true,
-            dataSource: ['1', '2', '3']
+    QUnit.module('search', {
+        beforeEach: function() {
+            this.$element = $('#dropDownList').dxDropDownList({
+                searchEnabled: true,
+                dataSource: ['1', 'ㅏ'],
+                deferRendering: false
+            });
+            this.instance = this.$element.dxDropDownList('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.getListItemsCount = () => {
+                const $content = $(this.instance.content());
+                const $listItems = $content.find(LIST_ITEM_SELECTOR);
+
+                return $listItems.length;
+            };
+        }
+    }, () => {
+        QUnit.test('dropDownList should search for a pasted value', function(assert) {
+            this.$input.val('1');
+            this.keyboard.input();
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'was search');
         });
 
-        const instance = $element.dxDropDownList('instance');
-        const searchSpy = sinon.spy(instance, '_searchDataSource');
-        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const kb = keyboardMock($input);
+        QUnit.test('should not search if composition is in progress (T1003899)', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
 
-        kb.input('2');
-        this.clock.tick(600);
+            assert.strictEqual(this.getListItemsCount(), 2, 'was no search');
+        });
 
-        assert.equal(searchSpy.callCount, 1, 'widget searched for a suitable values');
+        QUnit.test('should not cancel search on input if composition is in progress', function(assert) {
+            this.keyboard.type('2');
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'search is still in progress');
+        });
+
+        QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅏ');
+            this.$input.trigger($.Event('compositionend'));
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'last input composite character is not in search value');
+        });
+
+        QUnit.test('should search if composition is finished', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.$input.trigger($.Event('compositionend'));
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'was search');
+        });
     });
 
     QUnit.test('dropDownList should search in grouped DataSource', function(assert) {
@@ -715,7 +769,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const expectedValue = { key: 'b', items: [{ name: '2', key: 'b' }] };
 
         kb.type('2');
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual(instance.option('items')[0], expectedValue, 'widget searched for a suitable values');
     });
@@ -1004,7 +1058,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         }).dxDropDownList('instance');
 
         dropDownList.option('opened', true);
-        this.clock.tick(1000);
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.equal(getList(dropDownList).option('selectedItem'), 1, 'selectedItem is correct');
     });
