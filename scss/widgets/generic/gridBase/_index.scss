@@ -725,8 +725,8 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-modified-border-color;
-      border-bottom: 1px solid $datagrid-cell-modified-border-color;
+      border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
     }
 
     @include dx-set-checkbox-border-color-as-background();

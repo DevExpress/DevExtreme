@@ -98,7 +98,8 @@ $datagrid-menu-icon-color: null !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: null !default;
-$datagrid-row-removed-bg: color.change($base-success, $alpha: 0.5) !default;
+$datagrid-cell-removed-border-color: darken($base-bg, 25%) !default;
+$datagrid-row-removed-bg: darken($base-bg, 25%) !default;
 
 /**
 * $name 45. Invalidate data faded color
