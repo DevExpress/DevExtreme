@@ -249,8 +249,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
             .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.firstDayOfMonth)
             .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
-
-        return data;
     }
 
     _createAllDayPanelElements() {}

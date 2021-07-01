@@ -3,7 +3,6 @@ import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'event
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
-import { initFactoryInstance, stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
@@ -11,12 +10,9 @@ QUnit.testStart(function() {
 
 QUnit.module('Vertical Workspace with horizontal scrollbar', {
     beforeEach: function() {
-        const observer = initFactoryInstance();
-
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             crossScrollingEnabled: true,
             width: 100,
-            observer
         }).dxSchedulerWorkSpaceWeek('instance');
     }
 });
@@ -212,20 +208,14 @@ QUnit.test('Workspace tables width should not be less than element width', funct
 
 QUnit.module('Vertical Workspace with horizontal scrollbar, groupOrientation = vertical', {
     beforeEach: function() {
-        const observer = initFactoryInstance();
-
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             groupOrientation: 'vertical',
             crossScrollingEnabled: true,
             startDayHour: 8,
             showAllDayPanel: true,
             endDayHour: 20,
-            observer
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceWeek('instance');
-
-        stubInvokeMethod(this.instance, { key: observer.key });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 });
 
