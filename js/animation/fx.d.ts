@@ -85,7 +85,7 @@ export type AnimationConfig = {
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
 
-/** @deprecated use AnimationConfig instead */
+/** @deprecated Use the AnimationConfig type instead */
 export type animationConfig = AnimationConfig;
 
 /**
