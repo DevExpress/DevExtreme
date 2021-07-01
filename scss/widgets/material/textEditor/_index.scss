@@ -355,8 +355,19 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   position: absolute;
   font-size: $material-texteditor-label-font-size;
   color: $texteditor-label-color;
-  left: 0;
   white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    max-width: 100%;
+    display: block;
+  }
 
   .dx-invalid & {
     color: $base-invalid-color;
@@ -464,7 +475,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       position: absolute;
       top: 0;
       margin-top: 0;
-      left: 0;
       height: $material-texteditor-label-font-size;
       line-height: $material-texteditor-label-font-size;
 
@@ -547,7 +557,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
   .dx-texteditor-label {
     display: flex;
-    max-height: 2px;
     top: 0;
     margin-top: 0;
     height: $material-texteditor-label-font-size;
@@ -731,8 +740,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
 .dx-editor-underlined {
   $input-vertical-diff: 2px;
-  $input-top-padding: $material-standard-texteditor-input-top-padding + $input-vertical-diff;
-  $label-transform: translate(0, -$input-vertical-diff);
+  $input-top-padding: $material-standard-texteditor-input-top-padding + $input-vertical-diff * 2;
+  $label-transform: translate(0, 0);
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
@@ -765,7 +774,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         transform: translate(0, 0);
         font-size: $material-texteditor-font-size;
         top: 50%;
-        margin-top: math.div(-$material-texteditor-font-size, 2);
+        margin-top: math.div(-$material-texteditor-font-size, 2) + $input-vertical-diff;
         height: $material-texteditor-font-size;
         line-height: $material-texteditor-font-size;
       }
@@ -797,7 +806,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
 
       .dx-placeholder {
-        top: $input-top-padding;
+        top: $input-vertical-diff;
         display: block;
       }
     }
