@@ -92,6 +92,7 @@ $.each({
     'dxpointerdown': 'mouseDown',
     'dxpointermove': 'mouseMove',
     'dxpointerup': 'mouseUp',
+    'dxpointercancel': 'pointerCancel',
     'dxpointerover': 'mouseOver',
     'dxpointerout': 'mouseOut',
     'dxpointerenter': 'mouseEnter',

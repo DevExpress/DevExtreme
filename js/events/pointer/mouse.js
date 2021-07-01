@@ -6,7 +6,7 @@ const eventMap = {
     'dxpointerdown': 'mousedown',
     'dxpointermove': 'mousemove',
     'dxpointerup': 'mouseup',
-    'dxpointercancel': '',
+    'dxpointercancel': 'pointercancel',
     'dxpointerover': 'mouseover',
     'dxpointerout': 'mouseout',
     'dxpointerenter': 'mouseenter',
