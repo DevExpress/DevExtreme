@@ -1558,29 +1558,50 @@ class SchedulerWorkSpace extends WidgetObserver {
         return width / (totalCellCount + cellCount - startIndex);
     }
 
+    //
+    // TODO move get cell sizes methods to the separate layer
+    //
+
     getCellHeight() {
         const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+        const length = dateTableCellsMeta?.length;
 
-        return dateTableCellsMeta?.length
-            ? dateTableCellsMeta[0][0].height
+        return length
+            ? dateTableCellsMeta[length - 1][0].height
             : 0;
     }
 
     getCellWidth() {
         const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+        const length = dateTableCellsMeta?.length;
 
-        return dateTableCellsMeta?.length
-            ? dateTableCellsMeta[0][0].width
+        return length
+            ? dateTableCellsMeta[length - 1][0].width
             : 0;
     }
 
     getAllDayHeight() {
+        if(!this._isShowAllDayPanel()) return 0;
+
+        if(this._isVerticalGroupedWorkSpace()) {
+            const { dateTableCellsMeta } = this.getDOMElementsMetaData();
+            const length = dateTableCellsMeta?.length;
+
+            return length
+                ? dateTableCellsMeta[0][0].height
+                : 0;
+        }
+
         const { allDayPanelCellsMeta } = this.getDOMElementsMetaData();
 
         return allDayPanelCellsMeta?.length
             ? allDayPanelCellsMeta[0].height
             : 0;
     }
+
+    //
+    // ---
+    //
 
     getAllDayOffset() {
         return this._groupedStrategy.getAllDayOffset();
@@ -2741,6 +2762,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _changeAllDayVisibility() {
+        this.cache.clear();
         this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option('allDayExpanded') && this._isShowAllDayPanel());
     }
 
