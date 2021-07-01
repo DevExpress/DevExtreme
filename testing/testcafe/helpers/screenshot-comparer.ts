@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import { PNG } from 'pngjs';
 
 const screenshotComparerDefault = {
+  path: './testing',
   highlightColor: { r: 0xff, g: 0, b: 0xff },
   maskRadius: 5,
   attempts: 3,
@@ -21,15 +22,15 @@ const screenshotComparerDefault = {
   },
 };
 interface ComparerOptions {
-  path?: string;
+  path: string;
   highlightColor: {
     r: number;
     g: number;
     b: number;
   };
+  maskRadius?: number;
   attempts: number;
   attemptTimeout: number;
-  maskRadius?: number;
   looksSameComparisonOptions: Parameters<typeof LooksSame.createDiff>[0];
 }
 
@@ -261,14 +262,26 @@ async function tryGetValidScreenshot({
   return { equal, screenshotBuffer };
 }
 
+function getComparerOptions(
+  t: TestController,
+  comparisonOptions?: Partial<ComparerOptions>,
+): ComparerOptions {
+  const configOptions = (t as unknown as { testRun }).testRun.opts['screenshots-comparer'] as ComparerOptions;
+  return {
+    ...screenshotComparerDefault,
+    ...configOptions,
+    ...comparisonOptions ?? {},
+  };
+}
+
 export async function compareScreenshot(
   t: TestController,
   screenshotName: string,
   element: SelectorType = null,
   comparisonOptions?: Partial<ComparerOptions>,
 ): Promise<boolean> {
-  const { path: rootPath, ...configOptions } = (t as unknown as { testRun }).testRun.opts['screenshots-comparer'] as ComparerOptions;
-  const testRoot = rootPath ?? './testing';
+  const options = getComparerOptions(t, comparisonOptions);
+  const testRoot = options.path;
   const screenshotsPath = path.join(testRoot, '/screenshots');
   const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
 
@@ -276,11 +289,6 @@ export async function compareScreenshot(
   const etalonsPath = path.join(path.dirname((t as unknown as { testRun }).testRun.test.testFile.filename), 'etalons');
   const etalonFileName = path.join(etalonsPath, screenshotName);
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
-  const options = {
-    ...screenshotComparerDefault,
-    ...configOptions,
-    ...comparisonOptions ?? {},
-  } as ComparerOptions;
   try {
     ensureArtifactsPath(artifactsPath);
     const { equal, screenshotBuffer } = await tryGetValidScreenshot({
