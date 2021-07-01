@@ -82,7 +82,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @public
+     * @hidden
      */
     tableResizing?: dxHtmlEditorTableResizing;
     /**
@@ -397,19 +397,19 @@ export interface dxHtmlEditorMediaResizing {
   /**
    * @docid
    * @default 40
-   * @public
+   * @hidden
    */
    minColumnWidth?: number;
   /**
    * @docid
    * @default 20
-   * @public
+   * @hidden
    */
   minRowHeight?: number;
   /**
    * @docid
    * @default false
-   * @public
+   * @hidden
    */
   enabled?: boolean;
 }
