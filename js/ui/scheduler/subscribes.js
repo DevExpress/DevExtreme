@@ -53,7 +53,7 @@ const subscribes = {
     },
 
     createAppointmentSettings: function(appointment) {
-        return this._getAppointmentSettingsGenerator().create(appointment);
+        return this._getAppointmentSettingsGenerator(appointment).create();
     },
 
     isGroupedByDate: function() {
