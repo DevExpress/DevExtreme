@@ -1578,7 +1578,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { allDayPanelCellsMeta } = this.getDOMElementsMetaData();
 
         return allDayPanelCellsMeta?.length
-            ? allDayPanelCellsMeta[0][0].height
+            ? allDayPanelCellsMeta[0].height
             : 0;
     }
 
