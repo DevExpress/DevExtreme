@@ -60,7 +60,9 @@ import {
     getViewStartByOptions,
     calculateCellIndex,
     prepareCellData,
-    prepareAllDayCellData
+    prepareAllDayCellData,
+    getStartViewDateTimeOffset,
+    getDateByCellIndices
 } from './utils/base';
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
