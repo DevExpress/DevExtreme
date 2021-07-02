@@ -910,9 +910,10 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('selection.showCheckBoxesMode', 'none');
 
         // assert
-        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysBefore = keys);
+        let selectedKeysAfter;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysAfter = keys);
         this.clock.tick();
-        assert.deepEqual(selectedKeysBefore, [1]);
+        assert.deepEqual(selectedKeysAfter, [1]);
     });
 });
 
