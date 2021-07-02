@@ -1038,6 +1038,85 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
     });
+
+    QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            sorting: { mode: 'none' },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.roughEqual($cellContent.width(), 35.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
+    });
 });
 
 
