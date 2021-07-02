@@ -603,6 +603,10 @@
         display: inline-block;
         white-space: normal;
         vertical-align: top;
+
+        &:not(.dx-sort-indicator):not(.dx-header-filter-indicator) {
+          max-width: 100%;
+        }
       }
     }
 
