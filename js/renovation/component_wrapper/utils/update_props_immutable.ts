@@ -1,6 +1,5 @@
 import { isPlainObject } from '../../../core/utils/type';
 import { getPathParts } from '../../../core/utils/data';
-import { extend } from '../../../core/utils/extend';
 
 function cloneObjectValue(
   value: Record<string, unknown> | unknown[],
@@ -26,7 +25,7 @@ function cloneObjectProp(
     );
   } else if (name) {
     if (isPlainObject(value[name])) {
-      result[name] = extend(true, {}, value[name]);
+      result[name] = cloneObjectValue(value[name]);
     } else {
       result[name] = value[name];
     }

@@ -1,5 +1,9 @@
 import { isPlainObject, type } from '../../../../../core/utils/type';
 
+const notDeepCopyProperties: string[] = [
+  'dataSource',
+];
+
 interface ResultItem {
   path: string;
   value: unknown;
@@ -25,7 +29,8 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string, fullPropN
       resultPaths.push(...diffPaths.map((item) => ({ ...item, path: `${key}.${item.path}` })));
     }
   } else if (type1 === 'array') {
-    if (key !== 'columns' && !(key === 'items' && fullPropName.includes('toolbar')) && item1 !== item2) {
+    const notDeepCopy = notDeepCopyProperties.some((prop) => fullPropName.includes(prop));
+    if (notDeepCopy && item1 !== item2) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else if ((item1 as []).length !== (item2 as []).length) {
       resultPaths.push(getDiffItem(key, item2, item1));

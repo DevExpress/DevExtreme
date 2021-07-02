@@ -124,6 +124,17 @@ describe('get_updated_options', () => {
       .toEqual([{ path: 'focusedRowKey', value: 0, previousValue: null }]);
   });
 
+  it('deep diff if plain object', () => {
+    const oldObj = { items: [{ location: 'before' }] };
+    const obj = { items: [{ location: 'after' }] };
+    const diff = getUpdatedOptions(oldObj, obj);
+    expect(diff).toEqual([{
+      path: 'items[0].location',
+      value: 'after',
+      previousValue: 'before',
+    }]);
+  });
+
   it('deep diff only for plain object', () => {
     const oldObj = { dataSource: new DummyDataSource() };
     const obj = { dataSource: new DummyDataSource() };
