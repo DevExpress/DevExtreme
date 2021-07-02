@@ -54,7 +54,7 @@ interface TargetedAppointmentInfo {
 
 /** @public */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: any;
+  readonly appointmentData: dxSchedulerAppointment;
   readonly error?: Error;
 }
 
@@ -105,7 +105,7 @@ export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointm
 
 /** @public */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
-  readonly appointmentData: any;
+  readonly appointmentData: dxSchedulerAppointment;
   readonly error?: Error;
 }
 
@@ -508,7 +508,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @type_function_param1_field1 component:dxScheduler
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 appointmentData:Object
+     * @type_function_param1_field4 appointmentData:dxSchedulerAppointment
      * @type_function_param1_field5 error:Error
      * @action
      * @public

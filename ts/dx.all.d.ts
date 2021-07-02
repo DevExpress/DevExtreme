@@ -16515,7 +16515,7 @@ declare module DevExpress.ui {
   module dxScheduler {
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
@@ -16600,7 +16600,7 @@ declare module DevExpress.ui {
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
