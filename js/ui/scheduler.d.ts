@@ -969,14 +969,14 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * @docid
      * @publicName addAppointment(appointment)
-     * @param1 appointment:Object
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
     addAppointment(appointment: dxSchedulerAppointment): void;
     /**
      * @docid
      * @publicName deleteAppointment(appointment)
-     * @param1 appointment:Object
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
     deleteAppointment(appointment: dxSchedulerAppointment): void;
@@ -1030,26 +1030,26 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-     * @param1 appointmentData:Object|undefined
+     * @param1 appointmentData:dxSchedulerAppointment|undefined
      * @param2 createNewAppointment:Boolean|undefined
-     * @param3 currentAppointmentData:Object|undefined
+     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
     showAppointmentPopup(appointmentData?: dxSchedulerAppointment, createNewAppointment?: boolean, currentAppointmentData?: dxSchedulerAppointment): void;
     /**
      * @docid
      * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
-     * @param1 appointmentData:Object
+     * @param1 appointmentData:dxSchedulerAppointment
      * @param2 target:string|Element|jQuery
-     * @param3 currentAppointmentData:Object|undefined
+     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
     showAppointmentTooltip(appointmentData: dxSchedulerAppointment, target: string | UserDefinedElement, currentAppointmentData?: dxSchedulerAppointment): void;
     /**
      * @docid
      * @publicName updateAppointment(target, appointment)
-     * @param1 target:Object
-     * @param2 appointment:Object
+     * @param1 target:dxSchedulerAppointment
+     * @param2 appointment:dxSchedulerAppointment
      * @public
      */
     updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void;
