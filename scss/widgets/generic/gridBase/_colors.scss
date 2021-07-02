@@ -98,8 +98,8 @@ $datagrid-menu-icon-color: null !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: null !default;
-$datagrid-cell-removed-border-color: darken($base-bg, 25%) !default;
-$datagrid-row-removed-bg: darken($base-bg, 25%) !default;
+$datagrid-cell-removed-border-color: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-border-color !default;
 
 /**
 * $name 45. Invalidate data faded color
@@ -527,3 +527,4 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png') !default;
 }
 
+$datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;

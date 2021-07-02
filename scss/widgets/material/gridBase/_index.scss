@@ -942,6 +942,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       background-color: $datagrid-row-removed-bg;
       border-top: 1px solid $datagrid-cell-removed-border-color;
       border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      color: $datagrid-cell-removed-text-color;
     }
 
     .dx-adaptive-detail-row {

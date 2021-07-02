@@ -79,8 +79,8 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
-$datagrid-cell-removed-border-color: darken($base-bg, 30%) !default;
-$datagrid-row-removed-bg: darken($base-bg, 30%) !default;
+$datagrid-cell-removed-border-color: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-border-color !default;
 
 /**
 * $name 45. Invalidate data faded color
@@ -194,3 +194,4 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png') !default;
 }
 
+$datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
