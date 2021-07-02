@@ -15,6 +15,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -33,7 +34,7 @@ const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
 function getMaxHorizontalScrollOffset(scrollable) {
-    return scrollable ? scrollable.scrollWidth() - scrollable.clientWidth() : 0;
+    return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
 
 export const rowsModule = {
@@ -260,14 +261,24 @@ export const rowsModule = {
                 _handleScroll: function(e) {
                     const that = this;
                     const rtlEnabled = that.option('rtlEnabled');
+                    const isNativeScrolling = e.component.option('useNative');
 
                     that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
+                    let scrollLeft = e.scrollOffset.left;
                     if(rtlEnabled) {
                         this._scrollRight = getMaxHorizontalScrollOffset(e.component) - this._scrollLeft;
+
+                        if(isNativeScrolling) {
+                            scrollLeft = getScrollRtlBehavior().positive ? this._scrollRight : -this._scrollRight;
+                        }
+
+                        if(!this.isScrollbarVisible(true)) {
+                            this._scrollLeft = -1;
+                        }
                     }
-                    that.scrollChanged.fire(e.scrollOffset, that.name);
+                    that.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, that.name);
                 },
 
                 _renderScrollableCore: function($element) {
