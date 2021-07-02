@@ -16515,12 +16515,12 @@ declare module DevExpress.ui {
   module dxScheduler {
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -16544,12 +16544,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -16587,7 +16587,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: any;
+        readonly appointmentData?: dxSchedulerAppointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -16600,7 +16600,7 @@ declare module DevExpress.ui {
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
