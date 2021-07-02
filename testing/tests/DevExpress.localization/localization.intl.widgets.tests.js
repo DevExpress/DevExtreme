@@ -112,13 +112,13 @@ QUnit.module('Intl localization', () => {
             const currentLocale = locale();
             try {
                 locale('mr');
-                const $dateBoxInstance = $('#dateBox').dxDateBox({
-                    value: new Date('December 17, 1995 03:24:50.12'),
+                const dateBox = $('#dateBox').dxDateBox({
+                    value: new Date('2014-09-08T08:02:17.12'),
                     useMaskBehavior: true,
                     displayFormat: 'HH:mm:ss.SS'
                 }).dxDateBox('instance');
 
-                assert.strictEqual($dateBoxInstance.option('text'), '०३:२४:५०.१२', 'date is localized');
+                assert.strictEqual(dateBox.option('text'), '०८:०२:१७.१२', 'date is localized');
             } catch(e) {
                 assert.ok(false, `Error occured: ${e.message}`);
             } finally {
