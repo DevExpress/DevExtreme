@@ -3,7 +3,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 getLocations = function(date) {
     const timeZones = DevExpress.utils.getTimeZones(date);
     return timeZones.filter(function(timeZone) {
-        return this.locations.indexOf(timeZone.id) !== -1;
+        return locations.indexOf(timeZone.id) !== -1;
     });
 };
 
