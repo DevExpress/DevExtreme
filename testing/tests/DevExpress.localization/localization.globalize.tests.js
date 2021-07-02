@@ -271,10 +271,6 @@ define(function(require, exports, module) {
                 'yyyy MMMM d': {
                     text: '2015 марта 2',
                     expected: new Date(2015, 2, 2)
-                },
-                'yyyyMMdd': {
-                    text: '20100302',
-                    expected: new Date(2010, 2, 2)
                 }
             };
 
@@ -299,6 +295,23 @@ define(function(require, exports, module) {
     QUnit.module('Custom format types', () => {
         QUnit.test('format: { time: \'medium\' }', function(assert) {
             assert.equal(dateLocalization.format(new Date(2015, 1, 2, 3, 4, 5, 6), { time: 'medium' }), '3:04:05 AM', 'with object format');
+        });
+
+        QUnit.test('Parse custom format', function(assert) {
+            const assertData = {
+                'yyyyMMdd': {
+                    text: '20100302',
+                    expected: new Date(2010, 2, 2)
+                },
+                'dMyyyy': {
+                    text: '02mar10',
+                    expected: new Date(2010, 2, 2)
+                },
+            };
+
+            $.each(assertData, function(format, data) {
+                assert.equal(dateLocalization.parse(data.text, format), String(data.expected || generateExpectedDate(data.expectedConfig)), format + ' format');
+            });
         });
     });
 

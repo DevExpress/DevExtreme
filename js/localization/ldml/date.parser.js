@@ -1,4 +1,5 @@
 import { escapeRegExp } from '../../core/utils/common';
+import { logger } from '../../core/utils/console';
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -217,6 +218,22 @@ export const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
+
+    patterns.every((pattern, index) => {
+        const char = pattern[0];
+        const prevPatternChar = index ? patterns[index - 1][0] : null;
+        const nextPatternChar = index < patterns.length - 1 ? patterns[index + 1][0] : null;
+        const isSingle = pattern.length === 1;
+        const isFirst = index === 0;
+        const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
+
+        if(isSingle && isRegexpPart(char) && (isRegexpPart(prevPatternChar) || (isFirst && isRegexpPart(nextPatternChar)))) {
+            logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: ${format}.`);
+            return false;
+        } else {
+            return true;
+        }
+    });
 
     return {
         patterns: patterns,

@@ -8,6 +8,7 @@ const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
 const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
+const console = require('core/utils/console').logger;
 
 require('localization/currency');
 
@@ -518,6 +519,36 @@ QUnit.module('number formatter', () => {
                 const regExpGroupsResult = regExpInfo.regexp.exec(date).slice(1);
                 assert.deepEqual(regExpGroupsResult, result, `${format} - format ok`);
             });
+        });
+    });
+
+    QUnit.test('getRegExpInfo should write warning message if there are not separated single simbols in the `format`!', function(assert) {
+        const spy = sinon.spy(console, 'warn');
+        [
+            {
+                format: 'yyyyMMdd',
+                warningCalls: 0
+            },
+            {
+                format: 'yyyyMMd',
+                warningCalls: 1
+            },
+            {
+                format: 'dMyyyy',
+                warningCalls: 1
+            },
+            {
+                format: 'dyyyyM',
+                warningCalls: 1
+            },
+            {
+                format: 'dyyyyMM',
+                warningCalls: 1
+            }
+        ].forEach(({ format, warningCalls }) => {
+            spy.callCount = 0;
+            getRegExpInfo(format);
+            assert.equal(spy.callCount, warningCalls);
         });
     });
 });
