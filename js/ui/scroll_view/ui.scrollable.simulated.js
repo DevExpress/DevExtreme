@@ -553,7 +553,7 @@ export const SimulatedStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
+        this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
@@ -722,7 +722,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleScroll: function() {
-        this._component._updateRtlConfig();
+        this._updateRtlConfig();
         this._scrollAction();
     },
 
@@ -877,6 +877,13 @@ export const SimulatedStrategy = Class.inherit({
         };
     },
 
+    _getScrollOffset() {
+        return {
+            top: -this.location().top,
+            left: -this.location().left
+        };
+    },
+
     _eventHandler: function(eventName) {
         const args = [].slice.call(arguments).slice(1);
         const deferreds = map(this._scrollers, (scroller) => {
@@ -982,8 +989,60 @@ export const SimulatedStrategy = Class.inherit({
         };
     },
 
-    updateBounds: function() {
+    _updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
+    },
+
+    _isHorizontalAndRtlEnabled: function() {
+        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
+    },
+
+    updateRtlPosition: function(needInitializeRtlConfig) {
+        if(needInitializeRtlConfig) {
+            this._rtlConfig = {
+                scrollRight: 0,
+                clientWidth: this._$container.get(0).clientWidth,
+                windowPixelRatio: this._getWindowDevicePixelRatio()
+            };
+        }
+
+        this._updateBounds();
+        if(this._isHorizontalAndRtlEnabled()) {
+            deferUpdate(() => {
+                let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
+
+                if(scrollLeft <= 0) {
+                    scrollLeft = 0;
+                    this._rtlConfig.scrollRight = this._getMaxOffset().left;
+                }
+
+                deferRender(() => {
+                    if(this._getScrollOffset().left !== scrollLeft) {
+                        this._rtlConfig.skipUpdating = true;
+                        this._component.scrollTo({ left: scrollLeft });
+                        this._rtlConfig.skipUpdating = false;
+                    }
+                });
+            });
+        }
+    },
+
+    _updateRtlConfig: function() {
+        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
+            const { clientWidth, scrollLeft } = this._$container.get(0);
+            const windowPixelRatio = this._getWindowDevicePixelRatio();
+            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+                this._rtlConfig.scrollRight = (this._getMaxOffset().left - scrollLeft);
+            }
+            this._rtlConfig.clientWidth = clientWidth;
+            this._rtlConfig.windowPixelRatio = windowPixelRatio;
+        }
+    },
+
+    _getWindowDevicePixelRatio: function() {
+        return hasWindow()
+            ? getWindow().devicePixelRatio
+            : 1;
     },
 
     scrollBy: function(distance) {
@@ -1001,6 +1060,8 @@ export const SimulatedStrategy = Class.inherit({
         this._startAction();
         this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
         this._endAction();
+
+        this._updateRtlConfig();
     },
 
     validate: function(e) {
