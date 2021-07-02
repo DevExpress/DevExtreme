@@ -156,13 +156,13 @@ QUnit.module('DateBox', commonEnvironment, () => {
         try {
             Globalize.locale('ar');
 
-            const $dateBoxInstance = $('#dateBox').dxDateBox({
-                value: new Date('December 17, 1995 03:24:50.12'),
+            const dateBox = $('#dateBox').dxDateBox({
+                value: new Date('2014-09-08T08:02:17.12'),
                 useMaskBehavior: true,
                 displayFormat: 'HH:mm:ss.SS'
             }).dxDateBox('instance');
 
-            assert.strictEqual($dateBoxInstance.option('text'), '٠٣:٢٤:٥٠.١٢', 'date is localized');
+            assert.strictEqual(dateBox.option('text'), '٠٨:٠٢:١٧.١٢', 'date is localized');
         } catch(e) {
             assert.ok(false, `Error occured: ${e.message}`);
         } finally {
