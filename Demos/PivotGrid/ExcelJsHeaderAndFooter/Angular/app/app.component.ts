@@ -5,6 +5,7 @@ import { DxPivotGridModule } from 'devextreme-angular';
 import { Service, Sale } from './app.service';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
+// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
 
 if(!/localhost/.test(document.location.host)) {

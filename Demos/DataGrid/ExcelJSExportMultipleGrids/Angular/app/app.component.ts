@@ -4,6 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent } from 'devextreme-angular';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
+// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import DataGrid from 'devextreme/ui/data_grid';
 import 'devextreme/data/odata/store';

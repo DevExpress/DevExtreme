@@ -42,6 +42,7 @@
 import { DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
+// Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import service from './data.js';
 
