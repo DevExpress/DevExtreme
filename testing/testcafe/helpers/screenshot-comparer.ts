@@ -255,7 +255,7 @@ async function tryGetValidScreenshot({
       screenshotBuffer,
       comparisonOptions: options.looksSameComparisonOptions,
     });
-    if (attempt < options.attempts) {
+    if (!equal && attempt < options.attempts) {
       await t.wait(options.attemptTimeout);
     }
   }
@@ -270,7 +270,7 @@ function getComparerOptions(
   return {
     ...screenshotComparerDefault,
     ...configOptions,
-    ...comparisonOptions ?? {},
+    ...comparisonOptions,
   };
 }
 
