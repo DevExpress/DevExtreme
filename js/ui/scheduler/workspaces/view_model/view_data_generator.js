@@ -7,6 +7,9 @@ import {
     calculateCellIndex,
 } from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
+
+const HOUR_MS = dateUtils.dateToMilliseconds('hour');
+
 export class ViewDataGenerator {
     _getCompleteViewDataMap(options) {
         const {
@@ -572,10 +575,10 @@ export class ViewDataGenerator {
 
     prepareCellData(options, rowIndex, columnIndex) {
         const {
-            interval,
             groupsList,
             tableAllDay,
             endDayHour,
+            interval,
         } = options;
 
         const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
@@ -781,5 +784,12 @@ export class ViewDataGenerator {
                 },
             };
         });
+    }
+
+    getInterval(hoursInterval) {
+        if(this._interval === undefined) {
+            this._interval = hoursInterval * HOUR_MS;
+        }
+        return this._interval;
     }
 }

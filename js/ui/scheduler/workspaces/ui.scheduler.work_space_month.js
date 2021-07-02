@@ -23,7 +23,6 @@ const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
 
 const DAYS_IN_WEEK = 7;
-const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -48,10 +47,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getFormat() {
         return formatWeekday;
-    }
-
-    _getInterval() {
-        return DAY_IN_MILLISECONDS;
     }
 
     _getIntervalBetween(currentDate) {

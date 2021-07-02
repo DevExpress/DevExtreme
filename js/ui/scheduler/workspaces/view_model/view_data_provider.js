@@ -36,6 +36,8 @@ export default class ViewDataProvider {
     update(renderOptions, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(renderOptions.viewType);
         const viewDataGenerator = this.viewDataGenerator;
+
+        renderOptions.interval = this.viewDataGenerator.getInterval(renderOptions.hoursInterval);
         this._options = renderOptions;
 
         if(isGenerateNewViewData) {

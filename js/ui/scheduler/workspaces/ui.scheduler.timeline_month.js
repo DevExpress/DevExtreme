@@ -9,7 +9,6 @@ import { formatWeekdayAndDay } from './utils/base';
 import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
-const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -81,10 +80,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
     _getFormat() {
         return formatWeekdayAndDay;
-    }
-
-    _getInterval() {
-        return DAY_IN_MILLISECONDS;
     }
 
     _getIntervalBetween(currentDate) {

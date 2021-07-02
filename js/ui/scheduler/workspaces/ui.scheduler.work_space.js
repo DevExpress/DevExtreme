@@ -656,7 +656,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
-            interval: this._getInterval(),
             startViewDate: this.getStartViewDate(),
             startDayHour: this.option('startDayHour'),
             cellCountInDay: this._getCellCountInDay(),
@@ -665,6 +664,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             maxVisibleDate: this._maxVisibleDate,
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
+            hoursInterval: this.option('hoursInterval'),
             ...this._getDateGenerationOptions(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -939,7 +939,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     calculateEndDate(startDate) {
         return this.viewDataProvider.viewDataGenerator.calculateEndDate(
-            startDate, this._getInterval(), this.option('endDayHour'),
+            startDate,
+            this.viewDataProvider.viewDataGenerator.getInterval(this.option('hoursInterval')),
+            this.option('endDayHour'),
         );
     }
 
@@ -1017,13 +1019,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getInterval() {
-        if(this._interval === undefined) {
-            this._interval = this.option('hoursInterval') * HOUR_MS;
-        }
-        return this._interval;
-    }
-
     _getFormat() { return abstract(); }
 
     getWorkArea() {
@@ -1088,7 +1083,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             columnsInDay: 1,
             hiddenInterval: this._hiddenInterval,
             calculateCellIndex,
-            interval: this._getInterval(),
+            interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
             cellCountInDay: this._getCellCountInDay(),
             startViewDate: this.getStartViewDate(),
             rowCountBase: this._getRowCount(),
@@ -1431,7 +1426,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellIndexByDate(date, inAllDayRow) {
-        const timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : this._getInterval();
+        const timeInterval = inAllDayRow
+            ? 24 * 60 * 60 * 1000
+            : this.viewDataProvider.viewDataGenerator.getInterval(this.option('hoursInterval'));
         const startViewDateOffset = getStartViewDateTimeOffset(this.getStartViewDate(), this.option('startDayHour'));
         const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + startViewDateOffset;
 

@@ -3,6 +3,8 @@ import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
 import { calculateCellIndex, getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
 
+const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
+
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellData(rowIndex, columnIndex, options, allDay) {
         const data = super.getCellData(rowIndex, columnIndex, options, false);
@@ -39,4 +41,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     calculateEndDate(startDate, interval, endDayHour) {
         return setOptionHour(startDate, endDayHour);
     }
+
+    getInterval() {
+        return DAY_IN_MILLISECONDS;
+    }
+
 }
