@@ -195,7 +195,7 @@ export const rowsModule = {
 
                 _setAriaRowIndex: function(row, $row) {
                     const component = this.component;
-                    const isPagerMode = component.option('scrolling.mode') === 'standard' && component.option('scrolling.rowRenderingMode') !== 'virtual';
+                    const isPagerMode = component.option('scrolling.mode') === 'standard' && !gridCoreUtils.isVirtualRowRendering(component);
                     let rowIndex = row.rowIndex + 1;
 
                     if(isPagerMode) {
