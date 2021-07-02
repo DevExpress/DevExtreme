@@ -6,6 +6,7 @@ import devices from '../../../core/devices';
 import DataSource from '../../../data/data_source';
 import timeZoneDataUtils from '../timezones/utils.timezones_data';
 import { extend } from '../../../core/utils/extend';
+import dateUtils from '../../../core/utils/date';
 
 import '../recurrence_editor';
 import '../../text_area';
@@ -18,10 +19,6 @@ const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 export const APPOINTMENT_FORM_GROUP_NAMES = {
     Main: 'mainGroup',
     Recurrence: 'recurrenceGroup'
-};
-
-const getAllDayStartDate = startDate => {
-    return new Date(new Date(startDate).setHours(0, 0, 0, 0));
 };
 
 const getAllDayEndDate = startDate => {
@@ -258,7 +255,7 @@ export class AppointmentForm {
 
                             if(!this._lockDateShiftFlag && startDate) {
                                 if(value) {
-                                    const allDayStartDate = getAllDayStartDate(startDate);
+                                    const allDayStartDate = dateUtils.trimTime(startDate);
                                     startDateEditor.option('value', allDayStartDate);
                                     endDateEditor.option('value', getAllDayEndDate(allDayStartDate));
                                 } else {
