@@ -942,7 +942,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         return viewDataGenerator.calculateEndDate(
             startDate,
-            this.viewDataProvider.viewDataGenerator.getInterval(this.option('hoursInterval')),
+            viewDataGenerator.getInterval(this.option('hoursInterval')),
             this.option('endDayHour'),
         );
     }
@@ -1428,9 +1428,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellIndexByDate(date, inAllDayRow) {
+        const viewDataGenerator = this.viewDataProvider.viewDataGenerator;
+
         const timeInterval = inAllDayRow
             ? 24 * 60 * 60 * 1000
-            : this.viewDataProvider.viewDataGenerator.getInterval(this.option('hoursInterval'));
+            : viewDataGenerator.getInterval(this.option('hoursInterval'));
         const startViewDateOffset = getStartViewDateTimeOffset(this.getStartViewDate(), this.option('startDayHour'));
         const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + startViewDateOffset;
 
