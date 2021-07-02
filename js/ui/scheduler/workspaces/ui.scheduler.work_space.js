@@ -938,9 +938,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     calculateEndDate(startDate) {
-        const result = new Date(startDate);
-        result.setMilliseconds(result.getMilliseconds() + Math.round(this._getInterval()));
-        return result;
+        return this.viewDataProvider.viewDataGenerator.calculateEndDate(
+            startDate, this._getInterval(), this.option('endDayHour'),
+        );
     }
 
     _getGroupCount() {

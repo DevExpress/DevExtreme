@@ -94,11 +94,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    calculateEndDate(startDate) {
-        const startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option('endDayHour')));
-    }
-
     _getDateGenerationOptions() {
         return {
             ...super._getDateGenerationOptions(),

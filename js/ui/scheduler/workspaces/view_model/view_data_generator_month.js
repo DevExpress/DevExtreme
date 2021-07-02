@@ -1,4 +1,4 @@
-import { getToday } from '../utils/base';
+import { getToday, setOptionHour } from '../utils/base';
 import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
 import { calculateCellIndex, getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
@@ -34,5 +34,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
     _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
         return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    }
+
+    calculateEndDate(startDate, interval, endDayHour) {
+        return setOptionHour(startDate, endDayHour);
     }
 }
