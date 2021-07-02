@@ -271,6 +271,10 @@ define(function(require, exports, module) {
                 'yyyy MMMM d': {
                     text: '2015 марта 2',
                     expected: new Date(2015, 2, 2)
+                },
+                'yyyyMMdd': {
+                    text: '20100302',
+                    expected: new Date(2010, 2, 2)
                 }
             };
 

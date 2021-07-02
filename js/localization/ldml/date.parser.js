@@ -1,5 +1,4 @@
 import { escapeRegExp } from '../../core/utils/common';
-import { logger } from '../../core/utils/console';
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -178,7 +177,6 @@ export const getRegExpInfo = function(format, dateParts) {
     let regexpText = '';
     let stubText = '';
     let isEscaping;
-    let isSeparatedFormat = true;
     const patterns = [];
 
     const addPreviousStub = function() {
@@ -191,14 +189,8 @@ export const getRegExpInfo = function(format, dateParts) {
 
     for(let i = 0; i < format.length; i++) {
         const char = format[i];
-        const prevChar = format[i - 1];
         const isEscapeChar = char === '\'';
         const regexpPart = PATTERN_REGEXPS[char];
-        const prevCharRegexPart = PATTERN_REGEXPS[prevChar];
-
-        if(char !== ':' && prevChar !== ':' && regexpPart && prevCharRegexPart && char !== prevChar) {
-            isSeparatedFormat = false;
-        }
 
         if(isEscapeChar) {
             isEscaping = !isEscaping;
@@ -225,10 +217,6 @@ export const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
-
-    if(!isSeparatedFormat) {
-        logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: \`${format}\`.`);
-    }
 
     return {
         patterns: patterns,

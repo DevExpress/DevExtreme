@@ -8,7 +8,6 @@ const defaultDateNames = require('localization/default_date_names');
 const numberLocalization = require('localization/number');
 const dateLocalization = require('localization/date');
 const extend = require('core/utils/extend').extend;
-const console = require('core/utils/console').logger;
 
 require('localization/currency');
 
@@ -520,32 +519,5 @@ QUnit.module('number formatter', () => {
                 assert.deepEqual(regExpGroupsResult, result, `${format} - format ok`);
             });
         });
-    });
-
-    QUnit.test('getRegExpInfo should write warning message if `format` is not separated', function(assert) {
-        const spy = sinon.spy(console, 'warn');
-        [
-            {
-                format: 'yyyyMMdd',
-                warning: true
-            },
-            {
-                format: ' yyyyMMdd ',
-                warning: true
-            },
-            {
-                format: 'yyyy MMdd',
-                warning: true
-            },
-            {
-                format: 'yyyy MM dd',
-                warning: false
-            }
-        ].forEach(({ format, warning }) => {
-            spy.callCount = 0;
-            getRegExpInfo(format);
-            assert.equal(spy.callCount, warning);
-        });
-        spy.restore();
     });
 });
