@@ -33,6 +33,7 @@ import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
 import { AppointmentPopup, ACTION_TO_APPOINTMENT } from './appointmentPopup/popup';
+import { AppointmentForm } from './appointmentPopup/form';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
@@ -1290,7 +1291,6 @@ class Scheduler extends Widget {
             createComponent: (element, component, options) => this._createComponent(element, component, options),
             focus: () => this.focus(),
             getResourceManager: () => this.fire('getResourceManager'),
-            getResources: () => this.option('resources'),
 
             getEditingConfig: () => this._editing,
 
@@ -1310,7 +1310,9 @@ class Scheduler extends Widget {
             }
         };
 
-        return new AppointmentPopup(scheduler);
+        const form = new AppointmentForm(scheduler);
+
+        return new AppointmentPopup(scheduler, form);
     }
 
     _getAppointmentTooltipOptions() {
@@ -2054,10 +2056,6 @@ class Scheduler extends Widget {
         this._fireContentReadyAction();
     }
 
-    getAppointmentPopup() { // TODO remove
-        return this._appointmentPopup.getPopup();
-    }
-
     ///#DEBUG
     getAppointmentDetailsForm() { // TODO for tests
         return this._appointmentPopup._appointmentForm;
@@ -2222,7 +2220,7 @@ class Scheduler extends Widget {
     }
 
     hideAppointmentPopup(saveChanges) {
-        if(this._appointmentPopup && this._appointmentPopup.isVisible()) {
+        if(this._appointmentPopup?.isVisible()) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }
