@@ -2,7 +2,7 @@ import dateUtils from '../../../../core/utils/date';
 import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
 
 export class DateHeaderDataGenerator {
-    _getCompleteDateHeaderMap(options, completeViewDataMap) {
+    getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
             isGenerateWeekDaysHeaderData,
         } = options;
@@ -104,7 +104,7 @@ export class DateHeaderDataGenerator {
         });
     }
 
-    _generateDateHeaderData(completeDateHeaderMap, options) {
+    generateDateHeaderData(completeDateHeaderMap, options) {
         const {
             isGenerateWeekDaysHeaderData,
             cellCountInDay,

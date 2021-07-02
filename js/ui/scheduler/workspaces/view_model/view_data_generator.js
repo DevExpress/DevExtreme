@@ -1,7 +1,7 @@
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 
 export class ViewDataGenerator {
-    _getCompleteViewDataMap(options) {
+    getCompleteViewDataMap(options) {
         const {
             rowCountInGroup,
             cellCountInGroupRow,
@@ -138,7 +138,7 @@ export class ViewDataGenerator {
         return result;
     }
 
-    _generateViewDataMap(completeViewDataMap, options) {
+    generateViewDataMap(completeViewDataMap, options) {
         const {
             rowCount,
             startCellIndex,
@@ -179,7 +179,7 @@ export class ViewDataGenerator {
         };
     }
 
-    _getViewDataFromMap(viewDataMap, options) {
+    getViewDataFromMap(viewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,

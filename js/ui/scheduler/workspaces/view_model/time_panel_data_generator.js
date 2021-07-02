@@ -1,7 +1,7 @@
 import { getTimePanelCellText } from '../utils/week';
 
 export class TimePanelDataGenerator {
-    _getCompleteTimePanelMap(options, completeViewDataMap) {
+    getCompleteTimePanelMap(options, completeViewDataMap) {
         const {
             rowCountInGroup,
             startViewDate,
@@ -31,7 +31,7 @@ export class TimePanelDataGenerator {
         });
     }
 
-    _generateTimePanelData(completeTimePanelMap, options) {
+    generateTimePanelData(completeTimePanelMap, options) {
         const {
             startRowIndex,
             rowCount,

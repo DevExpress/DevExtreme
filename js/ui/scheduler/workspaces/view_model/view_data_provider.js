@@ -31,16 +31,16 @@ export default class ViewDataProvider {
         this._options = renderOptions;
 
         if(isGenerateNewViewData) {
-            this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
+            this.completeViewDataMap = viewDataGenerator.getCompleteViewDataMap(renderOptions);
             this.completeDateHeaderMap = dateHeaderDataGenerator
-                ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
+                .getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
             if(renderOptions.isGenerateTimePanelData) {
                 this.completeTimePanelMap = timePanelDataGenerator
-                    ._getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
+                    .getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
             }
         }
 
-        this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
+        this.viewDataMap = viewDataGenerator.generateViewDataMap(this.completeViewDataMap, renderOptions);
         this.updateViewData(renderOptions);
 
 
@@ -55,10 +55,10 @@ export default class ViewDataProvider {
         );
 
         this.dateHeaderData = dateHeaderDataGenerator
-            ._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
+            .generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
 
         if(renderOptions.isGenerateTimePanelData) {
-            this.timePanelData = timePanelDataGenerator._generateTimePanelData(
+            this.timePanelData = timePanelDataGenerator.generateTimePanelData(
                 this.completeTimePanelMap,
                 renderOptions,
             );
@@ -69,7 +69,7 @@ export default class ViewDataProvider {
         this.viewDataMapWithSelection = this.viewDataGenerator
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator
-            ._getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
+            .getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
     }
 
     getGroupStartDate(groupIndex) {
