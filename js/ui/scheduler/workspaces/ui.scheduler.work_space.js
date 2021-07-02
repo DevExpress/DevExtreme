@@ -1562,22 +1562,32 @@ class SchedulerWorkSpace extends WidgetObserver {
     // TODO move get cell sizes methods to the separate layer
     //
 
-    getCellHeight() {
+    getCellSize() {
         const { dateTableCellsMeta } = this.getDOMElementsMetaData();
         const length = dateTableCellsMeta?.length;
 
-        return length
-            ? dateTableCellsMeta[length - 1][0].height
-            : 0;
+        if(!length) {
+            return {
+                width: 0,
+                height: 0
+            };
+        }
+
+        const cellIndex = (length > 1) ? 1 : 0;
+        const cellSize = dateTableCellsMeta[cellIndex][0];
+
+        return {
+            width: Math.round(cellSize.width),
+            height: Math.round(cellSize.height),
+        };
+    }
+
+    getCellHeight() {
+        return this.getCellSize().height;
     }
 
     getCellWidth() {
-        const { dateTableCellsMeta } = this.getDOMElementsMetaData();
-        const length = dateTableCellsMeta?.length;
-
-        return length
-            ? dateTableCellsMeta[length - 1][0].width
-            : 0;
+        return this.getCellSize().width;
     }
 
     getAllDayHeight() {
