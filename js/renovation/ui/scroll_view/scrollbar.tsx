@@ -37,7 +37,7 @@ import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './types.d';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
-const THUMB_MIN_SIZE = 15;
+export const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
@@ -247,9 +247,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Effect()
   updateContentTranslate(): void {
     if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      if (this.initialTopPocketSize !== this.topPocketSize) {
+      if (this.initialTopPocketSize !== this.props.topPocketSize) {
         this.updateContent(this.props.scrollLocation);
-        this.initialTopPocketSize = this.topPocketSize;
+        this.initialTopPocketSize = this.props.topPocketSize;
       }
     }
   }
@@ -272,7 +272,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         if (this.props.pocketState !== TopPocketState.STATE_READY) {
           this.setPocketState(TopPocketState.STATE_READY);
         }
-      } else if (this.isReachBottom()) {
+      } else if (this.isReachBottom) {
         if (this.props.pocketState !== TopPocketState.STATE_LOADING) {
           this.setPocketState(TopPocketState.STATE_LOADING);
         }
@@ -454,7 +454,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     if (this.props.forceGeneratePockets && this.props.pullDownEnabled) {
-      contentTranslateOffset -= this.topPocketSize;
+      contentTranslateOffset -= this.props.topPocketSize;
     }
 
     this.props.contentTranslateOffsetChange?.(this.scrollProp, contentTranslateOffset);
@@ -463,7 +463,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   get maxOffset(): number {
     if (this.props.forceGeneratePockets) {
       if (this.isPullDown && this.pendingPullDown) {
-        return this.topPocketSize;
+        return this.props.topPocketSize;
       }
     }
 
@@ -494,17 +494,32 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && (this.props.scrollLocation - this.props.topPocketSize) >= 0;
   }
 
-  isReachBottom(): boolean {
+  get isReachBottom(): boolean {
     return this.props.reachBottomEnabled
-      && (this.props.scrollLocation - this.minOffset - this.bottomPocketSize <= 0.5);
+      && (this.props.scrollLocation + this.visibleScrollAreaSize <= 0.5);
+  }
+
+  get visibleContentAreaSize(): number {
+    const size = this.props.contentSize - this.props.bottomPocketSize - this.props.topPocketSize;
+
+    if (this.props.forceGeneratePockets && this.props.reachBottomEnabled) {
+      return Math.max(size - this.props.contentPaddingBottom, 0);
+    }
+
+    return Math.max(size, 0);
+  }
+
+  get visibleScrollAreaSize(): number {
+    return Math.max(this.visibleContentAreaSize - this.props.containerSize, 0);
   }
 
   get minOffset(): number {
-    if (this.props.forceGeneratePockets) {
-      return -Math.max(this.bottomBoundaryOffset + this.bottomPocketSize, 0);
+    if (this.props.forceGeneratePockets && this.props.reachBottomEnabled) {
+      return -Math.max(this.visibleScrollAreaSize
+        + this.props.bottomPocketSize + this.props.contentPaddingBottom, 0);
     }
 
-    return -Math.max(this.bottomBoundaryOffset, 0);
+    return -Math.max(this.visibleScrollAreaSize, 0);
   }
 
   get scrollSize(): number {
@@ -512,23 +527,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get scrollRatio(): number {
-    if (this.bottomBoundaryOffset) {
-      return (this.props.containerSize - this.scrollSize) / this.bottomBoundaryOffset;
+    if (this.visibleScrollAreaSize) {
+      return (this.props.containerSize - this.scrollSize) / this.visibleScrollAreaSize;
     }
 
     return 1;
   }
 
-  get contentSize(): number {
-    if (this.props.contentSize) {
-      return this.props.contentSize - this.bottomPocketSize - this.topPocketSize;
-    }
-    return 0;
-  }
-
   get containerToContentRatio(): number {
-    return this.contentSize
-      ? this.props.containerSize / this.contentSize
+    return this.visibleContentAreaSize
+      ? this.props.containerSize / this.visibleContentAreaSize
       : this.props.containerSize;
   }
 
@@ -550,26 +558,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     if (this.props.showScrollbar === 'onHover') {
       this.hovered = false;
     }
-  }
-
-  get topPocketSize(): number {
-    if (this.props.pullDownEnabled) {
-      return this.props.topPocketSize;
-    }
-
-    return 0;
-  }
-
-  get bottomPocketSize(): number {
-    if (this.props.reachBottomEnabled) {
-      return this.props.bottomPocketSize;
-    }
-
-    return 0;
-  }
-
-  get bottomBoundaryOffset(): number {
-    return this.contentSize - this.props.containerSize;
   }
 
   get cssClasses(): string {
