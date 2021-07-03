@@ -77,6 +77,7 @@ import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
+import { getElementPaddingBottom } from './utils/get_element_padding';
 
 const DEFAULT_OFFSET = { top: 0, left: 0 };
 
@@ -92,7 +93,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     scrollableRef, updateHandler, contentStyles, containerStyles, onBounce,
     onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
-    vScrollLocation, hScrollLocation,
+    vScrollLocation, hScrollLocation, contentPaddingBottom,
     forceUpdateHScrollbarLocation, forceUpdateVScrollbarLocation,
     onVisibilityChangeHandler,
     props: {
@@ -204,6 +205,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
               bottomPocketSize={bottomPocketClientHeight}
+              contentPaddingBottom={contentPaddingBottom}
               onPullDown={onPullDown}
               onRelease={onRelease}
               onReachBottom={onReachBottom}
@@ -294,6 +296,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() contentClientWidth = 0;
 
   @InternalState() contentClientHeight = 0;
+
+  @InternalState() contentPaddingBottom = 0;
 
   @InternalState() topPocketClientHeight = 0;
 
@@ -1160,22 +1164,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.contentScrollHeight = contentEl.scrollHeight;
     }
 
-    if (this.props.forceGeneratePockets) {
-      if (this.props.pullDownEnabled) {
-        const topPocketEl = this.topPocketRef.current;
+    const topPocketEl = this.topPocketRef.current;
+    const bottomPocketEl = this.bottomPocketRef.current;
 
-        if (isDefined(topPocketEl)) {
-          this.topPocketClientHeight = topPocketEl.clientHeight;
-        }
-      }
+    if (isDefined(topPocketEl)) {
+      this.topPocketClientHeight = topPocketEl.clientHeight;
+    }
 
-      if (this.props.reachBottomEnabled) {
-        const bottomPocketEl = this.bottomPocketRef.current;
-
-        if (isDefined(bottomPocketEl)) {
-          this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
-        }
-      }
+    if (isDefined(bottomPocketEl)) {
+      this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
     if (this.prevContentClientWidth !== this.contentClientWidth
@@ -1195,6 +1192,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         this.vScrollLocation = -containerEl.scrollTop;
       }
     }
+
+    this.contentPaddingBottom = getElementPaddingBottom(this.contentRef.current);
   }
 
   get containerElement(): HTMLDivElement {
@@ -1207,15 +1206,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
+    // T320141
     const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowX === 'hidden';
 
     /* istanbul ignore next */
-    if (!isOverflowHidden) {
-      const containerScrollSize = this.contentScrollWidth;
-      return Math.max(containerScrollSize, this.contentClientWidth);
+    if (isOverflowHidden) {
+      return this.contentClientWidth;
     }
 
-    return this.contentClientWidth;
+    const containerScrollSize = this.contentScrollWidth;
+    // for position absolute elements inside content
+    return Math.max(containerScrollSize, this.contentClientWidth);
   }
 
   get contentHeight(): number {
@@ -1223,15 +1224,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return 0;
     }
 
+    // T320141
     const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowY === 'hidden';
 
     /* istanbul ignore next */
-    if (!isOverflowHidden) {
-      const containerScrollSize = this.contentScrollHeight;
-      return Math.max(containerScrollSize, this.contentClientHeight);
+    if (isOverflowHidden) {
+      return this.contentClientHeight;
     }
 
-    return this.contentClientHeight;
+    const containerScrollSize = this.contentScrollHeight;
+    // for position absolute elements inside content
+    return Math.max(containerScrollSize, this.contentClientHeight);
   }
 
   /* istanbul ignore next */

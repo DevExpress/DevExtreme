@@ -264,7 +264,7 @@ each([{
           expect(viewModel.update).toHaveBeenCalledTimes(1);
         });
 
-        each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
+        each(optionValues.direction).describe('ScrollEffect params. Direction: %o', (direction) => {
           each([
             { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
             { eventName: 'dxscroll', effectName: 'move', passEvent: true },
