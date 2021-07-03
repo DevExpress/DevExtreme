@@ -2949,8 +2949,8 @@ QUnit.module('Columns resizing', {
             // assert
             assert.strictEqual(points.length, xValues.length, 'number of points');
             points.forEach((point, index) => {
-                assert.roughEqual(point.x, xValues[index], 0.6, `x of ${index} point`);
-                assert.roughEqual(point.y, -10000, 0.6, `y of ${index} point`);
+                assert.roughEqual(point.x, xValues[index], 1.1, `x of ${index} point`);
+                assert.roughEqual(point.y, -10000, 1, `y of ${index} point`);
                 assert.strictEqual(point.index, index, `index of ${index} point`);
                 assert.strictEqual(point.columnIndex, index, `columnIndex of ${index} point`);
             });
@@ -3061,7 +3061,7 @@ QUnit.module('Columns resizing', {
                     // header has border, so offset for it is fractional in IE
                     headerOffset = Math.floor(headerOffset);
                 }
-                assert.roughEqual(headerOffset, cellOffset, 0.6, `cells with index ${index}: header position matches cell position`);
+                assert.roughEqual(headerOffset, cellOffset, 1.1, `cells with index ${index}: header position matches cell position`);
             });
         });
 
@@ -3089,8 +3089,8 @@ QUnit.module('Columns resizing', {
             // assert
             assert.strictEqual(points.length, xValues.length, 'number of points');
             points.forEach((point, index) => {
-                assert.roughEqual(point.x, xValues[index], 0.6, `x of ${index} point`);
-                assert.roughEqual(point.y, -10000, 0.6, `y of ${index} point`);
+                assert.roughEqual(point.x, xValues[index], 1.1, `x of ${index} point`);
+                assert.roughEqual(point.y, -10000, 1.1, `y of ${index} point`);
                 assert.strictEqual(point.index, index + 1, `index of ${index} point`);
                 assert.strictEqual(point.columnIndex, index, `columnIndex of ${index} point`);
             });
@@ -3351,8 +3351,8 @@ QUnit.module('Headers reordering', {
         // assert
         assert.strictEqual(rPoints.length, xValues.length, 'number of points');
         rPoints.forEach((point, index) => {
-            assert.roughEqual(point.x, xValues[index], 0.6, `x of ${index} point`);
-            assert.roughEqual(point.y, -10000, 0.6, `y of ${index} point`);
+            assert.roughEqual(point.x, xValues[index], 1.1, `x of ${index} point`);
+            assert.roughEqual(point.y, -10000, 1, `y of ${index} point`);
             assert.strictEqual(point.index, index, `index of ${index} point`);
             assert.strictEqual(point.columnIndex, index, `columnIndex of ${index} point`);
         });
