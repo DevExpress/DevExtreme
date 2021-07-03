@@ -17,7 +17,7 @@ import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
 import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import { ScrollableProps } from './scrollable_props';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './types';
@@ -249,10 +249,16 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.moveTo(this.getLocationWithinRange(this.props.scrollLocation));
-    }
+      const boundaryLocation = this.getLocationWithinRange(this.props.scrollLocation);
 
-    this.scrollComplete();
+      this.moveTo(boundaryLocation);
+
+      if (this.props.scrollLocation === boundaryLocation) {
+        this.scrollComplete();
+      }
+    } else {
+      this.scrollComplete();
+    }
   }
 
   get isBounceAnimator(): boolean {

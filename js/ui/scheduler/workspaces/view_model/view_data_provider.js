@@ -1,5 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
+import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
+import { TimePanelDataGenerator } from './time_panel_data_generator';
 import { ViewDataGenerator } from './view_data_generator';
 
 export default class ViewDataProvider {
@@ -23,17 +25,22 @@ export default class ViewDataProvider {
 
     update(renderOptions, isGenerateNewViewData) {
         const viewDataGenerator = this.viewDataGenerator;
+        const dateHeaderDataGenerator = new DateHeaderDataGenerator();
+        const timePanelDataGenerator = new TimePanelDataGenerator();
+
         this._options = renderOptions;
 
         if(isGenerateNewViewData) {
-            this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
-            this.completeDateHeaderMap = viewDataGenerator
-                ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
-            this.completeTimePanelMap = viewDataGenerator
-                ._getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
+            this.completeViewDataMap = viewDataGenerator.getCompleteViewDataMap(renderOptions);
+            this.completeDateHeaderMap = dateHeaderDataGenerator
+                .getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
+            if(renderOptions.isGenerateTimePanelData) {
+                this.completeTimePanelMap = timePanelDataGenerator
+                    .getCompleteTimePanelMap(renderOptions, this.completeViewDataMap);
+            }
         }
 
-        this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
+        this.viewDataMap = viewDataGenerator.generateViewDataMap(this.completeViewDataMap, renderOptions);
         this.updateViewData(renderOptions);
 
 
@@ -47,18 +54,22 @@ export default class ViewDataProvider {
             },
         );
 
-        this.dateHeaderData = viewDataGenerator._generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
-        this.timePanelData = viewDataGenerator._generateTimePanelData(
-            this.completeTimePanelMap,
-            renderOptions,
-        );
+        this.dateHeaderData = dateHeaderDataGenerator
+            .generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
+
+        if(renderOptions.isGenerateTimePanelData) {
+            this.timePanelData = timePanelDataGenerator.generateTimePanelData(
+                this.completeTimePanelMap,
+                renderOptions,
+            );
+        }
     }
 
     updateViewData(renderOptions) {
         this.viewDataMapWithSelection = this.viewDataGenerator
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator
-            ._getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
+            .getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
     }
 
     getGroupStartDate(groupIndex) {

@@ -11,7 +11,6 @@ import {
     isDesktopEnvironment,
     asyncScrollTest,
     asyncWrapper,
-    isIE11
 } from '../../helpers/scheduler/helpers.js';
 import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
@@ -23,7 +22,7 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = isIE11 || !isDesktopEnvironment()
+    const testFunc = !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
     return testFunc(description, sinon.test(callback));
@@ -3439,7 +3438,6 @@ module('Virtual scrolling integration', () => {
             assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
         });
 
-        // Virtual Scrolling in IE
         QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', function(assert) {
             const scheduler = createWrapper({
                 views: ['timelineMonth'],

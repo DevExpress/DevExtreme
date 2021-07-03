@@ -810,7 +810,7 @@ class ScrollableTestHelper {
 
         let expectedScrollOffsetLeft = left;
 
-        if(isRenovation && this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
+        if(this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
             expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
 
             if(positive) {
@@ -1084,7 +1084,7 @@ class ScrollableTestHelper {
 
                 helper.$scrollable.find('.content1').css('width', '200px');
                 helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 25 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
 
                 helper.scrollable.update();
                 helper.checkScrollOffset({ left: 150, top: 0, maxScrollOffset: 150 });

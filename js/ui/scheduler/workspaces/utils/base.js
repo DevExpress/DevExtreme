@@ -1,6 +1,8 @@
+import errors from '../../../widget/ui.errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
+import { getCellGroups, getGroupsObjectFromGroupsArray } from '../../resources/utils';
 import timeZoneUtils from '../../utils.timeZone';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
@@ -9,12 +11,13 @@ export const isDateInRange = (date, startDate, endDate, diff) => {
         : dateUtils.dateInRange(date, endDate, startDate, 'date');
 };
 
-export const setStartDayHour = (date, startDayHour) => {
+export const setOptionHour = (date, startDayHour) => {
+    const nextDate = new Date(date);
+
     if(!isDefined(startDayHour)) {
-        return date;
+        return nextDate;
     }
 
-    const nextDate = new Date(date);
     nextDate.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
 
     return nextDate;
@@ -50,8 +53,9 @@ export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount)
     return columnIndex * rowCount + rowIndex;
 };
 
-const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay) => {
-    const weekendCount = Math.floor(columnIndex / (5 * columnsInDay));
+const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay, firstDayOfWeek) => {
+    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
+    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
 
     return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
 };
@@ -82,6 +86,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         cellCountInDay,
         rowCount,
         columnCount,
+        firstDayOfWeek,
     } = options;
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
@@ -96,7 +101,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
 
     const offsetByCount = isWorkView
-        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay)
+        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
         : 0;
 
     const startViewDateTime = startViewDate.getTime();
@@ -109,4 +114,91 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     currentDate.setTime(currentDate.getTime() + timeZoneDifference);
 
     return currentDate;
+};
+
+const calculateEndDate = (startDate, interval) => {
+    const result = new Date(startDate);
+    result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
+
+    return result;
+};
+
+export const prepareCellData = (options, rowIndex, columnIndex) => {
+    const {
+        isDateAndTimeView,
+        interval,
+        groups,
+        tableAllDay,
+        endDayHour,
+    } = options;
+
+    const startDate = getDateByCellIndices(options, rowIndex, columnIndex);
+    const endDate = isDateAndTimeView
+        ? calculateEndDate(startDate, interval)
+        : setOptionHour(startDate, endDayHour);
+
+    const data = {
+        startDate: startDate,
+        endDate: endDate,
+        allDay: tableAllDay,
+        groupIndex: 0,
+    };
+
+    const groupsArray = getCellGroups(0, groups);
+
+    if(groupsArray.length) {
+        data.groups = getGroupsObjectFromGroupsArray(groupsArray);
+    }
+
+    return data;
+};
+
+export const prepareAllDayCellData = (options, rowIndex, columnIndex) => {
+    const data = prepareCellData(options, rowIndex, columnIndex);
+    const startDate = dateUtils.trimTime(data.startDate);
+
+    return {
+        ...data,
+        startDate,
+        endDate: startDate,
+        allDay: true,
+    };
+};
+
+export const getHeaderCellText = (
+    headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
+) => {
+    const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
+    return dateLocalization.format(validDate, headerCellTextFormat);
+};
+
+export const validateDayHours = (startDayHour, endDayHour) => {
+    if(startDayHour >= endDayHour) {
+        throw errors.Error('E1058');
+    }
+};
+
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
+
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
 };

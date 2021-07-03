@@ -478,17 +478,19 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        const text = this.option('text');
+        const { text, type, validationError } = this.option();
         const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
-            this._applyInternalValidation(currentValue);
+            if(!validationError || validationError.editorSpecific) {
+                this._applyInternalValidation(currentValue);
+                this._applyCustomValidation();
+            }
             return;
         }
 
         const parsedDate = this._getParsedDate(text);
         const value = currentValue ?? this._getDateByDefault();
-        const type = this.option('type');
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
 

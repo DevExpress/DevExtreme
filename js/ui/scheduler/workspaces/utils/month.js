@@ -1,9 +1,10 @@
 import dateUtils from '../../../../core/utils/date';
+import dateLocalization from '../../../../localization/date';
 import {
     getCalculatedFirstDayOfWeek,
+    getToday,
     isDateInRange,
-    setStartDayHour,
-    getDateByCellIndices as getDateByCellIndicesBase,
+    setOptionHour,
 } from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
@@ -48,15 +49,30 @@ export const calculateStartViewDate = (
 
     const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
 };
 
 export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
     return rowIndex * columnCount + columnIndex;
 };
 
-export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
-    const date = getDateByCellIndicesBase(options, rowIndex, columnIndex);
+export const isFirstCellInMonthWithIntervalCount = (cellDate, intervalCount) => {
+    return cellDate.getDate() === 1 && intervalCount > 1;
+};
 
-    return setStartDayHour(date, options.startDayHour);
+export const getCellText = (date, intervalCount) => {
+    if(isFirstCellInMonthWithIntervalCount(date, intervalCount)) {
+        const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
+        return [monthName, dateLocalization.format(date, 'day')].join(' ');
+    }
+
+    return dateLocalization.format(date, 'dd');
+};
+
+export const isCurrentDate = (date, indicatorTime, timeZoneCalculator) => {
+    return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
+};
+
+export const isOtherMonth = (cellDate, minDate, maxDate) => {
+    return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
 };

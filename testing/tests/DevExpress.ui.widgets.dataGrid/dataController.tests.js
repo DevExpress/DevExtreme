@@ -6,6 +6,7 @@ import { errors as dataErrors } from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';
@@ -4731,6 +4732,21 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+        this.dataController.init();
+
+        // assert
+        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
+    });
+
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
         // arrange
         const getData = function(count) {
@@ -4746,7 +4762,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4800,7 +4815,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4858,7 +4872,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4904,7 +4917,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4932,7 +4944,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4960,7 +4971,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4988,7 +4998,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5401,6 +5410,21 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
     });
 
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowPageSize: 5,
+                minGap: 1
+            }
+        });
+        this.dataController.init();
+
+        // assert
+        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
+    });
+
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
         // arrange
         const getData = function(count) {
@@ -5416,7 +5440,6 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5470,7 +5493,6 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5528,7 +5550,6 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.applyOptions({
             scrolling: {
                 newMode: true,
-                rowRenderingMode: 'virtual',
                 rowPageSize: 5,
                 minGap: 1
             }

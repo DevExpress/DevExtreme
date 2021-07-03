@@ -1,7 +1,6 @@
 import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
-import browser from 'core/utils/browser';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
@@ -16,7 +15,7 @@ const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will h
 
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
-if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
+if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
     testStart(() => initTestMarkup());
     const moduleConfig = {
         beforeEach() {
@@ -224,13 +223,6 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             '4:00 PM', '', '5:00 PM', '', '6:00 PM', '', '7:00 PM', '', '8:00 PM', '', '9:00 PM', '', '10:00 PM', '', '11:00 PM', ''
         ];
 
-        const testCases = [
-            { view: 'week', times: expectedShortTimes },
-            { view: 'day', times: expectedShortTimes },
-            { view: 'timelineDay', times: expectedAllTimes },
-            { view: 'timelineWeek', times: expectedAllTimes }
-        ];
-
         const expectedDateResults = (() => {
             const result = [];
             let startHours = 0;
@@ -240,10 +232,22 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 result.push(new Date(currentDate));
                 startHours += 0.5;
                 currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
+
+                if(startHours === 2 || startHours === 2.5) {
+                    const validStartHour = startHours - 1;
+                    currentDate = new Date(new Date(summerDSTDate).setHours(validStartHour - (validStartHour % 1), validStartHour % 1 * 60));
+                }
             }
 
             return result;
         })();
+
+        const testCases = [
+            { view: 'week', times: expectedShortTimes, dates: expectedDateResults },
+            { view: 'day', times: expectedShortTimes, dates: expectedDateResults },
+            { view: 'timelineDay', times: expectedAllTimes, dates: expectedDateResults },
+            { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
+        ];
 
         [true, false].forEach((renovateRender) => {
             module('timeCellTemplate', () => {
@@ -255,7 +259,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                             dataSource: [],
                             timeCellTemplate: arg => {
                                 if(index < expectedAllTimes.length) {
-                                    assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                    assert.equal(arg.date.valueOf(), testCase.dates[index].valueOf(), 'arg.date should be valid');
                                     assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
 
                                     index++;
@@ -275,7 +279,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
                         let index = 0;
 
-                        const validExpectedDateResults = expectedDateResults.slice(4);
+                        const validExpectedDateResults = testCase.dates.slice(4);
                         const times = testCase.times.slice(4);
 
                         createWrapper({
@@ -313,11 +317,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                         test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
                             let index = 0;
 
-                            const validExpectedDateResults = [
-                                new Date(2020, 2, 8, 1, 0),
-                                new Date(2020, 2, 8, 1, 30),
-                                ...expectedDateResults.slice(6),
-                            ];
+                            const validExpectedDateResults = expectedDateResults.slice(4);
 
                             createWrapper({
                                 dataSource: [],

@@ -176,7 +176,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
   height: 600,
 }));
 
-test('StartDate and endDate should has correct type after "allDay" and "repeat" option changed (T1002864)', async (t) => {
+test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { appointmentPopup } = scheduler;
 
@@ -197,4 +197,25 @@ test('StartDate and endDate should has correct type after "allDay" and "repeat" 
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2021, 1, 1),
+}));
+
+test('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
+
+  await t
+    .doubleClick(scheduler.getDateTableCell(2, 4))
+
+    .expect(appointmentPopup.startDateElement.value)
+    .eql('7/5/2021, 6:00 AM')
+
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('7/5/2021, 6:30 AM');
+}).before(async () => createWidget('dxScheduler', {
+  views: ['workWeek'],
+  currentView: 'workWeek',
+  currentDate: new Date(2021, 5, 28),
+  startDayHour: 5,
+  height: 600,
+  firstDayOfWeek: 2,
 }));

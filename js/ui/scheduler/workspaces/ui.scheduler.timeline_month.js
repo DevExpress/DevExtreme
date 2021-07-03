@@ -5,6 +5,7 @@ import dateUtils from '../../../core/utils/date';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { calculateCellIndex, getViewStartByOptions } from './utils/month';
 import { calculateStartViewDate } from './utils/timeline_month';
+import { formatWeekdayAndDay } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
@@ -76,14 +77,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _getFormat() {
-        return this._formatWeekdayAndDay;
-    }
-
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
+        return formatWeekdayAndDay;
     }
 
     _getInterval() {
@@ -125,6 +119,14 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             this.option('intervalCount'),
             dateUtils.getFirstMonthDate(this.option('startDate')),
         );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions(true);
+        return {
+            ...options,
+            getDateForHeaderText: (_, date) => date,
+        };
     }
 }
 
