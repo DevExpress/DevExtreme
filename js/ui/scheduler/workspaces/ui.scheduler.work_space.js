@@ -1577,8 +1577,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellSize = dateTableCellsMeta[cellIndex][0];
 
         return {
-            width: Math.round(cellSize.width),
-            height: Math.round(cellSize.height),
+            width: cellSize.width,
+            height: cellSize.height,
         };
     }
 
@@ -2309,6 +2309,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _dispose() {
         super._dispose();
 
+        this.cache.clear();
         this.virtualScrollingDispatcher.dispose();
     }
 

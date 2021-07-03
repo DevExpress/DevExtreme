@@ -136,7 +136,7 @@ module('Browser zoom', zoomModuleConfig, () => {
 
             pointer
                 .down(offset.left, offset.top)
-                .move(0, -32);
+                .move(0, -30);
             pointer.up();
 
             assert.equal(scheduler.appointments.getDateText(), '9:00 AM - 11:00 AM', `appointment should move to previous cell in ${view} view`);
