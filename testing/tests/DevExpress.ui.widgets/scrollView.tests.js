@@ -1067,16 +1067,9 @@ QUnit.module('api', moduleConfig, () => {
 
         assert.ok($reachBottom.is(':hidden'), 'reach bottom is hidden');
 
-        if(isRenovation) {
-            $scrollView.dxScrollView('release');
+        $scrollView.dxScrollView('release').done(function() {
             assert.ok($reachBottom.is(':hidden'), 'reach bottom is hidden');
-        } else {
-            $scrollView.dxScrollView('release').done(function() {
-                assert.ok($reachBottom.is(':hidden'), 'reach bottom is hidden');
-            });
-            assert.ok($reachBottom.is(':hidden'), 'reach bottom is hidden');
-
-        }
+        });
 
         this.clock.tick();
     });
@@ -1116,14 +1109,10 @@ QUnit.module('api', moduleConfig, () => {
             useNative: false,
         });
 
-        if(isRenovation) {
-            $scrollView.dxScrollView('instance').release();
-            assert.ok(true, 'release was called');
-        } else {
-            $scrollView.dxScrollView('release').done(function() {
+        $scrollView.dxScrollView('release')
+            .done(function() {
                 assert.ok(true, 'release without loading fails');
             });
-        }
 
         this.clock.tick();
     });
@@ -1318,25 +1307,17 @@ QUnit.module('api', moduleConfig, () => {
             onPullDown: function(e) {
                 pullDownFired++;
 
-                if(isRenovation) {
-                    e.component.release();
-                    assert.ok(true, 'scroll view released');
-                } else {
-                    e.component.release().done(function() {
-                        deferred.resolve();
-                    });
-                }
-
+                e.component.release().done(function() {
+                    deferred.resolve();
+                });
             }
         }).dxScrollView('instance');
 
         scrollView.refresh();
 
-        if(!isRenovation) {
-            deferred.done(function() {
-                assert.ok(true, 'scroll view released');
-            });
-        }
+        deferred.done(function() {
+            assert.ok(true, 'scroll view released');
+        });
 
         assert.equal(pullDownFired, 1, 'pull down action fired once');
 
@@ -1354,14 +1335,9 @@ QUnit.module('api', moduleConfig, () => {
 
                 assert.equal(loadPanel.option('visible'), true, 'load panel shown on start');
 
-                if(isRenovation) {
-                    e.component.release();
-                } else {
-                    e.component.release().done(function() {
-                        deferred.resolve();
-                    });
-                }
-
+                e.component.release().done(function() {
+                    deferred.resolve();
+                });
             }
         }).dxScrollView('instance');
 
@@ -1369,13 +1345,9 @@ QUnit.module('api', moduleConfig, () => {
 
         scrollView.refresh();
 
-        if(isRenovation) {
-            assert.equal(loadPanel.option('visible'), false, 'load panel hidden');
-        } else {
-            deferred.done(function() {
-                assert.equal(loadPanel.option('visible'), false, 'load panel hidden on done');
-            });
-        }
+        deferred.done(function() {
+            assert.equal(loadPanel.option('visible'), false, 'load panel hidden on done');
+        });
     });
 
     QUnit.test('refreshingText pass to dxLoadPanel', function(assert) {

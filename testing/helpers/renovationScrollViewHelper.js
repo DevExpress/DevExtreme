@@ -86,6 +86,11 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
     update() {
         super.update.apply(this, arguments);
 
+        return new Deferred().resolve();
+    }
+
+    release() {
+        super.release.apply(this, arguments);
 
         return new Deferred().resolve();
     }
