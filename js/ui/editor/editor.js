@@ -149,7 +149,7 @@ const Editor = Widget.inherit({
         // it can change the editor's value
         if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
             // NOTE: Prevent the validation message from showing
-            const $validationMessageWrapper = this._validationMessage?._wrapper();
+            const $validationMessageWrapper = this._validationMessage?.$wrapper();
             $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
             clearTimeout(this.showValidationMessageTimeout);
@@ -179,7 +179,8 @@ const Editor = Widget.inherit({
         if(this._$validationMessage) {
             this._$validationMessage.remove();
             this.setAria('describedby', null);
-            this._$validationMessage = null;
+            this._$validationMessage = undefined;
+            this._validationMessage = undefined;
         }
     },
 
@@ -253,6 +254,7 @@ const Editor = Widget.inherit({
 
         data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
+        this._disposeValidationMessage();
         this.callBase();
     },
 

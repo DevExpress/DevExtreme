@@ -572,7 +572,32 @@ QUnit.module('option change', {}, () => {
 
         dropDownButton.option('tabIndex', 3);
 
-        assert.strictEqual(dropDownButton.$element().attr('tabindex'), '3', 'tabIndex is correct');
+        assert.strictEqual(dropDownButton.$element().attr('tabindex'), undefined, 'tabIndex is correct');
+    });
+
+    QUnit.test('dropDownButton has no tabIndex attribute', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+        const tabIndexAttribute = dropDownButton.$element().attr('tabIndex');
+
+        assert.strictEqual(tabIndexAttribute, undefined);
+    });
+
+    QUnit.test('buttonGroup tabIndex attribute equals 0', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+        const $buttonGroup = getButtonGroup(dropDownButton).$element();
+        const tabIndexAttribute = $buttonGroup.attr('tabIndex');
+
+        assert.strictEqual(tabIndexAttribute, '0');
+    });
+
+    QUnit.test('tabIndex option change sets buttonGroup tabIndex attribute', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+        const $buttonGroup = getButtonGroup(dropDownButton).$element();
+
+        dropDownButton.option('tabIndex', 1);
+        const tabIndexAttribute = $buttonGroup.attr('tabIndex');
+
+        assert.strictEqual(tabIndexAttribute, '1', 'buttonGroup tabIndex attribute changed');
     });
 
     QUnit.test('opened option change', function(assert) {
@@ -751,8 +776,8 @@ QUnit.module('option change', {}, () => {
             return;
         }
 
-        const popupContent = getPopup(dropDownButton).content();
-        assert.strictEqual($(popupContent).text(), 'Custom template', 'option has been changed');
+        const popupContent = getPopup(dropDownButton).$content();
+        assert.strictEqual(popupContent.text(), 'Custom template', 'option has been changed');
     });
 
     QUnit.test('items option change', function(assert) {
@@ -904,7 +929,7 @@ QUnit.module('option change', {}, () => {
         }
 
         const dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
-        const popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
+        const popupContentElementRect = getPopup(instance).$overlayContent().get(0).getBoundingClientRect();
 
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
     });

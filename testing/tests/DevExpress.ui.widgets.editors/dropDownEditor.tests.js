@@ -5,6 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import browser from 'core/utils/browser';
 import support from 'core/utils/support';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay';
@@ -40,7 +41,7 @@ const isIOs = devices.current().platform === 'ios';
 
 const beforeEach = function() {
     fx.off = true;
-    this.rootElement = $('<div id=\'dropDownEditor\'></div>');
+    this.rootElement = $('<div id="dropDownEditor"></div>');
     this.rootElement.appendTo($('#qunit-fixture'));
     this.$dropDownEditor = $('#dropDownEditor').dxDropDownEditor();
     this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor('instance');
@@ -56,10 +57,12 @@ const afterEach = function() {
     fx.off = false;
 };
 
-const reinitFixture = function(...args) {
-    // TODO: get rid of  beforeEach and afterEach usage
-    afterEach.apply(this, args);
-    beforeEach.apply(this, args);
+const reinitFixture = function(options) {
+    this.$dropDownEditor.remove();
+    this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+        .appendTo('#qunit-fixture');
+    this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor(options)
+        .dxDropDownEditor('instance');
 };
 
 const testEnvironment = {
@@ -139,6 +142,19 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         const $submitInput = this.$dropDownEditor.find('input[type=\'hidden\']');
 
         assert.equal($submitInput.val(), 'test', 'the submit value is correct');
+    });
+
+    QUnit.test('submit value should be equal to the value of widget with fieldTemplate', function(assert) {
+        this.reinitFixture({
+            useHiddenSubmitElement: true,
+            fieldTemplate: () => $('<div>').dxTextBox(),
+            value: 'test'
+        });
+
+        const $submitInput = this.$dropDownEditor.find('input[type=\'hidden\']');
+
+        assert.strictEqual($submitInput.length, 1);
+        assert.strictEqual($submitInput.val(), 'test', 'the submit value is correct');
     });
 
     QUnit.test('clicking the input must not close the dropdown', function(assert) {
@@ -348,8 +364,12 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'blur preventing unnecessary on mobile devices');
+        const isDesktop = devices.real().deviceType === 'desktop';
+        const isIE11OrLower = browser.msie && parseInt(browser.version) <= 11;
+
+        if(!isDesktop || isIE11OrLower) {
+            const message = isIE11OrLower ? 'test is ignored in IE11 because it failes on farm' : 'blur preventing unnecessary on mobile devices';
+            assert.ok(true, message);
             return;
         }
 
@@ -362,7 +382,7 @@ QUnit.module('focus policy', () => {
 
         instance.open();
 
-        const $buttons = instance._popup._wrapper().find('.dx-button');
+        const $buttons = instance._popup.$wrapper().find('.dx-button');
 
         $.each($buttons, function(index, button) {
             const $button = $(button);
@@ -531,13 +551,37 @@ QUnit.module('focus policy', () => {
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
     });
+
+    [false, true].forEach((acceptCustomValue) => {
+        const position = acceptCustomValue ? 'end' : 'beginning';
+        const testTitle = `caret should be set to the ${position} of the text after click on the dropDown button when "acceptCustomValue" option is ${acceptCustomValue} (T976700)`;
+
+        QUnit.testInActiveWindow(testTitle, function(assert) {
+            const value = '1234567890abcdefgh';
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [value],
+                focusStateEnabled: true,
+                showDropDownButton: true,
+                acceptCustomValue,
+                value
+            });
+            const $dropDownButton = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+            const input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0);
+            const expectedPosition = acceptCustomValue ? value.length : 0;
+
+            $dropDownButton.trigger('dxclick');
+
+            assert.strictEqual(input.selectionStart, expectedPosition, 'correct start position');
+            assert.strictEqual(input.selectionEnd, expectedPosition, 'correct end position');
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {
     beforeEach() {
         fx.off = true;
-        this.$rootElement = $('<div id=\'dropDownEditor\'></div>');
-        this.$rootElement.appendTo('body');
+        this.$rootElement = $('<div id="dropDownEditor"></div>');
+        this.$rootElement.appendTo('#qunit-fixture');
         this.dropDownEditor = $('#dropDownEditor').dxDropDownEditor({
             focusStateEnabled: true
         }).dxDropDownEditor('instance');
@@ -719,7 +763,7 @@ QUnit.module('keyboard navigation inside popup', {
     beforeEach() {
         fx.off = true;
         this.$element = $('<div>');
-        $('body').append(this.$element);
+        $('#qunit-fixture').append(this.$element);
 
         this.instance = this.$element.dxDropDownEditor({
             focusStateEnabled: true,
@@ -729,7 +773,7 @@ QUnit.module('keyboard navigation inside popup', {
 
         this.$input = this.$element.find('.dx-texteditor-input');
 
-        const $popupWrapper = $(this.instance._popup._wrapper());
+        const $popupWrapper = $(this.instance._popup.$wrapper());
         this.$doneButton = $popupWrapper.find('.dx-popup-done.dx-button');
         this.$cancelButton = $popupWrapper.find('.dx-popup-cancel.dx-button');
 
@@ -1094,6 +1138,24 @@ QUnit.module('Templates', () => {
 
         assert.strictEqual($buttons.length, 1, 'there is only one button');
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
+    });
+
+    ['readOnly', 'disabled'].forEach((prop) => {
+        [false, true].forEach((propValue) => {
+            QUnit.test(`Drop button template should be rendered once after change the "${prop}" option value to ${!propValue}`, function(assert) {
+                const dropDownButtonTemplate = sinon.spy(() => {
+                    return '<div>Template</div>';
+                });
+
+                const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+                    dropDownButtonTemplate,
+                    [prop]: propValue
+                }).dxDropDownEditor('instance');
+
+                editor.option(prop, !propValue);
+                assert.ok(dropDownButtonTemplate.calledOnce, 'dropDownButton template rendered once');
+            });
+        });
     });
 });
 
@@ -1519,7 +1581,7 @@ QUnit.module('popup integration', () => {
     });
 
     QUnit.test('popup should have correct class if it is flipped', function(assert) {
-        const $dropDownEditor = $('<div>').appendTo('body');
+        const $dropDownEditor = $('<div>').appendTo('#qunit-fixture');
         try {
             $dropDownEditor.css({ position: 'fixed', bottom: 0 });
             $dropDownEditor.dxDropDownEditor({
@@ -1543,7 +1605,7 @@ QUnit.module('popup integration', () => {
 
         const $dropDownEditor = $('<div>').dxDropDownEditor({
             opened: true
-        }).appendTo('body');
+        }).appendTo('#qunit-fixture');
 
         try {
             const popup = $dropDownEditor.find('.dx-popup').dxPopup('instance');
@@ -1563,8 +1625,8 @@ QUnit.module('popup integration', () => {
 QUnit.module('popup buttons', {
     beforeEach() {
         fx.off = true;
-        this.$dropDownEditor = $('<div id=\'dropDownEditor\'></div>')
-            .appendTo('body');
+        this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+            .appendTo('#qunit-fixture');
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor({
             applyValueMode: 'useButtons',
             dropDownOptions: { showTitle: true }
@@ -1573,8 +1635,8 @@ QUnit.module('popup buttons', {
     reinitFixture(options) {
         this.$dropDownEditor.remove();
         this.dropDownEditor = null;
-        this.$dropDownEditor = $('<div id=\'dropDownEditor\'></div>')
-            .appendTo('body');
+        this.$dropDownEditor = $('<div id="dropDownEditor"></div>')
+            .appendTo('#qunit-fixture');
         this.dropDownEditor = this.$dropDownEditor.dxDropDownEditor(options)
             .dxDropDownEditor('instance');
     },
@@ -1795,4 +1857,3 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 });
-

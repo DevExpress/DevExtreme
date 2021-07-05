@@ -95,7 +95,7 @@ const getDSWithAsyncSearch = () => {
                 const deferred = $.Deferred();
                 setTimeout(() => {
                     if(loadOptions.take && !loadOptions.searchValue) {
-                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
                     } else if(loadOptions.filter) {
                         const result = data.filter((item) => {
                             if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
@@ -114,7 +114,7 @@ const getDSWithAsyncSearch = () => {
                             }
                         });
 
-                        deferred.resolve(result);
+                        deferred.resolve(result, { totalCount: 9 });
                     } else if(loadOptions.searchValue) {
                         const result = data.filter((item) => {
                             if(item.id.indexOf(loadOptions.searchValue) >= 0) {
@@ -122,7 +122,9 @@ const getDSWithAsyncSearch = () => {
                             }
                         });
 
-                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take));
+                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+                    } else {
+                        deferred.resolve(data, { totalCount: 9 });
                     }
                 }, TIME_TO_WAIT * 2);
 
@@ -2500,7 +2502,7 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup._wrapper().find('.dx-button.dx-popup-done');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 });
@@ -2763,6 +2765,39 @@ QUnit.module('keyboard navigation through tags', {
 
         const value = this.instance.option('value');
         assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+    });
+
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        ['backspace', 'del'].forEach((keyName) => {
+            QUnit.test(`the focused tag should be removed after pressing the '${keyName}' key after ${optionName} state (T986220)`, function(assert) {
+                const items = [1, 2, 3, 4];
+                this.reinit({
+                    items,
+                    value: items,
+                    focusStateEnabled: true,
+                    searchEnabled: true
+                });
+
+                this.instance.option(optionName, true);
+                this.instance.option(optionName, false);
+
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .press('left')
+                    .press('left');
+
+                const expectedValue = this.instance.option('value').slice();
+                const focusedTagIndex = this.getFocusedTag().index();
+                expectedValue.splice(focusedTagIndex, 1);
+
+                this.keyboard
+                    .press(keyName);
+
+                const value = this.instance.option('value');
+                assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+            });
+        });
     });
 
     QUnit.test('backspace should remove selected search text but not tag if any text is selected', function(assert) {
@@ -3700,6 +3735,48 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.ok(handlerStub.called, 'repaint was fired');
     });
 
+    QUnit.test('popup should update position after change height of input on dataSource "Loaded" event', function(assert) {
+        const $element = $('#tagBox').dxTagBox({
+            focusStateEnabled: true,
+            opened: true,
+            dataSource: {
+                store: new CustomStore({
+                    loadMode: 'raw',
+                    load: function() {
+                        const deferred = $.Deferred();
+
+                        setTimeout(() => {
+                            deferred.resolve(['testvalue1', 'testvalue2', 'testvalue3']);
+                        }, TIME_TO_WAIT);
+
+                        return deferred.promise();
+                    }
+                })
+            },
+            width: 170,
+            value: ['testvalue1', 'testvalue2'],
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $element.dxTagBox('instance');
+        const popupContent = $(instance.content());
+        const { top: initialTop } = popupContent.offset();
+
+        $element
+            .find(`.${TEXTBOX_CLASS}`)
+            .val('testtesttesttest')
+            .trigger('input');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const { top: updatedTop } = popupContent.offset();
+
+        assert.ok(updatedTop > initialTop, 'Popup update position');
+    });
+
     QUnit.test('the input size should change if autocompletion is Enabled (T378411)', function(assert) {
         const items = ['Antigua and Barbuda', 'Albania'];
         const $element = $('#tagBox').dxTagBox({
@@ -3789,6 +3866,30 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             dataSource: new DataSource({
                 store: new ODataStore({ version: 4, url: 'odata4.org' }),
                 expand: ['Orders']
+            })
+        });
+    });
+
+    QUnit.test('filtering operation should pass "select" parameter to the data source (T982439)', function(assert) {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: 'dxdataservice',
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: 'this eq \'1\'',
+                    $select: 'name,company'
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $('#tagBox').dxTagBox({
+            value: ['1'],
+            dataSource: new DataSource({
+                store: new ODataStore({ url: 'dxdataservice' }),
+                select: ['name', 'company']
             })
         });
     });
@@ -4051,6 +4152,135 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
     });
 
+    QUnit.test('TagBox should correctly quickly add remove the same item after search if dataSource is async', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 1, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly quickly add remove items after search if dataSource is async', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and remove selected items after search if dataSource is async and all old items has been already selected', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and quickly remove all items after search if dataSource is async with selectAllMode \'allPages\' (T978877)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            selectAllMode: 'allPages',
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        const $selectAllCheckbox = $(tagBox._list.$element().find('.dx-list-select-all-checkbox').eq(0));
+        $selectAllCheckbox.trigger('dxclick');
+        $selectAllCheckbox.trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 0, 'no tags');
+        assert.deepEqual(tagBox.option('value'), [], 'all items are deselected');
+    });
 
     QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
         const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
@@ -4110,6 +4340,27 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
+    });
+
+    QUnit.test('Changing the data source should not cause an error when the search is active', function(assert) {
+        let isOk = true;
+
+        const tagBox = $('#tagBox')
+            .dxTagBox({
+                dataSource: null,
+                searchEnabled: true,
+                minSearchLength: 2,
+                opened: true
+            })
+            .dxTagBox('instance');
+
+        try {
+            tagBox.option('dataSource', []);
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'dataSource updated without errors');
     });
 });
 
@@ -4699,6 +4950,24 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
+    });
+});
+
+QUnit.module('options changing', moduleSetup, () => {
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                items: [1, 2],
+                value: [1],
+                searchEnabled: true
+            }).dxTagBox('instance');
+            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
+
+            tagBox.option(optionName, true);
+            tagBox.option(optionName, false);
+
+            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+        });
     });
 });
 

@@ -51,7 +51,7 @@ const SelectBox = DropDownList.inherit({
         return extend({}, parent, {
             tab: function() {
                 if(this.option('opened') && this.option('applyValueMode') === 'instantly') {
-                    this._cleanInputSelection();
+                    this._resetCaretPosition(true);
                 }
 
                 parent.tab && parent.tab.apply(this, arguments);
@@ -222,7 +222,7 @@ const SelectBox = DropDownList.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
-        this._popup.overlayContent().attr('tabindex', -1);
+        this._popup.$overlayContent().attr('tabindex', -1);
     },
 
     _popupWrapperClass: function() {
@@ -484,6 +484,11 @@ const SelectBox = DropDownList.inherit({
 
     _isValueEqualInputText: function() {
         const initialSelectedItem = this.option('selectedItem');
+
+        if(initialSelectedItem === null) {
+            return false;
+        }
+
         const value = this._displayGetter(initialSelectedItem);
         const displayValue = value ? String(value) : '';
         const inputText = this._searchValue();
@@ -615,10 +620,6 @@ const SelectBox = DropDownList.inherit({
         }
     },
 
-    _isEditable: function() {
-        return this.option('acceptCustomValue') || this.option('searchEnabled');
-    },
-
     _fieldRenderData: function() {
         const $listFocused = this._list && this.option('opened') && $(this._list.option('focusedElement'));
 
@@ -627,10 +628,6 @@ const SelectBox = DropDownList.inherit({
         }
 
         return this.option('selectedItem');
-    },
-
-    _readOnlyPropValue: function() {
-        return !this._isEditable() || this.option('readOnly');
     },
 
     _isSelectedValue: function(value) {
@@ -775,7 +772,7 @@ const SelectBox = DropDownList.inherit({
         this._wasSearchValue = value;
     },
 
-    _searchHandler: function(e) {
+    _searchHandler: function() {
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
@@ -785,7 +782,7 @@ const SelectBox = DropDownList.inherit({
             this._wasSearch(true);
         }
 
-        this.callBase(e);
+        this.callBase(arguments);
     },
 
     _dataSourceFiltered: function(searchValue) {
@@ -836,13 +833,6 @@ const SelectBox = DropDownList.inherit({
 
         inputElement.value = displayValue;
         this._caret({ start: valueLength, end: displayValue.length });
-    },
-
-    _cleanInputSelection: function() {
-        const inputElement = this._input().get(0);
-        const endPosition = inputElement.value.length;
-        inputElement.selectionStart = endPosition;
-        inputElement.selectionEnd = endPosition;
     },
 
     _dispose: function() {

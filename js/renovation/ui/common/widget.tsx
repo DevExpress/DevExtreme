@@ -22,7 +22,6 @@ import globalConfig from '../../../core/config';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
-import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
@@ -164,27 +163,6 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (rootElementRef) {
       this.props.rootElementRef = this.widgetRef;
     }
-  }
-
-  @Effect()
-  accessKeyEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { accessKey, focusStateEnabled, disabled } = this.props;
-    const isFocusable = focusStateEnabled && !disabled;
-    const canBeFocusedByKey = isFocusable && accessKey;
-
-    if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef, (e: Event) => {
-        if (isFakeClickEvent(e)) {
-          e.stopImmediatePropagation();
-          this.focused = true;
-        }
-      }, { namespace });
-
-      return (): void => dxClick.off(this.widgetRef, { namespace });
-    }
-
-    return undefined;
   }
 
   @Effect()

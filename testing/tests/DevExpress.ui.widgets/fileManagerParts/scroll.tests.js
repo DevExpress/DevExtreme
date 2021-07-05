@@ -167,4 +167,27 @@ QUnit.module('Scroll', moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
     });
+
+    test('NavPane - must keep scroll position after refresh', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1'
+        });
+        this.clock.tick(400);
+
+        const scrollPosition = 64;
+        this.wrapper.getTreeViewScrollableContainer().scrollTop(scrollPosition);
+        this.clock.tick(400);
+
+        this.fileManager.refresh();
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getTreeViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+
+        renderer.fn.width = originalFunc;
+    });
 });

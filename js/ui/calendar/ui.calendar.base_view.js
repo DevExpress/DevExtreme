@@ -45,19 +45,6 @@ const BaseView = Widget.inherit({
         });
     },
 
-    _init: function() {
-        this.callBase();
-
-        const value = this.option('value');
-
-        // TODO: what is this for?
-        this.option('value', new Date(value));
-
-        if(!this.option('value').valueOf()) {
-            this.option('value', new Date(0, 0, 0, 0, 0, 0));
-        }
-    },
-
     _initMarkup: function() {
         this.callBase();
 

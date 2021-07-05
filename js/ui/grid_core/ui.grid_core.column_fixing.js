@@ -9,6 +9,7 @@ import { each } from '../../core/utils/iterator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
 import { move } from '../../animation/translator';
+import Scrollable from '../scroll_view/ui.scrollable';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -244,16 +245,15 @@ const baseFixedColumns = {
     },
 
     _getCellElementsCore: function(rowIndex) {
-        const that = this;
-        const cellElements = that.callBase.apply(this, arguments);
+        const cellElements = this.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
-        const index = that.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
-        if(that._fixedTableElement && cellElements) {
-            const fixedColumns = that.getFixedColumns(index);
-            const fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children('td');
+        if(this._fixedTableElement && cellElements) {
+            const fixedColumns = this.getFixedColumns(headerRowIndex);
+            const fixedCellElements = this._getRowElements(this._fixedTableElement).eq(rowIndex).children('td');
 
-            each(fixedCellElements, function(columnIndex, cell) {
+            each(fixedCellElements, (columnIndex, cell) => {
                 if(isGroupRow) {
                     if(cellElements[columnIndex] && cell.style.visibility !== 'hidden') {
                         cellElements[columnIndex] = cell;
@@ -267,7 +267,7 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
+                            const fixedColumnIndex = this._columnsController.getVisibleIndexByColumn(fixedColumn, headerRowIndex);
                             cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
                         }
                     }
@@ -607,8 +607,18 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 });
                 eventsEngine.on($content, wheelEventName, function(e) {
                     const $nearestScrollable = $(e.target).closest('.dx-scrollable');
+                    let shouldScroll = false;
 
                     if(scrollable && scrollable.$element().is($nearestScrollable)) {
+                        shouldScroll = true;
+                    } else {
+                        const nearestScrollableInstance = $nearestScrollable.length && Scrollable.getInstance($nearestScrollable.get(0));
+                        const nearestScrollableHasVerticalScrollbar = nearestScrollableInstance && (nearestScrollableInstance.scrollHeight() - nearestScrollableInstance.clientHeight() > 0);
+
+                        shouldScroll = nearestScrollableInstance && !nearestScrollableHasVerticalScrollbar;
+                    }
+
+                    if(shouldScroll) {
                         scrollTop = scrollable.scrollTop();
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 
@@ -950,8 +960,8 @@ export default {
 
                     _pointCreated: function(point, columns, location, sourceColumn) {
                         const result = this.callBase.apply(this, arguments);
+                        const targetColumn = columns[point.columnIndex];
                         const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
-
 
                         if(!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
                             const boundingRect = getBoundingRect($transparentColumn.get(0));
@@ -959,6 +969,10 @@ export default {
                             if(sourceColumn && sourceColumn.fixed) {
                                 return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
                             } else {
+                                if(targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
+                                    return true;
+                                }
+
                                 return point.x < boundingRect.left || point.x > boundingRect.right;
                             }
                         }

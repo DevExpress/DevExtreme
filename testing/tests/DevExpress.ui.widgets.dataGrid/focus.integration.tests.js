@@ -370,7 +370,43 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isRowVisible(3, 1), 'Navigation row is visible');
     });
 
-    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual', function(assert) {
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual and useNative is true (T988877)', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({ id: i + 1 });
+        }
+
+        // act
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: data,
+            focusedRowEnabled: true,
+            focusedRowKey: 11,
+            paging: {
+                pageSize: 5
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: true
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $scrollContainer = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-scrollable-container');
+        $scrollContainer.trigger('scroll');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
+    });
+
+    QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {
         // arrange
         const data = [];
 
@@ -444,7 +480,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
@@ -1422,6 +1458,49 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');
         assert.ok($filterRowEditor.find('.dx-texteditor-input').is(':focus'), 'focus');
     });
+
+    // T993300
+    QUnit.test('The focused row should not be changed after filtering', function(assert) {
+        // arrange
+        const generateData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({ id: i + 1 });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: generateData(6),
+            paging: {
+                pageSize: 2
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 6,
+            columns: ['id']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        dataGrid.searchByText(3);
+        this.clock.tick(100);
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRows.length, 1, 'count row');
+        assert.strictEqual(visibleRows[0].key, 3, 'key row');
+        assert.strictEqual(dataGrid.option('focusedRowKey'), 6, 'focused row key');
+
+        // act
+        dataGrid.searchByText('');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(dataGrid.pageIndex(), 2, 'page is changed');
+        assert.ok($(dataGrid.getRowElement(dataGrid.getRowIndexByKey(6))).hasClass('dx-row-focused'), 'focused row is visible');
+    });
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
@@ -1535,7 +1614,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 refreshMode: 'repaint'
             },
             scrolling: {
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             paging: {
                 enabled: false
@@ -2434,6 +2514,65 @@ QUnit.module('View\'s focus', {
                     assert.equal(cellValue, 'a', 'cell value is correct');
                 });
             });
+        });
+    });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                return;
+            }
+            // arrange
+            this.dataGrid.dispose();
+            const dataGrid = createDataGrid({
+                keyExpr: 'id',
+                dataSource: [
+                    { id: 1, dateValue: '2021/1/1' }
+                ],
+                keyboardNavigation: {
+                    editOnKeyPress: true
+                },
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    startEditAction: 'dblClick'
+                },
+                columns: [
+                    {
+                        dataField: 'dateValue',
+                        dataType: 'date',
+                        format: 'dd/MM/yyyy',
+                        editorOptions: {
+                            useMaskBehavior: true
+                        }
+                    }
+                ]
+            });
+            this.clock.tick();
+
+            // act
+            let $cell = $(dataGrid.getCellElement(0, 0));
+            $cell.trigger(CLICK_EVENT).trigger('dxclick');
+            this.clock.tick();
+            let keyboard = keyboardMock($cell);
+            keyboard.keyDown('2');
+            this.clock.tick(25);
+            $cell = $(dataGrid.getCellElement(0, 0));
+            const $input = $cell.find('.dx-texteditor-input');
+
+            // assert
+            assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.strictEqual($input.val(), '02/01/2021', 'the editor text is correct after the first key pressed');
+
+            // act
+            keyboard = keyboardMock($input);
+            keyboard.keyDown('5');
+            this.clock.tick();
+
+            // assert
+            assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.strictEqual($input.val(), '25/01/2021', 'the editor text is correct after the second key pressed');
         });
     });
 
@@ -3462,6 +3601,111 @@ QUnit.module('View\'s focus', {
             $inputElement.remove();
         });
     });
+
+    QUnit.testInActiveWindow('Cell - An editable invalid cell should not lose focus when other cells are clicked (T983590)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { ID: 1, Field1: 'Field11', Field2: 'Field12' },
+                { ID: 2, Field1: 'Field21', Field2: 'Field22' }
+            ],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'Field1',
+                    validationRules: [{ type: 'required' }],
+                    setCellValue: function(newData, value, currentRowData) {
+                        newData.Field1 = value;
+                    }
+                },
+                {
+                    dataField: 'Field2',
+                    allowEditing: false,
+                    validationRules: [{ type: 'required' }]
+                }
+            ],
+        });
+        this.clock.tick();
+
+        for(let i = 0; i < 2; i++) {
+            for(let j = 0; j < 2; j++) {
+                // act
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                this.clock.tick();
+
+                if(i === 0 && j === 0) {
+                    $(this.dataGrid.getCellElement(i, j)).find('.dx-texteditor-input').val('').trigger('change');
+                    this.clock.tick();
+                }
+
+                // assert
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), `the first cell is rendered as invalid when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), `the first cell is focused when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-revert-button').is(':visible'), `revert button is visible when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-datagrid-invalid-message .dx-overlay-content').is(':visible'), `validation message is visible when the {${i}, ${j}} cell is clicked`);
+            }
+        }
+    });
+
+    QUnit.testInActiveWindow('Cell - An editable invalid cell in a new row should not lose focus when other cells are clicked (T983590)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { ID: 1, Field1: 'Field11', Field2: 'Field12' }
+            ],
+            keyExpr: 'ID',
+            editing: {
+                mode: 'cell',
+                allowAdding: true
+            },
+            columns: [
+                {
+                    dataField: 'Field1',
+                    validationRules: [{ type: 'required' }],
+                    setCellValue: function(newData, value, currentRowData) {
+                        newData.Field1 = value;
+                    }
+                },
+                {
+                    dataField: 'Field2',
+                    allowEditing: false,
+                    validationRules: [{ type: 'required' }]
+                }
+            ],
+        });
+        this.clock.tick();
+
+        $(this.dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok(this.dataGrid.getVisibleRows()[0].isNewRow, 'the first new row');
+        assert.notOk($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'the first cell is rendered as valid');
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is focused');
+
+        for(let i = 0; i < 2; i++) {
+            for(let j = 0; j < 2; j++) {
+                if(i === 0 && j === 0) {
+                    continue;
+                }
+
+                // act
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), `the first cell is rendered as invalid when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-revert-button').is(':visible'), `revert button is visible when the {${i}, ${j}} cell is clicked`);
+                assert.ok($(this.dataGrid.element()).find('.dx-datagrid-invalid-message .dx-overlay-content').is(':visible'), `validation message is visible when the {${i}, ${j}} cell is clicked`);
+            }
+        }
+
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is still focused');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
@@ -3508,7 +3752,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: array,
             height: 200,
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: false
             },
             editing: {
                 mode: 'cell',
@@ -3555,7 +3800,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: array,
             height: 200,
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: false
             },
             editing: {
                 mode: 'cell',

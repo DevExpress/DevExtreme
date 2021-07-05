@@ -55,3 +55,19 @@ QUnit.module('popover content size', {
         assert.equal($switch.contents().eq(0).height(), 20, 'Set correct switch height');
     });
 });
+
+QUnit.module('popup', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('title should have margin-bottom = 0 (T979891)', function(assert) {
+        const popup = $('#popup').dxPopup({ visible: true }).dxPopup('instance');
+        const $title = popup.topToolbar();
+
+        assert.strictEqual($title.css('marginBottom'), '0px', 'margin-bottom equals 0');
+    });
+});

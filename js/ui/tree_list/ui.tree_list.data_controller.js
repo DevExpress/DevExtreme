@@ -46,7 +46,7 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
                 return false;
             }
 
-            if(item1.level !== item2.level) {
+            if(item1.level !== item2.level || item1.isExpanded !== item2.isExpanded) {
                 return false;
             }
 

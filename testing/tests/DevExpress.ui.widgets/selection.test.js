@@ -2125,6 +2125,57 @@ QUnit.test('Deselect and select item when selected all', function(assert) {
     assert.deepEqual(selection.selectionFilter(), null, 'selectionFilter value');
 });
 
+QUnit.module('Deferred mode. Complex key with three items', {
+    beforeEach: function() {
+        this.data = [
+            { id: 1, name: 'Alex', age: 15 },
+            { id: 2, name: 'Dan', age: 20 },
+            { id: 3, name: 'Vadim', age: 17 },
+            { id: 4, name: 'Dmitry', age: 18 },
+            { id: 5, name: 'Sergey', age: 18 },
+            { id: 6, name: 'Kate', age: 19 },
+            { id: 7, name: 'Dan', age: 16 }
+        ];
+
+        this.dataSource = createDataSource(this.data, { key: ['id', 'name', 'age'] }, { pageSize: 5 });
+        this.dataSource.load();
+
+        this.createDeferredSelection = function(data, options) {
+            return createDeferredSelection(data, options, this.dataSource);
+        };
+    }
+});
+
+QUnit.test('Select item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.changeItemSelection(0);
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [['id', '=', 1], 'and', ['name', '=', 'Alex'], 'and', ['age', '=', 15]], 'selectionFilter value');
+});
+
+QUnit.test('Deselect item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.selectAll();
+
+    selection.changeItemSelection(0, { control: true });
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), ['!', [['id', '=', 1], 'and', ['name', '=', 'Alex'], 'and', ['age', '=', 15]]], 'selectionFilter value');
+});
+
+// T978952
+QUnit.test('Select and deselect item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.changeItemSelection(0);
+    selection.changeItemSelection(0, { control: true });
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [], 'selectionFilter value');
+});
+
 QUnit.module('filter length restriction', {
     beforeEach: function() {
         const data = this.data = [

@@ -102,20 +102,16 @@ QUnit.test('idField & parentField changing', function(assert) {
 
 QUnit.test('plain dataSource with custom childrenField', function(assert) {
     this.create({
-        childrenField: 'children',
-        idField: 'id',
-        parentField: 'parentId',
+        childrenField: 'customItems',
         dataSource: [{
-            value: 4,
-            id: 'id_0'
-        }, {
-            value: 2,
-            id: 'id_1',
-            parentId: 'id_0'
-        }, {
-            value: 6,
-            id: 'id_2',
-            parentId: 'id_0'
+            name: 'n1',
+            customItems: [{
+                value: 2,
+                name: 'n1-1'
+            }, {
+                value: 6,
+                name: 'n1-2',
+            }]
         }]
     });
 

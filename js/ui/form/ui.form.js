@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { isEmpty } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
-import { triggerShownEvent } from '../../events/visibility_change';
+import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
@@ -61,6 +61,8 @@ import {
     FORM_VALIDATION_SUMMARY,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
+import { TOOLBAR_CLASS } from '../toolbar/constants';
+
 const WIDGET_CLASS = 'dx-widget';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
@@ -77,21 +79,13 @@ const Form = Widget.inherit({
         this._attachSyncSubscriptions();
     },
 
-    _initOptions: function(options) {
-        if(!('screenByWidth' in options)) {
-            options.screenByWidth = defaultScreenFactorFunc;
-        }
-
-        this.callBase(options);
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
 
-            screenByWidth: null,
+            screenByWidth: defaultScreenFactorFunc,
 
             /**
             * @pseudo ColCountResponsibleType
@@ -464,6 +458,8 @@ const Form = Widget.inherit({
             items: this.option('items'),
             inOneColumn
         });
+
+        triggerResizeEvent(this.$element().find(`.${TOOLBAR_CLASS}`));
     },
 
     _clean: function() {

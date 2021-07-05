@@ -285,6 +285,7 @@ class FileUploader extends Editor {
             eventsEngine.on(this._$fileInput, 'change', this._inputChangeHandler.bind(this));
             eventsEngine.on(this._$fileInput, 'click', e => {
                 e.stopPropagation();
+                this._resetInputValue();
                 return this.option('useNativeInputClick') || this._isCustomClickEvent;
             });
         }
@@ -320,36 +321,8 @@ class FileUploader extends Editor {
         return this.option('uploadMode') !== 'useForm' && this.option('extendSelection') && this.option('multiple');
     }
 
-    _removeDuplicates(files, value) {
-        const result = [];
-
-        for(let i = 0; i < value.length; i++) {
-            if(!this._isFileInArray(files, value[i])) {
-                result.push(value[i]);
-            }
-        }
-
-        return result;
-    }
-
-    _isFileInArray(files, file) {
-        for(let i = 0; i < files.length; i++) {
-            const item = files[i];
-            if(item.size === file.size && item.name === file.name) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     _changeValue(value) {
         const files = this._shouldFileListBeExtended() ? this.option('value').slice() : [];
-
-        if(this.option('uploadMode') !== 'instantly') {
-            value = this._removeDuplicates(files, value);
-        }
-
         this.option('value', files.concat(value));
     }
 
@@ -721,10 +694,7 @@ class FileUploader extends Editor {
         this._preventRecreatingFiles = false;
 
         this._toggleFileUploaderEmptyClassName();
-
-        this._doPreventInputChange = true;
-        this._$fileInput.val('');
-        this._doPreventInputChange = false;
+        this._resetInputValue(true);
     }
 
     removeFile(fileData) {
@@ -1061,7 +1031,7 @@ class FileUploader extends Editor {
                     return true;
                 }
             } else {
-                allowedType = allowedType.replace('*', '');
+                allowedType = allowedType.replace(new RegExp('\\*', 'g'), '');
 
                 if(file.type.match(new RegExp(allowedType, 'i'))) {
                     return true;
@@ -1371,6 +1341,15 @@ class FileUploader extends Editor {
         }
     }
 
+    _resetInputValue(force) {
+        if(this.option('uploadMode') === 'useForm' && !force) {
+            return;
+        }
+        this._doPreventInputChange = true;
+        this._$fileInput.val('');
+        this._doPreventInputChange = false;
+    }
+
     reset() {
         this.option('value', []);
     }
@@ -1442,7 +1421,7 @@ class FileUploadStrategyBase {
     }
 
     abortUpload(file) {
-        if(file._isError || file._isLoaded || file.isAborted) {
+        if(file._isError || file._isLoaded || file.isAborted || !file.uploadStarted) {
             return;
         }
 
@@ -1804,7 +1783,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     }
 
     _shouldHandleError(file, e) {
-        return this._isStatusError(e.status) || !file._isProgressStarted;
+        return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
     }
 
     _createFormData(fieldName, fieldValue) {

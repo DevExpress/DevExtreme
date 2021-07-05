@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -85,7 +86,7 @@ $generic-accordion-disabled-opacity: 0.5;
     content: "\f016";
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
     font-size: $generic-base-icon-size;
-    margin-left: $generic-base-icon-size / 2;
+    margin-left: math.div($generic-base-icon-size, 2);
     margin-right: 0;
     line-height: $generic-accordion-arrow-line-height;
   }
@@ -127,7 +128,7 @@ $generic-accordion-disabled-opacity: 0.5;
   .dx-accordion-item-title {
     &::before {
       margin-left: 0;
-      margin-right: $generic-base-icon-size / 2;
+      margin-right: math.div($generic-base-icon-size, 2);
     }
   }
 }

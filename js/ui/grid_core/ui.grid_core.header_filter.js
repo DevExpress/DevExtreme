@@ -278,7 +278,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                     type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
                     remoteFiltering: remoteFiltering,
                     onShowing: function(e) {
-                        const dxResizableInstance = e.component.overlayContent().dxResizable('instance');
+                        const dxResizableInstance = e.component.$overlayContent().dxResizable('instance');
 
                         dxResizableInstance && dxResizableInstance.option('onResizeEnd', function(e) {
                             const columnsController = that.getController('columns');

@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../../base/timeView/mixins" as *;
 
 // adduse
 
@@ -9,16 +10,4 @@ $timeview-clock-bg: null !default;
 $timeview-hourarrow-bg: null !default;
 $timeview-minutearrow-bg: null !default;
 
-
-@if $mode == "light" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg') !default;
-}
-
-@if $mode == "dark" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/min-arrow.svg') !default;
-}
-
+@include clock-action-icons-mixin($base-accent, $mode);

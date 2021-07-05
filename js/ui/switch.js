@@ -49,6 +49,10 @@ const Switch = Editor.inherit({
         });
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             hoverStateEnabled: true,

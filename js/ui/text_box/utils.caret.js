@@ -36,7 +36,7 @@ const setCaret = function(input, position) {
     } catch(e) { }
 };
 
-const caret = function(input, position) {
+const caret = function(input, position, force = false) {
     input = $(input).get(0);
 
     if(!isDefined(position)) {
@@ -44,7 +44,7 @@ const caret = function(input, position) {
     }
 
     // NOTE: IE and AppleWebKit-based browsers focuses element input after caret position has changed
-    if(isFocusingOnCaretChange && domAdapter.getActiveElement() !== input) {
+    if(!force && isFocusingOnCaretChange && domAdapter.getActiveElement() !== input) {
         return;
     }
 

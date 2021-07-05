@@ -247,6 +247,15 @@ const ListEdit = ListBase.inherit({
         this.callBase(...arguments);
     },
 
+    _getItemContainer: function(changeData) {
+        if(this.option('grouped')) {
+            const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
+            return this._getGroupContainerByIndex(groupIndex);
+        } else {
+            return this.callBase(changeData);
+        }
+    },
+
     _itemContextMenuHandler(e) {
         const $itemElement = $(e.currentTarget);
         if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -356,12 +365,9 @@ const ListEdit = ListBase.inherit({
     * @return object
     * @hidden
     */
-    // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
-
-
 });
 
 export default ListEdit;

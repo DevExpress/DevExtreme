@@ -325,6 +325,110 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.strictEqual($(el).css('vertical-align'), 'middle', 'middle vertical align');
         });
     });
+
+    QUnit.test('SelectAll checkbox should be shown when a certain row is selected and allowSelectAll is disabled (T997734)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: false
+            }
+        });
+
+        this.clock.tick(100);
+        const $selectAllElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible initially');
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).find('.dx-select-checkbox').trigger('dxclick');
+        this.clock.tick(100);
+
+        // assert
+        assert.deepEqual(dataGrid.option('selectedRowKeys'), [1], 'selected keys');
+        assert.notOk($selectAllElement.hasClass('dx-state-invisible'), 'select all is visible');
+    });
+
+    QUnit.test('SelectAll checkbox should be hidden on click when allowSelectAll is disabled (T997734)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            selectedRowKeys: [1],
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: false
+            }
+        });
+
+        this.clock.tick(100);
+        const $selectAllElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+
+        // assert
+        assert.notOk($selectAllElement.hasClass('dx-state-invisible'), 'select all is visible initially');
+
+        // act
+        $selectAllElement.trigger('dxclick');
+        this.clock.tick(100);
+
+        // assert
+        assert.notOk(dataGrid.option('selectedRowKeys').length, 'no selected keys');
+        assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
+    });
+
+    QUnit.test('SelectAll checkbox should be shown when a certain row is selected and allowSelectAll is disabled (deferred) (T997734)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            selection: {
+                mode: 'multiple',
+                deferred: true,
+                allowSelectAll: false
+            }
+        });
+
+        this.clock.tick(100);
+        const $selectAllElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+
+        // assert
+        assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible initially');
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).find('.dx-select-checkbox').trigger('dxclick');
+        this.clock.tick(100);
+
+        // assert
+        assert.deepEqual(dataGrid.option('selectionFilter'), ['id', '=', 1], 'selection filter');
+        assert.notOk($selectAllElement.hasClass('dx-state-invisible'), 'select all is visible');
+    });
+
+    QUnit.test('SelectAll checkbox should be hidden on click when allowSelectAll is disabled (deferred) (T997734)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            selectionFilter: ['id', '=', 1],
+            selection: {
+                mode: 'multiple',
+                deferred: true,
+                allowSelectAll: false
+            }
+        });
+
+        this.clock.tick(100);
+        const $selectAllElement = $(dataGrid.element()).find('.dx-datagrid-headers .dx-command-select .dx-select-checkbox');
+
+        // assert
+        assert.notOk($selectAllElement.hasClass('dx-state-invisible'), 'select all is visible initially');
+
+        // act
+        $selectAllElement.trigger('dxclick');
+        this.clock.tick(100);
+
+        // assert
+        assert.notOk(dataGrid.option('selectionFilter').length, 'no selection filter');
+        assert.ok($selectAllElement.hasClass('dx-state-invisible'), 'select all is invisible');
+    });
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {
@@ -779,6 +883,37 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(selectionChangedSpy.callCount, 2, 'onSelectionChanged is called twice');
         assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-selection'), 'no dx-selection on the first row');
         assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection on the second row');
+    });
+
+    // T1008562
+    QUnit.test('selection.showCheckBoxesMode changing does not clear selection', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 1 }, { field1: 2, field2: 2 }],
+            keyExpr: 'field1',
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'onClick',
+                deferred: true
+            },
+        });
+        dataGrid.selectRows([1]);
+        this.clock.tick();
+
+        // assert
+        let selectedKeysBefore;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysBefore = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysBefore, [1]);
+
+        // act
+        dataGrid.option('selection.showCheckBoxesMode', 'none');
+
+        // assert
+        let selectedKeysAfter;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysAfter = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysAfter, [1]);
     });
 });
 

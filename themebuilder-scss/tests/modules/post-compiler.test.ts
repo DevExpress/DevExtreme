@@ -54,6 +54,22 @@ describe('PostCompiler', () => {
     expect(await PostCompiler.autoPrefix('.c1 { box-shadow: none; }'))
       .toBe('.c1 { -webkit-box-shadow: none; box-shadow: none; }');
   });
+
+  test('removeExternalResources', () => {
+    const css = `@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+    @import url(https://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
+    @import url(smth-else);
+    .dx-validationsummary-item-content {
+      line-height: normal;
+    }`;
+
+    const expectedCss = `    @import url(smth-else);
+    .dx-validationsummary-item-content {
+      line-height: normal;
+    }`;
+
+    expect(PostCompiler.removeExternalResources(css)).toBe(expectedCss);
+  });
 });
 
 describe('PostCompiler - swatch features (fixSwatchCss)', () => {

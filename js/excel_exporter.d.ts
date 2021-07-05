@@ -193,6 +193,20 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @public
      */
     component?: dxPivotGrid;
+       /**
+     * @docid ExcelExportPivotGridProps.mergeRowFieldValues
+     * @type boolean
+     * @default true
+     * @public
+     */
+    mergeRowFieldValues?: boolean;
+     /**
+     * @docid ExcelExportPivotGridProps.mergeColumnFieldValues
+     * @type boolean
+     * @default true
+     * @public
+     */
+    mergeColumnFieldValues?: boolean;
     /**
      * @docid ExcelExportPivotGridProps.customizeCell
      * @type function(options)

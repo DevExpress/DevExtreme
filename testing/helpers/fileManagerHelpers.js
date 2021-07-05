@@ -46,7 +46,6 @@ export const Consts = {
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
     ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
-    INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
     TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
     TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
@@ -56,6 +55,8 @@ export const Consts = {
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NAME_EDITOR_DIALOG_CLASS: 'dx-filemanager-dialog-name-editor-popup',
+    DELETE_ITEM_DIALOG_CLASS: 'dx-filemanager-dialog-delete-item-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
@@ -120,7 +121,7 @@ export class FileManagerWrapper {
 
     getFolderNodes(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
     }
@@ -136,7 +137,7 @@ export class FileManagerWrapper {
 
     getFolderToggles(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
     }
@@ -145,9 +146,9 @@ export class FileManagerWrapper {
         return this.getFolderToggles(inDialog).eq(index);
     }
 
-    isFolderNodeToggleOpened(text) {
+    isFolderNodeToggleOpened(text, inDialog) {
         let result = null;
-        const targetNode = this.getFolderNodes().filter(function() { return $(this).text() === text; }).eq(0).parent();
+        const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
         if(targetNode.length) {
             const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
             if(itemToggle.length) {
@@ -155,6 +156,10 @@ export class FileManagerWrapper {
             }
         }
         return result;
+    }
+
+    getTreeViewScrollableContainer() {
+        return this.getDirsTree().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
     }
 
     getFocusedItemText() {
@@ -473,11 +478,19 @@ export class FileManagerWrapper {
     }
 
     getFolderChooserDialog() {
-        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getNameEditorDialog() {
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getDeleteItemDialog() {
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDialogTextInput() {
-        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        return this.getNameEditorDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
     }
 
     getDialogButton(text) {
@@ -879,7 +892,9 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
 };
 
 export const stubFileReader = object => {
-    sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
+        sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    }
 };
 
 export const isDesktopDevice = () => {

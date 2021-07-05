@@ -1011,6 +1011,22 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
     });
+    test('abortUpload callback should not rise for not uploading files', function(assert) {
+        const abortUploadSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            chunkSize: 20000,
+            abortUpload: abortUploadSpy
+        });
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(200);
+
+        $fileUploader.dxFileUploader('instance').reset();
+        this.clock.tick(200);
+
+        assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
+    });
 });
 
 QUnit.module('validation rendering', moduleConfig, function() {
@@ -2235,6 +2251,26 @@ QUnit.module('file uploading', moduleConfig, () => {
 
         assert.strictEqual(onUploadedSpy.callCount, 1, 'onUploaded event raised');
         assert.ok($fileUploader.empty(), 'widget container empty');
+    });
+
+    test('whole file instantly upload can be cancelled with abortUpload (T990523)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            onUploadStarted: function({ component, file }) {
+                if(component.option('value').length > 2) {
+                    component.abortUpload(file);
+                }
+            }
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        $($fileUploader.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)).each(function(i, message) {
+            assert.equal($(message).text(), instance.option('uploadAbortedMessage'), 'has uploadAbortedMessage');
+        });
     });
 });
 
@@ -3539,6 +3575,36 @@ QUnit.module('files selection', moduleConfig, () => {
         simulateFileChoose($fileUploader, fakeFile1);
 
         assert.equal($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 1, 'only one file is in list');
+    });
+
+    QUnit.test('the file list should not remove duplicates (T969288)', function(assert) {
+        const uploadedSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            chunkSize: 200000,
+            uploadChunk: () => executeAfterDelay(null, this.xhrMock.LOAD_TIMEOUT),
+            onUploaded: uploadedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'two files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
+
+        uploadedSpy.reset();
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 4, 'four files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded again');
     });
 });
 

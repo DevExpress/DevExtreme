@@ -61,20 +61,53 @@ const timeZoneDataUtils = {
 
     getTimeZoneOffsetById: function(id, timestamp) {
         const tz = this.getTimezoneById(id);
-        let offsets;
-        let offsetIndices;
-        let untils;
-        let result;
 
         if(tz) {
-            offsets = tz.offsets;
-            untils = tz.untils;
-            offsetIndices = tz.offsetIndices;
-
-            result = this.getUtcOffset(offsets, offsetIndices, untils, timestamp);
+            return this.getUtcOffset(tz.offsets, tz.offsetIndices, tz.untils, timestamp);
         }
 
-        return result;
+        return undefined;
+    },
+
+    getTimeZoneDeclarationTuple: function(id, year) {
+        const tz = this.getTimezoneById(id);
+
+        if(tz) {
+            return this.getTimeZoneDeclarationTupleCore(tz.offsets, tz.offsetIndices, tz.untils, year);
+        }
+
+        return [];
+    },
+
+    getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untils, year) {
+        const tupleResult = [];
+
+        const offsetIndicesList = offsetIndices.split('');
+        const offsetsList = offsets.split('|').map(value => parseInt(value));
+
+        const untilsList = untils.split('|').map(until => {
+            if(until === 'Infinity') {
+                return null;
+            }
+            return parseInt(until, 36) * 1000;
+        });
+
+        let currentDate = 0;
+
+        for(let i = 0, listLength = untilsList.length; i < listLength; i++) {
+            currentDate += untilsList[i];
+
+            if(new Date(currentDate).getFullYear() === year) {
+                const offset = offsetsList[Number(offsetIndicesList[i + 1])];
+                tupleResult.push({ date: currentDate, offset: -offset / 60 });
+            }
+
+            if(new Date(currentDate).getFullYear() > year) {
+                break;
+            }
+        }
+
+        return tupleResult;
     },
 
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
@@ -82,7 +115,7 @@ const timeZoneDataUtils = {
         const offsetIndicesList = offsetIndices.split('');
         const offsetsList = offsets.split('|');
 
-        const untilsList = untils.split('|').map(function(until) {
+        const untilsList = untils.split('|').map(until => {
             if(until === 'Infinity') {
                 return null;
             }

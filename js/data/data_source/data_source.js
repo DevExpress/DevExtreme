@@ -68,10 +68,14 @@ export const DataSource = Class.inherit({
                 : options.pushAggregationTimeout;
 
             let pushDeferred;
+            let lastPushWaiters;
 
             const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
                 pushDeferred.resolve();
-                pushDeferred.done(() => this._onPush(changes));
+                const storePushPending = when(...lastPushWaiters);
+                storePushPending.done(() => this._onPush(changes));
+
+                lastPushWaiters = undefined;
                 pushDeferred = undefined;
             }, throttlingTimeout);
 
@@ -82,6 +86,7 @@ export const DataSource = Class.inherit({
                     pushDeferred = new Deferred();
                 }
 
+                lastPushWaiters = args.waitFor;
                 args.waitFor.push(pushDeferred.promise());
             };
             this._store.on('beforePush', this._onPushHandler);

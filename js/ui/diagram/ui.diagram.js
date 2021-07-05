@@ -3,7 +3,7 @@ import Widget from '../widget/ui.widget';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { compileSetter, compileGetter } from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -132,7 +132,8 @@ class Diagram extends Widget {
             .appendTo($contentWrapper);
 
         delete this._contextMenu;
-        if(this.option('contextMenu.enabled')) {
+        this._diagramInstance.settings.contextMenuEnabled = this.option('contextMenu.enabled');
+        if(this._diagramInstance.settings.contextMenuEnabled) {
             this._renderContextMenu($contentWrapper);
         }
 
@@ -708,20 +709,13 @@ class Diagram extends Widget {
             this._updateSnapToGridState();
         }
         if(this.option('gridSize')) {
-            if(this.option('gridSize.items')) {
-                this._updateGridSizeItemsState();
-            }
             this._updateGridSizeState();
-        }
-        if(this.option('zoomLevel.items')) {
-            this._updateZoomLevelItemsState();
-        }
-
-        if(this.option('simpleView')) {
-            this._updateSimpleViewState();
         }
         if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
+        }
+        if(this.option('simpleView')) {
+            this._updateSimpleViewState();
         }
         if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
             this._updateAutoZoomState();
@@ -814,7 +808,17 @@ class Diagram extends Widget {
         this._bindDiagramData();
     }
     _getChangesKeys(changes) {
-        return changes.map(change => change.internalKey || change.key).filter(key => !!key);
+        return changes.map(
+            (change) => {
+                if(isDefined(change.internalKey)) {
+                    return change.internalKey;
+                } else if(isDefined(change.key)) {
+                    return change.key;
+                } else {
+                    return null;
+                }
+            }
+        ).filter(key => isDefined(key));
     }
 
     _createOptionGetter(optionName) {
@@ -1094,6 +1098,10 @@ class Diagram extends Widget {
     _getToolboxGroups() {
         return DiagramToolboxManager.getGroups(this.option('toolbox.groups'));
     }
+    _updateAllCustomShapes() {
+        this._diagramInstance.removeAllCustomShapes();
+        this._updateCustomShapes(this._getCustomShapes());
+    }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
             this._diagramInstance.removeCustomShapes(prevCustomShapes.map(s => s.type));
@@ -1250,8 +1258,9 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
         this.toggleFullscreenLock--;
     }
-    _onShowContextMenu(x, y, selection) {
+    _onShowContextMenu(x, y, isTouchMode, selection) {
         if(this._contextMenu) {
+            this._contextMenu._isTouchMode = isTouchMode;
             this._contextMenu._show(x, y, selection);
         }
     }
@@ -1290,18 +1299,22 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
     }
     _updateZoomLevelState() {
-        let zoomLevel = this.option('zoomLevel.value');
-        if(!zoomLevel) {
-            zoomLevel = this.option('zoomLevel');
+        if(this.option('zoomLevel.items')) {
+            this._updateZoomLevelItemsState();
+            const zoomLevel = this.option('zoomLevel.value');
+            if(!zoomLevel) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
+        } else {
+            const zoomLevel = this.option('zoomLevel.value') || this.option('zoomLevel');
+            if(!zoomLevel) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
         }
-
-        const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
     }
     _updateZoomLevelItemsState() {
         const zoomLevelItems = this.option('zoomLevel.items');
         if(!Array.isArray(zoomLevelItems)) return;
-
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ZoomLevelItems, zoomLevelItems);
     }
@@ -1327,18 +1340,22 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option('snapToGrid'));
     }
     _updateGridSizeState() {
-        let gridSize = this.option('gridSize.value');
-        if(!gridSize) {
-            gridSize = this.option('gridSize');
+        if(this.option('gridSize.items')) {
+            this._updateGridSizeItemsState();
+            const gridSize = this.option('gridSize.value');
+            if(!gridSize) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
+        } else {
+            const gridSize = this.option('gridSize.value') || this.option('gridSize');
+            if(!gridSize) return;
+            const { DiagramCommand } = getDiagram();
+            this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
         }
-
-        const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
     }
     _updateGridSizeItemsState() {
         const gridSizeItems = this.option('gridSize.items');
         if(!Array.isArray(gridSizeItems)) return;
-
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
@@ -2651,13 +2668,6 @@ class Diagram extends Widget {
             });
         }
     }
-    _invalidatePropertiesPanelTabs() {
-        if(this._propertiesPanel) {
-            this._propertiesPanel.option({
-                propertyTabs: this.option('propertiesPanel.tabs')
-            });
-        }
-    }
     _invalidateMainToolbarCommands() {
         if(this._mainToolbar) {
             this._mainToolbar.option({
@@ -2705,10 +2715,7 @@ class Diagram extends Widget {
                 this._invalidate();
                 break;
             case 'zoomLevel':
-                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.items') {
-                    this._updateZoomLevelItemsState();
-                }
-                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.value') {
+                if(args.fullName === 'zoomLevel' || args.fullName === 'zoomLevel.items' || args.fullName === 'zoomLevel.value') {
                     this._updateZoomLevelState();
                 }
                 break;
@@ -2728,10 +2735,7 @@ class Diagram extends Widget {
                 this._updateSnapToGridState();
                 break;
             case 'gridSize':
-                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.items') {
-                    this._updateGridSizeItemsState();
-                }
-                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.value') {
+                if(args.fullName === 'gridSize' || args.fullName === 'gridSize.items' || args.fullName === 'gridSize.value') {
                     this._updateGridSizeState();
                 }
                 break;
@@ -2756,7 +2760,7 @@ class Diagram extends Widget {
                 this._updatePageColorState();
                 break;
             case 'nodes':
-                if(args.fullName === 'nodes.autoLayout') {
+                if(args.fullName.indexOf('nodes.autoLayout') === 0) {
                     this._refreshDataSources();
                 } else {
                     this._refreshNodesDataSource();
@@ -2766,7 +2770,11 @@ class Diagram extends Widget {
                 this._refreshEdgesDataSource();
                 break;
             case 'customShapes':
-                this._updateCustomShapes(args.value, args.previousValue);
+                if(args.fullName !== args.name) { // customShapes[i].<property>
+                    this._updateAllCustomShapes();
+                } else {
+                    this._updateCustomShapes(args.value, args.previousValue);
+                }
                 this._invalidate();
                 break;
             case 'contextMenu':
@@ -2780,11 +2788,7 @@ class Diagram extends Widget {
                 this._invalidate();
                 break;
             case 'propertiesPanel':
-                if(args.name === 'propertiesPanel.tabs') {
-                    this._invalidatePropertiesPanelTabs();
-                } else {
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'toolbox':
                 if(args.fullName === 'toolbox.groups') {

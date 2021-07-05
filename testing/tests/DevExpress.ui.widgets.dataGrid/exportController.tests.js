@@ -2578,10 +2578,8 @@ QUnit.module('Export menu', {
         this.headerPanel._$element = $container;
 
         this.headerPanel.option('export.enabled', false);
-        this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: false });
 
         this.headerPanel.option('export.enabled', true);
-        this.headerPanel.optionChanged({ name: 'export', fullName: 'export.enabled', value: true });
 
 
         assert.ok(this.headerPanel.isVisible(), 'is visible');

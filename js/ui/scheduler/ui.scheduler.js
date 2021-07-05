@@ -1295,29 +1295,38 @@ class Scheduler extends Widget {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => compileGetter(`appointmentData.${property}`);
 
+        const getDate = getter => {
+            return (data) => {
+                const value = getter(data);
+                if(value instanceof Date) {
+                    return value.valueOf();
+                }
+                return value;
+            };
+        };
+
         this._templateManager.addDefaultTemplates({
-            ['item']: new BindableTemplate(($container, data, model) => {
-                this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
-            }, [
-                'html',
-                'text',
-                'startDate',
-                'endDate',
-                'allDay',
-                'description',
-                'recurrenceRule',
-                'recurrenceException',
-                'startDateTimeZone',
-                'endDateTimeZone'
-            ], this.option('integrationOptions.watchMethod'), {
-                'text': createGetter(expr.textExpr),
-                'startDate': createGetter(expr.startDateExpr),
-                'endDate': createGetter(expr.endDateExpr),
-                'startDateTimeZone': createGetter(expr.startDateTimeZoneExpr),
-                'endDateTimeZone': createGetter(expr.endDateTimeZoneExpr),
-                'allDay': createGetter(expr.allDayExpr),
-                'recurrenceRule': createGetter(expr.recurrenceRuleExpr)
-            })
+            ['item']: new BindableTemplate(($container, data, model) => this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model)
+                , [
+                    'html',
+                    'text',
+                    'startDate',
+                    'endDate',
+                    'allDay',
+                    'description',
+                    'recurrenceRule',
+                    'recurrenceException',
+                    'startDateTimeZone',
+                    'endDateTimeZone'
+                ], this.option('integrationOptions.watchMethod'), {
+                    'text': createGetter(expr.textExpr),
+                    'startDate': getDate(createGetter(expr.startDateExpr)),
+                    'endDate': getDate(createGetter(expr.endDateExpr)),
+                    'startDateTimeZone': createGetter(expr.startDateTimeZoneExpr),
+                    'endDateTimeZone': createGetter(expr.endDateTimeZoneExpr),
+                    'allDay': createGetter(expr.allDayExpr),
+                    'recurrenceRule': createGetter(expr.recurrenceRuleExpr)
+                })
         });
     }
 
@@ -1698,7 +1707,7 @@ class Scheduler extends Widget {
         const currentView = this.option('currentView');
         const that = this;
 
-        this._currentView = currentView;
+        this._currentView = null;
 
         each(views, function(_, view) {
             const isViewIsObject = isObject(view);
@@ -1710,6 +1719,15 @@ class Scheduler extends Widget {
                 return false;
             }
         });
+
+        if(!this._currentView) {
+            const isCurrentViewValid = !!VIEWS_CONFIG[currentView];
+            if(isCurrentViewValid) {
+                this._currentView = currentView;
+            } else {
+                this._currentView = views[0];
+            }
+        }
     }
 
     _validateCellDuration() {

@@ -98,6 +98,7 @@ const environment = {
             discreteAxisDivisionMode: 'crossLabels'
         };
 
+        this.templateRender = sinon.spy();
         this.incidentOccurred = sinon.spy();
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
@@ -110,7 +111,11 @@ const environment = {
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
             eventTrigger: () => { },
-            getTemplate() {}
+            getTemplate: sinon.spy(() => {
+                return {
+                    render: this.templateRender
+                };
+            })
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -5014,6 +5019,7 @@ QUnit.module('Custom positioning', {
             indentFromAxis: 5
         };
         this.currentBBox = 0;
+        this.options.crosshairMargin = 0;
 
         that.bBoxes = [];
         for(let i = 0; i < 100; i++) {
@@ -5061,8 +5067,8 @@ QUnit.test('Set predefined axis position by \'position\' option', function(asser
     assert.equal(verticalAxis.getAxisPosition(), 910);
     assert.notOk(horizontalAxis.customPositionIsAvailable());
     assert.notOk(verticalAxis.customPositionIsAvailable());
-    assert.notOk(horizontalAxis.hasCustomPosition());
-    assert.notOk(verticalAxis.hasCustomPosition());
+    assert.notOk(horizontalAxis.hasNonBoundaryPosition());
+    assert.notOk(verticalAxis.hasNonBoundaryPosition());
     assert.equal(horizontalAxis.getResolvedPositionOption(), 'top');
     assert.equal(verticalAxis.getResolvedPositionOption(), 'right');
 
@@ -5081,8 +5087,8 @@ QUnit.test('Set custom position', function(assert) {
     assert.equal(verticalAxis.getAxisPosition(), 688);
     assert.ok(horizontalAxis.customPositionIsAvailable());
     assert.ok(verticalAxis.customPositionIsAvailable());
-    assert.ok(horizontalAxis.hasCustomPosition());
-    assert.ok(verticalAxis.hasCustomPosition());
+    assert.ok(horizontalAxis.hasNonBoundaryPosition());
+    assert.ok(verticalAxis.hasNonBoundaryPosition());
     assert.equal(horizontalAxis.getResolvedPositionOption(), 50);
     assert.equal(verticalAxis.getResolvedPositionOption(), 75);
     assert.notOk(horizontalAxis.customPositionIsBoundary());
@@ -5155,10 +5161,65 @@ QUnit.test('Validate \'customPosition\' option', function(assert) {
 
     assert.equal(horizontalAxis.getAxisPosition(), 600);
     assert.ok(horizontalAxis.customPositionIsAvailable());
-    assert.notOk(horizontalAxis.hasCustomPosition());
+    assert.notOk(horizontalAxis.hasNonBoundaryPosition());
     assert.ok(horizontalAxis.customPositionIsBoundary());
     assert.equal(horizontalAxis.getResolvedBoundaryPosition(), 'bottom');
     assert.ok(horizontalAxis.customPositionEqualsToPredefined());
+});
+
+QUnit.test('Check boundary side margin is equal 0 when the \'customPosition\' option exists and position of axis is not a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            customPosition: 200
+        });
+    verticalAxis._customBoundaryPosition = 200;
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 0);
+});
+
+QUnit.test('Check boundary side margin is not equal 0 when the \'customPosition\' option exists and position of axis is a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            customPosition: 200
+        });
+    verticalAxis._customBoundaryPosition = 'left';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 19);
+});
+
+QUnit.test('Check boundary side margin is cut when the \'offset\' option exists and position of axis is a boundary (position left, offset > 0)', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: 10
+        });
+    verticalAxis._customBoundaryPosition = 'left';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 9);
+});
+
+QUnit.test('Check boundary side margin is cut when the \'offset\' option exists and position of axis is a boundary (position right, offset < 0)', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: -10
+        });
+    verticalAxis._customBoundaryPosition = 'right';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.right, 10);
+});
+
+QUnit.test('Check boundary side margin is not cut when the \'offset\' option exists and position of axis is not a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: 10
+        });
+    verticalAxis._customBoundaryPosition = 100;
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 19);
 });
 
 QUnit.test('Resolve label overlapping by axis (in the middle, labels position by default)', function(assert) {
@@ -5321,4 +5382,18 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
     assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
+});
+
+QUnit.module('Axis templates with overlapping behavior', overlappingEnvironment);
+
+QUnit.test('Axis template was removed before rendered', function(assert) {
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', template() {} } });
+
+    // act
+    const count = this.templateRender.callCount;
+    for(let i = 0; i < count; i++) {
+        this.templateRender.getCall(i).args[0].onRendered();
+    }
+
+    assert.ok(true); // no errors
 });

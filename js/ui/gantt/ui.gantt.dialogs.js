@@ -1,6 +1,7 @@
 import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
+import '../radio_group';
 import messageLocalization from '../../localization/message';
 
 export class GanttDialog {

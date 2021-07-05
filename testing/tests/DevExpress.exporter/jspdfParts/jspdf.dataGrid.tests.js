@@ -7,6 +7,7 @@ import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
+import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/objectAssignHelper.js';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -21,6 +22,9 @@ QUnit.testStart(() => {
 let helper;
 
 const moduleConfig = {
+    before: function() {
+        initializeDxObjectAssign();
+    },
     beforeEach: function() {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
@@ -28,11 +32,14 @@ const moduleConfig = {
         this.customizeCellCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
+    },
+    after: function() {
+        clearDxObjectAssign();
     }
 };
 
 const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
+    const { keepColumnWidths = true, selectedRowsOnly = false, loadPanel = { enabled: false }, autoTableOptions = {}, customizeCell = () => {} } = options || {};
 
     let flatArrayExpectedCells;
     if(isDefined(expectedCustomizeCellArgs)) {
@@ -47,6 +54,7 @@ const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
     result.keepColumnWidths = keepColumnWidths;
     result.selectedRowsOnly = selectedRowsOnly;
     result.autoTableOptions = autoTableOptions;
+    result.loadPanel = loadPanel;
     result.customizeCell = (eventArgs) => {
         customizeCell(eventArgs);
         if(isDefined(flatArrayExpectedCells)) {
@@ -4489,6 +4497,23 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: true },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: false },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: 'auto' },
+        loadingTimeout: null
+    }, 'jsPDFDocument');
 
 

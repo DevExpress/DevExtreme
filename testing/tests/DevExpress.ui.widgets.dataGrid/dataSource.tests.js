@@ -3470,6 +3470,44 @@ QUnit.module('Remote group paging', {
         assert.strictEqual(loadingChanged.getCall(3).args[0].take, 2, 'take for second level');
     });
 
+    // T990766
+    QUnit.test('Reload dataSource when two expanded group and two group levels exist', function(assert) {
+        const dataSource = this.createDataSource({
+            group: ['field1', 'field2'],
+            pageSize: 3
+        });
+        const loadingChanged = sinon.stub();
+
+        dataSource.load();
+
+        dataSource.changeRowExpand([2]);
+        dataSource.load();
+        dataSource.changeRowExpand([2, 4]);
+        dataSource.load();
+
+        dataSource.store().on('loading', loadingChanged);
+
+        // act
+        dataSource.reload(true);
+
+        assert.deepEqual(dataSource.items(), [
+            {
+                key: 1,
+                items: null
+            },
+            {
+                key: 2,
+                items: [{
+                    isContinuationOnNextPage: true,
+                    key: 4,
+                    items: []
+                }]
+            }], 'items');
+
+        assert.equal(dataSource.totalItemsCount(), 9, 'total items count');
+        assert.strictEqual(loadingChanged.callCount, 6, 'loading count');
+    });
+
     QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
         const brokeOptions = {};
         const dataSource = this.createDataSource({

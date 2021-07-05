@@ -605,6 +605,27 @@ QUnit.module('add visible option', {
 });
 
 
+QUnit.test('check label rendering before/after toggling visibility (T985992)', function(assert) {
+    this.firstSDA = $('#fab-one').dxSpeedDialAction({
+        icon: 'add',
+        index: 1,
+        visible: false,
+    }).dxSpeedDialAction('instance');
+
+    this.firstSDA.option('label', 'Add row');
+    this.firstSDA.option('visible', true);
+
+    assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), 'Add row', 'FAB has label');
+
+    this.firstSDA.option('visible', false);
+    this.firstSDA.option('visible', true);
+    this.firstSDA.option('label', 'Add row');
+
+    assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), 'Add row', 'FAB has label');
+
+});
+
+
 QUnit.test('check onClick handler after toggling visibility (T933671)', function(assert) {
     const firstClickStub = sinon.stub();
     const secondClickStub = sinon.stub();

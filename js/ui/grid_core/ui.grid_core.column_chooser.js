@@ -130,7 +130,7 @@ const ColumnChooserView = ColumnsView.inherit({
                 }
             }
         } else if(!isSelectMode || !columnChooserList || change === 'full') {
-            this._popupContainer._wrapper()
+            this._popupContainer.$wrapper()
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
 
@@ -370,7 +370,7 @@ const ColumnChooserView = ColumnsView.inherit({
 
     getBoundingRect: function() {
         const that = this;
-        const container = that._popupContainer && that._popupContainer._container();
+        const container = that._popupContainer && that._popupContainer.$overlayContent();
 
         if(container && container.is(':visible')) {
             const offset = container.offset();

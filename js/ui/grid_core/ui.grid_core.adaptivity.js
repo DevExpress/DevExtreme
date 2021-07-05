@@ -143,7 +143,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
         return function(options, container) {
             const $container = $(container);
-            const columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex);
+            const columnIndex = that._columnsController.getVisibleIndex(column.index);
             const templateOptions = extend({}, cellOptions);
 
             const renderFormTemplate = function() {

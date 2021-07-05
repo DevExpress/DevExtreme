@@ -104,11 +104,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1026: 'The "calculateCustomSummary" function is missing from a field whose "summaryType" option is set to "custom"',
 
     /**
-    * @name ErrorsUIWidgets.E1030
-    */
-    E1030: 'Unknown ScrollView refresh strategy: \'{0}\'',
-
-    /**
     * @name ErrorsUIWidgets.E1031
     */
     E1031: 'Unknown subscription in the Scheduler widget: \'{0}\'',

@@ -4,7 +4,7 @@ import Button from './button';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import { isDefined } from '../core/utils/type';
+import { isDefined, isFunction } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 
 // STYLE buttonGroup
@@ -32,9 +32,10 @@ const ButtonCollection = CollectionWidget.inherit({
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
+                const template = this.option('buttonTemplate');
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                    _templateData: model,
-                    template: model.template || this.option('buttonTemplate')
+                    _templateData: this._hasCustomTemplate(template) ? model : {},
+                    template: model.template || template
                 }));
             }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'))
         });
@@ -54,6 +55,10 @@ const ButtonCollection = CollectionWidget.inherit({
         return extend(this.callBase(), {
             itemTemplateProperty: null
         });
+    },
+
+    _hasCustomTemplate(template) {
+        return isFunction(template) || this.option('integrationOptions.templates')[template];
     },
 
     _prepareItemStyles($item) {

@@ -64,6 +64,10 @@ const CheckBox = Editor.inherit({
         return true;
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _feedbackHideTimeout: CHECKBOX_FEEDBACK_HIDE_TIMEOUT,
 
     _initMarkup: function() {

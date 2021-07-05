@@ -362,33 +362,6 @@ QUnit.module('render', {}, () => {
         assert.equal($widget.attr('accesskey'), 'g', 'widget option has been changed successfully');
     });
 
-    QUnit.testInActiveWindow('widget focusing when accessKey pressed', function(assert) {
-        const $widget = $('#widget').dxWidget({
-            focusStateEnabled: true,
-            accessKey: 'y'
-        });
-
-        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
-        assert.ok($widget.hasClass('dx-state-focused'), 'widget has been focused');
-    });
-
-    QUnit.test('press on accessKey does not fire click event', function(assert) {
-        const $widget = $('#widget').dxWidget({
-            focusStateEnabled: true,
-            accessKey: 'y'
-        });
-
-        let isImmediatePropagationStopped = true;
-
-        $widget.on('dxclick', e => {
-            isImmediatePropagationStopped = false;
-        });
-
-        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
-
-        assert.ok(isImmediatePropagationStopped, 'click event\'s immediate propagation stopped on accessKey');
-    });
-
     QUnit.test('dxWidget on a custom node is a block DOM node', function(assert) {
         const $element = $('<custom-node/>').appendTo('#qunit-fixture');
         new DxWidget($element);

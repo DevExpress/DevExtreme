@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -18,18 +19,17 @@
 .dx-timeview-clock {
   min-height: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
   min-width: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
-  background: $timeview-clock-bg no-repeat 50% 50%;
   background-size: $material-timeview-clock-image-min-size;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 
 .dx-timeview-hourarrow {
-  background-image: $timeview-hourarrow-bg;
   background-size: 5px 57px - $material-timeview-arrow-height-reduce;
 }
 
 .dx-timeview-minutearrow {
-  background-image: $timeview-minutearrow-bg;
-  background-size: 5px 79px - $material-timeview-arrow-height-reduce / 2;
+  background-size: 5px 79px - math.div($material-timeview-arrow-height-reduce, 2);
 }
 
 .dx-timeview-format12 {

@@ -2146,7 +2146,7 @@ QUnit.module('adaptivity: render', {
             const maxHeight = overlay.option('maxHeight');
 
             assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
-            assert.ok(overlay._wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');
+            assert.ok(overlay.$wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');
         } finally {
             scrollTop.restore();
             windowHeight.restore();

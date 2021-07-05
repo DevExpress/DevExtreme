@@ -69,7 +69,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         const select = (e) => {
             e.preventDefault();
-            this._changeCheckBoxState($(this.option('focusedElement')));
+
+            const $focusedElement = $(this.option('focusedElement'));
+            const checkboxInstance = this._getCheckBoxInstance($focusedElement);
+            if(!checkboxInstance.option('disabled')) {
+                const currentState = checkboxInstance.option('value');
+                this._updateItemSelection(!currentState, $focusedElement.find('.' + ITEM_CLASS).get(0), true);
+            }
         };
 
         const toggleExpandedNestedItems = function(state, e) {
@@ -95,14 +101,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             asterisk: toggleExpandedNestedItems.bind(this, true),
             minus: toggleExpandedNestedItems.bind(this, false)
         });
-    },
-
-    _changeCheckBoxState: function($element) {
-        const checkboxInstance = this._getCheckBoxInstance($element);
-        const currentState = checkboxInstance.option('value');
-        if(!checkboxInstance.option('disabled')) {
-            this._updateItemSelection(!currentState, $element.find('.' + ITEM_CLASS).get(0), true, $element);
-        }
     },
 
     _toggleExpandedNestedItems: function(items, state) {
@@ -229,7 +227,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
         switch(value) {
             case 'selectAll':
-                !selectAllExists && this._renderSelectAllItem();
+                if(!selectAllExists) {
+                    this._createSelectAllValueChangedAction();
+                    this._renderSelectAllItem();
+                }
                 break;
             case 'normal':
                 if(selectAllExists) {
@@ -1035,15 +1036,17 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             text: this.option('selectAllText'),
-            onValueChanged: function(args) {
-                this._toggleSelectAll(args);
-                this._fireSelectAllValueChanged(args.value);
-            }.bind(this)
+            onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
+    },
+
+    _onSelectAllCheckboxValueChanged: function(args) {
+        this._toggleSelectAll(args);
+        this._fireSelectAllValueChanged(args.value);
     },
 
     _toggleSelectAll: function(args) {
@@ -1150,7 +1153,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
-        if(!node) {
+        if(!node || node.visible === false) {
             return false;
         }
 
@@ -1161,23 +1164,35 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!value && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
                 const $node = this._getNodeElement(node);
-                const checkbox = this._getCheckBoxInstance($node);
-
-                checkbox && checkbox.option('value', true);
+                this._getCheckBoxInstance($node).option('value', true);
             }
             return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodeKeys();
-        if(this._isSingleSelection() && value) {
-            each(selectedNodesKeys, (index, nodeKey) => {
-                this.unselectItem(nodeKey);
+        if(value && this._isSingleSelection()) {
+            const selectedKeys = this.getSelectedNodeKeys();
+            each(selectedKeys, (index, key) => {
+                this._dataAdapter.toggleSelection(key, false);
+                this._updateItemsUI();
+
+                this._fireItemSelectionChanged(this._getNode(key));
             });
         }
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
+        const isAllSelected = this._dataAdapter.isAllSelected();
+        const needFireSelectAllChanged = this._selectAllEnabled() && this._$selectAllItem.dxCheckBox('instance').option('value') !== isAllSelected;
         this._updateItemsUI();
 
+        this._fireItemSelectionChanged(node, dxEvent);
+        this._fireSelectionChanged();
+        if(needFireSelectAllChanged) {
+            this._fireSelectAllValueChanged(isAllSelected);
+        }
+        return true;
+    },
+
+    _fireItemSelectionChanged: function(node, dxEvent) {
         const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item);
         const handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
 
@@ -1185,9 +1200,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             node: this._dataAdapter.getPublicNode(node),
             itemData: node.internalFields.item
         });
-
-        this._fireSelectionChanged();
-        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1209,13 +1221,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this.setAria('selected', nodeSelection, $node);
 
             if(this._showCheckboxes()) {
-                const checkbox = this._getCheckBoxInstance($node);
-                checkbox.option('value', nodeSelection);
+                this._getCheckBoxInstance($node).option('value', nodeSelection);
             }
         });
 
         if(this._selectAllEnabled()) {
-            this._$selectAllItem.dxCheckBox('instance').option('value', this._dataAdapter.isAllSelected());
+            const selectAllCheckbox = this._$selectAllItem.dxCheckBox('instance');
+
+            selectAllCheckbox.option('onValueChanged', undefined);
+            selectAllCheckbox.option('value', this._dataAdapter.isAllSelected());
+            selectAllCheckbox.option('onValueChanged', this._onSelectAllCheckboxValueChanged.bind(this));
         }
     },
 

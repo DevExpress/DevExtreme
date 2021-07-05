@@ -9,13 +9,11 @@ import {
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils/index';
 import config from '../../../../core/config';
 import { ConfigProvider } from '../config_provider';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
-  isFakeClickEvent: jest.fn(),
 }));
 jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
 
@@ -96,78 +94,6 @@ describe('Widget', () => {
     });
 
     describe('Effects', () => {
-      describe('accessKeyEffect', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
-
-        beforeEach(() => {
-          (isFakeClickEvent as any).mockImplementation(() => true);
-        });
-
-        it('should subscribe to click event', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(true);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(1);
-        });
-
-        it('should not change state if click event is not fake', () => {
-          (isFakeClickEvent as any).mockImplementation(() => false);
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should return unsubscribe callback', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
-
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach();
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
-        });
-
-        it('should not subscribe if widget is disabled', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: true });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget is not focusable', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: false, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget does not have accessKey', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-      });
-
       describe('activeEffect', () => {
         const onActive = jest.fn();
         const onInactive = jest.fn();

@@ -301,6 +301,14 @@ export default {
 
         return this.callBase.apply(this, arguments);
     },
+    getTimeSeparator: function() {
+        const formatOptions = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        };
+        return normalizeNumerals(formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions)).replace(/\d/g, '');
+    },
 
     getFormatParts: function(format) {
         if(typeof format === 'string') {

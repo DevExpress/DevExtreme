@@ -75,7 +75,7 @@ const ODataContext = Class.inherit({
 
         return {
             __metadata: {
-                uri: store._byKeyUrl(key, true)
+                uri: store._byKeyUrl(key)
             }
         };
     },

@@ -1872,11 +1872,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(data) {
+        rowsView.option('onRowClick', function(data) {
             rowClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
         rowsView.render(testElement);
         const rows = testElement.find('tbody > tr');
 
@@ -1901,11 +1899,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let cellClickArgs;
 
-        this.options.onCellClick = function(options) {
+        rowsView.option('onCellClick', function(options) {
             cellClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellClick' });
+        });
         rowsView.render(testElement);
         const cells = testElement.find('td');
 
@@ -1930,11 +1926,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let rowDoubleClickArgs;
 
-        this.options.onRowDblClick = function(data) {
+        rowsView.option('onRowDblClick', function(data) {
             rowDoubleClickArgs = data;
-        };
-
-        rowsView.optionChanged({ name: 'onRowDblClick' });
+        });
         rowsView.render($testElement);
         const $rowElement = $(rowsView.getRowElement(1));
 
@@ -1959,11 +1953,9 @@ QUnit.module('Rows view', {
         const $testElement = $('#container');
         let cellDoubleClickArgs;
 
-        this.options.onCellDblClick = function(options) {
+        rowsView.option('onCellDblClick', function(options) {
             cellDoubleClickArgs = options;
-        };
-
-        rowsView.optionChanged({ name: 'onCellDblClick' });
+        });
         rowsView.render($testElement);
         const $cellElement = $(rowsView.getCellElement(0, 0));
 
@@ -2897,11 +2889,9 @@ QUnit.module('Rows view', {
         this.options.masterDetail = {
             enabled: true
         };
-        this.options.onRowClick = function(options) {
+        rowsView.option('onRowClick', function(options) {
             rowClickIndexes.push(options.rowIndex);
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         rowsView.render(testElement);
 
@@ -2957,11 +2947,9 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
         let rowClickArgs;
 
-        this.options.onRowClick = function(e) {
+        rowsView.option('onRowClick', function(e) {
             rowClickArgs = e;
-        };
-
-        rowsView.optionChanged({ name: 'onRowClick' });
+        });
 
         this.options.masterDetail = {
             enabled: true,
@@ -3924,9 +3912,14 @@ QUnit.module('Rows view', {
 
         // act
         rowsView.render($testElement);
+        const columnWidths = rowsView.getColumnWidths();
+        const values = [30, 100, 100];
 
         // assert
-        assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], 'calculate widths');
+        assert.strictEqual(columnWidths.length, values.length, 'number of widths');
+        columnWidths.forEach((width, index) => {
+            assert.roughEqual(width, values[index], 0.02, `calculate width of the ${index} column`);
+        });
     });
 
     QUnit.test('GetRowsElements method is called once when opacity is applied to rows', function(assert) {
@@ -6881,7 +6874,7 @@ QUnit.module('Scrollbar', {
         rowsView.render($('#container').css({ width: 100, height: 100 }));
 
         // arrange
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType === 'desktop' && !devices.real().mac) {
             assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
         } else {
             assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');

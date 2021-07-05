@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_box/ui.time_view';
 
@@ -23,6 +24,8 @@ const TIMEVIEW_FORMAT12_PM = 1;
 const BOX_CLASS = 'dx-box';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INPUT_CLASS = 'dx-texteditor-input';
+const NUMBERBOX_SPIN_UP_BUTTON_CLASS = 'dx-numberbox-spin-up';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 QUnit.module('rendering', () => {
     QUnit.test('widget class should be added', function(assert) {
@@ -437,6 +440,21 @@ QUnit.module('12 hours format', () => {
         assert.equal(instance.option('value').toString(), new Date(2011, 0, 1, 10, 5, 0, 0), 'value has not been changed');
         assert.equal(formatField.option('value'), TIMEVIEW_FORMAT12_AM, 'am is selected');
     });
+
+    QUnit.test('hour numberbox can change value from 12 to 1 after spin up button click (T986347)', function(assert) {
+        const $element = $('#timeView').dxTimeView({
+            value: new Date(2014, 11, 11, 12, 1),
+            use24HourFormat: false
+        });
+
+        const $hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`);
+        const hourNumberBox = $hourNumberBox.dxNumberBox('instance');
+        const $spinUpButton = $($hourNumberBox.find(`.${NUMBERBOX_SPIN_UP_BUTTON_CLASS}`));
+
+        $spinUpButton.trigger('dxpointerdown');
+
+        assert.equal(hourNumberBox.option('value'), 1);
+    });
 });
 
 QUnit.module('format rendering', () => {
@@ -464,7 +482,7 @@ QUnit.module('format rendering', () => {
         QUnit.test(`hour numberbox should have min/max constraints, use24HourFormat=${use24HourFormat}`, function(assert) {
             const $element = $('#timeView').dxTimeView({ use24HourFormat });
             const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
-            const expectedMaxValue = use24HourFormat ? 24 : 12;
+            const expectedMaxValue = use24HourFormat ? 24 : 13;
 
             assert.equal(hourNumberBox.option('min'), -1, 'min constraint set');
             assert.equal(hourNumberBox.option('max'), expectedMaxValue, 'max constraint set');
@@ -474,7 +492,7 @@ QUnit.module('format rendering', () => {
             const $element = $('#timeView').dxTimeView({ use24HourFormat });
             const timeView = $element.dxTimeView('instance');
             const newUse24HourFormatValue = !use24HourFormat;
-            const expectedMaxValue = newUse24HourFormatValue ? 24 : 12;
+            const expectedMaxValue = newUse24HourFormatValue ? 24 : 13;
 
             timeView.option('use24HourFormat', newUse24HourFormatValue);
             const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
@@ -500,6 +518,30 @@ QUnit.module('format rendering', () => {
 
                 assert.equal(hourNumberBox.option('value'), expectedValue, 'correct value');
             });
+        });
+
+        QUnit.test('hour numberbox should have correct value after some incorrect values applyings (T986347)', function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const maxValue = use24HourFormat ? 23 : 12;
+
+            const $hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0);
+            const hourNumberBox = $hourNumberBox.dxNumberBox('instance');
+
+            const $input = $hourNumberBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const kb = keyboardMock($input);
+
+            kb.caret({ start: 0, end: 2 })
+                .type('30')
+                .change();
+
+            kb.caret({ start: 0, end: 2 })
+                .type('30')
+                .change();
+
+            const text = hourNumberBox.option('text');
+            const value = hourNumberBox.option('value');
+            assert.ok(text <= maxValue, `current text value is ${text}; expected max is ${maxValue}`);
+            assert.ok(value <= maxValue, `current value is ${value}; expected max is ${maxValue}`);
         });
     });
 });

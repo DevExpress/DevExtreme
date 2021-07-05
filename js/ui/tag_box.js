@@ -487,7 +487,6 @@ const TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
-        // TODO: texteditor render methods order research
         this._initTagTemplate();
 
         this.callBase();
@@ -557,7 +556,10 @@ const TagBox = SelectBox.inherit({
     },
 
     _renderTypingEvent: function() {
-        eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), (e) => {
+        const input = this._input();
+        const namespace = addNamespace('keydown', this.NAME);
+        eventsEngine.off(input, namespace);
+        eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
             if(!this._isControlKey(keyName) && this._isEditable()) {
                 this._clearTagFocus();
@@ -714,7 +716,7 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSubstitution: function() {
         this.callBase();
-        this._renderInputSize();
+        this._updateWidgetHeight();
     },
 
     _getValue: function() {
@@ -759,7 +761,7 @@ const TagBox = SelectBox.inherit({
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
-        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource()?.isLoaded();
         const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
@@ -774,11 +776,11 @@ const TagBox = SelectBox.inherit({
             const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
             const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
             const filter = filterLength > this.option('maxFilterLength') ? undefined : filterExpr;
-            const { customQueryParams, expand } = dataSource.loadOptions();
+            const { customQueryParams, expand, select } = dataSource.loadOptions();
 
             dataSource
                 .store()
-                .load({ filter, customQueryParams, expand })
+                .load({ filter, customQueryParams, expand, select })
                 .done((data, extra) => {
                     this._isDataSourceChanged = false;
                     if(this._disposed) {
@@ -1284,7 +1286,7 @@ const TagBox = SelectBox.inherit({
 
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-            this.callBase(e);
+            this.callBase(arguments);
             this._setListDataSourceFilter();
         }
 
@@ -1495,6 +1497,11 @@ const TagBox = SelectBox.inherit({
                 break;
             case 'selectAllText':
                 this._setListOption('selectAllText', this.option('selectAllText'));
+                break;
+            case 'readOnly':
+            case 'disabled':
+                this.callBase(args);
+                !args.value && this._renderTypingEvent();
                 break;
             case 'value':
                 this._valuesToUpdate = args?.value;

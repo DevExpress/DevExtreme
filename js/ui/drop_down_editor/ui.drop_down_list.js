@@ -201,6 +201,10 @@ const DropDownList = DropDownEditor.inherit({
         });
     },
 
+    _isEditable: function() {
+        return this.callBase() || this.option('searchEnabled');
+    },
+
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption('focusStateEnabled')) {
             this._focusInput();
@@ -248,7 +252,7 @@ const DropDownList = DropDownEditor.inherit({
     _createPopup: function() {
         this.callBase();
         this._updateCustomBoundaryContainer();
-        this._popup._wrapper().addClass(this._popupWrapperClass());
+        this._popup.$wrapper().addClass(this._popupWrapperClass());
 
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
@@ -634,16 +638,29 @@ const DropDownList = DropDownEditor.inherit({
         return addNamespace(SEARCH_EVENT, this.NAME + 'Search');
     },
 
+    _getCompositionStartEvent: function() {
+        return addNamespace('compositionstart', this.NAME + 'CompositionStart');
+    },
+
+    _getCompositionEndEvent: function() {
+        return addNamespace('compositionend', this.NAME + 'CompositionEnd');
+    },
+
     _getSetFocusPolicyEvent: function() {
         return addNamespace('input', this.NAME + 'FocusPolicy');
     },
 
     _renderEvents: function() {
         this.callBase();
-        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), () => { this._setFocusPolicy(); });
 
         if(this._shouldRenderSearchEvent()) {
-            eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getSearchEvent(), (e) => { this._searchHandler(e); });
+            eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
+            eventsEngine.on(this._input(), this._getCompositionEndEvent(), (e) => {
+                this._isTextCompositionInProgress(undefined);
+                this._searchHandler(e, this._searchValue());
+            });
         }
     },
 
@@ -654,11 +671,25 @@ const DropDownList = DropDownEditor.inherit({
     _refreshEvents: function() {
         eventsEngine.off(this._input(), this._getSearchEvent());
         eventsEngine.off(this._input(), this._getSetFocusPolicyEvent());
+        eventsEngine.off(this._input(), this._getCompositionStartEvent());
+        eventsEngine.off(this._input(), this._getCompositionEndEvent());
 
         this.callBase();
     },
 
-    _searchHandler: function() {
+    _isTextCompositionInProgress: function(value) {
+        if(arguments.length) {
+            this._isTextComposition = value;
+        } else {
+            return this._isTextComposition;
+        }
+    },
+
+    _searchHandler: function(e, searchValue) {
+        if(this._isTextCompositionInProgress()) {
+            return;
+        }
+
         if(!this._isMinSearchLengthExceeded()) {
             this._searchCanceled();
             return;
@@ -668,9 +699,12 @@ const DropDownList = DropDownEditor.inherit({
 
         if(searchTimeout) {
             this._clearSearchTimer();
-            this._searchTimer = setTimeout(this._searchDataSource.bind(this), searchTimeout);
+            this._searchTimer = setTimeout(
+                () => { this._searchDataSource(searchValue); },
+                searchTimeout
+            );
         } else {
-            this._searchDataSource();
+            this._searchDataSource(searchValue);
         }
     },
 
@@ -682,8 +716,8 @@ const DropDownList = DropDownEditor.inherit({
         this._refreshList();
     },
 
-    _searchDataSource: function() {
-        this._filterDataSource(this._searchValue());
+    _searchDataSource: function(searchValue = this._searchValue()) {
+        this._filterDataSource(searchValue);
     },
 
     _filterDataSource: function(searchValue) {

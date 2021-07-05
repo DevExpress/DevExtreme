@@ -161,10 +161,9 @@ const EditorFactoryMixin = (function() {
             const stopWatch = options.row.watch(() => {
                 dataSource = options.lookup.dataSource(options.row);
                 return dataSource && dataSource.filter;
-            }, () => {
-                selectBox.option('dataSource', dataSource);
-            }, (row) => {
+            }, (newValue, row) => {
                 options.row = row;
+                selectBox.option('dataSource', dataSource);
             });
         }
     }
@@ -263,7 +262,16 @@ const EditorFactoryMixin = (function() {
             }
 
             if(options.editorName === 'dxDateBox') {
-                $editorElement.dxDateBox('instance').registerKeyHandler('enter', () => true);
+                const dateBox = $editorElement.dxDateBox('instance');
+                const defaultEnterKeyHandler = dateBox._supportedKeys()['enter'];
+
+                dateBox.registerKeyHandler('enter', (e) => {
+                    if(dateBox.option('opened')) {
+                        defaultEnterKeyHandler(e);
+                    }
+
+                    return true;
+                });
             }
 
             if(options.editorName === 'dxTextArea') {

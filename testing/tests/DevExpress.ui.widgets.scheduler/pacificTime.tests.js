@@ -3,6 +3,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import browser from 'core/utils/browser';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
@@ -161,6 +162,52 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 assert.equal(scheduler.appointments.getAppointmentCount(), appointmentCount - 1, 'appointment count should be reduced');
             });
         });
+
+        [{
+            cellDuration: 120,
+            appointmentTop: 100,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentTop: 150,
+            view: 'week',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }, {
+            cellDuration: 120,
+            appointmentLeft: 400,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4),
+        }, {
+            cellDuration: 90,
+            appointmentLeft: 600,
+            view: 'timelineWeek',
+            startDate: new Date(2020, 2, 8, 4, 30),
+        }].forEach(({ cellDuration, appointmentTop, appointmentLeft, view, startDate }) => {
+            test(`Appointments should be rendered correctly after DST when cellDuration is ${cellDuration} in ${view}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        startDate,
+                        endDate: new Date(2020, 2, 8, 6),
+                        text: 'Test Appointment',
+                    }],
+                    currentDate: summerDSTDate,
+                    views: [view],
+                    currentView: view,
+                    cellDuration,
+                });
+
+                if(view === 'week') {
+                    const actualAppointmentTop = scheduler.appointments.getAppointment(0).position().top;
+
+                    assert.equal(actualAppointmentTop, appointmentTop, 'Correct top coordinate');
+                } else {
+                    const actualAppointmentLeft = scheduler.appointments.getAppointment(0).position().left;
+
+                    assert.equal(actualAppointmentLeft, appointmentLeft, 'Correct left coordinate');
+                }
+            });
+        });
     });
 
     module('Time panel should have correct dates value in case DST', moduleConfig, () => {
@@ -252,6 +299,42 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
     module('Common', moduleConfig, () => {
         [{
+            currentDate: new Date(2021, 2, 14),
+            text: 'summer time'
+        }, {
+            currentDate: new Date(2021, 10, 7),
+            text: 'winter time'
+        }].forEach(({ currentDate, text }) => {
+            test(`If local time zone and scheduler time zone equal by declaration, then should be valid display appointments(skip scheduler timezone engine), ${text}`, function(assert) {
+                const etalonDateText = '10:30 AM - 12:00 PM';
+                const scheduler = createWrapper({
+                    currentDate,
+                    timeZone: 'America/Tijuana',
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate: new Date('2021-02-24T18:30:00.000Z'),
+                        endDate: new Date('2021-02-24T20:00:00.000Z'),
+                        recurrenceRule: 'FREQ=DAILY'
+                    }],
+                    views: ['week'],
+                    currentView: 'week',
+                    firstDayOfWeek: 5,
+                    startDayHour: 9,
+                    height: 600
+                });
+
+                scheduler.appointmentList.forEach(appointment => {
+                    assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                    appointment.click();
+
+                    assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+                });
+
+                assert.expect(14);
+            });
+        });
+
+        [{
             startDate: '2020-05-03T08:00:00.000Z',
             endDate: '2020-05-03T09:00:00.000Z',
             text: 'Test',
@@ -284,9 +367,16 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             });
         });
 
+        test('timeZoneUtils.isEqualLocalTimeZoneByDeclaration should be return right value', function(assert) {
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/New_York', new Date(2021, 6, 6)), 'should be return false');
+        });
+
         test('timeZoneUtils.isEqualLocalTimeZone should be return right value', function(assert) {
-            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles'), 'should be return true');
-            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York'), 'should be return false');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York', new Date(2021, 6, 6)), 'should be return false');
         });
 
         module('Today and current day in calendar', () => {
@@ -395,6 +485,19 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             scheduler.appointmentPopup.clickDoneButton();
 
             assert.expect(2);
+        });
+
+        test('Recurrence rule with UNTIL date in UTC format should apply correctly to local dates', function(assert) {
+            const dates = getRecurrenceProcessor().generateDates(
+                {
+                    rule: 'FREQ=DAILY;UNTIL=20210625T075959Z',
+                    start: new Date(2021, 5, 24, 1, 30),
+                    min: new Date(2021, 5, 20),
+                    max: new Date(2021, 5, 26)
+                }
+            );
+
+            assert.deepEqual(dates, [new Date(2021, 5, 24, 1, 30)], 'Should be only one date');
         });
     });
 }

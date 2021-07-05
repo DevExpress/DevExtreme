@@ -1,5 +1,6 @@
 
 
+@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -28,7 +29,7 @@ $badge-invalid-bg: $base-invalid-color;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$material-invalid-badge-size / 2;
+  margin-top: math.div(-$material-invalid-badge-size, 2);
   width: $material-invalid-badge-size;
   height: $material-invalid-badge-size;
   text-align: center;

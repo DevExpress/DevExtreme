@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -454,7 +455,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
   .dx-scheduler-appointment-collector-content {
     span:last-child {
-      line-height: $generic-scheduler-appointment-collector-height / 1.5;
+      line-height: math.div($generic-scheduler-appointment-collector-height, 1.5);
       height: $generic-scheduler-appointment-collector-height;
     }
   }
@@ -516,8 +517,13 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset);
 
     &.dx-scheduler-work-space-day {
-      @include baseScheduler.dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
-      @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
+      @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset);
+      @include baseScheduler.dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset);
+
+      &:not(.dx-scheduler-work-space-count) {
+        @include baseScheduler.dx-scheduler-group-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
+        @include baseScheduler.dx-scheduler-header-scrollable-mixin($header-scroll-bar-top-offset - $generic-scheduler-header-panel-table-cell-height);
+      }
     }
   }
 }

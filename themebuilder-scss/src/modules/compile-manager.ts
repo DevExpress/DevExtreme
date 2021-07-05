@@ -57,6 +57,10 @@ export default class CompileManager {
         css = await PostCompiler.cleanCss(css);
       }
 
+      if (config.removeExternalResources) {
+        css = PostCompiler.removeExternalResources(css);
+      }
+
       css = PostCompiler.addInfoHeader(css, version, compileData.result.stats === null);
 
       return {

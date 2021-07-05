@@ -13,7 +13,6 @@ let MentionModule = {};
 
 if(Quill) {
     const USER_ACTION = 'user';
-    const SILENT_ACTION = 'silent';
     const DEFAULT_MARKER = '@';
 
     const KEYS = {
@@ -191,21 +190,24 @@ if(Quill) {
             const markerLength = this._activeMentionConfig.marker.length;
             const textLength = markerLength + this._searchValue.length;
             const caretPosition = this.getPosition();
-            const startIndex = Math.max(0, caretPosition - markerLength);
             const selectedItem = this._list.option('selectedItem');
-
             const value = {
                 value: this._valueGetter(selectedItem),
                 id: this._idGetter(selectedItem),
                 marker: this._activeMentionConfig.marker
             };
+            const Delta = Quill.import('delta');
+            let startIndex = Math.max(0, caretPosition - markerLength);
+            const retainCorrection = this._getCharByIndex(startIndex) === '\n' ? 1 : 0;
+            startIndex += retainCorrection;
+            const newDelta = new Delta()
+                .retain(startIndex)
+                .delete(textLength)
+                .insert({ mention: value })
+                .insert(' ');
 
-            setTimeout(function() {
-                this.quill.insertText(startIndex, ' ', SILENT_ACTION);
-                this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
-                this.quill.insertEmbed(startIndex, 'mention', value);
-                this.quill.setSelection(startIndex + 2);
-            }.bind(this));
+            this.quill.updateContents(newDelta);
+            this.quill.setSelection(startIndex + 2);
         }
 
         _getLastInsertOperation(ops) {

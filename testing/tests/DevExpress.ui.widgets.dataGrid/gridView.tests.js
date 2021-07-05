@@ -391,7 +391,7 @@ QUnit.module('Grid view', {
 
         // act
         gridView.render(testElement, {});
-        gridView.optionChanged({ name: 'showBorders', value: true });
+        gridView.option('showBorders', true);
 
         // assert
         assert.equal(testElement.find('.dx-datagrid-borders').length, 1, 'borders class');
@@ -553,7 +553,7 @@ QUnit.module('Grid view', {
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
         const device = devices.real();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -807,7 +807,7 @@ QUnit.module('Grid view', {
         const headersTable = gridView.getView('columnHeadersView')._tableElement;
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -2035,7 +2035,6 @@ QUnit.module('Synchronize columns', {
         this.columnsController.beginUpdate();
 
         this.option('summary', []);
-        this.dataController.optionChanged({ name: 'summary', fullName: 'summary', value: [] });
         this.columnOption('field1', 'groupIndex', 0);
 
         this.columnsController.endUpdate();
@@ -2116,12 +2115,16 @@ QUnit.module('Fixed columns', {
         this.createGridView = createGridView;
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 }, () => {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('Draw grid view with a native scrolling', function(assert) {
+            if(devices.real().mac) {
+                assert.ok(true, 'test is not actual for mac');
+                return;
+            }
             // arrange
             this.defaultOptions.columnsController = new MockColumnsController([
                 { caption: 'Column 1', width: 100, fixed: true },

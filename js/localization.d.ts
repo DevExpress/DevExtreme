@@ -28,7 +28,7 @@ export function formatDate(value: Date, format: format): string;
  * @prevFileNamespace DevExpress
  * @public
  */
-export function formatMessage(key: string, value: string | Array<string>): string;
+export function formatMessage(key: string, ...values: Array<string>): string;
 
 /**
  * @docid localization.formatNumber

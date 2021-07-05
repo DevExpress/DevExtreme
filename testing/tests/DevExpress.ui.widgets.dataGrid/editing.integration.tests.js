@@ -40,6 +40,7 @@ import themes from 'ui/themes';
 import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
+import SelectBox from 'ui/select_box';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1403,6 +1404,63 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
         });
     });
+
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        [null, 'left', 'right'].forEach(fixedPosition => {
+            const fixedPositionText = fixedPosition === null ? 'not specified' : fixedPosition;
+            QUnit.testInActiveWindow(`${editMode} - Cells should be modified properly when fixedPosition is ${fixedPositionText} of a grouped column with showWhenGrouped enabled (T980535)`, function(assert) {
+                // act
+                const columns = [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        showWhenGrouped: true,
+                        groupIndex: 0
+                    },
+                    'field3'
+                ];
+
+                if(fixedPosition !== null) {
+                    columns[1].fixed = true;
+                    columns[1].fixedPosition = fixedPosition;
+                }
+
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, field1: 'test1', field2: 'test2', field3: 'test3' }],
+                    keyExpr: 'id',
+                    columns,
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    columnFixing: { enabled: true }
+                });
+
+                this.clock.tick();
+
+                for(let i = 1; i <= 3; i++) {
+                    // act
+                    let $cellElement = $(dataGrid.getCellElement(1, i));
+                    $cellElement.trigger('dxclick');
+                    this.clock.tick();
+                    $cellElement = $(dataGrid.getCellElement(1, i));
+
+                    // assert
+                    assert.ok($cellElement.hasClass('dx-focused'), `cell ${i} is focused after click`);
+                    assert.ok($cellElement.hasClass('dx-editor-cell'), `cell ${i} has an editor after click`);
+
+                    // act
+                    $cellElement.find('.dx-texteditor-input').val(i).trigger('change');
+                    dataGrid.closeEditCell();
+                    this.clock.tick();
+
+                    // assert
+                    assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
+                }
+            });
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
@@ -2162,7 +2220,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const errorMessageTopOffset = errorMessageTopPosition - bottomCellPosition;
 
         // assert
-        assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
+        assert.roughEqual(errorMessageTopOffset, 0, 1.1, 'error message offset');
     });
 
     ['close edit cell', 'cancel editing'].forEach(action => {
@@ -2319,6 +2377,275 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
         assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
+    });
+
+    QUnit.testInActiveWindow('Batch - saveEditData after change cell value from invalid to valid if key is complex (T984377)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, id2: 1, field1: 'test12' },
+                { id: 1, id2: 2, field1: 'test22' }
+            ],
+            keyExpr: ['id1', 'id2'],
+            columns: [{
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 'field1');
+        dataGrid.cellValue(0, 'field1', '');
+        dataGrid.cellValue(0, 'field1', '123');
+        dataGrid.saveEditData();
+
+        // assert
+        assert.notOk(dataGrid.hasEditData(), 'changes are saved');
+        assert.equal(dataGrid.cellValue(0, 'field1'), '123', 'cell value is changed');
+    });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a new row is rendered (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            $(dataGrid.element()).find('.dx-icon-edit-button-addrow').trigger('dxclick');
+            this.clock.tick();
+
+            let $firstRow = $(dataGrid.getRowElement(0));
+            const $inputElement = $firstRow.find('.dx-texteditor-input').first();
+
+            // assert
+            assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered');
+
+            // act
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'test21', 'field1 cell value of the first row');
+                assert.strictEqual(visibleRows[1].data.field1, 'tst', 'field1 cell value of the second row');
+                assert.notOk(visibleRows[1].isNewRow, 'the second row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstRow = $(dataGrid.getRowElement(0));
+
+                assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered after delete click');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 3, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].isNewRow, 'the first row is an inserted row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test11', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+                assert.strictEqual(visibleRows[2].data.field1, 'test21', 'field1 cell value of the second row');
+            }
+        });
+
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a cell in another row is modified (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            let $firstCell = $(dataGrid.getCellElement(0, 0));
+            $firstCell.trigger('dxclick');
+            this.clock.tick();
+            $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell is rendered with an editor');
+
+            // act
+            const $inputElement = $firstCell.find('.dx-texteditor-input').first();
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 1, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.notOk(visibleRows[0].isNewRow, 'the first row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstCell = $(dataGrid.getCellElement(0, 0));
+
+                assert.ok($firstCell.hasClass('dx-cell-modified'), 'first cell is rendered as modified');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].modified, 'the first row is a modified row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test21', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+            }
+        });
+    });
+
+    QUnit.testInActiveWindow('DropDownEditor Overlay should be closed on dropdown button click in ios (T998455)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'test1' }
+            ],
+            keyExpr: 'id',
+            columns: [{
+                dataField: 'field1',
+                lookup: {
+                    valueExpr: 'this',
+                    displayExpr: 'this',
+                    dataSource: ['test1', 'test2']
+                }
+            }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            loadingTimeout: null
+        });
+
+
+        // act
+        dataGrid.editRow(0);
+        const $dropDownEditor = $(dataGrid.getRowElement(0)).find('.dx-dropdowneditor');
+        const $dropDownEditorIcon = $dropDownEditor.find('.dx-dropdowneditor-icon');
+
+        $dropDownEditorIcon.trigger('dxclick');
+
+        // assert
+        const selectBox = SelectBox.getInstance($dropDownEditor);
+        assert.ok(selectBox.option('opened'), 'dropdowneditor is opened');
+    });
+
+    [true, false].forEach(repaintChangesOnly => {
+        QUnit.testInActiveWindow(`Cascading lookup editors should be updated properly when repaintChangesOnly is ${repaintChangesOnly} (T1005100)`, function(assert) {
+            const dataGrid = createDataGrid({
+                repaintChangesOnly,
+                dataSource: [
+                    { id: 1, field1: 3, field2: 6 }
+                ],
+                keyExpr: 'id',
+                columns: [{
+                    dataField: 'field1',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: [
+                            { id: 1, name: 'name1' },
+                            { id: 2, name: 'name2' },
+                            { id: 3, name: 'name3' }
+                        ]
+                    },
+                    setCellValue: function(rowData, value) {
+                        rowData.field1 = value;
+                        rowData.field2 = null;
+                    }
+                }, {
+                    dataField: 'field2',
+                    lookup: {
+                        valueExpr: 'id',
+                        displayExpr: 'name',
+                        dataSource: function(options) {
+                            return {
+                                store: [
+                                    { id: 1, name: 'name1', cat: 1 },
+                                    { id: 2, name: 'name2', cat: 1 },
+                                    { id: 3, name: 'name3', cat: 2 },
+                                    { id: 4, name: 'name4', cat: 2 },
+                                    { id: 5, name: 'name5', cat: 3 },
+                                    { id: 6, name: 'name6', cat: 3 },
+                                ],
+                                filter: options.data ? ['cat', '=', options.data.field1] : null
+                            };
+                        }
+                    }
+                }],
+                editing: {
+                    mode: 'row',
+                    allowUpdating: true
+                },
+                loadingTimeout: null
+            });
+
+
+            // act
+            dataGrid.editRow(0);
+            this.clock.tick();
+            dataGrid.cellValue(0, 0, 1);
+            this.clock.tick();
+            let $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            let $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            let selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 1');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 1, name: 'name1', cat: 1 }, { id: 2, name: 'name2', cat: 1 }], 'dropdowneditor items 1');
+
+            // act
+            $field2EditorIcon.trigger('dxclick');
+            dataGrid.cellValue(0, 0, 2);
+            this.clock.tick();
+            $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 2');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 3, name: 'name3', cat: 2 }, { id: 4, name: 'name4', cat: 2 }], 'dropdowneditor items 2');
+
+            // act
+            $field2EditorIcon.trigger('dxclick');
+            dataGrid.cellValue(0, 0, 3);
+            this.clock.tick();
+            $field2EditorElement = $(dataGrid.getCellElement(0, 1)).find('.dx-dropdowneditor');
+            $field2EditorIcon = $field2EditorElement.find('.dx-dropdowneditor-icon');
+            $field2EditorIcon.trigger('dxclick');
+            selectBoxField2 = SelectBox.getInstance($field2EditorElement);
+
+            // assert
+            assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 2');
+            assert.deepEqual(selectBoxField2.option('items'), [{ id: 5, name: 'name5', cat: 3 }, { id: 6, name: 'name6', cat: 3 }], 'dropdowneditor items 2');
+        });
     });
 });
 
@@ -3380,48 +3707,53 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
     });
 
-
-    QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
-
+    // T848039, T988258
+    ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
-            // arrange
-            const rowsViewWrapper = dataGridWrapper.rowsView;
-            const dataGrid = createDataGrid({
-                dataSource: [{ dateField: '01/01/2000' }],
-                editing: {
-                    mode: 'cell',
-                    allowUpdating: true
-                },
-                columns: [{
-                    dataField: 'dateField',
-                    dataType: 'date',
-                    editorOptions: {
-                        useMaskBehavior: useMaskBehavior
-                    }
-                }]
+            QUnit.testInActiveWindow(`Datebox editor's value should be selected from calendar by keyboard (useMaskBehavior = ${useMaskBehavior}, dataType = ${dataType})`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                    return;
+                }
+
+                // arrange
+                const rowsViewWrapper = dataGridWrapper.rowsView;
+                const dataGrid = createDataGrid({
+                    dataSource: [{ dateField: '01/01/2000' }],
+                    editing: {
+                        mode: 'cell',
+                        allowUpdating: true
+                    },
+                    columns: [{
+                        dataField: 'dateField',
+                        dataType,
+                        editorOptions: { useMaskBehavior }
+                    }]
+                });
+                this.clock.tick();
+
+                // act
+                dataGrid.editCell(0, 0);
+                this.clock.tick();
+
+                let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const instance = editor.getElement().dxDateBox('instance');
+                const keyboard = keyboardMock(editor.getInputElement());
+
+                instance.open();
+                keyboard
+                    .keyDown('left')
+                    .press('enter');
+
+                if(dataType === 'datetime') {
+                    keyboard.press('enter'); // confirm date
+                }
+
+                // assert
+                editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+                const expectedValue = dataType === 'date' ? '12/31/1999' : '12/31/1999, 12:00 AM';
+                assert.equal(editor.getInputElement().val(), expectedValue, 'dateBox value is changed');
             });
-            this.clock.tick();
-
-            // act
-            dataGrid.editCell(0, 0);
-            this.clock.tick();
-
-            let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            const instance = editor.getElement().dxDateBox('instance');
-            const keyboard = keyboardMock(editor.getInputElement());
-
-            instance.open();
-            keyboard
-                .keyDown('left')
-                .press('enter');
-
-            // assert
-            editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
-            assert.equal(editor.getInputElement().val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
         });
     });
 

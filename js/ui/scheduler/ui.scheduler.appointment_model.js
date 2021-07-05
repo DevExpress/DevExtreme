@@ -261,7 +261,9 @@ class AppointmentModel {
         const that = this;
 
         return [[(appointment) => {
-            let result = true;
+            const appointmentVisible = appointment.visible ?? true;
+            let result = appointmentVisible;
+
             const startDate = new Date(dataAccessors.getter.startDate(appointment));
             const endDate = new Date(dataAccessors.getter.endDate(appointment));
             const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
@@ -357,9 +359,13 @@ class AppointmentModel {
                     const itemExists = items.filter(item => item[keyName] === pushItem.key).length !== 0;
 
                     if(itemExists) {
-                        this._updatedAppointmentKeys.push({ key: keyName, value: pushItem.key });
+                        this._updatedAppointmentKeys.push({
+                            key: keyName,
+                            value: pushItem.key
+                        });
                     } else {
-                        items.push(pushItem.data);
+                        const { data } = pushItem;
+                        data && items.push(data);
                     }
                 });
             });

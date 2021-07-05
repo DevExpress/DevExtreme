@@ -37,7 +37,7 @@ export const extend = function(target) {
             let sourceValueIsArray = false;
             let clone;
 
-            if(key === '__proto__' || target === sourceValue) {
+            if(key === '__proto__' || key === 'constructor' || target === sourceValue) {
                 continue;
             }
 

@@ -2629,6 +2629,14 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeColumnFieldValues]
+         */
+        mergeColumnFieldValues?: boolean;
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
+         */
+        mergeRowFieldValues?: boolean;
     }
     /**
      * [descr:ExcelPivotGridCell]
@@ -9233,6 +9241,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxNavBar]
+     * @deprecated [depNote:dxNavBar]
      */
     export class dxNavBar extends dxTabs {
         constructor(element: Element, options?: dxNavBarOptions)
@@ -10671,11 +10680,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxScrollable.scrollBy(distance)]
          */
-        scrollBy(distance: number): void;
-        /**
-         * [descr:dxScrollable.scrollBy(distanceObject)]
-         */
-        scrollBy(distanceObject: any): void;
+        scrollBy(distance: number | any): void;
         /**
          * [descr:dxScrollable.scrollHeight()]
          */
@@ -10691,13 +10696,9 @@ declare module DevExpress.ui {
         /**
          * [descr:dxScrollable.scrollTo(targetLocation)]
          */
-        scrollTo(targetLocation: number): void;
+        scrollTo(targetLocation: number | any): void;
         /**
-         * [descr:dxScrollable.scrollTo(targetLocationObject)]
-         */
-        scrollTo(targetLocation: any): void;
-        /**
-         * [descr:dxScrollable.scrollToElement(targetLocation)]
+         * [descr:dxScrollable.scrollToElement(element)]
          */
         scrollToElement(element: Element | JQuery): void;
         /**
@@ -10816,6 +10817,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxSlideOut]
+     * @deprecated [depNote:dxSlideOut]
      */
     export class dxSlideOut extends CollectionWidget {
         constructor(element: Element, options?: dxSlideOutOptions)
@@ -10831,7 +10833,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSlideOut.toggleMenuVisibility(showing)]
          */
-        toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
+        toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
      * [descr:dxSlideOutItem]
@@ -10869,6 +10871,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:dxSlideOutView]
+     * @deprecated [depNote:dxSlideOutView]
      */
     export class dxSlideOutView extends Widget {
         constructor(element: Element, options?: dxSlideOutViewOptions)
@@ -10890,9 +10893,9 @@ declare module DevExpress.ui {
          */
         showMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * [descr:dxSlideOutView.toggleMenuVisibility()]
+         * [descr:dxSlideOutView.toggleMenuVisibility(showing)]
          */
-        toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+        toggleMenuVisibility(showing?: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
      * [descr:dxSlider.Options]
@@ -12254,11 +12257,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTreeView.Options.onItemSelectionChanged]
          */
-        onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
+        onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement, itemData?: any, itemIndex?: number }) => any);
         /**
          * [descr:dxTreeView.Options.onSelectAllValueChanged]
          */
-        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
+        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean | undefined }) => any);
         /**
          * [descr:dxTreeView.Options.onSelectionChanged]
          */
@@ -12415,6 +12418,10 @@ declare module DevExpress.ui {
          * [descr:dxTreeViewItem.icon]
          */
         icon?: string;
+        /**
+         * [descr:dxTreeViewItem.id]
+         */
+        id?: number | string;
         /**
          * [descr:dxTreeViewItem.items]
          */

@@ -120,7 +120,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
+    complete?: Promise<dxValidatorResult> & JQueryPromise<dxValidatorResult>;
     /**
      * @docid dxValidatorResult.isValid
      * @type boolean

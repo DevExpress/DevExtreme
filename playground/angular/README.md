@@ -23,5 +23,7 @@
 3. Set up a local web server and launch the application in it:
 
     ```bash
-    TODO: Add the command
+        http-server -c-1
     ```
+
+    Open `/playground/angular/index.html` file

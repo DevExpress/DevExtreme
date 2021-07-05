@@ -196,7 +196,7 @@ const ActionSheet = CollectionWidget.inherit({
 
     _renderPopupTitle: function() {
         this._mapPopupOption('showTitle');
-        this._popup && this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+        this._popup && this._popup.$wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
     },
 
     _clean: function() {
@@ -228,7 +228,7 @@ const ActionSheet = CollectionWidget.inherit({
             target: this.option('target')
         }));
 
-        this._popup._wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
     },
 
     _createPopup: function() {
@@ -282,7 +282,7 @@ const ActionSheet = CollectionWidget.inherit({
             }
         }));
 
-        this._popup._wrapper().addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
     },
 
     _popupContentReadyAction: function() {

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
+import browser from 'core/utils/browser';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
@@ -31,6 +32,9 @@ export const CLASSES = {
 
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
+    selectedCell: '.dx-state-focused',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
@@ -41,6 +45,8 @@ export const CLASSES = {
         right: '.dx-resizable-handle-right'
     }
 };
+
+export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
@@ -483,6 +489,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
@@ -502,7 +509,22 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
         };
 
         this.viewSwitcher = {

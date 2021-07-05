@@ -121,36 +121,63 @@ const getClientTimezoneOffset = (date = new Date()) => {
     return date.getTimezoneOffset() * 60000;
 };
 
-const isEqualLocalTimeZone = (timeZoneName) => {
+const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
     if(Intl) {
         const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        if(localTimeZoneName) {
-            return localTimeZoneName === timeZoneName;
+        if(localTimeZoneName === timeZoneName) {
+            return true;
         }
     }
 
-    return isEqualLocalTimeZoneByNativeDate(timeZoneName);
+    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
 };
 
+// TODO: Not used anywhere, if it isn't use in the future, then it must be removed
 const hasDSTInLocalTimeZone = () => {
     const [startDate, endDate] = getExtremeDates();
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
-    const [startDate, endDate] = getExtremeDates();
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
+    const year = date.getFullYear();
+    const getOffset = date => -date.getTimezoneOffset() / 60;
+    const getDateAndMoveHourBack = dateStamp => new Date(dateStamp - 3600000);
 
-    const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
-    const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
+    const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
+    const [summerTime, winterTime] = configTuple;
 
-    const startDateOffset = calculateTimezoneByValue(timeZoneName, startDate);
-    const endDateOffset = calculateTimezoneByValue(timeZoneName, endDate);
+    const noDSTInTargetTimeZone = configTuple.length === 0;
+    if(noDSTInTargetTimeZone) {
+        const targetTimeZoneOffset = timeZoneDataUtils.getTimeZoneOffsetById(timeZoneName, date);
+        const localTimeZoneOffset = getOffset(date);
 
-    if(startDateLocalOffset === startDateOffset && endDateLocalOffset === endDateOffset) {
-        return true;
+        if(targetTimeZoneOffset !== localTimeZoneOffset) {
+            return false;
+        }
+
+        return hasDSTInLocalTimeZone() ? false : true;
     }
 
-    return false;
+    const localSummerOffset = getOffset(new Date(summerTime.date));
+    const localWinterOffset = getOffset(new Date(winterTime.date));
+
+    if(localSummerOffset !== summerTime.offset) {
+        return false;
+    }
+
+    if(localSummerOffset === getOffset(getDateAndMoveHourBack(summerTime.date))) {
+        return false;
+    }
+
+    if(localWinterOffset !== winterTime.offset) {
+        return false;
+    }
+
+    if(localWinterOffset === getOffset(getDateAndMoveHourBack(winterTime.date))) {
+        return false;
+    }
+
+    return true;
 };
 
 
@@ -186,6 +213,7 @@ const utils = {
     getDateWithoutTimezoneChange,
     hasDSTInLocalTimeZone,
     isEqualLocalTimeZone,
+    isEqualLocalTimeZoneByDeclaration,
     getTimeZones
 };
 

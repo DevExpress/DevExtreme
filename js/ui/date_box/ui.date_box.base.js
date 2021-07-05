@@ -347,7 +347,7 @@ const DateBox = DropDownEditor.inherit({
 
     _renderPopup: function() {
         this.callBase();
-        this._popup._wrapper().addClass(DATEBOX_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
     },
 
@@ -371,7 +371,7 @@ const DateBox = DropDownEditor.inherit({
             $element.removeClass(DATEBOX_WRAPPER_CLASS + '-' + item);
         }).bind(this));
 
-        this._popup._wrapper()
+        this._popup.$wrapper()
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this.option('type'))
             .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType);
     },
@@ -478,17 +478,19 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        const text = this.option('text');
+        const { text, type, validationError } = this.option();
         const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
-            this._applyInternalValidation(currentValue);
+            if(!validationError || validationError.editorSpecific) {
+                this._applyInternalValidation(currentValue);
+                this._applyCustomValidation();
+            }
             return;
         }
 
         const parsedDate = this._getParsedDate(text);
         const value = currentValue ?? this._getDateByDefault();
-        const type = this.option('type');
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
@@ -757,9 +759,22 @@ const DateBox = DropDownEditor.inherit({
         return dateSerialization.serializeDate(date, serializationFormat);
     },
 
-    reset: function() {
+    _clearValue: function() {
+        const value = this.option('value');
+
         this.callBase();
-        this._updateValue(this.dateOption('value'));
+        if(value === null) {
+            this._applyCustomValidation(null);
+        }
+    },
+
+    reset: function() {
+        const value = this.option('value');
+
+        this.callBase();
+        if(value === null) {
+            this._applyInternalValidation(null);
+        }
     }
 });
 

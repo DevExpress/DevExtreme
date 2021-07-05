@@ -101,6 +101,10 @@ const NumberBoxBase = TextEditor.inherit({
         });
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _getDefaultButtons: function() {
         return this.callBase().concat([{ name: 'spins', Ctor: SpinButtons }]);
     },

@@ -2666,7 +2666,7 @@ QUnit.module('Fixed columns with band columns', {
         assert.equal(widths.length, 3, 'widths of the columns');
         assert.equal(widths[0], 200, 'width of the first cell');
         assert.equal(widths[1], 150, 'width of the second cell');
-        assert.equal(widths[2], 250, 'width of the fourth cell');
+        assert.roughEqual(widths[2], 250, 0.1, 'width of the fourth cell');
     });
 
     QUnit.test('Fixed columns with band columns', function(assert) {

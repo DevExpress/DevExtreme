@@ -574,6 +574,41 @@ QUnit.module('Initialization', {
         assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
     });
 
+    QUnit.test('Push API should work correctly for the wrong data item (T986087)', function(assert) {
+        const data = [{
+            id: 0,
+            text: 'Test Appointment',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const { instance } = createWrapper({
+            dataSource: {
+                pushAggregationTimeout: 0,
+                reshapeOnPush: true,
+                load: () => data,
+                key: 'id'
+            },
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        const dataSource = instance.getDataSource();
+
+        [null, undefined].forEach((wrongData) => {
+            try {
+                dataSource.store().push([{ type: 'update', key: 123, data: wrongData }]);
+
+                const dataSourceItems = instance.getDataSource().items();
+
+                assert.equal(dataSourceItems.length, 1, `Item count is correct for '${wrongData}' data`);
+            } catch(e) {
+                assert.ok(false, e.message);
+            }
+        });
+    });
+
     QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
@@ -2344,6 +2379,31 @@ QUnit.module('Scrolling to time', () => {
 
         assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
         assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
+    });
+
+    QUnit.test('It should be possible to change views option when view names are specified (T995794)', function(assert) {
+        const baseViews = [{
+            type: 'day',
+            name: 'Custom Day',
+        }, {
+            type: 'week',
+            name: 'Custom Week',
+        }];
+        const timelineViews = [{
+            type: 'timelineDay',
+            name: 'Custom Timeline Day',
+        }, {
+            type: 'timelineWeek',
+            name: 'Custom Timeline Week',
+        }];
+        const scheduler = createWrapper({
+            views: baseViews,
+            currentView: 'Custom Week',
+        });
+
+        scheduler.instance.option('views', timelineViews);
+
+        assert.equal(scheduler.workSpace.getCells().length, 48, 'Everything is correct');
     });
 })('Options');
 
@@ -4373,11 +4433,12 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'horizontal',
                             groupByDate: false,
-                        },
+                        }],
                         groups: ['ownerId'],
                     });
 
@@ -4408,11 +4469,12 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'horizontal',
                             groupByDate: true,
-                        },
+                        }],
                         groups: ['ownerId'],
                     });
 
@@ -4443,10 +4505,11 @@ QUnit.module('ScrollTo', () => {
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
+                        currentView: view,
+                        views: [{
                             type: view,
                             groupOrientation: 'vertical',
-                        },
+                        }],
                         groups: ['ownerId'],
                         showAllDayPanel: false,
                     });
@@ -4461,10 +4524,11 @@ QUnit.module('ScrollTo', () => {
                 const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
-                    currentView: {
+                    currentView: 'week',
+                    views: [{
                         type: 'week',
                         groupOrientation: 'vertical',
-                    },
+                    }],
                     groups: ['ownerId'],
                     showAllDayPanel: true,
                 });
@@ -4478,10 +4542,11 @@ QUnit.module('ScrollTo', () => {
                 const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
-                    currentView: {
+                    currentView: 'week',
+                    views: [{
                         type: 'week',
                         groupOrientation: 'vertical',
-                    },
+                    }],
                     groups: ['ownerId'],
                     showAllDayPanel: true,
                 });

@@ -150,7 +150,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
      * @docid dxOverlayOptions.position
      * @default { my: 'center', at: 'center', of: window }
-     * @fires dxOverlayOptions.onPositioning
      * @fires dxOverlayOptions.onPositioned
      * @prevFileNamespace DevExpress.ui
      * @public

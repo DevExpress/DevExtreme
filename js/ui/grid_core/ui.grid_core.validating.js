@@ -15,7 +15,7 @@ import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
 import Overlay from '../overlay';
 import errors from '../widget/ui.errors';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
 import browser from '../../core/utils/browser';
@@ -81,7 +81,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _getValidationData: function(key, create) {
-            let validationData = this._validationState.filter(data => data.key === key)[0];
+            let validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
 
             if(!validationData && create) {
                 validationData = { key, isValid: true };
@@ -120,7 +120,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             this.executeAction('onRowValidating', parameters);
 
-            when(parameters.promise).always(function() {
+            when(fromPromise(parameters.promise)).always(function() {
                 validationData.isValid = parameters.isValid;
                 validationData.errorText = parameters.errorText;
                 deferred.resolve(parameters);
@@ -164,7 +164,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 each(changes, (index, { type, key }) => {
 
                     if(type !== 'remove') {
-                        const validationData = this._getValidationData(key);
+                        const validationData = this._getValidationData(key, true);
                         const validationResult = this.validateGroup(validationData);
                         completeList.push(validationResult);
                         validationResult.done((validationResult) => {
@@ -428,7 +428,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
-            return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
+            return this._currentCellValidator && equalByValue(this._currentCellValidator.option('validationGroup').key, rowKey)
                 && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 

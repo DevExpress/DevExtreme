@@ -1,0 +1,28 @@
+@use "sass:string";
+@use "../string" as *;
+
+@mixin clock-icon-colored($data-uri, $current-color) {
+  $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
+
+  background-image: string.unquote($uri);
+}
+
+@mixin clock-action-icons-mixin($accent-color, $theme-mode) {
+  .dx-timeview-clock {
+    @if $theme-mode == 'light' {
+      @include clock-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg'), $accent-color);
+    }
+
+    @if $theme-mode == 'dark' {
+      @include clock-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/clock-bg.svg'), $accent-color);
+    }
+  }
+
+  .dx-timeview-hourarrow {
+    @include clock-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/timeView/hour-arrow.svg'), $accent-color);
+  }
+
+  .dx-timeview-minutearrow {
+    @include clock-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/timeView/min-arrow.svg'), $accent-color);
+  }
+}

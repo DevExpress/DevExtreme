@@ -132,7 +132,10 @@ const Autocomplete = DropDownList.inherit({
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: 'none'
+            pageLoadMode: 'none',
+            onSelectionChanged: (e) => {
+                this._setSelectedItem(e.addedItems[0]);
+            }
         });
     },
 
@@ -172,9 +175,9 @@ const Autocomplete = DropDownList.inherit({
         };
     },
 
-    _searchDataSource: function() {
+    _searchDataSource: function(searchValue) {
         this._dataSource.pageSize(this.option('maxItemCount'));
-        this.callBase();
+        this.callBase(searchValue);
         this._clearFocusedItem();
     },
 
