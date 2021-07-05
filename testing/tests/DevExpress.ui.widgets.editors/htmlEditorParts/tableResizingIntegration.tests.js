@@ -321,6 +321,7 @@ module('Table resizing integration', {
             assert.roughEqual(columnBorderOffsets[1], 200, 3);
         });
 
+
         test('Frame should change height if the table height is changed by horizontal drag', function(assert) {
             this.createWidget({ width: 430, tableResizing: { enabled: true, minColumnWidth: 0 } });
             this.clock.tick(TIME_TO_WAIT);
@@ -468,6 +469,47 @@ module('Table resizing integration', {
             this.clock.tick(TIME_TO_WAIT);
 
             assert.roughEqual($table.outerWidth(), startTableWidth + offset, 3);
+        });
+
+        test('Check columns border positions and table width after drag if the width is fixed and the cell has content', function(assert) {
+            this.createWidget({ width: 430 });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+            const $table = this.$element.find('table');
+
+            const startTableWidth = $table.outerWidth();
+
+            $columnResizerElements.eq(0)
+                .trigger('dxpointerdown');
+
+            $columnResizerElements.eq(0)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+            const pointerMock = PointerMock($draggableElements.eq(0));
+
+            pointerMock
+                .start()
+                .dragStart()
+                .drag(-15, 0)
+                .drag(-20, 0);
+
+            this.clock.tick(TIME_TO_WAIT / 4);
+
+            pointerMock
+                .drag(-15, 0)
+                .drag(-15, 0)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const columnBorderOffsets = getColumnBordersOffset($table);
+
+            assert.roughEqual(columnBorderOffsets[0], 70, 3);
+            assert.roughEqual(columnBorderOffsets[1], 130, 3);
+
+            assert.roughEqual($table.outerWidth(), startTableWidth, 3);
         });
     });
 

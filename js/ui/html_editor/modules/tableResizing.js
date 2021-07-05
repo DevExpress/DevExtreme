@@ -380,26 +380,32 @@ export default class TableResizingModule extends BaseModule {
         const currentLineNewSize = this._startLineSize + eventOffset;
 
         if(direction === 'horizontal') {
-            const nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
+            let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
             const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
             const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
             const $lineElements = this._getLineElements(frame.$table, index);
             const $nextLineElements = this._getLineElements(frame.$table, index + 1);
 
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
+
+
                 $lineElements.each((i, element) => {
                     $(element).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
                 });
 
-                const shouldApplyNewValue = ($($lineElements.eq(0)).outerWidth() - currentLineNewSize < 3);
+                const shouldApplyNewValue = ($($lineElements.eq(0)).outerWidth() - currentLineNewSize < 5);
+
 
                 if(!shouldApplyNewValue) {
                     each($lineElements, (i, element) => {
                         $(element).attr(directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth() + 'px');
                     });
+
+                    nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
                 }
 
-                if(this._nextLineSize && shouldApplyNewValue) {
+                if(this._nextLineSize) {
+
                     $nextLineElements.each((i, element) => {
                         $(element).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
                     });
@@ -441,6 +447,12 @@ export default class TableResizingModule extends BaseModule {
 
     _createDraggableElement(options) {
         const boundaryConfig = this._getBoundaryConfig(options);
+
+        // const $draggable = $('<div>').addClass('.dx-htmleditor-resizer-draggable').appendTo(options.frame.$frame);
+
+        // if(options.direction === 'vertical') {
+        // } else {
+        // }
 
         const config = {
             contentTemplate: null,
