@@ -2,6 +2,7 @@ import { isPlainObject, type } from '../../../../../core/utils/type';
 
 const notDeepCopyProperties: string[] = [
   'dataSource',
+  'selectedRowKeys',
 ];
 
 interface ResultItem {
