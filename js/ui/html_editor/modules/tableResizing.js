@@ -391,7 +391,15 @@ export default class TableResizingModule extends BaseModule {
                     $(element).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
                 });
 
-                if(this._nextLineSize) {
+                const shouldApplyNewValue = ($($lineElements.eq(0)).outerWidth() - currentLineNewSize < 3);
+
+                if(!shouldApplyNewValue) {
+                    each($lineElements, (i, element) => {
+                        $(element).attr(directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth() + 'px');
+                    });
+                }
+
+                if(this._nextLineSize && shouldApplyNewValue) {
                     $nextLineElements.each((i, element) => {
                         $(element).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
                     });
