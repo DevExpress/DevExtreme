@@ -94,7 +94,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
-    forceUpdateHScrollbarLocation, forceUpdateVScrollbarLocation,
     onVisibilityChangeHandler,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
@@ -178,7 +177,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
-              forceUpdateScrollbarLocation={forceUpdateHScrollbarLocation}
               rtlEnabled={rtlEnabled}
             />
           )}
@@ -200,7 +198,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
-              forceUpdateScrollbarLocation={forceUpdateVScrollbarLocation}
 
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
@@ -249,13 +246,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   endActionDirections:
   { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
 
-  @Mutable() prevContainerClientWidth = 0;
+  // @Mutable() prevContainerClientWidth = 0;
 
-  @Mutable() prevContainerClientHeight = 0;
+  // @Mutable() prevContainerClientHeight = 0;
 
-  @Mutable() prevContentClientWidth = 0;
+  // @Mutable() prevContentClientWidth = 0;
 
-  @Mutable() prevContentClientHeight = 0;
+  // @Mutable() prevContentClientHeight = 0;
 
   @Mutable() tabWasPressed = false;
 
@@ -314,10 +311,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() vContentTranslateOffset = 0;
 
   @InternalState() hContentTranslateOffset = 0;
-
-  @InternalState() forceUpdateHScrollbarLocation = false;
-
-  @InternalState() forceUpdateVScrollbarLocation = false;
 
   @Method()
   content(): HTMLDivElement {
@@ -744,9 +737,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     } else {
       this.vScrollLocation = location;
     }
-
-    this.forceUpdateHScrollbarLocation = false;
-    this.forceUpdateVScrollbarLocation = false;
   }
 
   onScroll(): void {
@@ -1173,24 +1163,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     if (isDefined(bottomPocketEl)) {
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
-    }
-
-    if (this.prevContentClientWidth !== this.contentClientWidth
-      || this.prevContainerClientWidth !== this.containerClientWidth) {
-      this.forceUpdateHScrollbarLocation = true;
-      this.prevContentClientWidth = this.contentClientWidth;
-      this.prevContainerClientWidth = this.containerClientWidth;
-      this.hScrollLocation = -containerEl.scrollLeft;
-    }
-    if (this.prevContentClientHeight !== this.contentClientHeight
-      || this.prevContainerClientHeight !== this.containerClientHeight) {
-      this.forceUpdateVScrollbarLocation = true;
-      this.prevContentClientHeight = this.contentClientHeight;
-      this.prevContainerClientHeight = this.containerClientHeight;
-      /* istanbul ignore next */
-      if (this.vScrollLocation <= 0) {
-        this.vScrollLocation = -containerEl.scrollTop;
-      }
     }
 
     this.contentPaddingBottom = getElementPaddingBottom(this.contentRef.current);

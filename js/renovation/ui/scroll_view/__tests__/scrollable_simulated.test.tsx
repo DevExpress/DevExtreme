@@ -195,12 +195,7 @@ describe('Simulated > Behavior', () => {
       viewModel.topPocketClientHeight = 11;
       viewModel.bottomPocketClientHeight = 12;
 
-      viewModel.prevContainerClientWidth = 13;
-      viewModel.prevContainerClientHeight = 14;
-      viewModel.prevContentClientWidth = 15;
-      viewModel.prevContentClientHeight = 16;
-
-      viewModel.contentPaddingBottom = 17;
+      viewModel.contentPaddingBottom = 13;
 
       Object.defineProperties(viewModel, {
         scrollableOffset: { get() { return { left: 10, top: 20 }; } },
@@ -271,25 +266,6 @@ describe('Simulated > Behavior', () => {
 
                 if (reachBottomEnabled) {
                   expectedBottomPocketSize = 55;
-                }
-
-                if (viewModel.prevContentClientWidth !== viewModel.contentClientWidth
-              || viewModel.prevContainerClientWidth !== viewModel.containerClientWidth) {
-                  expect(viewModel.forceUpdateHScrollbarLocation).toEqual(true);
-                  expect(viewModel.hScrollLocation).toEqual(-150);
-                  expect(viewModel.prevContentClientWidth).toEqual(elementRefExist ? 50 : 5);
-                  expect(viewModel.prevContainerClientWidth).toEqual(10);
-                }
-
-                if (viewModel.prevContentClientHeight !== viewModel.contentClientHeight
-              || viewModel.prevContainerClientHeight !== viewModel.containerClientHeight) {
-                  expect(viewModel.forceUpdateVScrollbarLocation).toEqual(true);
-                  expect(viewModel.prevContentClientHeight).toEqual(50);
-                  expect(viewModel.prevContainerClientHeight).toEqual(10);
-
-                  if (vScrollLocation <= 0) {
-                    expect(viewModel.vScrollLocation).toEqual(-200);
-                  }
                 }
               }
 

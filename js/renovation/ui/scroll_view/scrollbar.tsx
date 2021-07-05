@@ -85,6 +85,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() hideScrollbarTimer?: unknown;
 
+  @Mutable() prevContainerSize = 0;
+
+  @Mutable() prevContentSize = 0;
+
   @InternalState() pendingPullDown = false;
 
   @InternalState() showOnScrollByWheel?: boolean;
@@ -289,7 +293,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   moveToBoundaryOnSizeChange(): void {
-    if (this.props.forceUpdateScrollbarLocation) {
+    const contentSizeChanged = this.props.contentSize !== this.prevContentSize;
+    const containerSizeChanged = this.props.containerSize !== this.prevContainerSize;
+
+    if (contentSizeChanged || containerSizeChanged) {
+      this.prevContentSize = this.props.contentSize;
+      this.prevContainerSize = this.props.containerSize;
+
       if (this.props.scrollLocation <= this.maxOffset) {
         let newScrollLocation = this.getLocationWithinRange(this.props.scrollLocation);
 

@@ -32,7 +32,6 @@ describe('Scrollbar', () => {
       bottomPocketSize: 0,
       containerSize: 0,
       contentSize: 0,
-      forceUpdateScrollbarLocation: false,
       forceVisibility: false,
       isScrollableHovered: false,
       pocketState: 0,
@@ -225,10 +224,10 @@ describe('Scrollbar', () => {
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
     each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
-      each([true, false]).describe('forceUpdateScrollbarLocation: %o', (forceUpdateScrollbarLocation) => {
-        each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-          each([0, 100, 500, 600]).describe('rightScrollLocation: %o', (rightScrollLocation) => {
-            each([0, -80]).describe('maxOffset: %o', (maxOffset) => {
+      each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
+        each([0, 80]).describe('maxOffset: %o', (maxOffset) => {
+          each([0, 100, 500]).describe('contentSize: %o', (contentSize) => {
+            each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {
               it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
                 const topPocketSize = 85;
 
@@ -238,41 +237,59 @@ describe('Scrollbar', () => {
                   rtlEnabled,
                   topPocketSize,
                   scrollLocation,
-                  forceUpdateScrollbarLocation,
+                  contentSize,
+                  containerSize,
                 });
 
-                const minOffset = 500;
+                const minOffset = -300;
                 Object.defineProperties(viewModel, {
                   maxOffset: { get() { return maxOffset; } },
                   minOffset: { get() { return minOffset; } },
                 });
-                viewModel.moveTo = jest.fn();
-                viewModel.rightScrollLocation = rightScrollLocation;
 
-                viewModel.moveToBoundaryOnSizeChange();
+                [0, 100, 500].forEach((prevContentSize) => {
+                  [0, 50, 200].forEach((prevContainerSize) => {
+                    [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+                      viewModel.moveTo = jest.fn();
 
-                let expectedBoundaryLocation = Math.max(
-                  Math.min(scrollLocation, maxOffset), minOffset,
-                );
+                      viewModel.prevContentSize = prevContentSize;
+                      viewModel.prevContainerSize = prevContainerSize;
+                      viewModel.rightScrollLocation = rightScrollLocation;
 
-                if (forceUpdateScrollbarLocation && scrollLocation <= maxOffset) {
-                  expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                      viewModel.moveToBoundaryOnSizeChange();
 
-                  if (direction === 'horizontal' && rtlEnabled) {
-                    expectedBoundaryLocation = minOffset - rightScrollLocation;
+                      let expectedBoundaryLocation = Math.max(
+                        Math.min(scrollLocation, maxOffset), minOffset,
+                      );
 
-                    if (expectedBoundaryLocation >= 0) {
-                      expectedBoundaryLocation = 0;
-                    }
-                  }
+                      const contentSizeChanged = contentSize !== prevContentSize;
+                      const containerSizeChanged = containerSize !== prevContainerSize;
 
-                  expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
-                } else {
-                  expect(viewModel.moveTo).not.toBeCalled();
-                }
+                      if ((contentSizeChanged || containerSizeChanged)
+                        && scrollLocation <= maxOffset) {
+                        expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+
+                        if (direction === 'horizontal' && rtlEnabled) {
+                          expectedBoundaryLocation = minOffset - rightScrollLocation;
+
+                          if (expectedBoundaryLocation >= 0) {
+                            expectedBoundaryLocation = 0;
+                          }
+                        }
+
+                        expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
+                      } else {
+                        expect(viewModel.moveTo).not.toBeCalled();
+                      }
+                    });
+                  });
+                });
               });
             });
           });
+          //     });
+          //   });
+          // });
         });
       });
     });
