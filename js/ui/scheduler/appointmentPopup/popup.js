@@ -40,8 +40,7 @@ export class AppointmentPopup {
     constructor(scheduler, form) {
         this.scheduler = scheduler;
         this.form = form;
-
-        this._popup = null;
+        this.popup = null;
 
         this.state = {
             action: null,
@@ -57,39 +56,35 @@ export class AppointmentPopup {
 
     get key() { return this.scheduler.getKey(); }
 
-    get _appointmentForm() { // TODO
-        return this.form._appointmentForm;
-    }
-
     show(appointment, config) {
         this.state.appointment.data = appointment;
         this.state.action = config.action;
         this.state.excludeInfo = config.excludeInfo;
 
-        if(!this._popup) {
+        if(!this.popup) {
             const popupConfig = this._createPopupConfig();
-            this._popup = this._createPopup(popupConfig);
+            this.popup = this._createPopup(popupConfig);
         }
 
-        this._popup.option('toolbarItems', this._createPopupToolbarItems(config.isToolbarVisible));
-        this._popup.show();
+        this.popup.option('toolbarItems', this._createPopupToolbarItems(config.isToolbarVisible));
+        this.popup.show();
     }
 
     hide() {
-        this._popup.hide();
+        this.popup.hide();
     }
 
     isVisible() {
-        return this._popup ? this._popup.option('visible') : false;
+        return this.popup ? this.popup.option('visible') : false;
     }
 
     getPopup() {
-        return this._popup;
+        return this.popup;
     }
 
     dispose() {
         if(this._$popup) {
-            this._popup.$element().remove();
+            this.popup.$element().remove();
             this._$popup = null;
         }
     }
@@ -127,7 +122,7 @@ export class AppointmentPopup {
 
         const arg = {
             form: this.form._appointmentForm,
-            popup: this._popup,
+            popup: this.popup,
             appointmentData: this.state.appointment.data,
             cancel: false
         };
@@ -165,7 +160,6 @@ export class AppointmentPopup {
 
         this.form.create(
             expr,
-            this.scheduler,
             this.triggerResize.bind(this),
             this.changeSize.bind(this),
             formData,
@@ -255,7 +249,7 @@ export class AppointmentPopup {
     }
 
     triggerResize() {
-        this._popup && triggerResizeEvent(this._popup.$element());
+        this.popup && triggerResizeEvent(this.popup.$element());
     }
 
     _getMaxWidth(isRecurrence) {
@@ -267,7 +261,7 @@ export class AppointmentPopup {
 
     changeSize(isRecurrence) {
         const isFullScreen = this._isPopupFullScreenNeeded();
-        this._popup.option({
+        this.popup.option({
             maxWidth: isFullScreen ? '100%' : this._getMaxWidth(isRecurrence),
             fullScreen: isFullScreen
         });
@@ -400,7 +394,7 @@ export class AppointmentPopup {
     }
 
     _showLoadPanel() {
-        const $overlayContent = this._popup.$overlayContent();
+        const $overlayContent = this.popup.$overlayContent();
 
         showLoading({
             container: $overlayContent,
