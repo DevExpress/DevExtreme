@@ -762,10 +762,10 @@ describe('Simulated > Behavior', () => {
             direction, disabled: false, bounceEnabled: true,
           });
           viewModel.locked = false;
-          viewModel.update = jest.fn();
+          viewModel.updateHandler = jest.fn();
 
           expect(viewModel.validate(event)).toEqual(true);
-          expect(viewModel.update).toHaveBeenCalledTimes(1);
+          expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1130,7 +1130,7 @@ describe('Simulated > Behavior', () => {
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.updateSizes = jest.fn();
 
-        helper.viewModel.update();
+        helper.viewModel.updateHandler();
 
         if (actionHandler) {
           helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
@@ -1321,32 +1321,32 @@ describe('Simulated > Behavior', () => {
 
     describe('ScrollTo', () => {
       each(optionValues.direction).describe('Direction: %o', (direction) => {
-        it('ScrollBy() should call update()', () => {
+        it('ScrollBy() should call updateHandler()', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.update = jest.fn();
+          helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
           helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 10, top: 10 });
 
-          expect(helper.viewModel.update).toHaveBeenCalledTimes(1);
+          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(1);
         });
 
-        it('ScrollBy() should not call update() if position not changed', () => {
+        it('ScrollBy() should not call updateHandler() if position not changed', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.update = jest.fn();
+          helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
           helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 0, top: 0 });
 
-          expect(helper.viewModel.update).toHaveBeenCalledTimes(0);
+          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(0);
         });
 
         each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {

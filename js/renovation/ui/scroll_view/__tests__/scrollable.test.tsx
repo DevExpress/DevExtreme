@@ -58,7 +58,7 @@ describe('Scrollable', () => {
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
       { name: 'container', calledWith: [] },
-      { name: 'update', calledWith: [] },
+      { name: 'updateHandler', calledWith: [] },
       { name: 'release', calledWith: [] },
       { name: 'refresh', calledWith: [] },
       { name: 'startLoading', calledWith: [] },

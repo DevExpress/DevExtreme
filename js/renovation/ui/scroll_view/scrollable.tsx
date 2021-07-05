@@ -168,8 +168,8 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  update(): void {
-    this.scrollableRef.update();
+  updateHandler(): void {
+    this.scrollableRef.updateHandler();
   }
 
   @Method()

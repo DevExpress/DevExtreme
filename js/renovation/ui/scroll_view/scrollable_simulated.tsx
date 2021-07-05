@@ -319,12 +319,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
-  update(): void {
-    this.updateSizes();
-    this.onUpdated();
-  }
-
-  @Method()
   refresh(): void {
     this.pocketStateChange(TopPocketState.STATE_READY);
     this.startLoading();
@@ -344,7 +338,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return;
     }
 
-    this.update();
+    this.updateHandler();
 
     // TODO: try to simplify it
     if (this.direction.isVertical) {
@@ -563,7 +557,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return false;
     }
 
-    this.update();
+    this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -621,6 +615,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scrollableOffsetTop = this.scrollableOffset.top;
 
     this.updateSizes();
+  }
+
+  updateHandler(): void {
+    this.updateSizes();
+    this.onUpdated();
   }
 
   handleScroll(): void {
@@ -1107,10 +1106,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   get fullScrollInactiveProp(): 'scrollLeft' | 'scrollTop' {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
-  }
-
-  updateHandler(): void {
-    this.update();
   }
 
   onVisibilityChangeHandler(visible: boolean): void {
