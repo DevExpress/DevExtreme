@@ -234,9 +234,9 @@ const isNoSeparatedFormat = function(patterns) {
         const char = pattern[0];
         const prevPatternChar = index && patterns[index - 1][0];
         const nextPatternChar = index < patterns.length - 1 && patterns[index + 1][0];
+        const isSingle = pattern.length === 1;
         const isFirst = index === 0;
         const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
-        const isSingle = pattern.length === 1;
         const isNeighborsPatternChar = isRegexpPart(prevPatternChar) || (isFirst && isRegexpPart(nextPatternChar));
 
         if(isSingle && isNeighborsPatternChar && isRegexpPart(char)) {
