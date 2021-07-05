@@ -10,11 +10,9 @@ import {
     getViewStartByOptions,
     calculateCellIndex,
     getCellText,
-    isCurrentDate,
-    isOtherMonth,
-    isFirstCellInMonthWithIntervalCount,
 } from './utils/month';
 import { formatWeekday } from './utils/base';
+import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -25,11 +23,12 @@ const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
 
 const DAYS_IN_WEEK = 7;
-const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+    get type() { return VIEWS.MONTH; }
+
     get isDateAndTimeView() {
         return false;
     }
@@ -48,10 +47,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getFormat() {
         return formatWeekday;
-    }
-
-    _getInterval() {
-        return DAY_IN_MILLISECONDS;
     }
 
     _getIntervalBetween(currentDate) {
@@ -133,20 +128,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _getDate(week, day) {
-        const result = new Date(this._startViewDate);
-        const lastRowInDay = this._getRowCount();
-
-        result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
-        return result;
-    }
-
     _updateIndex(index) {
         return index;
-    }
-
-    _isFirstDayOfMonth(cellDate) {
-        return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
     }
 
     isIndicationAvailable() {
@@ -189,11 +172,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    calculateEndDate(startDate) {
-        const startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option('endDayHour')));
-    }
-
     getWorkSpaceLeftOffset() {
         return 0;
     }
@@ -229,31 +207,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    generateRenderOptions() {
-        const options = super.generateRenderOptions();
-        options.cellDataGetters.push((_, rowIndex, columnIndex, groupIndex, date) => {
-            return {
-                value: {
-                    text: getCellText(date, this.option('intervalCount')),
-                },
-            };
-        });
-
-        const getCellMetaData = (_, rowIndex, columnIndex, groupIndex, startDate) => {
-            return {
-                value: {
-                    today: isCurrentDate(startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
-                    otherMonth: isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate),
-                    firstDayOfMonth: isFirstCellInMonthWithIntervalCount(startDate, this.option('intervalCount')),
-                },
-            };
-        };
-
-        options.cellDataGetters.push(getCellMetaData);
-
-        return options;
-    }
-
     // -------------
     // We need these methods for now but they are useless for renovation
     // -------------
@@ -283,20 +236,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _setMonthClassesToCell($cell, data) {
         $cell
-            .toggleClass(
-                DATE_TABLE_CURRENT_DATE_CLASS,
-                isCurrentDate(data.startDate, this.option('indicatorTime'), this._getTimeZoneCalculator()),
-            )
-            .toggleClass(
-                DATE_TABLE_FIRST_OF_MONTH_CLASS,
-                isFirstCellInMonthWithIntervalCount(data.startDate, this.option('intervalCount')),
-            )
-            .toggleClass(
-                DATE_TABLE_OTHER_MONTH_DATE_CLASS,
-                isOtherMonth(data.startDate, this._minVisibleDate, this._maxVisibleDate),
-            );
-
-        return data;
+            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
+            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.firstDayOfMonth)
+            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
     }
 
     _createAllDayPanelElements() {}

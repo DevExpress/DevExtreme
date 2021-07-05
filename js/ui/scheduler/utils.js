@@ -27,5 +27,10 @@ export const utils = {
 
             return result;
         }
+    },
+    DOM: {
+        getHeaderHeight: (header) => {
+            return header._$element && parseInt(header._$element.outerHeight(), 10);
+        },
     }
 };

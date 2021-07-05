@@ -13840,7 +13840,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxLoadPanel> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxLoadPanelOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxLoadPanel>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxLoadPanel>;
     export type ShownEvent = DevExpress.events.EventInfo<dxLoadPanel>;
   }
   /**
@@ -14941,7 +14942,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.onShowing]
      */
-    onShowing?: (e: DevExpress.events.EventInfo<TComponent>) => void;
+    onShowing?: (
+      e: DevExpress.events.Cancelable & DevExpress.events.EventInfo<TComponent>
+    ) => void;
     /**
      * [descr:dxOverlayOptions.onShown]
      */
@@ -15775,7 +15778,8 @@ declare module DevExpress.ui {
      */
     interface PopoverInstance extends dxPopover<Properties> {}
     export type Properties = dxPopoverOptions<PopoverInstance>;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
@@ -15891,7 +15895,8 @@ declare module DevExpress.ui {
       DevExpress.ui.dxResizable.ResizeInfo;
     export type ResizeStartEvent = DevExpress.events.NativeEventInfo<dxPopup> &
       DevExpress.ui.dxResizable.ResizeInfo;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxPopup>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxPopup>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopup>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       TitleRenderedInfo;
@@ -16510,12 +16515,12 @@ declare module DevExpress.ui {
   module dxScheduler {
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -16539,12 +16544,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -16582,7 +16587,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: any;
+        readonly appointmentData?: dxSchedulerAppointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -16595,7 +16600,7 @@ declare module DevExpress.ui {
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
@@ -18904,7 +18909,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxToast> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxToastOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxToast>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxToast>;
     export type ShownEvent = DevExpress.events.EventInfo<dxToast>;
   }
   /**
@@ -19096,7 +19102,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTooltip> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxTooltipOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxTooltip>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTooltip>;
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
   /**

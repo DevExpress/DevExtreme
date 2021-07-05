@@ -3089,7 +3089,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -3126,7 +3125,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -3194,7 +3192,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -3255,7 +3252,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -3382,7 +3378,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -3500,7 +3495,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             }
@@ -3546,7 +3540,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             }
@@ -3603,7 +3596,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4082,7 +4074,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             }
@@ -4111,7 +4102,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4148,7 +4138,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4225,7 +4214,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4294,7 +4282,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             remoteOperations: true,
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4432,7 +4419,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             },
@@ -4558,7 +4544,6 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                rowRenderingMode: 'virtual',
                 newMode: true,
                 useNative: false
             }

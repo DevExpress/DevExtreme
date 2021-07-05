@@ -3234,7 +3234,9 @@ QUnit.module('dxPivotGrid', {
         const columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
         assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+        const dataAreaContainerElement = dataAreaScrollable._container().get(0);
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
         assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
     });
 
@@ -3266,7 +3268,9 @@ QUnit.module('dxPivotGrid', {
         const columnAreaContentTable = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers .dx-scrollable-content > table');
         assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
         assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+        const dataAreaContainerElement = dataAreaScrollable._container().get(0);
+        assert.roughEqual(dataAreaScrollable.scrollLeft(), dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
         assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
         assert.equal(dataAreaFakeTable.css('right'), '0px');
         assert.equal(columnAreaFakeTable.css('right'), '0px');
@@ -3308,7 +3312,9 @@ QUnit.module('dxPivotGrid', {
             assert.roughEqual(pivotGrid._scrollLeft, 10, 1, '_scrollLeft variable store inverted value');
             assert.ok(dataAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
             assert.ok(columnAreaScrollable.scrollLeft() > 0, 'scrollLeft is not zero');
-            assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
+
+            const dataAreaContainerElement = dataAreaScrollable._container().get(0);
+            assert.roughEqual(dataAreaScrollable.scrollLeft() + 10, dataAreaContainerElement.scrollWidth - dataAreaContainerElement.clientWidth, 1, 'scrollLeft is in max right position');
             assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, 'scrollLeft is in max right position');
 
             done();
