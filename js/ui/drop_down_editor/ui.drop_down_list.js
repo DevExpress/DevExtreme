@@ -302,7 +302,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _loadInputValue: function(value, callback) {
-        return this._loadItem(value).done(callback);
+        return this._loadItem(value).always(callback);
     },
 
     _getItemFromPlain: function(value, cache) {
