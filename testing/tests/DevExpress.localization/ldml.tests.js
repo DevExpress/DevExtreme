@@ -568,7 +568,16 @@ QUnit.module('number formatter', () => {
             {
                 format: 'yyyy M d',
                 warningCalls: 0
+            },
+            {
+                format: 'yyyM d',
+                warningCalls: 0
+            },
+            {
+                format: 'dyyyM',
+                warningCalls: 0
             }
+
         ].forEach(({ format, warningCalls }) => {
             spy.callCount = 0;
             getRegExpInfo(format);

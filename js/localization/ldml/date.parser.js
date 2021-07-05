@@ -24,7 +24,8 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return '[0-9]+?';
+        // return '[0-9]+?';
+        return '[0-9]{1,5}?';
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
@@ -218,8 +219,8 @@ export const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
-    if(isNoSeparatedFormat(patterns)) {
-        logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: ${format}.`);
+    if(!isSeparatedFormat(patterns)) {
+        logger.warn(`The following format may be parsed incorrectly: ${format}.`);
     }
 
     return {
@@ -228,25 +229,26 @@ export const getRegExpInfo = function(format, dateParts) {
     };
 };
 
-const isNoSeparatedFormat = function(patterns) {
-    let isNoSeparated = false;
+const isSeparatedFormat = function(patterns) {
+    let isSeparated = true;
     patterns.every((pattern, index) => {
-        const char = pattern[0];
-        const prevPatternChar = index && patterns[index - 1][0];
-        const nextPatternChar = index < patterns.length - 1 && patterns[index + 1][0];
-        const isSingle = pattern.length === 1;
-        const isFirst = index === 0;
         const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
-        const isNeighborsPatternChar = isRegexpPart(prevPatternChar) || (isFirst && isRegexpPart(nextPatternChar));
+        const isNearbyIncorrectPattern = (index, offset) => {
+            index = index + offset;
+            const pattern = 0 <= index && index < patterns.length - 1 && patterns[index];
+            const char = pattern && pattern[0];
+            const incorrectLengthPattern = pattern && (pattern.length !== 3);
+            return incorrectLengthPattern && isRegexpPart(char);
+        };
+        const char = pattern[0];
+        const single = pattern.length === 1;
 
-        if(isSingle && isNeighborsPatternChar && isRegexpPart(char)) {
-            isNoSeparated = true;
-            return false;
-        } else {
-            return true;
+        if(single && isRegexpPart(char) && (isNearbyIncorrectPattern(index, 1) || isNearbyIncorrectPattern(index, -1))) {
+            isSeparated = false;
         }
+        return isSeparated;
     });
-    return isNoSeparated;
+    return isSeparated;
 };
 
 export const getPatternSetters = function() {
