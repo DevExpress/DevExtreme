@@ -8637,16 +8637,9 @@ QUnit.module('Editing with real dataController', {
             assert.ok(Object.prototype.isPrototypeOf.call(Prop2, items[0].data.prop1.prop2), 'item prop is an instance of the Prop2 class');
         };
 
-        class Data {
-            prop1
-        }
-        class Prop1 {
-            prop2
-        }
-
-        class Prop2 {
-            name
-        }
+        function Data(prop1) { }
+        function Prop1(prop2) { }
+        function Prop2(name) { }
 
         const dataSource = [{
             prop1: {
