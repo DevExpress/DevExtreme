@@ -2309,7 +2309,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _dispose() {
         super._dispose();
 
-        this.cache.clear();
         this.virtualScrollingDispatcher.dispose();
     }
 
