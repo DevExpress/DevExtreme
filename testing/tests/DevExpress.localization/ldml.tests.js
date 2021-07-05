@@ -522,7 +522,7 @@ QUnit.module('number formatter', () => {
         });
     });
 
-    QUnit.test('getRegExpInfo should write warning message if there are not separated single simbols in the `format`!', function(assert) {
+    QUnit.test('getRegExpInfo should throw warning message if there are no separated single simbols in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         [
             {
