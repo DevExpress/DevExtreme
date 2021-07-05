@@ -571,17 +571,16 @@ QUnit.module('number formatter', () => {
             },
             {
                 format: 'yyyM d',
-                warningCalls: 0
+                warningCalls: 1
             },
             {
                 format: 'dyyyM',
-                warningCalls: 0
+                warningCalls: 1
             }
-
         ].forEach(({ format, warningCalls }) => {
             spy.callCount = 0;
             getRegExpInfo(format);
-            assert.equal(spy.callCount, warningCalls);
+            assert.equal(spy.callCount, warningCalls, `${format}`);
         });
     });
 });
