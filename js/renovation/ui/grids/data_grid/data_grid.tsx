@@ -528,10 +528,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   @Effect() updateOptions(): void {
     if (this.instance && this.prevProps && !this.isTwoWayPropUpdating) {
-      const updatedOptions = getUpdatedOptions(
-        (this.prevProps as unknown) as Record<string, unknown>,
-        (this.props as unknown) as Record<string, unknown>,
-      );
+      const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
       this.instance.beginUpdate();
       updatedOptions.forEach(({ path, value, previousValue }) => {
         // eslint-disable-next-line no-underscore-dangle
