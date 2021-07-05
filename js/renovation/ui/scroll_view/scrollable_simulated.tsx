@@ -246,14 +246,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   endActionDirections:
   { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
 
-  // @Mutable() prevContainerClientWidth = 0;
-
-  // @Mutable() prevContainerClientHeight = 0;
-
-  // @Mutable() prevContentClientWidth = 0;
-
-  // @Mutable() prevContentClientHeight = 0;
-
   @Mutable() tabWasPressed = false;
 
   @Mutable() savedScrollOffset?: { top: number; left: number } = { top: 0, left: 0 };
