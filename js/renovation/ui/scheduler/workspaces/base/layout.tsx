@@ -168,7 +168,9 @@ export class LayoutBaseProps extends LayoutProps {
 
   @OneWay() columnCountPerGroup = 1;
 
-  @OneWay() groupPanelClassName = 'dx-scheduler-work-space-vertical-group-table';
+  @OneWay() groupPanelClassName:
+  'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table'
+  = 'dx-scheduler-work-space-vertical-group-table';
 
   @OneWay() isWorkSpaceWithOddCells?: boolean;
 
