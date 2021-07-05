@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, CSSAttributes, ForwardRef, JSXComponent, OneWay, RefObject, Slot,
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual_row';
@@ -19,6 +19,7 @@ export const viewFunction = ({
     rightVirtualCellWidth,
     leftVirtualCellCount,
     rightVirtualCellCount,
+    tableRef,
   },
 }: Table): JSX.Element => (
   <table
@@ -26,6 +27,7 @@ export const viewFunction = ({
     {...restAttributes}
     className={className}
     style={style}
+    ref={tableRef}
   >
     <tbody>
       {hasTopVirtualRow && (
@@ -74,6 +76,8 @@ export class TableProps {
   @OneWay() height?: number;
 
   @Slot() children?: JSX.Element | JSX.Element[];
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({

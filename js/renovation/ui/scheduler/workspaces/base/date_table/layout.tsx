@@ -12,6 +12,7 @@ export const viewFunction = ({
     groupOrientation,
     cellTemplate,
     dataCellTemplate,
+    tableRef,
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
@@ -24,6 +25,7 @@ export const viewFunction = ({
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
+    tableRef={tableRef}
     topVirtualRowHeight={topVirtualRowHeight}
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}

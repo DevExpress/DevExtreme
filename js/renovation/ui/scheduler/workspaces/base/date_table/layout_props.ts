@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXTemplate, Template,
+  ComponentBindings, ForwardRef, JSXTemplate, RefObject, Template,
 } from '@devextreme-generator/declarations';
 import { DataCellTemplateProps, ViewCellData } from '../../types.d';
 import { LayoutProps } from '../layout_props';
@@ -12,4 +12,6 @@ export interface CellTemplateProps extends ViewCellData {
 @ComponentBindings()
 export class DateTableLayoutProps extends LayoutProps {
   @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
