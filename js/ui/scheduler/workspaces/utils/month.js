@@ -2,7 +2,6 @@ import dateUtils from '../../../../core/utils/date';
 import dateLocalization from '../../../../localization/date';
 import {
     getCalculatedFirstDayOfWeek,
-    getToday,
     isDateInRange,
     setOptionHour,
 } from './base';
@@ -67,12 +66,4 @@ export const getCellText = (date, intervalCount) => {
     }
 
     return dateLocalization.format(date, 'dd');
-};
-
-export const isCurrentDate = (date, indicatorTime, timeZoneCalculator) => {
-    return dateUtils.sameDate(date, getToday(indicatorTime, timeZoneCalculator));
-};
-
-export const isOtherMonth = (cellDate, minDate, maxDate) => {
-    return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
 };

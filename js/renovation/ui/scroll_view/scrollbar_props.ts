@@ -29,8 +29,6 @@ export class ScrollbarProps {
 
   @OneWay() forceVisibility = false;
 
-  @OneWay() forceUpdateScrollbarLocation = false;
-
   @OneWay() scrollLocation = 0;
 
   @OneWay() pocketState = TopPocketState.STATE_RELEASED;

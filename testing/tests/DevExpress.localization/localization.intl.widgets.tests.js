@@ -107,6 +107,24 @@ QUnit.module('Intl localization', () => {
                 locale(currentLocale);
             }
         });
+
+        QUnit.test('DateBox should not raise error when digits are not default arabic digits and Fractional Seconds in the "displayFormat"', function(assert) {
+            const currentLocale = locale();
+            try {
+                locale('mr');
+                const dateBox = $('#dateBox').dxDateBox({
+                    value: new Date('2014-09-08T08:02:17.12'),
+                    useMaskBehavior: true,
+                    displayFormat: 'HH:mm:ss.SS'
+                }).dxDateBox('instance');
+
+                assert.strictEqual(dateBox.option('text'), '०८:०२:१७.१२', 'date is localized');
+            } catch(e) {
+                assert.ok(false, `Error occured: ${e.message}`);
+            } finally {
+                locale(currentLocale);
+            }
+        });
     });
 });
 
