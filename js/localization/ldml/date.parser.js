@@ -222,7 +222,7 @@ export const getRegExpInfo = function(format, dateParts) {
     patterns.every((pattern, index) => {
         const char = pattern[0];
         const prevPatternChar = index ? patterns[index - 1][0] : null;
-        const nextPatternChar = index < patterns.length - 1 ? patterns[index + 1][0] : null;
+        const nextPatternChar = index < patterns.length - 1 && patterns[index + 1][0];
         const isSingle = pattern.length === 1;
         const isFirst = index === 0;
         const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
