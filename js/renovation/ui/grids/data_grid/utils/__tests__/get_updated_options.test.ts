@@ -142,7 +142,7 @@ describe('get_updated_options', () => {
       .toEqual([{ path: 'dataSource', value: obj.dataSource, previousValue: oldObj.dataSource }]);
   });
 
-  it('using notDeepDiffParam', () => {
+  it('using notDeepDiffArrays Param', () => {
     const oldObj = { toolbar: { items: [{ value: 1 }] } };
     const obj = { toolbar: { items: [{ value: 2 }] } };
     expect(getUpdatedOptions(oldObj, obj, ['toolbar.items']))
