@@ -35,7 +35,7 @@ function compare(resultPaths: ResultItem[],
       resultPaths.push(...diffPaths.map((item) => ({ ...item, path: `${key}.${item.path}` })));
     }
   } else if (type1 === 'array') {
-    const notDeepCopy = defaultNotDeepCopyArrays.some((prop) => fullPropName.includes(prop));
+    const notDeepCopy = notDeepCopyArrays.some((prop) => fullPropName.includes(prop));
     if (notDeepCopy && item1 !== item2) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else if ((item1 as []).length !== (item2 as []).length) {
