@@ -141,4 +141,11 @@ describe('get_updated_options', () => {
     expect(getUpdatedOptions(oldObj, obj))
       .toEqual([{ path: 'dataSource', value: obj.dataSource, previousValue: oldObj.dataSource }]);
   });
+
+  it('using notDeepDiffParam', () => {
+    const oldObj = { toolbar: { items: [{ value: 1 }] } };
+    const obj = { toolbar: { items: [{ value: 2 }] } };
+    expect(getUpdatedOptions(oldObj, obj, ['toolbar.items']))
+      .toEqual([{ path: 'toolbar.items', value: [{ value: 2 }], previousValue: [{ value: 1 }] }]);
+  });
 });

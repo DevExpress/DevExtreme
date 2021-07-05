@@ -1,6 +1,6 @@
 import { isPlainObject, type } from '../../../../../core/utils/type';
 
-const notDeepCopyProperties: string[] = [
+const defaultNotDeepCopyArrays: string[] = [
   'dataSource',
   'selectedRowKeys',
 ];
@@ -15,7 +15,12 @@ function getDiffItem(key, value, previousValue): ResultItem {
   return { path: key, value, previousValue };
 }
 
-function compare(resultPaths: ResultItem[], item1, item2, key: string, fullPropName: string): void {
+function compare(resultPaths: ResultItem[],
+  item1,
+  item2,
+  key: string,
+  fullPropName: string,
+  notDeepCopyArrays: string[]): void {
   const type1 = type(item1);
   const type2 = type(item2);
   if (item1 === item2) return;
@@ -26,18 +31,18 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string, fullPropN
       resultPaths.push(getDiffItem(key, item2, item1));
     } else {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const diffPaths = objectDiffs(item1, item2, fullPropName);
+      const diffPaths = objectDiffs(item1, item2, fullPropName, notDeepCopyArrays);
       resultPaths.push(...diffPaths.map((item) => ({ ...item, path: `${key}.${item.path}` })));
     }
   } else if (type1 === 'array') {
-    const notDeepCopy = notDeepCopyProperties.some((prop) => fullPropName.includes(prop));
+    const notDeepCopy = defaultNotDeepCopyArrays.some((prop) => fullPropName.includes(prop));
     if (notDeepCopy && item1 !== item2) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else if ((item1 as []).length !== (item2 as []).length) {
       resultPaths.push(getDiffItem(key, item2, item1));
     } else {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const diffPaths = objectDiffs(item1, item2, fullPropName);
+      const diffPaths = objectDiffs(item1, item2, fullPropName, notDeepCopyArrays);
       ([] as ResultItem[]).push.apply(resultPaths,
         diffPaths.map((item) => ({ ...item, path: `${key}${item.path}` })));
     }
@@ -50,14 +55,15 @@ const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (
   oldProps: Record<string, unknown>,
   props: Record<string, unknown>,
   fullPropName: string,
+  notDeepCopyArrays: string[],
 ):
 ResultItem[] => {
   const resultPaths: ResultItem[] = [];
   const processItem = !Array.isArray(oldProps)
     ? (propName): void => {
-      compare(resultPaths, oldProps[propName], props[propName], propName, `${fullPropName}.${propName}`);
+      compare(resultPaths, oldProps[propName], props[propName], propName, `${fullPropName}.${propName}`, notDeepCopyArrays);
     } : (propName): void => {
-      compare(resultPaths, oldProps[propName], props[propName], `[${propName}]`, `${fullPropName}.${propName}`);
+      compare(resultPaths, oldProps[propName], props[propName], `[${propName}]`, `${fullPropName}.${propName}`, notDeepCopyArrays);
     };
 
   propsEnumerator(oldProps).forEach(processItem);
@@ -82,6 +88,10 @@ const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(p
   .filter((p) => !reactProps[p]));
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function getUpdatedOptions(oldProps: {}, props: {}): ResultItem[] {
-  return objectDiffsWithoutReactProps(oldProps, props, '');
+export function getUpdatedOptions(
+  oldProps: Record<string, unknown>,
+  props: Record<string, unknown>,
+  notDeepCopyArrays: string[] = defaultNotDeepCopyArrays,
+): ResultItem[] {
+  return objectDiffsWithoutReactProps(oldProps, props, '', notDeepCopyArrays);
 }
