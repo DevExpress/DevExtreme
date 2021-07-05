@@ -41,25 +41,25 @@ const PATTERN_REGEXPS = {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format').join('|');
     },
     d: function(count) {
-        return count === 2 ? '3[01]|[12][0-9]|0[1-9]' : '0?[1-9]|[12][0-9]|3[01]';
+        return count === 2 ? '3[01]|[12][0-9]|0?[1-9]' : '0?[1-9]|[12][0-9]|3[01]';
     },
     H: function(count) {
-        return '0?[0-9]|1[0-9]|2[0-3]';
+        return count === 2 ? '2[0-3]|1[0-9]|0?[0-9]' : '0?[0-9]|1[0-9]|2[0-3]';
     },
     h: function(count) {
-        return '0?[1-9]|1[012]';
+        return count === 2 ? '1[012]|0?[1-9]' : '0?[1-9]|1[012]';
     },
     m: function(count) {
-        return '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
     },
     s: function(count) {
-        return '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
     },
     S: function(count) {
         return '[0-9]{1,' + count + '}';
     },
     w: function(count) {
-        return '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
     }
 };
 
@@ -218,27 +218,35 @@ export const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
-
-    patterns.every((pattern, index) => {
-        const char = pattern[0];
-        const prevPatternChar = index ? patterns[index - 1][0] : null;
-        const nextPatternChar = index < patterns.length - 1 ? patterns[index + 1][0] : null;
-        const isSingle = pattern.length === 1;
-        const isFirst = index === 0;
-        const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
-
-        if(isSingle && isRegexpPart(char) && (isRegexpPart(prevPatternChar) || (isFirst && isRegexpPart(nextPatternChar)))) {
-            logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: ${format}.`);
-            return false;
-        } else {
-            return true;
-        }
-    });
+    if(isNoSeparatedFormat(patterns)) {
+        logger.warn(`Date-time formats without separators may produce unexpected results. Please add separators to the following format: ${format}.`);
+    }
 
     return {
         patterns: patterns,
         regexp: new RegExp('^' + regexpText + '$', 'i')
     };
+};
+
+const isNoSeparatedFormat = function(patterns) {
+    let isNoSeparated = false;
+    patterns.every((pattern, index) => {
+        const char = pattern[0];
+        const prevPatternChar = index && patterns[index - 1][0];
+        const nextPatternChar = index < patterns.length - 1 && patterns[index + 1][0];
+        const isFirst = index === 0;
+        const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
+        const isSingle = pattern.length === 1;
+        const isNeighborsPatternChar = isRegexpPart(prevPatternChar) || (isFirst && isRegexpPart(nextPatternChar));
+
+        if(isSingle && isNeighborsPatternChar && isRegexpPart(char)) {
+            isNoSeparated = true;
+            return false;
+        } else {
+            return true;
+        }
+    });
+    return isNoSeparated;
 };
 
 export const getPatternSetters = function() {

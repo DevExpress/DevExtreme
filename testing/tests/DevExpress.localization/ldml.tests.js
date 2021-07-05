@@ -522,7 +522,7 @@ QUnit.module('number formatter', () => {
         });
     });
 
-    QUnit.test('getRegExpInfo should write warning message if there are not separated single simbols in the `format`!', function(assert) {
+    QUnit.test('getRegExpInfo should throw warning message if there are no separated single simbols in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         [
             {
@@ -538,12 +538,36 @@ QUnit.module('number formatter', () => {
                 warningCalls: 1
             },
             {
+                format: 'dMMyyyy',
+                warningCalls: 1
+            },
+            {
                 format: 'dyyyyM',
                 warningCalls: 1
             },
             {
                 format: 'dyyyyMM',
                 warningCalls: 1
+            },
+            {
+                format: 'd yyyyMM',
+                warningCalls: 0
+            },
+            {
+                format: 'dM yyyy',
+                warningCalls: 1
+            },
+            {
+                format: 'yyyyMd',
+                warningCalls: 1
+            },
+            {
+                format: 'yyyyM d',
+                warningCalls: 1
+            },
+            {
+                format: 'yyyy M d',
+                warningCalls: 0
             }
         ].forEach(({ format, warningCalls }) => {
             spy.callCount = 0;
