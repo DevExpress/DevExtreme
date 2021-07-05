@@ -295,13 +295,14 @@ const DropDownList = DropDownEditor.inherit({
 
     _renderInputValue: function() {
         const value = this._getCurrentValue();
+        this._rejectValueLoading();
 
         return this._loadInputValue(value, this._setSelectedItem.bind(this))
             .always(this.callBase.bind(this, value));
     },
 
     _loadInputValue: function(value, callback) {
-        return this._loadItem(value).always(callback);
+        return this._loadItem(value).done(callback);
     },
 
     _getItemFromPlain: function(value, cache) {
