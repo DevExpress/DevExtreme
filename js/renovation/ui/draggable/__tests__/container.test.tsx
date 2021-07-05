@@ -5,7 +5,7 @@ import {
   emit, getEventHandlers, clear as clearEventHandlers, EVENT,
 } from '../../../test_utils/events_mock';
 import { DraggableContainer, DraggableContainerProps, viewFunction as DraggableContainerView } from '../container';
-import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 
 describe('DraggableContainer', () => {
   describe('View', () => {

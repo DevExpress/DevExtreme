@@ -6,7 +6,7 @@ import {
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../utils/effect_return';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
 import { SchedulerProps } from './props';
