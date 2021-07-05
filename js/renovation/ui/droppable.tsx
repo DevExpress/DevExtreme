@@ -10,6 +10,7 @@ import {
   Slot,
 } from '@devextreme-generator/declarations';
 import { EffectReturn } from '../utils/effect_return';
+import { EventCallback } from './common/event_callback';
 
 import {
   enter,
@@ -40,25 +41,22 @@ interface DroppableEvent {
 
 @ComponentBindings()
 export class DroppableProps {
-  @OneWay() disabled?: boolean;
+  @OneWay() disabled = false;
 
   @OneWay() className = '';
 
-  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
+  @Slot() children?: JSX.Element;
 
-  @Event() onDragEnter?: (e: DroppableEvent) => void;
+  @Event() onDragEnter?: EventCallback<DroppableEvent>;
 
-  @Event() onDragLeave?: (e: DroppableEvent) => void;
+  @Event() onDragLeave?: EventCallback<DroppableEvent>;
 
-  @Event() onDrop?: (e: DroppableEvent) => void;
+  @Event() onDrop?: EventCallback<DroppableEvent>;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-  },
 })
 
 export class Droppable extends JSXComponent(DroppableProps) {
