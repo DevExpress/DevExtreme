@@ -1,10 +1,13 @@
 import registerComponent from '../../../core/component_registrator';
+import { VIEWS } from '../constants';
 import SchedulerTimeline from './ui.scheduler.timeline';
 import { calculateStartViewDate } from './utils/day';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 
 class SchedulerTimelineDay extends SchedulerTimeline {
+    get type() { return VIEWS.TIMELINE_DAY; }
+
     _getElementClass() {
         return TIMELINE_CLASS;
     }

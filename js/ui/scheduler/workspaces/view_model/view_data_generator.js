@@ -1,4 +1,11 @@
+import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
+import {
+    getDateByCellIndices,
+    calculateCellIndex,
+} from '../utils/base';
+
+const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 
 export class ViewDataGenerator {
     getCompleteViewDataMap(options) {
@@ -250,15 +257,12 @@ export class ViewDataGenerator {
     }
 
     _generateViewCellsData(options, rowsCount) {
-        const {
-            cellCountInGroupRow,
-            cellDataGetters,
-        } = options;
+        const { cellCountInGroupRow } = options;
         const viewCellsData = [];
 
         for(let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCountInGroupRow,
+                options, false, rowIndex, cellCountInGroupRow,
             ));
         }
 
@@ -270,19 +274,14 @@ export class ViewDataGenerator {
             return null;
         }
 
-        return this._generateCellsRow(
-            options, [options.getAllDayCellData], 0, cellCount,
-        );
+        return this._generateCellsRow(options, true, 0, cellCount);
     }
 
-    _generateCellsRow(options, cellDataGetters, rowIndex, columnCount) {
+    _generateCellsRow(options, allDay, rowIndex, columnCount) {
         const cellsRow = [];
 
         for(let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
-            const cellDataValue = cellDataGetters.reduce((data, getter) => ({
-                ...data,
-                ...getter(undefined, rowIndex, columnIndex, 0, data.startDate).value,
-            }), {});
+            const cellDataValue = this.getCellData(rowIndex, columnIndex, options, allDay);
 
             cellDataValue.index = rowIndex * columnCount + columnIndex;
 
@@ -297,6 +296,60 @@ export class ViewDataGenerator {
         }
 
         return cellsRow;
+    }
+
+    getCellData(rowIndex, columnIndex, options, allDay) {
+        return allDay
+            ? this.prepareAllDayCellData(options, rowIndex, columnIndex)
+            : this.prepareCellData(options, rowIndex, columnIndex);
+    }
+
+    prepareCellData(options, rowIndex, columnIndex) {
+        const {
+            groupsList,
+            tableAllDay,
+            endDayHour,
+            interval,
+        } = options;
+
+        const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
+        const endDate = this.calculateEndDate(startDate, interval, endDayHour);
+
+        const data = {
+            startDate: startDate,
+            endDate: endDate,
+            allDay: tableAllDay,
+            groupIndex: 0,
+        };
+
+        if(groupsList.length > 0) {
+            data.groups = groupsList[0];
+        }
+
+        return data;
+    }
+
+    prepareAllDayCellData(options, rowIndex, columnIndex) {
+        const data = this.prepareCellData(options, rowIndex, columnIndex);
+        const startDate = dateUtils.trimTime(data.startDate);
+
+        return {
+            ...data,
+            startDate,
+            endDate: startDate,
+            allDay: true,
+        };
+    }
+
+    calculateEndDate(startDate, interval, endDayHour) {
+        const result = new Date(startDate);
+        result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
+
+        return result;
+    }
+
+    _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+        return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
     }
 
     generateGroupedDataMap(viewDataMap) {
@@ -462,5 +515,12 @@ export class ViewDataGenerator {
                 },
             };
         });
+    }
+
+    getInterval(hoursInterval) {
+        if(this._interval === undefined) {
+            this._interval = hoursInterval * HOUR_MS;
+        }
+        return this._interval;
     }
 }

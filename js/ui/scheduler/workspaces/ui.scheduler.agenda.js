@@ -18,6 +18,7 @@ import {
 import { getPathToLeaf } from '../resources/utils';
 import { calculateStartViewDate } from './utils/agenda';
 import { formatWeekday } from './utils/base';
+import { VIEWS } from '../constants';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -37,6 +38,8 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends WorkSpace {
+    get type() { return VIEWS.AGENDA; }
+
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
     _init() {

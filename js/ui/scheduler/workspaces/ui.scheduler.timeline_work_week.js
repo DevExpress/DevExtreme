@@ -1,4 +1,5 @@
 import registerComponent from '../../../core/component_registrator';
+import { VIEWS } from '../constants';
 import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import {
     getWeekendsCount,
@@ -11,6 +12,8 @@ const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;
 
 class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
+    get type() { return VIEWS.TIMELINE_WORK_WEEK; }
+
     get isWorkView() { return true; }
 
     constructor(...args) {
