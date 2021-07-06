@@ -749,30 +749,6 @@ QUnit.module('Pager', {
         assert.equal(this.pagerView.element().find('.dx-info').css('direction'), 'rtl', 'infoText has rtl direction');
     });
 
-    QUnit.test('Pager container should be hidden when its content is not visible (T1011042)', function(assert) {
-        // arrange
-        const $testElement = $('#container');
-
-        this.options.pager.allowedPageSizes = [2, 4, 6];
-        this.dataControllerOptions = {
-            pageSize: 4,
-            pageCount: 2,
-            pageIndex: 0,
-            totalCount: 6
-        };
-        this.pagerView.render($testElement);
-        sinon.spy(this.pagerView, '_invalidate');
-
-        // act
-        this.dataController.skipProcessingPagingChange = function() { return true; };
-        this.option('paging.pageSize', 6);
-
-        // assert
-        assert.ok(this.pagerView.isVisible(), 'pager visible');
-        assert.strictEqual(this.pagerView._invalidate.callCount, 0, 'render not execute');
-        this.pagerView._invalidate.restore();
-    });
-
     // T1011042
     QUnit.test('Pager container is hidden after refresh if its content is not visible', function(assert) {
         // arrange
