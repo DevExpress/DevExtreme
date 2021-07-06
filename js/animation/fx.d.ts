@@ -1,24 +1,31 @@
-import {
-    DxElement
-} from '../core/element';
+import { DxElement } from '../core/element';
+import { DxPromise } from '../core/utils/deferred';
+import { PositionConfig } from './position';
 
-import {
-    DxPromise
-} from '../core/utils/deferred';
+/**
+ * @docid
+ * @public
+ */
+export type AnimationState = string | number | 
+{ opacity: number; } | 
+{ scale: number; } | 
+{ position: PositionConfig; } |
+{ left: number; } | 
+{ top: number; };
 
 /**
  * @docid
  * @namespace DevExpress
  * @type object
  */
-export interface animationConfig {
+export type AnimationConfig = {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
      * @public
      */
-    complete?: (($element: DxElement, config: any) => void);
+    complete?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default 0
@@ -49,7 +56,7 @@ export interface animationConfig {
      * @default {}
      * @public
      */
-    from?: number | string | any;
+    from?: AnimationState;
     /**
      * @docid
      * @default undefined
@@ -59,16 +66,16 @@ export interface animationConfig {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:object
+     * @type_function_param2 config:AnimationConfig
      * @public
      */
-    start?: (($element: DxElement, config: any) => void);
+    start?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default {}
      * @public
      */
-    to?: number | string | any;
+    to?: AnimationState;
     /**
      * @docid
      * @type Enums.AnimationType
@@ -77,6 +84,9 @@ export interface animationConfig {
      */
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
+
+/** @deprecated Use the AnimationConfig type instead */
+export type animationConfig = AnimationConfig;
 
 /**
  * @docid
@@ -90,12 +100,12 @@ declare const fx: {
      * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
-     * @param2 config:animationConfig
+     * @param2 config:AnimationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
      * @public
      */
-    animate(element: Element, config: animationConfig): DxPromise<void>;
+    animate(element: Element, config: AnimationConfig): DxPromise<void>;
 
     /**
      * @docid
