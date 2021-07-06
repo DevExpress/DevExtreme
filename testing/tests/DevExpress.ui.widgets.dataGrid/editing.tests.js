@@ -10032,6 +10032,22 @@ QUnit.module('Editing with real dataController', {
             assert.equal($(this.getCellElement(0, 0)).text(), 'test', 'cell was modified');
         });
     });
+
+    // T1009772
+    QUnit.test('Editing does not merge changes when value of cell is object', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        rowsView.render(testElement);
+
+        // act
+        this.cellValue(0, 0, { a: 1, b: 1 });
+        this.cellValue(0, 0, { a: 2 });
+        this.saveEditData();
+
+        // assert
+        assert.deepEqual(this.cellValue(0, 0), { a: 2 }, 'value didn\'t merge');
+    });
 });
 
 QUnit.module('Refresh modes', {
