@@ -16,7 +16,7 @@ jest.mock('../../utils', () => ({
   isVerticalGroupOrientation: jest.fn(),
 }));
 
-describe('LayoutBase ', () => {
+describe('LayoutBase', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
