@@ -130,6 +130,7 @@ const DropDownBox = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
+        this._rejectValueLoading();
         const callBase = this.callBase.bind(this);
         const values = [];
 
@@ -176,6 +177,10 @@ const DropDownBox = DropDownEditor.inherit({
                     deferred.resolve(item);
                 })
                 .fail(function(args) {
+                    if(args?.shouldSkipCallback) {
+                        return;
+                    }
+
                     if(that.option('acceptCustomValue')) {
                         deferred.resolve(value);
                     } else {
