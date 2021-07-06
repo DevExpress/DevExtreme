@@ -510,43 +510,6 @@ declare global {
 }
 declare module DevExpress {
   /**
-      config: AnimationConfig
-   * [descr:animationPresets]
-   */
-  export const animationPresets: {
-    /**
-     * [descr:animationPresets.applyChanges()]
-     */
-    applyChanges(): void;
-    /**
-     * [descr:animationPresets.clear()]
-     */
-    clear(): void;
-    /**
-     * [descr:animationPresets.clear(name)]
-     */
-    clear(name: string): void;
-    /**
-     * [descr:animationPresets.getPreset(name)]
-     */
-    getPreset(name: string): AnimationConfig;
-    /**
-     * [descr:animationPresets.registerDefaultPresets()]
-     */
-    registerDefaultPresets(): void;
-    /**
-     * [descr:animationPresets.registerPreset(name, config)]
-     */
-    registerPreset(
-      name: string,
-      config: { animation: AnimationConfig; device?: Device }
-    ): void;
-    /**
-     * [descr:animationPresets.resetToDefaults()]
-     */
-    resetToDefaults(): void;
-  };
-  /**
    * [descr:AnimationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -605,6 +568,42 @@ declare module DevExpress {
       | 'slide'
       | 'slideIn'
       | 'slideOut';
+  };
+  /**
+   * [descr:animationPresets]
+   */
+  export const animationPresets: {
+    /**
+     * [descr:animationPresets.applyChanges()]
+     */
+    applyChanges(): void;
+    /**
+     * [descr:animationPresets.clear()]
+     */
+    clear(): void;
+    /**
+     * [descr:animationPresets.clear(name)]
+     */
+    clear(name: string): void;
+    /**
+     * [descr:animationPresets.getPreset(name)]
+     */
+    getPreset(name: string): AnimationConfig;
+    /**
+     * [descr:animationPresets.registerDefaultPresets()]
+     */
+    registerDefaultPresets(): void;
+    /**
+     * [descr:animationPresets.registerPreset(name, config)]
+     */
+    registerPreset(
+      name: string,
+      config: { animation: AnimationConfig; device?: Device }
+    ): void;
+    /**
+     * [descr:animationPresets.resetToDefaults()]
+     */
+    resetToDefaults(): void;
   };
   /**
    * [descr:Component]
@@ -1005,6 +1004,29 @@ declare module DevExpress {
      */
     type?: PredefinedFormat;
   }
+  /**
+   * [descr:fx]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export const fx: {
+    /**
+     * [descr:fx.animate(element, config)]
+     */
+    animate(
+      element: Element,
+      config: AnimationConfig
+    ): DevExpress.core.utils.DxPromise<void>;
+
+    /**
+     * [descr:fx.isAnimating(element)]
+     */
+    isAnimating(element: Element): boolean;
+
+    /**
+     * [descr:fx.stop(element, jumpToEnd)]
+     */
+    stop(element: Element, jumpToEnd: boolean): void;
+  };
   /**
    * [descr:globalConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
