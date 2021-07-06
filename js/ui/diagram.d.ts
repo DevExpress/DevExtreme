@@ -164,7 +164,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
-     * @return void
+     * @type_function_return void
      * @public
      */
     customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
@@ -173,7 +173,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
-     * @return void
+     * @type_function_return void
      * @public
      */
     customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
@@ -298,7 +298,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
-       * @return void
+       * @type_function_return void
        */
       template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
       /**
@@ -342,7 +342,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 container:dxSVGElement
        * @type_function_param2 data:object
        * @type_function_param2_field1 item:dxDiagramShape
-       * @return void
+       * @type_function_return void
        */
       toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
       /**
