@@ -33,8 +33,6 @@ export const viewFunction = ({
   classes,
   isRenderGroupPanel,
   isStandaloneAllDayPanel,
-  groupRowCount,
-  groupColumnCount,
   isSetAllDayTitleClass,
   dateTableRef,
   groupPanelHeight,
@@ -64,8 +62,6 @@ export const viewFunction = ({
 }: LayoutBase): JSX.Element => (
   <Widget
     className={classes}
-    dx-group-row-count={groupRowCount}
-    dx-group-column-count={groupColumnCount}
   >
     {isAllDayPanelSupported && (
       <AllDayPanelTitle
@@ -215,6 +211,18 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
       'dx-scheduler-work-space-group-by-date': groupByDate,
       'dx-scheduler-work-space-grouped': groups?.length > 0,
       'dx-scheduler-work-space-vertical-grouped': isVerticalGroupOrientation(groupOrientation, groups),
+      'dx-scheduler-group-row-count-one': isHorizontalGroupOrientation(groups, groupOrientation)
+        && groups.length === 1,
+      'dx-scheduler-group-row-count-two': isHorizontalGroupOrientation(groups, groupOrientation)
+        && groups.length === 2,
+      'dx-scheduler-group-row-count-three': isHorizontalGroupOrientation(groups, groupOrientation)
+        && groups.length === 1,
+      'dx-scheduler-group-column-count-one': isVerticalGroupOrientation(groupOrientation, groups)
+        && groups.length === 1,
+      'dx-scheduler-group-column-count-two': isVerticalGroupOrientation(groupOrientation, groups)
+        && groups.length === 2,
+      'dx-scheduler-group-column-count-three': isVerticalGroupOrientation(groupOrientation, groups)
+        && groups.length === 3,
       'dx-scheduler-work-space': true,
     });
   }
@@ -241,28 +249,6 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
     const { groups, groupOrientation } = this.props;
 
     return !isVerticalGroupOrientation(groupOrientation, groups);
-  }
-
-  get groupRowCount(): number {
-    const {
-      groupOrientation,
-      groups,
-    } = this.props;
-
-    return isHorizontalGroupOrientation(groups, groupOrientation)
-      ? groups.length
-      : 0;
-  }
-
-  get groupColumnCount(): number {
-    const {
-      groupOrientation,
-      groups,
-    } = this.props;
-
-    return isVerticalGroupOrientation(groupOrientation, groups)
-      ? groups.length
-      : 0;
   }
 
   @Effect()
