@@ -301,8 +301,6 @@ export default class TableResizingModule extends BaseModule {
             transform: 'none'
         };
 
-        this._$highlightedElement?.remove();
-
         let currentPosition = 0;
         for(let i = 0; i <= determinantElementsSeparatorsCount; i++) {
             currentPosition += this._getSize($determinantElements.eq(i), directionInfo);
@@ -417,6 +415,10 @@ export default class TableResizingModule extends BaseModule {
             }
         } else {
             const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
+            if(currentLineNewSize >= this._minRowHeight) {
+                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
+            }
+
             $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
         }
 
@@ -454,11 +456,8 @@ export default class TableResizingModule extends BaseModule {
 
         const directionClass = options.direction === 'vertical' ? 'dx-htmleditor-highlighted-row' : 'dx-htmleditor-highlighted-column';
 
+        this._$highlightedElement?.remove();
         this._$highlightedElement = $('<div>').addClass(`${directionClass}`).insertAfter(options.lineSeparator);
-
-        // if(options.direction === 'vertical') {
-        // } else {
-        // }
 
         const config = {
             contentTemplate: null,
@@ -471,6 +470,7 @@ export default class TableResizingModule extends BaseModule {
                 this._dragStartHandler(options);
             },
             onDragEnd: () => {
+                this._$highlightedElement?.remove();
                 this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
                 this._updateFramesPositions();
                 this._updateFramesSeparators();

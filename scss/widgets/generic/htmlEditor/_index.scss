@@ -308,7 +308,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 }
 
 .dx-table-resize-frame {
-  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
     background-color: $htmleditor-cells-separator-bg;
   }
 }
