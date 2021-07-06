@@ -3,6 +3,7 @@ import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
 import timeZoneUtils from '../../utils.timeZone';
+import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -150,4 +151,17 @@ export const getToday = (indicatorTime, timeZoneCalculator) => {
     const todayDate = indicatorTime || new Date();
 
     return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};
+
+export const getVerticalGroupCountClass = (groups) => {
+    switch(groups?.length) {
+        case 1:
+            return VERTICAL_GROUP_COUNT_CLASSES[0];
+        case 2:
+            return VERTICAL_GROUP_COUNT_CLASSES[1];
+        case 3:
+            return VERTICAL_GROUP_COUNT_CLASSES[2];
+        default:
+            return undefined;
+    }
 };

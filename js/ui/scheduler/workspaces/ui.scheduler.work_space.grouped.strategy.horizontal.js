@@ -1,8 +1,6 @@
 
 import { getBoundingRect } from '../../../core/utils/position';
-import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-
-const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
+import { FIRST_GROUP_CELL_CLASS, HORIZONTAL_GROUP_COUNT_CLASSES, LAST_GROUP_CELL_CLASS } from '../classes';
 
 class HorizontalGroupedStrategy {
     constructor(workSpace) {
@@ -79,11 +77,17 @@ class HorizontalGroupedStrategy {
         return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     }
 
-    getGroupCountAttr(groups) {
-        return {
-            attr: HORIZONTAL_GROUPED_ATTR,
-            count: groups?.length
-        };
+    getGroupCountClass(groups) {
+        switch(groups?.length) {
+            case 1:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[0];
+            case 2:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[1];
+            case 3:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[2];
+            default:
+                return undefined;
+        }
     }
 
     getLeftOffset() {
