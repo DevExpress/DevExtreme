@@ -114,6 +114,8 @@ QUnit.module('Intl localization', () => {
                 locale('mr');
                 const dateBox = $('#dateBox').dxDateBox({
                     value: new Date('2014-09-08T08:02:17.12'),
+                    type: 'date',
+                    pickerType: 'calendar',
                     useMaskBehavior: true,
                     displayFormat: 'HH:mm:ss.SS'
                 }).dxDateBox('instance');
