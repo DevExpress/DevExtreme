@@ -16,6 +16,7 @@ import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
 import { Widget } from '../common/widget';
 import BaseComponent from '../../component_wrapper/editors/check_box';
+import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return';
@@ -69,7 +70,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className="dx-checkbox-container">
-        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
+        <span className="dx-checkbox-icon" ref={viewModel.iconRef} style={viewModel.iconStyles} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.showValidationMessage
@@ -107,6 +108,10 @@ export class CheckBoxProps extends BaseWidgetProps {
   @OneWay() name = '';
 
   @OneWay() readOnly = false;
+
+  @OneWay() iconHeight: number | string | (() => (string | number)) = 22;
+
+  @OneWay() iconWidth: number | string | (() => (string | number)) = 22;
 
   @OneWay() isValid = true;
 
@@ -190,6 +195,19 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
 
     return undefined;
+  }
+
+  get iconStyles(): { [key: string]: string | number } {
+    const { iconWidth, iconHeight } = this.props;
+
+    const fontSizeMultiplayer = 0.73;
+    const computedIconWidth = typeof iconWidth === 'function' ? +iconWidth() : +iconWidth;
+    const computedIconHeight = typeof iconHeight === 'function' ? +iconHeight() : +iconHeight;
+    const width = normalizeStyleProp('width', typeof iconWidth === 'function' ? iconWidth() : iconWidth);
+    const height = normalizeStyleProp('height', typeof iconHeight === 'function' ? iconHeight() : iconHeight);
+    const fontSize = normalizeStyleProp('font-size', Math.round(Math.min(computedIconWidth, computedIconHeight) * fontSizeMultiplayer));
+
+    return { height, width, fontSize };
   }
 
   get cssClasses(): string {
