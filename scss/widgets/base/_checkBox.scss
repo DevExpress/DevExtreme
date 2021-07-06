@@ -22,13 +22,15 @@
   background-position: 0 0;
   background-size: cover;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+  max-height: 100%;
 }
 
 .dx-checkbox-container {
   height: 100%;
   width: 100%;
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  column-gap: 5px;
 
   @include dx-overflow();
 }
@@ -41,10 +43,8 @@
 }
 
 .dx-checkbox-text {
-  display: inline-block;
-  vertical-align: middle;
+  word-break: break-word;
   white-space: pre-wrap;
-  word-wrap: break-word;
   line-height: normal;
   height: 100%;
   width: 100%;
