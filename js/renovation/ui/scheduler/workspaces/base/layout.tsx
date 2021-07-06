@@ -216,7 +216,7 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
       'dx-scheduler-group-row-count-two': isHorizontalGroupOrientation(groups, groupOrientation)
         && groups.length === 2,
       'dx-scheduler-group-row-count-three': isHorizontalGroupOrientation(groups, groupOrientation)
-        && groups.length === 1,
+        && groups.length === 3,
       'dx-scheduler-group-column-count-one': isVerticalGroupOrientation(groupOrientation, groups)
         && groups.length === 1,
       'dx-scheduler-group-column-count-two': isVerticalGroupOrientation(groupOrientation, groups)
@@ -242,7 +242,7 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
       isAllDayPanelVisible,
     } = this.props;
 
-    return isVerticalGroupOrientation(groupOrientation, groups) && isAllDayPanelVisible;
+    return !isVerticalGroupOrientation(groupOrientation, groups) && isAllDayPanelVisible;
   }
 
   get isSetAllDayTitleClass(): boolean {
