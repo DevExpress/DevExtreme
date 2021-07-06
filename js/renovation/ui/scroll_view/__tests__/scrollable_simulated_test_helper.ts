@@ -244,6 +244,8 @@ class ScrollableTestHelper {
           ...{
             contentSize: 200,
             containerSize: 100,
+            topPocketSize: 0,
+            bottomPocketSize: 0,
             scrollableOffset: 0,
             contentTranslateOffsetChange:
               scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),

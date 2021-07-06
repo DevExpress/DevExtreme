@@ -884,6 +884,37 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-selection'), 'no dx-selection on the first row');
         assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection on the second row');
     });
+
+    // T1008562
+    QUnit.test('selection.showCheckBoxesMode changing does not clear selection', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 1 }, { field1: 2, field2: 2 }],
+            keyExpr: 'field1',
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'onClick',
+                deferred: true
+            },
+        });
+        dataGrid.selectRows([1]);
+        this.clock.tick();
+
+        // assert
+        let selectedKeysBefore;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysBefore = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysBefore, [1]);
+
+        // act
+        dataGrid.option('selection.showCheckBoxesMode', 'none');
+
+        // assert
+        let selectedKeysAfter;
+        dataGrid.getSelectedRowKeys().done((keys) => selectedKeysAfter = keys);
+        this.clock.tick();
+        assert.deepEqual(selectedKeysAfter, [1]);
+    });
 });
 
 QUnit.module('columnWidth auto option', {

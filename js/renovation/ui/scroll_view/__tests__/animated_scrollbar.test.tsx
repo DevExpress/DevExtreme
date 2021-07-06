@@ -57,33 +57,43 @@ describe('Public methods', () => {
     expect(viewModel.cancel).toHaveBeenCalledTimes(1);
   });
 
-  each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
-    it('animator should call scrollComplete during step if was finished', () => {
-      const scrollCompleteHandler = jest.fn();
-      const scrollbarMoveToHandler = jest.fn();
+  each([-1000, -700]).describe('scrollLocation: %o', (scrollLocation) => {
+    each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
+      it('animator should call scrollComplete during step if was finished', () => {
+        const scrollCompleteHandler = jest.fn();
+        const scrollbarMoveToHandler = jest.fn();
 
-      const viewModel = new AnimatedScrollbar({ });
-      (viewModel as any).scrollbarRef = {
-        current: {
-          scrollComplete: scrollCompleteHandler,
-          moveTo: scrollbarMoveToHandler,
-          getLocationWithinRange: () => -700,
-        },
-      };
-      Object.defineProperties(viewModel, {
-        isFinished: { get() { return true; } },
-        isBounceAnimator: { get() { return isBounceAnimator; } },
+        const viewModel = new AnimatedScrollbar({
+          scrollLocation,
+        });
+        (viewModel as any).scrollbarRef = {
+          current: {
+            scrollComplete: scrollCompleteHandler,
+            moveTo: scrollbarMoveToHandler,
+            getLocationWithinRange: () => -700,
+          },
+        };
+        Object.defineProperties(viewModel, {
+          isFinished: { get() { return true; } },
+          isBounceAnimator: { get() { return isBounceAnimator; } },
+        });
+
+        viewModel.stepCore();
+
+        expect(viewModel.finished).toBe(true);
+        if (isBounceAnimator) {
+          expect(scrollbarMoveToHandler).toHaveBeenCalledTimes(1);
+          expect(scrollbarMoveToHandler).toHaveBeenCalledWith(-700);
+
+          if (scrollLocation === -700) {
+            expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
+          } else {
+            expect(scrollCompleteHandler).not.toBeCalled();
+          }
+        } else {
+          expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
+        }
       });
-
-      viewModel.stepCore();
-
-      expect(viewModel.finished).toBe(true);
-      if (isBounceAnimator) {
-        expect(scrollbarMoveToHandler).toHaveBeenCalledTimes(1);
-        expect(scrollbarMoveToHandler).toHaveBeenCalledWith(-700);
-      }
-
-      expect(scrollCompleteHandler).toHaveBeenCalledTimes(1);
     });
   });
 

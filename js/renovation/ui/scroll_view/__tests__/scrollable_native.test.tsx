@@ -520,7 +520,7 @@ describe('Native > Effects', () => {
       viewModel.updateSizes = jest.fn();
       (viewModel as any).getEventArgs = jest.fn(() => ({ fakeEventArg: { value: 3 } }));
 
-      viewModel.update();
+      viewModel.updateHandler();
 
       if (actionHandler) {
         expect(actionHandler).toHaveBeenCalledTimes(1);
@@ -1085,7 +1085,7 @@ describe('Methods', () => {
           scrollable.locked = false;
           scrollable.isScrollingOutOfBound = jest.fn(() => isScrollingOutOfBound);
           scrollable.tryGetAllowedDirection = jest.fn(() => allowedDirection);
-          scrollable.update = jest.fn();
+          scrollable.updateHandler = jest.fn();
 
           let expectedValidateResult = false;
 
@@ -1111,7 +1111,7 @@ describe('Methods', () => {
           scrollable.locked = false;
           scrollable.isScrollingOutOfBound = jest.fn(() => true);
           scrollable.tryGetAllowedDirection = jest.fn(() => allowedDirection);
-          scrollable.update = jest.fn();
+          scrollable.updateHandler = jest.fn();
 
           let expectedValidateResult = false;
 

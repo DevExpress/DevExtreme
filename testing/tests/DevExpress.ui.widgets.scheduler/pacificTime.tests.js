@@ -223,7 +223,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             '4:00 PM', '', '5:00 PM', '', '6:00 PM', '', '7:00 PM', '', '8:00 PM', '', '9:00 PM', '', '10:00 PM', '', '11:00 PM', ''
         ];
 
-        const expectedHeaderDateResults = (() => {
+        const expectedDateResults = (() => {
             const result = [];
             let startHours = 0;
             let currentDate = new Date(summerDSTDate);
@@ -242,26 +242,11 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             return result;
         })();
 
-        // TODO: dates should be the same in different views
-        const expectedDateResults = (() => {
-            const result = [];
-            let startHours = 0;
-            let currentDate = new Date(summerDSTDate);
-
-            while(currentDate.getDate() < 9) {
-                result.push(new Date(currentDate));
-                startHours += 0.5;
-                currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
-            }
-
-            return result;
-        })();
-
         const testCases = [
             { view: 'week', times: expectedShortTimes, dates: expectedDateResults },
             { view: 'day', times: expectedShortTimes, dates: expectedDateResults },
-            { view: 'timelineDay', times: expectedAllTimes, dates: expectedHeaderDateResults },
-            { view: 'timelineWeek', times: expectedAllTimes, dates: expectedHeaderDateResults }
+            { view: 'timelineDay', times: expectedAllTimes, dates: expectedDateResults },
+            { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
         ];
 
         [true, false].forEach((renovateRender) => {
@@ -332,11 +317,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
                             let index = 0;
 
-                            const validExpectedDateResults = [
-                                new Date(2020, 2, 8, 1, 0),
-                                new Date(2020, 2, 8, 1, 30),
-                                ...expectedDateResults.slice(6),
-                            ];
+                            const validExpectedDateResults = expectedDateResults.slice(4);
 
                             createWrapper({
                                 dataSource: [],

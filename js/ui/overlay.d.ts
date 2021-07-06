@@ -121,10 +121,10 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cancel:boolean
      * @action
      * @public
      */
@@ -136,10 +136,11 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cancel:Boolean
      * @action
      * @public
      */
-    onShowing?: ((e: EventInfo<TComponent>) => void);
+    onShowing?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null

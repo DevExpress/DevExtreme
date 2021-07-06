@@ -6,6 +6,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 
 import 'generic_light.css!';
 
@@ -720,7 +721,7 @@ class ScrollableTestHelper {
         const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
 
         return {
-            vertical: this._useNative ? maxVerticalOffset : maxVerticalOffset,
+            vertical: maxVerticalOffset,
             horizontal: maxHorizontalOffset
         };
     }
@@ -774,8 +775,22 @@ class ScrollableTestHelper {
 
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
+
+        const { decreasing, positive } = getScrollRtlBehavior();
+
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
-        QUnit.assert.roughEqual(-scrollOffset.left, left, epsilon, 'scrollOffset.left');
+
+        let expectedScrollOffsetLeft = left;
+
+        if(this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
+            expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
+
+            if(positive) {
+                expectedScrollOffsetLeft = Math.abs(expectedScrollOffsetLeft);
+            }
+        }
+
+        QUnit.assert.roughEqual(-scrollOffset.left, expectedScrollOffsetLeft, epsilon, 'scrollOffset.left');
         QUnit.assert.roughEqual(-scrollOffset.top, top, epsilon, 'scrollOffset.top');
         QUnit.assert.roughEqual(this.scrollable.scrollLeft(), left, epsilon, message || 'scrollable.scrollLeft()');
         QUnit.assert.roughEqual(this.scrollable.scrollTop(), top, epsilon, 'scrollable.scrollTop()');
@@ -1039,12 +1054,12 @@ class ScrollableTestHelper {
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: 25 });
 
                 helper.$scrollable.find('.content1').css('width', '200px');
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative && useSimulatedScrollbar ? 12 : 25 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative || (useNative && useSimulatedScrollbar) ? 12 : 35 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 12 : 35 });
             });
         });
 

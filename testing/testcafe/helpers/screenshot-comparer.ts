@@ -5,44 +5,44 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { PNG } from 'pngjs';
 
-const testRoot = './testing/testcafe/';
-const screenshotsPath = path.join(testRoot, '/screenshots');
-const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
-
 const screenshotComparerDefault = {
+  path: './testing',
   highlightColor: { r: 0xff, g: 0, b: 0xff },
+  maskRadius: 5,
   attempts: 3,
   attemptTimeout: 500,
   looksSameComparisonOptions: {
     strict: false,
-    tolerance: 30,
+    tolerance: 5,
     // eslint-disable-next-line spellcheck/spell-checker
     ignoreAntialiasing: true,
     // eslint-disable-next-line spellcheck/spell-checker
-    antialiasingTolerance: 10,
+    antialiasingTolerance: 5,
     ignoreCaret: true,
   },
 };
 interface ComparerOptions {
+  path: string;
   highlightColor: {
     r: number;
     g: number;
     b: number;
   };
+  maskRadius?: number;
   attempts: number;
   attemptTimeout: number;
   looksSameComparisonOptions: Parameters<typeof LooksSame.createDiff>[0];
 }
 
-function ensureArtifactsPath(): void {
+function ensureArtifactsPath(artifactsPath: string): void {
   if (!fs.existsSync(artifactsPath)) {
     fs.mkdirSync(artifactsPath, { recursive: true });
   }
 }
 
 function saveArtifacts({
-  screenshotFileName, etalonFileName,
-}: Record<'screenshotFileName' | 'etalonFileName', string>): void {
+  artifactsPath, screenshotFileName, etalonFileName,
+}: Record<'artifactsPath' | 'screenshotFileName' | 'etalonFileName', string>): void {
   function copyToArtifacts(sourcePath: string, postfix = ''): void {
     const fileName = path.basename(sourcePath, '.png');
     const targetPath = path.join(artifactsPath, `${fileName}${postfix}.png`);
@@ -144,25 +144,82 @@ async function getDiff({
 }
 
 function getMask(diffBuffer: Buffer, maskFileName: string, options: ComparerOptions): Buffer {
-  function makeTransparentExceptColor(image: Image, maskImage: Image, { r, g, b }: ComparerOptions['highlightColor']): void {
-    for (let y = 0; y < image.height; y++) {
-      for (let x = 0; x < image.width; x++) {
+  function transformImage(image, func) {
+    for (let y = 0; y < image.height; y += 1) {
+      for (let x = 0; x < image.width; x += 1) {
         const index = (image.width * y + x) << 2;
-        const isHighlighted = (
-          image.data[index + 0] === r
-          && image.data[index + 1] === g
-          && image.data[index + 2] === b) || (maskImage && maskImage.data[index] === 0);
-        for (let i = 0; i < 3; i++) {
-          image.data[index + i] = isHighlighted ? 0 : 255;
-        }
+        func(image.data, index, x, y);
       }
     }
   }
+
+  function makeTransparentExceptColor(image, { r, g, b }) {
+    transformImage(image, (data, index: number) => {
+      const isHighlighted = data[index + 0] === r
+        && data[index + 1] === g
+        && data[index + 2] === b;
+      const color = isHighlighted ? 0 : 255;
+
+      data[index + 0] = color;
+      data[index + 1] = color;
+      data[index + 2] = color;
+    });
+  }
+
+  function applyMaskRadius(image, maskRadius: number) {
+    const aroundColor = 7;
+    transformImage(image, (data, index: number, x: number, y: number) => {
+      const isHighlighted = data[index] === 0;
+
+      if (isHighlighted) {
+        const yBegin = Math.max(0, y - maskRadius);
+        const xBegin = Math.max(0, x - maskRadius);
+        const yEnd = Math.min(image.height, y + maskRadius);
+        const xEnd = Math.min(image.width, x + maskRadius);
+
+        for (let ry = yBegin; ry < yEnd; ry += 1) {
+          for (let rx = xBegin; rx < xEnd; rx += 1) {
+            const roundIndex = (image.width * ry + rx) << 2;
+            if (data[roundIndex] === 255) {
+              data[roundIndex] = aroundColor;
+            }
+          }
+        }
+      }
+    });
+
+    transformImage(image, (data, index: number) => {
+      if (data[index] === aroundColor) {
+        data[index + 0] = 0;
+        data[index + 1] = 0;
+        data[index + 2] = 0;
+      }
+    });
+  }
+
+  function applyPrevMask(image, prevMaskImage) {
+    transformImage(image, (data, index: number) => {
+      const isPrevHighlighted = prevMaskImage.data[index] === 0;
+
+      if (isPrevHighlighted) {
+        data[index + 0] = 0;
+        data[index + 1] = 0;
+        data[index + 2] = 0;
+      }
+    });
+  }
+
   const image = PNG.sync.read(diffBuffer);
   const maskBuffer = fs.existsSync(maskFileName) && fs.readFileSync(maskFileName);
-  const maskImage = maskBuffer && PNG.sync.read(maskBuffer);
+  const maskImg = maskBuffer && PNG.sync.read(maskBuffer);
+  makeTransparentExceptColor(image, options.highlightColor);
+  if (options.maskRadius) {
+    applyMaskRadius(image, options.maskRadius);
+  }
+  if (maskImg) {
+    applyPrevMask(image, maskImg);
+  }
 
-  makeTransparentExceptColor(image, maskImage, options.highlightColor);
   return PNG.sync.write(image);
 }
 
@@ -198,11 +255,23 @@ async function tryGetValidScreenshot({
       screenshotBuffer,
       comparisonOptions: options.looksSameComparisonOptions,
     });
-    if (attempt < options.attempts) {
+    if (!equal && attempt < options.attempts) {
       await t.wait(options.attemptTimeout);
     }
   }
   return { equal, screenshotBuffer };
+}
+
+function getComparerOptions(
+  t: TestController,
+  comparisonOptions?: Partial<ComparerOptions>,
+): ComparerOptions {
+  const configOptions = (t as unknown as { testRun }).testRun.opts['screenshots-comparer'] as ComparerOptions;
+  return {
+    ...screenshotComparerDefault,
+    ...configOptions,
+    ...comparisonOptions,
+  };
 }
 
 export async function compareScreenshot(
@@ -211,16 +280,17 @@ export async function compareScreenshot(
   element: SelectorType = null,
   comparisonOptions?: Partial<ComparerOptions>,
 ): Promise<boolean> {
-  const screenshotFileName = path.join(screenshotsPath, screenshotName);
+  const options = getComparerOptions(t, comparisonOptions);
+  const testRoot = options.path;
+  const screenshotsPath = path.join(testRoot, '/screenshots');
+  const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
+
+  const screenshotFileName = path.join(screenshotsPath, screenshotName.endsWith('.png') ? screenshotName : `${screenshotName}.png`);
   const etalonsPath = path.join(path.dirname((t as unknown as { testRun }).testRun.test.testFile.filename), 'etalons');
   const etalonFileName = path.join(etalonsPath, screenshotName);
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
-  const options = {
-    ...screenshotComparerDefault,
-    ...comparisonOptions ?? {},
-  } as ComparerOptions;
   try {
-    ensureArtifactsPath();
+    ensureArtifactsPath(artifactsPath);
     const { equal, screenshotBuffer } = await tryGetValidScreenshot({
       t, screenshotName, element, screenshotFileName, etalonFileName, maskFileName, options,
     });
@@ -233,12 +303,12 @@ export async function compareScreenshot(
       const maskBuffer = getMask(diffBuffer, maskFileName, options);
       fs.writeFileSync(diffFileName, diffBuffer);
       fs.writeFileSync(diffMaskFileName, maskBuffer);
-      saveArtifacts({ screenshotFileName, etalonFileName });
+      saveArtifacts({ artifactsPath, screenshotFileName, etalonFileName });
       return false;
     }
     return true;
   } catch (e) {
-    saveArtifacts({ screenshotFileName, etalonFileName });
+    saveArtifacts({ artifactsPath, screenshotFileName, etalonFileName });
     throw e;
   }
 }
