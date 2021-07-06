@@ -5380,6 +5380,54 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         assert.ok(filterDataSourceStub.notCalled, 'dataSource didn\'t filter when widget disposed');
     });
+
+    QUnit.test('byKey call result should be ignored after new call even when acceptCustomValue=true', function(assert) {
+        let callCount = 0;
+        const items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+        const customStore = new CustomStore({
+            load: () => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items, totalCount: items.length });
+                }, 100);
+                return deferred.promise();
+            },
+
+            byKey: (key) => {
+                const deferred = $.Deferred();
+                const filter = () => items.filter(item => item.id === key)[0];
+                if(callCount === 0) {
+                    setTimeout(() => {
+                        deferred.resolve(filter());
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        deferred.resolve(filter());
+                    }, 1000);
+                }
+                ++callCount;
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore
+        });
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            value: 1,
+            acceptCustomValue: true
+        }).dxSelectBox('instance');
+
+        selectBox.option('value', 2);
+        assert.strictEqual(selectBox.option('text'), null, '"1" did not accepted as value');
+
+        this.clock.tick(1000);
+        assert.strictEqual(selectBox.option('text'), 'second', 'second request is resolved');
+        this.clock.tick(1000);
+        assert.strictEqual(selectBox.option('text'), 'second', 'first init byKey result is ignored');
+    });
 });
 
 

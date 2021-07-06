@@ -758,6 +758,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
+        this._loadFilteredItemsPromise?.reject();
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
@@ -794,6 +795,7 @@ const TagBox = SelectBox.inherit({
                 })
                 .fail(d.reject);
 
+            this._loadFilteredItemsPromise = d;
             return d.promise();
         }
     },
@@ -863,10 +865,20 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
+        if(this._filteredGroupedItemsLoadPromise) {
+            this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
+        }
         if(!this._dataSource.items().length) {
-            this._dataSource.load().done(function() {
-                selectedItems.resolve(this._getItemsByValues(values));
-            }.bind(this)).fail(selectedItems.resolve([]));
+            this._filteredGroupedItemsLoadPromise = this._dataSource.load()
+                .done(() => {
+                    selectedItems.resolve(this._getItemsByValues(values));
+                })
+                .fail(() => {
+                    selectedItems.resolve([]);
+                })
+                .always(() => {
+                    this._filteredGroupedItemsLoadPromise = undefined;
+                });
         } else {
             selectedItems.resolve(this._getItemsByValues(values));
         }
