@@ -2372,6 +2372,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(change) {
                 if(options.data) {
+                    Object.keys(options.data).forEach((key) => {
+                        delete change.data[key];
+                    });
                     change.data = createObjectWithChanges(change.data, options.data);
                 }
                 if((!change.type || !options.data) && options.type) {
@@ -2379,6 +2382,9 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
+                    Object.keys(options.data).forEach((key) => {
+                        delete row.data[key];
+                    });
                     row.data = createObjectWithChanges(row.data, options.data);
                 }
             }
