@@ -870,6 +870,84 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         assert.equal(spy.callCount, 0, 'byKey is not called when items are loaded');
     });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.find(item => item.id === key);
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownList = $('#dropDownList').dxDropDownList({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                valueExpr: 'id',
+                value: 1
+            }).dxDropDownList('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownList.open();
+            this.clock.tick(100);
+
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined (T1008488)', function(assert) {
+            this.dropDownList.option('value', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'init byKey result is ignored');
+        });
+
+        QUnit.test('after value reset', function(assert) {
+            this.dropDownList.reset();
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
+        });
+    });
 });
 
 QUnit.module('selectedItem', moduleConfig, () => {
