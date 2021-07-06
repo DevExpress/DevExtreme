@@ -82,10 +82,10 @@ describe('CheckBox', () => {
     });
 
     it('should always render icon', () => {
-      const button = shallow(viewFunction({
+      const checkBox = shallow(viewFunction({
         props: {},
       } as CheckBox));
-      expect(button.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
+      expect(checkBox.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
     });
 
     it('should pass all necessary properties to the Widget', () => {
