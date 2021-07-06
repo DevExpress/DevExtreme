@@ -232,16 +232,15 @@ const isSeparatedFormat = function(patterns) {
     let isSeparated = true;
     patterns.every((pattern, index) => {
         const isRegexpPart = (char) => PATTERN_REGEXPS[char] && char !== ':';
-        const isIncorrectPattern = (index, offset) => {
-            index = index + offset;
+        const isIncorrectPattern = (index) => {
             const pattern = 0 <= index && index < patterns.length - 1 && patterns[index];
             const char = pattern && pattern[0];
-            const incorrectLengthPattern = pattern && (pattern.length !== 3);
+            const shortLengthPattern = pattern && pattern.length < 3;
             const yearPattern = char === 'y' || char === 'Y';
-            return yearPattern || incorrectLengthPattern && isRegexpPart(char);
+            return yearPattern || shortLengthPattern && isRegexpPart(char);
         };
         const isIncorrectNeighbors = (index) => {
-            return (isIncorrectPattern(index, 1) || isIncorrectPattern(index, -1));
+            return isIncorrectPattern(index + 1) || isIncorrectPattern(index - 1);
         };
 
         const char = pattern[0];

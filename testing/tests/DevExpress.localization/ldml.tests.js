@@ -415,172 +415,69 @@ QUnit.module('number formatter', () => {
     });
 
     QUnit.test('getRegExpInfo should return correct regex for some of not separated `formats`(T1008667)', function(assert) {
-        [
-            {
-                format: 'yyyyMMdd',
-                tests: [
-                    {
-                        date: '19990211',
-                        result: ['1999', '02', '11']
-                    },
-                    {
-                        date: '20151209',
-                        result: ['2015', '12', '09']
-                    },
-                    {
-                        date: '20150101',
-                        result: ['2015', '01', '01']
-                    },
-                    {
-                        date: '201270101',
-                        result: ['20127', '01', '01']
-                    }
-                ]
+
+        const formatTestData = {
+            'yyyyMMdd': {
+                '19990211': ['1999', '02', '11'],
+                '20151209': ['2015', '12', '09'],
+                '20150101': ['2015', '01', '01'],
+                '201270101': ['20127', '01', '01']
             },
-            {
-                format: 'ddMMyyyy',
-                tests: [
-                    {
-                        date: '11121212',
-                        result: ['11', '12', '1212']
-                    },
-                    {
-                        date: '3152021',
-                        result: ['31', '5', '2021']
-                    },
-                    {
-                        date: '19012021',
-                        result: ['19', '01', '2021']
-                    },
-                    {
-                        date: '110110217',
-                        result: ['11', '01', '10217']
-                    }
-                ]
+            'ddMMyyyy': {
+                '11121212': ['11', '12', '1212'],
+                '3152021': ['31', '5', '2021'],
+                '19012021': ['19', '01', '2021'],
+                '110110217': ['11', '01', '10217'],
             },
-            {
-                format: 'MMddyyyy',
-                tests: [
-                    {
-                        date: '12212121',
-                        result: ['12', '21', '2121']
-                    },
-                    {
-                        date: '3152021',
-                        result: ['3', '15', '2021']
-                    },
-                    {
-                        date: '31520212',
-                        result: ['3', '15', '20212']
-                    },
-                    {
-                        date: '110920213',
-                        result: ['11', '09', '20213']
-                    }
-                ]
+            'MMddyyyy': {
+                '12212121': ['12', '21', '2121'],
+                '3152021': ['3', '15', '2021'],
+                '31520212': ['3', '15', '20212'],
+                '110920213': ['11', '09', '20213']
             },
-            {
-                format: 'MMddyy',
-                tests: [
-                    {
-                        date: '122121',
-                        result: ['12', '21', '21']
-                    },
-                    {
-                        date: '31520',
-                        result: ['3', '15', '20']
-                    },
-                    {
-                        date: '110921',
-                        result: ['11', '09', '21']
-                    }
-                ]
+            'MMddyy': {
+                '122121': ['12', '21', '21'],
+                '31520': ['3', '15', '20'],
+                '110921': ['11', '09', '21']
             },
-            {
-                format: 'MMddyyy',
-                tests: [
-                    {
-                        date: '1221213',
-                        result: ['12', '21', '213']
-                    },
-                    {
-                        date: '315203',
-                        result: ['3', '15', '203']
-                    },
-                    {
-                        date: '1109213',
-                        result: ['11', '09', '213']
-                    }
-                ]
+            'MMddyyy': {
+                '1221213': ['12', '21', '213'],
+                '315203': ['3', '15', '203'],
+                '1109213': ['11', '09', '213']
             }
-        ].forEach(({ format, tests }) => {
+        };
+
+        Object.entries(formatTestData).forEach(([ format, tests ]) => {
             const regExpInfo = getRegExpInfo(format);
-            tests.forEach(({ date, result }) => {
-                const regExpGroupsResult = regExpInfo.regexp.exec(date).slice(1);
-                assert.deepEqual(regExpGroupsResult, result, `${format} - format ok`);
+            Object.entries(tests).forEach(([ dateString, expected ]) => {
+                const regExpGroupsResult = regExpInfo.regexp.exec(dateString).slice(1);
+                assert.deepEqual(regExpGroupsResult, expected, `Fromat '${format}' parse dateString '${dateString}' - ok.`);
             });
         });
     });
 
     QUnit.test('getRegExpInfo should throw warning message if there are no separated single simbols in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
-        [
-            {
-                format: 'yyyyMMdd',
-                warningCalls: 0
-            },
-            {
-                format: 'yyyyMMd',
-                warningCalls: 1
-            },
-            {
-                format: 'dMyyyy',
-                warningCalls: 1
-            },
-            {
-                format: 'dMMyyyy',
-                warningCalls: 1
-            },
-            {
-                format: 'dyyyyM',
-                warningCalls: 1
-            },
-            {
-                format: 'dyyyyMM',
-                warningCalls: 1
-            },
-            {
-                format: 'd yyyyMM',
-                warningCalls: 0
-            },
-            {
-                format: 'dM yyyy',
-                warningCalls: 1
-            },
-            {
-                format: 'yyyyMd',
-                warningCalls: 1
-            },
-            {
-                format: 'yyyyM d',
-                warningCalls: 1
-            },
-            {
-                format: 'yyyy M d',
-                warningCalls: 0
-            },
-            {
-                format: 'yyyM d',
-                warningCalls: 1
-            },
-            {
-                format: 'dyyyM',
-                warningCalls: 1
-            }
-        ].forEach(({ format, warningCalls }) => {
+        const expectedWarningsCount = {
+            'yyyyMMdd': 0,
+            'yyyyMMd': 1,
+            'dMyyyy': 1,
+            'dMMyyyy': 1,
+            'dyyyyM': 1,
+            'dyyyyMM': 1,
+            'd yyyyMM': 0,
+            'dM yyyy': 1,
+            'yyyyMd': 1,
+            'yyyyM d': 1,
+            'yyyy M d': 0,
+            'yyyM d': 1,
+            'dyyyM': 1
+        };
+
+        Object.entries(expectedWarningsCount).forEach(([ format, warningCalls ]) => {
             spy.callCount = 0;
             getRegExpInfo(format);
-            assert.equal(spy.callCount, warningCalls, `${format}`);
+            assert.equal(spy.callCount, warningCalls, `Format '${format}' calls ${warningCalls} warnings.`);
         });
     });
 });

@@ -298,20 +298,9 @@ define(function(require, exports, module) {
         });
 
         QUnit.test('Parse custom format', function(assert) {
-            const assertData = {
-                'yyyyMMdd': {
-                    text: '20100302',
-                    expected: new Date(2010, 2, 2)
-                },
-                'dMyyyy': {
-                    text: '02mar10',
-                    expected: new Date(2010, 2, 2)
-                },
-            };
-
-            $.each(assertData, function(format, data) {
-                assert.equal(dateLocalization.parse(data.text, format), String(data.expected || generateExpectedDate(data.expectedConfig)), format + ' format');
-            });
+            const expected = new Date(2010, 2, 2).toString();
+            assert.equal(dateLocalization.parse('20100302', 'yyyyMMdd'), expected, 'Format \'yyyyMMdd\' parse ok');
+            assert.equal(dateLocalization.parse('02mar10', 'dMyyyy'), expected, 'Format \'dMyyyy\' parse ok');
         });
     });
 
