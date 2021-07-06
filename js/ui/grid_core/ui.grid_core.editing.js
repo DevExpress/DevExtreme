@@ -5,7 +5,8 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isObject, isFunction, isString, isEmptyObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { extend } from '../../core/utils/extend';
+import { extend, extendFromObject } from '../../core/utils/extend';
+import { deepExtendArraySafe } from '../../core/utils/object';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import { name as doubleClickEvent } from '../../events/double_click';
@@ -146,12 +147,16 @@ const isEditingOrShowEditorAlwaysDataCell = function(isEditRow, cellOptions) {
     return cellOptions.rowType === 'data' && isEditorCell;
 };
 
-const applyChangesOneLevel = function(obj, changes) {
-    obj = { ...obj };
+const applyChangesOneLevel = function(target, changes) {
+    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
+    const targetWithoutPrototype = extendFromObject({}, target);
+    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+
     Object.keys(changes).forEach(key=> {
-        delete obj[key];
+        delete result[key];
     });
-    return createObjectWithChanges(obj, changes);
+
+    return deepExtendArraySafe(result, changes, true, true);
 };
 
 const EditingController = modules.ViewController.inherit((function() {
