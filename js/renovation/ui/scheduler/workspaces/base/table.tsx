@@ -17,8 +17,6 @@ export const viewFunction = ({
   hasBottomVirtualRow,
   hasTopVirtualRow,
   style,
-  // restAttributes,
-  // elementRef,
   props: {
     virtualCellsCount,
     className,
@@ -33,11 +31,8 @@ export const viewFunction = ({
   },
 }: Table): JSX.Element => (
   <table
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    // {...restAttributes}
     className={className}
     style={style}
-    // ref={elementRef}
     ref={tableRef}
   >
     <tbody>
@@ -117,11 +112,4 @@ export class Table extends JSXComponent(TableProps) {
 
     return !!bottomVirtualRowHeight;
   }
-
-  // @Effect()
-  // refEffect(): void {
-  //   if (this.props.tableRef) {
-  //     this.props.tableRef.current = this.elementRef.current;
-  //   }
-  // }
 }
