@@ -119,11 +119,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @InternalState() forceReachBottom?: boolean;
 
   @Method()
-  update(): void {
-    this.scrollable.update();
-  }
-
-  @Method()
   release(preventScrollBottom: boolean): void {
     if (preventScrollBottom !== undefined) {
       this.toggleLoading(!preventScrollBottom);
@@ -222,6 +217,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     this.scrollable.finishLoading();
   }
 
+  updateHandler(): void {
+    this.scrollable.updateHandler();
+  }
+
   get reachBottomEnabled(): boolean {
     if (isDefined(this.forceReachBottom)) {
       return this.forceReachBottom;
@@ -270,6 +269,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollable(): any {
     return this.scrollableRef.current!;
   }

@@ -5,19 +5,13 @@ import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
-import browser from 'core/utils/browser';
 
 const {
     module
 } = QUnit;
 
 const test = (description, callback) => {
-    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
-    const testFunc = isIE11
-        ? QUnit.skip
-        : QUnit.test;
-
-    return testFunc(description, sinon.test(callback));
+    return QUnit.test(description, sinon.test(callback));
 };
 
 module('Virtual Scrolling', {
@@ -47,6 +41,8 @@ module('Virtual Scrolling', {
                     dataCellTemplate: noop,
                     groupByDate: false,
                     scrolling: settings.scrolling,
+                    schedulerWidth: settings.width,
+                    schedulerHeight: settings.height,
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
@@ -65,15 +61,6 @@ module('Virtual Scrolling', {
                     };
                 },
                 getScrollable: () => this.scrollableMock,
-                invoke: (name, arg0) => {
-                    const options = {
-                        getOption: {
-                            width: settings.width,
-                            height: settings.height
-                        }
-                    };
-                    return options[name] && options[name][arg0];
-                },
                 _isVerticalGroupedWorkSpace: () => {
                     return false;
                 },

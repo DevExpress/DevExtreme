@@ -4,8 +4,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
-import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
-import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
+import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
+import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
@@ -17,6 +17,7 @@ import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
+import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -58,18 +59,18 @@ const dataAccessors = {
     }
 };
 
+ExpressionUtils.getField = (_, field, obj) => {
+    if(typeUtils.isDefined(dataAccessors.getter[field])) {
+        return dataAccessors.getter[field](obj);
+    }
+};
+
+ExpressionUtils.setField = (_, field, obj, value) => {
+    return dataAccessors.setter[field](obj, value);
+};
+
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
-    getField: (field, obj) => {
-        if(!typeUtils.isDefined(dataAccessors.getter[field])) {
-            return;
-        }
-
-        return dataAccessors.getter[field](obj);
-    },
-    setField: (field, obj, value) => {
-        return dataAccessors.setter[field](obj, value);
-    },
     getTimeZoneCalculator: () => {
         return {
             createDate: date => date

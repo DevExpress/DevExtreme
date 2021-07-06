@@ -8,7 +8,7 @@ export interface FormatObject extends LocalizationFormatObject, ChartFormatObjec
 export type Format = LocalizationFormat & FormatObject;
 export interface Point {
   size: number;
-  tag: string;
+  tag: unknown;
   originalArgument: Date | string | number;
   originalValue: Date | string | number;
 }
@@ -18,7 +18,9 @@ export interface Translator {
 }
 
 export interface BaseEventData {
-  readonly component: any; // TODO: after improve refs use ref of the widget
+  // TODO: after improve refs use ref of the widget
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly component: any;
 }
 
 export interface EventData<T> extends BaseEventData {

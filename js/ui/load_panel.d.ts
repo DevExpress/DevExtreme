@@ -41,7 +41,7 @@ export type InitializedEvent = InitializedEventInfo<dxLoadPanel>;
 export type OptionChangedEvent = EventInfo<dxLoadPanel> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxLoadPanel>;
+export type ShowingEvent = Cancelable & EventInfo<dxLoadPanel>;
 
 /** @public */
 export type ShownEvent = EventInfo<dxLoadPanel>;

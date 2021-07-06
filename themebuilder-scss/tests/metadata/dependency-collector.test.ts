@@ -1,6 +1,6 @@
 import fs from 'fs';
 import cabinet from 'filing-cabinet';
-import DependencyCollector from '../../src/metadata/dependency-collector';
+import DependencyCollector, { filePathMap } from '../../src/metadata/dependency-collector';
 
 const simpleDependencies: ScriptsDependencyTree = {
   dependencies: {
@@ -15,6 +15,10 @@ const simpleDependencies: ScriptsDependencyTree = {
             'icon.js': {
               dependencies: {},
               widget: 'icon',
+            },
+            'render.js': {
+              dependencies: {},
+              widget: '',
             },
           },
           widget: '',
@@ -38,6 +42,10 @@ const simpleDependencies: ScriptsDependencyTree = {
               dependencies: {},
               widget: 'icon',
             },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
           },
           widget: '',
         },
@@ -54,7 +62,8 @@ const filesContent: { [key: string]: string } = {
   'menu.js': '// STYLE menu',
   'button.js': 'import u from \'./utils\';\n// STYLE button',
   'icon.js': '// STYLE icon',
-  'utils.js': 'import f from \'./fx\';import i from \'./icon\';',
+  'utils.js': 'import f from \'./fx\';import i from \'./icon\';import t from \'./render\';',
+  'render.js': 'import t from \'./utils\';',
   'fx.js': '',
 
   // validation tests
@@ -83,6 +92,7 @@ jest.mock('filing-cabinet', () => ({
 describe('DependencyCollector', () => {
   beforeEach(() => {
     (fs.readFileSync as jest.Mock).mockClear();
+    filePathMap.clear();
   });
 
   test('getWidgetFromAst - no comments in ast', () => {
@@ -190,7 +200,7 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     dependencyCollector.collect();
 
-    expect(fs.readFileSync).toBeCalledTimes(9);
+    expect(fs.readFileSync).toBeCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
       toolbar: ['menu', 'icon'],
       button: ['icon'],

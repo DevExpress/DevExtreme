@@ -47,7 +47,7 @@ export type InitializedEvent = InitializedEventInfo<dxPopover>;
 export type OptionChangedEvent = EventInfo<dxPopover> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxPopover>;
+export type ShowingEvent = Cancelable & EventInfo<dxPopover>;
 
 /** @public */
 export type ShownEvent = EventInfo<dxPopover>;

@@ -30,9 +30,8 @@ export function addInfoHeader(
 
 export async function cleanCss(css: string): Promise<string> {
   const promiseOptions: Options = { returnPromise: true };
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const options = { ...commonOptions as OptionsPromise, ...promiseOptions };
-  const cleaner = new CleanCSS(options);
+  const options = { ...commonOptions, ...promiseOptions };
+  const cleaner = new CleanCSS(options as OptionsPromise);
   return (await cleaner.minify(css)).styles;
 }
 

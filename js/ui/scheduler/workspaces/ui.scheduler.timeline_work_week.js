@@ -1,6 +1,6 @@
 import registerComponent from '../../../core/component_registrator';
+import { VIEWS } from '../constants';
 import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
-import dateUtils from '../../../core/utils/date';
 import {
     getWeekendsCount,
     isDataOnWeekend,
@@ -8,12 +8,14 @@ import {
     calculateStartViewDate,
 } from './utils/work_week';
 
-const toMs = dateUtils.dateToMilliseconds;
-
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
 const LAST_DAY_WEEK_INDEX = 5;
 
 class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
+    get type() { return VIEWS.TIMELINE_WORK_WEEK; }
+
+    get isWorkView() { return true; }
+
     constructor(...args) {
         super(...args);
 
@@ -41,11 +43,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
             date.setDate(date.getDate() + 2);
         }
         super._incrementDate(date);
-    }
-
-    _getOffsetByCount(cellIndex) {
-        const weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
-        return toMs('day') * weekendCount * 2;
     }
 
     _calculateStartViewDate() {

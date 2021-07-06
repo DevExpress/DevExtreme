@@ -28,6 +28,10 @@ export class AppointmentDataProvider {
             : FilterStrategies.standard;
     }
 
+    getDataAccessors() {
+        return this.dataAccessors;
+    }
+
     getFilterStrategy() {
         if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
             this.initFilterStrategy();

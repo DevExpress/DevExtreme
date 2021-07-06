@@ -6,7 +6,7 @@ import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointment_form';
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointmentPopup/form';
 import {
     initTestMarkup,
     createWrapper,
@@ -417,7 +417,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance.getAppointmentPopup();
+                const popup = scheduler.instance._appointmentPopup.getPopup();
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
@@ -456,7 +456,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance.getAppointmentPopup();
+                const popup = scheduler.instance._appointmentPopup.getPopup();
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';

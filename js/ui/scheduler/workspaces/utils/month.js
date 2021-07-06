@@ -1,5 +1,10 @@
 import dateUtils from '../../../../core/utils/date';
-import { getCalculatedFirstDayOfWeek, isDateInRange, setStartDayHour } from './base';
+import dateLocalization from '../../../../localization/date';
+import {
+    getCalculatedFirstDayOfWeek,
+    isDateInRange,
+    setOptionHour,
+} from './base';
 
 export const getViewStartByOptions = (startDate, currentDate, intervalCount, startViewDate) => {
     if(!startDate) {
@@ -43,5 +48,22 @@ export const calculateStartViewDate = (
 
     const firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, firstDayOfWeek);
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
+};
+
+export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
+    return rowIndex * columnCount + columnIndex;
+};
+
+export const isFirstCellInMonthWithIntervalCount = (cellDate, intervalCount) => {
+    return cellDate.getDate() === 1 && intervalCount > 1;
+};
+
+export const getCellText = (date, intervalCount) => {
+    if(isFirstCellInMonthWithIntervalCount(date, intervalCount)) {
+        const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
+        return [monthName, dateLocalization.format(date, 'day')].join(' ');
+    }
+
+    return dateLocalization.format(date, 'dd');
 };

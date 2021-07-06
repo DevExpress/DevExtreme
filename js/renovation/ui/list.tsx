@@ -39,6 +39,7 @@ export class ListProps extends BaseWidgetProps {
 
   @OneWay() dataSource?:
   | string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | (string | dxListItem | any)[]
   | Store
   | DataSource
@@ -79,11 +80,15 @@ export class ListProps extends BaseWidgetProps {
   @Event() onItemClick?: ((e: {
     component?: LegacyList;
     element?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     model?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemData: any;
     itemElement?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemIndex?: number | any;
     event?: DxEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } & EventExtension) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
@@ -164,6 +169,7 @@ export class ListProps extends BaseWidgetProps {
 
   // @OneWay()useNativeScrolling?: boolean;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() itemTemplate?: any;
 
 //   @Event() onItemClick?: (e: any) => any = (() => {});

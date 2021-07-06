@@ -1,6 +1,8 @@
+import errors from '../../../widget/ui.errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
+import timeZoneUtils from '../../utils.timeZone';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -8,12 +10,13 @@ export const isDateInRange = (date, startDate, endDate, diff) => {
         : dateUtils.dateInRange(date, endDate, startDate, 'date');
 };
 
-export const setStartDayHour = (date, startDayHour) => {
+export const setOptionHour = (date, startDayHour) => {
+    const nextDate = new Date(date);
+
     if(!isDefined(startDayHour)) {
-        return date;
+        return nextDate;
     }
 
-    const nextDate = new Date(date);
     nextDate.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
 
     return nextDate;
@@ -44,3 +47,107 @@ export const getCalculatedFirstDayOfWeek = (firstDayOfWeekOption) => {
 
 export const getFirstDayOfWeek = (firstDayOfWeekOption) => firstDayOfWeekOption;
 export const calculateViewStartDate = (startDateOption) => startDateOption;
+
+export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {
+    return columnIndex * rowCount + rowIndex;
+};
+
+const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay, firstDayOfWeek) => {
+    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
+    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
+
+    return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
+};
+
+export const getStartViewDateWithoutDST = (startViewDate, startDayHour) => {
+    const newStartViewDate = timeZoneUtils.getDateWithoutTimezoneChange(startViewDate);
+    newStartViewDate.setHours(startDayHour);
+
+    return newStartViewDate;
+};
+
+const getMillisecondsOffset = (cellIndex, interval, hiddenIntervalBase, cellCountInDay) => {
+    const dayIndex = Math.floor(cellIndex / cellCountInDay);
+    const hiddenInterval = dayIndex * hiddenIntervalBase;
+
+    return interval * cellIndex + hiddenInterval;
+};
+
+export const getDateByCellIndices = (options, rowIndex, columnIndex, calculateCellIndex) => {
+    let startViewDate = options.startViewDate;
+    const {
+        startDayHour,
+        isWorkView,
+        columnsInDay,
+        hiddenInterval,
+        interval,
+        cellCountInDay,
+        rowCountBase,
+        columnCountBase,
+        firstDayOfWeek,
+    } = options;
+
+    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
+
+    if(isStartViewDateDuringDST) {
+        const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
+
+        startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
+    }
+
+    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
+
+    const offsetByCount = isWorkView
+        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
+        : 0;
+
+    const startViewDateTime = startViewDate.getTime();
+    const currentDate = new Date(startViewDateTime + millisecondsOffset + offsetByCount);
+
+    const timeZoneDifference = isStartViewDateDuringDST
+        ? 0
+        : dateUtils.getTimezonesDifference(startViewDate, currentDate);
+
+    currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+
+    return currentDate;
+};
+
+export const getHeaderCellText = (
+    headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
+) => {
+    const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
+    return dateLocalization.format(validDate, headerCellTextFormat);
+};
+
+export const validateDayHours = (startDayHour, endDayHour) => {
+    if(startDayHour >= endDayHour) {
+        throw errors.Error('E1058');
+    }
+};
+
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
+
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};

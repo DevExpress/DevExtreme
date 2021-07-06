@@ -23,6 +23,7 @@ $htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
 $htmleditor-mention-color: null !default;
 $htmleditor-table-border-color: $base-border-color !default;
+$htmleditor-cells-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
 
 
 @if $color == "carmine" {

@@ -1817,7 +1817,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return scrollingMode === 'virtual' || scrollingMode === 'infinite';
     },
     _isVirtualRowRender: function() {
-        return this._isVirtualScrolling() || this.option('scrolling.rowRenderingMode') === 'virtual';
+        return this._isVirtualScrolling() || gridCoreUtils.isVirtualRowRendering(this);
     },
     _isVirtualColumnRender: function() {
         return this.option('scrolling.columnRenderingMode') === 'virtual';

@@ -15,8 +15,10 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { getTimeZoneCalculator } from '../instanceFactory';
+import { getPathToLeaf } from '../resources/utils';
 import { calculateStartViewDate } from './utils/agenda';
+import { formatWeekday } from './utils/base';
+import { VIEWS } from '../constants';
 
 const { tableCreator } = tableCreatorModule;
 
@@ -36,6 +38,8 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends WorkSpace {
+    get type() { return VIEWS.AGENDA; }
+
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
     _init() {
@@ -114,8 +118,6 @@ class SchedulerAgenda extends WorkSpace {
     _getTimePanelRowCount() {
         return this.option('agendaDuration');
     }
-
-    _getDateByIndex() { return noop(); }
 
     _getFormat() {
         return 'd ddd';
@@ -240,7 +242,7 @@ class SchedulerAgenda extends WorkSpace {
 
     _makeGroupRows() {
         const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-        const resourceManager = this.invoke('getResourceManager');
+        const resourceManager = this.option('resourceManager');
         const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
         const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
@@ -337,8 +339,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const resourceManager = this.invoke('getResourceManager');
-        const path = isGroupedView && resourceManager._getPathToLeaf(rowIndex, groupsOpt) || [];
+        const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
@@ -378,7 +379,7 @@ class SchedulerAgenda extends WorkSpace {
                 if(options.getStartDate) {
                     date = options.getStartDate && options.getStartDate(rowIndex);
                     cellDateNumber = dateLocalization.format(date, 'd');
-                    cellDayName = dateLocalization.format(date, this._formatWeekday);
+                    cellDayName = dateLocalization.format(date, formatWeekday);
                 }
 
                 if(cellTemplateOpt && cellTemplateOpt.render) {
@@ -520,8 +521,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     updateScrollPosition(date) {
-        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
-        const newDate = timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
         const startDateHour = newDate.getHours();

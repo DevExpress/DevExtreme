@@ -510,29 +510,7 @@ declare global {
 }
 declare module DevExpress {
   /**
-   * [descr:fx]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const fx: {
-    /**
-     * [descr:fx.animate(element, config)]
-     */
-    animate(
-      element: Element,
       config: AnimationConfig
-    ): DevExpress.core.utils.DxPromise<void>;
-
-    /**
-     * [descr:fx.isAnimating(element)]
-     */
-    isAnimating(element: Element): boolean;
-
-    /**
-     * [descr:fx.stop(element, jumpToEnd)]
-     */
-    stop(element: Element, jumpToEnd: boolean): void;
-  };
-  /**
    * [descr:animationPresets]
    */
   export const animationPresets: {
@@ -568,11 +546,6 @@ declare module DevExpress {
      */
     resetToDefaults(): void;
   };
-  /**
-    * [descr:devices]
-    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-    */
-   export const devices: DevicesObject;
   /**
    * [descr:AnimationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -782,6 +755,11 @@ declare module DevExpress {
      */
     version?: Array<number>;
   }
+  /**
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
   /**
    * [descr:DevicesObject]
    */
@@ -1397,17 +1375,21 @@ declare module DevExpress.core {
    */
   interface Component<TProperties> {
     // eslint-disable-line @typescript-eslint/no-unused-vars
-    _optionsByReference: Record<string, any>;
-    _deprecatedOptions: Record<string, any>;
+    _optionsByReference: Record<string, unknown>;
+    _deprecatedOptions: Record<string, unknown>;
     _options: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       silent(path: any, value: any): void;
     };
     _createActionByOption(
       optionName: string,
-      config: Record<string, any>
-    ): (...args: any[]) => any;
+      config: Record<string, unknown>
+    ): (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...args: any[]
+    ) => any;
     _dispose(): void;
-    _getDefaultOptions(): Record<string, any>;
+    _getDefaultOptions(): Record<string, unknown>;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
@@ -3984,10 +3966,6 @@ declare module DevExpress.pdfExporter {
   }
 }
 declare module DevExpress.ui {
-  /**
-   * [descr:dxItem]
-   */
-  export var dxItem: any;
   /**
    * [descr:AsyncRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -12536,7 +12514,6 @@ declare module DevExpress.ui {
       DevExpress.events.Cancelable &
         DevExpress.events.EventInfo<dxGantt> & {
           readonly values: Array<any>;
-          readonly key: any;
         };
     export type ResourceUnassignedEvent =
       DevExpress.events.EventInfo<dxGantt> & {
@@ -12638,6 +12615,7 @@ declare module DevExpress.ui {
       | 'zoomOut'
       | 'deleteDependency'
       | 'taskDetails'
+      | 'resourceManager'
     >;
   }
   /**
@@ -12659,6 +12637,7 @@ declare module DevExpress.ui {
       | 'zoomOut'
       | 'deleteDependency'
       | 'taskDetails'
+      | 'resourceManager'
       | string;
   }
   /**
@@ -13447,6 +13426,10 @@ declare module DevExpress.ui {
      */
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
+     * [descr:dxHtmlEditorOptions.tableResizing]
+     */
+    tableResizing?: dxHtmlEditorTableResizing;
+    /**
      * [descr:dxHtmlEditorOptions.mentions]
      */
     mentions?: Array<dxHtmlEditorMention>;
@@ -13482,6 +13465,24 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
+  }
+  /**
+   * [descr:dxHtmlEditorTableResizing]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorTableResizing {
+    /**
+     * [descr:dxHtmlEditorTableResizing.minColumnWidth]
+     */
+    minColumnWidth?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.minRowHeight]
+     */
+    minRowHeight?: number;
+    /**
+     * [descr:dxHtmlEditorTableResizing.enabled]
+     */
+    enabled?: boolean;
   }
   /**
    * [descr:dxHtmlEditorToolbar]
@@ -13660,6 +13661,10 @@ declare module DevExpress.ui {
      */
     escapeChar?: string | Array<string>;
   }
+  /**
+   * [descr:dxItem]
+   */
+  export var dxItem: any;
   /**
    * [descr:dxList]
    */
@@ -14103,7 +14108,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxLoadPanel> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxLoadPanelOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxLoadPanel>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxLoadPanel>;
     export type ShownEvent = DevExpress.events.EventInfo<dxLoadPanel>;
   }
   /**
@@ -14981,6 +14987,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxNavBar]
+   * @deprecated [depNote:dxNavBar]
    */
   export class dxNavBar extends dxTabs<dxNavBarOptions> {}
   module dxNavBar {
@@ -15203,7 +15210,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.onShowing]
      */
-    onShowing?: (e: DevExpress.events.EventInfo<TComponent>) => void;
+    onShowing?: (
+      e: DevExpress.events.Cancelable & DevExpress.events.EventInfo<TComponent>
+    ) => void;
     /**
      * [descr:dxOverlayOptions.onShown]
      */
@@ -16037,7 +16046,8 @@ declare module DevExpress.ui {
      */
     interface PopoverInstance extends dxPopover<Properties> {}
     export type Properties = dxPopoverOptions<PopoverInstance>;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
@@ -16153,7 +16163,8 @@ declare module DevExpress.ui {
       DevExpress.ui.dxResizable.ResizeInfo;
     export type ResizeStartEvent = DevExpress.events.NativeEventInfo<dxPopup> &
       DevExpress.ui.dxResizable.ResizeInfo;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxPopup>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxPopup>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopup>;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       TitleRenderedInfo;
@@ -16772,12 +16783,12 @@ declare module DevExpress.ui {
   module dxScheduler {
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -16801,12 +16812,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -16844,7 +16855,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: any;
+        readonly appointmentData?: dxSchedulerAppointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -16857,7 +16868,7 @@ declare module DevExpress.ui {
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
@@ -17846,6 +17857,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOut]
+   * @deprecated [depNote:dxSlideOut]
    */
   export class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
     /**
@@ -17986,6 +17998,7 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxSlideOutView]
+   * @deprecated [depNote:dxSlideOutView]
    */
   export class dxSlideOutView extends Widget<dxSlideOutViewOptions> {
     /**
@@ -19164,7 +19177,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxToast> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxToastOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxToast>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxToast>;
     export type ShownEvent = DevExpress.events.EventInfo<dxToast>;
   }
   /**
@@ -19356,7 +19370,8 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxTooltip> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxTooltipOptions;
-    export type ShowingEvent = DevExpress.events.EventInfo<dxTooltip>;
+    export type ShowingEvent = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTooltip>;
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
   /**
@@ -20498,6 +20513,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.items]
      */
     items?: Array<dxTreeViewItem>;
+    /**
+     * [descr:dxTreeViewItem.id]
+     */
+    id?: number | string;
     /**
      * [descr:dxTreeViewItem.parentId]
      */

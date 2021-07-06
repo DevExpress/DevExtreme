@@ -1,4 +1,4 @@
-import { getViewStartByOptions, setStartDayHour } from './base';
+import { getViewStartByOptions, setOptionHour } from './base';
 
 export const calculateStartViewDate = (currentDate, startDayHour, startDate, intervalDuration) => {
     const firstViewDate = getViewStartByOptions(
@@ -8,5 +8,5 @@ export const calculateStartViewDate = (currentDate, startDayHour, startDate, int
         startDate,
     );
 
-    return setStartDayHour(firstViewDate, startDayHour);
+    return setOptionHour(firstViewDate, startDayHour);
 };

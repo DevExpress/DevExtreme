@@ -4,11 +4,11 @@ import eventsEngine from '../../../events/core/events_engine';
 import { data as elementData } from '../../../core/element_data';
 import { locate, move } from '../../../animation/translator';
 import dateUtils from '../../../core/utils/date';
-import { normalizeKey } from '../../../core/utils/common';
+import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge } from '../../../core/utils/array';
+import { merge, inArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -22,6 +22,8 @@ import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
 import { getTimeZoneCalculator } from '../instanceFactory';
+import { ExpressionUtils } from '../expressionUtils';
+import { createAppointmentAdapter } from '../appointmentAdapter';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -40,7 +42,6 @@ class SchedulerAppointments extends CollectionWidget {
 
     constructor(element, options) {
         super(element, options);
-        this.key = options.key;
         this._virtualAppointments = {};
     }
 
@@ -522,7 +523,6 @@ class SchedulerAppointments extends CollectionWidget {
             const config = {
                 data: rawAppointment,
                 groupIndex: settings.groupIndex,
-
                 observer: this.option('observer'),
                 geometry: geometry,
                 direction: settings.direction || 'vertical',
@@ -545,7 +545,10 @@ class SchedulerAppointments extends CollectionWidget {
             this._createComponent(
                 element,
                 this.isAgendaView ? AgendaAppointment : Appointment,
-                config
+                {
+                    ...config,
+                    key: this.option('key'),
+                }
             );
         }
     }
@@ -604,13 +607,12 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _resizeEndHandler(e) {
-        const scheduler = this.option('observer');
         const $element = $(e.element);
 
         const { info } = $element.data('dxAppointmentSettings');
         const sourceAppointment = this._getItemData($element);
 
-        const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
+        const modifiedAppointmentAdapter = createAppointmentAdapter(this.option('key'), sourceAppointment).clone();
 
         const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
         const endDate = info.appointment.endDate;
@@ -628,8 +630,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _getEndResizeAppointmentStartDate(e, rawAppointment, appointmentInfo) {
-        const scheduler = this.option('observer');
-        const appointmentAdapter = scheduler.createAppointmentAdapter(rawAppointment);
+        const appointmentAdapter = createAppointmentAdapter(this.option('key'), rawAppointment);
 
         let startDate = appointmentInfo.startDate;
         const recurrenceProcessor = getRecurrenceProcessor();
@@ -638,7 +639,7 @@ class SchedulerAppointments extends CollectionWidget {
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
-            startDate = getTimeZoneCalculator(this.key).createDate(
+            startDate = getTimeZoneCalculator(this.option('key')).createDate(
                 appointmentAdapter.startDate,
                 {
                     appointmentTimeZone: startDateTimeZone,
@@ -798,8 +799,8 @@ class SchedulerAppointments extends CollectionWidget {
     _sortAppointmentsByStartDate(appointments) {
         appointments.sort((function(a, b) {
             let result = 0;
-            const firstDate = new Date(this.invoke('getField', 'startDate', a.settings || a)).getTime();
-            const secondDate = new Date(this.invoke('getField', 'startDate', b.settings || b)).getTime();
+            const firstDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', a.settings || a)).getTime();
+            const secondDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', b.settings || b)).getTime();
 
             if(firstDate < secondDate) {
                 result = -1;
@@ -814,7 +815,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
         // NOTE: this method is actual only for agenda
-        const recurrenceRule = this.invoke('getField', 'recurrenceRule', appointment);
+        const recurrenceRule = ExpressionUtils.getField(this.option('key'), 'recurrenceRule', appointment);
         const result = {
             parts: [],
             indexes: []
@@ -823,10 +824,10 @@ class SchedulerAppointments extends CollectionWidget {
         if(recurrenceRule) {
             const dates = appointment.settings || appointment;
 
-            const startDate = new Date(this.invoke('getField', 'startDate', dates));
-            const endDate = new Date(this.invoke('getField', 'endDate', dates));
+            const startDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', dates));
+            const endDate = new Date(ExpressionUtils.getField(this.option('key'), 'endDate', dates));
             const appointmentDuration = endDate.getTime() - startDate.getTime();
-            const recurrenceException = this.invoke('getField', 'recurrenceException', appointment);
+            const recurrenceException = ExpressionUtils.getField(this.option('key'), 'recurrenceException', appointment);
             const startViewDate = this.invoke('getStartViewDate');
             const endViewDate = this.invoke('getEndViewDate');
             const recurrentDates = getRecurrenceProcessor().generateDates({
@@ -869,7 +870,7 @@ class SchedulerAppointments extends CollectionWidget {
         const endViewDate = this.invoke('getEndViewDate').getTime();
         const startViewDate = this.invoke('getStartViewDate').getTime();
 
-        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
 
         result = result || {
             parts: []
@@ -879,7 +880,7 @@ class SchedulerAppointments extends CollectionWidget {
             extend(appointment, parts[0]);
 
             for(let i = 1; i < partCount; i++) {
-                let startDate = this.invoke('getField', 'startDate', parts[i].settings).getTime();
+                let startDate = ExpressionUtils.getField(this.option('key'), 'startDate', parts[i].settings).getTime();
                 startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
 
                 if(startDate < endViewDate && startDate > startViewDate) {
@@ -905,12 +906,12 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyStartDateToObj(startDate, obj) {
-        this.invoke('setField', 'startDate', obj, startDate);
+        ExpressionUtils.setField(this.option('key'), 'startDate', obj, startDate);
         return obj;
     }
 
     _applyEndDateToObj(endDate, obj) {
-        this.invoke('setField', 'endDate', obj, endDate);
+        ExpressionUtils.setField(this.option('key'), 'endDate', obj, endDate);
         return obj;
     }
 
@@ -954,16 +955,16 @@ class SchedulerAppointments extends CollectionWidget {
     splitAppointmentByDay(appointment) {
         const dates = appointment.settings || appointment;
 
-        const originalStartDate = new Date(this.invoke('getField', 'startDate', dates));
+        const originalStartDate = new Date(ExpressionUtils.getField(this.option('key'), 'startDate', dates));
         let startDate = dateUtils.makeDate(originalStartDate);
-        let endDate = dateUtils.makeDate(this.invoke('getField', 'endDate', dates));
+        let endDate = dateUtils.makeDate(ExpressionUtils.getField(this.option('key'), 'endDate', dates));
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
         const appointmentIsLong = this.invoke('getAppointmentDataProvider').appointmentTakesSeveralDays(appointment);
         const result = [];
 
-        const timeZoneCalculator = getTimeZoneCalculator(this.key);
+        const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
 
         startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
         endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });
@@ -1044,6 +1045,31 @@ class SchedulerAppointments extends CollectionWidget {
 
             appointmentInstance.option('isDragSource', isDragSource);
         });
+    }
+
+    updateResizableArea() {
+        const $allResizableElements = this.$element().find('.dx-scheduler-appointment.dx-resizable');
+
+        const horizontalResizables = grep($allResizableElements, (el) => {
+            const $el = $(el);
+            const resizableInst = $el.dxResizable('instance');
+            const area = resizableInst.option('area');
+
+            return inArray(resizableInst.option('handles'), ['right left', 'left right']) > -1 && isPlainObject(area);
+        });
+
+        each(horizontalResizables, ((_, el) => {
+            const $el = $(el);
+            const position = locate($el);
+            const appointmentData = this._getItemData($el);
+
+            const area = this._calculateResizableArea({
+                left: position.left
+            }, appointmentData);
+
+            $el.dxResizable('instance').option('area', area);
+
+        }));
     }
 
 }

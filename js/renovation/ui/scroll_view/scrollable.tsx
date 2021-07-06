@@ -168,8 +168,8 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  update(): void {
-    this.scrollableRef.update();
+  updateHandler(): void {
+    this.scrollableRef.updateHandler();
   }
 
   @Method()
@@ -253,6 +253,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;

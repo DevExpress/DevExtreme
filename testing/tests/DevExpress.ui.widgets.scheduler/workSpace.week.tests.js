@@ -3,9 +3,6 @@ import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { initFactoryInstance, stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
 
@@ -26,15 +23,9 @@ testStart(function() {
 module('Work Space Week', () => {
     module('Default', {
         beforeEach: function() {
-
-            const observer = initFactoryInstance(() => this.instance.resources);
-
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 showCurrentTimeIndicator: false,
-                observer
             }).dxSchedulerWorkSpaceWeek('instance');
-
-            stubInvokeMethod(this.instance, { key: observer.key });
         }
     }, () => {
         test('Work space should find cell coordinates by date', function(assert) {
@@ -102,7 +93,7 @@ module('Work Space Week', () => {
             this.instance.option('currentDate', new Date(2015, 2, 4));
             this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
 
-            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), { 'one': [2] });
+            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), [1]);
             assert.equal(coords.length, 1);
             assert.equal(coords[0].top, $element.find('.dx-scheduler-date-table tbody td').eq(67).position().top, 'Cell coordinates are right');
             assert.roughEqual(coords[0].left, $element.find('.dx-scheduler-date-table tbody td').eq(67).position().left, 0.01, 'Cell coordinates are right');
@@ -114,7 +105,7 @@ module('Work Space Week', () => {
             this.instance.option('currentDate', new Date(2015, 2, 4));
             this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
 
-            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), { 'one': [1, 2] });
+            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), [0, 1]);
             const $cells = $element.find('.dx-scheduler-date-table tbody td');
             assert.equal(coords.length, 2);
             assert.equal(coords[0].top, $cells.eq(60).position().top, 'Cell coordinates are right');
@@ -141,8 +132,7 @@ module('Work Space Week', () => {
                 { field: 'two', dataSource: [{ id: 1 }, { id: 2 }] }
             ];
 
-            const resources = { one: [1, 2], two: [1, 2] };
-            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), resources);
+            const coords = this.instance.getCoordinatesByDateInGroup(new Date(2015, 2, 5, 2, 0), [0, 1, 2, 3]);
             const $cells = $element.find('.dx-scheduler-date-table tbody td');
 
             $.each(coords, function(index, coordinate) {
@@ -439,26 +429,15 @@ module('Work Space Week', () => {
 
     module('Group by date', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
                 showCurrentTimeIndicator: false,
-                observer
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }],
             }).dxSchedulerWorkSpaceWeek('instance');
-
-            stubInvokeMethod(this.instance, { key: observer.key });
-
-            this.instance.option('groups', [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }]);
         }
     }, () => {
         test('Get date range', function(assert) {
@@ -505,17 +484,8 @@ module('Work Space Week', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.createInstance = function(options) {
-
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ ...options, observer }).dxSchedulerWorkSpaceWeek('instance');
-                stubInvokeMethod(this.instance, { key: observer.key });
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek(options).dxSchedulerWorkSpaceWeek('instance');
             };
         }
     }, () => {
@@ -601,15 +571,7 @@ module('Work Space Week', () => {
 module('Work Space Work Week', () => {
     module('Default', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ observer }).dxSchedulerWorkSpaceWorkWeek('instance');
-            stubInvokeMethod(this.instance, { key: observer.key });
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({}).dxSchedulerWorkSpaceWorkWeek('instance');
         }
     }, () => {
         test('Work space should find cell coordinates by date', function(assert) {
@@ -626,7 +588,7 @@ module('Work Space Work Week', () => {
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
             this.instance.option('startDayHour', 5);
-            this.instance.option('firstDayOfWeek', 7);
+            this.instance.option('firstDayOfWeek', 5);
 
             const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(14).position().top, 1, 'Cell coordinates are right');
@@ -664,16 +626,8 @@ module('Work Space Work Week', () => {
 
     module('it with intervalCount', {
         beforeEach: function() {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({ ...options, observer }).dxSchedulerWorkSpaceWorkWeek('instance');
-                stubInvokeMethod(this.instance, { key: observer.key });
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek(options).dxSchedulerWorkSpaceWorkWeek('instance');
             };
         }
     }, () => {

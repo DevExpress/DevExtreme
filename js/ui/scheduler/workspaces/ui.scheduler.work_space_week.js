@@ -1,9 +1,12 @@
 import registerComponent from '../../../core/component_registrator';
+import { VIEWS } from '../constants';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 import { getIntervalDuration, calculateViewStartDate } from './utils/week';
 
 const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
+    get type() { return VIEWS.WEEK; }
+
     _getElementClass() {
         return WEEK_CLASS;
     }
@@ -14,12 +17,6 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
 
     _getCellCount() {
         return 7 * this.option('intervalCount');
-    }
-
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-        return resultDate;
     }
 
     _calculateViewStartDate() {

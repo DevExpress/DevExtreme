@@ -10,14 +10,13 @@ const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 import {
     HEADER_CURRENT_TIME_CELL_CLASS,
-    DATE_TABLE_ROW_CLASS,
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-
-import timeZoneUtils from '../utils.timeZone';
+import { getDateForHeaderText } from './utils/timeline_week';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import { formatWeekdayAndDay } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -40,28 +39,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
-    _init() {
-        super._init();
-
-        this.$element().addClass(TIMELINE_CLASS);
-        this._$sidebarTable = $('<div>')
-            .addClass(GROUP_TABLE_CLASS);
-    }
-
-    _getDefaultGroupStrategy() {
-        return 'vertical';
-    }
-
-    _toggleGroupingDirectionClass() {
-        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
-    }
-
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            groupOrientation: 'vertical'
-        });
-    }
-
     _getRowCount() {
         return 1;
     }
@@ -83,49 +60,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getDateForHeaderText(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
-
-        return this._getDateByIndexCore(firstViewDate, index);
-    }
-
-    _getDateByIndexCore(date, index) {
-        const result = new Date(date);
-        const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
-
-        return result;
-    }
-
-    _getDateByIndex(index) {
-        const firstViewDate = this._getFirstViewDateWithoutDST();
-
-        const result = this._getDateByIndexCore(firstViewDate, index);
-
-        if(timeZoneUtils.isTimezoneChangeInDate(this._startViewDate)) {
-            result.setDate(result.getDate() - 1);
-        }
-
-        return result;
-    }
-
     _getFormat() {
         return 'shorttime';
-    }
-
-    _calculateHiddenInterval(rowIndex, columnIndex) {
-        const dayIndex = Math.floor(columnIndex / this._getCellCountInDay());
-        return dayIndex * this._getHiddenInterval();
-    }
-
-    _getMillisecondsOffset(rowIndex, columnIndex) {
-        columnIndex = this._calculateCellIndex(rowIndex, columnIndex);
-
-        return this._getInterval() * columnIndex + this._calculateHiddenInterval(rowIndex, columnIndex);
-    }
-
-    _createWorkSpaceElements() {
-        this._createWorkSpaceScrollableElements();
     }
 
     _getWorkSpaceHeight() {
@@ -157,15 +93,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         });
     }
 
-    _renderTimePanel() { return noop(); }
-    _renderAllDayPanel() { return noop(); }
-
-    _getDateHeaderTemplate() {
-        return this.option('timeCellTemplate');
-    }
-    _toggleAllDayVisibility() { return noop(); }
-    _changeAllDayVisibility() { return noop(); }
-
     supportAllDayRow() {
         return false;
     }
@@ -181,68 +108,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _createAllDayPanelElements() { return noop(); }
-
-    _renderDateHeader() {
-        const $headerRow = super._renderDateHeader();
-        if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._startViewDate);
-            let currentDate = new Date(firstViewDate);
-
-            const $cells = [];
-            const groupCount = this._getGroupCount();
-            const cellCountInDay = this._getCellCountInDay();
-            const colSpan = this.isGroupedByDate()
-                ? cellCountInDay * groupCount
-                : cellCountInDay;
-            const cellTemplate = this.option('dateCellTemplate');
-
-            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-                ? groupCount
-                : 1;
-            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
-
-            const cellsCount = cellsInGroup * horizontalGroupCount;
-
-            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
-                const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(currentDate);
-
-                if(cellTemplate) {
-                    const templateOptions = {
-                        model: {
-                            text,
-                            date: new Date(currentDate),
-                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
-                        },
-                        container: $th,
-                        index: templateIndex,
-                    };
-
-                    cellTemplate.render(templateOptions);
-                } else {
-                    $th.text(text);
-                }
-
-                $th
-                    .addClass(HEADER_PANEL_CELL_CLASS)
-                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
-                    .attr('colSpan', colSpan);
-
-                $cells.push($th);
-
-                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
-                    currentDate = new Date(firstViewDate);
-                } else {
-                    this._incrementDate(currentDate);
-                }
-            }
-
-            const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
-            $headerRow.before($row);
-        }
-    }
-
     _needRenderWeekHeader() {
         return false;
     }
@@ -254,28 +119,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getWeekDuration() {
         return 1;
     }
-
-    _renderView() {
-        this._startViewDate = this._calculateStartViewDate();
-        let groupCellTemplates;
-        if(!this.isRenovatedRender()) {
-            groupCellTemplates = this._renderGroupHeader();
-        }
-
-        this.renderWorkSpace();
-
-        this._shader = new HorizontalShader(this);
-
-        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
-
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
-            this.renderRGroupPanel();
-        }
-
-        this._applyCellTemplates(groupCellTemplates);
-    }
-
-    _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
     getIndicationCellCount() {
         const timeDiff = this._getTimeDiff();
@@ -317,25 +160,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    _renderIndicator(height, rtlOffset, $container, groupCount) {
-        let $indicator;
-        const width = this.getIndicationWidth();
-
-        if(this.option('groupOrientation') === 'vertical') {
-            $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container.get(0)).height);
-            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
-        } else {
-            for(let i = 0; i < groupCount; i++) {
-                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-                $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container.get(0)).height);
-
-                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
-            }
-        }
-    }
-
     _isVerticalShader() {
         return false;
     }
@@ -344,25 +168,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _visibilityChanged(visible) {
-        super._visibilityChanged(visible);
-    }
-
     _setTableSizes() {
-        const cellHeight = this.getCellHeight();
         const minHeight = this._getWorkSpaceMinHeight();
-        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
-            ? this._getGroupCount()
-            : 1;
 
-        // WA for IE: virtual scrolling does not work correctly if we do not set this height
-        let height = cellHeight * verticalGroupCount;
-        if(height < minHeight) {
-            height = minHeight;
-        }
-
-        this._$sidebarTable.height(height);
-        this._$dateTable.height(height);
+        this._$sidebarTable.height(minHeight);
+        this._$dateTable.height(minHeight);
 
         super._setTableSizes();
 
@@ -378,38 +188,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
 
         return minHeight;
-    }
-
-    _makeGroupRows(groups, groupByDate) {
-        const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
-
-        return tableCreator.makeGroupedTable(tableCreatorStrategy,
-            groups, {
-                groupRowClass: GROUP_ROW_CLASS,
-                groupHeaderRowClass: GROUP_ROW_CLASS,
-                groupHeaderClass: this._getGroupHeaderClass.bind(this),
-                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
-            },
-            this._getCellCount() || 1,
-            this.option('resourceCellTemplate'),
-            this._getTotalRowCount(this._getGroupCount()),
-            groupByDate);
-    }
-
-    _ensureGroupHeaderCellsHeight(cellHeight) {
-        const minCellHeight = this._calculateMinCellHeight();
-
-        if(cellHeight < minCellHeight) {
-            return minCellHeight;
-        }
-        return cellHeight;
-    }
-
-    _calculateMinCellHeight() {
-        const dateTable = this._getDateTable();
-        const dateTableRowSelector = `.${DATE_TABLE_ROW_CLASS}`;
-
-        return (getBoundingRect(dateTable).height / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     }
 
     _getCellCoordinatesByIndex(index) {
@@ -499,39 +277,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         };
     }
 
-    getVisibleBounds() {
-        const isRtl = this.option('rtlEnabled');
-
-        const result = {};
-        const $scrollable = this.getScrollable().$element();
-        const cellWidth = this.getCellWidth();
-        const scrollableOffset = isRtl ? (this.getScrollableOuterWidth() - this.getScrollableScrollLeft()) : this.getScrollableScrollLeft();
-        const scrolledCellCount = scrollableOffset / cellWidth;
-        const visibleCellCount = $scrollable.width() / cellWidth;
-        const totalCellCount = isRtl ? scrolledCellCount - visibleCellCount : scrolledCellCount + visibleCellCount;
-        let leftDate = this._getDateByIndex(scrolledCellCount);
-        let rightDate = this._getDateByIndex(totalCellCount);
-
-        if(isRtl) {
-            leftDate = this._getDateByIndex(totalCellCount);
-            rightDate = this._getDateByIndex(scrolledCellCount);
-        }
-
-        result.left = {
-            hours: leftDate.getHours(),
-            minutes: leftDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(leftDate)
-        };
-
-        result.right = {
-            hours: rightDate.getHours(),
-            minutes: rightDate.getMinutes() >= 30 ? 30 : 0,
-            date: dateUtils.trimTime(rightDate)
-        };
-
-        return result;
-    }
-
     getIntervalDuration(allDay) {
         return this.getCellDuration();
     }
@@ -565,6 +310,99 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
     }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
+
+    _renderGroupAllDayPanel() {}
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions(true);
+
+        const groupCount = this._getGroupCount();
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? groupCount
+            : 1;
+
+        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+        const daysInView = cellsInGroup * horizontalGroupCount;
+
+        return {
+            ...options,
+            isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
+            daysInView,
+            cellCountInDay: this._getCellCountInDay(),
+            getDateForHeaderText,
+        };
+    }
+
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: this._getCellCountInDay(),
+        };
+    }
+
+    // -------------
+    // We need these methods for now but they are useless for renovation
+    // -------------
+
+    _init() {
+        super._init();
+
+        this.$element().addClass(TIMELINE_CLASS);
+        this._$sidebarTable = $('<div>')
+            .addClass(GROUP_TABLE_CLASS);
+    }
+
+    _getDefaultGroupStrategy() {
+        return 'vertical';
+    }
+
+    _toggleGroupingDirectionClass() {
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
+    }
+
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            groupOrientation: 'vertical'
+        });
+    }
+
+    _createWorkSpaceElements() {
+        this._createWorkSpaceScrollableElements();
+    }
+
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
+
+    _getDateHeaderTemplate() {
+        return this.option('timeCellTemplate');
+    }
+
+    _renderView() {
+        this._startViewDate = this._calculateStartViewDate();
+        this._hiddenInterval = this._getHiddenInterval();
+        let groupCellTemplates;
+        if(!this.isRenovatedRender()) {
+            groupCellTemplates = this._renderGroupHeader();
+        }
+
+        this.renderWorkSpace();
+
+        this._shader = new HorizontalShader(this);
+
+        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        }
+
+        this._applyCellTemplates(groupCellTemplates);
+    }
+
+    _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
     _setCurrentTimeCells() {
         const timePanelCells = this._getTimePanelCells();
@@ -604,30 +442,108 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeColumnIndex);
     }
 
-    renderRAllDayPanel() {}
+    // --------------
+    // These methods should be deleted when we get rid of old render
+    // --------------
 
-    renderRTimeTable() {}
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
 
-    _renderGroupAllDayPanel() {}
+    _createAllDayPanelElements() { return noop(); }
 
-    generateRenderOptions() {
-        const options = super.generateRenderOptions(true);
+    _renderDateHeader() {
+        const $headerRow = super._renderDateHeader();
+        if(this._needRenderWeekHeader()) {
+            const firstViewDate = new Date(this._startViewDate);
+            let currentDate = new Date(firstViewDate);
 
-        const groupCount = this._getGroupCount();
-        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-            ? groupCount
-            : 1;
+            const $cells = [];
+            const groupCount = this._getGroupCount();
+            const cellCountInDay = this._getCellCountInDay();
+            const colSpan = this.isGroupedByDate()
+                ? cellCountInDay * groupCount
+                : cellCountInDay;
+            const cellTemplate = this.option('dateCellTemplate');
 
-        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
-        const daysInView = cellsInGroup * horizontalGroupCount;
+            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+                ? groupCount
+                : 1;
+            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
 
-        return {
-            ...options,
-            isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
-            daysInView,
-            cellCountInDay: this._getCellCountInDay(),
-        };
+            const cellsCount = cellsInGroup * horizontalGroupCount;
+
+            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
+                const $th = $('<th>');
+                const text = formatWeekdayAndDay(currentDate);
+
+                if(cellTemplate) {
+                    const templateOptions = {
+                        model: {
+                            text,
+                            date: new Date(currentDate),
+                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
+                        },
+                        container: $th,
+                        index: templateIndex,
+                    };
+
+                    cellTemplate.render(templateOptions);
+                } else {
+                    $th.text(text);
+                }
+
+                $th
+                    .addClass(HEADER_PANEL_CELL_CLASS)
+                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
+                    .attr('colSpan', colSpan);
+
+                $cells.push($th);
+
+                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
+                    currentDate = new Date(firstViewDate);
+                } else {
+                    this._incrementDate(currentDate);
+                }
+            }
+
+            const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
+            $headerRow.before($row);
+        }
+    }
+
+    _renderIndicator(height, rtlOffset, $container, groupCount) {
+        let $indicator;
+        const width = this.getIndicationWidth();
+
+        if(this.option('groupOrientation') === 'vertical') {
+            $indicator = this._createIndicator($container);
+            $indicator.height(getBoundingRect($container.get(0)).height);
+            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
+        } else {
+            for(let i = 0; i < groupCount; i++) {
+                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+                $indicator = this._createIndicator($container);
+                $indicator.height(getBoundingRect($container.get(0)).height);
+
+                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
+            }
+        }
+    }
+
+    _makeGroupRows(groups, groupByDate) {
+        const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+
+        return tableCreator.makeGroupedTable(tableCreatorStrategy,
+            groups, {
+                groupRowClass: GROUP_ROW_CLASS,
+                groupHeaderRowClass: GROUP_ROW_CLASS,
+                groupHeaderClass: this._getGroupHeaderClass.bind(this),
+                groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
+            },
+            this._getCellCount() || 1,
+            this.option('resourceCellTemplate'),
+            this._getTotalRowCount(this._getGroupCount()),
+            groupByDate);
     }
 }
 

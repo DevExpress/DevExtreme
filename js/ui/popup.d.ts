@@ -67,7 +67,7 @@ export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxPopup>;
+export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;

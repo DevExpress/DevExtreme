@@ -9,7 +9,7 @@ import { getBoundingRect } from '../../core/utils/position';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
-import dataUtils from '../../data/utils';
+import { normalizeSortingInfo as normalizeSortingInfoUtility } from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -19,6 +19,11 @@ const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
 const DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const NO_DATA_CLASS = 'nodata';
+const SCROLLING_MODE_INFINITE = 'infinite';
+const SCROLLING_MODE_VIRTUAL = 'virtual';
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const SCROLLING_MODE_OPTION = 'scrolling.mode';
+const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 const DATE_INTERVAL_SELECTORS = {
     'year': function(value) {
         return value && value.getFullYear();
@@ -78,7 +83,7 @@ const setEmptyText = function($container) {
 
 const normalizeSortingInfo = function(sort) {
     sort = sort || [];
-    const result = dataUtils.normalizeSortingInfo(sort);
+    const result = normalizeSortingInfoUtility(sort);
 
     for(let i = 0; i < sort.length; i++) {
         if(sort && sort[i] && sort[i].isExpanded !== undefined) {
@@ -498,5 +503,17 @@ export default {
             return $grid.is(controller.component.$element());
         }
         return false;
+    },
+
+    isVirtualRowRendering: function(that) {
+        const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
+        const isVirtualMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_VIRTUAL;
+        const isAppendMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_INFINITE;
+
+        if(that.option(NEW_SCROLLING_MODE) && (isVirtualMode || isAppendMode)) {
+            return true;
+        } else {
+            return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
+        }
     }
 };

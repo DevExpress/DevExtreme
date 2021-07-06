@@ -781,7 +781,7 @@ const LayoutManager = Widget.inherit({
 
             $mark = $('<span>')
                 .addClass(markClass)
-                .html('&nbsp' + markText);
+                .text(String.fromCharCode(160) + markText);
         }
 
         return $mark;

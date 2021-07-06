@@ -29,12 +29,6 @@ class VerticalGroupedStrategy {
         };
     }
 
-    calculateCellIndex(rowIndex, columnIndex) {
-        rowIndex = rowIndex % this._workSpace._getRowCount();
-
-        return this._workSpace._getRowCount() * columnIndex + rowIndex;
-    }
-
     getGroupIndex(rowIndex) {
         return Math.floor(rowIndex / this._workSpace._getRowCount());
     }
@@ -53,28 +47,6 @@ class VerticalGroupedStrategy {
 
     getTotalRowCount() {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
-    }
-
-    addAdditionalGroupCellClasses(cellClass, index, i, j) {
-        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
-
-        return this._addFirstGroupCellClass(cellClass, i + 1);
-    }
-
-    _addLastGroupCellClass(cellClass, index) {
-        if(index % this._workSpace._getRowCount() === 0) {
-            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
-        }
-
-        return cellClass;
-    }
-
-    _addFirstGroupCellClass(cellClass, index) {
-        if((index - 1) % this._workSpace._getRowCount() === 0) {
-            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
-        }
-
-        return cellClass;
     }
 
     getVerticalMax(groupIndex) {
@@ -145,7 +117,7 @@ class VerticalGroupedStrategy {
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
 
             if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
                 topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
@@ -211,6 +183,32 @@ class VerticalGroupedStrategy {
 
     getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
+    }
+
+    // ------------
+    // We do not need these methods in renovation
+    // ------------
+
+    addAdditionalGroupCellClasses(cellClass, index, i, j) {
+        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
+
+        return this._addFirstGroupCellClass(cellClass, i + 1);
+    }
+
+    _addLastGroupCellClass(cellClass, index) {
+        if(index % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
+    }
+
+    _addFirstGroupCellClass(cellClass, index) {
+        if((index - 1) % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
     }
 }
 

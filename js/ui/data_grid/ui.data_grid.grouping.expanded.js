@@ -1,6 +1,6 @@
 
 import { toComparable } from '../../core/utils/data';
-import dataUtils from '../../data/utils';
+import { keysEqual } from '../../data/utils';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import storeHelper from '../../data/store_helper';
@@ -120,7 +120,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
     const pathEquals = function(path1, path2) {
         if(path1.length !== path2.length) return false;
         for(let i = 0; i < path1.length; i++) {
-            if(!dataUtils.keysEqual(null, path1[i], path2[i])) {
+            if(!keysEqual(null, path1[i], path2[i])) {
                 return false;
             }
         }

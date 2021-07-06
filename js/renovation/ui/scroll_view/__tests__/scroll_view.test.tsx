@@ -72,7 +72,7 @@ describe('ScrollView', () => {
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
-      { name: 'update', calledWith: [] },
+      { name: 'updateHandler', calledWith: [] },
       { name: 'release', calledWith: [] },
       { name: 'startLoading', calledWith: [] },
       { name: 'finishLoading', calledWith: [] },

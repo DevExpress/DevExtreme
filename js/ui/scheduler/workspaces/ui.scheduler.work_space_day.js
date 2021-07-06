@@ -1,10 +1,13 @@
 import registerComponent from '../../../core/component_registrator';
+import { VIEWS } from '../constants';
 import SchedulerWorkSpaceVertical from './ui.scheduler.work_space_vertical';
 import { calculateStartViewDate } from './utils/day';
 
 const DAY_CLASS = 'dx-scheduler-work-space-day';
 
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
+    get type() { return VIEWS.DAY; }
+
     _getElementClass() {
         return DAY_CLASS;
     }
@@ -24,16 +27,6 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
             this.option('startDate'),
             this._getIntervalDuration(),
         );
-    }
-
-    _getDateByIndex(headerIndex) {
-        if(this.option('intervalCount') === 1) {
-            return this._startViewDate;
-        }
-
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-        return resultDate;
     }
 
     _renderDateHeader() {

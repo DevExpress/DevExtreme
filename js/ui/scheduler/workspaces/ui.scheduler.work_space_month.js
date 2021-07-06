@@ -1,14 +1,18 @@
-import $ from '../../../core/renderer';
 import { noop } from '../../../core/utils/common';
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
-import dateLocalization from '../../../localization/date';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
-import { calculateStartViewDate, getViewStartByOptions } from './utils/month';
-import { setStartDayHour } from './utils/base';
+import {
+    calculateStartViewDate,
+    getViewStartByOptions,
+    calculateCellIndex,
+    getCellText,
+} from './utils/month';
+import { formatWeekday } from './utils/base';
+import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
@@ -19,17 +23,14 @@ const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
 
 const DAYS_IN_WEEK = 7;
-const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+    get type() { return VIEWS.MONTH; }
+
     get isDateAndTimeView() {
         return false;
-    }
-
-    _toggleFixedScrollableClass() {
-        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     }
 
     _getElementClass() {
@@ -44,29 +45,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return DAYS_IN_WEEK;
     }
 
-    _getDateByIndex(headerIndex) {
-        const resultDate = new Date(this._startViewDate);
-        resultDate.setDate(this._startViewDate.getDate() + headerIndex);
-
-        return resultDate;
-    }
-
     _getFormat() {
-        return this._formatWeekday;
-    }
-
-    _calculateCellIndex(rowIndex, columnIndex) {
-        if(this._isVerticalGroupedWorkSpace()) {
-            rowIndex = rowIndex % this._getRowCount();
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
-        return rowIndex * this._getCellCount() + columnIndex;
-    }
-
-    _getInterval() {
-        return DAY_IN_MILLISECONDS;
+        return formatWeekday;
     }
 
     _getIntervalBetween(currentDate) {
@@ -76,10 +56,13 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    _getDateByCellIndexes(rowIndex, columnIndex) {
-        const date = super._getDateByCellIndexes(rowIndex, columnIndex);
-
-        return setStartDayHour(date, this.option('startDayHour'));
+    _getDateGenerationOptions() {
+        return {
+            ...super._getDateGenerationOptions(),
+            columnsInDay: 1,
+            cellCountInDay: 1,
+            calculateCellIndex,
+        };
     }
 
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
@@ -98,9 +81,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         });
     }
 
-    _calculateHiddenInterval() {
+    _getHiddenInterval() {
         return 0;
     }
+
 
     _insertAllDayRowsIntoDateTable() {
         return false;
@@ -115,23 +99,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         };
     }
 
-    _createWorkSpaceElements() {
-        if(this._isVerticalGroupedWorkSpace()) {
-            this._createWorkSpaceScrollableElements();
-        } else {
-            super._createWorkSpaceElements();
-        }
-    }
-
     _needCreateCrossScrolling() {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
     }
-
-    _renderTimePanel() { return noop(); }
-    _renderAllDayPanel() { return noop(); }
-    _getTableAllDay() { return noop(); }
-    _toggleAllDayVisibility() { return noop(); }
-    _changeAllDayVisibility() { return noop(); }
 
     _setVisibilityDates() {
         const date = this._getViewStartByOptions();
@@ -158,66 +128,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    _renderTableBody(options) {
-        options.getCellText = this._getCellText.bind(this);
-        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-        super._renderTableBody(options);
-    }
-
-    _getCellText(rowIndex, columnIndex) {
-        if(this.isGroupedByDate()) {
-            columnIndex = Math.floor(columnIndex / this._getGroupCount());
-        } else {
-            columnIndex = columnIndex % this._getCellCount();
-        }
-
-        const date = this._getDate(rowIndex, columnIndex);
-
-        if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
-            return this._formatMonthAndDay(date);
-        }
-        return dateLocalization.format(date, 'dd');
-    }
-
-    _formatMonthAndDay(date) {
-        const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
-        return [monthName, dateLocalization.format(date, 'day')].join(' ');
-    }
-
-    _getDate(week, day) {
-        const result = new Date(this._startViewDate);
-        const lastRowInDay = this._getRowCount();
-
-        result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
-        return result;
-    }
-
     _updateIndex(index) {
         return index;
-    }
-
-    _prepareCellData(rowIndex, columnIndex, cell) {
-        const data = super._prepareCellData(rowIndex, columnIndex, cell);
-        const $cell = $(cell);
-
-        $cell
-            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
-            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
-            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
-
-        return data;
-    }
-
-    _isCurrentDate(cellDate) {
-        return dateUtils.sameDate(cellDate, this._getToday());
-    }
-
-    _isFirstDayOfMonth(cellDate) {
-        return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
-    }
-
-    _isOtherMonth(cellDate) {
-        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
     }
 
     isIndicationAvailable() {
@@ -260,33 +172,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return true;
     }
 
-    calculateEndDate(startDate) {
-        const startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option('endDayHour')));
-    }
-
     getWorkSpaceLeftOffset() {
         return 0;
     }
 
     needApplyCollectorOffset() {
         return true;
-    }
-
-    _getCellPositionByIndex(index, groupIndex) {
-        const position = super._getCellPositionByIndex(index, groupIndex);
-        const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
-        let calculatedTopOffset;
-        if(!this._isVerticalGroupedWorkSpace()) {
-            calculatedTopOffset = this.getCellHeight() * rowIndex;
-        } else {
-            calculatedTopOffset = this.getCellHeight() * (rowIndex + groupIndex * this._getRowCount());
-        }
-
-        if(calculatedTopOffset) {
-            position.top = calculatedTopOffset;
-        }
-        return position;
     }
 
     _getHeaderDate() {
@@ -298,8 +189,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     scrollToTime() { return noop(); }
-
-    _createAllDayPanelElements() {}
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
@@ -318,29 +207,52 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         );
     }
 
-    generateRenderOptions() {
-        const options = super.generateRenderOptions();
-        options.cellDataGetters.push((_, rowIndex, columnIndex) => {
-            return {
-                value: {
-                    text: this._getCellText(rowIndex, columnIndex),
-                },
-            };
-        });
+    // -------------
+    // We need these methods for now but they are useless for renovation
+    // -------------
 
-        const getCellMetaData = (_, rowIndex, columnIndex, groupIndex, startDate) => {
-            return {
-                value: {
-                    today: this._isCurrentDate(startDate),
-                    otherMonth: this._isOtherMonth(startDate),
-                    firstDayOfMonth: this._isFirstDayOfMonth(startDate),
-                },
-            };
+    _toggleFixedScrollableClass() {
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
+    }
+
+    _createWorkSpaceElements() {
+        if(this._isVerticalGroupedWorkSpace()) {
+            this._createWorkSpaceScrollableElements();
+        } else {
+            super._createWorkSpaceElements();
+        }
+    }
+
+    _getTableAllDay() { return noop(); } //
+    _toggleAllDayVisibility() { return noop(); }
+    _changeAllDayVisibility() { return noop(); }
+
+    // --------------
+    // These methods should be deleted when we get rid of old render
+    // --------------
+
+    _renderTimePanel() { return noop(); }
+    _renderAllDayPanel() { return noop(); }
+
+    _setMonthClassesToCell($cell, data) {
+        $cell
+            .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
+            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.firstDayOfMonth)
+            .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
+    }
+
+    _createAllDayPanelElements() {}
+
+    _renderTableBody(options) {
+        options.getCellText = (rowIndex, columnIndex) => {
+            const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
+
+            return getCellText(date, this.option('intervalCount'));
         };
+        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
+        options.setAdditionalClasses = this._setMonthClassesToCell.bind(this),
 
-        options.cellDataGetters.push(getCellMetaData);
-
-        return options;
+        super._renderTableBody(options);
     }
 }
 
