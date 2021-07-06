@@ -2066,7 +2066,7 @@ class Scheduler extends Widget {
 
     ///#DEBUG
     getAppointmentDetailsForm() { // TODO for tests
-        return this._appointmentForm;
+        return this._appointmentForm.form;
     }
     ///#ENDDEBUG
 
