@@ -38,7 +38,7 @@ export type InitializedEvent = InitializedEventInfo<dxToast>;
 export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxToast>;
+export type ShowingEvent = Cancelable & EventInfo<dxToast>;
 
 /** @public */
 export type ShownEvent = EventInfo<dxToast>;

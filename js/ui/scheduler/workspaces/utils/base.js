@@ -1,3 +1,4 @@
+import errors from '../../../widget/ui.errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
@@ -9,12 +10,13 @@ export const isDateInRange = (date, startDate, endDate, diff) => {
         : dateUtils.dateInRange(date, endDate, startDate, 'date');
 };
 
-export const setStartDayHour = (date, startDayHour) => {
+export const setOptionHour = (date, startDayHour) => {
+    const nextDate = new Date(date);
+
     if(!isDefined(startDayHour)) {
-        return date;
+        return nextDate;
     }
 
-    const nextDate = new Date(date);
     nextDate.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
 
     return nextDate;
@@ -71,18 +73,17 @@ const getMillisecondsOffset = (cellIndex, interval, hiddenIntervalBase, cellCoun
     return interval * cellIndex + hiddenInterval;
 };
 
-export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
+export const getDateByCellIndices = (options, rowIndex, columnIndex, calculateCellIndex) => {
     let startViewDate = options.startViewDate;
     const {
         startDayHour,
         isWorkView,
         columnsInDay,
         hiddenInterval,
-        calculateCellIndex,
         interval,
         cellCountInDay,
-        rowCount,
-        columnCount,
+        rowCountBase,
+        columnCountBase,
         firstDayOfWeek,
     } = options;
 
@@ -94,7 +95,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
     }
 
-    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
 
     const offsetByCount = isWorkView
@@ -111,4 +112,42 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     currentDate.setTime(currentDate.getTime() + timeZoneDifference);
 
     return currentDate;
+};
+
+export const getHeaderCellText = (
+    headerIndex, date, headerCellTextFormat, getDateForHeaderText, additionalOptions,
+) => {
+    const validDate = getDateForHeaderText(headerIndex, date, additionalOptions);
+    return dateLocalization.format(validDate, headerCellTextFormat);
+};
+
+export const validateDayHours = (startDayHour, endDayHour) => {
+    if(startDayHour >= endDayHour) {
+        throw errors.Error('E1058');
+    }
+};
+
+export const getStartViewDateTimeOffset = (startViewDate, startDayHour) => {
+    const validStartDayHour = Math.floor(startDayHour);
+    const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+    if(isDSTChange && validStartDayHour !== startViewDate.getHours()) {
+        return dateUtils.dateToMilliseconds('hour');
+    }
+
+    return 0;
+};
+
+export const formatWeekday = function(date) {
+    return dateLocalization.getDayNames('abbreviated')[date.getDay()];
+};
+
+export const formatWeekdayAndDay = (date) => {
+    return formatWeekday(date) + ' ' + dateLocalization.format(date, 'day');
+};
+
+export const getToday = (indicatorTime, timeZoneCalculator) => {
+    const todayDate = indicatorTime || new Date();
+
+    return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
 };

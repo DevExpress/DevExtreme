@@ -23,7 +23,7 @@ import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 // eslint-disable-next-line import/no-cycle
 import BaseComponent from '../component_wrapper/button';
-import { EffectReturn } from '../utils/effect_return';
+import { EffectReturn } from '../utils/effect_return.d';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -45,7 +45,7 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, icon, iconPosition, template: ButtonTemplate, text, templateData,
+    children, iconPosition, template: ButtonTemplate, text,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
@@ -76,7 +76,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className="dx-button-content" ref={viewModel.contentRef}>
-        {ButtonTemplate && (<ButtonTemplate data={{ icon, text, ...templateData }} />)}
+        {ButtonTemplate && (<ButtonTemplate data={viewModel.buttonTemplateData} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
         {renderText && (<span className="dx-button-text">{text}</span>)}
@@ -270,5 +270,10 @@ export class Button extends JSXComponent(ButtonProps) {
       useHoldAnimation: false,
       waveSizeCoefficient: 1,
     } : {};
+  }
+
+  get buttonTemplateData(): Record<string, unknown> {
+    const { icon, text, templateData } = this.props;
+    return { icon, text, ...templateData };
   }
 }

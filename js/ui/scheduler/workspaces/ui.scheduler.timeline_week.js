@@ -2,10 +2,13 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerTimeline from './ui.scheduler.timeline';
 import { getBoundingRect } from '../../../core/utils/position';
 import { getIntervalDuration } from './utils/week';
+import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
+    get type() { return VIEWS.TIMELINE_WEEK; }
+
     _getElementClass() {
         return TIMELINE_CLASS;
     }

@@ -222,7 +222,7 @@ const FocusController = core.ViewController.inherit((function() {
         },
         _navigateTo: function(key, deferred, needFocusRow) {
             const visibleRowIndex = this.getController('data').getRowIndexByKey(key);
-            const isVirtualRowRenderingMode = this.option('scrolling.rowRenderingMode') === 'virtual';
+            const isVirtualRowRenderingMode = gridCoreUtils.isVirtualRowRendering(this);
             const isAutoNavigate = this.isAutoNavigateToFocusedRow();
 
             if(isAutoNavigate && isVirtualRowRenderingMode && visibleRowIndex < 0) {

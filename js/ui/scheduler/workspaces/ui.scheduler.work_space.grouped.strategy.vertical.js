@@ -117,7 +117,7 @@ class VerticalGroupedStrategy {
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
 
             if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
                 topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);

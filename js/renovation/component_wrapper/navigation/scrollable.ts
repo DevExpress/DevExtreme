@@ -11,7 +11,7 @@ export class ScrollableWrapper extends Component {
   }
 
   update(): unknown {
-    (this.viewRef as Scrollable).update();
+    (this.viewRef as Scrollable).updateHandler();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new (Deferred as any)().resolve();

@@ -9,6 +9,7 @@ import Toolbar from './modules/toolbar';
 import DropImage from './modules/dropImage';
 import Variables from './modules/variables';
 import Resizing from './modules/resizing';
+import TableResizing from './modules/tableResizing';
 import MentionsModule from './modules/mentions';
 
 class QuillRegistrator {
@@ -33,6 +34,7 @@ class QuillRegistrator {
             'modules/dropImage': DropImage,
             'modules/variables': Variables,
             'modules/resizing': Resizing,
+            'modules/tableResizing': TableResizing,
             'modules/mentions': MentionsModule,
 
             'themes/basic': BaseTheme

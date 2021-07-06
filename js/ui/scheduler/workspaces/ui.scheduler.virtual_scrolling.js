@@ -43,11 +43,11 @@ export default class VirtualScrollingDispatcher {
     get document() { return domAdapter.getDocument(); }
 
     get height() {
-        return this.workspace.invoke('getOption', 'height');
+        return this.workspace.option('schedulerHeight');
     }
 
     get width() {
-        return this.workspace.invoke('getOption', 'width');
+        return this.workspace.option('schedulerWidth');
     }
 
     get rowHeight() { return this._rowHeight; }
