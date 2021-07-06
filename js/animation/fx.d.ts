@@ -66,7 +66,7 @@ export type AnimationConfig = {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:object
+     * @type_function_param2 config:AnimationConfig
      * @public
      */
     start?: (($element: DxElement, config: AnimationConfig) => void);
