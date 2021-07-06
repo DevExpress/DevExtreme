@@ -21,13 +21,13 @@ export class ScrollbarProps {
 
   @OneWay() bottomPocketSize = 0;
 
+  @OneWay() contentPaddingBottom = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() isScrollableHovered = false;
 
   @OneWay() forceVisibility = false;
-
-  @OneWay() forceUpdateScrollbarLocation = false;
 
   @OneWay() scrollLocation = 0;
 

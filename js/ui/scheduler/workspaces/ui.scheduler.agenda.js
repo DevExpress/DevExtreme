@@ -17,15 +17,14 @@ import {
 } from '../classes';
 import { getPathToLeaf } from '../resources/utils';
 import { calculateStartViewDate } from './utils/agenda';
-import { formatWeekday } from './utils/base';
+import { formatWeekday, getVerticalGroupCountClass } from './utils/base';
+import { VIEWS } from '../constants';
 
 const { tableCreator } = tableCreatorModule;
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
 const AGENDA_DATE_CLASS = 'dx-scheduler-agenda-date';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
-
-const AGENDA_GROUPED_ATTR = 'dx-group-column-count';
 
 const TIME_PANEL_ROW_CLASS = 'dx-scheduler-time-panel-row';
 const TIME_PANEL_CELL_CLASS = 'dx-scheduler-time-panel-cell';
@@ -37,6 +36,8 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends WorkSpace {
+    get type() { return VIEWS.AGENDA; }
+
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
     _init() {
@@ -69,7 +70,7 @@ class SchedulerAgenda extends WorkSpace {
                     if(this._$groupTable) {
                         this._$groupTable.remove();
                         this._$groupTable = null;
-                        this._detachGroupCountAttr();
+                        this._detachGroupCountClass();
                     }
                 } else {
                     if(!this._$groupTable) {
@@ -208,12 +209,9 @@ class SchedulerAgenda extends WorkSpace {
         return result;
     }
 
-    _detachGroupCountAttr() {
-        this.$element().removeAttr(AGENDA_GROUPED_ATTR);
-    }
-
-    _attachGroupCountAttr() {
-        this.$element().attr(AGENDA_GROUPED_ATTR, this.option('groups').length);
+    _attachGroupCountClass() {
+        const className = getVerticalGroupCountClass(this.option('groups'));
+        this.$element().addClass(className);
     }
 
     _removeEmptyRows(rows) {

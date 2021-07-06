@@ -6197,6 +6197,71 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         assert.ok(true, 'TagBox rendered');
     });
+
+    QUnit.test('tags loading call result should be ignored after new call', function(assert) {
+        const items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+        const customStore = new CustomStore({
+            load: () => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items, totalCount: items.length });
+                }, 100);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore
+        });
+        const tagBox = $('#tagBox').dxTagBox({
+            dataSource: dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            value: [1],
+        }).dxTagBox('instance');
+
+        this.clock.tick(20);
+        tagBox.option('value', [2]);
+
+        this.clock.tick(80);
+        const list = getList(tagBox).dxList('instance');
+        assert.strictEqual(list.option('selectedItemKeys').length, 0, 'first loading result is ignored');
+        this.clock.tick(20);
+        assert.strictEqual(list.option('selectedItemKeys')[0], 2, 'value is correct');
+    });
+
+    QUnit.test('tags loading call result should be ignored after new call when grouped=true', function(assert) {
+        const items = [{ key: 'key', items: [{ id: 1, text: 'first' }, { id: 2, text: 'second' }] }];
+        const customStore = new CustomStore({
+            load: (options) => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items[0].items, totalCount: 2 });
+                }, 200);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore,
+            key: 'id'
+        });
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            grouped: true,
+            value: [1],
+            deferRendering: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(100);
+        tagBox.option('value', [2]);
+        this.clock.tick(100);
+
+        assert.strictEqual(tagBox.option('selectedItems').length, 0, 'first request is cancelled');
+        this.clock.tick(100);
+        assert.strictEqual(tagBox.option('selectedItems')[0].id, 2, 'second loading result');
+    });
 });
 
 QUnit.module('performance', () => {

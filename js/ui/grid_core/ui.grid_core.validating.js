@@ -343,6 +343,17 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
         },
 
+        _syncInternalEditingData: function(parameters) {
+            const editingController = this._editingController;
+            const change = editingController.getChangeByKey(parameters.key);
+            const oldDataFromState = editingController._getOldData(parameters.key);
+            const oldData = parameters.row?.oldData;
+
+            if(change && oldData && !oldDataFromState) {
+                editingController._addInternalData({ key: parameters.key, oldData });
+            }
+        },
+
         createValidator: function(parameters, $container) {
             const editingController = this._editingController;
             const column = parameters.column;
@@ -366,7 +377,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
 
                 if(isCellOrBatchEditingAllowed && showEditorAlways) {
-                    editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
+                    editingController._addInternalData({ key: parameters.key, oldData: parameters.row?.oldData ?? parameters.data });
                 }
             }
 
@@ -376,6 +387,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     return;
                 }
 
+                this._syncInternalEditingData(parameters);
                 const validationData = this._getValidationData(parameters.key, true);
 
                 const getValue = () => {

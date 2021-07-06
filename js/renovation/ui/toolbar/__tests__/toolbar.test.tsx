@@ -1,10 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Toolbar, ToolbarProps, viewFunction as ToolbarView } from '../toolbar';
+import { Toolbar, viewFunction as ToolbarView } from '../toolbar';
+import { ToolbarProps } from '../toolbar_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyToolbar from '../../../../ui/toolbar';
-
-jest.mock('../../../../ui/number_box', () => jest.fn());
 
 describe('Toolbar', () => {
   describe('View', () => {

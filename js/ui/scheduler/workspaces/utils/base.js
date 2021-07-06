@@ -2,8 +2,8 @@ import errors from '../../../widget/ui.errors';
 import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
-import { getCellGroups, getGroupsObjectFromGroupsArray } from '../../resources/utils';
 import timeZoneUtils from '../../utils.timeZone';
+import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -74,18 +74,17 @@ const getMillisecondsOffset = (cellIndex, interval, hiddenIntervalBase, cellCoun
     return interval * cellIndex + hiddenInterval;
 };
 
-export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
+export const getDateByCellIndices = (options, rowIndex, columnIndex, calculateCellIndex) => {
     let startViewDate = options.startViewDate;
     const {
         startDayHour,
         isWorkView,
         columnsInDay,
         hiddenInterval,
-        calculateCellIndex,
         interval,
         cellCountInDay,
-        rowCount,
-        columnCount,
+        rowCountBase,
+        columnCountBase,
         firstDayOfWeek,
     } = options;
 
@@ -97,7 +96,7 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
         startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
     }
 
-    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
 
     const offsetByCount = isWorkView
@@ -114,55 +113,6 @@ export const getDateByCellIndices = (options, rowIndex, columnIndex) => {
     currentDate.setTime(currentDate.getTime() + timeZoneDifference);
 
     return currentDate;
-};
-
-const calculateEndDate = (startDate, interval) => {
-    const result = new Date(startDate);
-    result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
-
-    return result;
-};
-
-export const prepareCellData = (options, rowIndex, columnIndex) => {
-    const {
-        isDateAndTimeView,
-        interval,
-        groups,
-        tableAllDay,
-        endDayHour,
-    } = options;
-
-    const startDate = getDateByCellIndices(options, rowIndex, columnIndex);
-    const endDate = isDateAndTimeView
-        ? calculateEndDate(startDate, interval)
-        : setOptionHour(startDate, endDayHour);
-
-    const data = {
-        startDate: startDate,
-        endDate: endDate,
-        allDay: tableAllDay,
-        groupIndex: 0,
-    };
-
-    const groupsArray = getCellGroups(0, groups);
-
-    if(groupsArray.length) {
-        data.groups = getGroupsObjectFromGroupsArray(groupsArray);
-    }
-
-    return data;
-};
-
-export const prepareAllDayCellData = (options, rowIndex, columnIndex) => {
-    const data = prepareCellData(options, rowIndex, columnIndex);
-    const startDate = dateUtils.trimTime(data.startDate);
-
-    return {
-        ...data,
-        startDate,
-        endDate: startDate,
-        allDay: true,
-    };
 };
 
 export const getHeaderCellText = (
@@ -201,4 +151,17 @@ export const getToday = (indicatorTime, timeZoneCalculator) => {
     const todayDate = indicatorTime || new Date();
 
     return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};
+
+export const getVerticalGroupCountClass = (groups) => {
+    switch(groups?.length) {
+        case 1:
+            return VERTICAL_GROUP_COUNT_CLASSES[0];
+        case 2:
+            return VERTICAL_GROUP_COUNT_CLASSES[1];
+        case 3:
+            return VERTICAL_GROUP_COUNT_CLASSES[2];
+        default:
+            return undefined;
+    }
 };

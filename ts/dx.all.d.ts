@@ -510,34 +510,6 @@ declare global {
 }
 declare module DevExpress {
   /**
-   * [descr:fx]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const fx: {
-    /**
-     * [descr:fx.animate(element, config)]
-     */
-    animate(
-      element: Element,
-      config: animationConfig
-    ): DevExpress.core.utils.DxPromise<void>;
-
-    /**
-     * [descr:fx.isAnimating(element)]
-     */
-    isAnimating(element: Element): boolean;
-
-    /**
-     * [descr:fx.stop(element, jumpToEnd)]
-     */
-    stop(element: Element, jumpToEnd: boolean): void;
-  };
-  /**
-    * [descr:devices]
-    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-    */
-   export const devices: DevicesObject;
-  /**
    * [descr:animationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -777,6 +749,11 @@ declare module DevExpress {
     version?: Array<number>;
   }
   /**
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
+  /**
    * [descr:DevicesObject]
    */
   export class DevicesObject {
@@ -984,6 +961,29 @@ declare module DevExpress {
      */
     shadingColor?: string;
   }
+  /**
+   * [descr:fx]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export const fx: {
+    /**
+     * [descr:fx.animate(element, config)]
+     */
+    animate(
+      element: Element,
+      config: animationConfig
+    ): DevExpress.core.utils.DxPromise<void>;
+
+    /**
+     * [descr:fx.isAnimating(element)]
+     */
+    isAnimating(element: Element): boolean;
+
+    /**
+     * [descr:fx.stop(element, jumpToEnd)]
+     */
+    stop(element: Element, jumpToEnd: boolean): void;
+  };
   /**
    * [descr:globalConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3698,10 +3698,6 @@ declare module DevExpress.pdfExporter {
   }
 }
 declare module DevExpress.ui {
-  /**
-   * [descr:dxItem]
-   */
-  export var dxItem: any;
   /**
    * [descr:AsyncRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -13398,6 +13394,10 @@ declare module DevExpress.ui {
     escapeChar?: string | Array<string>;
   }
   /**
+   * [descr:dxItem]
+   */
+  export var dxItem: any;
+  /**
    * [descr:dxList]
    */
   export class dxList extends CollectionWidget<dxListOptions> {
@@ -16515,12 +16515,12 @@ declare module DevExpress.ui {
   module dxScheduler {
     export type AppointmentAddedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentAddingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
@@ -16544,12 +16544,12 @@ declare module DevExpress.ui {
       };
     export type AppointmentDeletedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentDeletingEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
@@ -16587,7 +16587,7 @@ declare module DevExpress.ui {
       AppointmentDraggingEvent;
     export type AppointmentFormOpeningEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData?: any;
+        readonly appointmentData?: dxSchedulerAppointment;
         readonly form: dxForm;
         readonly popup: dxPopup;
       };
@@ -16600,7 +16600,7 @@ declare module DevExpress.ui {
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
     export type AppointmentUpdatedEvent =
       DevExpress.events.EventInfo<dxScheduler> & {
-        readonly appointmentData: any;
+        readonly appointmentData: dxSchedulerAppointment;
         readonly error?: Error;
       };
     export type AppointmentUpdatingEvent =
