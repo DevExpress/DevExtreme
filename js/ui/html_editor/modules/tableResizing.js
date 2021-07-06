@@ -301,6 +301,8 @@ export default class TableResizingModule extends BaseModule {
             transform: 'none'
         };
 
+        this._$highlightedElement?.remove();
+
         let currentPosition = 0;
         for(let i = 0; i <= determinantElementsSeparatorsCount; i++) {
             currentPosition += this._getSize($determinantElements.eq(i), directionInfo);
@@ -349,11 +351,12 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _dragStartHandler({ $determinantElements, index, frame, direction }) {
+    _dragStartHandler({ $determinantElements, index, frame, direction, lineSeparator }) {
         const directionInfo = this._getDirectionInfo(direction);
 
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
+        this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
@@ -393,6 +396,7 @@ export default class TableResizingModule extends BaseModule {
                     $(element).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
                 });
 
+                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
                 const shouldApplyNewValue = ($($lineElements.eq(0)).outerWidth() - currentLineNewSize < 5);
 
 
@@ -448,7 +452,9 @@ export default class TableResizingModule extends BaseModule {
     _createDraggableElement(options) {
         const boundaryConfig = this._getBoundaryConfig(options);
 
-        // const $draggable = $('<div>').addClass('.dx-htmleditor-resizer-draggable').appendTo(options.frame.$frame);
+        const directionClass = options.direction === 'vertical' ? 'dx-htmleditor-highlighted-row' : 'dx-htmleditor-highlighted-column';
+
+        this._$highlightedElement = $('<div>').addClass(`${directionClass}`).insertAfter(options.lineSeparator);
 
         // if(options.direction === 'vertical') {
         // } else {
