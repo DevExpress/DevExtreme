@@ -12,7 +12,6 @@ describe('Droppable', () => {
     it('default render', () => {
       const mockRef = createRef();
       const props = new DroppableProps();
-      props.children = [];
       const droppableProps = {
         cssClasses: 'test',
         widgetRef: mockRef,
@@ -22,7 +21,6 @@ describe('Droppable', () => {
       const tree = mount(<DroppableView {...droppableProps as any} /> as any);
 
       expect(tree.find('div').props()).toMatchObject({
-        ...props,
         className: 'test',
         'rest-attributes': 'true',
       });
