@@ -566,7 +566,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.headerPanelOffsetRecalculate();
 
         this.cache.clear();
-        this._cleanAllowedPositions();
     }
 
     _needCreateCrossScrolling() {
@@ -1310,11 +1309,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             aliasKey,
             this.cache.get(key)
         );
-    }
-
-    _cleanAllowedPositions() {
-        this._maxAllowedVerticalPosition = [];
-        this._maxAllowedPosition = [];
     }
 
     supportAllDayRow() {
@@ -2495,8 +2489,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._viewDataProvider = null;
         this._cellsSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
-        this._maxAllowedVerticalPosition = [];
-        this._maxAllowedPosition = [];
 
         super._init();
 
@@ -2805,7 +2797,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _cleanView() {
         this.cache.clear();
         this._cleanTableWidths();
-        this._cleanAllowedPositions();
         this.cellsSelectionState.clearSelectedAndFocusedCells();
         if(!this.isRenovatedRender()) {
             this._$thead.empty();
@@ -2909,7 +2900,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderWorkSpace(isGenerateNewViewData = true) {
-        this._cleanAllowedPositions();
         this.cache.clear();
 
         this.viewDataProvider.update(this.generateRenderOptions(), isGenerateNewViewData);

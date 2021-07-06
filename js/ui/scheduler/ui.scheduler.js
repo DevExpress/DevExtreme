@@ -914,7 +914,6 @@ class Scheduler extends Widget {
         this._toggleSmallClass();
 
         if(!this._isAgenda() && filteredItems && this._isVisible()) {
-            this._workSpace._cleanAllowedPositions();
             this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             this._workSpace._dimensionChanged();
 
