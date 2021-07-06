@@ -107,6 +107,14 @@ const isEditingOrShowEditorAlwaysDataCell = function(isEditRow, cellOptions) {
     return cellOptions.rowType === 'data' && isEditorCell;
 };
 
+const applyChangesOneLevel = function(obj, changes) {
+    obj = { ...obj };
+    Object.keys(changes).forEach(key=> {
+        delete obj[key];
+    });
+    return createObjectWithChanges(obj, changes);
+};
+
 const EditingController = modules.ViewController.inherit((function() {
     const getEditingTexts = (options) => {
         const editingTexts = options.component.option('editing.texts') || {};
@@ -1855,20 +1863,14 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(change) {
                 if(options.data) {
-                    Object.keys(options.data).forEach((key) => {
-                        delete change.data[key];
-                    });
-                    change.data = createObjectWithChanges(change.data, options.data);
+                    change.data = applyChangesOneLevel(change.data, options.data);
                 }
                 if((!change.type || !options.data) && options.type) {
                     change.type = options.type;
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
-                    Object.keys(options.data).forEach((key) => {
-                        delete row.data[key];
-                    });
-                    row.data = createObjectWithChanges(row.data, options.data);
+                    row.data = applyChangesOneLevel(row.data, options.data);
                 }
             }
 
