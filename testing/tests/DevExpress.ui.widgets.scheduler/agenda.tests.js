@@ -448,7 +448,7 @@ module('Agenda', {}, () => {
         assert.roughEqual($groupTableRows.eq(5).outerHeight(), 914, 3.001, 'Row height is OK');
     });
 
-    test('Agenda should have the right \'dx-group-column-count\' attr depend on group count', function(assert) {
+    test('Agenda should have the right group count class depending on group count', function(assert) {
         const instance = createInstance({
             groups: [
                 { name: 'roomId', items: [{ id: 1, text: 'r1' }, { id: 2, text: 'r2' }] },
@@ -458,12 +458,11 @@ module('Agenda', {}, () => {
 
         const $element = instance.$element();
 
-        assert.equal($element.attr('dx-group-column-count'), '2', 'Attr is OK');
-        assert.notOk($element.attr('dx-group-row-count'), 'row-count attr is not applied');
+        assert.ok($element.hasClass('dx-scheduler-group-column-count-two'), 'Correct class');
 
         instance.option('groups', []);
 
-        assert.notOk($element.attr('dx-group-column-count'), 'column-count attr is not applied');
+        assert.notOk($element.hasClass('dx-scheduler-group-column-count-two'), 'column count class was not applied');
     });
 
     test('Agenda should not create scrollable elements, if crossSCrollingEnabled=true ', function(assert) {

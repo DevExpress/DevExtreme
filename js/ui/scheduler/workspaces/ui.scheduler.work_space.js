@@ -35,6 +35,8 @@ import {
     DATE_TABLE_ROW_CLASS,
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
+    VERTICAL_GROUP_COUNT_CLASSES,
+    HORIZONTAL_GROUP_COUNT_CLASSES,
 } from '../classes';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
@@ -2142,7 +2144,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.option('groups').length) {
-            this._attachGroupCountAttr();
+            this._attachGroupCountClass();
             this.renderRComponent(
                 this._getGroupHeaderContainer(),
                 dxrGroupPanel,
@@ -2150,7 +2152,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 options,
             );
         } else {
-            this._detachGroupCountAttr();
+            this._detachGroupCountClass();
         }
     }
 
@@ -2191,9 +2193,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     renderRHeaderPanel(isRenderDateHeader = true) {
         if(this.option('groups').length) {
-            this._attachGroupCountAttr();
+            this._attachGroupCountClass();
         } else {
-            this._detachGroupCountAttr();
+            this._detachGroupCountClass();
         }
 
         this.renderRComponent(
@@ -2726,16 +2728,19 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setIndicationUpdateInterval() { return noop(); }
     _refreshDateTimeIndication() { return noop(); }
 
-    _detachGroupCountAttr() {
-        const groupedAttr = this._groupedStrategy.getGroupCountAttr();
-
-        this.$element().removeAttr(groupedAttr.attr);
+    _detachGroupCountClass() {
+        [
+            ...VERTICAL_GROUP_COUNT_CLASSES,
+            ...HORIZONTAL_GROUP_COUNT_CLASSES,
+        ].forEach((className) => {
+            this.$element().removeClass(className);
+        });
     }
 
-    _attachGroupCountAttr() {
-        const groupedAttr = this._groupedStrategy.getGroupCountAttr(this.option('groups'));
+    _attachGroupCountClass() {
+        const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
 
-        this.$element().attr(groupedAttr.attr, groupedAttr.count);
+        this.$element().addClass(className);
     }
 
     _getDateHeaderTemplate() {
@@ -2900,11 +2905,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         let cellTemplates = [];
         if(groupCount) {
             const groupRows = this._makeGroupRows(this.option('groups'), this.option('groupByDate'));
-            this._attachGroupCountAttr();
+            this._attachGroupCountClass();
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
-            this._detachGroupCountAttr();
+            this._detachGroupCountClass();
         }
 
         return cellTemplates;
