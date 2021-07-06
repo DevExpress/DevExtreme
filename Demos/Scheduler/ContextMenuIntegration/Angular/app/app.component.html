@@ -18,11 +18,11 @@
     ></dxi-resource>
 </dx-scheduler>
 <dx-context-menu #contextMenu
-    [dataSource]="dataSource"
-    [disabled]="disabled"
-    [target]="target"
-    (onItemClick)="onContextMenuItemClick($event)"
-    [width]="200">
+     [items]="contextMenuItems"
+     [disabled]="disabled"
+     [target]="target"
+     (onItemClick)="onContextMenuItemClick($event)"
+     [width]="200">
     <div *dxTemplate="let e of 'item'">
         <div *ngIf="e.color">
             <div class="item-badge" [ngStyle]="{ backgroundColor: e.color}"></div>

@@ -1,10 +1,13 @@
 <template>
   <div>
     <DxScheduler
+      ref="scheduler"
       time-zone="America/Los_Angeles"
+      :groups="groups"
       :data-source="dataSource"
       :views="views"
       :current-date="currentDate"
+      :cross-scrolling-enabled="crossScrollingEnabled"
       :start-day-hour="9"
       :height="600"
       :on-appointment-context-menu="onAppointmentContextMenu"
@@ -19,7 +22,7 @@
       />
     </DxScheduler>
     <DxContextMenu
-      :data-source="contextMenuItems"
+      :items="contextMenuItems"
       :width="200"
       :disabled="disabled"
       :target="target"
@@ -30,7 +33,6 @@
         <ItemTemplate :item-data="itemData"/>
       </template>
     </DxContextMenu>
-
   </div>
 </template>
 
@@ -40,7 +42,6 @@ import DxContextMenu from 'devextreme-vue/context-menu';
 
 import ItemTemplate from './ItemTemplate.vue';
 import { resourcesData, data } from './data.js';
-import { cellContextMenuItems, appointmentContextMenuItems, setResource } from './MenuItems.js';
 
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
@@ -50,59 +51,117 @@ export default {
     DxScheduler,
     DxResource,
     DxContextMenu,
-    ItemTemplate
+    ItemTemplate,
   },
   data() {
     return {
       views: ['day', 'month'],
       currentDate: new Date(2020, 10, 25),
       dataSource: data,
+      groups: null,
+      crossScrollingEnabled: false,
       resourcesData: resourcesData,
-      cellContextMenuItems: cellContextMenuItems,
-      appointmentContextMenuItems: this.getAllAppointmentContextMenuItems(),
       disabled: true,
       contextMenuItems: [],
-      contextMenuEvent: null,
       target: appointmentClassName,
     };
   },
   methods: {
-    onAppointmentContextMenu(e) {
+    onAppointmentContextMenu({ appointmentData, targetedAppointmentData }) {
+      const scheduler = this.$refs.scheduler.instance;
+      const resourceItems = resourcesData.map((item) => ({
+        ...item,
+        onItemClick: ({ itemData }) =>
+          scheduler.updateAppointment(appointmentData, {
+            ...appointmentData,
+            ...{ roomId: [itemData.id] },
+          }),
+      }));
       this.target = appointmentClassName;
       this.disabled = false;
-      this.contextMenuItems = this.appointmentContextMenuItems;
-      this.contextMenuEvent = e;
+      this.contextMenuItems = [
+        {
+          text: 'Open',
+          onItemClick: () => scheduler.showAppointmentPopup(appointmentData),
+        },
+        {
+          text: 'Delete',
+          onItemClick: () => scheduler.deleteAppointment(appointmentData),
+        },
+        {
+          text: 'Repeat Weekly',
+          beginGroup: true,
+          onItemClick: () =>
+            scheduler.updateAppointment(appointmentData, {
+              startDate: targetedAppointmentData.startDate,
+              recurrenceRule: 'FREQ=WEEKLY',
+            }),
+        },
+        { text: 'Set Room', beginGroup: true, disabled: true },
+        ...resourceItems,
+      ];
     },
-
-    onCellContextMenu(e) {
+    onCellContextMenu({ cellData }) {
+      const scheduler = this.$refs.scheduler.instance;
       this.target = cellClassName;
       this.disabled = false;
-      this.contextMenuItems = this.cellContextMenuItems;
-      this.contextMenuEvent = e;
+      this.contextMenuItems = [
+        {
+          text: 'New Appointment',
+          onItemClick: () =>
+            scheduler.showAppointmentPopup(
+              { startDate: cellData.startDate },
+              true
+            ),
+        },
+        {
+          text: 'New Recurring Appointment',
+          onItemClick: () =>
+            scheduler.showAppointmentPopup(
+              {
+                startDate: cellData.startDate,
+                recurrenceRule: 'FREQ=DAILY',
+              },
+              true
+            ),
+        },
+        {
+          text: 'Group by Room/Ungroup',
+          beginGroup: true,
+          onItemClick: () => {
+            if (this.groups) {
+              this.crossScrollingEnabled = false;
+              this.groups = null;
+            } else {
+              this.crossScrollingEnabled = true;
+              this.groups = ['roomId'];
+            }
+          },
+        },
+        {
+          text: 'Go to Today',
+          onItemClick: () => {
+            this.currentDate = new Date();
+          },
+        },
+      ];
     },
 
     onContextMenuItemClick(e) {
-      e.itemData.onItemClick(this.contextMenuEvent, e);
+      e.itemData.onItemClick(e);
     },
-
-    getAllAppointmentContextMenuItems() {
-      resourcesData.map(function(item) {
-        item.onItemClick = setResource;
-      });
-      return appointmentContextMenuItems.concat(resourcesData);
-    }
   },
 };
 </script>
 
 <style scoped>
-  .dx-menu-item-content span {
-    margin-right: 5px;
-  }
+.dx-menu-item-content span {
+  margin-right: 5px;
+}
 
-  .dx-menu-item-has-submenu .dx-icon-spinright {
-    position: absolute;
-    top: 7px;
-    right: 2px;
-  }
+.dx-menu-item-has-submenu .dx-icon-spinright {
+  position: absolute;
+  top: 7px;
+  right: 2px;
+}
 </style>
