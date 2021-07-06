@@ -5395,7 +5395,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
             byKey: (key) => {
                 const deferred = $.Deferred();
-                const filter = () => items.find(item => item.id === key);
+                const filter = () => items.filter(item => item.id === key)[0];
                 if(callCount === 0) {
                     setTimeout(() => {
                         deferred.resolve(filter());
