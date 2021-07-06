@@ -1191,7 +1191,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this._pageIndex = dataController.pageIndex();
             this._addInternalData({
                 key: item.key,
-                oldData: item.data
+                oldData: item.oldData ?? item.data
             });
             this._setEditRowKey(item.key);
         },
@@ -1474,7 +1474,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(!params.column.showEditorAlways) {
                 this._addInternalData({
                     key: item.key,
-                    oldData: item.data
+                    oldData: item.oldData ?? item.data
                 });
             }
 
