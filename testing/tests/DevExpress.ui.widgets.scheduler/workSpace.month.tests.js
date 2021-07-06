@@ -162,7 +162,7 @@ module('Work Space Month', () => {
 
                 const $lastCell = this.instance.$element().find('.dx-scheduler-date-table').find('td').eq(6);
 
-                assert.deepEqual(this.instance.getMaxAllowedPosition(),
+                assert.equal(Math.round(this.instance.getMaxAllowedPosition()),
                     Math.round($lastCell.position().left + $lastCell.outerWidth()), 'Max left position is correct');
             });
 
@@ -188,10 +188,10 @@ module('Work Space Month', () => {
                 const $fourthGroupLastCell = $cells.eq(27);
 
                 const expectedResult = [
-                    Math.round($firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width)
+                    $firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width,
+                    $secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width,
+                    $thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width,
+                    $fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width
                 ];
 
                 const actualResult = [0, 1, 2, 3].map((groupIndex) => {
