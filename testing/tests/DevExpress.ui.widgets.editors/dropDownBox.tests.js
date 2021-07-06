@@ -378,7 +378,7 @@ QUnit.module('common', moduleConfig, () => {
 
                 byKey: (key) => {
                     const deferred = $.Deferred();
-                    const filter = () => this.items.find(item => item.id === key);
+                    const filter = () => this.items.filter(item => item.id === key)[0];
                     if(this.callCount === 0) {
                         setTimeout(() => {
                             deferred.resolve(filter());
