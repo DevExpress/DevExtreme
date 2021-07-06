@@ -675,7 +675,11 @@ const SelectBox = DropDownList.inherit({
             .done((function(item) {
                 deferred.resolve(item);
             }).bind(this))
-            .fail((function() {
+            .fail((function(args) {
+                if(args?.shouldSkipCallback) {
+                    return;
+                }
+
                 const selectedItem = that.option('selectedItem');
                 if(that.option('acceptCustomValue') && value === that._valueGetter(selectedItem)) {
                     deferred.resolve(selectedItem);

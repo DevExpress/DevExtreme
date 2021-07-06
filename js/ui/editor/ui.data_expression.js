@@ -78,7 +78,12 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
                 deferred.reject();
             });
 
+        this._loadValueDeferred = deferred;
         return deferred.promise();
+    },
+
+    _rejectValueLoading: function() {
+        this._loadValueDeferred?.reject({ shouldSkipCallback: true });
     },
 
     _getCurrentValue: function() {
