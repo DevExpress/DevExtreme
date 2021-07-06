@@ -1,5 +1,14 @@
 import {
-  Component, ComponentBindings, CSSAttributes, ForwardRef, JSXComponent, OneWay, RefObject, Slot,
+  Component,
+  ComponentBindings,
+  CSSAttributes,
+  // Effect,
+  ForwardRef,
+  JSXComponent,
+  OneWay,
+  Ref,
+  RefObject,
+  Slot,
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual_row';
@@ -8,7 +17,8 @@ export const viewFunction = ({
   hasBottomVirtualRow,
   hasTopVirtualRow,
   style,
-  restAttributes,
+  // restAttributes,
+  // elementRef,
   props: {
     virtualCellsCount,
     className,
@@ -24,9 +34,10 @@ export const viewFunction = ({
 }: Table): JSX.Element => (
   <table
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
+    // {...restAttributes}
     className={className}
     style={style}
+    // ref={elementRef}
     ref={tableRef}
   >
     <tbody>
@@ -85,6 +96,9 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
+  @Ref()
+  elementRef!: RefObject<HTMLTableElement>;
+
   get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;
@@ -103,4 +117,11 @@ export class Table extends JSXComponent(TableProps) {
 
     return !!bottomVirtualRowHeight;
   }
+
+  // @Effect()
+  // refEffect(): void {
+  //   if (this.props.tableRef) {
+  //     this.props.tableRef.current = this.elementRef.current;
+  //   }
+  // }
 }

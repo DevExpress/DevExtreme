@@ -2,11 +2,11 @@ import {
   Component,
   ComponentBindings,
   Effect,
+  ForwardRef,
   InternalState,
   JSXComponent,
   JSXTemplate,
   OneWay,
-  Ref,
   RefObject,
   Template,
 } from '@devextreme-generator/declarations';
@@ -21,7 +21,7 @@ import {
   TimePanelData,
 } from '../types';
 import { isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../utils';
-import { DateTableLayoutProps } from './date_table/layout_props';
+import { DateTableLayoutProps } from './date_table/layout';
 import { GroupPanel } from './group_panel/group_panel';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
@@ -187,7 +187,7 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
   @InternalState()
   groupPanelHeight: number | undefined;
 
-  @Ref()
+  @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
   get classes(): string {
