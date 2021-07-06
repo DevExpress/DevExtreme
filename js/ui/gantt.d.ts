@@ -910,7 +910,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param2_field6 taskResources:Array<object>
      * @type_function_param2_field7 taskSize:object
      * @type_function_return string|Element|jQuery
-     * @return void
      * @public
      */
     taskContentTemplate?: template | ((container: DxElement, item: TaskContentTemplateData) => string | UserDefinedElement);
