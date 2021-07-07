@@ -55,7 +55,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import dxSortable from './sortable';
 
 import {
-    dxToolbarOptions
+    dxToolbarOptions, dxToolbarItem
 } from './toolbar';
 
 import {
@@ -3682,6 +3682,12 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     summary?: Summary;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: dxDataGridToolbar;
 }
 
 export interface ExcelCellInfo {
@@ -4114,6 +4120,36 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string
+}
+
+type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxDataGridToolbarItem extends dxToolbarItem {
+  /**
+   * @docid
+   * @type Enums.GridToolbarItemName|string
+   * @public
+  */
+  name?: dxDataGridDefaultToolbarItemName | string
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxDataGridToolbar {
+  /**
+   * @docid
+   * @type Array<dxDataGridToolbarItem,Enums.GridToolbarItemName>
+   * @public
+   */
+  items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
 }
 
 /**

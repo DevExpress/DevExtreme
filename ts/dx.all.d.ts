@@ -6238,6 +6238,18 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    type dxDataGridDefaultToolbarItemName =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'exportButton'
+      | 'groupPanel'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export interface dxDataGridSortByGroupSummaryInfoItem {
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
@@ -7917,6 +7929,10 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.summary]
      */
     summary?: DevExpress.ui.dxDataGrid.Summary;
+    /**
+     * [descr:dxDataGridOptions.toolbar]
+     */
+    toolbar?: dxDataGridToolbar;
   }
   /**
    * @deprecated 
@@ -7930,6 +7946,29 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
+  /**
+   * [descr:dxDataGridToolbar]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxDataGridToolbar {
+    /**
+     * [descr:dxDataGridToolbar.items]
+     */
+    items?: Array<
+      | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
+      | dxDataGridToolbarItem
+    >;
+  }
+  /**
+   * [descr:dxDataGridToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxDataGridToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxDataGridToolbarItem.name]
+     */
+    name?: DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName | string;
+  }
   /**
    * [descr:dxDateBox]
    */
@@ -19807,6 +19846,16 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxTreeList> &
         DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
     export type DisposingEvent = DevExpress.events.EventInfo<dxTreeList>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type dxTreeListDefaultToolbarItemName =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     export type EditCanceledEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type EditCancelingEvent = DevExpress.events.Cancelable &
@@ -20337,6 +20386,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.selection]
      */
     selection?: DevExpress.ui.dxTreeList.Selection;
+    /**
+     * [descr:dxTreeListOptions.toolbar]
+     */
+    toolbar?: dxTreeListToolbar;
   }
   /**
    * @deprecated 
@@ -20354,6 +20407,29 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
+  /**
+   * [descr:dxTreeListToolbar]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxTreeListToolbar {
+    /**
+     * [descr:dxTreeListToolbar.items]
+     */
+    items?: (
+      | DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName
+      | dxTreeListToolbarItem
+    )[];
+  }
+  /**
+   * [descr:dxTreeListToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxTreeListToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxTreeListToolbarItem.name]
+     */
+    name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+  }
   /**
    * [descr:dxTreeView]
    */
