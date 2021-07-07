@@ -246,6 +246,7 @@ function indexByKey(keyInfo, array, key) {
 export {
     applyBatch,
     createObjectWithChanges,
+    cloneInstance,
     update,
     insert,
     remove,
