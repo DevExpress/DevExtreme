@@ -618,7 +618,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     generateRenderOptions(isProvideVirtualCellsWidth) {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
-        const horizontalGroupCount = isVerticalGrouping ? 1 : groupCount;
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
@@ -629,9 +628,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const options = {
             groupByDate: this.isGroupedByDate(), // TODO: rework
-            horizontalGroupCount, // TODO: remove
-            isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(), // TODO: remove
-            isVerticalGrouping, // TODO: remove
             isStandaloneAllDayPanel: !isVerticalGrouping && this.isAllDayPanelVisible, // TODO: remove
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(), // TODO: remove
             rowCountInGroup,

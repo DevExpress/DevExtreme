@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
@@ -37,7 +38,9 @@ export default class ViewDataProvider {
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
-    update(renderOptions, isGenerateNewViewData) {
+    update(options, isGenerateNewViewData) {
+        const renderOptions = this._transformRenderOptions(options);
+
         this.viewDataGenerator = getViewDataGeneratorByViewType(renderOptions.viewType);
         const viewDataGenerator = this.viewDataGenerator;
         const dateHeaderDataGenerator = new DateHeaderDataGenerator();
@@ -86,6 +89,21 @@ export default class ViewDataProvider {
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator
             .getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
+    }
+
+    _transformRenderOptions(renderOptions) {
+        const {
+            groups,
+            groupOrientation,
+            groupByDate,
+        } = renderOptions;
+
+        return {
+            ...renderOptions,
+            isVerticalGrouping: isVerticalGroupOrientation(groupOrientation, groups),
+            isHorizontalGrouping: isHorizontalGroupOrientation(groups, groupOrientation),
+            isGroupedByDate: groupByDate,
+        };
     }
 
     getGroupStartDate(groupIndex) {

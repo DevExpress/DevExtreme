@@ -5,6 +5,8 @@ import dateLocalization from '../../../../localization/date';
 import timeZoneUtils from '../../utils.timeZone';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import { VIEWS } from '../../constants';
+import { getGroupCount } from '../../resources/utils';
+import { isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -169,4 +171,11 @@ export const getVerticalGroupCountClass = (groups) => {
 
 export const isDateAndTimeView = (viewType) => {
     return viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
+};
+
+export const getHorizontalGroupCount = (groups, groupOrientation) => {
+    const groupCount = getGroupCount(groups) | 1;
+    const isVerticalGrouping = isVerticalGroupOrientation(groupOrientation, groups);
+
+    return isVerticalGrouping ? 1 : groupCount;
 };
