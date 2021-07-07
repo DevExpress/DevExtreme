@@ -14,7 +14,7 @@ export class ViewDataGenerator {
             rowCountInGroup,
             cellCountInGroupRow,
             groups,
-            groupByDate,
+            isGroupedByDate,
             isHorizontalGrouping,
             isVerticalGrouping,
             totalCellCount,
@@ -29,7 +29,7 @@ export class ViewDataGenerator {
         allDayPanelData && viewDataMap.push(allDayPanelData);
         viewDataMap.push(...viewCellsData);
 
-        if(isHorizontalGrouping && !groupByDate) {
+        if(isHorizontalGrouping && !isGroupedByDate) {
             viewDataMap = this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
         }
 
@@ -37,7 +37,7 @@ export class ViewDataGenerator {
             viewDataMap = this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
         }
 
-        if(groupByDate) {
+        if(isGroupedByDate) {
             viewDataMap = this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
         }
 
@@ -422,12 +422,12 @@ export class ViewDataGenerator {
             rowCountInGroup,
             cellCountInGroupRow,
             groups,
-            groupByDate,
+            isGroupedByDate,
         } = options;
 
         const groupCount = getGroupCount(groups);
 
-        if(groupByDate) {
+        if(isGroupedByDate) {
             return columnIndex % groupCount === 0;
         }
 
@@ -444,12 +444,12 @@ export class ViewDataGenerator {
             rowCountInGroup,
             cellCountInGroupRow,
             groups,
-            groupByDate
+            isGroupedByDate
         } = options;
 
         const groupCount = getGroupCount(groups);
 
-        if(groupByDate) {
+        if(isGroupedByDate) {
             return (columnIndex + 1) % groupCount === 0;
         }
 

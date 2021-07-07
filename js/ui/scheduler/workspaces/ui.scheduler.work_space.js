@@ -627,7 +627,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             : this._getDefaultGroupStrategy();
 
         const options = {
-            groupByDate: this.isGroupedByDate(), // TODO: rework
+            groupByDate: this.option('groupByDate'),
             isStandaloneAllDayPanel: !isVerticalGrouping && this.isAllDayPanelVisible, // TODO: remove
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(), // TODO: remove
             rowCountInGroup,

@@ -23,7 +23,7 @@ export class DateHeaderDataGenerator {
 
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
-            groupByDate,
+            isGroupedByDate,
             cellCountInDay,
             daysInView,
             groups,
@@ -32,7 +32,7 @@ export class DateHeaderDataGenerator {
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+        const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
 
         const weekDaysRow = [];
 
@@ -54,7 +54,7 @@ export class DateHeaderDataGenerator {
     _generateHeaderDateRow(options, completeViewDataMap) {
         const {
             today,
-            groupByDate,
+            isGroupedByDate,
             cellCountInGroupRow,
             groupOrientation,
             groups,
@@ -68,10 +68,10 @@ export class DateHeaderDataGenerator {
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const slicedByColumnsData = groupByDate
+        const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
             : completeViewDataMap[index];
 
@@ -101,8 +101,8 @@ export class DateHeaderDataGenerator {
                 text,
                 today: dateUtils.sameDate(startDate, today),
                 colSpan,
-                isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
-                isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+                isFirstGroupCell: isGroupedByDate || (isFirstGroupCell && !isVerticalGrouping),
+                isLastGroupCell: isGroupedByDate || (isLastGroupCell && !isVerticalGrouping),
             });
         });
     }
@@ -162,11 +162,11 @@ export class DateHeaderDataGenerator {
             isProvideVirtualCellsWidth,
             groups,
             groupOrientation,
-            groupByDate,
+            isGroupedByDate,
         } = options;
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
-        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
         const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
         const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
 

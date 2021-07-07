@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
+import { isGroupingByDate, isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
@@ -95,14 +95,17 @@ export default class ViewDataProvider {
         const {
             groups,
             groupOrientation,
-            groupByDate,
+            isGroupedByDate,
+            ...restOptions
         } = renderOptions;
 
         return {
-            ...renderOptions,
+            ...restOptions,
             isVerticalGrouping: isVerticalGroupOrientation(groupOrientation, groups),
             isHorizontalGrouping: isHorizontalGroupOrientation(groups, groupOrientation),
-            isGroupedByDate: groupByDate,
+            isGroupedByDate: isGroupingByDate(groups, groupOrientation, isGroupedByDate),
+            groups,
+            groupOrientation,
         };
     }
 
