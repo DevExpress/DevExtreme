@@ -3166,6 +3166,27 @@ testModule('resize', moduleConfig, () => {
         assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [190, 190], 'correct size');
     });
 
+    test('overlay content dimensions should be updated during resize', function(assert) {
+        const done = assert.async();
+        const $overlay = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true,
+            width: 200,
+            height: 200
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $overlayContent = overlay.$content();
+        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(10);
+
+        setTimeout(() => {
+            assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
+            done();
+        });
+    });
+
     test('resized overlay should not save dimensions after height changed', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             resizeEnabled: true,

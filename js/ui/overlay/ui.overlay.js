@@ -358,7 +358,15 @@ const Overlay = Widget.inherit({
         this._contentResizeObserver = new window.ResizeObserver(() => {
             this._dimensionChanged();
         });
+        this._observeContentResize();
+    },
+
+    _observeContentResize: function() {
         this._contentResizeObserver.observe(this._$content.get(0));
+    },
+
+    _unobserveContentResize: function() {
+        this._contentResizeObserver.unobserve(this._$content.get(0));
     },
 
     _initMarkup() {
@@ -946,9 +954,15 @@ const Overlay = Widget.inherit({
     _renderResize: function() {
         this._resizable = this._createComponent(this._$content, Resizable, {
             handles: this.option('resizeEnabled') ? 'all' : 'none',
-            onResizeEnd: this._resizeEndHandler.bind(this),
+            onResizeEnd: (...args) => {
+                this._resizeEndHandler(...args);
+                this._observeContentResize();
+            },
             onResize: this._actions.onResize.bind(this),
-            onResizeStart: this._actions.onResizeStart.bind(this),
+            onResizeStart: (...args) => {
+                this._unobserveContentResize();
+                this._actions.onResizeStart(...args);
+            },
             minHeight: 100,
             minWidth: 100,
             area: this._getDragResizeContainer()
