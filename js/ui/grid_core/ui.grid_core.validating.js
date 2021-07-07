@@ -850,6 +850,8 @@ export const validatingModule = {
 
                 _afterSaveEditData: function(cancel) {
                     let $firstErrorRow;
+                    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+
                     each(this.getChanges(), (_, change) => {
                         const $errorRow = this._showErrorRow(change);
                         $firstErrorRow = $firstErrorRow || $errorRow;
@@ -862,7 +864,7 @@ export const validatingModule = {
                         }
                     }
 
-                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                    if(cancel && isCellEditMode && this._needUpdateRow()) {
                         const editRowIndex = this.getEditRowIndex();
 
                         this._dataController.updateItems({
@@ -871,7 +873,18 @@ export const validatingModule = {
                         });
                         this._focusEditingCell();
                     } else if(!cancel) {
-                        this.getController('validating')._validationState = [];
+                        let shouldResetValidationState = true;
+
+                        if(isCellEditMode) {
+                            const columns = this.getController('columns').getColumns();
+                            const columnsWithValidatingEditors = columns.filter(col => col.showEditorAlways && col.validationRules?.length > 0).length > 0;
+
+                            shouldResetValidationState = !columnsWithValidatingEditors;
+                        }
+
+                        if(shouldResetValidationState) {
+                            this.getController('validating')._validationState = [];
+                        }
                     }
                 },
 
