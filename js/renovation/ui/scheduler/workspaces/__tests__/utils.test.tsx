@@ -228,6 +228,35 @@ describe('Workspaces utils', () => {
       expect(isVerticalGroupOrientation())
         .toBe(false);
     });
+
+    it('should return false if groups are empty', () => {
+      expect(isVerticalGroupOrientation(VERTICAL_GROUP_ORIENTATION, []))
+        .toBe(false);
+    });
+
+    it('should return true if groups are not empty', () => {
+      expect(isVerticalGroupOrientation(
+        VERTICAL_GROUP_ORIENTATION,
+        [{
+          data: [],
+          items: [],
+          name: 'Group',
+        }],
+      ))
+        .toBe(true);
+    });
+
+    it('should return false if groups are not empty but orientation is horizontal', () => {
+      expect(isVerticalGroupOrientation(
+        HORIZONTAL_GROUP_ORIENTATION,
+        [{
+          data: [],
+          items: [],
+          name: 'Group',
+        }],
+      ))
+        .toBe(false);
+    });
   });
 
   describe('isHorizontalGroupOrientation', () => {
