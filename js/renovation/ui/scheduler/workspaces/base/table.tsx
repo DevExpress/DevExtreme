@@ -2,7 +2,6 @@ import {
   Component,
   ComponentBindings,
   CSSAttributes,
-  // Effect,
   ForwardRef,
   JSXComponent,
   OneWay,
