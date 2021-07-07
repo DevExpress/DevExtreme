@@ -271,6 +271,7 @@ const Overlay = Widget.inherit({
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
+        this._initContentResizeObserver();
     },
 
     _initOptions: function(options) {
@@ -358,7 +359,6 @@ const Overlay = Widget.inherit({
     _initMarkup() {
         this.callBase();
         this._renderWrapperAttributes();
-        this._initContentResizeObserver();
     },
 
     _documentDownHandler: function(e) {
