@@ -132,7 +132,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellHeight() {
-        const cellHeight = this.workspace.getCellHeight(false);
+        const cellHeight = this.workspace.getCellHeight();
         const result = cellHeight > 0
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
@@ -275,7 +275,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     updateDimensions(isForce) {
-        const cellHeight = this.getCellHeight(false);
+        const cellHeight = this.getCellHeight();
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
         if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;
