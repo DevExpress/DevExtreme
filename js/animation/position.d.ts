@@ -105,5 +105,8 @@ export interface PositionConfig {
     };
 }
 
-/** @deprecated Use the PositionConfig type instead*/
+/**
+ * @docid
+ * @deprecated Use the PositionConfig type instead
+ */
 export interface positionConfig extends PositionConfig { }
