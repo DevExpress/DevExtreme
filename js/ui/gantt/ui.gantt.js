@@ -1510,7 +1510,13 @@ class Gantt extends Widget {
                 * @type boolean
                 * @default false
                 */
-                autoUpdateParentTasks: false
+                autoUpdateParentTasks: false,
+                /**
+                * @name dxGanttOptions.validation.enablePredecessorGap
+                * @type boolean
+                * @default false
+                */
+                enablePredecessorGap: false
             },
             toolbar: null,
             contextMenu: {
