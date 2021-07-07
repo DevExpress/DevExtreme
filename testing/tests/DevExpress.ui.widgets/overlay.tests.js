@@ -267,6 +267,22 @@ testModule('render', moduleConfig, () => {
         }
     });
 
+    test('overlay should be repositioned only once on window resize', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+        let callCount = 0;
+        const done = assert.async();
+
+        overlay.on('positioned', () => { ++callCount; });
+        resizeCallbacks.fire();
+
+        setTimeout(() => {
+            assert.strictEqual(callCount, 1, 'overlay was repositioned only once');
+            done();
+        });
+    });
+
     test('default', function(assert) {
         const instance = $('#overlay').dxOverlay().dxOverlay('instance');
         const $content = instance.$content();

@@ -356,7 +356,9 @@ const Overlay = Widget.inherit({
 
     _initContentResizeObserver: function() {
         this._contentResizeObserver = new window.ResizeObserver(() => {
-            this._dimensionChanged();
+            if(!this._shouldSkipContentResizeHandler) {
+                this._dimensionChanged();
+            }
         });
         this._observeContentResize();
     },
@@ -1316,7 +1318,9 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
+        this._shouldSkipContentResizeHandler = true;
         this._renderGeometry(true);
+        this._shouldSkipContentResizeHandler = undefined;
     },
 
     _clean: function() {
