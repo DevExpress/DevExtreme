@@ -4,14 +4,14 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import { isDefined, isObject, isFunction, isEmptyObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { extend, extendFromObject } from '../../core/utils/extend';
+import { extend } from '../../core/utils/extend';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import gridCoreUtils from './ui.grid_core.utils';
-import { createObjectWithChanges } from '../../data/array_utils';
+import { createObjectWithChanges, cloneInstance } from '../../data/array_utils';
 import { addNamespace } from '../../events/utils/index';
 import { confirm } from '../dialog';
 import messageLocalization from '../../localization/message';
@@ -108,15 +108,11 @@ const isEditingOrShowEditorAlwaysDataCell = function(isEditRow, cellOptions) {
     return cellOptions.rowType === 'data' && isEditorCell;
 };
 
-const applyChangesOneLevel = function(target, changes) {
-    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
-    const targetWithoutPrototype = extendFromObject({}, target);
-    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
-
+const createObjectWithChangesOnOneLevel = function(target, changes) {
+    const result = cloneInstance(target);
     Object.keys(changes).forEach(key=> {
         delete result[key];
     });
-
     return deepExtendArraySafe(result, changes, true, true);
 };
 
@@ -1862,14 +1858,14 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(change) {
                 if(options.data) {
-                    change.data = applyChangesOneLevel(change.data, options.data);
+                    change.data = createObjectWithChangesOnOneLevel(change.data, options.data);
                 }
                 if((!change.type || !options.data) && options.type) {
                     change.type = options.type;
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
-                    row.data = applyChangesOneLevel(row.data, options.data);
+                    row.data = createObjectWithChangesOnOneLevel(row.data, options.data);
                 }
             }
 
