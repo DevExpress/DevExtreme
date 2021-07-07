@@ -157,6 +157,23 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return undefined;
   }
 
+  @Effect()
+  updateIconFontSize(): EffectReturn {
+    const iconElement = this.iconRef?.current;
+    const { iconWidth, iconHeight } = this.props;
+
+    if (iconElement !== null && iconElement !== undefined) {
+      const width = typeof iconWidth === 'number' ? iconWidth : iconElement.getBoundingClientRect().width;
+      const height = typeof iconHeight === 'number' ? iconHeight : iconElement.getBoundingClientRect().height;
+
+      const calculatedFontSize = `${Math.floor(Math.min(width, height) * ICON_FONT_SIZE_RATION)}px`;
+
+      iconElement.style.fontSize = calculatedFontSize;
+    }
+
+    return undefined;
+  }
+
   @Method()
   focus(): void {
     this.widgetRef.current!.focus();
@@ -203,13 +220,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get iconStyles(): { [key: string]: string | number } {
     const { iconWidth, iconHeight } = this.props;
 
-    const computedIconWidth = typeof iconWidth === 'function' ? +iconWidth() : +iconWidth;
-    const computedIconHeight = typeof iconHeight === 'function' ? +iconHeight() : +iconHeight;
     const width = normalizeStyleProp('width', typeof iconWidth === 'function' ? iconWidth() : iconWidth);
     const height = normalizeStyleProp('height', typeof iconHeight === 'function' ? iconHeight() : iconHeight);
-    const fontSize = normalizeStyleProp('font-size', Math.round(Math.min(computedIconWidth, computedIconHeight) * ICON_FONT_SIZE_RATION));
 
-    return { height, width, fontSize };
+    return { height, width };
   }
 
   get cssClasses(): string {
