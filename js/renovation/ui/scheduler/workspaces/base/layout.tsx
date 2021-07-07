@@ -212,17 +212,17 @@ LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
       'dx-scheduler-work-space-grouped': groups?.length > 0,
       'dx-scheduler-work-space-vertical-grouped': isVerticalGroupOrientation(groupOrientation, groups),
       'dx-scheduler-group-row-count-one': isHorizontalGroupOrientation(groups, groupOrientation)
-        && groups.length === 1,
+        && groups?.length === 1,
       'dx-scheduler-group-row-count-two': isHorizontalGroupOrientation(groups, groupOrientation)
-        && groups.length === 2,
+        && groups?.length === 2,
       'dx-scheduler-group-row-count-three': isHorizontalGroupOrientation(groups, groupOrientation)
-        && groups.length === 3,
+        && groups?.length === 3,
       'dx-scheduler-group-column-count-one': isVerticalGroupOrientation(groupOrientation, groups)
-        && groups.length === 1,
+        && groups?.length === 1,
       'dx-scheduler-group-column-count-two': isVerticalGroupOrientation(groupOrientation, groups)
-        && groups.length === 2,
+        && groups?.length === 2,
       'dx-scheduler-group-column-count-three': isVerticalGroupOrientation(groupOrientation, groups)
-        && groups.length === 3,
+        && groups?.length === 3,
       'dx-scheduler-work-space': true,
     });
   }

@@ -329,6 +329,19 @@ describe('LayoutBase', () => {
           expect(layout.groupPanelHeight)
             .toBe(325);
         });
+
+        it('should work if tableRef was not initialized', () => {
+          const layout = new LayoutBase({} as any);
+
+          layout.dateTableRef = {
+            current: null,
+          } as any;
+
+          layout.groupPanelHeightEffect();
+
+          expect(layout.groupPanelHeight)
+            .toBe(undefined);
+        });
       });
     });
   });
@@ -513,6 +526,43 @@ describe('LayoutBase', () => {
             'dx-scheduler-group-row-count-two': false,
             'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': true,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      it('should call combineClasses with correct parameters when groups are undefined', () => {
+        (isVerticalGroupOrientation as any).mockImplementation(() => false);
+
+        const layout = new LayoutBase({
+          className: 'dx-scheduler-work-space-day',
+          intervalCount: 35,
+          isWorkSpaceWithOddCells: true,
+          isAllDayPanelCollapsed: true,
+          isAllDayPanelVisible: true,
+          groupByDate: false,
+          groups: undefined,
+          groupOrientation: 'vertical',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        layout.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': true,
+            'dx-scheduler-work-space-all-day-collapsed': true,
+            'dx-scheduler-work-space-all-day': true,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': false,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
