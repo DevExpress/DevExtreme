@@ -19,6 +19,7 @@ import BaseComponent from '../../component_wrapper/editors/check_box';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
+import { getOptionValue } from '../../utils/get_option_value';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
@@ -220,8 +221,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get iconStyles(): { [key: string]: string | number } {
     const { iconWidth, iconHeight } = this.props;
 
-    const width = normalizeStyleProp('width', typeof iconWidth === 'function' ? iconWidth() : iconWidth);
-    const height = normalizeStyleProp('height', typeof iconHeight === 'function' ? iconHeight() : iconHeight);
+    const width = normalizeStyleProp('width', getOptionValue(iconWidth));
+    const height = normalizeStyleProp('height', getOptionValue(iconHeight));
 
     return { height, width };
   }

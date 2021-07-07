@@ -20,6 +20,7 @@ import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
 import { combineClasses } from '../../utils/combine_classes';
+import { getOptionValue } from '../../utils/get_option_value';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { normalizeStyleProp } from '../../../core/utils/style';
@@ -339,8 +340,8 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { width, height } = this.props;
     const style = this.restAttributes.style || {};
 
-    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
-    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
+    const computedWidth = normalizeStyleProp('width', getOptionValue(width));
+    const computedHeight = normalizeStyleProp('height', getOptionValue(height));
 
     return {
       ...style,
