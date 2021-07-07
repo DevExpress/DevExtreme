@@ -19,6 +19,8 @@ export class AllDayPanelTitleProps {
   @OneWay() className = '';
 
   @OneWay() visible? = true;
+
+  @OneWay() isSetTitleClass = true;
 }
 
 @Component({
@@ -36,7 +38,7 @@ export class AllDayPanelTitle extends JSXComponent(AllDayPanelTitleProps) {
 
   get classes(): string {
     return combineClasses({
-      'dx-scheduler-all-day-title': true,
+      'dx-scheduler-all-day-title': this.props.isSetTitleClass,
       'dx-scheduler-all-day-title-hidden': !this.props.visible,
       [this.props.className]: !!this.props.className,
     });

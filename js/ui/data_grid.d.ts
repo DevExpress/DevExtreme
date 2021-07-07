@@ -70,10 +70,13 @@ import {
     StringLengthRule
 } from './validation_rules';
 
-import Widget, {
-    format,
+import Widget, {    
     WidgetOptions
 } from './widget/ui.widget';
+
+import { 
+  Format
+} from '../localization';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
@@ -2524,7 +2527,7 @@ export interface ColumnBase {
      * @default ""
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid GridBaseColumn.headerFilter
      * @type object
@@ -4014,7 +4017,7 @@ export interface SummaryGroupItem {
      * @docid dxDataGridOptions.summary.groupItems.valueFormat
      * @default undefined
      */
-    valueFormat?: format
+    valueFormat?: Format
 }
 
 export interface SummaryTotalItem {
@@ -4071,7 +4074,7 @@ export interface SummaryTotalItem {
    * @docid dxDataGridOptions.summary.totalItems.valueFormat
    * @default undefined
    */
-  valueFormat?: format
+  valueFormat?: Format
 }
 
 export interface SummaryTexts {

@@ -973,15 +973,6 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type Format =
-    | FormatObject
-    | PredefinedFormat
-    | string
-    | ((value: number | Date) => string)
-    | ExternalFormat;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export interface FormatObject {
     /**
      * [descr:FormatObject.currency]
@@ -2522,7 +2513,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupIndex]
      */
@@ -3869,7 +3860,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatDate(value, format)]
    */
-  export function formatDate(value: Date, format: Format): string;
+  export function formatDate(value: Date, format: DevExpress.ui.Format): string;
   /**
    * [descr:localization.formatMessage(key, value)]
    */
@@ -3877,7 +3868,10 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatNumber(value, format)]
    */
-  export function formatNumber(value: number, format: Format): string;
+  export function formatNumber(
+    value: number,
+    format: DevExpress.ui.Format
+  ): string;
   /**
    * [descr:localization.loadMessages(messages)]
    */
@@ -3893,11 +3887,14 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.parseDate(text, format)]
    */
-  export function parseDate(text: string, format: Format): Date;
+  export function parseDate(text: string, format: DevExpress.ui.Format): Date;
   /**
    * [descr:localization.parseNumber(text, format)]
    */
-  export function parseNumber(text: string, format: Format): number;
+  export function parseNumber(
+    text: string,
+    format: DevExpress.ui.Format
+  ): number;
 }
 declare module DevExpress.pdfExporter {
   /**
@@ -5777,7 +5774,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:GridBaseColumn.headerFilter]
        */
@@ -7615,7 +7612,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7708,7 +7705,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
@@ -8049,7 +8046,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.displayFormat]
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * [descr:dxDateBoxOptions.interval]
      */
@@ -11590,7 +11587,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxFilterBuilderField.lookup]
      */
@@ -12800,6 +12797,10 @@ declare module DevExpress.ui {
        * [descr:dxGanttOptions.validation.autoUpdateParentTasks]
        */
       autoUpdateParentTasks?: boolean;
+      /**
+       * [descr:dxGanttOptions.validation.enablePredecessorGap]
+       */
+      enablePredecessorGap?: boolean;
     };
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
@@ -15129,7 +15130,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
      */
@@ -18169,7 +18170,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.label.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.label.position]
        */
@@ -18202,7 +18203,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.tooltip.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.tooltip.position]
        */
@@ -21130,10 +21131,14 @@ declare module DevExpress.ui {
     type: 'email';
   }
   /**
-   * [descr:format]
-   * @deprecated [depNote:format]
+   * [descr:Format]
    */
-  export type format = Format;
+  export type Format =
+    | FormatObject
+    | PredefinedFormat
+    | string
+    | ((value: number | Date) => string)
+    | ExternalFormat;
   /**
    * [descr:GridBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -22095,6 +22100,14 @@ declare module DevExpress.ui {
      */
     repaint(): void;
   }
+  module Widget {
+    /**
+     * [descr:format]
+     * @deprecated [depNote:format]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type format = Format;
+  }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -22453,7 +22466,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:BaseChartOptions.tooltip.contentTemplate]
      */
@@ -22745,7 +22758,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
@@ -23839,7 +23852,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseWidgetOptions.tooltip.opacity]
      */
@@ -24114,7 +24127,7 @@ declare module DevExpress.viz {
       /**
        * [descr:CommonIndicator.text.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:CommonIndicator.text.indent]
        */
@@ -24214,7 +24227,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.legend.itemTextFormat]
      */
-    itemTextFormat?: DevExpress.ui.format;
+    itemTextFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxBarGaugeOptions.legend.markerTemplate]
      */
@@ -24303,7 +24316,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxBarGaugeOptions.label.indent]
        */
@@ -24783,7 +24796,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25491,7 +25504,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.visible]
                */
@@ -25534,7 +25547,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.crosshair.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxChartOptions.crosshair.label.visible]
          */
@@ -25580,7 +25593,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.visible]
                */
@@ -26511,7 +26524,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
      */
@@ -26565,7 +26578,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
      */
@@ -28024,7 +28037,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28530,7 +28543,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxFunnelOptions.label.horizontalAlignment]
        */
@@ -29141,7 +29154,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat]
        */
-      argumentFormat?: DevExpress.ui.format;
+      argumentFormat?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor]
        */
@@ -29195,7 +29208,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.position]
        */
@@ -29564,7 +29577,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30452,7 +30465,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor]
      */
@@ -30506,7 +30519,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
      */
@@ -30856,7 +30869,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31237,7 +31250,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
@@ -31277,7 +31290,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxRangeSelectorOptions.scale.marker.label.format]
            */
-          format?: DevExpress.ui.format;
+          format?: DevExpress.ui.Format;
         };
         /**
          * [descr:dxRangeSelectorOptions.scale.marker.separatorHeight]
@@ -31451,7 +31464,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.invalidRangeColor]
        */
@@ -33191,7 +33204,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]

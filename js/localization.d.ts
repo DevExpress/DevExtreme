@@ -2,7 +2,7 @@
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
  * @param1 value:date
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -30,7 +30,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @docid localization.formatNumber
  * @publicName formatNumber(value, format)
  * @param1 value:number
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -80,7 +80,7 @@ export function locale(locale: string): void;
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return date
  * @static
  * @module localization
@@ -94,7 +94,7 @@ export function parseDate(text: string, format: Format): Date;
  * @docid localization.parseNumber
  * @publicName parseNumber(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return number
  * @static
  * @module localization
@@ -133,4 +133,14 @@ export interface FormatObject {
    type?: PredefinedFormat
 }
 type ExternalFormat = any;
+/**
+ * @docid
+ * @type Enums.Format|string|function|Object
+ * @type_function_param1 value:number|date
+ * @type_function_return string
+ * @default undefined
+ * @section Common
+ * @namespace DevExpress.ui
+ * @public
+ */
 export type Format = FormatObject | PredefinedFormat | string | ((value: number | Date) => string) | ExternalFormat;

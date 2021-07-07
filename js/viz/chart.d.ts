@@ -11,9 +11,9 @@ import {
     ChangedOptionInfo
 } from '../events/index';
 
-import {
-    format
-} from '../ui/widget/ui.widget';
+import { 
+    Format
+  } from '../localization';
 
 import {
     template
@@ -711,7 +711,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format,
+          format?: Format,
           /**
            * @docid
            * @default false
@@ -762,7 +762,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @extends CommonVizFormat
          */
-        format?: format,
+        format?: Format,
         /**
          * @docid
          * @default false
@@ -817,7 +817,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format,
+          format?: Format,
           /**
            * @docid
            * @default false
@@ -1513,7 +1513,7 @@ export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStripStyle {
@@ -2586,7 +2586,7 @@ export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripStyle {
@@ -3671,7 +3671,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    argumentFormat?: format;
+    argumentFormat?: Format;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.backgroundColor
      * @default undefined
@@ -3750,7 +3750,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.horizontalOffset
      * @default 0
