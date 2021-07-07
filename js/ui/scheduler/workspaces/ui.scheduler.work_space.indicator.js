@@ -6,7 +6,7 @@ import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
-import { getTimeZoneCalculator } from '../instanceFactory';
+import { getToday } from './utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -14,14 +14,8 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
-    _getTimeZoneCalculator() {
-        return getTimeZoneCalculator(this.option('key'));
-    }
     _getToday() {
-        const todayDate = this.option('indicatorTime') || new Date();
-        const timeZoneCalculator = this._getTimeZoneCalculator();
-
-        return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+        return getToday(this.option('indicatorTime'), this.timeZoneCalculator);
     }
 
     isIndicationOnView() {

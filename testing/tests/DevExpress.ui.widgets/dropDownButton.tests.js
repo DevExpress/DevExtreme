@@ -5,6 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
 
 import 'generic_light.css!';
 
@@ -1656,6 +1657,77 @@ QUnit.module('deferred datasource', {
         });
 
         assert.ok(byKeySpy.notCalled, 'no unnecessary call was made');
+    });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.find(item => item.id === key);
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownButton = $('#dropDownButton').dxDropDownButton({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                keyExpr: 'id',
+                selectedItemKey: 1
+            }).dxDropDownButton('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownButton.option('selectedItemKey', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownButton.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownButton.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownButton.open();
+            this.clock.tick(100);
+
+            this.dropDownButton.option('selectedItemKey', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownButton.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownButton.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined (T1008488)', function(assert) {
+            this.dropDownButton.option('selectedItemKey', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownButton.option('selectedItem'), null, 'init byKey result is ignored');
+        });
     });
 });
 

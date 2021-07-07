@@ -1,9 +1,9 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: animationConfig,
+      hide?: AnimationConfig,
       /**
        * @docid
        * @default undefined
        */
-      show?: animationConfig
+      show?: AnimationConfig
     };
     /**
      * @docid
@@ -309,7 +309,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default false

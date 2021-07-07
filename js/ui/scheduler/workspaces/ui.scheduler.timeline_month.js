@@ -5,13 +5,16 @@ import dateUtils from '../../../core/utils/date';
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { calculateCellIndex, getViewStartByOptions } from './utils/month';
 import { calculateStartViewDate } from './utils/timeline_month';
+import { formatWeekdayAndDay } from './utils/base';
+import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
-const DAY_IN_MILLISECONDS = 86400000;
 
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
+    get type() { return VIEWS.TIMELINE_MONTH; }
+
     get isDateAndTimeView() {
         return false;
     }
@@ -76,11 +79,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     }
 
     _getFormat() {
-        return this._formatWeekdayAndDay;
-    }
-
-    _getInterval() {
-        return DAY_IN_MILLISECONDS;
+        return formatWeekdayAndDay;
     }
 
     _getIntervalBetween(currentDate) {
@@ -88,11 +87,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    }
-
-    calculateEndDate(startDate) {
-        const startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option('endDayHour')));
     }
 
     _getDateGenerationOptions() {

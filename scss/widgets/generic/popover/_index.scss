@@ -19,6 +19,8 @@ $generic-popover-toolbar-padding: 15px;
 
   .dx-popup-title {
     margin: 0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
 
     &.dx-toolbar {
       padding-left: $generic-popover-toolbar-padding;

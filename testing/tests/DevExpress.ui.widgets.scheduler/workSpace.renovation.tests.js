@@ -2,7 +2,6 @@ import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -15,7 +14,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { extend } from 'core/utils/extend';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -46,27 +44,18 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            const key = createFactoryInstances({
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => {},
-                appointmentDuration: 60
-            });
-            const observer = getObserver(key);
-
             this.instance = $('#scheduler-work-space')[workSpace](extend({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
-                observer,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
                 }
             }, options))[workSpace]('instance');
-            stubInvokeMethod(this.instance, { key });
         };
     },
     after() {
@@ -100,7 +89,6 @@ module('Renovated Render', {
                             allDay: false,
                             groupIndex: 0,
                             index: 0,
-                            text: '12:00 AM',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
                             key: 0,
@@ -110,7 +98,6 @@ module('Renovated Render', {
                             groupIndex: 0,
                             index: 1,
                             allDay: false,
-                            text: '',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
                             key: 1,
@@ -151,7 +138,6 @@ module('Renovated Render', {
                                 allDay: false,
                                 groupIndex: 0,
                                 index: 0,
-                                text: '12:00 AM',
                                 isFirstGroupCell: true,
                                 isLastGroupCell: true,
                                 key: 0,
@@ -164,7 +150,6 @@ module('Renovated Render', {
                                 allDay: false,
                                 groupIndex: 0,
                                 index: 1,
-                                text: '',
                                 isFirstGroupCell: true,
                                 isLastGroupCell: true,
                                 key: 1,
@@ -224,7 +209,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
@@ -235,7 +219,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
@@ -246,7 +229,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 1,
@@ -257,7 +239,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 1,
@@ -315,7 +296,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 0),
                                 endDate: new Date(2020, 6, 29, 0, 30),
                                 allDay: false,
-                                text: '12:00 AM',
                                 groups: { res: 1 },
                                 groupIndex: 0,
                                 index: 0,
@@ -329,7 +309,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 0),
                                 endDate: new Date(2020, 6, 29, 0, 30),
                                 allDay: false,
-                                text: '12:00 AM',
                                 groups: { res: 2 },
                                 groupIndex: 1,
                                 index: 0,
@@ -343,7 +322,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 30),
                                 endDate: new Date(2020, 6, 29, 1, 0),
                                 allDay: false,
-                                text: '',
                                 groups: { res: 1 },
                                 groupIndex: 0,
                                 index: 1,
@@ -357,7 +335,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 30),
                                 endDate: new Date(2020, 6, 29, 1, 0),
                                 allDay: false,
-                                text: '',
                                 groups: { res: 2 },
                                 groupIndex: 1,
                                 index: 1,
@@ -441,7 +418,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
@@ -452,7 +428,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
@@ -463,7 +438,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 30, 0, 0),
                             endDate: new Date(2020, 6, 30, 0, 30),
                             allDay: false,
-                            text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 1,
@@ -474,7 +448,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 30, 0, 0),
                             endDate: new Date(2020, 6, 30, 0, 30),
                             allDay: false,
-                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 1,
@@ -485,7 +458,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 2,
@@ -496,7 +468,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 2,
@@ -507,7 +478,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 30, 0, 30),
                             endDate: new Date(2020, 6, 30, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 3,
@@ -518,7 +488,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 30, 0, 30),
                             endDate: new Date(2020, 6, 30, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 3,
@@ -578,7 +547,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 0,
@@ -589,7 +557,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 1 },
                             groupIndex: 0,
                             index: 1,
@@ -615,7 +582,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '12:00 AM',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
@@ -626,7 +592,6 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
                             allDay: false,
-                            text: '',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 1,
@@ -659,7 +624,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 0),
                                 endDate: new Date(2020, 6, 29, 0, 30),
                                 allDay: false,
-                                text: '12:00 AM',
                                 groups: { res: 1 },
                                 groupIndex: 0,
                                 index: 0,
@@ -673,7 +637,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 30),
                                 endDate: new Date(2020, 6, 29, 1, 0),
                                 allDay: false,
-                                text: '',
                                 groups: { res: 1 },
                                 groupIndex: 0,
                                 index: 1,
@@ -700,7 +663,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 0),
                                 endDate: new Date(2020, 6, 29, 0, 30),
                                 allDay: false,
-                                text: '12:00 AM',
                                 groups: { res: 2 },
                                 groupIndex: 1,
                                 index: 0,
@@ -714,7 +676,6 @@ module('Renovated Render', {
                                 startDate: new Date(2020, 6, 29, 0, 30),
                                 endDate: new Date(2020, 6, 29, 1, 0),
                                 allDay: false,
-                                text: '',
                                 groups: { res: 2 },
                                 groupIndex: 1,
                                 index: 1,
@@ -734,20 +695,6 @@ module('Renovated Render', {
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
             });
         });
-    });
-
-    test('should generate text correctly in week view', function(assert) {
-        this.createInstance({
-            showAllDayPanel: false,
-        }, WORKSPACE_WEEK.class);
-
-        this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
-
-        const { viewData } = this.instance.viewDataProvider;
-        const { dateTable } = viewData.groupedData[0];
-
-        assert.equal(dateTable[0][0].text, '12:00 AM', 'correct text');
-        assert.equal(dateTable[1][0].text, '', 'correct text');
     });
 
     test('should generate correct data for month view', function(assert) {
@@ -924,27 +871,26 @@ module('Renovated Render', {
         });
     });
 
-    test('should call showAddAppointmentPopup with correct parameters', function(assert) {
+    test('should call onSelectedCellsClick with correct parameters', function(assert) {
+        const onSelectedCellsClick = sinon.stub();
         this.createInstance({
             groupOrientation: 'vertical',
             showAllDayPanel: false,
+            onSelectedCellsClick,
         });
         const $element = this.instance.$element();
 
         const keyboard = keyboardMock($element);
-        const invokeSpy = sinon.spy(noop);
-        this.instance.invoke = invokeSpy;
 
         $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
 
-        assert.equal(invokeSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-        assert.deepEqual(invokeSpy.getCall(0).args[1], {
+        assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
-        }, 'showAddAppointmentPopup has been called with correct parameters');
+        }, 'onSelectedCellsClick has been called with correct parameters');
     });
 
     test('getDataByDroppableCell should work correctly', function(assert) {
@@ -1070,7 +1016,7 @@ module('Renovated Render', {
 
             this.instance.renderWorkSpace();
 
-            assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+            assert.ok(cacheClearSpy.callCount > 0, 'Cache has been cleared');
 
             cacheClearSpy.restore();
         });

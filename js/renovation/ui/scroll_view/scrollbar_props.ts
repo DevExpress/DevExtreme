@@ -3,8 +3,8 @@ import {
   OneWay,
   Event,
 } from '@devextreme-generator/declarations';
+import { EventCallback } from '../common/event_callback';
 
-import noop from '../../utils/noop';
 import { TopPocketState } from './common/consts';
 
 @ComponentBindings()
@@ -21,13 +21,13 @@ export class ScrollbarProps {
 
   @OneWay() bottomPocketSize = 0;
 
+  @OneWay() contentPaddingBottom = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() isScrollableHovered = false;
 
   @OneWay() forceVisibility = false;
-
-  @OneWay() forceUpdateScrollbarLocation = false;
 
   @OneWay() scrollLocation = 0;
 
@@ -35,15 +35,15 @@ export class ScrollbarProps {
 
   @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
-  @Event() onAnimatorCancel?: () => void = noop;
+  @Event() onAnimatorCancel?: EventCallback;
 
-  @Event() onPullDown?: () => void = noop;
+  @Event() onPullDown?: EventCallback;
 
-  @Event() onReachBottom?: () => void = noop;
+  @Event() onReachBottom?: EventCallback;
 
-  @Event() onRelease?: () => void = noop;
+  @Event() onRelease?: EventCallback;
 
-  @Event() onScroll?: () => void = noop;
+  @Event() onScroll?: EventCallback;
 
-  @Event() onEnd?: (direction: string) => void = noop;
+  @Event() onEnd?: EventCallback<string>;
 }

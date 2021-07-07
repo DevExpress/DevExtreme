@@ -8,6 +8,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
+import type { dxToolbarItem } from '../../../../../ui/toolbar';
 import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
@@ -1139,6 +1140,17 @@ export class DataGridCommonColumnSettings {
   @OneWay() falseText?: string;
 }
 
+type DataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+export interface DataGridToolbarItem extends dxToolbarItem {
+  name?: DataGridDefaultToolbarItemName | string;
+}
+
+@ComponentBindings()
+export class DataGridToolbar {
+  @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+}
+
 @ComponentBindings()
 export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
@@ -1355,6 +1367,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     trueText: messageLocalization.format('dxDataGrid-trueText'),
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
+
+  @OneWay() toolbar?: DataGridToolbar;
 
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 

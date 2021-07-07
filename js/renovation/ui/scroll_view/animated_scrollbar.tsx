@@ -17,7 +17,7 @@ import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
 import { ScrollbarProps } from './scrollbar_props';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import { ScrollableProps } from './scrollable_props';
 import { inRange } from '../../../core/utils/math';
 import { DxMouseEvent } from './types';
@@ -41,11 +41,11 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollableOffset, contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled,
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
-      scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
-      scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
+      scrollLocation, scrollLocationChange, contentTranslateOffsetChange,
+      isScrollableHovered, topPocketSize, bottomPocketSize,
       onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
-      rtlEnabled,
+      rtlEnabled, contentPaddingBottom,
     },
   } = viewModel;
 
@@ -65,7 +65,6 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
-      forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
       onScroll={onScroll}
       onEnd={onEnd}
       // Horizontal
@@ -74,6 +73,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       forceGeneratePockets={forceGeneratePockets}
       topPocketSize={topPocketSize}
       bottomPocketSize={bottomPocketSize}
+      contentPaddingBottom={contentPaddingBottom}
       onPullDown={onPullDown}
       onRelease={onRelease}
       onReachBottom={onReachBottom}

@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -121,10 +121,10 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cancel:boolean
      * @action
      * @public
      */
@@ -136,10 +136,11 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 cancel:Boolean
      * @action
      * @public
      */
-    onShowing?: ((e: EventInfo<TComponent>) => void);
+    onShowing?: ((e: Cancelable & EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -199,13 +200,13 @@ export interface dxOverlayAnimation {
      * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxOverlayOptions.animation.show
      * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

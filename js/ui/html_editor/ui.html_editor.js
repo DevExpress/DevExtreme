@@ -45,6 +45,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: null,
             variables: null,
             mediaResizing: null,
+            tableResizing: null,
             mentions: null,
             customizeModules: null,
 
@@ -291,6 +292,7 @@ const HtmlEditor = Editor.inherit({
             // TODO: extract some IE11 tweaks for the Quill uploader module
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
+            tableResizing: this._getModuleConfigByOption('tableResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
                 onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
@@ -435,6 +437,7 @@ const HtmlEditor = Editor.inherit({
             case 'variables':
             case 'toolbar':
             case 'mentions':
+            case 'tableResizing':
             case 'customizeModules':
                 this._invalidate();
                 break;
