@@ -192,7 +192,7 @@ QUnit.module('Checkbox', function() {
             const iconWidth = 45;
             const iconHeight = 55;
             const $element = $('#checkBox').dxCheckBox({ iconWidth, iconHeight });
-            const fontSizeMultiplayer = 0.73;
+            const fontSizeMultiplayer = 16 / 22;
             const expectedFontSize = `${Math.round(fontSizeMultiplayer * Math.min(iconHeight, iconWidth))}px`;
 
             assert.strictEqual($element.find(ICON_SELECTOR).css('font-size'), expectedFontSize, 'font-size is calculated correctly');
@@ -218,7 +218,7 @@ QUnit.module('Checkbox', function() {
             assert.strictEqual($element.css('height'), `${height}px`, 'root element height not equals icon height');
         });
 
-        [14, '14', '14px', '1em', '50%', () => 14].forEach((value) => {
+        [14, '14', '14px', '50%', () => 14, () => '14px'].forEach((value) => {
             QUnit.test(`checkbox "iconWidth"/"iconHeight" options should correctly apply value in format ${value}`, function(assert) {
                 const $element = $('#checkBox').dxCheckBox({ width: 28, height: 28, iconWidth: value, iconHeight: value });
                 assert.strictEqual($element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${value} option value`);
