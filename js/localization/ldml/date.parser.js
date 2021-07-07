@@ -218,7 +218,7 @@ export const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
-    if(isIncorrectlyParsed(patterns)) {
+    if(!isPossibleForParsingFormat(patterns)) {
         logger.warn(`The following format may be parsed incorrectly: ${format}.`);
     }
 
@@ -228,43 +228,40 @@ export const getRegExpInfo = function(format, dateParts) {
     };
 };
 
-export const isIncorrectlyParsed = function(patterns) {
-    let incorrectlyParsed = false;
-    const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'S', 'w', 'M', 'L', 'Q'];
-    const maxAmbiguousDigitPatternsCount = 1;
-    const minimumDigits = 1;
+const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'S', 'w', 'M', 'L', 'Q'];
 
+export const isPossibleForParsingFormat = function(patterns) {
     const isDigitPattern = (pattern) => {
-        const char = pattern && pattern[0];
-        const length = pattern && pattern.length;
-        return char === 'y' || digitFieldSymbols.includes(char) && length < 3;
+        if(!pattern) {
+            return false;
+        }
+        const char = pattern[0];
+        return char === 'y' || digitFieldSymbols.includes(char) && pattern.length < 3;
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
         const char = pattern[0];
-        return char === 'y' || pattern.length === minimumDigits && char !== 'S';
+        return char === 'y' || pattern.length === 1 && char !== 'S';
     };
 
-    patterns.reduce((noSeparatedDigitPatterns, currentPattern, index) => {
-        const currentPatternIsDigit = isDigitPattern(currentPattern);
+    let possibleForParsing = true;
+    let ambiguousDigitPatternsCount = 0;
+    patterns.every((pattern, index, patterns) => {
+        const patternIsDigit = isDigitPattern(pattern);
         const prevPatternIsDigit = isDigitPattern(patterns[index - 1]);
         const nextPatternIsDigit = isDigitPattern(patterns[index + 1]);
-        if(currentPatternIsDigit && (prevPatternIsDigit || nextPatternIsDigit)) {
-            noSeparatedDigitPatterns.push(currentPattern);
 
-            const currentIndexIsLast = index === patterns.length - 1;
-            const nextPatternIsText = !nextPatternIsDigit;
-
-            if(currentIndexIsLast || nextPatternIsText) {
-                const ambiguousDigitPatterns = noSeparatedDigitPatterns.filter((pattern) => isAmbiguousDigitPattern(pattern));
-                incorrectlyParsed = incorrectlyParsed || ambiguousDigitPatterns.length > maxAmbiguousDigitPatternsCount;
-                noSeparatedDigitPatterns = [];
+        if(patternIsDigit && (prevPatternIsDigit || nextPatternIsDigit)) {
+            ambiguousDigitPatternsCount = ambiguousDigitPatternsCount + isAmbiguousDigitPattern(pattern);
+            const indexIsLast = index === patterns.length - 1;
+            if(indexIsLast || !nextPatternIsDigit) {
+                possibleForParsing = ambiguousDigitPatternsCount < 2;
+                ambiguousDigitPatternsCount = 0;
             }
         }
-        return noSeparatedDigitPatterns;
-    }, []);
-
-    return incorrectlyParsed;
+        return possibleForParsing;
+    });
+    return possibleForParsing;
 };
 
 export const getPatternSetters = function() {
