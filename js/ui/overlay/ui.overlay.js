@@ -348,9 +348,17 @@ const Overlay = Widget.inherit({
         };
     },
 
+    _initContentResizeObserver: function() {
+        this._contentResizeObserver = new window.ResizeObserver(() => {
+            this._dimensionChanged();
+        });
+        this._contentResizeObserver.observe(this._$content.get(0));
+    },
+
     _initMarkup() {
         this.callBase();
         this._renderWrapperAttributes();
+        this._initContentResizeObserver();
     },
 
     _documentDownHandler: function(e) {
@@ -1316,6 +1324,8 @@ const Overlay = Widget.inherit({
 
         this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
+        this._contentResizeObserver.disconnect();
+        this._contentResizeObserver = undefined;
         this._$wrapper.remove();
         this._$content.remove();
     },
