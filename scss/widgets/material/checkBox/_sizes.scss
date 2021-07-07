@@ -11,7 +11,7 @@ $material-checkbox-size: null !default;
 
 @if $size == "default" {
   $material-checkbox-ripple-size: 40px !default;
-  $generic-checkbox-arrow-icon-size: 1em !default;
+  $material-checkbox-arrow-icon-size: 1em !default;
   $material-checkbox-indeterminate-icon-size: 1.25em !default;
   $material-checkbox-border-radius: $checkbox-icon-border-radius !default;
   $material-checkbox-size: 18px !default;

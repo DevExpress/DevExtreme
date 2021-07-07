@@ -30,7 +30,6 @@
   height: 100%;
   width: 100%;
   display: flex;
-  column-gap: 5px;
 
   @include dx-overflow();
 }
@@ -48,6 +47,7 @@
   line-height: normal;
   height: 100%;
   width: 100%;
+  padding-left: 5px;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {

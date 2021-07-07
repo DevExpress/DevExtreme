@@ -22,6 +22,9 @@ import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
+const DEFAULT_ICON_SIZE = 22;
+const ICON_FONT_SIZE_RATION = 16 / 22;
+
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
     text, readOnly, isValid, value,
@@ -109,9 +112,9 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() readOnly = false;
 
-  @OneWay() iconHeight: number | string | (() => (string | number)) = 22;
+  @OneWay() iconHeight: number | string | (() => (string | number)) = DEFAULT_ICON_SIZE;
 
-  @OneWay() iconWidth: number | string | (() => (string | number)) = 22;
+  @OneWay() iconWidth: number | string | (() => (string | number)) = DEFAULT_ICON_SIZE;
 
   @OneWay() isValid = true;
 
@@ -200,12 +203,11 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   get iconStyles(): { [key: string]: string | number } {
     const { iconWidth, iconHeight } = this.props;
 
-    const fontSizeMultiplayer = 0.73;
     const computedIconWidth = typeof iconWidth === 'function' ? +iconWidth() : +iconWidth;
     const computedIconHeight = typeof iconHeight === 'function' ? +iconHeight() : +iconHeight;
     const width = normalizeStyleProp('width', typeof iconWidth === 'function' ? iconWidth() : iconWidth);
     const height = normalizeStyleProp('height', typeof iconHeight === 'function' ? iconHeight() : iconHeight);
-    const fontSize = normalizeStyleProp('font-size', Math.round(Math.min(computedIconWidth, computedIconHeight) * fontSizeMultiplayer));
+    const fontSize = normalizeStyleProp('font-size', Math.round(Math.min(computedIconWidth, computedIconHeight) * ICON_FONT_SIZE_RATION));
 
     return { height, width, fontSize };
   }
