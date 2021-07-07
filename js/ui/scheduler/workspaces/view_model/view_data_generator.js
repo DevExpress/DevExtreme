@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
+import { getAllGroups, getGroupCount } from '../../resources/utils';
 import {
     getDateByCellIndices,
     calculateCellIndex,
@@ -12,12 +13,14 @@ export class ViewDataGenerator {
         const {
             rowCountInGroup,
             cellCountInGroupRow,
-            groupsList,
+            groups,
             groupByDate,
             isHorizontalGrouping,
             isVerticalGrouping,
             totalCellCount,
         } = options;
+
+        const groupsList = getAllGroups(groups);
 
         let viewDataMap = [];
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow);
@@ -149,10 +152,12 @@ export class ViewDataGenerator {
         const {
             rowCount,
             startCellIndex,
+            startRowIndex,
             cellCount,
             isStandaloneAllDayPanel,
         } = options;
-        const { startRowIndex } = options;
+
+        // const i
 
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
@@ -306,11 +311,13 @@ export class ViewDataGenerator {
 
     prepareCellData(options, rowIndex, columnIndex) {
         const {
-            groupsList,
+            groups,
             tableAllDay,
             endDayHour,
             interval,
         } = options;
+
+        const groupsList = getAllGroups(groups);
 
         const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
         const endDate = this.calculateEndDate(startDate, interval, endDayHour);
@@ -414,9 +421,11 @@ export class ViewDataGenerator {
             groupOrientation,
             rowCountInGroup,
             cellCountInGroupRow,
-            groupCount,
+            groups,
             groupByDate,
         } = options;
+
+        const groupCount = getGroupCount(groups);
 
         if(groupByDate) {
             return columnIndex % groupCount === 0;
@@ -434,9 +443,11 @@ export class ViewDataGenerator {
             groupOrientation,
             rowCountInGroup,
             cellCountInGroupRow,
-            groupCount,
+            groups,
             groupByDate
         } = options;
+
+        const groupCount = getGroupCount(groups);
 
         if(groupByDate) {
             return (columnIndex + 1) % groupCount === 0;

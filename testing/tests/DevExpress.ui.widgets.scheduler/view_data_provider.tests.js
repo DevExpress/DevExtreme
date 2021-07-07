@@ -161,7 +161,6 @@ const verticalGroupingRenderOptions = {
     isStandaloneAllDayPanel: false,
     isGroupedAllDayPanel: true,
     isAllDayPanelVisible: true,
-    isDateAndTimeView: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
 };
@@ -180,7 +179,6 @@ const horizontalGroupingRenderOptions = {
     isAllDayPanelVisible: true,
     isGroupedAllDayPanel: false,
     isStandaloneAllDayPanel: true,
-    isDateAndTimeView: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
 };
@@ -611,7 +609,7 @@ module('View Data Provider', {
             module('Date views', () => {
                 const renderOptions = {
                     ...verticalGroupingRenderOptions,
-                    isDateAndTimeView: false,
+                    viewType: 'month',
                 };
 
                 test('it should return correct cell start date', function(assert) {
@@ -890,7 +888,7 @@ module('View Data Provider', {
                 module('Vertical Grouping', function() {
                     const renderOptions = {
                         ...verticalGroupingRenderOptions,
-                        isDateAndTimeView: false,
+                        viewType: 'month',
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -949,7 +947,7 @@ module('View Data Provider', {
                 module('Horizontal Grouping', function() {
                     const renderOptions = {
                         ...horizontalGroupingRenderOptions,
-                        isDateAndTimeView: false,
+                        viewType: 'month',
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -1039,7 +1037,6 @@ module('View Data Provider', {
                 startViewDate: new Date(baseStartDate),
                 rowCountBase: 2,
                 columnCountBase: 2,
-                isDateAndTimeView: true,
                 tableAllDay: false,
                 firstDayOfWeek: 0,
             };

@@ -4,6 +4,7 @@ import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
 import timeZoneUtils from '../../utils.timeZone';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
+import { VIEWS } from '../../constants';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -164,4 +165,8 @@ export const getVerticalGroupCountClass = (groups) => {
         default:
             return undefined;
     }
+};
+
+export const isDateAndTimeView = (viewType) => {
+    return viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
 };

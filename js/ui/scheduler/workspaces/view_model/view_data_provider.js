@@ -66,7 +66,7 @@ export default class ViewDataProvider {
             this.completeViewDataMap,
             {
                 isVerticalGrouping: renderOptions.isVerticalGrouping,
-                isDateAndTimeView: renderOptions.isDateAndTimeView,
+                viewType: renderOptions.viewType,
             },
         );
 
