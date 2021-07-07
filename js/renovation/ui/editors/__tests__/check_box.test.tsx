@@ -224,6 +224,20 @@ describe('CheckBox', () => {
 
           expect(icon?.style.fontSize).toEqual('32px');
         });
+
+        it('should correctly change icon font size if "iconWidth"/"iconHeight" options are not numbers', () => {
+          const checkBox = new CheckBox({ iconHeight: '22', iconWidth: '22px' });
+          // checkBox.iconRef = { current: { style: {} } } as any;
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            getBoundingClientRect: () => ({ width: '22', height: '22' }),
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
       });
 
       describe('updateValidationMessageVisibility', () => {
