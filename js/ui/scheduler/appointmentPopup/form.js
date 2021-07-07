@@ -88,11 +88,11 @@ export class AppointmentForm {
     }
 
     get formData() {
-        return this.dxForm.option('formData');
+        return this.form.option('formData');
     }
 
     set formData(value) {
-        this.dxForm.option('formData', value);
+        this.form.option('formData', value);
     }
 
     create(dataExprs, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
