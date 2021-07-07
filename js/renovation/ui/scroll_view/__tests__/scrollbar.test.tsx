@@ -308,36 +308,41 @@ describe('Scrollbar', () => {
         expect(viewModel.updateContent.bind(viewModel)).not.toThrow();
       });
 
-      each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
-        each(optionValues.bounceEnabled).describe('BounceEnabled: %o', (bounceEnabled) => {
           each([
-            { eventData: { pageX: 50, pageY: 50 }, expected: bounceEnabled ? 60 : 0 },
-            { eventData: { pageX: 150, pageY: 150 }, expected: -340 },
-            { eventData: { pageX: 250, pageY: 250 }, expected: bounceEnabled ? -740 : -590 },
-          ]).describe('ClickLocation: %o', (clickLocation) => {
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 0 },
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 0 },
+        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 0 },
+        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: 0, expected: -52 },
+        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -150, expected: -52 },
+        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -300, expected: -52 },
+        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: 0, expected: -138 },
+        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -150, expected: -138 },
+        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -300, expected: -138 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -300 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -300 },
+        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -300 },
+      ]).describe('testData: %o', (testData) => {
             it('moveToMouseLocation(event)', () => {
               const viewModel = new Scrollbar({
-                showScrollbar,
                 direction,
-                bounceEnabled,
-                containerSize: 200,
+            containerSize: 100,
+            contentSize: 400,
                 scrollableOffset: 40,
-                scrollLocation: -250,
+            scrollLocation: testData.scrollLocation,
               });
 
               viewModel.moveTo = jest.fn();
+          viewModel.visibility = false;
 
               Object.defineProperties(viewModel, {
-                minOffset: { get() { return -590; } },
-                maxOffset: { get() { return 0; } },
-                containerToContentRatio: { get() { return 0.25; } },
+            visibleContentAreaSize: { get() { return 400; } },
               });
 
-              viewModel.moveToMouseLocation(clickLocation.eventData);
+          viewModel.moveToMouseLocation(testData.eventData);
 
+          expect(viewModel.visibility).toEqual(true);
               expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-              expect(viewModel.moveTo).toHaveBeenCalledWith(clickLocation.expected);
-            });
+          expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
           });
         });
 

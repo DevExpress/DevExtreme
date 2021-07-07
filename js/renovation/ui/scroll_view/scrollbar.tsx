@@ -446,10 +446,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   moveToMouseLocation(event: DxMouseEvent): void {
     const mouseLocation = event[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
-    const delta = this.props.scrollLocation + mouseLocation
-    / this.containerToContentRatio - this.props.containerSize / 2;
+    const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
 
-    this.scrollStep(-Math.round(delta));
+    this.visibility = true;
+
+    this.moveTo(Math.round(Math.max(Math.min(-delta, 0), -this.visibleScrollAreaSize)));
   }
 
   updateContent(location: number): void {
