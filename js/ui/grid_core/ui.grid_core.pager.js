@@ -13,14 +13,11 @@ const getPageIndex = function(dataController) {
 
 const PagerView = modules.View.inherit({
     init: function() {
-        const that = this;
-        const dataController = that.getController('data');
+        const dataController = this.getController('data');
 
-        that._isVisible = false;
-
-        dataController.changed.add(function(e) {
+        dataController.changed.add((e) => {
             if(e && e.repaintChangesOnly) {
-                const pager = that._getPager();
+                const pager = this._getPager();
                 if(pager) {
                     pager.option({
                         pageIndex: getPageIndex(dataController),
@@ -30,10 +27,10 @@ const PagerView = modules.View.inherit({
                         hasKnownLastPage: dataController.hasKnownLastPage()
                     });
                 } else {
-                    that.render();
+                    this.render();
                 }
             } else if(!e || e.changeType !== 'update' && e.changeType !== 'updateSelection') {
-                that.render();
+                this.render();
             }
         });
     },
@@ -107,15 +104,11 @@ const PagerView = modules.View.inherit({
     },
 
     isVisible: function() {
-        const that = this;
-        const dataController = that.getController('data');
-        const pagerOptions = that.option('pager');
+        const dataController = this.getController('data');
+        const pagerOptions = this.option('pager');
         let pagerVisible = pagerOptions && pagerOptions.visible;
-        const scrolling = that.option('scrolling');
+        const scrolling = this.option('scrolling');
 
-        if(that._isVisible) {
-            return true;
-        }
         if(pagerVisible === 'auto') {
             if(scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
                 pagerVisible = false;
@@ -123,7 +116,6 @@ const PagerView = modules.View.inherit({
                 pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
             }
         }
-        that._isVisible = pagerVisible;
         return pagerVisible;
     },
 
@@ -132,13 +124,12 @@ const PagerView = modules.View.inherit({
     },
 
     optionChanged: function(args) {
-        const that = this;
         const name = args.name;
         const isPager = name === 'pager';
         const isPaging = name === 'paging';
         const isDataSource = name === 'dataSource';
         const isScrolling = name === 'scrolling';
-        const dataController = that.getController('data');
+        const dataController = this.getController('data');
 
         if(isPager || isPaging || isScrolling || isDataSource) {
             args.handled = true;
@@ -148,16 +139,13 @@ const PagerView = modules.View.inherit({
             }
 
             if(isPager || isPaging) {
-                that._pageSizes = null;
-            }
-            if(isPager || isPaging || isScrolling) {
-                that._isVisible = false;
+                this._pageSizes = null;
             }
 
             if(!isDataSource) {
-                that._invalidate();
-                if(hasWindow() && isPager && that.component) {
-                    that.component.resize();
+                this._invalidate();
+                if(hasWindow() && isPager && this.component) {
+                    this.component.resize();
                 }
             }
         }
