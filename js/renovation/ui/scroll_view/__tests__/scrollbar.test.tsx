@@ -308,7 +308,7 @@ describe('Scrollbar', () => {
         expect(viewModel.updateContent.bind(viewModel)).not.toThrow();
       });
 
-          each([
+      each([
         { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 0 },
         { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 0 },
         { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 0 },
@@ -322,30 +322,31 @@ describe('Scrollbar', () => {
         { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -300 },
         { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -300 },
       ]).describe('testData: %o', (testData) => {
-            it('moveToMouseLocation(event)', () => {
-              const viewModel = new Scrollbar({
-                direction,
+        it('moveToMouseLocation(event)', () => {
+          const viewModel = new Scrollbar({
+            direction,
             containerSize: 100,
             contentSize: 400,
-                scrollableOffset: 40,
+            scrollableOffset: 40,
             scrollLocation: testData.scrollLocation,
-              });
+          });
 
-              viewModel.moveTo = jest.fn();
+          viewModel.moveTo = jest.fn();
           viewModel.visibility = false;
 
-              Object.defineProperties(viewModel, {
+          Object.defineProperties(viewModel, {
             visibleContentAreaSize: { get() { return 400; } },
-              });
+          });
 
           viewModel.moveToMouseLocation(testData.eventData);
 
           expect(viewModel.visibility).toEqual(true);
-              expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+          expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
           expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
-          });
         });
+      });
 
+      each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
         each([
           { location: -500.25, expected: -100.25 },
           { location: -400, expected: 0 },
