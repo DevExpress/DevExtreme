@@ -139,7 +139,7 @@ export class AppointmentPopup {
 
     _createPopupContent() {
         this._createForm();
-        return this.form._appointmentForm.$element();
+        return this.form.dxForm.$element();
     }
 
     _createAppointmentFormData(rawAppointment) {
@@ -269,7 +269,7 @@ export class AppointmentPopup {
 
     updatePopupFullScreenMode() {
         if(this.form._appointmentForm) {
-            const formData = this.form._appointmentForm.option('formData');
+            const formData = this.form.dxForm.option('formData');
             const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
 
             if(this.isVisible()) {
@@ -300,7 +300,7 @@ export class AppointmentPopup {
 
     saveChanges(showLoadPanel) {
         const deferred = new Deferred();
-        const validation = this.form._appointmentForm.validate();
+        const validation = this.form.dxForm.validate();
         const state = this.state.appointment;
 
         showLoadPanel && this._showLoadPanel();
@@ -312,7 +312,7 @@ export class AppointmentPopup {
                 return;
             }
 
-            const formData = this.form._appointmentForm.option('formData');
+            const formData = this.form.dxForm.option('formData');
             const adapter = this._createAppointmentAdapter(formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 

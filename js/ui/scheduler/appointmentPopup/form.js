@@ -71,6 +71,10 @@ export class AppointmentForm {
         this._lockDateShiftFlag = false;
     }
 
+    get dxForm() {
+        return this.form;
+    }
+
     set readOnly(value) {
         this.form.option('readOnly', value);
         const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
