@@ -1014,26 +1014,26 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
-        assert.strictEqual(dataGrid.getScrollable().scrollHeight(), 1655, 'scroll height1');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1653, 5, 'scroll height1');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1290 });
 
         // assert
-        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 1290, 'scroll top2');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1289, 5, 'scroll top2');
 
         // act
         dataGrid.expandRow(10);
         this.clock.tick();
 
         // assert
-        assert.strictEqual(dataGrid.getScrollable().scrollHeight(), 2093, 'scroll height2');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2090, 5, 'scroll height2');
 
         // act
         dataGrid.getScrollable().scrollTo({ top: 1728 });
         this.clock.tick();
 
         // assert
-        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 1728, 'scroll top3');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1725, 5, 'scroll top3');
     });
 });
