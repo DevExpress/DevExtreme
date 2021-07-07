@@ -119,7 +119,7 @@ describe('LayoutBase', () => {
         .toBe('custom-classes');
     });
 
-    it('should render HeaderPanel and pass to it correc props', () => {
+    it('should render HeaderPanel and pass to it correct props', () => {
       const props = {
         dateHeaderData,
         timeCellTemplate: () => null,
