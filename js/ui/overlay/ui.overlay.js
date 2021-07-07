@@ -355,6 +355,10 @@ const Overlay = Widget.inherit({
     },
 
     _initContentResizeObserver: function() {
+        if(!hasWindow()) {
+            return;
+        }
+
         this._contentResizeObserver = new window.ResizeObserver(() => {
             if(!this._shouldSkipContentResizeHandler) {
                 this._dimensionChanged();
@@ -364,11 +368,11 @@ const Overlay = Widget.inherit({
     },
 
     _observeContentResize: function() {
-        this._contentResizeObserver.observe(this._$content.get(0));
+        this._contentResizeObserver?.observe(this._$content.get(0));
     },
 
     _unobserveContentResize: function() {
-        this._contentResizeObserver.unobserve(this._$content.get(0));
+        this._contentResizeObserver?.unobserve(this._$content.get(0));
     },
 
     _initMarkup() {
@@ -1357,7 +1361,7 @@ const Overlay = Widget.inherit({
 
         this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
-        this._contentResizeObserver.disconnect();
+        this._contentResizeObserver?.disconnect();
         this._contentResizeObserver = undefined;
         this._$wrapper.remove();
         this._$content.remove();
