@@ -95,7 +95,8 @@ export default class ViewDataProvider {
         const {
             groups,
             groupOrientation,
-            isGroupedByDate,
+            groupByDate,
+            isAllDayPanelVisible,
             ...restOptions
         } = renderOptions;
 
@@ -103,9 +104,11 @@ export default class ViewDataProvider {
             ...restOptions,
             isVerticalGrouping: isVerticalGroupOrientation(groupOrientation, groups),
             isHorizontalGrouping: isHorizontalGroupOrientation(groups, groupOrientation),
-            isGroupedByDate: isGroupingByDate(groups, groupOrientation, isGroupedByDate),
+            isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
+            isGroupedAllDayPanel: isVerticalGroupOrientation(groupOrientation, groups) && isAllDayPanelVisible,
             groups,
             groupOrientation,
+            isAllDayPanelVisible,
         };
     }
 

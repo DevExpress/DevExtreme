@@ -628,8 +628,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const options = {
             groupByDate: this.option('groupByDate'),
-            isStandaloneAllDayPanel: !isVerticalGrouping && this.isAllDayPanelVisible, // TODO: remove
-            isGroupedAllDayPanel: this.isGroupedAllDayPanel(), // TODO: remove
             rowCountInGroup,
             cellCount,
             cellCountInGroupRow: this._getCellCount(),
@@ -651,9 +649,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             startViewDate: this.getStartViewDate(),
             startDayHour: this.option('startDayHour'),
             cellCountInDay: this._getCellCountInDay(),
-            cellDuration: this.getCellDuration(), // TODO
-            minVisibleDate: this._minVisibleDate, // TODO
-            maxVisibleDate: this._maxVisibleDate, // TODO
+            cellDuration: this.getCellDuration(),
+            minVisibleDate: this._minVisibleDate,
+            maxVisibleDate: this._maxVisibleDate,
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
             hoursInterval: this.option('hoursInterval'),

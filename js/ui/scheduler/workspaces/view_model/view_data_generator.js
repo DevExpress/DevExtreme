@@ -154,10 +154,9 @@ export class ViewDataGenerator {
             startCellIndex,
             startRowIndex,
             cellCount,
-            isStandaloneAllDayPanel,
+            isVerticalGrouping,
+            isAllDayPanelVisible,
         } = options;
-
-        // const i
 
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
@@ -176,7 +175,7 @@ export class ViewDataGenerator {
 
         let correctedStartRowIndex = startRowIndex;
         let allDayPanelMap = [];
-        if(isStandaloneAllDayPanel) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
             correctedStartRowIndex++;
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
@@ -189,6 +188,10 @@ export class ViewDataGenerator {
             allDayPanelMap,
             dateTableMap
         };
+    }
+
+    _isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
+        return isVerticalGrouping && isAllDayPanelVisible;
     }
 
     getViewDataFromMap(viewDataMap, options) {
@@ -206,7 +209,8 @@ export class ViewDataGenerator {
             startCellIndex,
             isProvideVirtualCellsWidth,
             isGroupedAllDayPanel,
-            isStandaloneAllDayPanel,
+            isVerticalGrouping,
+            isAllDayPanelVisible,
         } = options;
         const {
             allDayPanelMap,
@@ -242,7 +246,7 @@ export class ViewDataGenerator {
             };
         }, { previousGroupIndex: -1, previousGroupedData: [] });
 
-        if(isStandaloneAllDayPanel) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
         }
 
