@@ -924,6 +924,7 @@ class Scheduler extends Widget {
 
         this.hideAppointmentTooltip();
 
+        // TODO popup
         this._appointmentPopup.triggerResize();
         this._appointmentPopup.updatePopupFullScreenMode();
     }
@@ -1737,7 +1738,7 @@ class Scheduler extends Widget {
     }
 
     _cleanPopup() {
-        this._appointmentPopup && this._appointmentPopup.dispose();
+        this._appointmentPopup?.dispose();
     }
 
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
@@ -2057,7 +2058,7 @@ class Scheduler extends Widget {
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
+            this._appointmentPopup.visible && this._appointmentPopup.hide();
         }
 
         this._actions[handlerName](args);
@@ -2228,7 +2229,7 @@ class Scheduler extends Widget {
     }
 
     hideAppointmentPopup(saveChanges) {
-        if(this._appointmentPopup?.isVisible()) {
+        if(this._appointmentPopup?.visible) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }

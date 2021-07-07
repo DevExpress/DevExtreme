@@ -7,6 +7,7 @@ import DataSource from '../../../data/data_source';
 import timeZoneDataUtils from '../timezones/utils.timezones_data';
 import { extend } from '../../../core/utils/extend';
 import dateUtils from '../../../core/utils/date';
+import Semaphore from '../semaphore';
 
 import '../recurrence_editor';
 import '../../text_area';
@@ -69,6 +70,8 @@ export class AppointmentForm {
         this.scheduler = scheduler;
         this.form = null;
         this._lockDateShiftFlag = false;
+
+        this.semaphore = new Semaphore();
     }
 
     get dxForm() {
@@ -79,8 +82,17 @@ export class AppointmentForm {
         this.form.option('readOnly', value);
         const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
+        // TODO hack fore rec editor
         const recurrenceEditor = this.form.getEditor(recurrenceRuleExpr);
         recurrenceEditor?._recurrenceForm?.option('readOnly', value);
+    }
+
+    get formData() {
+        return this.dxForm.option('formData');
+    }
+
+    set formData(value) {
+        this.dxForm.option('formData', value);
     }
 
     create(dataExprs, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, formData) {
@@ -141,7 +153,7 @@ export class AppointmentForm {
         const previousValue = dateSerialization.deserializeDate(args.previousValue);
         const dateEditor = this.form.getEditor(dateExpr);
         const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
-        if(!this._lockDateShiftFlag && dateValue && value && isNeedCorrect(dateValue, value)) {
+        if(this.semaphore.isFree() && dateValue && value && isNeedCorrect(dateValue, value)) {
             const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
             dateEditor.option('value', new Date(value.getTime() + duration));
         }
@@ -257,7 +269,7 @@ export class AppointmentForm {
                             const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
                             const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                            if(!this._lockDateShiftFlag && startDate) {
+                            if(this.semaphore.isFree() && startDate) {
                                 if(value) {
                                     const allDayStartDate = dateUtils.trimTime(startDate);
                                     startDateEditor.option('value', allDayStartDate);
@@ -379,7 +391,7 @@ export class AppointmentForm {
     }
 
     updateFormData(formData, dataExprs) {
-        this._lockDateShiftFlag = true;
+        this.semaphore.take();
 
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
@@ -389,6 +401,7 @@ export class AppointmentForm {
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
         this.form.option('formData', formData);
-        this._lockDateShiftFlag = false;
+
+        this.semaphore.release();
     }
 }
