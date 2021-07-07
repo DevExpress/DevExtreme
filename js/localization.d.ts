@@ -107,35 +107,41 @@ export function parseNumber(text: string, format: Format): number;
 type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 export interface FormatObject {
     /**
-     * @docid
+     * @docid Format.currency
+     * @public
      */
    currency?: string,
    /**
-    * @docid
+    * @docid Format.formatter
+    * @public
     * @type_function_param1 value:number|date
     * @type_function_return string
     */
    formatter?: ((value: number | Date) => string),
    /**
-    * @docid
+    * @docid Format.parser
+    * @public
     * @type_function_param1 value:string
     * @type_function_return number|date
     */
    parser?: ((value: string) => number | Date),
    /**
-    * @docid
+    * @docid Format.precision
+    * @public
     */
    precision?: number,
    /**
-    * @docid
+    * @docid Format.type
+    * @public
     * @type Enums.Format
     */
    type?: PredefinedFormat
 }
 type ExternalFormat = any;
+
 /**
  * @docid
- * @type Enums.Format|string|function|Object
+ * @type Object|Enums.Format|string|function
  * @type_function_param1 value:number|date
  * @type_function_return string
  * @default undefined

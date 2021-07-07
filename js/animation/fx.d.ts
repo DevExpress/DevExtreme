@@ -5,13 +5,39 @@ import { PositionConfig } from './position';
 /**
  * @docid
  * @public
+ * @type object
  */
-export type AnimationState = string | number | 
-{ opacity: number; } | 
-{ scale: number; } | 
-{ position: PositionConfig; } |
-{ left: number; } | 
-{ top: number; };
+export type AnimationState = string | number | {
+    /**
+     * @docid
+     * @public
+     */
+    opacity: number;
+} | {
+    /**
+     * @docid
+     * @public
+     */
+    scale: number;
+} | {
+    /**
+     * @docid
+     * @public
+     */
+    position: PositionConfig;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    left: number;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    top: number;
+};
 
 /**
  * @docid
@@ -85,7 +111,10 @@ export type AnimationConfig = {
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
 
-/** @deprecated Use the AnimationConfig type instead */
+/**
+ * @docid
+ * @deprecated Use the AnimationConfig type instead 
+ */
 export type animationConfig = AnimationConfig;
 
 /**

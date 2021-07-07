@@ -975,23 +975,23 @@ declare module DevExpress {
    */
   export interface FormatObject {
     /**
-     * [descr:FormatObject.currency]
+     * [descr:Format.currency]
      */
     currency?: string;
     /**
-     * [descr:FormatObject.formatter]
+     * [descr:Format.formatter]
      */
     formatter?: (value: number | Date) => string;
     /**
-     * [descr:FormatObject.parser]
+     * [descr:Format.parser]
      */
     parser?: (value: string) => number | Date;
     /**
-     * [descr:FormatObject.precision]
+     * [descr:Format.precision]
      */
     precision?: number;
     /**
-     * [descr:FormatObject.type]
+     * [descr:Format.type]
      */
     type?: PredefinedFormat;
   }
@@ -1371,16 +1371,53 @@ declare module DevExpress {
 }
 declare module DevExpress.animation {
   /**
+   * [descr:animationConfig]
+   * @deprecated [depNote:animationConfig]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type animationConfig = AnimationConfig;
+  /**
    * [descr:AnimationState]
    */
   export type AnimationState =
     | string
     | number
-    | { opacity: number }
-    | { scale: number }
-    | { position: PositionConfig }
-    | { left: number }
-    | { top: number };
+    | {
+        /**
+         * [descr:AnimationState.opacity]
+         */
+        opacity: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.scale]
+         */
+        scale: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.position]
+         */
+        position: PositionConfig;
+      }
+    | {
+        /**
+         * [descr:AnimationState.left]
+         */
+        left: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.top]
+         */
+        top: number;
+      };
+  /**
+   * [descr:positionConfig]
+   * @deprecated [depNote:positionConfig]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface positionConfig extends PositionConfig {}
 }
 declare module DevExpress.core {
   /**
