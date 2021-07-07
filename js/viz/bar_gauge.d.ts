@@ -20,8 +20,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -195,7 +195,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @default 20
@@ -328,7 +328,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @extends CommonVizFormat
      * @public
      */
-    itemTextFormat?: format;
+    itemTextFormat?: Format;
     /**
      * @docid dxBarGaugeOptions.legend.markerTemplate
      * @default undefined

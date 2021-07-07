@@ -27,8 +27,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -374,7 +374,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @type Enums.HorizontalEdge

@@ -15,9 +15,9 @@ import {
     EventInfo
 } from '../../events/index';
 
-import {
-    format
-} from '../../ui/widget/ui.widget';
+import { 
+  Format
+} from '../../localization';
 
 import {
     DashStyleType
@@ -520,7 +520,7 @@ export interface BaseWidgetTooltip {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid BaseWidgetOptions.tooltip.opacity
      * @default undefined
