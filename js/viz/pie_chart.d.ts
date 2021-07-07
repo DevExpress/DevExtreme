@@ -16,8 +16,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     basePointObject,
@@ -607,7 +607,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
        * @extends CommonVizFormat
        */
-      argumentFormat?: format,
+      argumentFormat?: Format,
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor
        * @default undefined
@@ -676,7 +676,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
        * @type Enums.PieChartLabelPosition

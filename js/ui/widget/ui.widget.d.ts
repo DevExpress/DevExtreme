@@ -110,13 +110,6 @@ export var dxItem: any;
 
 /**
  * @docid
- * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
- * @type_function_return string
- * @default undefined
- * @section Common
- * @namespace DevExpress.ui
  * @deprecated
- * @public
  */
 export type format = Format;

@@ -21,9 +21,12 @@ import {
 } from '../events/index';
 
 import Widget, {
-    format,
     WidgetOptions
 } from './widget/ui.widget';
+
+import { 
+    Format
+} from '../localization';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
@@ -453,7 +456,7 @@ export interface dxFilterBuilderField {
      * @default ""
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid
      * @default undefined

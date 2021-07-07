@@ -93,7 +93,7 @@ import type {
   AsyncRule,
 // eslint-disable-next-line import/extensions
 } from '../../../../../ui/validation_rules';
-import type { format } from '../../../../../ui/widget/ui.widget';
+import type { Format } from '../../../../../localization';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
 import messageLocalization from '../../../../../localization/message';
@@ -287,7 +287,7 @@ export class DataGridColumn {
   formItem?: dxFormSimpleItem;
 
   @OneWay()
-  format?: format;
+  format?: Format;
 
   @Nested()
   headerFilter?: DataGridColumnHeaderFilter;
@@ -682,7 +682,7 @@ export class DataGridSummaryGroupItem {
   summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
 
   @OneWay()
-  valueFormat?: format;
+  valueFormat?: Format;
 }
 
 @ComponentBindings()
@@ -715,7 +715,7 @@ export class DataGridSummaryTotalItem {
   summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
 
   @OneWay()
-  valueFormat?: format;
+  valueFormat?: Format;
 }
 
 @ComponentBindings()
