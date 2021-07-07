@@ -4795,6 +4795,14 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
+     * [descr:dxCheckBoxOptions.iconHeight]
+     */
+    iconHeight?: number | string | (() => number | string);
+    /**
+     * [descr:dxCheckBoxOptions.iconWidth]
+     */
+    iconWidth?: number | string | (() => number | string);
+    /**
      * [descr:dxCheckBoxOptions.name]
      */
     name?: string;
