@@ -1614,6 +1614,37 @@ testModule('content', moduleConfig, () => {
 
         assert.strictEqual(overlay.$content().text(), 'template2', 'template rerendered correctly');
     });
+
+    test('content resize should trigger overlay geometry rendering', function(assert) {
+        const done = assert.async();
+        const overlay = $('#overlay').dxOverlay({
+            contentTemplate: () => {
+                return $('<div>')
+                    .attr({ id: 'customOverlayContent' })
+                    .css({ width: 100, height: 100 });
+            },
+            width: 'auto',
+            height: 'auto',
+            visible: true
+        }).dxOverlay('instance');
+
+        const overlayContentElement = overlay.$content().get(0);
+        const contentRect = overlayContentElement.getBoundingClientRect();
+        const getCenter = (rect, dimension) => {
+            if(dimension === 'x') {
+                return (rect.left + rect.right) / 2;
+            }
+            return (rect.bottom + rect.top) / 2;
+        };
+
+        $('#customOverlayContent').css({ width: 500, height: 500 });
+        setTimeout(() => {
+            const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
+            assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
+            assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
+            done();
+        });
+    });
 });
 
 
