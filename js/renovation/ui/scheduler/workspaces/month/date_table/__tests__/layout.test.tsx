@@ -40,6 +40,7 @@ describe('MonthDateTableLayout', () => {
       const layout = render({
         props: {
           addDateTableClass: 'addDateTableClass',
+          tableRef: 'tableRef',
         },
       });
 
@@ -49,6 +50,7 @@ describe('MonthDateTableLayout', () => {
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate: MonthDateTableCell,
           addDateTableClass: 'addDateTableClass',
+          tableRef: 'tableRef',
         });
     });
   });

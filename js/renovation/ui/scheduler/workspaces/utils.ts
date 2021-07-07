@@ -78,7 +78,9 @@ export const getIsGroupedAllDayPanel = (
 
 export const isVerticalGroupOrientation = (
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+  groups?: Group[],
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
+  && (!groups || !!groups.length); // TODO: make groups required (see function below)
 
 export const isHorizontalGroupOrientation = (
   groups: Group[], groupOrientation?: GroupOrientation,
