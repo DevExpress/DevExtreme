@@ -436,7 +436,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.equal($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
     });
 
