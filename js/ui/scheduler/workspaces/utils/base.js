@@ -174,7 +174,7 @@ export const isDateAndTimeView = (viewType) => {
 };
 
 export const getHorizontalGroupCount = (groups, groupOrientation) => {
-    const groupCount = getGroupCount(groups) | 1;
+    const groupCount = getGroupCount(groups) || 1;
     const isVerticalGrouping = isVerticalGroupOrientation(groupOrientation, groups);
 
     return isVerticalGrouping ? 1 : groupCount;

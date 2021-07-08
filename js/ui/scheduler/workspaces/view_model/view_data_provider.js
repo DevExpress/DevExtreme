@@ -84,7 +84,8 @@ export default class ViewDataProvider {
         }
     }
 
-    updateViewData(renderOptions) {
+    updateViewData(options) {
+        const renderOptions = this._transformRenderOptions(options);
         this.viewDataMapWithSelection = this.viewDataGenerator
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator

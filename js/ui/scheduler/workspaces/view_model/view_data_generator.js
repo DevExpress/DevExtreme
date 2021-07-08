@@ -191,7 +191,7 @@ export class ViewDataGenerator {
     }
 
     _isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
-        return isVerticalGrouping && isAllDayPanelVisible;
+        return !isVerticalGrouping && isAllDayPanelVisible;
     }
 
     getViewDataFromMap(viewDataMap, options) {
