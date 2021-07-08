@@ -226,10 +226,11 @@ describe('CheckBox', () => {
         });
 
         it('should correctly change icon font size if "iconWidth"/"iconHeight" options are not numbers', () => {
-          const checkBox = new CheckBox({ iconHeight: '22', iconWidth: '22px' });
+          const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
-            getBoundingClientRect: () => ({ width: '22', height: '22' }),
+            offsetHeight: 22,
+            offsetWidth: 22,
             style: {},
           } as any;
           checkBox.updateIconFontSize();
@@ -415,7 +416,7 @@ describe('CheckBox', () => {
           expect(checkBox.iconStyles).toMatchObject({ width: '22px', height: '22px' });
         });
 
-        each([22, '22'])
+        each([22, '22px'])
           .it('should convert %s" in "22px"', (value) => {
             expect(new CheckBox({
               iconHeight: value, iconWidth: value, width: 44, height: 44,
