@@ -355,6 +355,8 @@ export default class TableResizingModule extends BaseModule {
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
         this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
+        // console.log('_dragStartHandler');
+        // console.log(this._startLineSeparatorPosition);
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
@@ -419,10 +421,16 @@ export default class TableResizingModule extends BaseModule {
 
             $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
 
-            if(Math.abs($determinantElements.eq(index).outerHeight() - newHeight) < 1) {
+            // console.log(newHeight);
+            // console.log($determinantElements.eq(index).outerHeight());
+
+            if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
+
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
+                // console.log((this._startLineSeparatorPosition + eventOffset) + 'px');
             } else {
                 this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
+                // console.log(this._startLineSeparatorPosition + 'px');
             }
         }
 
