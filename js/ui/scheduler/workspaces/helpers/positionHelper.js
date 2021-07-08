@@ -98,7 +98,6 @@ export class PositionHelper {
     }
 
     get key() { return this.options.key; }
-    get DOMMetaData() { return this.options.DOMMetaData; }
     get viewDataProvider() { return this.options.viewDataProvider; }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
@@ -107,9 +106,10 @@ export class PositionHelper {
     get isGroupedByDate() { return this.options.isGroupedByDate; }
     get isRtlEnabled() { return this.options.isRtlEnabled; }
     get startViewDate() { return this.options.startViewDate; }
-    get isSkippedDataCallback() { return this.options.isSkippedDataCallback; }
-    get getPositionShiftCallback() { return this.options.getPositionShiftCallback; }
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
+    get isSkippedData() { return this.options.isSkippedDataCallback; }
+    get getPositionShift() { return this.options.getPositionShiftCallback; }
+    get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
 
     getLoadedResources() { return getResourceManager(this.key).loadedResources; }
 
@@ -131,7 +131,7 @@ export class PositionHelper {
             ? 0
             : this.getTimeShift(date);
 
-        const shift = this.getPositionShiftCallback(timeShift, inAllDayRow);
+        const shift = this.getPositionShift(timeShift, inAllDayRow);
         const horizontalHMax = this.getHorizontalMax(validGroupIndex, date);
 
         return {
@@ -153,7 +153,7 @@ export class PositionHelper {
     getCoordinatesByDateInGroup(startDate, groupIndices, inAllDayRow, groupIndex) {
         const result = [];
 
-        if(this.isSkippedDataCallback(startDate)) {
+        if(this.isSkippedData(startDate)) {
             return result;
         }
 
@@ -179,7 +179,7 @@ export class PositionHelper {
         const {
             dateTableCellsMeta,
             allDayPanelCellsMeta,
-        } = this.DOMMetaData;
+        } = this.getDOMMetaData();
         const {
             columnIndex,
             rowIndex,
@@ -236,7 +236,7 @@ export class PositionHelper {
             correctedGroupIndex,
             this.viewDataProvider,
             this.isRtlEnabled,
-            this.DOMMetaData
+            this.getDOMMetaData()
         );
     }
 }

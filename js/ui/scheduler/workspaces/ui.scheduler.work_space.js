@@ -2289,7 +2289,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _initPositionHelper() {
         this.positionHelper = new PositionHelper({
             key: this.option('key'),
-            DOMMetaData: this.getDOMElementsMetaData(),
             viewDataProvider: this.viewDataProvider,
             viewStartDayHour: this.option('startDayHour'),
             viewEndDayHour: this.option('enddayHour'),
@@ -2301,6 +2300,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             isVirtualScrolling: this.isVirtualScrolling(),
             isSkippedDataCallback: this._isSkippedData.bind(this),
             getPositionShiftCallback: this.getPositionShift.bind(this),
+            getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this),
         });
     }
 
@@ -3069,7 +3069,7 @@ const createDragBehaviorConfig = (
         const MOUSE_IDENT = 10;
 
         const appointmentWidth = $(state.dragElement).width();
-        const cellWidth = this.getCellWidth();
+        const cellWidth = getCellWidth();
         const isWideAppointment = appointmentWidth > cellWidth;
 
         const dragElementContainer = $(state.dragElement).parent();
