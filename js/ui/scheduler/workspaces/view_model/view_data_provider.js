@@ -4,7 +4,7 @@ import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
 import { ViewDataGenerator } from './view_data_generator';
-import { ViewDataGeneratorDay } from './view_data_generator_Day';
+import { ViewDataGeneratorDay } from './view_data_generator_day';
 import { ViewDataGeneratorMonth } from './view_data_generator_month';
 import { ViewDataGeneratorTimelineMonth } from './view_data_generator_timeline_month';
 import { ViewDataGeneratorWeek } from './view_data_generator_week';
