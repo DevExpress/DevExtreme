@@ -196,7 +196,7 @@ QUnit.module('Checkbox', function() {
                 const iconHeight = 55;
                 const $element = $('#checkBox').dxCheckBox({ iconWidth, iconHeight });
                 const fontSizeMultiplayer = 16 / 22;
-                const expectedFontSize = `${Math.round(fontSizeMultiplayer * Math.min(iconHeight, iconWidth))}px`;
+                const expectedFontSize = `${Math.ceil(fontSizeMultiplayer * Math.min(iconHeight, iconWidth))}px`;
 
                 assert.strictEqual($element.find(ICON_SELECTOR).css('font-size'), expectedFontSize, 'font-size is calculated correctly');
             });
