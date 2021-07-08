@@ -368,6 +368,7 @@ const Overlay = Widget.inherit({
     },
 
     _observeContentResize: function() {
+        this._shouldSkipContentResizeHandler = true;
         this._contentResizeObserver?.observe(this._$content.get(0));
     },
 

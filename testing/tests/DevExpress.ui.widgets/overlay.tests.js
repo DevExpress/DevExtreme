@@ -4122,23 +4122,28 @@ QUnit.module('resizeObserver integraion', {
     }
 }, () => {
     test('overlay should be repositioned only once on window resize', function(assert) {
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnWindowResizeDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
             visible: true
         }).dxOverlay('instance');
         const positionedHandlerStub = sinon.stub();
-        const done = assert.async();
 
         overlay.on('positioned', positionedHandlerStub);
-        resizeCallbacks.fire();
 
         setTimeout(() => {
-            assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
-            done();
+            resizeCallbacks.fire();
+            setTimeout(() => {
+                assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
+                resizeOnWindowResizeDone();
+            }, 100);
+            resizeOnOpeningDone();
         });
     });
 
     test('content resize should trigger overlay geometry rendering', function(assert) {
-        const done = assert.async();
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnRestylingDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
             contentTemplate: () => {
                 return $('<div>')
@@ -4159,17 +4164,21 @@ QUnit.module('resizeObserver integraion', {
             return (rect.bottom + rect.top) / 2;
         };
 
-        $('#customOverlayContent').css({ width: 500, height: 500 });
         setTimeout(() => {
-            const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
-            assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
-            assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
-            done();
+            $('#customOverlayContent').css({ width: 500, height: 500 });
+            setTimeout(() => {
+                const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
+                assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
+                assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
+                resizeOnRestylingDone();
+            }, 100);
+            resizeOnOpeningDone();
         });
     });
 
     test('overlay content dimensions should be updated during resize', function(assert) {
-        const done = assert.async();
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnDraggingDone = assert.async();
         const $overlay = $('#overlay').dxOverlay({
             resizeEnabled: true,
             visible: true,
@@ -4181,11 +4190,41 @@ QUnit.module('resizeObserver integraion', {
         const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
         const pointer = pointerMock($handle);
 
-        pointer.start().dragStart().drag(10);
 
         setTimeout(() => {
-            assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
-            done();
+            pointer.start().dragStart().drag(10);
+            setTimeout(() => {
+                assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
+                resizeOnDraggingDone();
+            }, 100);
+            resizeOnOpeningDone();
+        });
+    });
+
+    test('resize end should trigger the single geometry rendering', function(assert) {
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnDraggingDone = assert.async();
+        const $overlay = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true,
+            width: 200,
+            height: 200
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $overlayContent = overlay.$content();
+        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
+        const pointer = pointerMock($handle);
+        const positionedHandlerStub = sinon.stub();
+        overlay.on('positioned', positionedHandlerStub);
+
+
+        setTimeout(() => {
+            pointer.start().dragStart().drag(10).dragEnd();
+            setTimeout(() => {
+                assert.ok(positionedHandlerStub.calledOnce);
+                resizeOnDraggingDone();
+            }, 100);
+            resizeOnOpeningDone();
         });
     });
 });
