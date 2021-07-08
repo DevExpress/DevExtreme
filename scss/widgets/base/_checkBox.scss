@@ -24,6 +24,7 @@
   background-repeat: no-repeat;
   flex-shrink: 0;
   max-height: 100%;
+  max-width: 100%;
 }
 
 .dx-checkbox-container {
@@ -48,6 +49,7 @@
   height: 100%;
   width: 100%;
   padding-left: 5px;
+  overflow: hidden;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
