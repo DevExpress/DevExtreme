@@ -4,13 +4,14 @@
         define(function(require, exports, module) {
             root.pointerMock = module.exports = factory(
                 require('jquery'),
+                require('inferno'),
                 require('events/gesture/emitter.gesture'),
                 require('events/click'));
         });
     } else {
         root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);
     }
-}(window, function($, GestureEmitter, clickEvent) {
+}(window, function($, inferno, GestureEmitter, clickEvent) {
 
     GestureEmitter.touchBoundary(0);
 
@@ -109,6 +110,8 @@
                 requestAnimationFrameCallback();
 
                 this.nativeClick();
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
 
                 return this;
             },
