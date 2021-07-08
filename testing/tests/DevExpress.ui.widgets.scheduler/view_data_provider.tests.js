@@ -157,12 +157,13 @@ const verticalGroupingRenderOptions = {
     cellCountInGroupRow: undefined,
     groupOrientation: 'vertical',
     isProvideVirtualCellsWidth: true,
-    isVerticalGrouping: true,
-    isStandaloneAllDayPanel: false,
-    isGroupedAllDayPanel: true,
     isAllDayPanelVisible: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
+    groups: [{
+        name: 'groupId',
+        items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+    }],
 };
 const horizontalGroupingRenderOptions = {
     startRowIndex: 0,
@@ -175,12 +176,10 @@ const horizontalGroupingRenderOptions = {
     cellCountInGroupRow: undefined,
     groupOrientation: 'horizontal',
     isProvideVirtualCellsWidth: true,
-    isVerticalGrouping: false,
     isAllDayPanelVisible: true,
-    isGroupedAllDayPanel: false,
-    isStandaloneAllDayPanel: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
+    groups: [],
 };
 
 const createViewDataProvider = ({
@@ -1014,12 +1013,12 @@ module('View Data Provider', {
                 totalCellCount: 4,
                 totalRowCount: 2,
                 verticalGroupCount: 1,
-                horizontalGroupCount: 2,
                 today: baseStartDate,
                 groupByDate: false,
-                isHorizontalGrouping: true,
-                isVerticalGrouping: false,
-                groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
                 cellCountInGroupRow: 2,
                 rowCountInGroup: 2,
                 isAllDayPanelVisible: false,
@@ -1278,7 +1277,6 @@ module('View Data Provider', {
                 const completeDateHeaderMapRenderOptions = {
                     ...dataGenerationRenderOptions,
                     groupByDate: true,
-                    isHorizontalGrouping: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1677,8 +1675,11 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', function(assert) {
                 const completeTimePanelMapRenderOptions = {
                     ...dataGenerationRenderOptions,
-                    isVerticalGrouping: true,
-                    groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                    groupOrientation: 'vertical',
+                    groups: [{
+                        name: 'groupId',
+                        items: [{ id: 1 }, { id: 2 }],
+                    }],
                     isAllDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1710,8 +1711,8 @@ module('View Data Provider', {
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
                     key: 4,
                     allDay: false,
                     text: '',
@@ -1740,8 +1741,8 @@ module('View Data Provider', {
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
                     key: 12,
                     allDay: false,
                     text: '',
@@ -1755,8 +1756,11 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', function(assert) {
                 const completeTimePanelMapRenderOptions = {
                     ...dataGenerationRenderOptions,
-                    isVerticalGrouping: true,
-                    groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                    groupOrientation: 'vertical',
+                    groups: [{
+                        name: 'groupId',
+                        items: [{ id: 1 }, { id: 2 }],
+                    }],
                     isAllDayPanelVisible: false,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1778,8 +1782,8 @@ module('View Data Provider', {
                     groupIndex: 0,
                     groups: { groupId: 1 },
                     index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
                     key: 4,
                     allDay: false,
                     text: '',
@@ -1798,8 +1802,8 @@ module('View Data Provider', {
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
                     key: 12,
                     allDay: false,
                     text: '',
@@ -1906,11 +1910,13 @@ module('View Data Provider', {
                 totalRowCount: 4,
                 totalCellCount: 2,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: true,
                 isGenerateTimePanelData: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const virtualHorizontalGroupingRenderOptions = {
                 startCellIndex: 0,
@@ -1924,11 +1930,12 @@ module('View Data Provider', {
                 totalRowCount: 4,
                 totalCellCount: 4,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: false,
-                isStandaloneAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const horizontalDataMap = [[
                 {
@@ -2327,10 +2334,12 @@ module('View Data Provider', {
                 totalRowCount: 2,
                 totalCellCount: 3,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
 
             const virtualHorizontalGroupingRenderOptions = {
@@ -2347,11 +2356,12 @@ module('View Data Provider', {
                 totalRowCount: 2,
                 totalCellCount: 3,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: false,
-                isStandaloneAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const horizontalDataMap = [[
                 {
@@ -2772,7 +2782,10 @@ module('View Data Provider', {
                         rightVirtualCellWidth: 800,
                         cellCountInGroupRow: 12,
                         totalCellCount: 12,
-                        horizontalGroupCount: 1,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }],
+                        }],
                         cellCountInDay: 4,
                         groupByDate: false,
                         cellWidth: 100,
@@ -2815,7 +2828,10 @@ module('View Data Provider', {
                         rightVirtualCellWidth: 600,
                         cellCountInGroupRow: 12,
                         totalCellCount: 12,
-                        horizontalGroupCount: 1,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }],
+                        }],
                         cellCountInDay: 4,
                         groupByDate: false,
                         cellWidth: 100,
@@ -2864,7 +2880,10 @@ module('View Data Provider', {
                         rightVirtualCellWidth: 900,
                         cellCountInGroupRow: 12,
                         totalCellCount: 24,
-                        horizontalGroupCount: 2,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }, { id: 2 }],
+                        }],
                         cellCountInDay: 4,
                         groupByDate: true,
                         cellWidth: 100,
