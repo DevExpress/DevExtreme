@@ -221,7 +221,7 @@ QUnit.module('Checkbox', function() {
                 assert.strictEqual($element.css('height'), `${height}px`, 'root element height not equals icon height');
             });
 
-            [14, '14', '14px', '50%', () => 14, () => '14px'].forEach((value) => {
+            [14, '14', '14px', '50%'].forEach((value) => {
                 QUnit.test(`checkbox "iconWidth"/"iconHeight" options should correctly apply value in format ${value}`, function(assert) {
                     const $element = $('#checkBox').dxCheckBox({ width: 28, height: 28, iconWidth: value, iconHeight: value });
                     assert.strictEqual($element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${value} option value`);

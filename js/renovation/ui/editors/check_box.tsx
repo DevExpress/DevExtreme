@@ -19,11 +19,10 @@ import BaseComponent from '../../component_wrapper/editors/check_box';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
-import { getOptionValue } from '../../utils/get_option_value';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
-const ICON_FONT_SIZE_RATION = 16 / 22;
+const ICON_FONT_SIZE_RATIO = 16 / 22;
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -112,9 +111,9 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() readOnly = false;
 
-  @OneWay() iconHeight?: number | string | (() => (string | number));
+  @OneWay() iconHeight?: number | string;
 
-  @OneWay() iconWidth?: number | string | (() => (string | number));
+  @OneWay() iconWidth?: number | string;
 
   @OneWay() isValid = true;
 
@@ -163,10 +162,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const { iconWidth, iconHeight } = this.props;
 
     if (iconElement !== null && iconElement !== undefined) {
-      const width = typeof iconWidth === 'number' ? iconWidth : iconElement.getBoundingClientRect().width;
-      const height = typeof iconHeight === 'number' ? iconHeight : iconElement.getBoundingClientRect().height;
+      const width = typeof iconWidth === 'number' ? iconWidth : iconElement.clientWidth;
+      const height = typeof iconHeight === 'number' ? iconHeight : iconElement.clientHeight;
 
-      const calculatedFontSize = `${Math.round(Math.min(width, height) * ICON_FONT_SIZE_RATION)}px`;
+      const calculatedFontSize = `${Math.round(Math.min(width, height) * ICON_FONT_SIZE_RATIO)}px`;
 
       iconElement.style.fontSize = calculatedFontSize;
     }
@@ -219,9 +218,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   get iconStyles(): { [key: string]: string | number } {
     const { iconWidth, iconHeight } = this.props;
-
-    const width = normalizeStyleProp('width', getOptionValue(iconWidth));
-    const height = normalizeStyleProp('height', getOptionValue(iconHeight));
+    const width = normalizeStyleProp('width', iconWidth);
+    const height = normalizeStyleProp('height', iconHeight);
 
     return { height, width };
   }

@@ -415,7 +415,7 @@ describe('CheckBox', () => {
           expect(checkBox.iconStyles).toMatchObject({ width: '22px', height: '22px' });
         });
 
-        each([22, '22', () => 22, () => '22'])
+        each([22, '22'])
           .it('should convert %s" in "22px"', (value) => {
             expect(new CheckBox({
               iconHeight: value, iconWidth: value, width: 44, height: 44,

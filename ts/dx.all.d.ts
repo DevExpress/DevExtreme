@@ -4797,11 +4797,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBoxOptions.iconHeight]
      */
-    iconHeight?: number | string | (() => number | string);
+    iconHeight?: number | string;
     /**
      * [descr:dxCheckBoxOptions.iconWidth]
      */
-    iconWidth?: number | string | (() => number | string);
+    iconWidth?: number | string;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
