@@ -37,6 +37,10 @@ export class ScrollbarProps {
 
   @Event() onAnimatorCancel?: EventCallback;
 
+  @Event() onLock?: EventCallback;
+
+  @Event() onUnlock?: EventCallback;
+
   @Event() onPullDown?: EventCallback;
 
   @Event() onReachBottom?: EventCallback;
