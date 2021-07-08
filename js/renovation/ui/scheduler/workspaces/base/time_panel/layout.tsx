@@ -13,7 +13,6 @@ import { CellBase } from '../cell';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
-  isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
@@ -28,7 +27,6 @@ export const viewFunction = ({
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
-  isVerticalGroupOrientation: isVerticalGrouping,
   restAttributes,
 }: TimePanelTableLayout): JSX.Element => (
   <Table
@@ -69,10 +67,10 @@ export const viewFunction = ({
                 <Cell
                   startDate={startDate}
                   text={text}
-                  groups={isVerticalGrouping ? groups : undefined}
-                  groupIndex={isVerticalGrouping ? groupIndex : undefined}
-                  isFirstGroupCell={isVerticalGrouping && isFirstGroupCell}
-                  isLastGroupCell={isVerticalGrouping && isLastGroupCell}
+                  groups={groups}
+                  groupIndex={groupIndex}
+                  isFirstGroupCell={isFirstGroupCell}
+                  isLastGroupCell={isLastGroupCell}
                   index={Math.floor(cellIndex / cellCountInGroupRow)}
                   timeCellTemplate={timeCellTemplate}
                 />
@@ -114,11 +112,5 @@ export class TimePanelTableLayout extends JSXComponent(TimePaneLayoutProps) {
 
   get bottomVirtualRowHeight(): number {
     return this.props.timePanelData.bottomVirtualRowHeight ?? 0;
-  }
-
-  get isVerticalGroupOrientation(): boolean {
-    const { groupOrientation } = this.props;
-
-    return isVerticalGroupOrientation(groupOrientation);
   }
 }

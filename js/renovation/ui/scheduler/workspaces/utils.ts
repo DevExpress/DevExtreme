@@ -17,9 +17,9 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 };
 
 export const getKeyByGroup = (
-  groupIndex: number, groupOrientation: GroupOrientation | undefined,
+  groupIndex: number | undefined, groupOrientation: GroupOrientation | undefined,
 ): string => {
-  if (groupOrientation === VERTICAL_GROUP_ORIENTATION) {
+  if (groupOrientation === VERTICAL_GROUP_ORIENTATION && !!groupIndex) {
     return groupIndex.toString();
   }
 
@@ -76,12 +76,12 @@ export const getIsGroupedAllDayPanel = (
   return isAllDayPanel && isGroupedAllDayPanel;
 };
 
-export const isVerticalGroupOrientation = (
+export const isVerticalGroupingApplied = (
+  groups: Group[],
   groupOrientation?: GroupOrientation,
-  groups?: Group[],
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && (!groups || !!groups.length); // TODO: make groups required (see function below)
+  && !!groups.length;
 
-export const isHorizontalGroupOrientation = (
+export const isHorizontalGroupingApplied = (
   groups: Group[], groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
