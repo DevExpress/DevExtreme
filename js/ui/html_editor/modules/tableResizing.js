@@ -406,7 +406,7 @@ export default class TableResizingModule extends BaseModule {
                     nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
                 }
 
-                if(this._nextLineSize) {
+                if(this._nextLineSize && nextColumnNewSize > 0) {
 
                     $nextLineElements.each((i, element) => {
                         $(element).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
@@ -415,11 +415,15 @@ export default class TableResizingModule extends BaseModule {
             }
         } else {
             const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
-            if(currentLineNewSize >= this._minRowHeight) {
-                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-            }
+
 
             $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
+
+            if(Math.abs($determinantElements.eq(index).outerHeight() - newHeight) < 1) {
+                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
+            } else {
+                this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
+            }
         }
 
         this._updateFramePosition(frame.$table, frame.$frame);
