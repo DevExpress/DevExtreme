@@ -395,8 +395,9 @@ export default class TableResizingModule extends BaseModule {
                 });
 
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-                const shouldApplyNewValue = ($($lineElements.eq(0)).outerWidth() - currentLineNewSize < 5);
 
+                const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
+                const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < 5 : realWidthDiff > -5;
 
                 if(!shouldApplyNewValue) {
                     each($lineElements, (i, element) => {
@@ -415,7 +416,6 @@ export default class TableResizingModule extends BaseModule {
             }
         } else {
             const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
-
 
             $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
 
@@ -461,7 +461,7 @@ export default class TableResizingModule extends BaseModule {
         const directionClass = options.direction === 'vertical' ? 'dx-htmleditor-highlighted-row' : 'dx-htmleditor-highlighted-column';
 
         this._$highlightedElement?.remove();
-        this._$highlightedElement = $('<div>').addClass(`${directionClass}`).insertAfter(options.lineSeparator);
+        this._$highlightedElement = $('<div>').addClass(`${directionClass}`).insertAfter($(options.lineSeparator));
 
         const config = {
             contentTemplate: null,
