@@ -4188,19 +4188,4 @@ QUnit.module('resizeObserver integraion', {
             done();
         });
     });
-
-    test('geometry should not be rerendered on overlay close', function(assert) {
-        const done = assert.async();
-        const positionedHandlerStub = sinon.stub();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-
-        overlay.on('positioned', positionedHandlerStub);
-
-        setTimeout(() => {
-            assert.ok(positionedHandlerStub.notCalled);
-            done();
-        });
-    });
 });
