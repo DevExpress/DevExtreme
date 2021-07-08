@@ -40,6 +40,10 @@ class SchedulerAgenda extends WorkSpace {
 
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
+    getStartViewDate() {
+        return this._startViewDate;
+    }
+
     _init() {
         super._init();
         this._activeStateUnit = undefined;

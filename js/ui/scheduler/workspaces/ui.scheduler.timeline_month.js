@@ -4,7 +4,6 @@ import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { calculateCellIndex, getViewStartByOptions } from './utils/month';
-import { calculateStartViewDate } from './utils/timeline_month';
 import { formatWeekdayAndDay } from './utils/base';
 import { VIEWS } from '../constants';
 
@@ -67,15 +66,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         }
 
         return cellCount;
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this.option('intervalCount'),
-        );
     }
 
     _getFormat() {
