@@ -19,6 +19,8 @@ export class ViewDataGenerator {
             totalCellCount,
         } = options;
 
+        this._setVisibilityDates(options);
+
         let viewDataMap = [];
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow);
         const viewCellsData = this._generateViewCellsData(options, rowCountInGroup);
@@ -523,4 +525,6 @@ export class ViewDataGenerator {
         }
         return this._interval;
     }
+
+    _setVisibilityDates() {}
 }

@@ -605,8 +605,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
     }
 
-    _setVisibilityDates() {}
-
     onDataSourceChanged() {
     }
 
@@ -661,11 +659,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDayHour: this.option('startDayHour'),
             cellCountInDay: this._getCellCountInDay(),
             cellDuration: this.getCellDuration(),
-            minVisibleDate: this._minVisibleDate,
-            maxVisibleDate: this._maxVisibleDate,
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
             hoursInterval: this.option('hoursInterval'),
+            startDate: this.option('startDate'),
+            currentDate: this.option('currentDate'),
             ...this._getDateGenerationOptions(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -2718,7 +2716,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._startViewDate = this._calculateStartViewDate();
         this._hiddenInterval = this._getHiddenInterval();
-        this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {
