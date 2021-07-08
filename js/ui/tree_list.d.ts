@@ -844,12 +844,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type object
      */
     selection?: Selection;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-     toolbar?: dxTreeListToolbar;
 }
 
 /**
