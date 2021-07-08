@@ -4,6 +4,11 @@ import {
 
 export interface EventExtension { }
 export interface EventType { }
+
+interface EventType extends JQueryEventObject {
+  cancel?: boolean;
+}
+
 /**
  * @docid
  * @type EventObject|jQuery.Event
