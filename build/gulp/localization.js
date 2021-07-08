@@ -152,7 +152,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
             }))
             .pipe(lint({
                 fix: true,
-                configFile: '.eslintrc'
+                configFile: '.eslintrc.js'
             }))
             .pipe(lint.format())
             .pipe(rename(source.filename))

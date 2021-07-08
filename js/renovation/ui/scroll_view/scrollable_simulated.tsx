@@ -94,8 +94,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     onReachBottom, onRelease, onPullDown, onScroll, onEnd, direction, topPocketState,
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
-    forceUpdateHScrollbarLocation, forceUpdateVScrollbarLocation,
     onVisibilityChangeHandler,
+    lock, unlock,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -178,7 +178,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
-              forceUpdateScrollbarLocation={forceUpdateHScrollbarLocation}
               rtlEnabled={rtlEnabled}
             />
           )}
@@ -200,7 +199,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
-              forceUpdateScrollbarLocation={forceUpdateVScrollbarLocation}
 
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
@@ -213,6 +211,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               reachBottomEnabled={reachBottomEnabled}
               pocketState={topPocketState}
               pocketStateChange={pocketStateChange}
+
+              onLock={lock}
+              onUnlock={unlock}
             />
           )}
         </div>
@@ -248,14 +249,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Mutable()
   endActionDirections:
   { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
-
-  @Mutable() prevContainerClientWidth = 0;
-
-  @Mutable() prevContainerClientHeight = 0;
-
-  @Mutable() prevContentClientWidth = 0;
-
-  @Mutable() prevContentClientHeight = 0;
 
   @Mutable() tabWasPressed = false;
 
@@ -315,10 +308,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() hContentTranslateOffset = 0;
 
-  @InternalState() forceUpdateHScrollbarLocation = false;
-
-  @InternalState() forceUpdateVScrollbarLocation = false;
-
   @Method()
   content(): HTMLDivElement {
     if (this.props.needScrollViewContentWrapper) {
@@ -334,12 +323,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
-  update(): void {
-    this.updateSizes();
-    this.onUpdated();
-  }
-
-  @Method()
   refresh(): void {
     this.pocketStateChange(TopPocketState.STATE_READY);
     this.startLoading();
@@ -348,6 +331,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   release(): void {
+    this.updateSizes();
     this.eventHandler((scrollbar) => scrollbar.releaseHandler());
   }
 
@@ -359,7 +343,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return;
     }
 
-    this.update();
+    this.updateHandler();
 
     // TODO: try to simplify it
     if (this.direction.isVertical) {
@@ -578,7 +562,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return false;
     }
 
-    this.update();
+    this.updateHandler();
 
     return this.moveIsAllowed(event);
   }
@@ -636,6 +620,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scrollableOffsetTop = this.scrollableOffset.top;
 
     this.updateSizes();
+  }
+
+  updateHandler(): void {
+    this.updateSizes();
+    this.onUpdated();
   }
 
   handleScroll(): void {
@@ -744,9 +733,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     } else {
       this.vScrollLocation = location;
     }
-
-    this.forceUpdateHScrollbarLocation = false;
-    this.forceUpdateVScrollbarLocation = false;
   }
 
   onScroll(): void {
@@ -810,7 +796,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar) => scrollbar.endHandler(event.velocity));
+    this.eventHandler((scrollbar) => scrollbar.endHandler(event.velocity, true));
   }
 
   handleStop(): void {
@@ -820,7 +806,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
+    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }, false));
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
@@ -1127,10 +1113,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
   }
 
-  updateHandler(): void {
-    this.update();
-  }
-
   onVisibilityChangeHandler(visible: boolean): void {
     if (visible) {
       this.updateHandler();
@@ -1173,24 +1155,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     if (isDefined(bottomPocketEl)) {
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
-    }
-
-    if (this.prevContentClientWidth !== this.contentClientWidth
-      || this.prevContainerClientWidth !== this.containerClientWidth) {
-      this.forceUpdateHScrollbarLocation = true;
-      this.prevContentClientWidth = this.contentClientWidth;
-      this.prevContainerClientWidth = this.containerClientWidth;
-      this.hScrollLocation = -containerEl.scrollLeft;
-    }
-    if (this.prevContentClientHeight !== this.contentClientHeight
-      || this.prevContainerClientHeight !== this.containerClientHeight) {
-      this.forceUpdateVScrollbarLocation = true;
-      this.prevContentClientHeight = this.contentClientHeight;
-      this.prevContainerClientHeight = this.containerClientHeight;
-      /* istanbul ignore next */
-      if (this.vScrollLocation <= 0) {
-        this.vScrollLocation = -containerEl.scrollTop;
-      }
     }
 
     this.contentPaddingBottom = getElementPaddingBottom(this.contentRef.current);
@@ -1264,7 +1228,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-renovated': true,
+      'dx-scrollable': true,
       [SCROLLABLE_SIMULATED_CLASS]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,

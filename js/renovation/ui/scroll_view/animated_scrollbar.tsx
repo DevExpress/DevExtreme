@@ -41,11 +41,12 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollableOffset, contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled,
       forceGeneratePockets, pullDownEnabled, reachBottomEnabled,
-      scrollLocation, forceUpdateScrollbarLocation, contentTranslateOffsetChange,
-      scrollLocationChange, isScrollableHovered, topPocketSize, bottomPocketSize,
+      scrollLocation, scrollLocationChange, contentTranslateOffsetChange,
+      isScrollableHovered, topPocketSize, bottomPocketSize,
       onPullDown, onRelease, onReachBottom, onScroll, onEnd,
       pocketState, pocketStateChange,
       rtlEnabled, contentPaddingBottom,
+      onLock, onUnlock,
     },
   } = viewModel;
 
@@ -65,7 +66,6 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
-      forceUpdateScrollbarLocation={forceUpdateScrollbarLocation}
       onScroll={onScroll}
       onEnd={onEnd}
       // Horizontal
@@ -82,6 +82,9 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       reachBottomEnabled={reachBottomEnabled}
       pocketState={pocketState}
       pocketStateChange={pocketStateChange}
+
+      onLock={onLock}
+      onUnlock={onUnlock}
     />
   );
 };
@@ -160,8 +163,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  endHandler(velocity: { x: number; y: number }): void {
-    this.scrollbar.endHandler(velocity);
+  endHandler(velocity: { x: number; y: number }, needRiseEnd: boolean): void {
+    this.scrollbar.endHandler(velocity, needRiseEnd);
   }
 
   @Method()
@@ -227,7 +230,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   /* istanbul ignore next */
   getStepAnimationFrame(): number {
-    return requestAnimationFrame(this.stepCore);
+    return requestAnimationFrame(this.stepCore.bind(this));
   }
 
   step(): void {
@@ -253,11 +256,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
       this.moveTo(boundaryLocation);
 
-      if (this.props.scrollLocation === boundaryLocation) {
-        this.scrollComplete();
-      }
+      // if (this.props.scrollLocation === boundaryLocation) {
+      this.stopAnimator('bounce');
+      // }
     } else {
-      this.scrollComplete();
+      this.stopAnimator('inertia');
     }
   }
 
@@ -319,8 +322,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.scrollbar.moveTo(location);
   }
 
-  scrollComplete(): void {
-    this.scrollbar.scrollComplete();
+  stopAnimator(animator: string): void {
+    this.scrollbar.stopAnimator(animator);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

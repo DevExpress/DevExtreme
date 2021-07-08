@@ -23,9 +23,9 @@ import {
     NativeEventInfo
 } from '../../events/index';
 
-import {
-    format
-} from '../../ui/widget/ui.widget';
+import { 
+    Format
+  } from '../../localization';
 
 import {
     basePointObject,
@@ -274,7 +274,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @extends CommonVizFormat
      * @public
      */
-    argumentFormat?: format;
+    argumentFormat?: Format;
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
      * @type_function_param1 pointInfo:object

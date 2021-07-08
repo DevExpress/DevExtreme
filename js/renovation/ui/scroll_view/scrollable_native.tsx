@@ -268,12 +268,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
-  update(): void {
-    this.updateSizes();
-    this.onUpdated();
-  }
-
-  @Method()
   refresh(): void {
     this.setPocketState(TopPocketState.STATE_READY);
 
@@ -526,6 +520,11 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return isDefined(this.tryGetAllowedDirection());
   }
 
+  updateHandler(): void {
+    this.updateSizes();
+    this.onUpdated();
+  }
+
   clearReleaseTimer(): void {
     clearTimeout(this.releaseTimer as number);
     this.releaseTimer = undefined;
@@ -648,10 +647,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   get fullScrollInactiveProp(): 'scrollLeft' | 'scrollTop' {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollTop' : 'scrollLeft';
-  }
-
-  updateHandler(): void { // TODO: update if simulatedScrollbars are using
-    this.update();
   }
 
   updateSizes(): void {
@@ -921,7 +916,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     } = this.props;
 
     const classesMap = {
-      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform} dx-scrollable-renovated`]: true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform}`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar !== 'never' && this.useSimulatedScrollbar,

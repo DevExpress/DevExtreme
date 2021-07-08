@@ -26,8 +26,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -822,7 +822,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @docid dxVectorMapOptions.tooltip.format
      * @hidden
      */
-    format?: format;
+    format?: Format;
 }
 /**
  * @docid

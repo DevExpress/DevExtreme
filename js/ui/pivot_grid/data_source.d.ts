@@ -12,9 +12,9 @@ import {
     dxPivotGridSummaryCell
 } from '../pivot_grid';
 
-import {
-    format
-} from '../widget/ui.widget';
+import { 
+    Format
+  } from '../../localization';
 
 import XmlaStore, {
     XmlaStoreOptions
@@ -219,7 +219,7 @@ export interface PivotGridDataSourceField {
      * @default ''
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupIndex
      * @default undefined
@@ -499,7 +499,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -508,7 +508,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -517,7 +517,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -525,7 +525,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(events: any): this;
+    on(events: {[key in EventName]?: Function}): this;
     /**
      * @docid
      * @publicName reload()
@@ -548,3 +548,5 @@ export default class PivotGridDataSource {
      */
     state(state: any): void;
 }
+
+type EventName = 'changed' | 'fieldsPrepared' | 'loadError' | 'loadingChanged';

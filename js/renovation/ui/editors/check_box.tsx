@@ -18,7 +18,7 @@ import { Widget } from '../common/widget';
 import BaseComponent from '../../component_wrapper/editors/check_box';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
-import { EffectReturn } from '../../utils/effect_return';
+import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {

@@ -231,7 +231,11 @@ export const masterDetailModule = {
                 },
                 _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
                     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
-                    if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                    const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
+                    const rowsNotEqual = $rows?.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height();
+                    const tablesNotEqual = $tables?.length === 2 && $tables.eq(0).height() !== $tables.eq(1).height();
+
+                    if(rowsNotEqual || tablesNotEqual) {
                         const detailElementWidth = $detailElement.width();
                         return masterDataGrid.updateDimensions().done(() => {
                             const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;

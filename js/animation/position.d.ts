@@ -6,8 +6,9 @@ import {
  * @docid
  * @namespace DevExpress
  * @type object
+ * @public
  */
-export interface positionConfig {
+export interface PositionConfig {
     /**
      * @docid
      * @type Enums.PositionAlignment|object
@@ -104,3 +105,9 @@ export interface positionConfig {
       y?: number
     };
 }
+
+/**
+ * @public
+ * @deprecated Use the PositionConfig type instead
+ */
+export interface positionConfig extends PositionConfig { }

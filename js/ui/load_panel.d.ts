@@ -10,11 +10,11 @@ import {
 } from '../events/index';
 
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import dxOverlay, {
@@ -113,10 +113,10 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     message?: string;
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default 'transparent'
@@ -152,13 +152,13 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
      * @default null
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
      * @default null
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

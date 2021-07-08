@@ -55,6 +55,8 @@ import {
     RowDraggingTemplateDataModel
 } from './data_grid';
 
+import { dxToolbarItem } from './toolbar';
+
 import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
@@ -1182,6 +1184,36 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
+}
+
+type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxTreeListToolbarItem extends dxToolbarItem {
+  /**
+   * @docid
+   * @type Enums.TreeListToolbarItemName|string
+   * @public
+  */
+  name?: dxTreeListDefaultToolbarItemName | string
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxTreeListToolbar {
+  /**
+   * @docid
+   * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItemName>
+   * @public
+   */
+  items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
 }
 
 /**

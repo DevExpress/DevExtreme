@@ -2,6 +2,20 @@ import {
     DxPromise
 } from '../../core/utils/deferred';
 
+export interface ODataRequestOptions {
+    accepts: any;
+    async: boolean;
+    contentType: string | boolean;
+    data: any;
+    dataType: string;
+    headers: any;
+    jsonp?: boolean;
+    method: string;
+    timeout: number;
+    url: string;
+    xhrFields: any;
+}
+
 /** @namespace DevExpress.data */
 export interface ODataContextOptions {
     /**
@@ -16,7 +30,7 @@ export interface ODataContextOptions {
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
     /**
      * @docid
      * @public
@@ -35,7 +49,7 @@ export interface ODataContextOptions {
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @public
@@ -88,11 +102,11 @@ export default class ODataContext {
      * @publicName invoke(operationName, params, httpMethod)
      * @param1 operationName:string
      * @param2 params:object
-     * @param3 httpMethod:object
+     * @param3 httpMethod:string
      * @return Promise<void>
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): DxPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)
@@ -103,3 +117,5 @@ export default class ODataContext {
      */
     objectLink(entityAlias: string, key: any | string | number): any;
 }
+
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';

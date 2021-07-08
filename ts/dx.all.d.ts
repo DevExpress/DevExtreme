@@ -510,76 +510,53 @@ declare global {
 }
 declare module DevExpress {
   /**
-   * [descr:fx]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * [descr:AnimationConfig]
    */
-  export const fx: {
+  export type AnimationConfig = {
     /**
-     * [descr:fx.animate(element, config)]
+     * [descr:AnimationConfig.complete]
      */
-    animate(
-      element: Element,
-      config: animationConfig
-    ): DevExpress.core.utils.DxPromise<void>;
-
+    complete?: (
+      $element: DevExpress.core.DxElement,
+      config: AnimationConfig
+    ) => void;
     /**
-     * [descr:fx.isAnimating(element)]
-     */
-    isAnimating(element: Element): boolean;
-
-    /**
-     * [descr:fx.stop(element, jumpToEnd)]
-     */
-    stop(element: Element, jumpToEnd: boolean): void;
-  };
-  /**
-    * [descr:devices]
-    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-    */
-   export const devices: DevicesObject;
-  /**
-   * [descr:animationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface animationConfig {
-    /**
-     * [descr:animationConfig.complete]
-     */
-    complete?: ($element: DevExpress.core.DxElement, config: any) => void;
-    /**
-     * [descr:animationConfig.delay]
+     * [descr:AnimationConfig.delay]
      */
     delay?: number;
     /**
-     * [descr:animationConfig.direction]
+     * [descr:AnimationConfig.direction]
      */
     direction?: 'bottom' | 'left' | 'right' | 'top';
     /**
-     * [descr:animationConfig.duration]
+     * [descr:AnimationConfig.duration]
      */
     duration?: number;
     /**
-     * [descr:animationConfig.easing]
+     * [descr:AnimationConfig.easing]
      */
     easing?: string;
     /**
-     * [descr:animationConfig.from]
+     * [descr:AnimationConfig.from]
      */
-    from?: number | string | any;
+    from?: DevExpress.animation.AnimationState;
     /**
-     * [descr:animationConfig.staggerDelay]
+     * [descr:AnimationConfig.staggerDelay]
      */
     staggerDelay?: number;
     /**
-     * [descr:animationConfig.start]
+     * [descr:AnimationConfig.start]
      */
-    start?: ($element: DevExpress.core.DxElement, config: any) => void;
+    start?: (
+      $element: DevExpress.core.DxElement,
+      config: AnimationConfig
+    ) => void;
     /**
-     * [descr:animationConfig.to]
+     * [descr:AnimationConfig.to]
      */
-    to?: number | string | any;
+    to?: DevExpress.animation.AnimationState;
     /**
-     * [descr:animationConfig.type]
+     * [descr:AnimationConfig.type]
      */
     type?:
       | 'css'
@@ -590,11 +567,11 @@ declare module DevExpress {
       | 'slide'
       | 'slideIn'
       | 'slideOut';
-  }
+  };
   /**
    * [descr:animationPresets]
    */
-  export class animationPresets {
+  export const animationPresets: {
     /**
      * [descr:animationPresets.applyChanges()]
      */
@@ -610,7 +587,7 @@ declare module DevExpress {
     /**
      * [descr:animationPresets.getPreset(name)]
      */
-    getPreset(name: string): any;
+    getPreset(name: string): AnimationConfig;
     /**
      * [descr:animationPresets.registerDefaultPresets()]
      */
@@ -620,13 +597,13 @@ declare module DevExpress {
      */
     registerPreset(
       name: string,
-      config: { animation?: animationConfig; device?: Device }
+      config: { animation: AnimationConfig; device?: Device }
     ): void;
     /**
      * [descr:animationPresets.resetToDefaults()]
      */
     resetToDefaults(): void;
-  }
+  };
   /**
    * [descr:Component]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -660,7 +637,7 @@ declare module DevExpress {
     /**
      * [descr:Component.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key: string]: Function }): this;
     /**
      * [descr:Component.option()]
      */
@@ -777,10 +754,15 @@ declare module DevExpress {
     version?: Array<number>;
   }
   /**
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
+  /**
    * [descr:DevicesObject]
    */
   export class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
      * [descr:DevicesObject.current()]
      */
@@ -792,23 +774,23 @@ declare module DevExpress {
     /**
      * [descr:DevicesObject.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.core.EventName): this;
     /**
      * [descr:DevicesObject.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: DevExpress.core.EventName, eventHandler: Function): this;
     /**
      * [descr:DevicesObject.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: DevExpress.core.EventName, eventHandler: Function): this;
     /**
      * [descr:DevicesObject.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key in DevExpress.core.EventName]?: Function }): this;
     /**
      * [descr:DevicesObject.orientation()]
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
      * [descr:DevicesObject.real()]
      */
@@ -829,10 +811,9 @@ declare module DevExpress {
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
-    static defaultOptions(rule: {
-      device?: Device | Array<Device> | Function;
-      options?: any;
-    }): void;
+    static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
+      rule: DevExpress.core.Rule<TProperties>
+    ): void;
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -877,11 +858,11 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.bindingOptions]
      */
-    bindingOptions?: any;
+    bindingOptions?: { [key: string]: any };
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
-    elementAttr?: any;
+    elementAttr?: { [key: string]: any };
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -985,6 +966,58 @@ declare module DevExpress {
     shadingColor?: string;
   }
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type ExternalFormat = any;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface FormatObject {
+    /**
+     * [descr:Format.currency]
+     */
+    currency?: string;
+    /**
+     * [descr:Format.formatter]
+     */
+    formatter?: (value: number | Date) => string;
+    /**
+     * [descr:Format.parser]
+     */
+    parser?: (value: string) => number | Date;
+    /**
+     * [descr:Format.precision]
+     */
+    precision?: number;
+    /**
+     * [descr:Format.type]
+     */
+    type?: PredefinedFormat;
+  }
+  /**
+   * [descr:fx]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export const fx: {
+    /**
+     * [descr:fx.animate(element, config)]
+     */
+    animate(
+      element: Element,
+      config: AnimationConfig
+    ): DevExpress.core.utils.DxPromise<void>;
+
+    /**
+     * [descr:fx.isAnimating(element)]
+     */
+    isAnimating(element: Element): boolean;
+
+    /**
+     * [descr:fx.stop(element, jumpToEnd)]
+     */
+    stop(element: Element, jumpToEnd: boolean): void;
+  };
+  /**
    * [descr:globalConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1039,7 +1072,7 @@ declare module DevExpress {
         | 'right bottom'
         | 'right top'
         | 'top'
-        | positionConfig
+        | PositionConfig
         | Function;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.shading]
@@ -1081,12 +1114,11 @@ declare module DevExpress {
    */
   export function hideTopOverlay(): boolean;
   /**
-   * [descr:positionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * [descr:PositionConfig]
    */
-  export interface positionConfig {
+  export interface PositionConfig {
     /**
-     * [descr:positionConfig.at]
+     * [descr:PositionConfig.at]
      */
     at?:
       | 'bottom'
@@ -1100,35 +1132,35 @@ declare module DevExpress {
       | 'top'
       | {
           /**
-           * [descr:positionConfig.at.x]
+           * [descr:PositionConfig.at.x]
            */
           x?: 'center' | 'left' | 'right';
           /**
-           * [descr:positionConfig.at.y]
+           * [descr:PositionConfig.at.y]
            */
           y?: 'bottom' | 'center' | 'top';
         };
     /**
-     * [descr:positionConfig.boundary]
+     * [descr:PositionConfig.boundary]
      */
     boundary?: string | DevExpress.core.UserDefinedElement | Window;
     /**
-     * [descr:positionConfig.boundaryOffset]
+     * [descr:PositionConfig.boundaryOffset]
      */
     boundaryOffset?:
       | string
       | {
           /**
-           * [descr:positionConfig.boundaryOffset.x]
+           * [descr:PositionConfig.boundaryOffset.x]
            */
           x?: number;
           /**
-           * [descr:positionConfig.boundaryOffset.y]
+           * [descr:PositionConfig.boundaryOffset.y]
            */
           y?: number;
         };
     /**
-     * [descr:positionConfig.collision]
+     * [descr:PositionConfig.collision]
      */
     collision?:
       | 'fit'
@@ -1147,16 +1179,16 @@ declare module DevExpress {
       | 'none flipfit'
       | {
           /**
-           * [descr:positionConfig.collision.x]
+           * [descr:PositionConfig.collision.x]
            */
           x?: 'fit' | 'flip' | 'flipfit' | 'none';
           /**
-           * [descr:positionConfig.collision.y]
+           * [descr:PositionConfig.collision.y]
            */
           y?: 'fit' | 'flip' | 'flipfit' | 'none';
         };
     /**
-     * [descr:positionConfig.my]
+     * [descr:PositionConfig.my]
      */
     my?:
       | 'bottom'
@@ -1170,47 +1202,84 @@ declare module DevExpress {
       | 'top'
       | {
           /**
-           * [descr:positionConfig.my.x]
+           * [descr:PositionConfig.my.x]
            */
           x?: 'center' | 'left' | 'right';
           /**
-           * [descr:positionConfig.my.y]
+           * [descr:PositionConfig.my.y]
            */
           y?: 'bottom' | 'center' | 'top';
         };
     /**
-     * [descr:positionConfig.of]
+     * [descr:PositionConfig.of]
      */
     of?: string | DevExpress.core.UserDefinedElement | Window;
     /**
-     * [descr:positionConfig.offset]
+     * [descr:PositionConfig.offset]
      */
     offset?:
       | string
       | {
           /**
-           * [descr:positionConfig.offset.x]
+           * [descr:PositionConfig.offset.x]
            */
           x?: number;
           /**
-           * [descr:positionConfig.offset.y]
+           * [descr:PositionConfig.offset.y]
            */
           y?: number;
         };
   }
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type PredefinedFormat =
+    | 'billions'
+    | 'currency'
+    | 'day'
+    | 'decimal'
+    | 'exponential'
+    | 'fixedPoint'
+    | 'largeNumber'
+    | 'longDate'
+    | 'longTime'
+    | 'millions'
+    | 'millisecond'
+    | 'month'
+    | 'monthAndDay'
+    | 'monthAndYear'
+    | 'percent'
+    | 'quarter'
+    | 'quarterAndYear'
+    | 'shortDate'
+    | 'shortTime'
+    | 'thousands'
+    | 'trillions'
+    | 'year'
+    | 'dayOfWeek'
+    | 'hour'
+    | 'longDateLongTime'
+    | 'minute'
+    | 'second'
+    | 'shortDateShortTime';
+  /**
    * [descr:registerComponent(name, componentClass)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export function registerComponent(name: string, componentClass: any): void;
+  export function registerComponent<TComponent>(
+    name: string,
+    componentClass: DevExpress.core.ComponentFactory<TComponent>
+  ): void;
   /**
    * [descr:registerComponent(name, namespace, componentClass)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export function registerComponent(
+  export function registerComponent<TComponent>(
     name: string,
-    namespace: any,
-    componentClass: any
+    namespace: {
+      [key: string]: DevExpress.core.ComponentFactory<DOMComponent>;
+    },
+    componentClass: DevExpress.core.ComponentFactory<TComponent>
   ): void;
   /**
    * [descr:setTemplateEngine(name)]
@@ -1232,14 +1301,14 @@ declare module DevExpress {
      */
     enter(
       elements: DevExpress.core.UserDefinedElementsArray,
-      animation: animationConfig | string
+      animation: AnimationConfig | string
     ): void;
     /**
      * [descr:TransitionExecutor.leave(elements, animation)]
      */
     leave(
       elements: DevExpress.core.UserDefinedElementsArray,
-      animation: animationConfig | string
+      animation: AnimationConfig | string
     ): void;
     /**
      * [descr:TransitionExecutor.reset()]
@@ -1298,6 +1367,52 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.animation {
+  /**
+   * @deprecated Use the AnimationConfig type instead
+   */
+  export type animationConfig = AnimationConfig;
+  /**
+   * [descr:AnimationState]
+   */
+  export type AnimationState =
+    | string
+    | number
+    | {
+        /**
+         * [descr:AnimationState.opacity]
+         */
+        opacity: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.scale]
+         */
+        scale: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.position]
+         */
+        position: PositionConfig;
+      }
+    | {
+        /**
+         * [descr:AnimationState.left]
+         */
+        left: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.top]
+         */
+        top: number;
+      };
+  /**
+   * @deprecated Use the PositionConfig type instead
+   */
+  export interface positionConfig extends PositionConfig {}
+}
 declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1326,6 +1441,13 @@ declare module DevExpress.core {
     _setOptionsByReference(): void;
     _setDeprecatedOptions(): void;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type ComponentFactory<TComponent> = {
+    new (): TComponent;
+    getInstance(element: UserDefinedElement): TComponent;
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1385,6 +1507,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
+  type EventName = 'orientationChanged';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
   export class FunctionTemplate {
     render(template: {
       container: unknown;
@@ -1400,6 +1526,19 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Rule<T> = {
+    device: ((device: Device) => boolean) | Device | Device[];
+    options: RecursivePartial<T>;
+  };
   /**
    * [descr:template]
    */
@@ -1451,8 +1590,11 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore extends Store {
-    constructor(options?: ArrayStoreOptions);
+  export class ArrayStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: ArrayStoreOptions<TKey, TValue>);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1460,26 +1602,36 @@ declare module DevExpress.data {
     /**
      * [descr:ArrayStore.createQuery()]
      */
-    createQuery(): any;
+    createQuery(): Query;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+  export interface ArrayStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
-    data?: Array<any>;
+    data?: Array<TValue>;
   }
   /**
    * [descr:Utils.base64_encode(input)]
    */
   export function base64_encode(input: string | Array<number>): string;
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type BaseGroupDescriptor<T> = {
+    selector: KeySelector<T>;
+  };
+  /**
    * [descr:CustomStore]
    */
-  export class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions);
+  export class CustomStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: CustomStoreOptions<TKey, TValue>);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
@@ -1488,11 +1640,12 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+  export interface CustomStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
-    byKey?: (key: any | string | number) => PromiseLike<any>;
+    byKey?: (key: TKey) => PromiseLike<TValue>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
      */
@@ -1500,11 +1653,13 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.insert]
      */
-    insert?: (values: any) => PromiseLike<any>;
+    insert?: (values: TValue) => PromiseLike<TValue>;
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (options: LoadOptions) => PromiseLike<any> | Array<any>;
+    load?: (
+      options: LoadOptions<TValue>
+    ) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1512,18 +1667,18 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.remove]
      */
-    remove?: (key: any | string | number) => PromiseLike<void>;
+    remove?: (key: TKey) => PromiseLike<void>;
     /**
      * [descr:CustomStoreOptions.totalCount]
      */
     totalCount?: (loadOptions: {
-      filter?: any;
-      group?: any;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     }) => PromiseLike<number>;
     /**
      * [descr:CustomStoreOptions.update]
      */
-    update?: (key: any | string | number, values: any) => PromiseLike<any>;
+    update?: (key: TKey, values: TValue) => PromiseLike<any>;
     /**
      * [descr:CustomStoreOptions.useDefaultSearch]
      */
@@ -1532,15 +1687,19 @@ declare module DevExpress.data {
   /**
    * [descr:DataSource]
    */
-  export class DataSource {
-    constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
-    constructor(store: Store);
+  export class DataSource<TKey = any, TValue = any> {
+    constructor(data: Array<TValue>);
+    constructor(
+      options:
+        | CustomStoreOptions<TKey, TValue>
+        | DataSourceOptions<TKey, any, TValue, any>
+    );
+    constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
      */
-    cancel(): boolean;
+    cancel(operationId: number): boolean;
     /**
      * [descr:DataSource.dispose()]
      */
@@ -1548,19 +1707,21 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.filter()]
      */
-    filter(): any;
+    filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:DataSource.filter(filterExpr)]
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
      * [descr:DataSource.group()]
      */
-    group(): any;
+    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * [descr:DataSource.group(groupExpr)]
      */
-    group(groupExpr: any): void;
+    group(
+      groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.isLastPage()]
      */
@@ -1580,7 +1741,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.key()]
      */
-    key(): any & string & number;
+    key(): string | Array<string>;
     /**
      * [descr:DataSource.load()]
      */
@@ -1588,23 +1749,31 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): any;
+    loadOptions(): LoadOptions<TValue>;
     /**
      * [descr:DataSource.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.DataSource.EventName): this;
     /**
      * [descr:DataSource.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.DataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:DataSource.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.DataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:DataSource.on(events)]
      */
-    on(events: any): this;
+    on(
+      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
+    ): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -1668,32 +1837,47 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.select()]
      */
-    select(): any;
+    select(): SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * [descr:DataSource.select(expr)]
      */
-    select(expr: any): void;
+    select(
+      expr: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.sort()]
      */
-    sort(): any;
+    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * [descr:DataSource.sort(sortExpr)]
      */
-    sort(sortExpr: any): void;
+    sort(
+      sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>
+    ): void;
     /**
      * [descr:DataSource.store()]
      */
-    store(): any;
+    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
     /**
      * [descr:DataSource.totalCount()]
      */
     totalCount(): number;
   }
+  module DataSource {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type EventName = 'changed' | 'loadError' | 'loadingChanged';
+  }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface DataSourceOptions {
+  export interface DataSourceOptions<
+    TKey = any,
+    TSourceValue = any,
+    TValue = TSourceValue,
+    TMappedValue = TValue
+  > {
     /**
      * [descr:DataSourceOptions.customQueryParams]
      */
@@ -1705,23 +1889,23 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.filter]
      */
-    filter?: string | Array<any> | Function;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:DataSourceOptions.group]
      */
-    group?: string | Array<any> | Function;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.map]
      */
-    map?: (dataItem: any) => any;
+    map?: (dataItem: TSourceValue) => TMappedValue;
     /**
      * [descr:DataSourceOptions.onChanged]
      */
-    onChanged?: (e: { changes?: Array<any> }) => void;
+    onChanged?: (e: { readonly changes?: Array<TMappedValue> }) => void;
     /**
      * [descr:DataSourceOptions.onLoadError]
      */
-    onLoadError?: (error: { message?: string }) => void;
+    onLoadError?: (error: { readonly message?: string }) => void;
     /**
      * [descr:DataSourceOptions.onLoadingChanged]
      */
@@ -1737,7 +1921,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.postProcess]
      */
-    postProcess?: (data: Array<any>) => Array<any>;
+    postProcess?: (data: Array<TMappedValue>) => Array<TValue>;
     /**
      * [descr:DataSourceOptions.pushAggregationTimeout]
      */
@@ -1757,7 +1941,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.searchOperation]
      */
-    searchOperation?: string;
+    searchOperation?: SearchOperation;
     /**
      * [descr:DataSourceOptions.searchValue]
      */
@@ -1765,15 +1949,18 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.select]
      */
-    select?: string | Array<any> | Function;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.sort]
      */
-    sort?: string | Array<any> | Function;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * [descr:DataSourceOptions.store]
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?:
+      | Store<TKey, TSourceValue>
+      | StoreOptions<TKey, TSourceValue>
+      | Array<TSourceValue>;
   }
   /**
    * [descr:EdmLiteral]
@@ -1791,6 +1978,18 @@ declare module DevExpress.data {
    */
   export function errorHandler(e: Error): void;
   /**
+   * [descr:FilterDescriptor]
+   */
+  export type FilterDescriptor = any;
+  /**
+   * [descr:GroupDescriptor]
+   */
+  export type GroupDescriptor<T> =
+    | KeySelector<T>
+    | (BaseGroupDescriptor<T> & {
+        desc?: boolean;
+      });
+  /**
    * [descr:Guid]
    */
   export class Guid {
@@ -1806,10 +2005,14 @@ declare module DevExpress.data {
     valueOf(): string;
   }
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  type KeySelector<T> = string | ((source: T) => string);
+  /**
    * [descr:LoadOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LoadOptions {
+  export interface LoadOptions<T = any> {
     /**
      * [descr:LoadOptions.customQueryParams]
      */
@@ -1817,19 +2020,19 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.expand]
      */
-    expand?: any;
+    expand?: Array<string>;
     /**
      * [descr:LoadOptions.filter]
      */
-    filter?: any;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * [descr:LoadOptions.group]
      */
-    group?: any;
+    group?: GroupDescriptor<T> | Array<GroupDescriptor<T>>;
     /**
      * [descr:LoadOptions.groupSummary]
      */
-    groupSummary?: any;
+    groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * [descr:LoadOptions.parentIds]
      */
@@ -1849,7 +2052,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.searchOperation]
      */
-    searchOperation?: string;
+    searchOperation?: SearchOperation;
     /**
      * [descr:LoadOptions.searchValue]
      */
@@ -1857,7 +2060,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.select]
      */
-    select?: any;
+    select?: SelectDescriptor<T> | Array<SelectDescriptor<T>>;
     /**
      * [descr:LoadOptions.skip]
      */
@@ -1865,7 +2068,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.sort]
      */
-    sort?: any;
+    sort?: SortDescriptor<T> | Array<SortDescriptor<T>>;
     /**
      * [descr:LoadOptions.take]
      */
@@ -1873,7 +2076,7 @@ declare module DevExpress.data {
     /**
      * [descr:LoadOptions.totalSummary]
      */
-    totalSummary?: any;
+    totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
      * [descr:LoadOptions.userData]
      */
@@ -1924,12 +2127,34 @@ declare module DevExpress.data {
     invoke(
       operationName: string,
       params: any,
-      httpMethod: any
+      httpMethod: DevExpress.data.ODataContext.HttpMethod
     ): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:ODataContext.objectLink(entityAlias, key)]
      */
     objectLink(entityAlias: string, key: any | string | number): any;
+  }
+  module ODataContext {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface ODataRequestOptions {
+      accepts: any;
+      async: boolean;
+      contentType: string | boolean;
+      data: any;
+      dataType: string;
+      headers: any;
+      jsonp?: boolean;
+      method: string;
+      timeout: number;
+      url: string;
+      xhrFields: any;
+    }
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1939,13 +2164,13 @@ declare module DevExpress.data {
      * [descr:ODataContextOptions.beforeSend]
      */
     beforeSend?: (options: {
-      url?: string;
-      async?: boolean;
-      method?: string;
-      timeout?: number;
-      params?: any;
-      payload?: any;
-      headers?: any;
+      url: string;
+      async: boolean;
+      method: string;
+      timeout: number;
+      params: any;
+      payload: any;
+      headers: any;
     }) => void;
     /**
      * [descr:ODataContextOptions.deserializeDates]
@@ -1959,9 +2184,9 @@ declare module DevExpress.data {
      * [descr:ODataContextOptions.errorHandler]
      */
     errorHandler?: (e: {
-      httpStatus?: number;
-      errorDetails?: any;
-      requestOptions?: any;
+      httpStatus: number;
+      errorDetails: any;
+      requestOptions: DevExpress.data.ODataContext.ODataRequestOptions;
     }) => void;
     /**
      * [descr:ODataContextOptions.filterToLower]
@@ -1987,31 +2212,38 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore extends Store {
-    constructor(options?: ODataStoreOptions);
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+  export class ODataStore<TKey = any, TValue = any> extends Store<
+    TKey,
+    TValue
+  > {
+    constructor(options?: ODataStoreOptions<TKey, TValue>);
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
      */
     byKey(
-      key: any | string | number,
+      key: TKey,
       extraOptions: {
         expand?: string | Array<string>;
         select?: string | Array<string>;
       }
-    ): DevExpress.core.utils.DxPromise<any>;
+    ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.createQuery(loadOptions)]
      */
-    createQuery(loadOptions: any): any;
+    createQuery(loadOptions?: {
+      expand?: string | Array<string>;
+      requireTotalCount?: boolean;
+      customQueryParams?: any;
+    }): Query;
 
     /**
      * [descr:ODataStore.insert(values)]
      */
     insert(
-      values: any
-    ): DevExpress.core.utils.DxPromise<any> &
-      DevExpress.data.ODataStore.PromiseExtension<any>;
+      values: TValue
+    ): DevExpress.core.utils.DxPromise<TValue> &
+      DevExpress.data.ODataStore.PromiseExtension<TValue>;
   }
   module ODataStore {
     /**
@@ -2036,18 +2268,19 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+  export interface ODataStoreOptions<TKey = any, TValue = any>
+    extends StoreOptions<TKey, TValue> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
     beforeSend?: (options: {
-      url?: string;
-      async?: boolean;
-      method?: string;
-      timeout?: number;
-      params?: any;
-      payload?: any;
-      headers?: any;
+      url: string;
+      async: boolean;
+      method: string;
+      timeout: number;
+      params: any;
+      payload: any;
+      headers: any;
     }) => void;
     /**
      * [descr:ODataStoreOptions.deserializeDates]
@@ -2057,9 +2290,9 @@ declare module DevExpress.data {
      * [descr:ODataStoreOptions.errorHandler]
      */
     errorHandler?: (e: {
-      httpStatus?: number;
-      errorDetails?: any;
-      requestOptions?: any;
+      httpStatus: number;
+      errorDetails: any;
+      requestOptions: DevExpress.data.ODataContext.ODataRequestOptions;
     }) => void;
     /**
      * [descr:ODataStoreOptions.fieldTypes]
@@ -2088,7 +2321,7 @@ declare module DevExpress.data {
     /**
      * [descr:ODataStoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions) => void;
+    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -2183,19 +2416,29 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.PivotGridDataSource.EventName): this;
     /**
      * [descr:PivotGridDataSource.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.PivotGridDataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:PivotGridDataSource.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.PivotGridDataSource.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(events: any): this;
+    on(
+      events: {
+        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+      }
+    ): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
@@ -2208,6 +2451,16 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSource.state(state)]
      */
     state(state: any): void;
+  }
+  module PivotGridDataSource {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type EventName =
+      | 'changed'
+      | 'fieldsPrepared'
+      | 'loadError'
+      | 'loadingChanged';
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2291,7 +2544,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupIndex]
      */
@@ -2555,82 +2808,136 @@ declare module DevExpress.data {
     toArray(): Array<any>;
   }
   /**
+   * [descr:SearchOperation]
+   */
+  export type SearchOperation =
+    | '='
+    | '<>'
+    | '>'
+    | '>='
+    | '<'
+    | '<='
+    | 'startswith'
+    | 'endswith'
+    | 'contains'
+    | 'notcontains';
+  /**
+   * [descr:SelectDescriptor]
+   */
+  export type SelectDescriptor<T> = KeySelector<T>;
+  /**
    * [descr:Utils.setErrorHandler]
    */
   export function setErrorHandler(handler: (e: Error) => void): void;
   /**
+   * [descr:SortDescriptor]
+   */
+  export type SortDescriptor<T> = GroupDescriptor<T>;
+  /**
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class Store {
-    constructor(options?: StoreOptions);
+  export class Store<TKey = any, TValue = any> {
+    constructor(options?: StoreOptions<TKey, TValue>);
     /**
      * [descr:Store.byKey(key)]
      */
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+    byKey(
+      key: TKey,
+      extraOptions?: LoadOptions<TValue>
+    ): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.insert(values)]
      */
-    insert(values: any): DevExpress.core.utils.DxPromise<any>;
+    insert(values: TValue): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:Store.key()]
      */
-    key(): any;
+    key(): string | Array<string>;
     /**
      * [descr:Store.keyOf(obj)]
      */
-    keyOf(obj: any): any;
+    keyOf(obj: TValue): TKey;
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxPromise<any>;
+    load(): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.load(options)]
      */
-    load(options: LoadOptions): DevExpress.core.utils.DxPromise<any>;
+    load(
+      options: LoadOptions<TValue>
+    ): DevExpress.core.utils.DxPromise<Array<TValue>>;
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: string): this;
+    off(eventName: DevExpress.data.Store.EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(
+      eventName: DevExpress.data.Store.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(
+      eventName: DevExpress.data.Store.EventName,
+      eventHandler: Function
+    ): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(events: any): this;
+    on(events: { [key in DevExpress.data.Store.EventName]?: Function }): this;
     /**
      * [descr:Store.push(changes)]
      */
-    push(changes: Array<any>): void;
+    push(
+      changes: Array<{
+        type: 'insert' | 'update' | 'remove';
+        data?: TValue;
+        key?: TKey;
+        index?: number;
+      }>
+    ): void;
     /**
      * [descr:Store.remove(key)]
      */
-    remove(key: any | string | number): DevExpress.core.utils.DxPromise<void>;
+    remove(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:Store.totalCount(options)]
      */
     totalCount(obj: {
-      filter?: any;
-      group?: any;
+      filter?: FilterDescriptor | Array<FilterDescriptor>;
+      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
      * [descr:Store.update(key, values)]
      */
-    update(
-      key: any | string | number,
-      values: any
-    ): DevExpress.core.utils.DxPromise<any>;
+    update(key: TKey, values: TValue): DevExpress.core.utils.DxPromise<TValue>;
+  }
+  module Store {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type EventName =
+      | 'loaded'
+      | 'loading'
+      | 'inserted'
+      | 'inserting'
+      | 'updated'
+      | 'updating'
+      | 'push'
+      | 'removed'
+      | 'removing'
+      | 'modified'
+      | 'modifying';
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface StoreOptions<T = Store> {
+  export interface StoreOptions<TKey = any, TValue = any> {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -2642,19 +2949,22 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onInserted]
      */
-    onInserted?: (values: any, key: any | string | number) => void;
+    onInserted?: (values: TValue, key: TKey) => void;
     /**
      * [descr:StoreOptions.onInserting]
      */
-    onInserting?: (values: any) => void;
+    onInserting?: (values: TValue) => void;
     /**
      * [descr:StoreOptions.onLoaded]
      */
-    onLoaded?: (result: Array<any>) => void;
+    onLoaded?: (
+      result: Array<TValue>,
+      loadOptions: LoadOptions<TValue>
+    ) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions) => void;
+    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
     /**
      * [descr:StoreOptions.onModified]
      */
@@ -2666,24 +2976,32 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<any>) => void;
+    onPush?: (changes: Array<TValue>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
-    onRemoved?: (key: any | string | number) => void;
+    onRemoved?: (key: TKey) => void;
     /**
      * [descr:StoreOptions.onRemoving]
      */
-    onRemoving?: (key: any | string | number) => void;
+    onRemoving?: (key: TKey) => void;
     /**
      * [descr:StoreOptions.onUpdated]
      */
-    onUpdated?: (key: any | string | number, values: any) => void;
+    onUpdated?: (key: TKey, values: TValue) => void;
     /**
      * [descr:StoreOptions.onUpdating]
      */
-    onUpdating?: (key: any | string | number, values: any) => void;
+    onUpdating?: (key: TKey, values: TValue) => void;
   }
+  /**
+   * [descr:SummaryDescriptor]
+   */
+  export type SummaryDescriptor<T> =
+    | KeySelector<T>
+    | (BaseGroupDescriptor<T> & {
+        summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
+      });
   /**
    * [descr:XmlaStore]
    */
@@ -3573,7 +3891,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatDate(value, format)]
    */
-  export function formatDate(value: Date, format: DevExpress.ui.format): string;
+  export function formatDate(value: Date, format: DevExpress.ui.Format): string;
   /**
    * [descr:localization.formatMessage(key, value)]
    */
@@ -3583,7 +3901,7 @@ declare module DevExpress.localization {
    */
   export function formatNumber(
     value: number,
-    format: DevExpress.ui.format
+    format: DevExpress.ui.Format
   ): string;
   /**
    * [descr:localization.loadMessages(messages)]
@@ -3600,13 +3918,13 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.parseDate(text, format)]
    */
-  export function parseDate(text: string, format: DevExpress.ui.format): Date;
+  export function parseDate(text: string, format: DevExpress.ui.Format): Date;
   /**
    * [descr:localization.parseNumber(text, format)]
    */
   export function parseNumber(
     text: string,
-    format: DevExpress.ui.format
+    format: DevExpress.ui.Format
   ): number;
 }
 declare module DevExpress.pdfExporter {
@@ -3698,10 +4016,6 @@ declare module DevExpress.pdfExporter {
   }
 }
 declare module DevExpress.ui {
-  /**
-   * [descr:dxItem]
-   */
-  export var dxItem: any;
   /**
    * [descr:AsyncRule]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4925,7 +5239,7 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type PositioningEvent =
       DevExpress.events.NativeEventInfo<dxContextMenu> & {
-        readonly position: positionConfig;
+        readonly position: PositionConfig;
       };
     export type Properties = dxContextMenuOptions;
     export type SelectionChangedEvent =
@@ -4993,7 +5307,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.position]
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * [descr:dxContextMenuOptions.showEvent]
      */
@@ -5491,7 +5805,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:GridBaseColumn.headerFilter]
        */
@@ -5949,6 +6263,18 @@ declare module DevExpress.ui {
       readonly fromIndex: number;
       readonly fromData?: any;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type dxDataGridDefaultToolbarItemName =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'exportButton'
+      | 'groupPanel'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7317,7 +7643,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7410,7 +7736,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
@@ -7631,6 +7957,10 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.summary]
      */
     summary?: DevExpress.ui.dxDataGrid.Summary;
+    /**
+     * [descr:dxDataGridOptions.toolbar]
+     */
+    toolbar?: dxDataGridToolbar;
   }
   /**
    * @deprecated 
@@ -7644,6 +7974,29 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
+  /**
+   * [descr:dxDataGridToolbar]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxDataGridToolbar {
+    /**
+     * [descr:dxDataGridToolbar.items]
+     */
+    items?: Array<
+      | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
+      | dxDataGridToolbarItem
+    >;
+  }
+  /**
+   * [descr:dxDataGridToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxDataGridToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxDataGridToolbarItem.name]
+     */
+    name?: DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName | string;
+  }
   /**
    * [descr:dxDateBox]
    */
@@ -7724,7 +8077,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.displayFormat]
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * [descr:dxDateBoxOptions.interval]
      */
@@ -7797,7 +8150,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.animation]
      */
-    animation?: animationConfig;
+    animation?: AnimationConfig;
     /**
      * [descr:dxDeferRenderingOptions.onRendered]
      */
@@ -11265,7 +11618,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxFilterBuilderField.lookup]
      */
@@ -12475,6 +12828,10 @@ declare module DevExpress.ui {
        * [descr:dxGanttOptions.validation.autoUpdateParentTasks]
        */
       autoUpdateParentTasks?: boolean;
+      /**
+       * [descr:dxGanttOptions.validation.enablePredecessorGap]
+       */
+      enablePredecessorGap?: boolean;
     };
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
@@ -13398,6 +13755,10 @@ declare module DevExpress.ui {
     escapeChar?: string | Array<string>;
   }
   /**
+   * [descr:dxItem]
+   */
+  export var dxItem: any;
+  /**
    * [descr:dxList]
    */
   export class dxList extends CollectionWidget<dxListOptions> {
@@ -13851,11 +14212,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxLoadPanelOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -13911,7 +14272,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | PositionConfig
       | Function;
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
@@ -13971,11 +14332,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxLookupOptions.animation.hide]
        */
-      hide?: animationConfig;
+      hide?: AnimationConfig;
       /**
        * [descr:dxLookupOptions.animation.show]
        */
-      show?: animationConfig;
+      show?: AnimationConfig;
     };
     /**
      * [descr:dxLookupOptions.applyButtonText]
@@ -14087,7 +14448,7 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.position]
      * @deprecated [depNote:dxLookupOptions.position]
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
      */
@@ -14488,11 +14849,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMenuBaseOptions.animation.hide]
        */
-      hide?: animationConfig;
+      hide?: AnimationConfig;
       /**
        * [descr:dxMenuBaseOptions.animation.show]
        */
-      show?: animationConfig;
+      show?: AnimationConfig;
     };
     /**
      * [descr:dxMenuBaseOptions.cssClass]
@@ -14800,7 +15161,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
      */
@@ -14867,11 +15228,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxOverlayOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -15791,11 +16152,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxPopoverOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -15835,7 +16196,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * [descr:dxPopoverOptions.shading]
      */
@@ -15914,11 +16275,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxPopupOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -15979,7 +16340,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | PositionConfig
       | Function;
     /**
      * [descr:dxPopupOptions.resizeEnabled]
@@ -17840,7 +18201,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.label.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.label.position]
        */
@@ -17873,7 +18234,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.tooltip.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.tooltip.position]
        */
@@ -18920,11 +19281,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.animation.hide]
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * [descr:dxToastOptions.animation.show]
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
   }
   /**
    * @deprecated use Properties instead
@@ -18972,7 +19333,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.position]
      */
-    position?: positionConfig | string;
+    position?: PositionConfig | string;
     /**
      * [descr:dxToastOptions.shading]
      */
@@ -19517,6 +19878,16 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxTreeList> &
         DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
     export type DisposingEvent = DevExpress.events.EventInfo<dxTreeList>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type dxTreeListDefaultToolbarItemName =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     export type EditCanceledEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type EditCancelingEvent = DevExpress.events.Cancelable &
@@ -20064,6 +20435,29 @@ declare module DevExpress.ui {
    * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
+  /**
+   * [descr:dxTreeListToolbar]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxTreeListToolbar {
+    /**
+     * [descr:dxTreeListToolbar.items]
+     */
+    items?: (
+      | DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName
+      | dxTreeListToolbarItem
+    )[];
+  }
+  /**
+   * [descr:dxTreeListToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxTreeListToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxTreeListToolbarItem.name]
+     */
+    name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+  }
   /**
    * [descr:dxTreeView]
    */
@@ -20764,89 +21158,14 @@ declare module DevExpress.ui {
     type: 'email';
   }
   /**
-   * [descr:format]
+   * [descr:Format]
    */
-  export type format =
-    | 'billions'
-    | 'currency'
-    | 'day'
-    | 'decimal'
-    | 'exponential'
-    | 'fixedPoint'
-    | 'largeNumber'
-    | 'longDate'
-    | 'longTime'
-    | 'millions'
-    | 'millisecond'
-    | 'month'
-    | 'monthAndDay'
-    | 'monthAndYear'
-    | 'percent'
-    | 'quarter'
-    | 'quarterAndYear'
-    | 'shortDate'
-    | 'shortTime'
-    | 'thousands'
-    | 'trillions'
-    | 'year'
-    | 'dayOfWeek'
-    | 'hour'
-    | 'longDateLongTime'
-    | 'minute'
-    | 'second'
-    | 'shortDateShortTime'
+  export type Format =
+    | FormatObject
+    | PredefinedFormat
     | string
     | ((value: number | Date) => string)
-    | {
-        /**
-         * [descr:format.currency]
-         */
-        currency?: string;
-        /**
-         * [descr:format.formatter]
-         */
-        formatter?: (value: number | Date) => string;
-        /**
-         * [descr:format.parser]
-         */
-        parser?: (value: string) => number | Date;
-        /**
-         * [descr:format.precision]
-         */
-        precision?: number;
-        /**
-         * [descr:format.type]
-         */
-        type?:
-          | 'billions'
-          | 'currency'
-          | 'day'
-          | 'decimal'
-          | 'exponential'
-          | 'fixedPoint'
-          | 'largeNumber'
-          | 'longDate'
-          | 'longTime'
-          | 'millions'
-          | 'millisecond'
-          | 'month'
-          | 'monthAndDay'
-          | 'monthAndYear'
-          | 'percent'
-          | 'quarter'
-          | 'quarterAndYear'
-          | 'shortDate'
-          | 'shortTime'
-          | 'thousands'
-          | 'trillions'
-          | 'year'
-          | 'dayOfWeek'
-          | 'hour'
-          | 'longDateLongTime'
-          | 'minute'
-          | 'second'
-          | 'shortDateShortTime';
-      };
+    | ExternalFormat;
   /**
    * [descr:GridBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -21808,6 +22127,14 @@ declare module DevExpress.ui {
      */
     repaint(): void;
   }
+  module Widget {
+    /**
+     * [descr:format]
+     * @deprecated [depNote:format]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type format = Format;
+  }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -22166,7 +22493,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:BaseChartOptions.tooltip.contentTemplate]
      */
@@ -22458,7 +22785,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
@@ -22986,10 +23313,9 @@ declare module DevExpress.viz {
      * [descr:BaseWidget.defaultOptions(rule)]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    static defaultOptions(rule: {
-      device?: Device | Array<Device> | Function;
-      options?: any;
-    }): void;
+    static defaultOptions<TProperties>(
+      rule: DevExpress.core.Rule<TProperties>
+    ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]
      */
@@ -23553,7 +23879,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseWidgetOptions.tooltip.opacity]
      */
@@ -23828,7 +24154,7 @@ declare module DevExpress.viz {
       /**
        * [descr:CommonIndicator.text.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:CommonIndicator.text.indent]
        */
@@ -23928,7 +24254,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.legend.itemTextFormat]
      */
-    itemTextFormat?: DevExpress.ui.format;
+    itemTextFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxBarGaugeOptions.legend.markerTemplate]
      */
@@ -24017,7 +24343,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxBarGaugeOptions.label.indent]
        */
@@ -24497,7 +24823,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25205,7 +25531,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.visible]
                */
@@ -25248,7 +25574,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.crosshair.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxChartOptions.crosshair.label.visible]
          */
@@ -25294,7 +25620,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.visible]
                */
@@ -26225,7 +26551,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
      */
@@ -26279,7 +26605,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
      */
@@ -27738,7 +28064,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28244,7 +28570,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxFunnelOptions.label.horizontalAlignment]
        */
@@ -28855,7 +29181,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat]
        */
-      argumentFormat?: DevExpress.ui.format;
+      argumentFormat?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor]
        */
@@ -28909,7 +29235,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.position]
        */
@@ -29278,7 +29604,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30166,7 +30492,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor]
      */
@@ -30220,7 +30546,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
      */
@@ -30570,7 +30896,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30951,7 +31277,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
@@ -30991,7 +31317,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxRangeSelectorOptions.scale.marker.label.format]
            */
-          format?: DevExpress.ui.format;
+          format?: DevExpress.ui.Format;
         };
         /**
          * [descr:dxRangeSelectorOptions.scale.marker.separatorHeight]
@@ -31165,7 +31491,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.invalidRangeColor]
        */
@@ -32905,7 +33231,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]

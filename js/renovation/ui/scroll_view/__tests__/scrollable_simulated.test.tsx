@@ -195,12 +195,7 @@ describe('Simulated > Behavior', () => {
       viewModel.topPocketClientHeight = 11;
       viewModel.bottomPocketClientHeight = 12;
 
-      viewModel.prevContainerClientWidth = 13;
-      viewModel.prevContainerClientHeight = 14;
-      viewModel.prevContentClientWidth = 15;
-      viewModel.prevContentClientHeight = 16;
-
-      viewModel.contentPaddingBottom = 17;
+      viewModel.contentPaddingBottom = 13;
 
       Object.defineProperties(viewModel, {
         scrollableOffset: { get() { return { left: 10, top: 20 }; } },
@@ -271,25 +266,6 @@ describe('Simulated > Behavior', () => {
 
                 if (reachBottomEnabled) {
                   expectedBottomPocketSize = 55;
-                }
-
-                if (viewModel.prevContentClientWidth !== viewModel.contentClientWidth
-              || viewModel.prevContainerClientWidth !== viewModel.containerClientWidth) {
-                  expect(viewModel.forceUpdateHScrollbarLocation).toEqual(true);
-                  expect(viewModel.hScrollLocation).toEqual(-150);
-                  expect(viewModel.prevContentClientWidth).toEqual(elementRefExist ? 50 : 5);
-                  expect(viewModel.prevContainerClientWidth).toEqual(10);
-                }
-
-                if (viewModel.prevContentClientHeight !== viewModel.contentClientHeight
-              || viewModel.prevContainerClientHeight !== viewModel.containerClientHeight) {
-                  expect(viewModel.forceUpdateVScrollbarLocation).toEqual(true);
-                  expect(viewModel.prevContentClientHeight).toEqual(50);
-                  expect(viewModel.prevContainerClientHeight).toEqual(10);
-
-                  if (vScrollLocation <= 0) {
-                    expect(viewModel.vScrollLocation).toEqual(-200);
-                  }
                 }
               }
 
@@ -463,7 +439,7 @@ describe('Simulated > Behavior', () => {
 
         expect(helper.viewModel.eventForUserAction).toEqual(event);
         helper.checkActionHandlerCalls(expect, [], []);
-        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[{ x: 0, y: 0 }]]);
+        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[{ x: 0, y: 0 }, false]]);
       });
 
       test('emit "dxscrollstart" event', () => {
@@ -506,7 +482,7 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'velocity');
         expect(helper.viewModel.eventForUserAction).toEqual(event);
         helper.checkActionHandlerCalls(expect, [], [[]]);
-        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[event.velocity]]);
+        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[event.velocity, true]]);
       });
 
       test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
@@ -786,10 +762,10 @@ describe('Simulated > Behavior', () => {
             direction, disabled: false, bounceEnabled: true,
           });
           viewModel.locked = false;
-          viewModel.update = jest.fn();
+          viewModel.updateHandler = jest.fn();
 
           expect(viewModel.validate(event)).toEqual(true);
-          expect(viewModel.update).toHaveBeenCalledTimes(1);
+          expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
         });
 
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
@@ -1154,7 +1130,7 @@ describe('Simulated > Behavior', () => {
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.updateSizes = jest.fn();
 
-        helper.viewModel.update();
+        helper.viewModel.updateHandler();
 
         if (actionHandler) {
           helper.checkActionHandlerCalls(expect, ['onUpdated'], [[{ scrollOffset: { top: 5, left: 10 } }]]);
@@ -1345,32 +1321,32 @@ describe('Simulated > Behavior', () => {
 
     describe('ScrollTo', () => {
       each(optionValues.direction).describe('Direction: %o', (direction) => {
-        it('ScrollBy() should call update()', () => {
+        it('ScrollBy() should call updateHandler()', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.update = jest.fn();
+          helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
           helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 10, top: 10 });
 
-          expect(helper.viewModel.update).toHaveBeenCalledTimes(1);
+          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(1);
         });
 
-        it('ScrollBy() should not call update() if position not changed', () => {
+        it('ScrollBy() should not call updateHandler() if position not changed', () => {
           const helper = new ScrollableTestHelper({ direction });
           helper.initScrollbarSettings();
 
-          helper.viewModel.update = jest.fn();
+          helper.viewModel.updateHandler = jest.fn();
           helper.viewModel.prepareDirections = jest.fn();
           helper.viewModel.onStart = jest.fn();
           helper.viewModel.eventHandler = jest.fn();
 
           helper.viewModel.scrollBy({ left: 0, top: 0 });
 
-          expect(helper.viewModel.update).toHaveBeenCalledTimes(0);
+          expect(helper.viewModel.updateHandler).toHaveBeenCalledTimes(0);
         });
 
         each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
@@ -1399,7 +1375,7 @@ describe('Simulated > Behavior', () => {
                   hScrollLocation: -initialScrollPosition.left,
                 },
               });
-              helper.changeScrollbarMethod('scrollComplete', jest.fn());
+              helper.changeScrollbarMethod('stopScrolling', jest.fn());
               helper.initContainerPosition(initialScrollPosition);
 
               helper.viewModel.scrollTo(scrollToValue);
@@ -1441,7 +1417,7 @@ describe('Simulated > Behavior', () => {
                   hScrollLocation: -initialScrollPosition.left,
                 },
               });
-              helper.changeScrollbarMethod('scrollComplete', jest.fn());
+              helper.changeScrollbarMethod('stopScrolling', jest.fn());
 
               helper.initContainerPosition(initialScrollPosition);
 
