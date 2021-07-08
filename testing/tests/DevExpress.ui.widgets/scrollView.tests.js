@@ -320,7 +320,9 @@ QUnit.module('actions', moduleConfig, () => {
                 assert.ok(false, 'end action should not be fired');
             }
         }));
-        const $container = $scrollView.find('.dx-scrollable-container'); const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        const $container = $scrollView.find('.dx-scrollable-container');
+        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
         pointerMock($content)
             .start()
@@ -858,7 +860,13 @@ QUnit.module('dynamic', moduleConfig, () => {
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
-                assert.roughEqual(location.top, $container.height() - $content.height(), 1, 'scrollview bounced');
+                if(isRenovation) {
+                    const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
+                    assert.roughEqual(location.top, $container.height() - $content.height() + $bottomPocket.height(), 1, 'scrollview bounced');
+                } else {
+                    assert.roughEqual(location.top, $container.height() - $content.height(), 1, 'scrollview bounced');
+                }
+
             }
         });
 
@@ -1135,7 +1143,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('release calls update', function(assert) {
-        assert.expect(1);
+        assert.expect(isRenovation ? 2 : 1);
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,

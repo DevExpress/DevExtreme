@@ -56,11 +56,11 @@ QUnit.module('Scrolling', {
             this._prepareEnvironment();
 
             this.$container.wrap($('<div>'));
-            this.$container.dxScrollView({
+            this.scrollView = this.$container.dxScrollView({
                 height: 100,
                 useNative: false,
                 showScrollbar: 'always',
-            });
+            }).dxScrollView('instance');
             this.popup = this.$container.parent().dxPopup({
                 visible: true
             }).dxPopup('instance');
@@ -106,7 +106,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 50);
+        helper.scrollView.scrollTo({ top: 50 });
 
         const pointer = nativePointerMock(helper.$editorContent.children().first());
 
@@ -125,7 +125,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 25);
+        helper.scrollView.scrollTo({ top: 25 });
         helper.setPosition(helper.$editorContent, helper.maxScrollValue);
 
         const pointer = nativePointerMock(helper.$editorContent);
@@ -144,7 +144,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 50);
+        helper.scrollView.scrollTo({ top: 50 });
         helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
 
         const pointer = nativePointerMock(helper.$editorContent);
@@ -219,7 +219,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 50);
+        helper.scrollView.scrollTo({ top: 50 });
 
         const pointer = nativePointerMock(helper.$editorContent);
 
@@ -237,7 +237,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 25);
+        helper.scrollView.scrollTo({ top: 25 });
         helper.setPosition(helper.$editorContent, helper.maxScrollValue);
 
         const pointer = nativePointerMock(helper.$editorContent);
@@ -256,7 +256,7 @@ QUnit.module('Scrolling', {
         const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 50);
+        helper.scrollView.scrollTo({ top: 50 });
         helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
 
         const pointer = nativePointerMock(helper.$editorContent);
