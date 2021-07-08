@@ -243,6 +243,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   scrollByHandler(delta: { x: number; y: number }): void {
     this.scrollBy(delta);
+    this.needRiseEnd = true;
     this.stopScrolling();
   }
 
