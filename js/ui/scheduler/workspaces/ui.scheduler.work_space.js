@@ -722,7 +722,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getIntervalDuration() {
-        return this.viewDataProvider.viewDataGenerator._getIntervalDuration(this.option('intervalCount'));
+        return this.viewDataProvider.getIntervalDuration(this.option('intervalCount'));
     }
 
     _getHeaderDate() {

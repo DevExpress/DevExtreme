@@ -378,4 +378,8 @@ export default class ViewDataProvider {
     getStartViewDate() {
         return this._options.startViewDate;
     }
+
+    getIntervalDuration(intervalCount) {
+        return this.viewDataGenerator._getIntervalDuration(intervalCount);
+    }
 }

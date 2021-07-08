@@ -1036,7 +1036,7 @@ module('View Data Provider', {
                 hiddenInterval: 3600000 * 22,
                 hoursInterval: 1,
                 cellCountInDay: 2,
-                startViewDate: new Date(baseStartDate),
+                currentDate: new Date(baseStartDate),
                 rowCountBase: 2,
                 columnCountBase: 2,
                 isDateAndTimeView: true,
