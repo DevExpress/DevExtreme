@@ -5,7 +5,7 @@ import {
 export interface EventExtension { }
 export interface EventType { }
 
-interface JQueryEventObject { }
+interface JQueryEventObject extends JQuery.Event { }
 
 interface EventType extends JQueryEventObject {
   cancel?: boolean;
