@@ -685,7 +685,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             return column.fixed && (result || column.fixedPosition === 'right');
         }
 
-        return result && !column.fixed;
+        return result && (!this._isFixedColumns || !column.fixed);
     },
 
     _renderGroupSummaryCellsCore: function($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
