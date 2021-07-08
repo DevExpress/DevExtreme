@@ -270,60 +270,67 @@ export class ToolbarButtonProps {
   // TODO: other props
 }
 
-// TODO: it is not a 'native' way
-// TODO: not used, https://github.com/DevExpress/devextreme-renovation/issues/724
-@ComponentBindings()
-export class ToolbarTextBoxProps {
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
-  //
-  @OneWay() value: string | null = '';
+// TODO: commented to avoid issues in Vue application
+// https://github.com/DevExpress/devextreme-renovation/issues/724
+// // TODO: it is not a 'native' way
+// @ComponentBindings()
+// export class ToolbarTextBoxProps {
+//   //
+//   // Use cases:
+//   //
+//   // - in a RenoV component:
+//   // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
+//   //
+//   @OneWay() value: string | null = '';
 
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar
-  //   items={[
-  //     { widget: 'dxTextBox', options: { value: 'box1', onValueChanged: () => console.log('hi') }}
-  //   ]}
-  // />
-  //
-  // TODO:  EventCallback<TextBoxValueChanged>
-  //
-  @Event() onValueChanged?: (() => void);
+//   //
+//   // Use cases:
+//   //
+//   // - in a RenoV component:
+//   // <Toolbar
+//   //   items={[
+//   //     { widget: 'dxTextBox', options: {
+//   //        value: 'box1', onValueChanged: () => console.log('hi') }}
+//   //   ]}
+//   // />
+//   //
+//   // TODO:  EventCallback<TextBoxValueChanged>
+//   //
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   @Event() onValueChanged?: EventCallback<any>;
 
-  // TODO: other props
-}
+//   // TODO: other props
+// }
 
-// TODO: it is not a 'native' way
-// TODO: not used, https://github.com/DevExpress/devextreme-renovation/issues/724
-@ComponentBindings()
-export class ToolbarCheckBoxProps {
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
-  //
-  @OneWay() value: boolean | null = false;
+// TODO: commented to avoid issues in Vue application
+// https://github.com/DevExpress/devextreme-renovation/issues/724
+// // TODO: it is not a 'native' way
+// // TODO: not used, https://github.com/DevExpress/devextreme-renovation/issues/724
+// @ComponentBindings()
+// export class ToolbarCheckBoxProps {
+//   //
+//   // Use cases:
+//   //
+//   // - in a RenoV component:
+//   // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
+//   //
+//   @OneWay() value: boolean | null = false;
 
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar
-  //   items={[
-  //     { widget: 'dxTextBox', options: { value: 'box1', onValueChanged: () => console.log('hi') }}
-  //   ]}
-  // />
-  //
-  // TODO:  EventCallback
-  //
-  @Event() onValueChanged?: (() => void);
+//   //
+//   // Use cases:
+//   //
+//   // - in a RenoV component:
+//   // <Toolbar
+//   //   items={[
+//   //     { widget: 'dxTextBox', options: {
+//   //       value: 'box1', onValueChanged: () => console.log('hi') }}
+//   //   ]}
+//   // />
+//   //
+//   // TODO:  EventCallback
+//   //
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   @Event() onValueChanged?: EventCallback<any>;
 
-  // TODO: other props
-}
+//   // TODO: other props
+// }
