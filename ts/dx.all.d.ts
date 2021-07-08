@@ -20424,10 +20424,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.selection]
      */
     selection?: DevExpress.ui.dxTreeList.Selection;
-    /**
-     * [descr:dxTreeListOptions.toolbar]
-     */
-    toolbar?: dxTreeListToolbar;
   }
   /**
    * @deprecated 
