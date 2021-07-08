@@ -267,22 +267,6 @@ testModule('render', moduleConfig, () => {
         }
     });
 
-    test('overlay should be repositioned only once on window resize', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-        let callCount = 0;
-        const done = assert.async();
-
-        overlay.on('positioned', () => { ++callCount; });
-        resizeCallbacks.fire();
-
-        setTimeout(() => {
-            assert.strictEqual(callCount, 1, 'overlay was repositioned only once');
-            done();
-        });
-    });
-
     test('default', function(assert) {
         const instance = $('#overlay').dxOverlay().dxOverlay('instance');
         const $content = instance.$content();
@@ -1629,37 +1613,6 @@ testModule('content', moduleConfig, () => {
         });
 
         assert.strictEqual(overlay.$content().text(), 'template2', 'template rerendered correctly');
-    });
-
-    test('content resize should trigger overlay geometry rendering', function(assert) {
-        const done = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            contentTemplate: () => {
-                return $('<div>')
-                    .attr({ id: 'customOverlayContent' })
-                    .css({ width: 100, height: 100 });
-            },
-            width: 'auto',
-            height: 'auto',
-            visible: true
-        }).dxOverlay('instance');
-
-        const overlayContentElement = overlay.$content().get(0);
-        const contentRect = overlayContentElement.getBoundingClientRect();
-        const getCenter = (rect, dimension) => {
-            if(dimension === 'x') {
-                return (rect.left + rect.right) / 2;
-            }
-            return (rect.bottom + rect.top) / 2;
-        };
-
-        $('#customOverlayContent').css({ width: 500, height: 500 });
-        setTimeout(() => {
-            const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
-            assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
-            assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
-            done();
-        });
     });
 });
 
@@ -3182,27 +3135,6 @@ testModule('resize', moduleConfig, () => {
         assert.deepEqual([$overlayContent.width(), $overlayContent.height()], [190, 190], 'correct size');
     });
 
-    test('overlay content dimensions should be updated during resize', function(assert) {
-        const done = assert.async();
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(10);
-
-        setTimeout(() => {
-            assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
-            done();
-        });
-    });
-
     test('resized overlay should not save dimensions after height changed', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -4178,5 +4110,97 @@ QUnit.module('prevent safari scrolling on ios devices', {
 
         this.instance.option('container', undefined);
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
+    });
+});
+
+QUnit.module('resizeObserver integraion', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    test('overlay should be repositioned only once on window resize', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+        const positionedHandlerStub = sinon.stub();
+        const done = assert.async();
+
+        overlay.on('positioned', positionedHandlerStub);
+        resizeCallbacks.fire();
+
+        setTimeout(() => {
+            assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
+            done();
+        });
+    });
+
+    test('content resize should trigger overlay geometry rendering', function(assert) {
+        const done = assert.async();
+        const overlay = $('#overlay').dxOverlay({
+            contentTemplate: () => {
+                return $('<div>')
+                    .attr({ id: 'customOverlayContent' })
+                    .css({ width: 100, height: 100 });
+            },
+            width: 'auto',
+            height: 'auto',
+            visible: true
+        }).dxOverlay('instance');
+
+        const overlayContentElement = overlay.$content().get(0);
+        const contentRect = overlayContentElement.getBoundingClientRect();
+        const getCenter = (rect, dimension) => {
+            if(dimension === 'x') {
+                return (rect.left + rect.right) / 2;
+            }
+            return (rect.bottom + rect.top) / 2;
+        };
+
+        $('#customOverlayContent').css({ width: 500, height: 500 });
+        setTimeout(() => {
+            const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
+            assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
+            assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
+            done();
+        });
+    });
+
+    test('overlay content dimensions should be updated during resize', function(assert) {
+        const done = assert.async();
+        const $overlay = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true,
+            width: 200,
+            height: 200
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $overlayContent = overlay.$content();
+        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(10);
+
+        setTimeout(() => {
+            assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
+            done();
+        });
+    });
+
+    test('geometry should not be rerendered on overlay close', function(assert) {
+        const done = assert.async();
+        const positionedHandlerStub = sinon.stub();
+        const overlay = $('#overlay').dxOverlay({
+            visible: true
+        }).dxOverlay('instance');
+
+        overlay.on('positioned', positionedHandlerStub);
+
+        setTimeout(() => {
+            assert.ok(positionedHandlerStub.notCalled);
+            done();
+        });
     });
 });
