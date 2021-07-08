@@ -14,8 +14,8 @@ import dxTrackBar, {
 } from './track_bar';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format
+} from '../localization';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;
@@ -95,7 +95,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default function(value) { return value }
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @type Enums.VerticalEdge
@@ -140,7 +140,7 @@ export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComp
        * @docid
        * @default function(value) { return value }
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @type Enums.VerticalEdge

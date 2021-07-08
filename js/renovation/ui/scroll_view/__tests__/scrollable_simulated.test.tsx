@@ -439,7 +439,7 @@ describe('Simulated > Behavior', () => {
 
         expect(helper.viewModel.eventForUserAction).toEqual(event);
         helper.checkActionHandlerCalls(expect, [], []);
-        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[{ x: 0, y: 0 }]]);
+        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[{ x: 0, y: 0 }, false]]);
       });
 
       test('emit "dxscrollstart" event', () => {
@@ -482,7 +482,7 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'velocity');
         expect(helper.viewModel.eventForUserAction).toEqual(event);
         helper.checkActionHandlerCalls(expect, [], [[]]);
-        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[event.velocity]]);
+        helper.checkScrollbarEventHandlerCalls(expect, ['end'], [[event.velocity, true]]);
       });
 
       test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
@@ -1375,7 +1375,7 @@ describe('Simulated > Behavior', () => {
                   hScrollLocation: -initialScrollPosition.left,
                 },
               });
-              helper.changeScrollbarMethod('scrollComplete', jest.fn());
+              helper.changeScrollbarMethod('stopScrolling', jest.fn());
               helper.initContainerPosition(initialScrollPosition);
 
               helper.viewModel.scrollTo(scrollToValue);
@@ -1417,7 +1417,7 @@ describe('Simulated > Behavior', () => {
                   hScrollLocation: -initialScrollPosition.left,
                 },
               });
-              helper.changeScrollbarMethod('scrollComplete', jest.fn());
+              helper.changeScrollbarMethod('stopScrolling', jest.fn());
 
               helper.initContainerPosition(initialScrollPosition);
 

@@ -13,8 +13,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import { HatchingDirectionType } from './common';
 
@@ -645,7 +645,7 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
@@ -1274,7 +1274,7 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
@@ -1849,7 +1849,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    argumentFormat?: format;
+    argumentFormat?: Format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
      * @default undefined
@@ -1928,7 +1928,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
      * @type Enums.RelativePosition

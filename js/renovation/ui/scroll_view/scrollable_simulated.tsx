@@ -95,6 +95,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
+    lock, unlock,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -210,6 +211,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               reachBottomEnabled={reachBottomEnabled}
               pocketState={topPocketState}
               pocketStateChange={pocketStateChange}
+
+              onLock={lock}
+              onUnlock={unlock}
             />
           )}
         </div>
@@ -327,6 +331,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   release(): void {
+    this.updateSizes();
     this.eventHandler((scrollbar) => scrollbar.releaseHandler());
   }
 
@@ -791,7 +796,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar) => scrollbar.endHandler(event.velocity));
+    this.eventHandler((scrollbar) => scrollbar.endHandler(event.velocity, true));
   }
 
   handleStop(): void {
@@ -801,7 +806,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
+    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }, false));
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
@@ -1223,7 +1228,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-renovated': true,
+      'dx-scrollable': true,
       [SCROLLABLE_SIMULATED_CLASS]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,

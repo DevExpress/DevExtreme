@@ -1332,7 +1332,6 @@ describe('Scrollbar integration', () => {
       expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
       expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
       expect(viewModel.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
-      expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
       expect(viewModel.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
 
       let expectedScrollbarsCount = 0;

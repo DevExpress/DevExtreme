@@ -1,6 +1,7 @@
 artifacts/*
 js/viz/docs/*
 node_modules/*
+build/*
 testing/helpers/sinon/*
 *.d.ts
 *.j.tsx

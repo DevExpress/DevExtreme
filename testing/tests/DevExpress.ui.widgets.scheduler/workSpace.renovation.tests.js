@@ -1016,7 +1016,7 @@ module('Renovated Render', {
 
             this.instance.renderWorkSpace();
 
-            assert.ok(cacheClearSpy.calledOnce, 'Cache has been cleared');
+            assert.ok(cacheClearSpy.callCount > 0, 'Cache has been cleared');
 
             cacheClearSpy.restore();
         });
