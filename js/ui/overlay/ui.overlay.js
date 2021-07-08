@@ -356,12 +356,10 @@ const Overlay = Widget.inherit({
 
         this._contentResizeObserver = new window.ResizeObserver(() => {
             if(!this._shouldSkipContentResizeHandler) {
-                console.log('resizeObserver');
                 this._dimensionChanged();
             }
             this._shouldSkipContentResizeHandler = undefined;
         });
-        this._observeContentResize();
     },
 
     _observeContentResize: function() {
@@ -527,6 +525,7 @@ const Overlay = Widget.inherit({
                     that._isShown = true;
                     that._actions.onShown();
                     that._toggleSafariScrolling();
+                    that._observeContentResize();
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -594,6 +593,7 @@ const Overlay = Widget.inherit({
 
                 this._animate(hideAnimation,
                     function() {
+                        that._unobserveContentResize();
                         that._$content.css('pointerEvents', '');
                         that._renderVisibility(false);
 
@@ -1309,7 +1309,6 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        console.log('dimension changed');
         this._shouldSkipContentResizeHandler = true;
         this._renderGeometry(true);
     },
