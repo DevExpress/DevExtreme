@@ -511,7 +511,6 @@ declare global {
 declare module DevExpress {
   /**
    * [descr:AnimationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type AnimationConfig = {
     /**
@@ -1116,7 +1115,6 @@ declare module DevExpress {
   export function hideTopOverlay(): boolean;
   /**
    * [descr:PositionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PositionConfig {
     /**
@@ -1371,9 +1369,7 @@ declare module DevExpress {
 }
 declare module DevExpress.animation {
   /**
-   * [descr:animationConfig]
-   * @deprecated [depNote:animationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * @deprecated Use the AnimationConfig type instead
    */
   export type animationConfig = AnimationConfig;
   /**
@@ -1413,9 +1409,7 @@ declare module DevExpress.animation {
         top: number;
       };
   /**
-   * [descr:positionConfig]
-   * @deprecated [depNote:positionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * @deprecated Use the PositionConfig type instead
    */
   export interface positionConfig extends PositionConfig {}
 }
