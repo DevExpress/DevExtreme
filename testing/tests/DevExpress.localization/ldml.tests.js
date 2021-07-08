@@ -455,28 +455,23 @@ QUnit.module('number formatter', () => {
                     {
                         dateString: '110110217',
                         expected: ['11', '01', '10217']
-                    }
-                ]
-            },
-            {
-                format: 'MMddyyyy',
-                tests: [
-                    {
-                        dateString: '12212121',
-                        expected: ['12', '21', '2121']
                     },
                     {
-                        dateString: '3152021',
-                        expected: ['3', '15', '2021']
+                        dateString: '010110217',
+                        expected: ['01', '01', '10217']
                     },
                     {
-                        dateString: '31520212',
-                        expected: ['3', '15', '20212']
+                        dateString: '01011021',
+                        expected: ['01', '01', '1021']
                     },
                     {
-                        dateString: '110920213',
-                        expected: ['11', '09', '20213']
-                    }
+                        dateString: '010302',
+                        expected: ['01', '03', '02']
+                    },
+                    {
+                        dateString: '11111111',
+                        expected: ['11', '11', '1111']
+                    },
                 ]
             },
             {
@@ -487,12 +482,12 @@ QUnit.module('number formatter', () => {
                         expected: ['12', '21', '21']
                     },
                     {
-                        dateString: '31520',
-                        expected: ['3', '15', '20']
+                        dateString: '3120',
+                        expected: ['3', '1', '20']
                     },
                     {
-                        dateString: '110921',
-                        expected: ['11', '09', '21']
+                        dateString: '101021',
+                        expected: ['10', '10', '21']
                     }
                 ]
             },
@@ -514,15 +509,15 @@ QUnit.module('number formatter', () => {
                 ],
             },
             {
-                format: 'Mddyyy',
+                format: 'dMMyyy',
                 tests: [
                     {
-                        dateString: '1221213',
-                        expected: ['1', '22', '1213']
+                        dateString: '1121213',
+                        expected: ['1', '12', '1213']
                     },
                     {
-                        dateString: '315203',
-                        expected: ['3', '15', '203']
+                        dateString: '312203',
+                        expected: ['3', '12', '203']
                     },
                     {
                         dateString: '1109213',
@@ -545,6 +540,7 @@ QUnit.module('number formatter', () => {
             'dMMyyyy': 1,
             'MMdyyyy': 1,
             'dMMMy': 0,
+            'ddMMyy': 0,
             'MMMdyyyy': 1,
             'dMMMy hm': 1,
             'd MMM y hm': 1,
@@ -554,6 +550,9 @@ QUnit.module('number formatter', () => {
             'QQQdMMM': 0,
             'QQQdMMM yyyy d h m': 0,
             'QQQdHHMMM yyyyd hhmm': 1,
+            'QQQdHHMMM hhmm': 0,
+            'QQQdHHsMMM hhmm': 1,
+            'QQQdSSSsMMM hhmm': 1,
         };
 
         Object.entries(expectedWarningsCount).forEach(([ format, warningCalls ]) => {

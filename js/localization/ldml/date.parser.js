@@ -24,7 +24,7 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return '[0-9]{1,5}?';
+        return count === 2 ? '[0-9]{2}' : '[0-9]+?';
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
@@ -228,34 +228,29 @@ export const getRegExpInfo = function(format, dateParts) {
     };
 };
 
-const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'S', 'w', 'M', 'L', 'Q'];
-
+const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'w', 'M', 'L', 'Q'];
 export const isPossibleForParsingFormat = function(patterns) {
     const isDigitPattern = (pattern) => {
         if(!pattern) {
             return false;
         }
+
         const char = pattern[0];
-        return char === 'y' || digitFieldSymbols.includes(char) && pattern.length < 3;
+        return ['y', 'S'].includes(char) || digitFieldSymbols.includes(char) && pattern.length < 3;
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
-        const char = pattern[0];
-        return char === 'y' || pattern.length === 1 && char !== 'S';
+        return pattern[0] !== 'S' && pattern.length !== 2;
     };
 
     let possibleForParsing = true;
     let ambiguousDigitPatternsCount = 0;
     patterns.every((pattern, index, patterns) => {
-        const patternIsDigit = isDigitPattern(pattern);
-        const prevPatternIsDigit = isDigitPattern(patterns[index - 1]);
-        const nextPatternIsDigit = isDigitPattern(patterns[index + 1]);
-
-        if(patternIsDigit && (prevPatternIsDigit || nextPatternIsDigit)) {
-            ambiguousDigitPatternsCount = ambiguousDigitPatternsCount + isAmbiguousDigitPattern(pattern);
-            const indexIsLast = index === patterns.length - 1;
-            if(indexIsLast || !nextPatternIsDigit) {
-                possibleForParsing = ambiguousDigitPatternsCount < 2;
+        if(isDigitPattern(pattern)) {
+            if(isAmbiguousDigitPattern(pattern)) {
+                possibleForParsing = (++ambiguousDigitPatternsCount) < 2;
+            }
+            if(!isDigitPattern(patterns[index + 1])) {
                 ambiguousDigitPatternsCount = 0;
             }
         }
