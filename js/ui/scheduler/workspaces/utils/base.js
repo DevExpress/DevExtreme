@@ -179,3 +179,7 @@ export const getHorizontalGroupCount = (groups, groupOrientation) => {
 
     return isVerticalGrouping ? 1 : groupCount;
 };
+
+export const calculateIsGroupedAllDayPanel = (groups, groupOrientation, isAllDayPanelVisible) => {
+    return isVerticalGroupOrientation(groupOrientation, groups) && isAllDayPanelVisible;
+};

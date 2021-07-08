@@ -65,6 +65,7 @@ import {
     validateDayHours,
     getStartViewDateTimeOffset,
     isDateAndTimeView,
+    calculateIsGroupedAllDayPanel,
 } from './utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
@@ -612,7 +613,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isGroupedAllDayPanel() {
-        return this.isAllDayPanelVisible && this._isVerticalGroupedWorkSpace();
+        return calculateIsGroupedAllDayPanel(
+            this.option('groups'),
+            this.option('groupOrientation'),
+            this.isAllDayPanelVisible,
+        );
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
