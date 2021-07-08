@@ -1223,7 +1223,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-renovated': true,
+      'dx-scrollable': true,
       [SCROLLABLE_SIMULATED_CLASS]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
