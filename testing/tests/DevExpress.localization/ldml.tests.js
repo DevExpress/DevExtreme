@@ -524,6 +524,23 @@ QUnit.module('number formatter', () => {
                         expected: ['1', '10', '9213']
                     }
                 ]
+            },
+            {
+                format: 'MMdyy',
+                tests: [
+                    {
+                        dateString: '11212',
+                        expected: ['11', '2', '12']
+                    },
+                    {
+                        dateString: '102212',
+                        expected: ['10', '22', '12']
+                    },
+                    {
+                        dateString: '110912',
+                        expected: ['11', '09', '12']
+                    }
+                ]
             }
         ].forEach(({ format, tests }) => {
             const regExpInfo = getRegExpInfo(format);
