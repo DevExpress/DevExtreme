@@ -23,12 +23,8 @@ export class AppComponent {
     constructor(service: Service) {
         this.employees = service.getEmployees();
         this.lookupData = {
-            store: {
-                type: "array",
-                data: this.employees,
-                group: "City"
-            }
-
+            store: this.employees,
+            sort: "Full_Name"
         };
     }
 

@@ -24,12 +24,8 @@ export class AppComponent {
         this.employees = service.getEmployees();
 
         this.lookupData = {
-            store: {
-                type: "array",
-                data: this.employees,
-                sort: "Full_Name"
-            }
-
+            store: this.employees,
+            sort: "Full_Name"
         };
     }
 
