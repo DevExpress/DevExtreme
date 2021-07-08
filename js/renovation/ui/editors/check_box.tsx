@@ -23,7 +23,6 @@ import { getOptionValue } from '../../utils/get_option_value';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
-const DEFAULT_ICON_SIZE = 22;
 const ICON_FONT_SIZE_RATION = 16 / 22;
 
 const getCssClasses = (model: CheckBoxProps): string => {
@@ -113,9 +112,9 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() readOnly = false;
 
-  @OneWay() iconHeight: number | string | (() => (string | number)) = DEFAULT_ICON_SIZE;
+  @OneWay() iconHeight?: number | string | (() => (string | number));
 
-  @OneWay() iconWidth: number | string | (() => (string | number)) = DEFAULT_ICON_SIZE;
+  @OneWay() iconWidth?: number | string | (() => (string | number));
 
   @OneWay() isValid = true;
 

@@ -227,7 +227,6 @@ describe('CheckBox', () => {
 
         it('should correctly change icon font size if "iconWidth"/"iconHeight" options are not numbers', () => {
           const checkBox = new CheckBox({ iconHeight: '22', iconWidth: '22px' });
-          // checkBox.iconRef = { current: { style: {} } } as any;
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             getBoundingClientRect: () => ({ width: '22', height: '22' }),
