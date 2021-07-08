@@ -380,7 +380,9 @@ export const ListBase = CollectionWidget.inherit({
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
         const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
-        this._scrollView = this._createComponent(this.$element(), getScrollView(), {
+        this._createScrollViewActions();
+
+        this._createComponent(this.$element(), getScrollView(), {
             height: this.option('height'),
             width: this.option('width'),
             disabled: this.option('disabled') || !scrollingEnabled,
@@ -398,7 +400,10 @@ export const ListBase = CollectionWidget.inherit({
             pulledDownText: this.option('pulledDownText'),
             refreshingText: this.option('refreshingText'),
             reachBottomText: this.option('pageLoadingText'),
-            useKeyboard: false
+            useKeyboard: false,
+            onInitialized: (e) => {
+                this._scrollView = e.component;
+            }
         });
 
         this._$container = $(this._scrollView.content());
@@ -407,7 +412,6 @@ export const ListBase = CollectionWidget.inherit({
             this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
         }
 
-        this._createScrollViewActions();
     },
 
     _createScrollViewActions: function() {
