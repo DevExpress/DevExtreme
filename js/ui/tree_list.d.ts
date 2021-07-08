@@ -810,21 +810,21 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     remoteOperations?: {
-      /**
-       * @docid
-       * @default false
-       */
-      filtering?: boolean,
-      /**
-       * @docid
-       * @default false
-       */
-      grouping?: boolean,
-      /**
-       * @docid
-       * @default false
-       */
-      sorting?: boolean
+        /**
+         * @docid
+         * @default false
+         */
+        filtering?: boolean,
+        /**
+         * @docid
+         * @default false
+         */
+        grouping?: boolean,
+        /**
+         * @docid
+         * @default false
+         */
+        sorting?: boolean
     } | 'auto';
     /**
      * @docid
@@ -844,6 +844,12 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type object
      */
     selection?: Selection;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: dxTreeListToolbar;
 }
 
 /**
@@ -1190,16 +1196,16 @@ type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 
 /**
  * @docid
- * @type object
+ * @inherits dxToolbarItem
  * @namespace DevExpress.ui
  */
 export interface dxTreeListToolbarItem extends dxToolbarItem {
-  /**
-   * @docid
-   * @type Enums.TreeListToolbarItemName|string
-   * @public
-  */
-  name?: dxTreeListDefaultToolbarItemName | string
+    /**
+     * @docid
+     * @type Enums.TreeListToolbarItemName|string
+     * @public
+     */
+    name?: dxTreeListDefaultToolbarItemName | string
 }
 
 /**
@@ -1208,12 +1214,12 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
  * @namespace DevExpress.ui
  */
 export interface dxTreeListToolbar {
-  /**
-   * @docid
-   * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItemName>
-   * @public
-   */
-  items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
+    /**
+     * @docid
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItemName>
+     * @public
+     */
+    items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
 }
 
 /**
