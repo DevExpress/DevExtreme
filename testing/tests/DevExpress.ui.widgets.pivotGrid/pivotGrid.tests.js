@@ -3210,7 +3210,7 @@ QUnit.module('dxPivotGrid', {
                     const expectedColHeaderCellText = area === 'row' ? '57' : '46';
                     checkLeftTopVisibleHeaderCellTexts(pivotGrid, expectedRowHeaderCellText, area === 'row'
                         ? expectedColHeaderCellText
-                        : (+expectedColHeaderCellText + 1).toString(), 'after changing visible to a false value');
+                        : (Number(expectedColHeaderCellText) + 1).toString(), 'after changing visible to a false value');
                 });
 
                 QUnit.test(`Render -> scrollTo() -> subField.visible=false -> subField.visible=true. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
