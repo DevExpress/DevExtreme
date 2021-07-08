@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:list";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -16,7 +15,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   line-height: 0;
 
   .dx-checkbox-container {
-    overflow: visible;
+    overflow: hidden;
   }
 
   &.dx-state-readonly,
