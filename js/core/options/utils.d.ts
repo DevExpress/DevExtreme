@@ -7,7 +7,7 @@ export type RecursivePartial<T> = {
 };
 
 export type Rule<T> = {
-    device: ((device: Device) => boolean) | Device | Device[];
+    device?: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
 };
 
