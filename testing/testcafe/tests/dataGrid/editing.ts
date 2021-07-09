@@ -1635,7 +1635,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   },
 }));
 
-test.skip('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -1671,7 +1671,10 @@ test.skip('Checkbox has ink ripple in material theme inside editing popup (T9772
     },
     columns: ['LastName'],
   });
-}).after(() => changeTheme('generic.light'));
+}).after(async () => {
+  await disposeWidgets();
+  await changeTheme('generic.light');
+});
 
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');
