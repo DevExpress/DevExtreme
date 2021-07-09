@@ -112,6 +112,7 @@ export class PositionHelper {
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
 
     getLoadedResources() { return getResourceManager(this.key).loadedResources; }
+    getGroupCount() { return getGroupCount(this.getLoadedResources()); }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         const validGroupIndex = groupIndex || 0;
@@ -160,7 +161,7 @@ export class PositionHelper {
         let validGroupIndices = [groupIndex];
 
         if(!isDefined(groupIndex)) {
-            validGroupIndices = getGroupCount(this.getLoadedResources())
+            validGroupIndices = this.getGroupCount(this.getLoadedResources())
                 ? groupIndices
                 : [0];
         }
@@ -228,7 +229,7 @@ export class PositionHelper {
 
         if(this.isVirtualScrolling) {
             correctedGroupIndex = this.isGroupedByDate
-                ? this._getGroupCount() - 1
+                ? this.getGroupCount() - 1
                 : groupIndex;
         }
 
