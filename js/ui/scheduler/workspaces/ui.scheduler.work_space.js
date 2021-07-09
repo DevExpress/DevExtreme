@@ -416,7 +416,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.$element();
     }
 
-    _isVerticalGroupedWorkSpace() {
+    _isVerticalGroupedWorkSpace() { // TODO move to the Model
         return !!this.option('groups').length && this.option('groupOrientation') === 'vertical';
     }
 
@@ -1423,8 +1423,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         return getMaxAllowedVerticalPosition({
             groupIndex,
             viewDataProvider: this.viewDataProvider,
-            isShowAllDayPanel: this.showAllDayPanel,
+            isShowAllDayPanel: this.option('showAllDayPanel'),
             isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
+            isVerticalGrouped: this._isVerticalGroupedWorkSpace(),
             DOMMetaData: this.getDOMElementsMetaData()
         });
     }
@@ -2301,6 +2302,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             isGroupedByDate: this.isGroupedByDate(),
             isRtlEnabled: this.option('rtlEnabled'),
             startViewDate: this.getStartViewDate(),
+            isVerticalGroupedWorkSpace: this._isVerticalGroupedWorkSpace(),
+            groupCount: this._getGroupCount(),
             isVirtualScrolling: this.isVirtualScrolling(),
             isSkippedDataCallback: this._isSkippedData.bind(this),
             getPositionShiftCallback: this.getPositionShift.bind(this),

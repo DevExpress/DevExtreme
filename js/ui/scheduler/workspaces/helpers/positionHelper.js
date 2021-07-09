@@ -1,7 +1,5 @@
 import { isDefined } from '../../../../core/utils/type';
-import { getGroupCount } from '../../resources/utils';
 import dateUtils from '../../../../core/utils/date';
-import { getResourceManager } from '../../instanceFactory';
 
 const getCellSize = (DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
@@ -74,7 +72,7 @@ export const getMaxAllowedPosition = (groupIndex, viewDataProvider, isRtlEnabled
     return getMaxAllowedHorizontalPosition(validGroupIndex, viewDataProvider, isRtlEnabled, DOMMetaData);
 };
 
-export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, isShowAllDayPanel, isGroupedAllDayPanel, DOMMetaData }) => {
+export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, isShowAllDayPanel, isGroupedAllDayPanel, isVerticalGrouped, DOMMetaData }) => {
     const { rowIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
     const { dateTableCellsMeta } = DOMMetaData;
     const lastGroupRow = dateTableCellsMeta[rowIndex];
@@ -86,7 +84,7 @@ export const getMaxAllowedVerticalPosition = ({ groupIndex, viewDataProvider, is
     // TODO remove while refactoring dual calculcations.
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if(isGroupedAllDayPanel) {
-        result -= (groupIndex + 1) * getAllDayHeight(isShowAllDayPanel, DOMMetaData);
+        result -= (groupIndex + 1) * getAllDayHeight(isShowAllDayPanel, isVerticalGrouped, DOMMetaData);
     }
 
     return result;
@@ -106,13 +104,12 @@ export class PositionHelper {
     get isGroupedByDate() { return this.options.isGroupedByDate; }
     get isRtlEnabled() { return this.options.isRtlEnabled; }
     get startViewDate() { return this.options.startViewDate; }
+    get isVerticalGroupedWorkSpace() { return this.options.isVerticalGroupedWorkSpace; }
+    get groupCount() { return this.options.groupCount; }
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
     get isSkippedData() { return this.options.isSkippedDataCallback; }
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get getDOMMetaData() { return this.options.getDOMMetaDataCallback; }
-
-    getLoadedResources() { return getResourceManager(this.key).loadedResources; }
-    getGroupCount() { return getGroupCount(this.getLoadedResources()); }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         const validGroupIndex = groupIndex || 0;
@@ -161,7 +158,7 @@ export class PositionHelper {
         let validGroupIndices = [groupIndex];
 
         if(!isDefined(groupIndex)) {
-            validGroupIndices = this.getGroupCount(this.getLoadedResources())
+            validGroupIndices = this.groupCount
                 ? groupIndices
                 : [0];
         }
@@ -229,7 +226,7 @@ export class PositionHelper {
 
         if(this.isVirtualScrolling) {
             correctedGroupIndex = this.isGroupedByDate
-                ? this.getGroupCount() - 1
+                ? this.groupCount - 1
                 : groupIndex;
         }
 
