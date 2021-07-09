@@ -2291,7 +2291,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             key: this.option('key'),
             viewDataProvider: this.viewDataProvider,
             viewStartDayHour: this.option('startDayHour'),
-            viewEndDayHour: this.option('enddayHour'),
+            viewEndDayHour: this.option('endDayHour'),
             cellDuration: this.getCellDuration(),
             groupedStrategy: this._groupedStrategy,
             isGroupedByDate: this.isGroupedByDate(),
