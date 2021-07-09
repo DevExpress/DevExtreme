@@ -11,6 +11,7 @@ import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
 import { deferUpdate } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
+import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
 import 'ui/button_group';
@@ -1669,6 +1670,11 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('dropdown menu should have height less then document height on android (T1010948)', function(assert) {
+        if(browser.msie) {
+            assert.ok('not relevant browser');
+            return;
+        }
+
         devices.current({ platform: 'android' });
         const toolbar = $('#widget').dxToolbar({
             items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
