@@ -374,8 +374,14 @@ export default class TableResizingModule extends BaseModule {
         return direction === 'horizontal' && this.editorInstance.option('rtlEnabled');
     }
 
-    _getLineElements($table, index) {
-        return $table.find(`td:nth-child(${(1 + index)})`);
+    _getLineElements($table, index, direction) {
+        let result;
+        if(direction !== 'vertical') {
+            result = $table.find(`td:nth-child(${(1 + index)})`);
+        } else {
+            result = $table.find('tr').eq(index).find('td');
+        }
+        return result;
     }
 
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
@@ -504,7 +510,10 @@ export default class TableResizingModule extends BaseModule {
 
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
-            $(element).attr('width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH) + 'px');
+            const $lineElements = this._getLineElements($table, index);
+            $lineElements.each((i, lineElement) => {
+                $(lineElement).attr('width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH) + 'px');
+            });
         });
     }
 
