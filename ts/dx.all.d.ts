@@ -812,7 +812,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:DOMComponent.dispose()]
@@ -1536,7 +1536,7 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type Rule<T> = {
-    device?: ((device: Device) => boolean) | Device | Device[];
+    device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
   };
   /**
@@ -23318,7 +23318,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]
