@@ -365,8 +365,6 @@ export default class TableResizingModule extends BaseModule {
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
         this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
-        // console.log('_dragStartHandler');
-        // console.log(this._startLineSeparatorPosition);
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
@@ -389,6 +387,12 @@ export default class TableResizingModule extends BaseModule {
         return result;
     }
 
+    _setLineElementsAttrValue($lineElements, property, value) {
+        each($lineElements, (i, element) => {
+            $(element).attr(property, value + 'px');
+        });
+    }
+
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
         let eventOffset = event.offset[directionInfo.positionCoordinateName];
@@ -406,11 +410,7 @@ export default class TableResizingModule extends BaseModule {
             const $nextLineElements = this._getLineElements(frame.$table, index + 1);
 
             if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-
-
-                $lineElements.each((i, element) => {
-                    $(element).attr(directionInfo.positionStyleProperty, currentLineNewSize + 'px');
-                });
+                this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
 
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
 
@@ -418,27 +418,20 @@ export default class TableResizingModule extends BaseModule {
                 const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < 5 : realWidthDiff > -5;
 
                 if(!shouldApplyNewValue) {
-                    each($lineElements, (i, element) => {
-                        $(element).attr(directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth() + 'px');
-                    });
+                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
 
                     nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
                 }
 
                 if(this._nextLineSize && nextColumnNewSize > 0) {
-
-                    $nextLineElements.each((i, element) => {
-                        $(element).attr(directionInfo.positionStyleProperty, nextColumnNewSize + 'px');
-                    });
+                    this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                 }
             }
         } else {
             const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
             const $lineElements = this._getLineElements(frame.$table, index, 'vertical');
 
-            each($lineElements, (i, element) => {
-                $(element).attr(directionInfo.positionStyleProperty, newHeight + 'px');
-            });
+            this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
 
             if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
@@ -514,9 +507,7 @@ export default class TableResizingModule extends BaseModule {
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
             const $lineElements = this._getLineElements($table, index);
-            $lineElements.each((i, lineElement) => {
-                $(lineElement).attr('width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH) + 'px');
-            });
+            this._setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH));
         });
     }
 
@@ -561,9 +552,7 @@ export default class TableResizingModule extends BaseModule {
                 resultWidth = this._minColumnWidth;
             }
 
-            $lineElements.each((i, element) => {
-                $(element).attr('width', resultWidth + 'px');
-            });
+            this._setLineElementsAttrValue($lineElements, 'width', resultWidth);
         });
     }
 
