@@ -14,6 +14,7 @@ import { fitIntoRange } from '../core/utils/math';
 import { addNamespace } from '../events/utils/index';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
+import { POPOVER_BOUNDARY_OFFSET } from './popover_contants';
 
 // STYLE popover
 
@@ -192,7 +193,7 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 },
+            boundaryOffset: { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET },
             _fixedPosition: true
 
             /**
