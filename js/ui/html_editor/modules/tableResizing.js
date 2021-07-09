@@ -79,6 +79,7 @@ export default class TableResizingModule extends BaseModule {
                 this._updateFramesSeparators();
             } else {
                 this._updateFramesPositions();
+                this._updateFramesSeparators('vertical');
             }
         };
     }
@@ -248,10 +249,14 @@ export default class TableResizingModule extends BaseModule {
         move($frame, { left: 0, top: 0 });
     }
 
-    _updateFramesSeparators() {
+    _updateFramesSeparators(direction) {
         each(this._tableResizeFrames, (index, frame) => {
-            this._updateFrameSeparators(frame, 'vertical');
-            this._updateFrameSeparators(frame, 'horizontal');
+            if(direction) {
+                this._updateFrameSeparators(frame, direction);
+            } else {
+                this._updateFrameSeparators(frame, 'vertical');
+                this._updateFrameSeparators(frame, 'horizontal');
+            }
         });
     }
 
