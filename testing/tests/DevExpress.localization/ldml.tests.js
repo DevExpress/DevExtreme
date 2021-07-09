@@ -448,7 +448,6 @@ QUnit.module('number formatter', () => {
                 dateString: '1012101012',
                 expected: ['10', '12', '10', '10', '12']
             }
-
         };
 
         Object.entries(formatsTestsData).forEach(([ format, { dateString, expected } ]) => {
@@ -461,18 +460,21 @@ QUnit.module('number formatter', () => {
     QUnit.test('getRegExpInfo should throw a warning message if there are two or more ambiguous patterns at the sequence of non separated digit patterns in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         const expectedWarningsCount = {
+            'dMMy': 1,
+            'dMMyy': 0,
             'dMMMy': 0,
             'ddMMyy': 0,
             'QQQdMMM': 0,
             'dMMyyyy': 1,
             'MMdyyyy': 1,
-            'MMMdyyyy': 1,
+            'MMddyyyy': 0,
             'dMMMy hm': 1,
-            'd MMM y hm': 1,
-            'QQQdMMM yhm': 1,
-            'QQQdHHMMM hm': 1,
-            'QQQdMMM y hm': 1,
-            'dMQQQdMMM yhm': 1,
+            'dMMMy hhm': 0,
+            'QQQdMMM hm': 1,
+            'QQQdMMM hmm': 0,
+            'EEEdHHMMM m': 0,
+            'dMQQQdMMM ym': 1,
+            'aaadMMM y hhm': 0,
             'QQQdSHHMMM hhmm': 0,
             'QQQdHHsMMM hhmm': 1,
             'QQQsSSSMMM hhmm': 1,
