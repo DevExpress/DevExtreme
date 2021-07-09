@@ -1,7 +1,7 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
-import { createScreenshotsComparer } from '../../../../helpers/screenshot-comparer';
 
 fixture`Outlook dragging base tests in shifted container`
   .page(url(__dirname, 'shiftedContainer.html'));
