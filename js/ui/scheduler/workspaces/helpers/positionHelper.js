@@ -47,12 +47,12 @@ export const getCellWidth = (DOMMetaData) => {
     return getCellSize(DOMMetaData).width;
 };
 
-export const getAllDayHeight = (isShowAllDayPanel, DOMMetaData) => {
+export const getAllDayHeight = (isShowAllDayPanel, isVerticalGrouped, DOMMetaData) => {
     if(!isShowAllDayPanel) {
         return 0;
     }
 
-    if(this.isVerticalGroupedWorkSpace) {
+    if(isVerticalGrouped) {
         const { dateTableCellsMeta } = DOMMetaData;
         const length = dateTableCellsMeta?.length;
 

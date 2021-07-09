@@ -1403,7 +1403,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getAllDayHeight() {
-        return getAllDayHeight(this.showAllDayPanel, this.getDOMElementsMetaData());
+        return getAllDayHeight(
+            this.option('showAllDayPanel'),
+            this._isVerticalGroupedWorkSpace(),
+            this.getDOMElementsMetaData()
+        );
     }
 
     getMaxAllowedPosition(groupIndex) {
