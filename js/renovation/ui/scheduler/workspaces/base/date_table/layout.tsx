@@ -1,10 +1,16 @@
 import {
   Component,
+  ComponentBindings,
+  ForwardRef,
   JSXComponent,
+  JSXTemplate,
+  RefObject,
+  Template,
 } from '@devextreme-generator/declarations';
 import { Table } from '../table';
-import { DateTableBody } from './table_body';
-import { DateTableLayoutProps } from './layout_props';
+import { CellTemplateProps, DateTableBody } from './table_body';
+import { LayoutProps } from '../layout_props';
+import { DateTableCellBase } from './cell';
 
 export const viewFunction = ({
   props: {
@@ -12,6 +18,7 @@ export const viewFunction = ({
     groupOrientation,
     cellTemplate,
     dataCellTemplate,
+    tableRef,
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
@@ -24,6 +31,7 @@ export const viewFunction = ({
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
+    tableRef={tableRef}
     topVirtualRowHeight={topVirtualRowHeight}
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}
@@ -43,6 +51,13 @@ export const viewFunction = ({
     />
   </Table>
 );
+
+@ComponentBindings()
+export class DateTableLayoutProps extends LayoutProps {
+  @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
+}
 
 @Component({
   defaultOptionRules: null,

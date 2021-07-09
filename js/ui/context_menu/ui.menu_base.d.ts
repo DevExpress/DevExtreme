@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../../animation/fx';
 
 import DataSource, {
@@ -35,12 +35,12 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
        * @docid
        * @default { type: "fade", from: 1, to: 0, duration: 100 }
        */
-      hide?: animationConfig,
+      hide?: AnimationConfig,
       /**
        * @docid
        * @default { type: "fade", from: 0, to: 1, duration: 100 }
        */
-      show?: animationConfig
+      show?: AnimationConfig
     };
     /**
      * @docid

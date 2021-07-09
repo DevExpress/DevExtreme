@@ -1,8 +1,7 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import { cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-
-const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
+import { getVerticalGroupCountClass } from './utils/base';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
@@ -99,11 +98,8 @@ class VerticalGroupedStrategy {
         return 0;
     }
 
-    getGroupCountAttr(groups) {
-        return {
-            attr: VERTICAL_GROUPED_ATTR,
-            count: groups?.length
-        };
+    getGroupCountClass(groups) {
+        return getVerticalGroupCountClass(groups);
     }
 
     getLeftOffset() {

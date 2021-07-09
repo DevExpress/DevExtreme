@@ -471,13 +471,13 @@ module('Work Space Week', () => {
             let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 2, 0), 1, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.equal(coords.hMax, 998, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 998, 1, 'hMax cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-all-day-table tbody td').eq(3).position().left, 0.01, 'Left cell coordinates are right');
 
             coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.equal(coords.hMax, 998, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 998, 1, 'hMax cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(8).position().left, 0.01, 'Left cell coordinates are right');
         });
     });

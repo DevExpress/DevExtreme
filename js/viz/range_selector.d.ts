@@ -17,9 +17,9 @@ import {
     ChangedOptionInfo
 } from '../events/index';
 
-import {
-    format
-} from '../ui/widget/ui.widget';
+import { 
+  Format
+} from '../localization';
 
 import {
     dxChartCommonSeriesSettings
@@ -443,7 +443,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @docid
          * @extends CommonVizFormat
          */
-        format?: format,
+        format?: Format,
         /**
          * @docid
          * @type Enums.ScaleLabelOverlappingBehavior
@@ -492,7 +492,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format
+          format?: Format
         },
         /**
          * @docid
@@ -717,7 +717,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @default 'red'

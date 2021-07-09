@@ -228,7 +228,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @docid
        * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
-       * @return void
+       * @type_function_return void
        */
       action?: ((itemElement: DxElement, itemData: any) => any),
       /**

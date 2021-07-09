@@ -281,7 +281,10 @@ export default class ViewDataProvider {
     }
 
     getColumnsCount() {
-        return this.viewDataMap.dateTableMap[0].length;
+        const { dateTableMap } = this.viewDataMap;
+        return dateTableMap
+            ? dateTableMap[0].length
+            : 0;
     }
 
     getViewEdgeIndices(isAllDayPanel) {

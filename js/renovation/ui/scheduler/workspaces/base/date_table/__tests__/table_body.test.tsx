@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
-import { viewFunction as TableBodyView } from '../table_body';
+import { DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
@@ -73,6 +73,7 @@ describe('DateTableBody', () => {
       <TableBodyView
         {...viewModel}
         props={{
+          ...new DateTableBodyProps(),
           viewData,
           cellTemplate,
           groupOrientation: VERTICAL_GROUP_ORIENTATION,

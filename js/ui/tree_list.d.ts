@@ -55,6 +55,8 @@ import {
     RowDraggingTemplateDataModel
 } from './data_grid';
 
+import { dxToolbarItem } from './toolbar';
+
 import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
@@ -808,21 +810,21 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     remoteOperations?: {
-      /**
-       * @docid
-       * @default false
-       */
-      filtering?: boolean,
-      /**
-       * @docid
-       * @default false
-       */
-      grouping?: boolean,
-      /**
-       * @docid
-       * @default false
-       */
-      sorting?: boolean
+        /**
+         * @docid
+         * @default false
+         */
+        filtering?: boolean,
+        /**
+         * @docid
+         * @default false
+         */
+        grouping?: boolean,
+        /**
+         * @docid
+         * @default false
+         */
+        sorting?: boolean
     } | 'auto';
     /**
      * @docid
@@ -842,6 +844,12 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @type object
      */
     selection?: Selection;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: dxTreeListToolbar;
 }
 
 /**
@@ -1182,6 +1190,36 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
+}
+
+type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+/**
+ * @docid
+ * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
+ */
+export interface dxTreeListToolbarItem extends dxToolbarItem {
+    /**
+     * @docid
+     * @type Enums.TreeListToolbarItemName|string
+     * @public
+     */
+    name?: dxTreeListDefaultToolbarItemName | string
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxTreeListToolbar {
+    /**
+     * @docid
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItemName>
+     * @public
+     */
+    items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
 }
 
 /**

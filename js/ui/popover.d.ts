@@ -1,9 +1,9 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -101,11 +101,11 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     } | string;
     /**
      * @docid
-     * @type Enums.Position|positionConfig
+     * @type Enums.Position|PositionConfig
      * @default 'bottom'
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
     /**
      * @docid
      * @default false
@@ -156,13 +156,13 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
      * @default { type: "fade", to: 0 }
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopoverOptions.animation.show
      * @default { type: "fade", from: 0, to: 1 }
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid

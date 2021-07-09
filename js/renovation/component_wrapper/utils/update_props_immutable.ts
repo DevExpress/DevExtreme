@@ -24,7 +24,11 @@ function cloneObjectProp(
       fullNameParts.slice(1),
     );
   } else if (name) {
-    result[name] = value[name];
+    if (isPlainObject(value[name])) {
+      result[name] = cloneObjectValue(value[name]);
+    } else {
+      result[name] = value[name];
+    }
   }
   return result;
 }

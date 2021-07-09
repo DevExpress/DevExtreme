@@ -610,7 +610,6 @@ each([{
 
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
 
               if (Scrollable === ScrollableNative) {

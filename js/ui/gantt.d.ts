@@ -355,7 +355,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default false
        */
-      autoUpdateParentTasks?: boolean
+      autoUpdateParentTasks?: boolean,
+      /**
+       * @docid
+       * @default false
+       */
+       enablePredecessorGap?: boolean
     };
     /**
      * @docid
