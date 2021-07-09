@@ -82,7 +82,9 @@ class VirtualStrategy extends BaseStrategy {
     }
 
     createRecurrentAppointmentInfos(dateSettings, isAllDayAppointment) {
-        const result = dateSettings.map(({ source, startDate }, index) => {
+        const result = [];
+
+        dateSettings.forEach(({ source, startDate }, index) => {
             const coordinate = this.positionHelper.getCoordinatesByDate(
                 startDate,
                 source.groupIndex,
@@ -90,7 +92,9 @@ class VirtualStrategy extends BaseStrategy {
             );
 
             if(coordinate) {
-                return this._prepareObject(coordinate, index);
+                result.push(
+                    this._prepareObject(coordinate, index)
+                );
             }
         });
 
