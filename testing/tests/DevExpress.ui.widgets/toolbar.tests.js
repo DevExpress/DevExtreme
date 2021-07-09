@@ -10,6 +10,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
 import { deferUpdate } from 'core/utils/common';
+import domAdapter from 'core/dom_adapter';
+import devices from 'core/devices';
 
 import 'ui/button_group';
 
@@ -1664,6 +1666,24 @@ QUnit.module('adaptivity', {
         $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger('dxclick');
 
         assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
+    });
+
+    QUnit.test('dropdown menu should have height less then document height on android (T1010948)', function(assert) {
+        devices.current({ platform: 'android' });
+        const toolbar = $('#widget').dxToolbar({
+            items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
+        }).dxToolbar('instance');
+
+        toolbar.option('overflowMenuVisible', true);
+        this.clock.tick();
+
+        const $popupContent = toolbar.$element()
+            .find(`.${DROP_DOWN_MENU_CLASS}`)
+            .dxDropDownMenu('instance')._popup._$content;
+
+        const document = domAdapter.getDocumentElement();
+        assert.equal($popupContent.height() < document.clientHeight, true, `popup height must be less then document height (${$popupContent.height()} < ${document.clientHeight})`);
+        devices.current(null);
     });
 });
 

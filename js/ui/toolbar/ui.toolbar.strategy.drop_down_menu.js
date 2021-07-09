@@ -41,7 +41,7 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         return extend(this.callBase(), {
             deferRendering: true,
             container: this._toolbar.option('menuContainer'),
-            popupMaxHeight: (devices.current().android || devices.real.android) // T1010948
+            popupMaxHeight: (devices.current().platform === 'android') // T1010948
                 ? domAdapter.getDocumentElement().clientHeight - topAndBottomOffset
                 : undefined,
             menuWidget: ToolbarMenu,
