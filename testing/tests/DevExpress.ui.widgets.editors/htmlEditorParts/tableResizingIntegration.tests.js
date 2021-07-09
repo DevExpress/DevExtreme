@@ -954,6 +954,45 @@ module('Table resizing integration', {
             checkColumnResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
 
+        test('Table should save custom column width after the first column deletion', function(assert) {
+            this.createWidget({
+                width: 630
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+            $columnResizerElements.eq(3)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            PointerMock($draggableElements.eq(0))
+                .start()
+                .dragStart()
+                .drag(-50, 0)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const tableModule = this.quillInstance.getModule('table');
+            let $table = this.$element.find('table');
+            const tableWidth = $table.outerWidth();
+
+            this.quillInstance.setSelection(4, 0);
+            tableModule.deleteRow();
+            this.clock.tick(TIME_TO_WAIT);
+
+            const expectedColumnsWidths = [150, 150, 150, 100];
+            $table = this.$element.find('table');
+
+            $table.find('tr').eq(0).find('td').each((i, columnElement) => {
+                assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2.01, 'Column has expected width, index = ' + i);
+            });
+
+            assert.roughEqual($table.outerWidth(), tableWidth, 'table width is not changed');
+        });
+
         test('Column resizers should be updated after a column insert', function(assert) {
             this.createWidget({
                 value: tableMarkup
@@ -1170,6 +1209,45 @@ module('Table resizing integration', {
             checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
             assert.roughEqual($table.outerWidth(), tableWidth, 2, 'Table width is not changed');
+        });
+
+        test('Table should save custom row height after the first row deletion', function(assert) {
+            this.createWidget({
+                value: tableMarkup,
+                width: 630
+            });
+            this.clock.tick(TIME_TO_WAIT);
+            let $table = this.$element.find('table').eq(0);
+
+            const $rowResizerElement = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`).eq(0);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            $rowResizerElement
+                .trigger('dxpointerdown');
+
+            const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+            PointerMock($draggableElement)
+                .start()
+                .dragStart()
+                .drag(0, 50)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const tableHeight = $table.outerHeight();
+
+            const tableModule = this.quillInstance.getModule('table');
+
+            this.quillInstance.setSelection(4, 0);
+            tableModule.deleteColumn();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            $table = this.$element.find('table').eq(0);
+
+            assert.roughEqual($table.outerHeight(), tableHeight, 2, 'Table width is not changed');
         });
 
         test('Second table frame should update position after the insert row to the first table', function(assert) {
