@@ -1,8 +1,1 @@
-﻿new Promise(resolve => {
-    const interval = setInterval(() => {
-        if($('div:contains("Chai")').length) {
-            clearInterval(interval);
-            resolve();
-        }
-    }, 200);
-});
+﻿testUtils.postponeUntil(() => testUtils.findElements('div').some(x=>(x.innerHTML || '').indexOf('Chai') != -1), 200, 20000);

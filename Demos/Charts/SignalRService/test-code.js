@@ -1,21 +1,10 @@
-﻿(function (factory) {
-    if (window.Promise && window.System) {
-        System.import("devextreme/viz/chart").then(factory);
-    } else {
-        factory(DevExpress.viz.dxChart);
-    }
-})(function (dxChart) {
-    return new Promise((resolve) => {
-        var intervalId = setInterval(() => {
+﻿testUtils.importAnd(() => "devextreme/viz/chart", () => DevExpress.viz.dxChart, function (dxChart) {
+    let isReady = false;
+    return testUtils
+        .postponeUntilFound('#chart', 100, 3000)
+        .then(x => {
+            debugger;
             var chart = dxChart.getInstance(document.querySelector("#chart"));
-            if (!chart) return;
-
-            clearInterval(intervalId);
-
-            var isReady = false;
-            window.checkReady = function () {
-                return isReady;
-            }
 
             var dataSourceItems = getData(),
                 keyField = "Date";
@@ -30,32 +19,20 @@
             }
 
 
-            chart.option("adjustAxesOnZoom", true);
-
-            function stubPush() {
-                var dataSource = chart.getDataSource(),
-                    store = dataSource.store();
-
-                store.push = function () {
-                    return;
-                };
-            }
-
-            stubPush();
-
+            chart.option("adjustAxesOnZoom", true);            
             chart.on("done", function () {
                 isReady = true;
             });
-
+            
             chart.option("dataSource", dataSourceItems);
             chart.getArgumentAxis().visualRange({
                 length: "hour",
                 endValue: new Date(1539775980000)
             });
             chart.option = function () { };
-            resolve();
-        }, 100);
-    });
+        })
+        .then(testUtils.postponeUntil(()=>isReady, 100, 30000))
+        .then(testUtils.postpone(500)); 
 });
 
 function getData() {

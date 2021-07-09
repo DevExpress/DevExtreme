@@ -1,17 +1,12 @@
-(function (factory) {
-    if (window.Promise && window.System) {
-        Promise.all([
-            System.import("devextreme/ui/data_grid"),
-            System.import("devextreme/data/data_source")
-        ]).then(function (args) {
-            factory(args[0], args[1]);
-        });
-    } else {
-        factory(DevExpress.ui.dxDataGrid, DevExpress.data.DataSource);
-    }
-})(function (dxDataGrid, DataSource) {
+testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_source'], () => [DevExpress.ui.dxDataGrid, DevExpress.data.DataSource], function (dxDataGrid, DataSource) {
     return new Promise((resolve) => {
+        let i = 0;
         var intervalId = setInterval(() => {
+            i += 1;
+            if(i === 200) {
+                clearInterval(intervalId);
+                throw 'timeout';
+            }
             if (!dxDataGrid.getInstance(document.querySelector("#gridContainer"))) return;
 
             clearInterval(intervalId);

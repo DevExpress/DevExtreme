@@ -1,14 +1,4 @@
-(function (factory) {
-  if (window.Promise && window.System) {
-    Promise.all([
-      System.import("devextreme/viz/chart")
-    ]).then(function (args) {
-      factory(args[0]);
-    });
-  } else {
-    factory(DevExpress.viz.dxChart);
-  }
-})(function (dxChart) {
+testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, function (dxChart) {
   var dataSource = [
     { x1: 9, y1: 5, x2: undefined, y2: undefined },
     { x1: 14, y1: 9, x2: undefined, y2: undefined },
@@ -92,8 +82,12 @@
     { x1: -11, y1: -6, x2: -8, y2: 8 },
   ];
   
-    var instance = dxChart.getInstance(document.getElementById("chart"));
-    instance.option("dataSource", dataSource);
-    instance.option = function() { };
+  return testUtils
+    .postponeUntilFound('#chart', 100, 10000)
+    .then(() => {
+        const instance = dxChart.getInstance(document.querySelector('#chart'));
+        instance.option("dataSource", dataSource);
+        instance.option = function() { };
+    })
+    .then(testUtils.postpone(2000));
 });
-

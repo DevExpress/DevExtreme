@@ -1,14 +1,4 @@
-﻿(function (factory) {
-    if (window.Promise && window.System) {
-        Promise.all([
-            System.import("devextreme/viz/chart")
-        ]).then(function (args) {
-            factory(args[0]);
-        });
-    } else {
-        factory(DevExpress.viz.dxChart);
-    }
-})(function (dxChart) {
+﻿testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, function (dxChart) {
     var dataSource = [
         {
             monarch: "Anne",
@@ -122,8 +112,12 @@
         item.Monarch = item.monarch;
     });
 
-    var instance = dxChart.getInstance(document.getElementById("chart"));
-    instance.option("dataSource", dataSource);
-    instance.option = function () { };
+    return testUtils
+        .postponeUntilFound('#chart', 100, 10000)
+        .then(() => {
+            const instance = dxChart.getInstance(document.querySelector('#chart'));
+            instance.option("dataSource", dataSource);
+            instance.option = function() { };
+        })
+        .then(testUtils.postpone(2000));
 });
-

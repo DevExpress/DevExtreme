@@ -1,14 +1,9 @@
-(function (factory) {
-    if (window.Promise && window.System) {
-        Promise.all([
-            System.import("devextreme/ui/calendar")
-        ]).then(function (args) {
-            factory(args[0]);
-        });
-    } else {
-        factory(DevExpress.ui.dxCalendar);
-    }
-})(function (dxCalendar) {
-    var instance = dxCalendar.getInstance(document.querySelector(".dx-calendar"));
-    instance.option("value", new Date("Mon Oct 10 2014 14:18:19"));
+testUtils.importAnd(()=>'devextreme/ui/calendar', ()=>DevExpress.ui.dxCalendar, function (dxCalendar) {
+    return testUtils
+        .postponeUntilFound('.dx-calendar', 100, 10000)
+        .then(() => {
+            const instance = dxCalendar.getInstance(document.querySelector('.dx-calendar'));
+            instance.option("value", new Date("Mon Oct 10 2014 14:18:19"));
+        })
+        .then(testUtils.postpone(2000));
 });

@@ -1,10 +1,1 @@
-﻿new Promise(resolve => {
-    var i = 0;
-    const interval = setInterval(() => {
-        if(i > 100 || $('td:contains("Store:")').length) {
-            clearInterval(interval);
-            resolve();
-        }
-        i++;
-    }, 200);
-});
+﻿testUtils.postponeUntil(() => testUtils.findElements('td').some(x=>(x.innerHTML || '').indexOf('Store:') != -1), 200, 20000);

@@ -1,1 +1,3 @@
-$(".demo-container").css("min-height", "450px");
+testUtils
+    .postponeUntilFound('.demo-container')
+    .then(() => testUtils.findElements(".demo-container").forEach(x=>x.style.minHeight = '450px'));

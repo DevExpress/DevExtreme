@@ -1,10 +1,1 @@
-﻿new Promise(resolve => {
-    var i = 0;
-    const interval = setInterval(() => {
-        if(i > 100 || $('#tasks-count:contains("0")').length) {
-            clearInterval(interval);
-            resolve();
-        }
-        i++;
-    }, 200);
-});
+﻿testUtils.postponeUntil(() => testUtils.findElements('#tasks-count').some(x=>(x.innerHTML || '').indexOf('0') != -1), 200, 20000);

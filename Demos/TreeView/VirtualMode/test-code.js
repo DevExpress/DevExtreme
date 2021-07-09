@@ -1,10 +1,2 @@
-﻿new Promise(resolve => {
-    var i = 0;
-    const interval = setInterval(() => {
-        if(i > 100 || $('span:contains("Stores")').length) {
-            clearInterval(interval);
-            resolve();
-        }
-        i++;
-    }, 200);
-});
+﻿testUtils.postponeUntil(() => testUtils.findElements('span').some(x=>(x.innerHTML || '').indexOf('Stores') != -1), 100, 20000)
+

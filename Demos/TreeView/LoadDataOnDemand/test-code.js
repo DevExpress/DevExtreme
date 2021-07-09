@@ -1,15 +1,4 @@
-(function (factory) {
-    if (window.Promise && window.System) {
-        Promise.all([
-            System.import("devextreme/ui/tree_view")
-        ]).then(function (args) {
-            factory(args[0]);
-        });
-    } else {
-        factory(DevExpress.ui.dxTreeView);
-    }
-})(function (dxTreeView) {
-    if(!window.$) return;
+testUtils.importAnd(()=>'devextreme/ui/tree_view', ()=>DevExpress.ui.dxTreeView, function (dxTreeView) {    
     
     var treeView = dxTreeView.getInstance(document.getElementById("simple-treeview"));
     function changeCreateChildren(treeView) {

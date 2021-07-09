@@ -1,10 +1,1 @@
-﻿new Promise(resolve => {
-    var i = 0;
-    const interval = setInterval(() => {
-        if(i > 50 || $('.dx-scheduler-appointment-title').length) {
-            clearInterval(interval);
-            resolve();
-        }
-        i++;
-    }, 100);
-});
+﻿testUtils.postponeUntilFound('.dx-scheduler-appointment-title', 100, 5000);

@@ -1,10 +1,1 @@
-﻿new Promise(resolve => {
-    var i = 0;
-    const interval = setInterval(() => {
-        if(i > 100 || $('span:contains("Home Appliances Total")').length) {
-            clearInterval(interval);
-            resolve();
-        }
-        i++;
-    }, 200);
-});
+﻿testUtils.postponeUntil(() => testUtils.findElements('span').some(x=>(x.innerHTML || '').indexOf('Home Appliances Total') != -1), 200, 20000);
