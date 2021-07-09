@@ -590,6 +590,9 @@ export class DataGridSelection {
 
   @OneWay()
   showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
+
+  @OneWay()
+  maxFilterLengthInRequest?: number;
 }
 
 @ComponentBindings()
@@ -1016,6 +1019,8 @@ export class DataGridFilterRow {
     notContains?: string;
     notEqual?: string;
     startsWith?: string;
+    isBlank?: string;
+    isNotBlank?: string;
   };
 
   @OneWay()
@@ -1174,7 +1179,20 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     changes: [],
   };
 
-  @OneWay() export?: DataGridExport;
+  @OneWay() export?: DataGridExport = {
+    enabled: false,
+    fileName: 'DataGrid',
+    excelFilterEnabled: false,
+    excelWrapTextEnabled: undefined,
+    proxyUrl: undefined,
+    allowExportSelectedData: false,
+    ignoreExcelErrors: true,
+    texts: {
+      exportTo: messageLocalization.format('dxDataGrid-exportTo'),
+      exportAll: messageLocalization.format('dxDataGrid-exportAll'),
+      exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows'),
+    },
+  };
 
   @Nested() groupPanel?: DataGridGroupPanel = {
     visible: false,
@@ -1196,7 +1214,10 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     },
   };
 
-  @Nested() masterDetail?: DataGridMasterDetail;
+  @Nested() masterDetail?: DataGridMasterDetail = {
+    enabled: false,
+    autoExpandAll: false,
+  };
 
   @Nested() scrolling?: DataGridScrolling = {
     timeout: 300,
@@ -1215,21 +1236,105 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     useNative: 'auto',
   };
 
-  @Nested() selection?: DataGridSelection;
+  @Nested() selection?: DataGridSelection = {
+    mode: 'none',
+    showCheckBoxesMode: 'onClick',
+    allowSelectAll: true,
+    selectAllMode: 'allPages',
+    maxFilterLengthInRequest: 1500,
+    deferred: false,
+  };
 
   @Nested() sortByGroupSummaryInfo?: DataGridSortByGroupSummaryInfoItem[];
 
-  @Nested() summary?: DataGridSummary;
+  @Nested() summary?: DataGridSummary = {
+    groupItems: undefined,
+    totalItems: undefined,
+    calculateCustomSummary: undefined,
+    skipEmptyValues: true,
+    recalculateWhileEditing: false,
+    texts: {
+      sum: messageLocalization.getFormatter('dxDataGrid-summarySum')(),
+      sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn')(),
+      min: messageLocalization.getFormatter('dxDataGrid-summaryMin')(),
+      minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn')(),
+      max: messageLocalization.getFormatter('dxDataGrid-summaryMax')(),
+      maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn')(),
+      avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg')(),
+      avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn')(),
+      count: messageLocalization.getFormatter('dxDataGrid-summaryCount')(),
+    },
+  };
 
-  @Nested() columnChooser?: DataGridColumnChooser;
+  @Nested() columnChooser?: DataGridColumnChooser = {
+    enabled: false,
+    allowSearch: false,
+    searchTimeout: 500,
+    mode: 'dragAndDrop',
+    width: 250,
+    height: 260,
+    title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
+    emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
+  };
 
-  @Nested() columnFixing?: DataGridColumnFixing;
+  @Nested() columnFixing?: DataGridColumnFixing = {
+    enabled: false,
+    texts: {
+      fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
+      unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
+      leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
+      rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition'),
+    },
+  };
 
-  @Nested() filterPanel?: DataGridFilterPanel;
+  @Nested() filterPanel?: DataGridFilterPanel = {
+    visible: false,
+    filterEnabled: true,
+    texts: {
+      createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
+      clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
+      filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
+    },
+  };
 
-  @Nested() filterRow?: DataGridFilterRow;
+  @Nested() filterRow?: DataGridFilterRow = {
+    visible: false,
+    showOperationChooser: true,
+    showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
+    resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
+    applyFilter: 'auto',
+    applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
+    operationDescriptions: {
+      equal: messageLocalization.format('dxDataGrid-filterRowOperationEquals'),
+      notEqual: messageLocalization.format('dxDataGrid-filterRowOperationNotEquals'),
+      lessThan: messageLocalization.format('dxDataGrid-filterRowOperationLess'),
+      lessThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationLessOrEquals'),
+      greaterThan: messageLocalization.format('dxDataGrid-filterRowOperationGreater'),
+      greaterThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationGreaterOrEquals'),
+      startsWith: messageLocalization.format('dxDataGrid-filterRowOperationStartsWith'),
+      contains: messageLocalization.format('dxDataGrid-filterRowOperationContains'),
+      notContains: messageLocalization.format('dxDataGrid-filterRowOperationNotContains'),
+      endsWith: messageLocalization.format('dxDataGrid-filterRowOperationEndsWith'),
+      between: messageLocalization.format('dxDataGrid-filterRowOperationBetween'),
+      isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+    },
+    betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
+    betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText'),
+  };
 
-  @Nested() headerFilter?: DataGridHeaderFilter;
+  @Nested() headerFilter?: DataGridHeaderFilter = {
+    visible: false,
+    width: 252,
+    height: 325,
+    allowSearch: false,
+    searchTimeout: 500,
+    texts: {
+      emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
+      ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
+      cancel: messageLocalization.format('dxDataGrid-headerFilterCancel'),
+    },
+  };
 
   @OneWay() useKeyboard?: boolean; // TODO remove
 
@@ -1250,11 +1355,22 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     showPane: true,
   };
 
-  @Nested() pager?: DataGridPager;
+  @Nested() pager?: DataGridPager = {
+    visible: 'auto',
+    showPageSizeSelector: false,
+    allowedPageSizes: 'auto',
+  };
 
-  @Nested() paging?: DataGridPaging;
+  @Nested() paging?: DataGridPaging = {
+    enabled: true,
+  };
 
-  @Nested() rowDragging?: DataGridRowDragging;
+  @Nested() rowDragging?: DataGridRowDragging = {
+    showDragIcons: true,
+    dropFeedbackMode: 'indicate',
+    allowReordering: false,
+    allowDropInsideItem: false,
+  };
 
   @Nested() searchPanel?: DataGridSearchPanel = {
     visible: false,
@@ -1274,7 +1390,11 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     showSortIndexes: true,
   };
 
-  @Nested() stateStoring?: DataGridStateStoring;
+  @Nested() stateStoring?: DataGridStateStoring = {
+    enabled: false,
+    type: 'localStorage',
+    savingTimeout: 2000,
+  };
 
   @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
 
@@ -1297,25 +1417,25 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     sorting?: boolean;
     summary?: boolean;
   }
-  | 'auto';
+  | 'auto' = 'auto';
 
-  @OneWay() allowColumnReordering?: boolean;
+  @OneWay() allowColumnReordering?: boolean = false;
 
-  @OneWay() allowColumnResizing?: boolean;
+  @OneWay() allowColumnResizing?: boolean = false;
 
-  @OneWay() autoNavigateToFocusedRow?: boolean;
+  @OneWay() autoNavigateToFocusedRow?: boolean = true;
 
-  @OneWay() cacheEnabled?: boolean;
+  @OneWay() cacheEnabled?: boolean = true;
 
-  @OneWay() cellHintEnabled?: boolean;
+  @OneWay() cellHintEnabled?: boolean = true;
 
-  @OneWay() columnAutoWidth?: boolean;
+  @OneWay() columnAutoWidth?: boolean = false;
 
-  @OneWay() columnHidingEnabled?: boolean;
+  @OneWay() columnHidingEnabled?: boolean = false;
 
   @OneWay() columnMinWidth?: number;
 
-  @OneWay() columnResizingMode?: 'nextColumn' | 'widget';
+  @OneWay() columnResizingMode?: 'nextColumn' | 'widget' = 'nextColumn';
 
   @OneWay() columnWidth?: number;
 
@@ -1323,25 +1443,47 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() dateSerializationFormat?: string;
 
-  @OneWay() errorRowEnabled?: boolean;
+  @OneWay() errorRowEnabled?: boolean = true;
 
-  @OneWay() filterBuilder?: dxFilterBuilderOptions;
+  @OneWay() filterBuilder?: dxFilterBuilderOptions = {
+    groupOperationDescriptions: {
+      and: messageLocalization.format('dxFilterBuilder-and'),
+      or: messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: messageLocalization.format('dxFilterBuilder-notOr'),
+    },
+    filterOperationDescriptions: {
+      between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+      equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+      notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+      lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+      lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+      greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+      greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+      startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+      contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+      notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+      endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+      isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+    },
+  };
 
-  @OneWay() filterBuilderPopup?: PopupProperties;
+  @OneWay() filterBuilderPopup?: PopupProperties = {};
 
   @OneWay() filterSyncEnabled?: boolean | 'auto' = 'auto';
 
-  @OneWay() focusedRowEnabled?: boolean;
+  @OneWay() focusedRowEnabled?: boolean = false;
 
-  @OneWay() highlightChanges?: boolean;
+  @OneWay() highlightChanges?: boolean = false;
 
-  @OneWay() noDataText?: string;
+  @OneWay() noDataText?: string = messageLocalization.format('dxDataGrid-noDataText');
 
-  @OneWay() renderAsync?: boolean;
+  @OneWay() renderAsync?: boolean = false;
 
-  @OneWay() repaintChangesOnly?: boolean;
+  @OneWay() repaintChangesOnly?: boolean = false;
 
-  @OneWay() rowAlternationEnabled?: boolean;
+  @OneWay() rowAlternationEnabled?: boolean = false;
 
   @OneWay() showBorders?: boolean = false;
 
@@ -1351,9 +1493,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() showRowLines?: boolean = false;
 
-  @OneWay() twoWayBindingEnabled?: boolean;
+  @OneWay() twoWayBindingEnabled?: boolean = true;
 
-  @OneWay() wordWrapEnabled?: boolean;
+  @OneWay() wordWrapEnabled?: boolean = false;
 
   @OneWay() loadingTimeout?: number = 30;
 
