@@ -122,7 +122,7 @@ const RowDraggingExtender = {
             showColumnHeaders: false,
             scrolling: {
                 useNative: false,
-                showScrollbar: false
+                showScrollbar: 'never'
             },
             pager: {
                 visible: false

@@ -11,6 +11,13 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
 
         const scrollable = this._viewRef.current.scrollableRef.current.scrollableRef;
 
+        const updateSizes = scrollable.updateSizes;
+
+        scrollable.updateSizes = function() {
+            updateSizes.apply(this, arguments);
+            reRender();
+        };
+
         if(this.option('useNative')) {
             const setPocketState = scrollable.setPocketState;
 

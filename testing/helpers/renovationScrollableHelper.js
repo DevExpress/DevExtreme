@@ -10,6 +10,13 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
 
         const scrollable = this._viewRef.current.scrollableRef;
 
+        const updateSizes = scrollable.updateSizes;
+
+        scrollable.updateSizes = function() {
+            updateSizes.apply(this, arguments);
+            reRender();
+        };
+
         let vScrollbar;
         let hScrollbar;
 

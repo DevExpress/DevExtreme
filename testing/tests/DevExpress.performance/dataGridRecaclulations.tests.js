@@ -6,6 +6,7 @@ require('../../content/orders.js');
 require('generic_light.css!');
 require('ui/data_grid/ui.data_grid');
 const Pager = require('ui/pager');
+const Scrollable = require('ui/scroll_view/ui.scrollable');
 
 const createDataGridMeasureFunction = function(options) {
     return function() {
@@ -24,7 +25,7 @@ QUnit.performanceTest('render without data', function(assert) {
     const measureFunction = createDataGridMeasureFunction({
     });
 
-    assert.measureStyleRecalculation(measureFunction, 11);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 7 : 11);
 });
 
 QUnit.performanceTest('render with data', function(assert) {
@@ -41,7 +42,7 @@ QUnit.performanceTest('render with columnAutoWidth', function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 11 : 13);
 });
 
 QUnit.performanceTest('render with columnFixing', function(assert) {
@@ -53,7 +54,7 @@ QUnit.performanceTest('render with columnFixing', function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : 14);
 });
 
 QUnit.performanceTest('render with virtual scrolling', function(assert) {
@@ -63,7 +64,7 @@ QUnit.performanceTest('render with virtual scrolling', function(assert) {
         scrolling: { mode: 'virtual' }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 10 : 13);
 });
 
 QUnit.performanceTest('updateDimensions', function(assert) {
@@ -98,7 +99,7 @@ QUnit.performanceTest('updateDimensions with columnFixing', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('updateDimensions');
 
-    assert.measureStyleRecalculation(measureFunction, 3);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 7 : 3);
 });
 
 QUnit.performanceTest('updateDimensions with virtual scrolling', function(assert) {
