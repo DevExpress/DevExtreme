@@ -164,7 +164,8 @@ export const GanttHelper = {
             },
             validation: {
                 validateDependencies: false,
-                autoUpdateParentTasks: false
+                autoUpdateParentTasks: false,
+                enablePredecessorGap: false
             },
             toolbar: null,
             contextMenu: {

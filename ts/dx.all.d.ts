@@ -12502,6 +12502,10 @@ declare module DevExpress.ui {
        * [descr:dxGanttOptions.validation.autoUpdateParentTasks]
        */
       autoUpdateParentTasks?: boolean;
+      /**
+       * [descr:dxGanttOptions.validation.enablePredecessorGap]
+       */
+      enablePredecessorGap?: boolean;
     };
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
