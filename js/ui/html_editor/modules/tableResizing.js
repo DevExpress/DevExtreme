@@ -66,7 +66,6 @@ export default class TableResizingModule extends BaseModule {
     _getQuillTextChangeHandler(delta, oldContent, source) {
         return (delta, oldContent, source) => {
             if(this._isTableChanging()) {
-
                 const $tables = this._findTables();
                 this._removeResizeFrames();
                 if(source === 'api') {
@@ -79,7 +78,9 @@ export default class TableResizingModule extends BaseModule {
                 this._updateFramesSeparators();
             } else {
                 this._updateFramesPositions();
-                this._updateFramesSeparators('vertical');
+                if(!this._verticalDragging) {
+                    this._updateFramesSeparators('vertical');
+                }
             }
         };
     }
@@ -357,6 +358,10 @@ export default class TableResizingModule extends BaseModule {
     _dragStartHandler({ $determinantElements, index, frame, direction, lineSeparator }) {
         const directionInfo = this._getDirectionInfo(direction);
 
+        if(direction === 'vertical') {
+            this._verticalDragging = true;
+        }
+
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
         this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
@@ -429,19 +434,16 @@ export default class TableResizingModule extends BaseModule {
             }
         } else {
             const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
+            const $lineElements = this._getLineElements(frame.$table, index, 'vertical');
 
-            $determinantElements.eq(index).attr(directionInfo.positionStyleProperty, newHeight + 'px');
-
-            // console.log(newHeight);
-            // console.log($determinantElements.eq(index).outerHeight());
+            each($lineElements, (i, element) => {
+                $(element).attr(directionInfo.positionStyleProperty, newHeight + 'px');
+            });
 
             if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
-
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-                // console.log((this._startLineSeparatorPosition + eventOffset) + 'px');
             } else {
                 this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
-                // console.log(this._startLineSeparatorPosition + 'px');
             }
         }
 
@@ -494,6 +496,7 @@ export default class TableResizingModule extends BaseModule {
             },
             onDragEnd: () => {
                 this._$highlightedElement?.remove();
+                this._verticalDragging = false;
                 this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
                 this._updateFramesPositions();
                 this._updateFramesSeparators();
@@ -577,6 +580,7 @@ export default class TableResizingModule extends BaseModule {
         _windowResizeCallbacks.remove(this._resizeHandler);
         clearTimeout(this._windowResizeTimeout);
         this._resizeHandler = undefined;
+        this._verticalDragging = undefined;
 
         clearTimeout(this._attachResizerTimeout);
     }
