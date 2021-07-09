@@ -415,106 +415,52 @@ QUnit.module('number formatter', () => {
     });
 
     QUnit.test('getRegExpInfo should return correct regular expression for unambiguous not separated `formats`(T1008667)', function(assert) {
-        [
-            {
-                format: 'yyyyMMdd',
-                tests: [
-                    {
-                        dateString: '111111111',
-                        expected: ['11111', '11', '11']
-                    },
-                    {
-                        dateString: '11111111',
-                        expected: ['1111', '11', '11']
-                    },
-                    {
-                        dateString: '1111111',
-                        expected: ['111', '11', '11']
-                    }
-                ]
+        const formatsTestsData = {
+            'yyyyMMdd': {
+                dateString: '11111111',
+                expected: ['1111', '11', '11']
             },
-            {
-                format: 'ddMMyyyy',
-                tests: [
-                    {
-                        dateString: '11121212',
-                        expected: ['11', '12', '1212']
-                    },
-                    {
-                        dateString: '111110217',
-                        expected: ['11', '11', '10217']
-                    },
-                    {
-                        dateString: '111111',
-                        expected: ['11', '11', '11']
-                    }
-                ]
+            'ddMMyyyy': {
+                dateString: '11121212',
+                expected: ['11', '12', '1212']
             },
-            {
-                format: 'MMdyy',
-                tests: [
-                    {
-                        dateString: '11212',
-                        expected: ['11', '2', '12']
-                    },
-                    {
-                        dateString: '101212',
-                        expected: ['10', '12', '12']
-                    }
-                ]
+            'MMdyy': {
+                dateString: '11212',
+                expected: ['11', '2', '12']
             },
-            {
-                format: 'MMddyy',
-                tests: [
-                    {
-                        dateString: '111111',
-                        expected: ['11', '11', '11']
-                    },
-                    {
-                        dateString: '101021',
-                        expected: ['10', '10', '21']
-                    }
-                ]
+            'dMMyy': {
+                dateString: '11111',
+                expected: ['1', '11', '11']
             },
-            {
-                format: 'MMddyyy',
-                tests: [
-                    {
-                        dateString: '1010213',
-                        expected: ['10', '10', '213']
-                    },
-                    {
-                        dateString: '10102133',
-                        expected: ['10', '10', '2133']
-                    }
-                ],
+            'MMddyy': {
+                dateString: '111111',
+                expected: ['11', '11', '11']
             },
-            {
-                format: 'wwhhmms',
-                tests: [
-                    {
-                        dateString: '1110000',
-                        expected: ['11', '10', '00', '0']
-                    },
-                    {
-                        dateString: '1010100',
-                        expected: ['10', '10', '10', '0']
-                    }
-                ]
+            'wwhhmms': {
+                dateString: '1010100',
+                expected: ['10', '10', '10', '0']
+            },
+            'wwHHmms': {
+                dateString: '1012100',
+                expected: ['10', '12', '10', '0']
+            },
+            'wwHHmmssSSS': {
+                dateString: '1012101012',
+                expected: ['10', '12', '10', '10', '12']
             }
-        ].forEach(({ format, tests }) => {
+
+        };
+
+        Object.entries(formatsTestsData).forEach(([ format, { dateString, expected } ]) => {
             const regExpInfo = getRegExpInfo(format);
-            tests.forEach(({ dateString, expected }) => {
-                const regExpGroupsResult = regExpInfo.regexp.exec(dateString).slice(1);
-                assert.deepEqual(regExpGroupsResult, expected, `Fromat '${format}' parse dateString '${dateString}' - ok.`);
-            });
+            const regExpGroupsResult = regExpInfo.regexp.exec(dateString).slice(1);
+            assert.deepEqual(regExpGroupsResult, expected, `Fromat '${format}' parse dateString '${dateString}' - ok.`);
         });
     });
 
     QUnit.test('getRegExpInfo should throw a warning message if there are two or more ambiguous patterns at the sequence of non separated digit patterns in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         const expectedWarningsCount = {
-
             'dMMMy': 0,
             'ddMMyy': 0,
             'QQQdMMM': 0,
@@ -527,9 +473,9 @@ QUnit.module('number formatter', () => {
             'QQQdHHMMM hm': 1,
             'QQQdMMM y hm': 1,
             'dMQQQdMMM yhm': 1,
-            'QQQdHHMMM hhmm': 0,
+            'QQQdSHHMMM hhmm': 0,
             'QQQdHHsMMM hhmm': 1,
-            'QQQdSSSsMMM hhmm': 1,
+            'QQQsSSSMMM hhmm': 1,
             'QQQdMMM yyyy d h m': 0,
             'QQQdHHMMM yyyyd hhmm': 1,
         };

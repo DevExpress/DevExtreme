@@ -56,7 +56,7 @@ const PATTERN_REGEXPS = {
         return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
     },
     S: function(count) {
-        return '[0-9]{1,' + count + '}';
+        return `[0-9]{1,${count}}`;
     },
     w: function(count) {
         return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
@@ -234,13 +234,12 @@ export const isPossibleForParsingFormat = function(patterns) {
         if(!pattern) {
             return false;
         }
-
         const char = pattern[0];
         return ['y', 'S'].includes(char) || digitFieldSymbols.includes(char) && pattern.length < 3;
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
-        return pattern[0] !== 'S' && pattern.length !== 2;
+        return pattern !== 'S' && pattern !== 'yy' && pattern.length !== 2;
     };
 
     let possibleForParsing = true;
