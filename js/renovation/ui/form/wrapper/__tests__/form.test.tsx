@@ -3,9 +3,9 @@ import { shallow } from 'enzyme';
 import { Form, viewFunction as FormView } from '../form';
 import { FormProps } from '../form_props';
 import { DomComponentWrapper } from '../../../common/dom_component_wrapper';
-import LegacyForm from '../../../../../ui/toolbar';
+import LegacyForm from '../../../../../ui/form';
 
-describe('Toolbar', () => {
+describe('Form', () => {
   describe('View', () => {
     it('default render', () => {
       const componentProps = new FormProps();
