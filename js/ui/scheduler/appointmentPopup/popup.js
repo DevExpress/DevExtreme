@@ -118,7 +118,8 @@ export class AppointmentPopup {
                         showTitle: false
                     }
                 }
-            ]
+            ],
+            copyRootClassesToWrapper: true
         };
     }
 
@@ -406,7 +407,8 @@ export class AppointmentPopup {
             container: $overlayContent,
             position: {
                 of: $overlayContent
-            }
+            },
+            copyRootClassesToWrapper: true
         });
     }
 

@@ -179,7 +179,7 @@ const Overlay = Widget.inherit({
 
             closeOnOutsideClick: false,
 
-            copyClassesToWrapper: false,
+            copyRootClassesToWrapper: false,
 
             onShowing: null,
 
@@ -258,12 +258,13 @@ const Overlay = Widget.inherit({
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
+        this._customWrapperClass = null;
         this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $('<div>').addClass(OVERLAY_CONTENT_CLASS);
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        this.option('copyClassesToWrapper') && this._$wrapper.addClass($element.attr('class'));
+        this.option('copyRootClassesToWrapper') && this.option('wrapperAttr', { class: `${this.option('wrapperAttr').class} ${$element.attr('class')}` });
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
@@ -434,8 +435,18 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperAttributes() {
-        const { wrapperAttr } = this.option();
-        this._$wrapper.attr(wrapperAttr ?? {});
+        const { wrapperAttr } = this.option() || {};
+        const attributes = extend({}, wrapperAttr);
+        const classNames = attributes.class;
+
+        delete attributes.class;
+
+        this.$wrapper()
+            .attr(attributes)
+            .removeClass(this._customWrapperClass)
+            .addClass(classNames);
+
+        this._customWrapperClass = classNames;
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -1002,10 +1013,6 @@ const Overlay = Widget.inherit({
         return $container;
     },
 
-    _getElementCustomClasses: function() {
-        return this._$element.attr('class').split(' ').filter(str => !str.includes('dx')).join(' ');
-    },
-
     _deltaSize: function() {
         const $content = this._$content;
         const $container = this._getDragResizeContainer();
@@ -1421,9 +1428,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
-                break;
-            case 'copyClassesToWrapper':
-                value ? this._$wrapper.addClass(this._getElementCustomClasses()) : this._$wrapper.removeClass(this._getElementCustomClasses());
                 break;
             default:
                 this.callBase(args);

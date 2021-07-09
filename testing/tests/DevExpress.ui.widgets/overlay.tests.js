@@ -522,6 +522,12 @@ testModule('option', moduleConfig, () => {
 
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
         });
+
+        test('does not override old clases', function(assert) {
+            this.overlay.option('wrapperAttr', { class: 'newClass' });
+
+            assert.ok(this.$wrapper.hasClass(OVERLAY_WRAPPER_CLASS));
+        });
     });
 
     test('show warning if deprecated "elementAttr" option is used', function(assert) {
