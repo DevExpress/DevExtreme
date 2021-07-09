@@ -34,7 +34,7 @@ class BaseStrategy {
     getCoordinateInfos(options) {
         const {
             appointment,
-            isAllDay,
+            isAllDayAppointment,
             groupIndices,
             recurrent
         } = options;
@@ -48,7 +48,7 @@ class BaseStrategy {
         return this.positionHelper.getCoordinatesByDateInGroup(
             startDate,
             groupIndices,
-            isAllDay,
+            isAllDayAppointment,
             groupIndex
         );
     }
