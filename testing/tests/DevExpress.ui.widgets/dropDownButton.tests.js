@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
+import themes from 'ui/themes';
 
 import 'generic_light.css!';
 
@@ -51,6 +52,26 @@ const getActionButton = (instance) => {
 const getToggleButton = (instance) => {
     return instance.$element().find(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
 };
+
+QUnit.test('Render dxDropDownButton widget on matetial theme', function(assert) {
+    const origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    $('#dropDownButton').dxDropDownButton({
+        displayExpr: 'text',
+        items: [
+            {
+                text: 'Month', type: 'month', name: 'month',
+            },
+        ],
+        keyExpr: 'name',
+        selectedItemKey: 'month',
+    });
+
+    themes.isMaterial = origIsMaterial;
+
+    assert.strictEqual(true, true, 'should not fail');
+});
 
 QUnit.module('button group integration', {}, () => {
     QUnit.test('height option should change buttonGroup wrapper height', function(assert) {

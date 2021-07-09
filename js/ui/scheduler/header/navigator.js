@@ -150,7 +150,7 @@ export const Navigator = Widget.inherit({
     _updateCurrentDate: function(direction) {
         const date = this._getNextDate(direction);
 
-        dateUtils.normalizeDate(date, this.option('min'), this.option('max'));
+        dateUtils.normalizeDate(date, this.option('min'), this.option('max')); // Этот метод возвращает значение, но его не используют
         this.notifyObserver('currentDateUpdated', date);
     },
 

@@ -203,90 +203,56 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   background-color: $scheduler-header-bg;
   border: baseScheduler.$scheduler-base-border;
   height: $generic-scheduler-header-height;
-}
 
-.dx-scheduler-navigator {
-  padding: ($generic-scheduler-header-height - $generic-scheduler-navigator-height) * 0.5;
+  .dx-toolbar-items-container {
+    .dx-scheduler-view-switcher {
+      font-size: $generic-scheduler-view-switcher-font-size;
 
-  .dx-button {
-    margin-top: -1px;
-    height: $generic-scheduler-navigator-height;
-  }
+      .dx-toolbar-item-content {
+        .dx-buttongroup {
+          .dx-button {
+            position: relative;
 
-  .dx-button-has-icon .dx-button-content {
-    padding: $generic-scheduler-navigation-buttons-padding;
-  }
-}
+            &.dx-item-selected::after,
+            &.dx-state-focused::after {
+              content: "";
+              position: absolute;
+              height: 100%;
+              right: -1px;
+              left: -1px;
+              bottom: -1px;
+              z-index: 1;
+              border-left: baseScheduler.$scheduler-base-border;
+              border-right: baseScheduler.$scheduler-base-border;
+            }
 
-.dx-scheduler-navigator-caption {
-  border-radius: 0;
-  border-right-width: 0;
-  border-left-width: 0;
+            &.dx-item-selected {
+              background-color: $scheduler-tab-selected-bg;
 
-  &.dx-state-focused,
-  &.dx-state-hover,
-  &.dx-state-active {
-    border-right-width: 1px;
-    border-left-width: 1px;
-  }
-}
+              &::before {
+                position: absolute;
+                bottom: -2px;
+                width: 100%;
+                height: 2px;
+                content: "";
+                right: 0;
+                background-color: $scheduler-tab-selected-before-bg;
+              }
+            }
 
-.dx-scheduler-navigator-previous {
-  border-radius: $generic-scheduler-navigator-border-radius 0 0 $generic-scheduler-navigator-border-radius;
+            &.dx-state-focused::after {
+              top: -1px;
+              border-top: $generic-scheduler-focused-tab-border;
+              border-bottom: none;
+            }
 
-  .dx-rtl & {
-    border-radius: 0 $generic-scheduler-navigator-border-radius $generic-scheduler-navigator-border-radius 0;
-  }
-}
-
-.dx-scheduler-navigator-next {
-  border-radius: 0 $generic-scheduler-navigator-border-radius $generic-scheduler-navigator-border-radius 0;
-
-  .dx-rtl & {
-    border-radius: $generic-scheduler-navigator-border-radius 0 0 $generic-scheduler-navigator-border-radius;
-  }
-}
-
-.dx-scheduler-view-switcher.dx-tabs {
-  font-size: $generic-scheduler-view-switcher-font-size;
-
-  .dx-tab {
-    &:not(.dx-tab-selected):not(.dx-state-hover) {
-      background: none;
-    }
-
-    &.dx-tab-selected {
-      background-color: $scheduler-tab-selected-bg;
-
-      &::before {
-        background-color: $scheduler-tab-selected-before-bg;
+            &.dx-state-hover {
+              background-color: $scheduler-tab-selected-bg;
+            }
+          }
+        }
       }
     }
-
-    &.dx-state-focused::after {
-      border-left: baseScheduler.$scheduler-base-border;
-      border-right: baseScheduler.$scheduler-base-border;
-      border-top: $generic-scheduler-focused-tab-border;
-      border-bottom: none;
-    }
-
-    &.dx-tab-selected::after {
-      height: $generic-scheduler-header-height;
-    }
-  }
-}
-
-.dx-scheduler-view-switcher.dx-dropdownmenu {
-  margin-top: ($generic-scheduler-header-height - $generic-scheduler-navigator-height) * 0.5 - 1px;
-}
-
-.dx-scheduler-view-switcher-label {
-  margin-top: ($generic-scheduler-header-height - $generic-scheduler-navigator-height) * 0.8;
-  right: $generic-scheduler-switcher-label-offset;
-
-  .dx-rtl & {
-    left: $generic-scheduler-switcher-label-offset;
-    right: auto;
   }
 }
 

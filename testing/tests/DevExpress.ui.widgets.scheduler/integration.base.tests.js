@@ -14,6 +14,7 @@ const errors = require('ui/widget/ui.errors');
 const config = require('core/config');
 
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.module('Integration: Base', {
     beforeEach: function() {

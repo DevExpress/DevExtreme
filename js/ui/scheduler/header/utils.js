@@ -1,10 +1,15 @@
 import dateUtils from '../../../core/utils/date';
 import dateLocalization from '../../../localization/date';
-import { isFunction } from '../../../core/utils/type';
+import messageLocalization from '../../../localization/message';
+import { camelize } from '../../../core/utils/inflector';
+import { isFunction, isObject } from '../../../core/utils/type';
+import errors from '../../../core/errors';
 
 const DAY_FORMAT = 'd';
 
 const DAYS_IN_WORK_WEEK = 5;
+
+const DEFAULT_ELEMENT = 'defaultElement';
 
 const {
     correctDateWithUnitBeginning: getPeriodStart,
@@ -314,4 +319,69 @@ export const getCaption = (options, isShort, customizationFunction) => {
     }
 
     return { startDate, endDate, text };
+};
+
+const STEP_MAP = {
+    day: 'day',
+    week: 'week',
+    workWeek: 'workWeek',
+    month: 'month',
+    timelineDay: 'day',
+    timelineWeek: 'week',
+    timelineWorkWeek: 'workWeek',
+    timelineMonth: 'month',
+    agenda: 'agenda'
+};
+
+const VIEWS = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'];
+
+export const getStep = (view) => {
+    return STEP_MAP[getViewType(view)];
+};
+
+export const getViewType = (view) => {
+    if(isObject(view) && view.type) {
+        return view.type;
+    }
+
+    return view;
+};
+
+export const getViewName = (view) => {
+    if(isObject(view)) {
+        return view.name ? view.name : view.type;
+    }
+
+    return view;
+};
+
+export const getViewText = (view) => {
+    return view.name || messageLocalization.format('dxScheduler-switcher' + camelize(view.type || view, true));
+};
+
+export const validateViews = (views) => {
+    views.forEach(view => {
+        const viewType = getViewType(view);
+
+        if(!VIEWS.includes(viewType)) {
+            errors.log('W0008', viewType);
+        }
+    });
+};
+
+export const isDefaultItem = (item) => {
+    return Object.prototype.hasOwnProperty
+        .call(item, DEFAULT_ELEMENT);
+};
+
+export const formatViews = (views) => {
+    validateViews(views);
+
+    return views.map(view => {
+        const text = getViewText(view);
+        const type = getViewType(view);
+        const name = getViewName(view);
+
+        return { text, type, name };
+    });
 };

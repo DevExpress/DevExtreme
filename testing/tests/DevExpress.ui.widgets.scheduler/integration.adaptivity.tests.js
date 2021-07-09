@@ -10,6 +10,7 @@ import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import 'ui/switch';
+import 'ui/drop_down_button';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
@@ -55,7 +56,8 @@ module('Mobile tooltip', moduleConfig, () => {
         const MAX_TOOLTIP_HEIGHT = 250;
         const isDesktop = devices.real().deviceType === 'desktop';
 
-        const { tooltip, appointments } = createInstance();
+        const scheduler = createInstance();
+        const { tooltip, appointments } = scheduler;
 
         assert.notOk(tooltip.isVisible(), 'On page load tooltip should be invisible');
 
@@ -443,45 +445,6 @@ module('Appointment popup buttons', moduleConfig, () => {
 }),
 
 module('View switcher', moduleConfig, () => {
-    test('View switcher should render selection current view', function(assert) {
-        this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
-        try {
-            const scheduler = createInstance();
-            scheduler.viewSwitcher.show();
-
-            assert.equal(scheduler.option('currentView'), scheduler.viewSwitcher.getSelectedViewName().toLocaleLowerCase(),
-                `current view should equal selected value of view switcher(${scheduler.option('currentView')})`);
-
-            scheduler.viewSwitcher.click('Day');
-            scheduler.viewSwitcher.show();
-
-            assert.equal(scheduler.option('currentView'), 'day', 'current view should be equal Day value');
-            assert.equal(scheduler.viewSwitcher.getSelectedViewName(), 'Day', 'view switcher should select Day value');
-        } finally {
-            this.realDeviceMock.restore();
-        }
-    });
-
-    if(isDesktopEnvironment()) {
-        test('View switcher shouldn\'t render selection current view in desktop', function(assert) {
-            const scheduler = createInstance({
-                adaptivityEnabled: false,
-                useDropDownViewSwitcher: true
-            });
-
-            assert.ok(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name should be visible');
-
-            scheduler.viewSwitcher.show();
-            assert.equal(scheduler.viewSwitcher.getSelectedViewName().toLocaleLowerCase(), '', 'view switcher shouldn\'t select current view');
-
-            scheduler.viewSwitcher.click('Day');
-            scheduler.viewSwitcher.show();
-
-            assert.equal(scheduler.option('currentView'), 'day', 'view should change on \'Day\'');
-            assert.equal(scheduler.viewSwitcher.getSelectedViewName(), '', 'view switcher shouldn\'t select current view after change view');
-        });
-    }
-
     if(!isDesktopEnvironment()) {
         const config = {
             beforeEach() {

@@ -17,17 +17,21 @@ const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 export const CLASSES = {
     root: '.dx-scheduler',
 
+    button: '.dx-button',
+    selected: '.dx-item-selected',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
+    navigatorCalendarButton: '.dx-scheduler-navigator-calendar-button',
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
-    navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
+    viewSwitcher: '.dx-scheduler-view-switcher',
 
-    calendar: 'dx-scheduler-navigator-calendar',
+    calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
     calendarSelected: '.dx-calendar-selected-date',
 
@@ -158,11 +162,23 @@ class ElementWrapper {
         }
         return $(this.selector).eq(this.index);
     }
+
+    getText() {
+        return this.getElement().text();
+    }
+
+    hasClass(className) {
+        return this.getElement().hasClass(className);
+    }
 }
 
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
+    }
+
+    isDisabled() {
+        return this.hasClass('dx-state-disabled');
     }
 }
 
@@ -297,19 +313,15 @@ class Calendar extends ElementWrapper {
 
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
-        return this.content.getElement().is(':visible');
+        return this.getElement().is(':visible');
     }
 
     get calendar() {
         return new Calendar();
     }
 
-    get content() {
-        return new ElementWrapper(CLASSES.navigatorPopoverContent);
-    }
-
     get hasScroll() {
-        return this.content.getElement().find('.dx-scrollable').length > 0;
+        return this.getElement().find('.dx-scrollable').length > 0;
     }
 }
 
@@ -326,12 +338,50 @@ class NavigatorWrapper extends ElementWrapper {
         return new ClickElementWrapper(CLASSES.navigatorPrevButton);
     }
 
+    get calendarButton() {
+        return new ClickElementWrapper(CLASSES.navigatorCalendarButton);
+    }
+
     get nextButton() {
         return new ClickElementWrapper(CLASSES.navigatorNextButton);
     }
 
     get popover() {
-        return new NavigatorPopover(CLASSES.navigatorPopover);
+        return new NavigatorPopover(CLASSES.navigatorPopover, false, 1);
+    }
+}
+
+class ViewSwitcherWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.viewSwitcher);
+    }
+
+    getText() {
+        return this.getElement().text();
+    }
+
+    get selected() {
+        return new ClickElementWrapper(CLASSES.selected);
+    }
+
+    click(name) {
+        this.getButton(name).click();
+    }
+
+    getButton(name) {
+        const parent = this.getElement();
+
+        const buttons = parent.find('.dx-button');
+
+        let result;
+        buttons.each((index, button) => {
+            if($(button).text() === name) {
+                result = new ClickElementWrapper(CLASSES.button, parent, index);
+                // TODO return false;
+            }
+        });
+
+        return result;
     }
 }
 
@@ -342,6 +392,10 @@ class HeaderWrapper extends ElementWrapper {
 
     get navigator() {
         return new NavigatorWrapper();
+    }
+
+    get viewSwitcher() {
+        return new ViewSwitcherWrapper();
     }
 }
 
