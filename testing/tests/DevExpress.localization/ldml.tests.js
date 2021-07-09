@@ -417,49 +417,53 @@ QUnit.module('number formatter', () => {
     QUnit.test('getRegExpInfo should return correct regular expression for unambiguous not separated `formats`(T1008667)', function(assert) {
         const formatsTestsData = {
             'yyyyMMdd': {
-                dateString: '11111111',
+                text: '11111111',
                 expected: ['1111', '11', '11']
             },
             'ddMMyyyy': {
-                dateString: '11121212',
+                text: '11121212',
                 expected: ['11', '12', '1212']
             },
             'MMdyy': {
-                dateString: '11212',
+                text: '11212',
                 expected: ['11', '2', '12']
             },
             'dMMyy': {
-                dateString: '11111',
+                text: '11111',
                 expected: ['1', '11', '11']
             },
             'MMddyy': {
-                dateString: '111111',
+                text: '111111',
                 expected: ['11', '11', '11']
             },
             'wwhhmms': {
-                dateString: '1010100',
+                text: '1010100',
                 expected: ['10', '10', '10', '0']
             },
             'wwHHmms': {
-                dateString: '1012100',
+                text: '1012100',
                 expected: ['10', '12', '10', '0']
             },
             'wwHHmmssSSS': {
-                dateString: '1012101012',
+                text: '1012101012',
                 expected: ['10', '12', '10', '10', '12']
             }
         };
 
-        Object.entries(formatsTestsData).forEach(([ format, { dateString, expected } ]) => {
+        Object.entries(formatsTestsData).forEach(([ format, { text, expected } ]) => {
             const regExpInfo = getRegExpInfo(format);
-            const regExpGroupsResult = regExpInfo.regexp.exec(dateString).slice(1);
-            assert.deepEqual(regExpGroupsResult, expected, `Fromat '${format}' parse dateString '${dateString}' - ok.`);
+            const parenthesizedResult = regExpInfo.regexp.exec(text).slice(1);
+            assert.deepEqual(parenthesizedResult, expected, `Fromat '${format}' parse dateString '${text}' - ok.`);
         });
     });
 
     QUnit.test('getRegExpInfo should throw a warning message if there are two or more ambiguous patterns at the sequence of non separated digit patterns in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         const expectedWarningsCount = {
+            'd': 0,
+            'dd': 0,
+            'dm': 1,
+            'dmm': 0,
             'dMMy': 1,
             'dMMyy': 0,
             'dMMMy': 0,
