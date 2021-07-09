@@ -18,6 +18,7 @@ const DEFAULT_MIN_COLUMN_WIDTH = 40;
 const DEFAULT_MIN_ROW_HEIGHT = DEFAULT_MIN_COLUMN_WIDTH / 2;
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
+const ROUGH_OFFSET = 5;
 
 const MODULE_NAMESPACE = 'dxHtmlTableResizingModule';
 
@@ -400,7 +401,7 @@ export default class TableResizingModule extends BaseModule {
             this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
 
             const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
-            const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < 5 : realWidthDiff > -5;
+            const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < ROUGH_OFFSET : realWidthDiff > -ROUGH_OFFSET;
 
             if(!shouldApplyNewValue) {
                 this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
