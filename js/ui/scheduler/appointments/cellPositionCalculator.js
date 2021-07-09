@@ -11,7 +11,7 @@ class BaseStrategy {
     calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment) {
         const result = [];
 
-        this.appointments.forEach((dateSetting) => {
+        this.appointments.forEach((dateSetting, index) => {
             const coordinates = this.getCoordinateInfos({
                 appointment: dateSetting,
                 groupIndices,
@@ -19,7 +19,13 @@ class BaseStrategy {
                 isRecurrentAppointment
             });
 
-            result.push(...coordinates);
+            coordinates
+                .filter((item) => !!item)
+                .forEach(item => {
+                    result.push(
+                        this._prepareObject(item, index)
+                    );
+                });
         });
 
         return result;
@@ -46,6 +52,14 @@ class BaseStrategy {
             groupIndex
         );
     }
+
+    _prepareObject(position, dateSettingIndex) {
+        position.dateSettingIndex = dateSettingIndex;
+        return {
+            coordinates: position,
+            dateSettingIndex
+        };
+    }
 }
 
 class VirtualStrategy extends BaseStrategy {
@@ -68,12 +82,16 @@ class VirtualStrategy extends BaseStrategy {
     }
 
     createRecurrentAppointmentInfos(dateSettings, isAllDayAppointment) {
-        const result = dateSettings.map(({ source, startDate }) => {
-            return this.positionHelper.getCoordinatesByDate(
+        const result = dateSettings.map(({ source, startDate }, index) => {
+            const coordinate = this.positionHelper.getCoordinatesByDate(
                 startDate,
                 source.groupIndex,
                 isAllDayAppointment
             );
+
+            if(coordinate) {
+                return this._prepareObject(coordinate, index);
+            }
         });
 
         return result;

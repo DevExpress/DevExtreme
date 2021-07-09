@@ -518,17 +518,15 @@ export class AppointmentSettingsGenerator {
     _prepareAppointmentInfos(dateSettings, cellPositions) {
         const infos = [];
 
-        dateSettings.forEach((dateSetting, index) => {
-            const position = cellPositions[index];
-            if(position) {
-                infos.push({
-                    ...position,
-                    info: {
-                        appointment: dateSetting,
-                        sourceAppointment: dateSetting.source
-                    }
-                });
-            }
+        cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
+            const dateSetting = dateSettings[dateSettingIndex];
+            infos.push({
+                ...coordinates,
+                info: {
+                    appointment: dateSetting,
+                    sourceAppointment: dateSetting.source
+                }
+            });
         });
 
         return infos;
