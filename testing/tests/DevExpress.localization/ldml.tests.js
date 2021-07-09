@@ -414,26 +414,22 @@ QUnit.module('number formatter', () => {
 
     });
 
-    QUnit.test('getRegExpInfo should return correct regex for some of not separated `formats`(T1008667)', function(assert) {
+    QUnit.test('getRegExpInfo should return correct regular expression for unambiguous not separated `formats`(T1008667)', function(assert) {
         [
             {
                 format: 'yyyyMMdd',
                 tests: [
                     {
-                        dateString: '19990211',
-                        expected: ['1999', '02', '11']
+                        dateString: '111111111',
+                        expected: ['11111', '11', '11']
                     },
                     {
-                        dateString: '20151209',
-                        expected: ['2015', '12', '09']
+                        dateString: '11111111',
+                        expected: ['1111', '11', '11']
                     },
                     {
-                        dateString: '20150101',
-                        expected: ['2015', '01', '01']
-                    },
-                    {
-                        dateString: '201270101',
-                        expected: ['20127', '01', '01']
+                        dateString: '1111111',
+                        expected: ['111', '11', '11']
                     }
                 ]
             },
@@ -445,83 +441,12 @@ QUnit.module('number formatter', () => {
                         expected: ['11', '12', '1212']
                     },
                     {
-                        dateString: '3152021',
-                        expected: ['31', '5', '2021']
+                        dateString: '111110217',
+                        expected: ['11', '11', '10217']
                     },
                     {
-                        dateString: '19012021',
-                        expected: ['19', '01', '2021']
-                    },
-                    {
-                        dateString: '110110217',
-                        expected: ['11', '01', '10217']
-                    },
-                    {
-                        dateString: '010110217',
-                        expected: ['01', '01', '10217']
-                    },
-                    {
-                        dateString: '01011021',
-                        expected: ['01', '01', '1021']
-                    },
-                    {
-                        dateString: '010302',
-                        expected: ['01', '03', '02']
-                    },
-                    {
-                        dateString: '11111111',
-                        expected: ['11', '11', '1111']
-                    },
-                ]
-            },
-            {
-                format: 'MMddyy',
-                tests: [
-                    {
-                        dateString: '122121',
-                        expected: ['12', '21', '21']
-                    },
-                    {
-                        dateString: '3120',
-                        expected: ['3', '1', '20']
-                    },
-                    {
-                        dateString: '101021',
-                        expected: ['10', '10', '21']
-                    }
-                ]
-            },
-            {
-                format: 'MMddyyy',
-                tests: [
-                    {
-                        dateString: '1221213',
-                        expected: ['12', '21', '213']
-                    },
-                    {
-                        dateString: '315203',
-                        expected: ['3', '15', '203']
-                    },
-                    {
-                        dateString: '1109213',
-                        expected: ['11', '09', '213']
-                    }
-                ],
-            },
-            {
-                format: 'dMMyyy',
-                tests: [
-                    {
-                        dateString: '1121213',
-                        expected: ['1', '12', '1213']
-                    },
-                    {
-                        dateString: '312203',
-                        expected: ['3', '12', '203']
-                    },
-                    {
-                        dateString: '1109213',
-                        expected: ['1', '10', '9213']
+                        dateString: '111111',
+                        expected: ['11', '11', '11']
                     }
                 ]
             },
@@ -533,12 +458,47 @@ QUnit.module('number formatter', () => {
                         expected: ['11', '2', '12']
                     },
                     {
-                        dateString: '102212',
-                        expected: ['10', '22', '12']
+                        dateString: '101212',
+                        expected: ['10', '12', '12']
+                    }
+                ]
+            },
+            {
+                format: 'MMddyy',
+                tests: [
+                    {
+                        dateString: '111111',
+                        expected: ['11', '11', '11']
                     },
                     {
-                        dateString: '110912',
-                        expected: ['11', '09', '12']
+                        dateString: '101021',
+                        expected: ['10', '10', '21']
+                    }
+                ]
+            },
+            {
+                format: 'MMddyyy',
+                tests: [
+                    {
+                        dateString: '1010213',
+                        expected: ['10', '10', '213']
+                    },
+                    {
+                        dateString: '10102133',
+                        expected: ['10', '10', '2133']
+                    }
+                ],
+            },
+            {
+                format: 'wwhhmms',
+                tests: [
+                    {
+                        dateString: '1110000',
+                        expected: ['11', '10', '00', '0']
+                    },
+                    {
+                        dateString: '1010100',
+                        expected: ['10', '10', '10', '0']
                     }
                 ]
             }
@@ -551,25 +511,27 @@ QUnit.module('number formatter', () => {
         });
     });
 
-    QUnit.test('getRegExpInfo should throw warning message if there are no separated single simbols in the `format`!', function(assert) {
+    QUnit.test('getRegExpInfo should throw a warning message if there are two or more ambiguous patterns at the sequence of non separated digit patterns in the `format`!', function(assert) {
         const spy = sinon.spy(console, 'warn');
         const expectedWarningsCount = {
-            'dMMyyyy': 1,
-            'MMdyyyy': 1,
+
             'dMMMy': 0,
             'ddMMyy': 0,
+            'QQQdMMM': 0,
+            'dMMyyyy': 1,
+            'MMdyyyy': 1,
             'MMMdyyyy': 1,
             'dMMMy hm': 1,
             'd MMM y hm': 1,
-            'QQQdMMM y hm': 1,
             'QQQdMMM yhm': 1,
+            'QQQdHHMMM hm': 1,
+            'QQQdMMM y hm': 1,
             'dMQQQdMMM yhm': 1,
-            'QQQdMMM': 0,
-            'QQQdMMM yyyy d h m': 0,
-            'QQQdHHMMM yyyyd hhmm': 1,
             'QQQdHHMMM hhmm': 0,
             'QQQdHHsMMM hhmm': 1,
             'QQQdSSSsMMM hhmm': 1,
+            'QQQdMMM yyyy d h m': 0,
+            'QQQdHHMMM yyyyd hhmm': 1,
         };
 
         Object.entries(expectedWarningsCount).forEach(([ format, warningCalls ]) => {
