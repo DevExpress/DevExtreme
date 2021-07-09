@@ -8,15 +8,15 @@ class BaseStrategy {
     get viewDataProvider() { return this.options.viewDataProvider; }
     get positionHelper() { return this.options.positionHelper; }
 
-    calculateCellPositions(groupIndices, isAllDay, recurrent) {
+    calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment) {
         const result = [];
 
         this.appointments.forEach((dateSetting) => {
             const coordinates = this.getCoordinateInfos({
                 appointment: dateSetting,
                 groupIndices,
-                isAllDay,
-                recurrent
+                isAllDayAppointment,
+                isRecurrentAppointment
             });
 
             result.push(...coordinates);
@@ -49,34 +49,30 @@ class BaseStrategy {
 }
 
 class VirtualStrategy extends BaseStrategy {
-    calculateCellPositions(groupIndices, allDay, recurrent) {
-        const appointments = allDay
+    calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment) {
+        const appointments = isAllDayAppointment
             ? this.appointments
             : this.appointments.filter(({ source, startDate, endDate }) => {
-                const { groupIndex } = source;
-
-                return this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate);
+                return this.viewDataProvider.isGroupIntersectDateInterval(
+                    source.groupIndex,
+                    startDate,
+                    endDate
+                );
             });
 
-        if(recurrent) {
-            return this.createRecurrentAppointmentInfos(appointments, allDay);
+        if(isRecurrentAppointment) {
+            return this.createRecurrentAppointmentInfos(appointments, isAllDayAppointment);
         }
 
-        return super.calculateCellPositions(groupIndices, allDay, recurrent);
+        return super.calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment);
     }
 
-    createRecurrentAppointmentInfos(dateSettings, allDay) {
-        const result = dateSettings.map((item) => {
-            const {
-                source,
-                startDate
-            } = item;
-            const { groupIndex } = source;
-
+    createRecurrentAppointmentInfos(dateSettings, isAllDayAppointment) {
+        const result = dateSettings.map(({ source, startDate }) => {
             return this.positionHelper.getCoordinatesByDate(
                 startDate,
-                groupIndex,
-                allDay
+                source.groupIndex,
+                isAllDayAppointment
             );
         });
 
@@ -89,11 +85,11 @@ export class CellPositionCalculator {
         this.options = options;
     }
 
-    calculateCellPositions(groupIndices, isAllDay, recurrent) {
+    calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment) {
         const strategy = this.options.isVirtualScrolling
             ? new VirtualStrategy(this.options)
             : new BaseStrategy(this.options);
 
-        return strategy.calculateCellPositions(groupIndices, isAllDay, recurrent);
+        return strategy.calculateCellPositions(groupIndices, isAllDayAppointment, isRecurrentAppointment);
     }
 }
