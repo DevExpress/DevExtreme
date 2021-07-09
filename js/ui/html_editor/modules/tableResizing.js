@@ -139,13 +139,7 @@ export default class TableResizingModule extends BaseModule {
             }
 
             if($columnElements.eq(0).attr('width')) {
-                let columnsSum = 0;
-
-                each($columnElements, (_, element) => {
-                    const $element = $(element);
-                    const columnWidth = $element.attr('width') ? this._getWidthAttrValue($element) : $element.outerWidth();
-                    columnsSum += columnWidth;
-                });
+                const { columnsSum } = this._getColumnElementsSum($columnElements);
 
                 $table.css('width', 'initial');
 
@@ -393,6 +387,46 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
+    _horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { index, frame }) {
+        let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
+        const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
+        const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
+        const $lineElements = this._getLineElements(frame.$table, index);
+        const $nextLineElements = this._getLineElements(frame.$table, index + 1);
+
+        if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
+            this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
+
+            this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
+
+            const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
+            const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < 5 : realWidthDiff > -5;
+
+            if(!shouldApplyNewValue) {
+                this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
+
+                nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
+            }
+
+            if(this._nextLineSize && nextColumnNewSize > 0) {
+                this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
+            }
+        }
+    }
+
+    _verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame }) {
+        const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
+        const $lineElements = this._getLineElements(frame.$table, index, 'vertical');
+
+        this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
+
+        if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
+            this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
+        } else {
+            this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
+        }
+    }
+
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
         let eventOffset = event.offset[directionInfo.positionCoordinateName];
@@ -403,44 +437,20 @@ export default class TableResizingModule extends BaseModule {
         const currentLineNewSize = this._startLineSize + eventOffset;
 
         if(direction === 'horizontal') {
-            let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
-            const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
-            const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
-            const $lineElements = this._getLineElements(frame.$table, index);
-            const $nextLineElements = this._getLineElements(frame.$table, index + 1);
-
-            if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
-                this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
-
-                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-
-                const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
-                const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < 5 : realWidthDiff > -5;
-
-                if(!shouldApplyNewValue) {
-                    this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
-
-                    nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
-                }
-
-                if(this._nextLineSize && nextColumnNewSize > 0) {
-                    this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
-                }
-            }
+            this._horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { index, frame });
         } else {
-            const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
-            const $lineElements = this._getLineElements(frame.$table, index, 'vertical');
-
-            this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
-
-            if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
-                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-            } else {
-                this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
-            }
+            this._verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame });
         }
 
         this._updateFramePosition(frame.$table, frame.$frame);
+    }
+
+    _dragEndHandler(options) {
+        this._$highlightedElement?.remove();
+        this._verticalDragging = false;
+        this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
+        this._updateFramesPositions();
+        this._updateFramesSeparators();
     }
 
     _isLastColumnResizing({ $determinantElements, index }) {
@@ -488,11 +498,7 @@ export default class TableResizingModule extends BaseModule {
                 this._dragStartHandler(options);
             },
             onDragEnd: () => {
-                this._$highlightedElement?.remove();
-                this._verticalDragging = false;
-                this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
-                this._updateFramesPositions();
-                this._updateFramesSeparators();
+                this._dragEndHandler(options);
             }
         };
 
@@ -511,39 +517,26 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _updateColumnsWidth($table, frameIndex) {
-        const determinantElements = this._getTableDeterminantElements($table);
-        let frame = this._tableResizeFrames[frameIndex];
-
-        if(!frame) {
-            this._tableResizeFrames[frameIndex] = {};
-        }
-
-        frame = this._tableResizeFrames[frameIndex];
-        const tableWidth = this._tableLastWidth(frame) || $table.outerWidth();
+    _getColumnElementsSum(columnElements) {
         const columnsWidths = [];
-        let columnSum = 0;
-        let ratio;
+        let columnsSum = 0;
 
-        each(determinantElements, (index, element) => {
+        each(columnElements, (index, element) => {
             const $element = $(element);
             const columnWidth = this._getWidthAttrValue($element) || $element.outerWidth();
 
             columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
-            columnSum += columnsWidths[index];
+            columnsSum += columnsWidths[index];
         });
 
-        const minWidthForColumns = determinantElements.length * this._minColumnWidth;
+        return {
+            columnsWidths,
+            columnsSum
+        };
+    }
 
-        if(columnSum > minWidthForColumns) {
-            ratio = (tableWidth - minWidthForColumns) / (columnSum - minWidthForColumns);
-        } else {
-            ratio = -1;
-        }
-
-        this._tableLastWidth(frame, ratio > 0 ? tableWidth : minWidthForColumns);
-
-        each(determinantElements, (index) => {
+    _setColumnsRatioWidth(columnElements, ratio, columnsWidths, $table) {
+        each(columnElements, (index) => {
             const $lineElements = this._getLineElements($table, index);
             let resultWidth;
             if(ratio > 0) {
@@ -554,6 +547,33 @@ export default class TableResizingModule extends BaseModule {
 
             this._setLineElementsAttrValue($lineElements, 'width', resultWidth);
         });
+    }
+
+    _updateColumnsWidth($table, frameIndex) {
+        const determinantElements = this._getTableDeterminantElements($table);
+        let frame = this._tableResizeFrames[frameIndex];
+
+        if(!frame) {
+            this._tableResizeFrames[frameIndex] = {};
+        }
+
+        frame = this._tableResizeFrames[frameIndex];
+        const tableWidth = this._tableLastWidth(frame) || $table.outerWidth();
+        let ratio;
+
+        const { columnsWidths, columnsSum } = this._getColumnElementsSum(determinantElements);
+
+        const minWidthForColumns = determinantElements.length * this._minColumnWidth;
+
+        if(columnsSum > minWidthForColumns) {
+            ratio = (tableWidth - minWidthForColumns) / (columnsSum - minWidthForColumns);
+        } else {
+            ratio = -1;
+        }
+
+        this._tableLastWidth(frame, ratio > 0 ? tableWidth : minWidthForColumns);
+
+        this._setColumnsRatioWidth(determinantElements, ratio, columnsWidths, $table);
     }
 
     _updateTablesColumnsWidth($tables) {
