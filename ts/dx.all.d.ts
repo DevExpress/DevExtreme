@@ -505,8 +505,6 @@ declare global {
     dxVectorMap(options: string): any;
     dxVectorMap(options: string, ...params: any[]): any;
   }
-  interface JQueryEventObject extends JQuery.Event {}
-  interface JQueryPromise<T> {}
 }
 declare module DevExpress {
   /**
@@ -1455,7 +1453,7 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface Condition extends JQueryEventObject {}
+  interface Condition extends JQuery.Event {}
   /**
    * [descr:dxElement]
    * @deprecated [depNote:dxElement]
@@ -1525,7 +1523,7 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface PromiseType<T> extends JQueryPromise<T> {}
+  interface PromiseType<T> extends JQuery.Deferred.Callback<T> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -3136,7 +3134,7 @@ declare module DevExpress.events {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface EventType extends JQueryEventObject {
+  interface EventType extends JQuery.Event {
     cancel?: boolean;
   }
   export interface InitializedEventInfo<T> {
