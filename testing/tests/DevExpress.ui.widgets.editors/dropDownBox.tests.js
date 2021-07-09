@@ -8,6 +8,8 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import { normalizeKeyName } from 'events/utils/index';
+import CustomStore from 'data/custom_store';
+import { DataSource } from 'data/data_source/data_source';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -359,6 +361,90 @@ QUnit.module('common', moduleConfig, () => {
         });
 
         assert.strictEqual(spy.callCount, 1, 'value has been applied');
+    });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.filter(item => item.id === key)[0];
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownBox = this.$element.dxDropDownBox({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                valueExpr: 'id',
+                value: 1
+            }).dxDropDownBox('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownBox.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after new call event when acceptCustomValue=true', function(assert) {
+            this.dropDownBox.option({ acceptCustomValue: true, displayExpr: undefined });
+            this.dropDownBox.option('value', 2);
+            assert.strictEqual(this.dropDownBox.option('text'), null, 'text is not changed on byKey reject');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownBox.open();
+            this.clock.tick(100);
+
+            this.dropDownBox.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownBox.option('text'), 'second', 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined', function(assert) {
+            this.dropDownBox.option('value', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownBox.option('text'), '', 'init byKey result is ignored');
+        });
+
+        QUnit.test('after value reset', function(assert) {
+            this.dropDownBox.reset();
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownBox.option('text'), '', 'byKey result is ignored');
+        });
     });
 });
 

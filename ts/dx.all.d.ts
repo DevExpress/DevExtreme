@@ -7942,7 +7942,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.validation]
          */
-        validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
+        validation?: { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean };
     }
     /**
      * [descr:dxGantt]

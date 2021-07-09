@@ -342,6 +342,17 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
         },
 
+        _syncInternalEditingData: function(parameters) {
+            const editingController = this._editingController;
+            const change = editingController.getChangeByKey(parameters.key);
+            const oldDataFromState = editingController._getOldData(parameters.key);
+            const oldData = parameters.row?.oldData;
+
+            if(change && oldData && !oldDataFromState) {
+                editingController._addInternalData({ key: parameters.key, oldData });
+            }
+        },
+
         createValidator: function(parameters, $container) {
             const editingController = this._editingController;
             const column = parameters.column;
@@ -365,7 +376,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
 
                 if(isCellOrBatchEditingAllowed && showEditorAlways) {
-                    editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
+                    editingController._addInternalData({ key: parameters.key, oldData: parameters.row?.oldData ?? parameters.data });
                 }
             }
 
@@ -375,6 +386,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     return;
                 }
 
+                this._syncInternalEditingData(parameters);
                 const validationData = this._getValidationData(parameters.key, true);
 
                 const getValue = () => {
@@ -835,6 +847,8 @@ export default {
 
                 _afterSaveEditData: function(cancel) {
                     let $firstErrorRow;
+                    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+
                     each(this.getChanges(), (_, change) => {
                         const $errorRow = this._showErrorRow(change);
                         $firstErrorRow = $firstErrorRow || $errorRow;
@@ -847,7 +861,7 @@ export default {
                         }
                     }
 
-                    if(cancel && this.getEditMode() === EDIT_MODE_CELL && this._needUpdateRow()) {
+                    if(cancel && isCellEditMode && this._needUpdateRow()) {
                         const editRowIndex = this.getEditRowIndex();
 
                         this._dataController.updateItems({
@@ -856,7 +870,18 @@ export default {
                         });
                         this._focusEditingCell();
                     } else if(!cancel) {
-                        this.getController('validating')._validationState = [];
+                        let shouldResetValidationState = true;
+
+                        if(isCellEditMode) {
+                            const columns = this.getController('columns').getColumns();
+                            const columnsWithValidatingEditors = columns.filter(col => col.showEditorAlways && col.validationRules?.length > 0).length > 0;
+
+                            shouldResetValidationState = !columnsWithValidatingEditors;
+                        }
+
+                        if(shouldResetValidationState) {
+                            this.getController('validating')._validationState = [];
+                        }
                     }
                 },
 
