@@ -179,6 +179,8 @@ const Overlay = Widget.inherit({
 
             closeOnOutsideClick: false,
 
+            copyClassesToWrapper: false,
+
             onShowing: null,
 
             onShown: null,
@@ -261,7 +263,7 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        this._$wrapper.addClass($element.attr('class'));
+        this.option('copyClassesToWrapper') && this._$wrapper.addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
@@ -1000,6 +1002,10 @@ const Overlay = Widget.inherit({
         return $container;
     },
 
+    _getElementCustomClasses: function() {
+        return this._$element.attr('class').split(' ').filter(str => !str.includes('dx')).join(' ');
+    },
+
     _deltaSize: function() {
         const $content = this._$content;
         const $container = this._getDragResizeContainer();
@@ -1415,6 +1421,9 @@ const Overlay = Widget.inherit({
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
+                break;
+            case 'copyClassesToWrapper':
+                value ? this._$wrapper.addClass(this._getElementCustomClasses()) : this._$wrapper.removeClass(this._getElementCustomClasses());
                 break;
             default:
                 this.callBase(args);
