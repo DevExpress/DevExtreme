@@ -33,6 +33,7 @@ const environment = {
         getAppointmentDisabled: stubGetAppointmentDisabled,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        copyRootClassesToWrapper: true
     },
     extraOptions: {
         rtlEnabled: true,
