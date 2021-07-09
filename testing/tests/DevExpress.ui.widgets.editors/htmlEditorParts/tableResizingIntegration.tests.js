@@ -343,8 +343,8 @@ module('Table resizing integration', {
 
             checkColumnResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
-            assert.roughEqual(columnBorderOffsets[0], 150, 2);
-            assert.roughEqual(columnBorderOffsets[1], 200, 2);
+            assert.roughEqual(columnBorderOffsets[0], 150, 2.01);
+            assert.roughEqual(columnBorderOffsets[1], 200, 2.01);
         });
 
         test('Frame should change height if the table height is changed by horizontal drag', function(assert) {
