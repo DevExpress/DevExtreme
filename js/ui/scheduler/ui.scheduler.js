@@ -1836,6 +1836,7 @@ class Scheduler extends Widget {
                 onHidden: (e) => {
                     e.component.$element().remove();
                 },
+                copyRootClassesToWrapper: true
             },
         });
 
