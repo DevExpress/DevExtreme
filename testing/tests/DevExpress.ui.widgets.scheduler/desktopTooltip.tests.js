@@ -94,7 +94,7 @@ QUnit.test('createComponent should be called with correct options', function(ass
 
     assert.equal(stubCreateComponent.getCall(0).args[0][0].className, 'dx-scheduler-appointment-tooltip-wrapper');
     assert.deepEqual(stubCreateComponent.getCall(0).args[1], Tooltip);
-    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 5);
+    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 6);
     assert.equal(stubCreateComponent.getCall(0).args[2].target, 'target');
     assert.equal(stubCreateComponent.getCall(0).args[2].maxHeight, 200);
     assert.equal(stubCreateComponent.getCall(0).args[2].rtlEnabled, true);
