@@ -1634,7 +1634,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('columnChooser', { mode: 'select' });
         assert.equal(headerPanel._getToolbarOptions.callCount, 3, 'Toolbar items are updated after columnChooser options change');
 
-        dataGrid.option('export', { allowExportSelectedData: false });
+        dataGrid.option('export', { allowExportSelectedData: true });
         assert.equal(headerPanel._getToolbarOptions.callCount, 4, 'Toolbar items are updated after export options change');
 
         dataGrid.option('groupPanel', { emptyPanelText: 'test' });

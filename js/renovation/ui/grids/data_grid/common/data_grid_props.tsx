@@ -1109,7 +1109,7 @@ export class DataGridLoadPanel {
 export class DataGridExport {
   @OneWay() allowExportSelectedData?: boolean;
 
-  @Event() customizeExcelCell?: ((options: ExcelCellInfo) => any);
+  @Event() customizeExcelCell?: (options: ExcelCellInfo) => any;
 
   @OneWay() enabled?: boolean;
 
@@ -1183,10 +1183,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     enabled: false,
     fileName: 'DataGrid',
     excelFilterEnabled: false,
-    excelWrapTextEnabled: undefined,
-    proxyUrl: undefined,
     allowExportSelectedData: false,
     ignoreExcelErrors: true,
+    customizeExcelCell: undefined,
     texts: {
       exportTo: messageLocalization.format('dxDataGrid-exportTo'),
       exportAll: messageLocalization.format('dxDataGrid-exportAll'),
