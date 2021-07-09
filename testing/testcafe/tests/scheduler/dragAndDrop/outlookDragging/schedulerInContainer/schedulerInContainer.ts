@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { createScreenshotsComparer } from '../../../../../helpers/screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
 
 fixture`Outlook dragging, for case scheduler in container`

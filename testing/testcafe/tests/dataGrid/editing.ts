@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
-import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import { changeTheme } from '../../helpers/changeTheme';
 
 fixture.disablePageReloads`Editing`
