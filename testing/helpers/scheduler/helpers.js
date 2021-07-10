@@ -252,8 +252,12 @@ class Appointment extends ClickElementWrapper {
 
     click() {
         const clock = sinon.useFakeTimers();
-        this.getElement().trigger('dxclick');
-        clock.tick(300);
+
+        Date.now = () => NaN;
+        this.getElement().trigger('click');
+        Date.now = () => 0;
+
+        clock.tick(400);
         clock.restore();
     }
 
@@ -437,7 +441,11 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
+
+                Date.now = () => NaN;
                 this.appointments.getAppointment(index).trigger('dxclick');
+                Date.now = () => 0;
+
                 this.clock.tick(300);
                 this.clock.restore();
             },
