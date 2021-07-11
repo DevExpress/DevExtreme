@@ -239,7 +239,7 @@ export const isPossibleForParsingFormat = function(patterns) {
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
-        return pattern !== 'S' && pattern !== 'yy' && pattern.length !== 2;
+        return pattern === 'SS' || pattern.length !== 2 && pattern !== 'S';
     };
 
     let possibleForParsing = true;

@@ -481,6 +481,7 @@ QUnit.module('number formatter', () => {
             'aaadMMM y hhm': 0,
             'QQQdSHHMMM hhmm': 0,
             'QQQdHHsMMM hhmm': 1,
+            'QQQsSSMMM hhmm': 1,
             'QQQsSSSMMM hhmm': 1,
             'QQQdMMM yyyy d h m': 0,
             'QQQdHHMMM yyyyd hhmm': 1,
