@@ -93,6 +93,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     /**
      * @docid
      * @default false
+     * @public
+     */
+     copyRootClassesToWrapper?: boolean;
+    /**
+     * @docid
+     * @default false
      * @default true [for](desktop)
      * @public
      */
