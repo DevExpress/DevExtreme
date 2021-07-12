@@ -122,10 +122,6 @@ class SchedulerAgenda extends WorkSpace {
         return this.option('agendaDuration');
     }
 
-    _getFormat() {
-        return 'd ddd';
-    }
-
     _renderAllDayPanel() { return noop(); }
 
     _toggleAllDayVisibility() { return noop(); }

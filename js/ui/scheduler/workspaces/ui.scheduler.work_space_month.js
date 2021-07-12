@@ -28,10 +28,6 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     get type() { return VIEWS.MONTH; }
 
-    get isDateAndTimeView() {
-        return false;
-    }
-
     _getElementClass() {
         return MONTH_CLASS;
     }

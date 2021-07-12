@@ -1,5 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
+import { isGroupingByDate, isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
+import { calculateIsGroupedAllDayPanel } from '../utils/base';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
@@ -45,6 +47,7 @@ export default class ViewDataProvider {
 
     update(options, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
+
         const viewDataGenerator = this.viewDataGenerator;
         const dateHeaderDataGenerator = new DateHeaderDataGenerator();
         const timePanelDataGenerator = new TimePanelDataGenerator();
@@ -74,7 +77,7 @@ export default class ViewDataProvider {
             this.completeViewDataMap,
             {
                 isVerticalGrouping: renderOptions.isVerticalGrouping,
-                isDateAndTimeView: renderOptions.isDateAndTimeView,
+                viewType: renderOptions.viewType,
             },
         );
 
@@ -98,9 +101,26 @@ export default class ViewDataProvider {
     }
 
     _transformRenderOptions(renderOptions) {
+        const {
+            groups,
+            groupOrientation,
+            groupByDate,
+            isAllDayPanelVisible,
+            ...restOptions
+        } = renderOptions;
+
         return {
-            ...renderOptions,
+            ...restOptions,
             startViewDate: this.viewDataGenerator._calculateStartViewDate(renderOptions),
+            isVerticalGrouping: isVerticalGroupOrientation(groupOrientation, groups),
+            isHorizontalGrouping: isHorizontalGroupOrientation(groups, groupOrientation),
+            isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
+            isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
+                groups, groupOrientation, isAllDayPanelVisible,
+            ),
+            groups,
+            groupOrientation,
+            isAllDayPanelVisible,
         };
     }
 
