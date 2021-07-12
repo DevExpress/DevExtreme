@@ -396,9 +396,10 @@ module('Table resizing integration', {
                 .drag(1, 0)
                 .drag(1, 0)
                 .drag(1, 0)
+                .drag(1, 0)
                 .dragEnd();
 
-            assert.roughEqual(startTableWidth, $table.outerWidth(), 4);
+            assert.roughEqual(startTableWidth, $table.outerWidth(), 5);
         });
 
         test('Table should not change on non-last column resizing if previous column has content', function(assert) {
@@ -426,9 +427,10 @@ module('Table resizing integration', {
                 .drag(-1, 0)
                 .drag(-1, 0)
                 .drag(-1, 0)
+                .drag(-1, 0)
                 .dragEnd();
 
-            assert.roughEqual(startTableWidth, $table.outerWidth(), 4);
+            assert.roughEqual(startTableWidth, $table.outerWidth(), 5);
         });
     });
 
