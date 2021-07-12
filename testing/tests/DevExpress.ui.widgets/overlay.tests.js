@@ -477,32 +477,6 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
     });
 
-    test('copyClassesToWrapper copy custom classes after runtime change', function(assert) {
-        const overlay = $('#overlayWithClass').dxOverlay({
-            visible: true
-        }).dxOverlay('instance');
-
-        overlay.option('copyClassesToWrapper', true);
-
-        assert.ok(overlay.$wrapper().hasClass('something'));
-        assert.ok(overlay.$wrapper().hasClass('another'));
-    });
-
-    test('copyClassesToWrapper deletes custom classes after runtime change', function(assert) {
-        const overlay = $('#overlayWithClass').dxOverlay({
-            visible: true,
-            copyClassesToWrapper: true
-        }).dxOverlay('instance');
-
-        assert.ok(overlay.$wrapper().hasClass('something'));
-        assert.ok(overlay.$wrapper().hasClass('another'));
-
-        overlay.option('copyClassesToWrapper', false);
-
-        assert.notOk(overlay.$wrapper().hasClass('something'));
-        assert.notOk(overlay.$wrapper().hasClass('another'));
-    });
-
     testModule('wrapperAttr option', {
         beforeEach: function() {
             this.overlay = $('#overlay').dxOverlay({
@@ -2288,10 +2262,10 @@ testModule('container', moduleConfig, () => {
         assert.strictEqual($(toSelector(VIEWPORT_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 0);
     });
 
-    test('css classes from overlay should be duplicated to wrapper if "copyClassesToWrapper" is true', function(assert) {
+    test('css classes from overlay should be duplicated to wrapper if "copyRootClassesToWrapper" is true', function(assert) {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true,
-            copyClassesToWrapper: true
+            copyRootClassesToWrapper: true
         }).dxOverlay('instance');
         const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
 
