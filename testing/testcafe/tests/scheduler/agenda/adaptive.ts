@@ -1,5 +1,5 @@
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:adaptive`
