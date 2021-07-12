@@ -359,6 +359,7 @@ export default class TableResizingModule extends BaseModule {
 
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
+        this._startTableWidth = frame.$table.outerWidth();
         this._startLineSeparatorPosition = parseInt($(lineSeparator).css(directionInfo.positionCoordinate));
         this._nextLineSize = 0;
         if($determinantElements[index + 1]) {
@@ -389,11 +390,15 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _isNextColumnHasEnoughPlace(nextColumnNewSize, $nextColumnElement, eventOffset) {
-        if(!this._nextLineSize || (nextColumnNewSize >= this._minColumnWidth)) {
-            const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
-            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - $nextColumnElement.outerWidth()) > ROUGH_OFFSET;
+        if(!this._nextLineSize) {
+            return true;
+        } else {
+            if((nextColumnNewSize >= this._minColumnWidth)) {
+                const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
+                const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - $nextColumnElement.outerWidth()) > ROUGH_OFFSET;
 
-            return (isWidthIncreased || !isWidthLimited);
+                return (isWidthIncreased || !isWidthLimited);
+            }
         }
 
         return false;
@@ -418,20 +423,19 @@ export default class TableResizingModule extends BaseModule {
                 }
 
                 const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
-                const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET;
+                const isTableWidthChanged = Math.abs(this._startTableWidth - frame.$table.outerWidth()) < ROUGH_OFFSET;
+                const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
                 if(shouldRevertNewValue) {
                     this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
 
-                    nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
+                    nextColumnNewSize += currentLineNewSize - $($lineElements.eq(0)).outerWidth();
 
                     if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
                         this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                     }
                 }
                 this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + realWidthDiff) + 'px');
-
-
             } else {
                 this._nextColumnOffsetLimit = this._nextColumnOffsetLimit || eventOffset;
             }
@@ -615,6 +619,7 @@ export default class TableResizingModule extends BaseModule {
         clearTimeout(this._windowResizeTimeout);
         this._resizeHandler = undefined;
         this._verticalDragging = undefined;
+        this._startTableWidth = undefined;
 
         clearTimeout(this._attachResizerTimeout);
     }

@@ -371,6 +371,65 @@ module('Table resizing integration', {
             PointerMock($draggableElement).dragEnd();
             this.clock.tick(TIME_TO_WAIT);
         });
+
+        test('Table should not change on non-last column resizing if next column has content', function(assert) {
+            this.createWidget({ width: 630, value: tableMarkupWidth });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+            const $table = this.$element.find('table');
+            const startTableWidth = $table.outerWidth();
+            $table.find('td').eq(3).text('text12');
+
+            $columnResizerElements.eq(2)
+                .trigger('dxpointerdown');
+
+            const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+            PointerMock($draggableElement)
+                .start()
+                .dragStart()
+                .drag(1, 0)
+                .drag(1, 0)
+                .drag(1, 0)
+                .drag(1, 0)
+                .drag(1, 0)
+                .drag(1, 0)
+                .drag(1, 0)
+                .dragEnd();
+
+            assert.roughEqual(startTableWidth, $table.outerWidth(), 4);
+        });
+
+        test('Table should not change on non-last column resizing if previous column has content', function(assert) {
+            this.createWidget({ width: 630, value: tableMarkupWidth });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+            const $table = this.$element.find('table');
+            const startTableWidth = $table.outerWidth();
+            $table.find('td').eq(1).text('text12');
+
+            $columnResizerElements.eq(1)
+                .trigger('dxpointerdown');
+
+            const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+            PointerMock($draggableElement)
+                .start()
+                .dragStart()
+                .drag(-50, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .drag(-1, 0)
+                .dragEnd();
+
+            assert.roughEqual(startTableWidth, $table.outerWidth(), 4);
+        });
     });
 
     module('minColumnWidth', {}, () => {
