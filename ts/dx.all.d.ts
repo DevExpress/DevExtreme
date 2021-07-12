@@ -15258,9 +15258,9 @@ declare module DevExpress.ui {
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
-     * [descr:dxOverlayOptions.copyClassesToWrapper]
+     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
      */
-    copyClassesToWrapper?: boolean;
+    copyRootClassesToWrapper?: boolean;
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */

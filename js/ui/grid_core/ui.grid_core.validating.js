@@ -1044,6 +1044,7 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
+                            copyRootClassesToWrapper: true,
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
                                 const buttonOptions = {

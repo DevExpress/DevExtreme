@@ -183,7 +183,6 @@ export const Navigator = Widget.inherit({
     _renderPopover: function() {
         const overlayType = this._isMobileLayout() ? Popup : Popover;
         const popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
-
         this._popover = this._createComponent(popoverContainer, overlayType, {
             contentTemplate: () => this._createPopupContent(),
             defaultOptionsRules: [
