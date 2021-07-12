@@ -1728,12 +1728,13 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
             }
         });
+
+        this.clock.tick();
 
         const changedSpy = sinon.spy();
         const loadingSpy = sinon.spy();
@@ -1746,6 +1747,8 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             pageIndex: 1,
             pageSize: 2
         });
+
+        this.clock.tick();
 
         // assert
         assert.strictEqual(changedSpy.callCount, 1, 'changed is called');
