@@ -23,12 +23,12 @@ const getCellSize = (DOMMetaData) => {
 
 const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
-    const row = dateTableCellsMeta[groupIndex];
+    const firstRow = dateTableCellsMeta[0];
 
-    if(!row) return 0;
+    if(!firstRow) return 0;
 
     const { columnIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
-    const cellPosition = row[columnIndex];
+    const cellPosition = firstRow[columnIndex];
 
     if(!cellPosition) return 0;
 
@@ -234,33 +234,22 @@ export class PositionHelper {
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
 
-
     getHorizontalMax(groupIndex) {
-        const result = getMaxAllowedPosition(
+        if(this.isGroupedByDate) {
+            return Math.max(
+                this.getMaxAllowedPosition(groupIndex),
+                this.getMaxAllowedPosition(this._getGroupCount() - 1),
+            );
+        }
+
+        return this.getMaxAllowedPosition(groupIndex);
+    }
+    getMaxAllowedPosition(groupIndex) {
+        return getMaxAllowedPosition(
             groupIndex,
             this.viewDataProvider,
             this.isRtlEnabled,
             this.getDOMMetaData()
         );
-
-        if(this.isVirtualScrolling) {
-            const correctedGroupIndex = this.isGroupedByDate
-                ? this.groupCount - 1
-                : groupIndex;
-
-            if(correctedGroupIndex !== groupIndex) {
-                return Math.max(
-                    result,
-                    getMaxAllowedPosition(
-                        correctedGroupIndex,
-                        this.viewDataProvider,
-                        this.isRtlEnabled,
-                        this.getDOMMetaData()
-                    ),
-                );
-            }
-        }
-
-        return result;
     }
 }
