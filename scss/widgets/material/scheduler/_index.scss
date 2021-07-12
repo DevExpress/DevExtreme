@@ -45,12 +45,12 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
+$arrow-down: "\f016";
+
 $material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
 $material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
 
 $material-scheduler-month-date-text-size: 14px;
-
-$material-scheduler-switcher-label-offset: 10px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
@@ -452,7 +452,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
           }
 
           .dx-icon::before {
-            content: "\f016";
+            content: $arrow-down;
           }
         }
       }
