@@ -32,7 +32,8 @@ import {
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs,
-    getItemPath
+    getItemPath,
+    getLabelWidthByText
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -41,17 +42,14 @@ import '../validation_group';
 // STYLE form
 
 import {
-    WIDGET_CLASS,
     FORM_CLASS,
     FIELD_ITEM_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
     FORM_GROUP_CLASS,
     FORM_GROUP_CONTENT_CLASS,
     FIELD_ITEM_CONTENT_HAS_GROUP_CLASS,
     FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
     FORM_GROUP_WITH_CAPTION_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    HIDDEN_LABEL_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_TAB_CLASS,
@@ -67,28 +65,6 @@ import { TOOLBAR_CLASS } from '../toolbar/constants';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
-
-function getLabelWidthByText(text, layoutManager, labelLocation) {
-    const $hiddenContainer = $('<div>')
-        .addClass(WIDGET_CLASS)
-        .addClass(HIDDEN_LABEL_CLASS)
-        .appendTo('body');
-
-    const $label = layoutManager._renderLabel({
-        text: ' ',
-        location: labelLocation
-    }).appendTo($hiddenContainer);
-
-    const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
-
-    // this code has slow performance
-    labelTextElement.innerHTML = text;
-    const result = labelTextElement.offsetWidth;
-
-    $hiddenContainer.remove();
-
-    return result;
-}
 
 const Form = Widget.inherit({
     _init: function() {
