@@ -96,7 +96,7 @@ import type {
 import type { Format } from '../../../../../localization';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
-// import messageLocalization from '../../../../../localization/message';
+import messageLocalization from '../../../../../localization/message';
 
 @ComponentBindings()
 export class DataGridColumnButton {
@@ -1187,15 +1187,15 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     ignoreExcelErrors: true,
     customizeExcelCell: undefined,
     texts: {
-      // exportTo: messageLocalization.format('dxDataGrid-exportTo'),
-      // exportAll: messageLocalization.format('dxDataGrid-exportAll'),
-      // exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows'),
+      exportTo: messageLocalization.format('dxDataGrid-exportTo'),
+      exportAll: messageLocalization.format('dxDataGrid-exportAll'),
+      exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows'),
     },
   };
 
   @Nested() groupPanel?: DataGridGroupPanel = {
     visible: false,
-    // emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
+    emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
     allowColumnDragging: true,
   };
 
@@ -1205,11 +1205,11 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     contextMenuEnabled: false,
     expandMode: 'buttonClick',
     texts: {
-      // groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
-      // groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
-      // groupByThisColumn: messageLocalization.format('dxDataGrid-groupHeaderText'),
-      // ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
-      // ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText'),
+      groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
+      groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
+      groupByThisColumn: messageLocalization.format('dxDataGrid-groupHeaderText'),
+      ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
+      ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText'),
     },
   };
 
@@ -1253,15 +1253,15 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     skipEmptyValues: true,
     recalculateWhileEditing: false,
     texts: {
-      // sum: messageLocalization.getFormatter('dxDataGrid-summarySum')(),
-      // sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn')(),
-      // min: messageLocalization.getFormatter('dxDataGrid-summaryMin')(),
-      // minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn')(),
-      // max: messageLocalization.getFormatter('dxDataGrid-summaryMax')(),
-      // maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn')(),
-      // avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg')(),
-      // avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn')(),
-      // count: messageLocalization.getFormatter('dxDataGrid-summaryCount')(),
+      sum: messageLocalization.getFormatter('dxDataGrid-summarySum')(),
+      sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn')(),
+      min: messageLocalization.getFormatter('dxDataGrid-summaryMin')(),
+      minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn')(),
+      max: messageLocalization.getFormatter('dxDataGrid-summaryMax')(),
+      maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn')(),
+      avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg')(),
+      avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn')(),
+      count: messageLocalization.getFormatter('dxDataGrid-summaryCount')(),
     },
   };
 
@@ -1272,17 +1272,17 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     mode: 'dragAndDrop',
     width: 250,
     height: 260,
-    // title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
-    // emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
+    title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
+    emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
   };
 
   @Nested() columnFixing?: DataGridColumnFixing = {
     enabled: false,
     texts: {
-      // fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
-      // unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
-      // leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
-      // rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition'),
+      fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
+      unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
+      leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
+      rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition'),
     },
   };
 
@@ -1290,38 +1290,36 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     visible: false,
     filterEnabled: true,
     texts: {
-      // createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
-      // clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
-      // filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
+      createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
+      clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
+      filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
     },
   };
 
   @Nested() filterRow?: DataGridFilterRow = {
     visible: false,
     showOperationChooser: true,
-    // showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
-    // resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
+    showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
+    resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
     applyFilter: 'auto',
-    // applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
+    applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
     operationDescriptions: {
-      // equal: messageLocalization.format('dxDataGrid-filterRowOperationEquals'),
-      // notEqual: messageLocalization.format('dxDataGrid-filterRowOperationNotEquals'),
-      // lessThan: messageLocalization.format('dxDataGrid-filterRowOperationLess'),
-      // lessThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationLessOrEquals'),
-      // greaterThan: messageLocalization.format('dxDataGrid-filterRowOperationGreater'),
-      // eslint-disable-next-line max-len
-      // greaterThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationGreaterOrEquals'),
-      // startsWith: messageLocalization.format('dxDataGrid-filterRowOperationStartsWith'),
-      // contains: messageLocalization.format('dxDataGrid-filterRowOperationContains'),
-      // notContains: messageLocalization.format('dxDataGrid-filterRowOperationNotContains'),
-      // endsWith: messageLocalization.format('dxDataGrid-filterRowOperationEndsWith'),
-      // between: messageLocalization.format('dxDataGrid-filterRowOperationBetween'),
-      // isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-      // isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+      equal: messageLocalization.format('dxDataGrid-filterRowOperationEquals'),
+      notEqual: messageLocalization.format('dxDataGrid-filterRowOperationNotEquals'),
+      lessThan: messageLocalization.format('dxDataGrid-filterRowOperationLess'),
+      lessThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationLessOrEquals'),
+      greaterThan: messageLocalization.format('dxDataGrid-filterRowOperationGreater'),
+      greaterThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationGreaterOrEquals'),
+      startsWith: messageLocalization.format('dxDataGrid-filterRowOperationStartsWith'),
+      contains: messageLocalization.format('dxDataGrid-filterRowOperationContains'),
+      notContains: messageLocalization.format('dxDataGrid-filterRowOperationNotContains'),
+      endsWith: messageLocalization.format('dxDataGrid-filterRowOperationEndsWith'),
+      between: messageLocalization.format('dxDataGrid-filterRowOperationBetween'),
+      isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
     },
-    // eslint-disable-next-line max-len
-    // betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
-    // betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText'),
+    betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
+    betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText'),
   };
 
   @Nested() headerFilter?: DataGridHeaderFilter = {
@@ -1331,9 +1329,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     allowSearch: false,
     searchTimeout: 500,
     texts: {
-      // emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
-      // ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
-      // cancel: messageLocalization.format('dxDataGrid-headerFilterCancel'),
+      emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
+      ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
+      cancel: messageLocalization.format('dxDataGrid-headerFilterCancel'),
     },
   };
 
@@ -1348,7 +1346,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() loadPanel?: DataGridLoadPanel = {
     enabled: 'auto',
-    // text: messageLocalization.format('Loading'),
+    text: messageLocalization.format('Loading'),
     width: 200,
     height: 90,
     showIndicator: true,
@@ -1376,7 +1374,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() searchPanel?: DataGridSearchPanel = {
     visible: false,
     width: 160,
-    // placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
+    placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
     highlightSearchText: true,
     highlightCaseSensitive: false,
     text: '',
@@ -1385,9 +1383,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() sorting?: DataGridSorting = {
     mode: 'single',
-    // ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
-    // descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
-    // clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
+    ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
+    descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
+    clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
     showSortIndexes: true,
   };
 
@@ -1448,26 +1446,25 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() filterBuilder?: dxFilterBuilderOptions = {
     groupOperationDescriptions: {
-      // and: messageLocalization.format('dxFilterBuilder-and'),
-      // or: messageLocalization.format('dxFilterBuilder-or'),
-      // notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
-      // notOr: messageLocalization.format('dxFilterBuilder-notOr'),
+      and: messageLocalization.format('dxFilterBuilder-and'),
+      or: messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: messageLocalization.format('dxFilterBuilder-notOr'),
     },
     filterOperationDescriptions: {
-      // between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
-      // equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
-      // notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
-      // lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
-      // lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
-      // greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
-      // eslint-disable-next-line max-len
-      // greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
-      // startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
-      // contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
-      // notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
-      // endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
-      // isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-      // isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+      between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+      equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+      notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+      lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+      lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+      greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+      greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+      startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+      contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+      notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+      endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+      isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
     },
   };
 
@@ -1479,7 +1476,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() highlightChanges?: boolean = false;
 
-  // @OneWay() noDataText?: string = messageLocalization.format('dxDataGrid-noDataText');
+  @OneWay() noDataText?: string = messageLocalization.format('dxDataGrid-noDataText');
 
   @OneWay() renderAsync?: boolean = false;
 
@@ -1508,8 +1505,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     allowSorting: true,
     allowEditing: true,
     encodeHtml: true,
-    // trueText: messageLocalization.format('dxDataGrid-trueText'),
-    // falseText: messageLocalization.format('dxDataGrid-falseText'),
+    trueText: messageLocalization.format('dxDataGrid-trueText'),
+    falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
 
   @OneWay() toolbar?: DataGridToolbar;
