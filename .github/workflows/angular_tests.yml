@@ -1,4 +1,4 @@
-name: Angular Tests
+name: Angular Wrapper Tests
 
 on: [push, pull_request]
 
