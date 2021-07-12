@@ -91,7 +91,7 @@ export const isGroupingByDate = (
   groupOrientation: GroupOrientation | undefined,
   groupByDate: boolean,
 ): boolean => {
-  const isHorizontalGrouping = isHorizontalGroupOrientation(groups, groupOrientation);
+  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
 
   return groupByDate && isHorizontalGrouping;
 };
