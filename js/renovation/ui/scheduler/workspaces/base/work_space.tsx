@@ -185,7 +185,7 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
         }]],
         groupIndex: 0,
       }],
-      cellCountInGroupRow: 0,
+      cellCountInGroupRow: 1,
       leftVirtualCellCount: 0,
       rightVirtualCellCount: 0,
       topVirtualRowCount: 0,
