@@ -1137,6 +1137,7 @@ export const validatingModule = {
                             animation: false,
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
+                            copyRootClassesToWrapper: true,
                             closeOnTargetScroll: false,
                             position: {
                                 collision: 'flip',

@@ -149,6 +149,7 @@ export const editingFormBasedModule = {
                         {
                             showTitle: false,
                             fullScreen: isMobileDevice,
+                            copyRootClassesToWrapper: true,
                             toolbarItems: [
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getSaveButtonConfig() },
                                 { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this._getCancelButtonConfig() }
