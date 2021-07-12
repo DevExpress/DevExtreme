@@ -7,6 +7,7 @@ import {
   getGroupCellClasses,
   isVerticalGroupOrientation,
   isHorizontalGroupOrientation,
+  isGroupingByDate,
 } from '../utils';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
@@ -276,6 +277,25 @@ describe('Workspaces utils', () => {
 
     it('should return false if groups length is 0', () => {
       expect(isHorizontalGroupOrientation([], HORIZONTAL_GROUP_ORIENTATION))
+        .toBe(false);
+    });
+  });
+
+  describe('isGroupingByDate', () => {
+    const testGroups = [{}] as any;
+
+    it('should return true if group orientation is horizontal and groupByDate is true', () => {
+      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, true))
+        .toBe(true);
+    });
+
+    it('should return false if group orientation is horizontal and groupByDate is false', () => {
+      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, false))
+        .toBe(false);
+    });
+
+    it('should return false if group orientation is vertical', () => {
+      expect(isGroupingByDate(testGroups, VERTICAL_GROUP_ORIENTATION, false))
         .toBe(false);
     });
   });

@@ -64,6 +64,8 @@ import {
     getDateByCellIndices,
     validateDayHours,
     getStartViewDateTimeOffset,
+    isDateAndTimeView,
+    calculateIsGroupedAllDayPanel,
 } from './utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import { calculateStartViewDate } from './utils/week';
@@ -214,10 +216,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this.supportAllDayRow();
     }
 
-    get isDateAndTimeView() {
-        return true;
-    }
-
     get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
 
     get viewDirection() { return 'vertical'; }
@@ -279,7 +277,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     groupCount,
                     isMultiSelection,
                     isMultiSelectionAllowed,
-                    isDateAndTimeView: this.isDateAndTimeView,
+                    viewType: this.type,
                     key,
                     getCellDataByPosition: this.viewDataProvider.getCellData.bind(this.viewDataProvider),
                     isAllDayPanelCell,
@@ -615,13 +613,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     isGroupedAllDayPanel() {
-        return this.isAllDayPanelVisible && this._isVerticalGroupedWorkSpace();
+        return calculateIsGroupedAllDayPanel(
+            this.option('groups'),
+            this.option('groupOrientation'),
+            this.isAllDayPanelVisible,
+        );
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
-        const horizontalGroupCount = isVerticalGrouping ? 1 : groupCount;
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
@@ -631,7 +632,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             : this._getDefaultGroupStrategy();
 
         const options = {
-            horizontalGroupCount,
+            groupByDate: this.option('groupByDate'),
             rowCountInGroup,
             cellCount,
             cellCountInGroupRow: this._getCellCount(),
@@ -641,17 +642,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCount,
             totalRowCount: rowCount,
             totalCellCount: cellCount,
-            groupCount,
             today: this._getToday?.(),
-            groupByDate: this.isGroupedByDate(),
-            groupsList: this._getAllGroups(),
-            isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
-            isVerticalGrouping,
+            groups: this.option('groups'),
             isProvideVirtualCellsWidth,
-            isStandaloneAllDayPanel: !isVerticalGrouping && this.isAllDayPanelVisible,
-            isGroupedAllDayPanel: this.isGroupedAllDayPanel(),
             isAllDayPanelVisible: this.isAllDayPanelVisible,
-            isDateAndTimeView: this.isDateAndTimeView,
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
             rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
@@ -952,19 +946,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return getGroupCount(this.option('groups'));
     }
 
-    _getAllGroups() {
-        const groupCount = this._getGroupCount();
-
-        return [...(new Array(groupCount))].map((_, groupIndex) => {
-            const groupsArray = getCellGroups(
-                groupIndex,
-                this.option('groups')
-            );
-
-            return getGroupsObjectFromGroupsArray(groupsArray);
-        });
-    }
-
     _attachTablesEvents() {
         const element = this.$element();
 
@@ -1091,7 +1072,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startViewDate: this.getStartViewDate(),
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
-            isDateAndTimeView: this.isDateAndTimeView,
             tableAllDay: this._getTableAllDay(),
             firstDayOfWeek: this._firstDayOfWeek(),
         };
@@ -1260,7 +1240,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellData,
             position,
             currentDate,
-            this.isDateAndTimeView,
+            isDateAndTimeView(this.type),
             this.viewDirection === 'vertical',
         );
     }
