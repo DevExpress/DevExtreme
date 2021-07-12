@@ -1613,7 +1613,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: undefined,
                     groups: undefined,
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 4,
@@ -1659,7 +1659,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: undefined,
                     groups: undefined,
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 4,
@@ -1710,7 +1710,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 4,
@@ -1740,7 +1740,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 12,
@@ -1781,7 +1781,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 4,
@@ -1801,7 +1801,7 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
-                    index: 2,
+                    index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
                     key: 12,
@@ -1856,7 +1856,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: undefined,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -1890,7 +1889,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: undefined,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -2022,7 +2020,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 2,
                         isGroupedAllDayPanel: true,
                     };
 
@@ -2055,7 +2052,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2101,7 +2097,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2312,7 +2307,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: 50,
                     topVirtualRowHeight: 50,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: 2,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -2484,7 +2478,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: 20,
                         rightVirtualCellWidth: 30,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 2,
                         isGroupedAllDayPanel: true,
                     };
 
@@ -2517,7 +2510,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: 20,
                         rightVirtualCellWidth: 30,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2553,7 +2545,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
