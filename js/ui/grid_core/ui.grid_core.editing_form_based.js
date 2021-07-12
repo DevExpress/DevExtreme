@@ -164,7 +164,7 @@ export const editingFormBasedModule = {
                             .appendTo(this.component.$element())
                             .addClass(this.addWidgetPrefix(EDIT_POPUP_CLASS));
 
-                        this._editPopup = this._createComponent($popupContainer, Popup, {});
+                        this._editPopup = this._createComponent($popupContainer, Popup, { copyRootClassesToWrapper: true, });
                         this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
                         this._editPopup.on('shown', (e) => {
                             eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not('.' + SCROLLABLE_CONTAINER_CLASS).first(), 'focus');
