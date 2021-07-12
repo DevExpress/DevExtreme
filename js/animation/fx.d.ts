@@ -43,6 +43,7 @@ export type AnimationState = string | number | {
  * @docid
  * @namespace DevExpress
  * @type object
+ * @public
  */
 export type AnimationConfig = {
     /**
@@ -112,7 +113,7 @@ export type AnimationConfig = {
 }
 
 /**
- * @docid
+ * @public
  * @deprecated Use the AnimationConfig type instead 
  */
 export type animationConfig = AnimationConfig;
