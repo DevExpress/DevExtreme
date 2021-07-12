@@ -14,7 +14,7 @@ const mathUtils = require('../core/utils/math');
 const eventUtils = require('../events/utils');
 const Popup = require('./popup');
 const getBoundingRect = require('../core/utils/position').getBoundingRect;
-
+const POPOVER_BOUNDARY_OFFSET = require('./popover_contants').POPOVER_BOUNDARY_OFFSET;
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
@@ -212,7 +212,7 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 },
+            boundaryOffset: { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET },
             _fixedPosition: true
 
             /**
