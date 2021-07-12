@@ -26,7 +26,7 @@ const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTime
 QUnit.module('Timeline Base', {
 
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 });
 
