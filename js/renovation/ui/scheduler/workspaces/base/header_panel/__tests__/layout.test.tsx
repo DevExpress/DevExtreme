@@ -11,7 +11,7 @@ import { DateHeaderLayout } from '../date_header/layout';
 import { TimelineDateHeaderLayout } from '../../../timeline/header_panel/date_header/layout';
 import { DateHeaderData } from '../../../types';
 
-const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
+const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
 describe('HeaderPanelLayoutLayout', () => {
   const dateHeaderData: DateHeaderData = {
@@ -133,7 +133,7 @@ describe('HeaderPanelLayoutLayout', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('isHorizontalGrouping', () => {
-        it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
+        it('should call "isHorizontalGroupingApplied" with correct parameters', () => {
           const groups = [];
           const layout = new HeaderPanelLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
@@ -144,7 +144,7 @@ describe('HeaderPanelLayoutLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(false);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
         });
       });

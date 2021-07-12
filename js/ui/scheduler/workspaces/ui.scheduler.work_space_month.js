@@ -98,12 +98,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
     }
 
-    _setVisibilityDates() {
-        const date = this._getViewStartByOptions();
-        this._minVisibleDate = new Date(date.setDate(1));
-        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
-    }
-
     _getViewStartByOptions() {
         return getViewStartByOptions(
             this.option('startDate'),

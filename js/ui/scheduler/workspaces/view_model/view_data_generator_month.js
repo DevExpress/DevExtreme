@@ -1,7 +1,13 @@
 import { getToday, setOptionHour } from '../utils/base';
 import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
-import { calculateCellIndex, calculateStartViewDate, getCellText, isFirstCellInMonthWithIntervalCount } from '../utils/month';
+import {
+    calculateCellIndex,
+    calculateStartViewDate,
+    getCellText,
+    isFirstCellInMonthWithIntervalCount,
+    getViewStartByOptions,
+} from '../utils/month';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 
@@ -14,12 +20,10 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
             indicatorTime,
             timeZoneCalculator,
             intervalCount,
-            maxVisibleDate,
-            minVisibleDate,
         } = options;
 
         data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
-        data.otherMonth = this.isOtherMonth(startDate, minVisibleDate, maxVisibleDate);
+        data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
         data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
         data.text = getCellText(startDate, intervalCount);
 
@@ -54,5 +58,21 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
             options.intervalCount,
             options.firstDayOfWeek,
         );
+    }
+
+    _setVisibilityDates(options) {
+        const {
+            intervalCount,
+            startDate,
+            currentDate,
+        } = options;
+
+        const firstMonthDate = dateUtils.getFirstMonthDate(startDate);
+        const viewStart = getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
+
+        this._minVisibleDate = new Date(viewStart.setDate(1));
+
+        const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
+        this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
     }
 }

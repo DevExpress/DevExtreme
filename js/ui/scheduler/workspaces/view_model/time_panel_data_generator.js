@@ -7,13 +7,21 @@ export class TimePanelDataGenerator {
             startViewDate,
             cellDuration,
             startDayHour,
+            isVerticalGrouping,
         } = options;
 
         let allDayRowsCount = 0;
 
         return completeViewDataMap.map((row, index) => {
             const {
-                allDay, startDate, endDate, ...restCellProps
+                allDay,
+                startDate,
+                endDate,
+                groups,
+                groupIndex,
+                isFirstGroupCell,
+                isLastGroupCell,
+                ...restCellProps
             } = row[0];
 
             if(allDay) {
@@ -27,6 +35,10 @@ export class TimePanelDataGenerator {
                 startDate,
                 allDay,
                 text: getTimePanelCellText(timeIndex, startDate, startViewDate, cellDuration, startDayHour),
+                groups: isVerticalGrouping ? groups : undefined,
+                groupIndex: isVerticalGrouping ? groupIndex : undefined,
+                isFirstGroupCell: isVerticalGrouping && isFirstGroupCell,
+                isLastGroupCell: isVerticalGrouping && isLastGroupCell,
             };
         });
     }
