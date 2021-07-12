@@ -59,7 +59,7 @@ export const viewFunction = ({
     dateCellTemplate,
     resourceCellTemplate,
   },
-}: LayoutBase): JSX.Element => (
+}: OrdinaryLayout): JSX.Element => (
   <Widget
     className={classes}
   >
@@ -126,8 +126,8 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class LayoutBaseProps extends LayoutProps {
-  @Template() headerPanelTemplate!: JSXTemplate<HeaderPanelLayoutProps>;
+export class OrdinaryLayoutProps extends LayoutProps {
+  @Template() headerPanelTemplate!: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
 
   @Template() dateTableTemplate!: JSXTemplate<DateTableLayoutProps>;
 
@@ -181,8 +181,8 @@ export class LayoutBaseProps extends LayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class LayoutBase extends JSXComponent<
-LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
+export class OrdinaryLayout extends JSXComponent<
+OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
 >() {
   @InternalState()
   groupPanelHeight: number | undefined;
