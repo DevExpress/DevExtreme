@@ -137,7 +137,7 @@ export const getGroupsObjectFromGroupsArray = (groupsArray) => {
 export const getAllGroups = (groups) => {
     const groupCount = getGroupCount(groups);
 
-    return (new Array(groupCount)).map((_, groupIndex) => {
+    return [...(new Array(groupCount))].map((_, groupIndex) => {
         const groupsArray = getCellGroups(
             groupIndex,
             groups,

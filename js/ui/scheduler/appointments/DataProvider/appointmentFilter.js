@@ -700,9 +700,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
     filter() {
         const hourMs = toMs('hour');
-        const isDateAndTimeView = calculateIsDateAndTimeView(this.workspace.type);
-        const isCalculateStartAndEndDayHour = isDateAndTimeView;
-        const checkIntersectViewport = isDateAndTimeView && this.workspace.viewDirection === 'horizontal';
+        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.workspace.type);
+        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.workspace.viewDirection === 'horizontal';
 
         const isAllDayWorkspace = !this.workspace.supportAllDayRow();
         const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
