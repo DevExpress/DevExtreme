@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { isGroupingByDate, isHorizontalGroupOrientation, isVerticalGroupOrientation } from '../../../../renovation/ui/scheduler/workspaces/utils';
+import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
 import { calculateIsGroupedAllDayPanel } from '../utils/base';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
@@ -104,8 +104,8 @@ export default class ViewDataProvider {
 
         return {
             ...restOptions,
-            isVerticalGrouping: isVerticalGroupOrientation(groupOrientation, groups),
-            isHorizontalGrouping: isHorizontalGroupOrientation(groups, groupOrientation),
+            isVerticalGrouping: isVerticalGroupingApplied(groups, groupOrientation),
+            isHorizontalGrouping: isHorizontalGroupingApplied(groups, groupOrientation),
             isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
             isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
                 groups, groupOrientation, isAllDayPanelVisible,
