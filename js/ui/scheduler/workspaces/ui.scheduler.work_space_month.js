@@ -6,7 +6,6 @@ import { getBoundingRect } from '../../../core/utils/position';
 
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
-    calculateStartViewDate,
     getViewStartByOptions,
     calculateCellIndex,
     getCellText,
@@ -97,16 +96,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _needCreateCrossScrolling() {
         return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this.option('intervalCount'),
-            this.option('firstDayOfWeek'),
-        );
     }
 
     _getViewStartByOptions() {

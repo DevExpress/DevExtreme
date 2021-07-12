@@ -540,5 +540,9 @@ export class ViewDataGenerator {
         return this._interval;
     }
 
+    _getIntervalDuration(intervalCount) {
+        return dateUtils.dateToMilliseconds('day') * intervalCount;
+    }
+
     _setVisibilityDates() {}
 }

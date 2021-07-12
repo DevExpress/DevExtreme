@@ -1,7 +1,13 @@
 import { getToday, setOptionHour } from '../utils/base';
 import { ViewDataGenerator } from './view_data_generator';
 import dateUtils from '../../../../core/utils/date';
-import { calculateCellIndex, getCellText, getViewStartByOptions, isFirstCellInMonthWithIntervalCount } from '../utils/month';
+import {
+    calculateCellIndex,
+    calculateStartViewDate,
+    getCellText,
+    isFirstCellInMonthWithIntervalCount,
+    getViewStartByOptions,
+} from '../utils/month';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 
@@ -42,6 +48,16 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
     getInterval() {
         return DAY_IN_MILLISECONDS;
+    }
+
+    _calculateStartViewDate(options) {
+        return calculateStartViewDate(
+            options.currentDate,
+            options.startDayHour,
+            options.startDate,
+            options.intervalCount,
+            options.firstDayOfWeek,
+        );
     }
 
     _setVisibilityDates(options) {
