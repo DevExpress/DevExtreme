@@ -20,6 +20,7 @@ export class ViewDataGenerator {
             totalCellCount,
         } = options;
 
+        this._setVisibilityDates(options);
         const groupsList = getAllGroups(groups);
 
         let viewDataMap = [];
@@ -538,4 +539,6 @@ export class ViewDataGenerator {
         }
         return this._interval;
     }
+
+    _setVisibilityDates() {}
 }
