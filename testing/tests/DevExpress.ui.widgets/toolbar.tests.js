@@ -1536,7 +1536,7 @@ QUnit.module('adaptivity', {
             items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
         }).dxToolbar('instance');
 
-        toolbar.option('overflowMenuVisible', true);
+        $(toolbar.$element().find('.dx-dropdownmenu-button')).trigger('dxclick');
         this.clock.tick();
 
         const $popupContent = toolbar.$element()
