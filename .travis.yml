@@ -6,7 +6,6 @@ services:
 
 env:
   matrix:
-    - TARGET=lint
     - TARGET=ts
     - TARGET=test CONSTEL=export
     - TARGET=test CONSTEL=misc

@@ -25,7 +25,6 @@ pipeline:
 
 matrix:
   include:
-    - { TARGET: lint }
     - { TARGET: ts }
     - { TARGET: test, CONSTEL: misc, TZ: 'PST8PDT' }
     - { TARGET: test, CONSTEL: misc, TZ: 'Japan' }
