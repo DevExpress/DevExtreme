@@ -416,7 +416,7 @@ module('Work Space Day with grouping by date', () => {
             coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.equal(coords.hMax, 998, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 773, 1.01, 'hMax cell coordinates are right');
             assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(18).position().left, 'Left cell coordinates are right');
         });
     });
