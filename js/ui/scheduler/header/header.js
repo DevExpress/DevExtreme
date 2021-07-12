@@ -78,9 +78,6 @@ export class Header extends Widget {
             case 'currentDate':
                 this._navigator.option('date', value);
                 break;
-            case 'displayedDate':
-                this._navigator.option('displayedDate', value);
-                break;
             case 'min':
             case 'max':
             case 'firstDayOfWeek':

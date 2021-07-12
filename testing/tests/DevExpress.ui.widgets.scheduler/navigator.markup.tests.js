@@ -291,7 +291,7 @@ QUnit.module('Navigator markup', moduleConfig, () => {
         this.instance.option('date', new Date(2016, 0, 10));
         this.instance.option('displayedDate', new Date(2016, 1, 13));
 
-        const caption = devices.real().generic ? '15-19 February 2016' : '15-19 Feb 2016';
+        const caption = devices.real().generic ? '11-15 February 2016' : '11-15 Feb 2016';
 
         this.instance.option('step', 'workWeek');
         assert.equal(button.option('text'), caption, 'Step is workWeek: Caption is OK');
