@@ -49,11 +49,3 @@ jobs:
       run: |
         cd ./devextreme-angular-repo
         npx lerna run --scope devextreme-angular gulp -- run.tests
-
-    - name: Copy metadata artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: angular-metadata
-        path: ${{ github.workspace }}/devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json
-        if-no-files-found: ignore
