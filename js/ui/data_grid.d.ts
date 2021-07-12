@@ -4129,15 +4129,15 @@ type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 
 /**
  * @docid
- * @type object
+ * @inherits dxToolbarItem
  * @namespace DevExpress.ui
  */
 export interface dxDataGridToolbarItem extends dxToolbarItem {
   /**
    * @docid
-   * @type Enums.GridToolbarItemName|string
+   * @type Enums.DataGridToolbarItem|string
    * @public
-  */
+   */
   name?: dxDataGridDefaultToolbarItemName | string
 }
 
@@ -4149,7 +4149,7 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
 export interface dxDataGridToolbar {
   /**
    * @docid
-   * @type Array<dxDataGridToolbarItem,Enums.GridToolbarItemName>
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;

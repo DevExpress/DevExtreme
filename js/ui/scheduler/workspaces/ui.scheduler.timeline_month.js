@@ -15,10 +15,6 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get type() { return VIEWS.TIMELINE_MONTH; }
 
-    get isDateAndTimeView() {
-        return false;
-    }
-
     get viewDirection() { return 'horizontal'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }

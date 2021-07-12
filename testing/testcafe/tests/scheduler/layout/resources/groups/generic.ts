@@ -1,4 +1,4 @@
-import { compareScreenshot } from '../../../../../helpers/screenshot-comparer';
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';

@@ -85,3 +85,13 @@ export const isVerticalGroupingApplied = (
 export const isHorizontalGroupingApplied = (
   groups: Group[], groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+
+export const isGroupingByDate = (
+  groups: Group[],
+  groupOrientation: GroupOrientation | undefined,
+  groupByDate: boolean,
+): boolean => {
+  const isHorizontalGrouping = isHorizontalGroupOrientation(groups, groupOrientation);
+
+  return groupByDate && isHorizontalGrouping;
+};
