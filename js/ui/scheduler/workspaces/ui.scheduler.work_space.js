@@ -1299,7 +1299,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy._getGroupTop(groupIndex);
     }
 
-    isGroupedByDate() { // TODO mode to the ModelProvider
+    isGroupedByDate() { // TODO move to the ModelProvider
         return this.option('groupByDate')
             && this._isHorizontalGroupedWorkSpace()
             && this._getGroupCount() > 0;
