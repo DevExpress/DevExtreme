@@ -117,7 +117,7 @@ export class AppointmentPopup {
     // }
 
     dispose() {
-        this.popup.$element().remove();
+        this.popup?.$element().remove();
     }
 
     _createPopup(options) {
@@ -141,7 +141,7 @@ export class AppointmentPopup {
         this._updateForm();
 
         const arg = {
-            form: this.form._appointmentForm,
+            form: this.form.form,
             popup: this.popup,
             appointmentData: this.state.appointment.data,
             cancel: false
