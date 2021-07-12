@@ -570,7 +570,7 @@ const DropDownEditor = TextBox.inherit({
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
-            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
+            copyRootClassesToWrapper: true,
             closeOnTargetScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {
