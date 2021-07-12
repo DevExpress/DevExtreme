@@ -388,17 +388,22 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { index, frame }) {
+    _isNextColumnHasEnoughPlace(nextColumnNewSize, $nextColumnElement, eventOffset) {
+        // console.log($nextColumnElement.outerWidth());
+        // console.log(nextColumnNewSize);
+        // console.log(!this._nextLineSize || (nextColumnNewSize >= this._minColumnWidth && Math.abs($nextColumnElement.outerWidth() - nextColumnNewSize) < ROUGH_OFFSET));
+        return !this._nextLineSize || (nextColumnNewSize >= this._minColumnWidth && nextColumnNewSize - $nextColumnElement.outerWidth() < ROUGH_OFFSET);
+    }
+
+    _horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame }) {
         let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
         const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
-        const isNextColumnHasEnoughPlace = !this._nextLineSize || nextColumnNewSize >= this._minColumnWidth;
         const $lineElements = this._getLineElements(frame.$table, index);
         const $nextLineElements = this._getLineElements(frame.$table, index + 1);
 
-        if(isCurrentColumnHasEnoughPlace && isNextColumnHasEnoughPlace) {
+        if(isCurrentColumnHasEnoughPlace && this._isNextColumnHasEnoughPlace(nextColumnNewSize, $determinantElements.eq(index + 1)), eventOffset) {
             this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
 
-            this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
 
             const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
             const shouldApplyNewValue = this._shouldRevertOffset() ? realWidthDiff < ROUGH_OFFSET : realWidthDiff > -ROUGH_OFFSET;
@@ -407,6 +412,8 @@ export default class TableResizingModule extends BaseModule {
                 this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, $($lineElements.eq(0)).outerWidth());
 
                 nextColumnNewSize = currentLineNewSize - $($lineElements.eq(0)).outerWidth();
+            } else {
+                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
             }
 
             if(this._nextLineSize && nextColumnNewSize > 0) {
@@ -438,7 +445,7 @@ export default class TableResizingModule extends BaseModule {
         const currentLineNewSize = this._startLineSize + eventOffset;
 
         if(direction === 'horizontal') {
-            this._horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { index, frame });
+            this._horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame });
         } else {
             this._verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame });
         }
