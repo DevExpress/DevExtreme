@@ -23,12 +23,12 @@ const getCellSize = (DOMMetaData) => {
 
 const getMaxAllowedHorizontalPosition = (groupIndex, viewDataProvider, isRtlEnabled, DOMMetaData) => {
     const { dateTableCellsMeta } = DOMMetaData;
-    const firstRow = dateTableCellsMeta[0];
+    const row = dateTableCellsMeta[groupIndex];
 
-    if(!firstRow) return 0;
+    if(!row) return 0;
 
     const { columnIndex } = viewDataProvider.getLastGroupCellPosition(groupIndex);
-    const cellPosition = firstRow[columnIndex];
+    const cellPosition = row[columnIndex];
 
     if(!cellPosition) return 0;
 
@@ -221,20 +221,46 @@ export class PositionHelper {
             : 0;
     }
 
-    getHorizontalMax(groupIndex) {
-        let correctedGroupIndex = groupIndex;
+    _getHorizontalMax(groupIndex) {
+        if(this.isGroupedByDate) {
+            const correctedGroupIndex = this._getGroupCount() - 1;
 
-        if(this.isVirtualScrolling) {
-            correctedGroupIndex = this.isGroupedByDate
-                ? this.groupCount - 1
-                : groupIndex;
+            return Math.max(
+                this._groupedStrategy.getHorizontalMax(groupIndex),
+                this._groupedStrategy.getHorizontalMax(correctedGroupIndex)
+            );
         }
 
-        return getMaxAllowedPosition(
-            correctedGroupIndex,
+        return this._groupedStrategy.getHorizontalMax(groupIndex);
+    }
+
+
+    getHorizontalMax(groupIndex) {
+        const result = getMaxAllowedPosition(
+            groupIndex,
             this.viewDataProvider,
             this.isRtlEnabled,
             this.getDOMMetaData()
         );
+
+        if(this.isVirtualScrolling) {
+            const correctedGroupIndex = this.isGroupedByDate
+                ? this.groupCount - 1
+                : groupIndex;
+
+            if(correctedGroupIndex !== groupIndex) {
+                return Math.max(
+                    result,
+                    getMaxAllowedPosition(
+                        correctedGroupIndex,
+                        this.viewDataProvider,
+                        this.isRtlEnabled,
+                        this.getDOMMetaData()
+                    ),
+                );
+            }
+        }
+
+        return result;
     }
 }
