@@ -8,7 +8,7 @@ import {
   WorkSpaceBaseProps,
 } from '../work_space';
 
-describe('LayoutBase', () => {
+describe('WorkSpaceBase', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
@@ -199,7 +199,7 @@ describe('LayoutBase', () => {
       });
 
       describe('dateHeaderData', () => {
-        it('should return correct viewData', () => {
+        it('should return correct dateHeaderData', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
           });
@@ -210,7 +210,7 @@ describe('LayoutBase', () => {
       });
 
       describe('timePanelData', () => {
-        it('should return correct viewData', () => {
+        it('should return correct timePanelData', () => {
           const workSpace = new WorkSpaceBase({
             currentDate: new Date(),
           });
