@@ -49,7 +49,6 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
     - TARGET=test_jest
     - TARGET=native_components
-    - TARGET=test_styles
 
 cache:
   directories:

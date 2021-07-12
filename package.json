@@ -214,7 +214,8 @@
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage --maxWorkers=8",
-    "test-jest:watch": "jest --watch"
+    "test-jest:watch": "jest --watch",
+    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false"
   },
   "browserslist": [
     "last 2 versions",
