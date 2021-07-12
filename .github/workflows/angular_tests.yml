@@ -38,7 +38,7 @@ jobs:
 
     - name: Update angular metadata
       run: |
-        npm run internal-tool --  update-meta --output-path ./devextreme-angular/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
+        npm run internal-tool --  update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
 
     - name: Build with Angular 7
       run: |
@@ -49,3 +49,11 @@ jobs:
       run: |
         cd ./devextreme-angular-repo
         npx lerna run --scope devextreme-angular gulp -- run.tests
+
+    - name: Copy metadata artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: angular-metadata
+        path: ${{ github.workspace }}/devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json
+        if-no-files-found: ignore
