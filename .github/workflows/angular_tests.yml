@@ -24,7 +24,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: npm run build-dist
+      run: npm run build
 
     - name: Install devextreme package
       run: |
