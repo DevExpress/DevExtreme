@@ -30,6 +30,7 @@ $agenda-appointment-title-font-size: null !default;
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
+@use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icons" as *;
 @use "./common";
@@ -39,15 +40,14 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 
+$arrow-down: "\f016";
+
 $scheduler-navigator-offset: 10px;
 $scheduler-switcher-offset: 10px;
+$toolbar-menu-container-offset: 9px;
 $scheduler-default-header-height: 56px;
 
 $scheduler-navigator-caption-width: 180px;
-
-$scheduler-mobile-navigator-caption-width: 140px;
-
-$scheduler-switcher-tab-width: 100px;
 
 $scheduler-timepanel-cell-offset: 20px;
 
@@ -569,11 +569,11 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-toolbar-items-container {
         .dx-scheduler-navigator {
-          padding: 10px;
+          padding: $scheduler-navigator-offset;
 
           .dx-button {
             &.dx-item-selected:not(.dx-state-focused) {
-              background-color: white; // TODO
+              background-color: white; // TODO перенести в generic и material
             }
 
             .dx-button-content {
@@ -581,15 +581,17 @@ $scheduler-appointment-form-label-padding: 20px;
             }
           }
 
-          .dx-buttongroup-wrapper :nth-child(2) {
-            width: $scheduler-navigator-caption-width;
+          .dx-buttongroup-wrapper {
+            .dx-scheduler-navigator-calendar-button {
+              width: $scheduler-navigator-caption-width;
+            }
           }
         }
       }
 
       .dx-scheduler-view-switcher {
         .dx-scheduler-view-switcher-dropdown-button {
-          margin: 10px;
+          margin: $scheduler-switcher-offset;
         }
 
         .dx-button-content {
@@ -598,10 +600,10 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       .dx-toolbar-menu-container {
-        padding: 9px;
+        padding: $toolbar-menu-container-offset;
 
         .dx-icon::before {
-          content: "\f016";
+          content: $arrow-down;
         }
       }
     }
