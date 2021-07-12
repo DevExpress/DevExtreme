@@ -175,11 +175,11 @@ export const isDateAndTimeView = (viewType) => {
 
 export const getHorizontalGroupCount = (groups, groupOrientation) => {
     const groupCount = getGroupCount(groups) || 1;
-    const isVerticalGrouping = isVerticalGroupingApplied(groupOrientation, groups);
+    const isVerticalGrouping = isVerticalGroupingApplied(groups, groupOrientation);
 
     return isVerticalGrouping ? 1 : groupCount;
 };
 
 export const calculateIsGroupedAllDayPanel = (groups, groupOrientation, isAllDayPanelVisible) => {
-    return isVerticalGroupingApplied(groupOrientation, groups) && isAllDayPanelVisible;
+    return isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 };

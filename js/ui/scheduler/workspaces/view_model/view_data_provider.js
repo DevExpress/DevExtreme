@@ -104,7 +104,7 @@ export default class ViewDataProvider {
 
         return {
             ...restOptions,
-            isVerticalGrouping: isVerticalGroupingApplied(groupOrientation, groups),
+            isVerticalGrouping: isVerticalGroupingApplied(groups, groupOrientation),
             isHorizontalGrouping: isHorizontalGroupingApplied(groups, groupOrientation),
             isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
             isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
