@@ -30,7 +30,7 @@ export class ScrollableWrapper extends Component {
   }
 
   _moveIsAllowed(event: DxMouseEvent): boolean {
-    return (this.viewRef as Scrollable).scrollableRef.moveIsAllowed(event);
+    return (this.viewRef as Scrollable).scrollableRef.moveIsAllowed(event) as boolean;
   }
 
   _prepareDirections(value: boolean): void {

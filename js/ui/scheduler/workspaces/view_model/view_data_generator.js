@@ -20,6 +20,7 @@ export class ViewDataGenerator {
             totalCellCount,
         } = options;
 
+        this._setVisibilityDates(options);
         const groupsList = getAllGroups(groups);
 
         let viewDataMap = [];
@@ -200,7 +201,6 @@ export class ViewDataGenerator {
             bottomVirtualRowHeight,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
-            cellCountInGroupRow,
             totalCellCount,
             totalRowCount,
             cellCount,
@@ -256,7 +256,6 @@ export class ViewDataGenerator {
             bottomVirtualRowHeight,
             leftVirtualCellWidth: isProvideVirtualCellsWidth ? leftVirtualCellWidth : undefined,
             rightVirtualCellWidth: isProvideVirtualCellsWidth ? rightVirtualCellWidth : undefined,
-            cellCountInGroupRow,
             isGroupedAllDayPanel,
             leftVirtualCellCount: startCellIndex,
             rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
@@ -538,4 +537,10 @@ export class ViewDataGenerator {
         }
         return this._interval;
     }
+
+    _getIntervalDuration(intervalCount) {
+        return dateUtils.dateToMilliseconds('day') * intervalCount;
+    }
+
+    _setVisibilityDates() {}
 }

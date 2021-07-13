@@ -221,28 +221,19 @@ module('Work Space Month', () => {
         test('Get cell count to last view dates', function(assert) {
             this.instance.option('renovateRender', false);
 
-            const origGetFirstViewDate = this.instance.getStartViewDate;
+            this.instance.option({
+                currentDate: new Date(2016, 2, 14, 0, 0),
+                startDayHour: 5,
+                firstDayOfWeek: 1,
+            });
 
-            this.instance.getStartViewDate = function() {
-                return new Date(2016, 1, 29, 5, 0);
-            };
+            const $cell = this.instance._getCells().eq(14);
 
-            try {
-                this.instance.option({
-                    currentDate: new Date(2016, 2, 14, 0, 0),
-                    startDayHour: 5
-                });
-
-                const $cell = this.instance._getCells().eq(14);
-
-                assert.deepEqual($cell.data('dxCellData'), {
-                    startDate: new Date(2016, 2, 14, 5, 0),
-                    endDate: new Date(2016, 2, 15, 0, 0),
-                    groupIndex: 0,
-                }, 'data of the cell is right');
-            } finally {
-                this.instance.getStartViewDate = origGetFirstViewDate;
-            }
+            assert.deepEqual($cell.data('dxCellData'), {
+                startDate: new Date(2016, 2, 14, 5, 0),
+                endDate: new Date(2016, 2, 15, 0, 0),
+                groupIndex: 0,
+            }, 'data of the cell is right');
         });
 
         test('Cells have right cellData in horizontal grouped WorkSpace Month view', function(assert) {
