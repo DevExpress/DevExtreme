@@ -88,44 +88,42 @@ export function getLabelWidthByText(text, labelLocation, labelMarkOptions) {
     return result;
 }
 
-export function renderLabel({ text, id, location, alignment, labelID = null, markOptions }) {
-    if(isDefined(text) && text.length > 0) {
-        const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
-        const $label = $('<label>')
-            .addClass(labelClasses)
-            .attr('for', id)
-            .attr('id', labelID);
+export function renderLabel({ text, id, location, alignment, labelID = null, markOptions = {} }) {
+    if(!isDefined(text) || text.length <= 0) {
+        return null;
+    }
 
-        const $labelContent = $('<span>')
-            .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-            .appendTo($label);
+    const $label = $('<label>')
+        .addClass(FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location)
+        .attr('for', id)
+        .attr('id', labelID);
 
+    const $labelContent = $('<span>')
+        .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
+        .appendTo($label);
+
+    $labelContent.append(
         $('<span>')
             .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
             .text(text)
-            .appendTo($labelContent);
+            .appendTo($labelContent)
+    );
 
-        if(alignment) {
-            $label.css('textAlign', alignment);
-        }
+    $labelContent.append(_renderLabelMark(markOptions));
 
-        $labelContent.append(_renderLabelMark(markOptions));
-
-        return $label;
+    if(alignment) {
+        $label.css('textAlign', alignment);
     }
+
+    return $label;
 }
 
 function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
-    let $mark;
-
-    if(isRequiredMark || isOptionalMark) {
-        const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
-        const markText = isRequiredMark ? requiredMark : optionalMark;
-
-        $mark = $('<span>')
-            .addClass(markClass)
-            .text(String.fromCharCode(160) + markText);
+    if(!isRequiredMark && !isOptionalMark) {
+        return null;
     }
 
-    return $mark;
+    return $('<span>')
+        .addClass(isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
+        .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
