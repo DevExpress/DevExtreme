@@ -109,6 +109,7 @@ export class SchedulerToolbar extends Widget {
 
     _init() {
         super._init();
+        this._createEventMap();
         this.$element().addClass(COMPONENT_CLASS);
     }
 
