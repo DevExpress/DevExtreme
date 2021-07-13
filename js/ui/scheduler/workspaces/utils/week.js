@@ -24,7 +24,7 @@ export const calculateStartViewDate = (
         startDate,
         currentDate,
         intervalDuration,
-        startDate,
+        dateUtils.getFirstWeekDate(startDate, firstDayOfWeek),
     );
 
     const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);

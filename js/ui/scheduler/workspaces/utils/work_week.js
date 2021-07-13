@@ -25,11 +25,12 @@ export const calculateStartViewDate = (
     intervalDuration,
     firstDayOfWeekOption,
 ) => {
+    const firstDayOfWeek = getFirstDayOfWeek(firstDayOfWeekOption);
     const viewStart = getViewStartByOptions(
         startDate,
         currentDate,
         intervalDuration,
-        startDate,
+        dateUtils.getFirstWeekDate(startDate, firstDayOfWeek),
     );
 
     const firstViewDate = dateUtils.getFirstWeekDate(viewStart, getFirstDayOfWeek(firstDayOfWeekOption));
