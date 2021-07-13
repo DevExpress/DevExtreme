@@ -619,6 +619,28 @@ QUnit.module('dimensions', {
         resizeCallbacks.fire();
         assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position still the same');
     });
+
+    QUnit.test('popup should be repositioned correctly after change height from static to "auto"', function(assert) {
+        const getCenterY = (rect) => {
+            return (rect.bottom + rect.top) / 2;
+        };
+
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            height: 500,
+            contentTemplate: function($container) {
+                return $('<div>').height(100);
+            }
+        }).dxPopup('instance');
+
+        const contentElement = popup.$content().get(0);
+        const initialContentRect = contentElement.getBoundingClientRect();
+
+        popup.option('height', 'auto');
+
+        const contentRect = contentElement.getBoundingClientRect();
+        assert.roughEqual(getCenterY(contentRect), getCenterY(initialContentRect), 0.51, 'popup is repositioned correctly');
+    });
 });
 
 QUnit.module('options changed callbacks', {
