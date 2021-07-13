@@ -150,7 +150,7 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
 
   get styles(): Record<string, string | number | undefined> {
     const { width, height } = this.props;
-    const style = this.restAttributes.style || {};
+    const style = this.restAttributes.style as Record<string, string | number> || {};
     return { ...style, height, width };
   }
 

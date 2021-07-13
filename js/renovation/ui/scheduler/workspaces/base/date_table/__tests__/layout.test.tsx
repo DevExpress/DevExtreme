@@ -35,7 +35,6 @@ describe('DateTableLayoutBase', () => {
       }]],
       groupIndex: 1,
     }],
-    cellCountInGroupRow: 1,
     leftVirtualCellCount: 32,
     rightVirtualCellCount: 44,
   };

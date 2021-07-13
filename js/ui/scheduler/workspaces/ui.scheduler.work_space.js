@@ -68,7 +68,7 @@ import {
     calculateIsGroupedAllDayPanel,
 } from './utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
-import { calculateStartViewDate } from './utils/week';
+import Semaphore from '../semaphore';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -140,27 +140,6 @@ const HOUR_MS = toMs('hour');
 
 const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
-
-class ScrollSemaphore {
-    constructor() {
-        this.counter = 0;
-    }
-
-    isFree() {
-        return this.counter === 0;
-    }
-
-    take() {
-        this.counter++;
-    }
-
-    release() {
-        this.counter--;
-        if(this.counter < 0) {
-            this.counter = 0;
-        }
-    }
-}
 
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
@@ -603,8 +582,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
     }
 
-    _setVisibilityDates() {}
-
     onDataSourceChanged() {
     }
 
@@ -651,15 +628,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
-            startViewDate: this.getStartViewDate(),
             startDayHour: this.option('startDayHour'),
             cellCountInDay: this._getCellCountInDay(),
             cellDuration: this.getCellDuration(),
-            minVisibleDate: this._minVisibleDate,
-            maxVisibleDate: this._maxVisibleDate,
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
             hoursInterval: this.option('hoursInterval'),
+            currentDate: this.option('currentDate'),
+            startDate: this.option('startDate'),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
             ...this._getDateGenerationOptions(),
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -705,16 +682,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, 0);
     }
 
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this._getIntervalDuration(),
-            this.option('firstDayOfWeek'),
-        );
-    }
-
     _getViewStartByOptions() {
         return getViewStartByOptions(
             this.option('startDate'),
@@ -724,16 +691,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
+    _getIntervalDuration() {
+        return this.viewDataProvider.getIntervalDuration(this.option('intervalCount'));
+    }
+
     _getHeaderDate() {
         return this.getStartViewDate();
     }
 
     _calculateViewStartDate() {
         return calculateViewStartDate(this.option('startDate'));
-    }
-
-    _getIntervalDuration() {
-        return toMs('day') * this.option('intervalCount');
     }
 
     _firstDayOfWeek() {
@@ -1059,7 +1026,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _getDateGenerationOptions() {
+    _getDateGenerationOptions(isOldRender = false) {
         return {
             startDayHour: this.option('startDayHour'),
             endDayHour: this.option('endDayHour'),
@@ -1069,7 +1036,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             calculateCellIndex,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
             cellCountInDay: this._getCellCountInDay(),
-            startViewDate: this.getStartViewDate(),
+            startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
             tableAllDay: this._getTableAllDay(),
@@ -1446,7 +1413,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();
-        const minTime = this._startViewDate.getTime();
+        const minTime = this.getStartViewDate().getTime();
 
         return (currentDateTime > minTime)
             ? ((currentDateTime - currentDayStartTime + timeZoneDifference) % cellDuration) / cellDuration
@@ -1646,7 +1613,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getStartViewDate() {
-        return this._startViewDate;
+        return this.viewDataProvider.getStartViewDate();
     }
 
     getEndViewDate() {
@@ -2076,7 +2043,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _oldRender_getAllDayCellData(groupIndex) {
         return (cell, rowIndex, columnIndex) => {
             const validColumnIndex = columnIndex % this._getCellCount();
-            const options = this._getDateGenerationOptions();
+            const options = this._getDateGenerationOptions(true);
             let startDate = getDateByCellIndices(
                 options, rowIndex, validColumnIndex, options.calculateCellIndex,
             );
@@ -2463,9 +2430,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _init() {
-        this._headerSemaphore = new ScrollSemaphore();
-        this._sideBarSemaphore = new ScrollSemaphore();
-        this._dataTableSemaphore = new ScrollSemaphore();
+        this._headerSemaphore = new Semaphore();
+        this._sideBarSemaphore = new Semaphore();
+        this._dataTableSemaphore = new Semaphore();
         this._viewDataProvider = null;
         this._cellsSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
@@ -2696,9 +2663,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _toggleFixedScrollableClass() { return noop(); }
 
     _renderView() {
-        this._startViewDate = this._calculateStartViewDate();
         this._hiddenInterval = this._getHiddenInterval();
-        this._setVisibilityDates();
 
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {

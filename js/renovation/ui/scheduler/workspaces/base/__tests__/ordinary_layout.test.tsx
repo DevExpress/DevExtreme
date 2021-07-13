@@ -1,22 +1,26 @@
 import { shallow, mount } from 'enzyme';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
-import { LayoutBase, LayoutBaseProps, viewFunction as LayoutView } from '../layout';
+import {
+  OrdinaryLayout,
+  OrdinaryLayoutProps,
+  viewFunction as LayoutView,
+} from '../ordinary_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle, AllDayPanelTitleProps } from '../date_table/all_day_panel/title';
 import { combineClasses } from '../../../../../utils/combine_classes';
-import { isVerticalGroupOrientation } from '../../utils';
+import { isVerticalGroupingApplied } from '../../utils';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
 }));
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
-  isVerticalGroupOrientation: jest.fn(),
+  isVerticalGroupingApplied: jest.fn(),
 }));
 
-describe('LayoutBase', () => {
+describe('OrdinaryLayout', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
@@ -58,7 +62,6 @@ describe('LayoutBase', () => {
   };
   const timePanelData = {
     groupedData: [],
-    cellCountInGroupRow: 0,
     leftVirtualCellCount: 0,
     rightVirtualCellCount: 0,
     topVirtualRowCount: 0,
@@ -314,7 +317,7 @@ describe('LayoutBase', () => {
     describe('Effects', () => {
       describe('groupPanelHeightEffect', () => {
         it('should set groupPanelHeight', () => {
-          const layout = new LayoutBase({} as any);
+          const layout = new OrdinaryLayout({} as any);
 
           layout.dateTableRef = {
             current: {
@@ -331,7 +334,7 @@ describe('LayoutBase', () => {
         });
 
         it('should work if tableRef was not initialized', () => {
-          const layout = new LayoutBase({} as any);
+          const layout = new OrdinaryLayout({} as any);
 
           layout.dateTableRef = {
             current: null,
@@ -351,10 +354,10 @@ describe('LayoutBase', () => {
       afterEach(jest.resetAllMocks);
 
       describe('isRenderGroupPanel', () => {
-        it('should call isVerticalGroupOrientation', () => {
-          (isVerticalGroupOrientation as any).mockImplementationOnce(() => true);
+        it('should call isVerticalGroupingApplied', () => {
+          (isVerticalGroupingApplied as any).mockImplementationOnce(() => true);
 
-          const layout = new LayoutBase({
+          const layout = new OrdinaryLayout({
             groups,
             groupOrientation: 'vertical',
           } as any);
@@ -363,16 +366,16 @@ describe('LayoutBase', () => {
 
           expect(result)
             .toBe(true);
-          expect(isVerticalGroupOrientation)
-            .toBeCalledWith('vertical', groups);
+          expect(isVerticalGroupingApplied)
+            .toBeCalledWith(groups, 'vertical');
         });
       });
 
       describe('isStandaloneAllDayPanel', () => {
         it('should return true when vertical group orientation is not used and all day panel is visible', () => {
-          (isVerticalGroupOrientation as any).mockImplementationOnce(() => false);
+          (isVerticalGroupingApplied as any).mockImplementationOnce(() => false);
 
-          const layout = new LayoutBase({
+          const layout = new OrdinaryLayout({
             groups,
             groupOrientation: 'horizontal',
             isAllDayPanelVisible: true,
@@ -382,14 +385,14 @@ describe('LayoutBase', () => {
 
           expect(result)
             .toBe(true);
-          expect(isVerticalGroupOrientation)
-            .toBeCalledWith('horizontal', groups);
+          expect(isVerticalGroupingApplied)
+            .toBeCalledWith(groups, 'horizontal');
         });
       });
 
       it('should return false all day panel is not visible', () => {
-        (isVerticalGroupOrientation as any).mockImplementationOnce(() => false);
-        const layout = new LayoutBase({
+        (isVerticalGroupingApplied as any).mockImplementationOnce(() => false);
+        const layout = new OrdinaryLayout({
           groups,
           groupOrientation: 'horizontal',
           isAllDayPanelVisible: false,
@@ -399,14 +402,14 @@ describe('LayoutBase', () => {
 
         expect(result)
           .toBe(false);
-        expect(isVerticalGroupOrientation)
-          .toBeCalledWith('horizontal', groups);
+        expect(isVerticalGroupingApplied)
+          .toBeCalledWith(groups, 'horizontal');
       });
     });
 
     describe('isSetAllDayTitleClass', () => {
-      it('should call isVerticalGroupOrientation and revert its value', () => {
-        const layout = new LayoutBase({
+      it('should call isVerticalGroupingApplied and revert its value', () => {
+        const layout = new OrdinaryLayout({
           groups,
           groupOrientation: 'horizontal',
         } as any);
@@ -415,20 +418,20 @@ describe('LayoutBase', () => {
 
         expect(result)
           .toBe(true);
-        expect(isVerticalGroupOrientation)
-          .toBeCalledWith('horizontal', groups);
+        expect(isVerticalGroupingApplied)
+          .toBeCalledWith(groups, 'horizontal');
       });
     });
 
     describe('classes', () => {
       beforeEach(() => {
-        (isVerticalGroupOrientation as any).mockImplementation(() => true);
+        (isVerticalGroupingApplied as any).mockImplementation(() => true);
       });
 
       afterEach(jest.resetAllMocks);
 
       it('should call combineClasses with correct parameters', () => {
-        const layout = new LayoutBase({
+        const layout = new OrdinaryLayout({
           className: 'dx-scheduler-work-space-day',
           intervalCount: 35,
           isWorkSpaceWithOddCells: true,
@@ -463,7 +466,7 @@ describe('LayoutBase', () => {
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not collapsed', () => {
-        const layout = new LayoutBase({
+        const layout = new OrdinaryLayout({
           className: 'dx-scheduler-work-space-day',
           intervalCount: 35,
           isWorkSpaceWithOddCells: true,
@@ -498,7 +501,7 @@ describe('LayoutBase', () => {
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not visible', () => {
-        const layout = new LayoutBase({
+        const layout = new OrdinaryLayout({
           className: 'dx-scheduler-work-space-day',
           intervalCount: 35,
           isWorkSpaceWithOddCells: true,
@@ -533,9 +536,9 @@ describe('LayoutBase', () => {
       });
 
       it('should call combineClasses with correct parameters when groups are empty', () => {
-        (isVerticalGroupOrientation as any).mockImplementation(() => false);
+        (isVerticalGroupingApplied as any).mockImplementation(() => false);
 
-        const layout = new LayoutBase({
+        const layout = new OrdinaryLayout({
           className: 'dx-scheduler-work-space-day',
           intervalCount: 35,
           isWorkSpaceWithOddCells: true,
@@ -570,9 +573,9 @@ describe('LayoutBase', () => {
       });
 
       it('should call combineClasses with correct parameters when groups are empty but groupOrientation is vertical', () => {
-        (isVerticalGroupOrientation as any).mockImplementation(() => true);
+        (isVerticalGroupingApplied as any).mockImplementation(() => true);
 
-        const layout = new LayoutBase({
+        const layout = new OrdinaryLayout({
           className: 'dx-scheduler-work-space-day',
           intervalCount: 35,
           isWorkSpaceWithOddCells: true,
@@ -680,10 +683,10 @@ describe('LayoutBase', () => {
         className: 'dx-scheduler-group-row-count-three',
       }].forEach(({ groups: currentGroups, groupOrientation, className }) => {
         it(`should call combineClasses with correct parameters when groups count is ${currentGroups.length} and groupOrientation is ${groupOrientation}`, () => {
-          (isVerticalGroupOrientation as any).mockImplementation(() => groupOrientation === 'vertical');
+          (isVerticalGroupingApplied as any).mockImplementation(() => groupOrientation === 'vertical');
 
-          const layout = new LayoutBase({
-            ...new LayoutBaseProps(),
+          const layout = new OrdinaryLayout({
+            ...new OrdinaryLayoutProps(),
             className: 'dx-scheduler-work-space-day',
             groups: currentGroups,
             groupOrientation,

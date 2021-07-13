@@ -37,7 +37,7 @@ export const createAxis = (isHorizontal: boolean): Axis => {
     update: (range, canvas, options): void => translator.update(range, canvas, options),
     getVisibleArea: (): [number, number] => {
       const visibleArea = translator.getCanvasVisibleArea();
-      return [visibleArea.min, visibleArea.max];
+      return [visibleArea.min as number, visibleArea.max as number];
     },
     visualRange: noop,
     calculateInterval: noop,

@@ -4,7 +4,7 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { Row } from '../../../base/row';
-import { isHorizontalGroupOrientation } from '../../../utils';
+import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
 import { DateHeaderLayoutProps } from '../../../base/header_panel/date_header/layout';
 
@@ -104,6 +104,6 @@ export class TimelineDateHeaderLayout extends JSXComponent<DateHeaderLayoutProps
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
+    return isHorizontalGroupingApplied(groups, groupOrientation) && !groupByDate;
   }
 }
