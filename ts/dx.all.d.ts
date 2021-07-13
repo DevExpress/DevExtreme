@@ -15259,7 +15259,6 @@ declare module DevExpress.ui {
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxOverlayOptions.copyRootClassesToWrapper]
-     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
      */
     copyRootClassesToWrapper?: boolean;
     /**
