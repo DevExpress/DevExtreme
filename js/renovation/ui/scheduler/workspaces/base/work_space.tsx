@@ -185,7 +185,6 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
         }]],
         groupIndex: 0,
       }],
-      cellCountInGroupRow: 1,
       leftVirtualCellCount: 0,
       rightVirtualCellCount: 0,
       topVirtualRowCount: 0,
@@ -210,7 +209,6 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
   get timePanelData(): TimePanelData {
     return {
       groupedData: [],
-      cellCountInGroupRow: 0,
       leftVirtualCellCount: 0,
       rightVirtualCellCount: 0,
       topVirtualRowCount: 0,
