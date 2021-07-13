@@ -109,13 +109,6 @@ export class AppointmentPopup {
         this.popup.hide();
     }
 
-    // hideAppointmentPopup(saveChanges) {
-    //     if(this._appointmentPopup?.visible) {
-    //         saveChanges && this._appointmentPopup.saveChanges();
-    //         this._appointmentPopup.hide();
-    //     }
-    // }
-
     dispose() {
         this.popup?.$element().remove();
     }
