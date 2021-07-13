@@ -124,7 +124,7 @@ export class SchedulerToolbar extends Widget {
     _renderToolbar() {
         const config = this._createToolbarConfig();
 
-        const toolbarElement = $('<div/>');
+        const toolbarElement = $('<div>');
         toolbarElement.appendTo(this.$element());
 
         this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
