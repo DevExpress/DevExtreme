@@ -344,18 +344,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     this.updateHandler();
+    const isTopDefined = location.top !== undefined;
+    const isLeftDefined = location.left !== undefined;
 
     // TODO: try to simplify it
-    if (this.direction.isVertical) {
+    if (this.direction.isVertical && isTopDefined) {
       const scrollbar = this.vScrollbarRef.current!;
+
       location.top = scrollbar.getLocationWithinRange(
-        location.top! + this.vScrollLocation,
+        location.top as number + this.vScrollLocation,
       ) - this.vScrollLocation;
     }
-    if (this.direction.isHorizontal) {
+    if (this.direction.isHorizontal && isLeftDefined) {
       const scrollbar = this.hScrollbarRef.current!;
+
       location.left = scrollbar.getLocationWithinRange(
-        location.left! + this.hScrollLocation,
+        location.left as number + this.hScrollLocation,
       ) - this.hScrollLocation;
     }
 
@@ -1171,10 +1175,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowX === 'hidden';
+    const computedStyle = getElementComputedStyle(this.contentRef.current);
 
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (computedStyle?.overflowX === 'hidden') {
       return this.contentClientWidth;
     }
 
@@ -1189,10 +1193,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowY === 'hidden';
+    const computedStyle = getElementComputedStyle(this.contentRef.current);
 
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (computedStyle?.overflowY === 'hidden') {
       return this.contentClientHeight;
     }
 
