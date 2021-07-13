@@ -924,6 +924,7 @@ class Scheduler extends Widget {
 
         this.hideAppointmentTooltip();
 
+        // TODO popup
         this._appointmentPopup.triggerResize();
         this._appointmentPopup.updatePopupFullScreenMode();
     }
@@ -1268,7 +1269,8 @@ class Scheduler extends Widget {
             ? MobileTooltipStrategy
             : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
-        this._appointmentPopup = this.createAppointmentPopup();
+        this._appointmentForm = this.createAppointmentForm();
+        this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
 
         if(this._isLoaded() || this._isDataSourceLoading()) {
             this._initMarkupCore(getResourceManager(this.key).loadedResources);
@@ -1283,7 +1285,21 @@ class Scheduler extends Widget {
         }
     }
 
-    createAppointmentPopup() {
+    createAppointmentForm() {
+        const scheduler = {
+            getResourceManager: () => this.fire('getResourceManager'),
+            getDataAccessors: () => this._dataAccessors,
+            createComponent: (element, component, options) => this._createComponent(element, component, options),
+
+            getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
+            getStartDayHour: () => this.option('startDayHour'),
+            getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+        };
+
+        return new AppointmentForm(scheduler);
+    }
+
+    createAppointmentPopup(form) {
         const scheduler = {
             getKey: () => this.key,
             getElement: () => this.$element(),
@@ -1300,16 +1316,10 @@ class Scheduler extends Widget {
             addAppointment: (appointment) => this.addAppointment(appointment),
             updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
 
-            getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
-            getStartDayHour: () => this.option('startDayHour'),
-            getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
-
             updateScrollPosition: (startDate, resourceItem, inAllDayRow) => {
                 this._workSpace.updateScrollPosition(startDate, resourceItem, inAllDayRow);
             }
         };
-
-        const form = new AppointmentForm(scheduler);
 
         return new AppointmentPopup(scheduler, form);
     }
@@ -1726,7 +1736,7 @@ class Scheduler extends Widget {
     }
 
     _cleanPopup() {
-        this._appointmentPopup && this._appointmentPopup.dispose();
+        this._appointmentPopup?.dispose();
     }
 
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
@@ -2046,7 +2056,7 @@ class Scheduler extends Widget {
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
+            this._appointmentPopup.visible && this._appointmentPopup.hide();
         }
 
         this._actions[handlerName](args);
@@ -2055,7 +2065,7 @@ class Scheduler extends Widget {
 
     ///#DEBUG
     getAppointmentDetailsForm() { // TODO for tests
-        return this._appointmentPopup._appointmentForm;
+        return this._appointmentForm.form;
     }
     ///#ENDDEBUG
 
@@ -2217,7 +2227,7 @@ class Scheduler extends Widget {
     }
 
     hideAppointmentPopup(saveChanges) {
-        if(this._appointmentPopup?.isVisible()) {
+        if(this._appointmentPopup?.visible) {
             saveChanges && this._appointmentPopup.saveChanges();
             this._appointmentPopup.hide();
         }

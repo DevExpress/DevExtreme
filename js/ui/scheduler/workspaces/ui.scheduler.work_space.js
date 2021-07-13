@@ -68,6 +68,7 @@ import {
     calculateIsGroupedAllDayPanel,
 } from './utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
+import Semaphore from '../semaphore';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -139,27 +140,6 @@ const HOUR_MS = toMs('hour');
 
 const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
-
-class ScrollSemaphore {
-    constructor() {
-        this.counter = 0;
-    }
-
-    isFree() {
-        return this.counter === 0;
-    }
-
-    take() {
-        this.counter++;
-    }
-
-    release() {
-        this.counter--;
-        if(this.counter < 0) {
-            this.counter = 0;
-        }
-    }
-}
 
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
@@ -2450,9 +2430,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _init() {
-        this._headerSemaphore = new ScrollSemaphore();
-        this._sideBarSemaphore = new ScrollSemaphore();
-        this._dataTableSemaphore = new ScrollSemaphore();
+        this._headerSemaphore = new Semaphore();
+        this._sideBarSemaphore = new Semaphore();
+        this._dataTableSemaphore = new Semaphore();
         this._viewDataProvider = null;
         this._cellsSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
