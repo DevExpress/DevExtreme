@@ -526,6 +526,31 @@ module('Table resizing integration', {
             assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 45, 3);
         });
 
+        test('Check column highlighted element position if the column with min width is dragging to the left', function(assert) {
+            this.createWidget({ value: tableMarkupWidth, tableResizing: { enabled: true, minColumnWidth: 50 } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+            $columnResizerElements.eq(2)
+                .trigger('dxpointerdown');
+
+            const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+            PointerMock($draggableElement)
+                .start()
+                .dragStart()
+                .drag(-10, 0);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_COLUMN_CLASS}`);
+
+            assert.roughEqual(parseInt($highlightedElement.css('left')), 200, 3);
+
+            PointerMock($draggableElement).dragEnd();
+        });
+
         test('Check frame elements positions after drag out of the column width limit', function(assert) {
             this.createWidget({ width: 435 });
             this.clock.tick(TIME_TO_WAIT);

@@ -413,6 +413,7 @@ export default class TableResizingModule extends BaseModule {
         const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
         const $lineElements = this._getLineElements(frame.$table, index);
         const $nextLineElements = this._getLineElements(frame.$table, index + 1);
+        const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
 
         if(isCurrentColumnHasEnoughPlace) {
             if(this._isNextColumnHasEnoughPlace(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
@@ -422,7 +423,7 @@ export default class TableResizingModule extends BaseModule {
                     this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                 }
 
-                const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
+
                 const isTableWidthChanged = Math.abs(this._startTableWidth - frame.$table.outerWidth()) < ROUGH_OFFSET;
                 const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
@@ -435,11 +436,12 @@ export default class TableResizingModule extends BaseModule {
                         this._setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                     }
                 }
-                this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + realWidthDiff) + 'px');
             } else {
                 this._nextColumnOffsetLimit = this._nextColumnOffsetLimit || eventOffset;
             }
         }
+
+        this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + realWidthDiff) + 'px');
     }
 
     _verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame }) {
