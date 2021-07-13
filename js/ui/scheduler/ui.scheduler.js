@@ -2337,11 +2337,11 @@ class Scheduler extends Widget {
     }
 
     focus() {
-        if(this._editAppointmentData) {
-            this._appointments.focus();
-        } else {
-            this._workSpace.focus();
-        }
+        // if(this._editAppointmentData) {
+        //     this._appointments.focus();
+        // } else {
+        //     this._workSpace.focus();
+        // }
     }
 
     getFirstDayOfWeek() {
