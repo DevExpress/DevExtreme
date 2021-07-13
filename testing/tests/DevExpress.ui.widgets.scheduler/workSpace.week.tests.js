@@ -477,7 +477,7 @@ module('Work Space Week', () => {
             coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
-            assert.roughEqual(coords.hMax, 933, 1, 'hMax cell coordinates are right');
+            assert.roughEqual(coords.hMax, 998, 1, 'hMax cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(8).position().left, 0.01, 'Left cell coordinates are right');
         });
     });

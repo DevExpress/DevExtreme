@@ -892,7 +892,7 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
 
         assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
-        assert.equal(coords.hMax, 16600, 'hMax is right');
+        assert.equal(coords.hMax, 16800, 'hMax is right');
 
         coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
 

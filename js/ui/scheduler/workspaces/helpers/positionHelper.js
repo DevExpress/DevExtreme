@@ -221,35 +221,23 @@ export class PositionHelper {
             : 0;
     }
 
-    _getHorizontalMax(groupIndex) {
-        if(this.isGroupedByDate) {
-            const correctedGroupIndex = this._getGroupCount() - 1;
-
-            return Math.max(
-                this._groupedStrategy.getHorizontalMax(groupIndex),
-                this._groupedStrategy.getHorizontalMax(correctedGroupIndex)
-            );
-        }
-
-        return this._groupedStrategy.getHorizontalMax(groupIndex);
-    }
-
     getHorizontalMax(groupIndex) {
+        const getMaxPosition = (groupIndex) => {
+            return getMaxAllowedPosition(
+                groupIndex,
+                this.viewDataProvider,
+                this.isRtlEnabled,
+                this.getDOMMetaData()
+            );
+        };
+
         if(this.isGroupedByDate) {
             return Math.max(
-                this.getMaxAllowedPosition(groupIndex),
-                this.getMaxAllowedPosition(this._getGroupCount() - 1),
+                getMaxPosition(groupIndex),
+                getMaxPosition(this.groupCount - 1),
             );
         }
 
-        return this.getMaxAllowedPosition(groupIndex);
-    }
-    getMaxAllowedPosition(groupIndex) {
-        return getMaxAllowedPosition(
-            groupIndex,
-            this.viewDataProvider,
-            this.isRtlEnabled,
-            this.getDOMMetaData()
-        );
+        return getMaxPosition(groupIndex);
     }
 }
