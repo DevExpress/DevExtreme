@@ -79,7 +79,7 @@ export default class TableResizingModule extends BaseModule {
                 this._updateFramesSeparators();
             } else {
                 this._updateFramesPositions();
-                if(!this._verticalDragging) {
+                if(!this._isVerticalDragging) {
                     this._updateFramesSeparators('vertical');
                 }
             }
@@ -354,7 +354,7 @@ export default class TableResizingModule extends BaseModule {
         const directionInfo = this._getDirectionInfo(direction);
 
         if(direction === 'vertical') {
-            this._verticalDragging = true;
+            this._isVerticalDragging = true;
         }
 
         this._fixColumnsWidth(frame.$table);
@@ -389,16 +389,14 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
-    _isNextColumnHasEnoughPlace(nextColumnNewSize, $nextColumnElement, eventOffset) {
+    _isNextColumnWidthEnough(nextColumnNewSize, $nextColumnElement, eventOffset) {
         if(!this._nextLineSize) {
             return true;
-        } else {
-            if((nextColumnNewSize >= this._minColumnWidth)) {
-                const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
-                const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - $nextColumnElement.outerWidth()) > ROUGH_OFFSET;
+        } else if((nextColumnNewSize >= this._minColumnWidth)) {
+            const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
+            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - $nextColumnElement.outerWidth()) > ROUGH_OFFSET;
 
-                return (isWidthIncreased || !isWidthLimited);
-            }
+            return (isWidthIncreased || !isWidthLimited);
         }
 
         return false;
@@ -408,15 +406,15 @@ export default class TableResizingModule extends BaseModule {
         return this._nextLineSize && nextColumnNewSize > 0;
     }
 
-    _horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame }) {
+    _horizontalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame }) {
         let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
-        const isCurrentColumnHasEnoughPlace = currentLineNewSize >= this._minColumnWidth;
+        const isCurrentColumnWidthEnough = currentLineNewSize >= this._minColumnWidth;
         const $lineElements = this._getLineElements(frame.$table, index);
         const $nextLineElements = this._getLineElements(frame.$table, index + 1);
         const realWidthDiff = $($lineElements.eq(0)).outerWidth() - currentLineNewSize;
 
-        if(isCurrentColumnHasEnoughPlace) {
-            if(this._isNextColumnHasEnoughPlace(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
+        if(isCurrentColumnWidthEnough) {
+            if(this._isNextColumnWidthEnough(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
                 this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
 
                 if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
@@ -444,7 +442,7 @@ export default class TableResizingModule extends BaseModule {
         this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + realWidthDiff) + 'px');
     }
 
-    _verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame }) {
+    _verticalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame }) {
         const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
         const $lineElements = this._getLineElements(frame.$table, index, 'vertical');
 
@@ -465,9 +463,9 @@ export default class TableResizingModule extends BaseModule {
         const currentLineNewSize = this._startLineSize + eventOffset;
 
         if(direction === 'horizontal') {
-            this._horizontalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame });
+            this._horizontalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame });
         } else {
-            this._verticalDragHandler(currentLineNewSize, directionInfo, eventOffset, { $determinantElements, index, frame });
+            this._verticalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame });
         }
 
         this._updateFramePosition(frame.$table, frame.$frame);
@@ -475,7 +473,7 @@ export default class TableResizingModule extends BaseModule {
 
     _dragEndHandler(options) {
         this._$highlightedElement?.remove();
-        this._verticalDragging = false;
+        this._isVerticalDragging = undefined;
         this._nextColumnOffsetLimit = undefined;
         this._tableLastWidth(options.frame, options.frame.$table.outerWidth());
         this._updateFramesPositions();
@@ -626,7 +624,7 @@ export default class TableResizingModule extends BaseModule {
         _windowResizeCallbacks.remove(this._resizeHandler);
         clearTimeout(this._windowResizeTimeout);
         this._resizeHandler = undefined;
-        this._verticalDragging = undefined;
+        this._isVerticalDragging = undefined;
         this._startTableWidth = undefined;
 
         clearTimeout(this._attachResizerTimeout);

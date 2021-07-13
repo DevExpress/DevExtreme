@@ -100,6 +100,11 @@ function checkColumnResizerPositions(assert, $lineResizerElements, lineBorderOff
     });
 }
 
+function dragLoop(pointerMockInstance, stepCount, offsets) {
+    for(let i = 0; i < stepCount; i++) {
+        pointerMockInstance.drag(offsets[0], offsets[1]);
+    }
+}
 
 module('Table resizing integration', {
     beforeEach: function() {
@@ -168,7 +173,7 @@ module('Table resizing integration', {
             assert.strictEqual($highlightedElement.length, 1, 'Column resizers highlighted element is created after the pointerDown event');
         });
 
-        test('Vertical raggable element should be created on pointerDown event', function(assert) {
+        test('Vertical draggable element should be created on pointerDown event', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
 
@@ -399,18 +404,13 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
-                .dragStart()
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .drag(1, 0)
-                .dragEnd();
+                .dragStart();
+
+            dragLoop(pointerMockInstance, 10, [1, 0]);
+
+            pointerMockInstance.dragEnd();
 
             assert.roughEqual(startTableWidth, $table.outerWidth(), 5);
         });
@@ -429,19 +429,14 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
                 .dragStart()
-                .drag(-50, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .drag(-1, 0)
-                .dragEnd();
+                .drag(-50, 0);
+
+            dragLoop(pointerMockInstance, 10, [-1, 0]);
+
+            pointerMockInstance.dragEnd();
 
             assert.roughEqual(startTableWidth, $table.outerWidth(), 5);
         });
@@ -563,14 +558,11 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
-                .dragStart()
-                .drag(-20, 0)
-                .drag(-20, 0)
-                .drag(-20, 0)
-                .drag(-20, 0)
-                .drag(-20, 0);
+                .dragStart();
+
+            dragLoop(pointerMockInstance, 5, [-20, 0]);
 
             this.clock.tick(TIME_TO_WAIT);
 
@@ -581,7 +573,7 @@ module('Table resizing integration', {
 
             assert.roughEqual(parseInt($highlightedElement.css('left')), 40, 3);
 
-            PointerMock($draggableElement).dragEnd();
+            pointerMockInstance.dragEnd();
         });
 
         test('Check frame elements positions after drag out of the next column width limit', function(assert) {
@@ -730,16 +722,12 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
                 .dragStart()
-                .drag(0, 40)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10);
+                .drag(0, 40);
+
+            dragLoop(pointerMockInstance, 6, [0, -10]);
 
             this.clock.tick(TIME_TO_WAIT);
 
@@ -748,7 +736,7 @@ module('Table resizing integration', {
             assert.roughEqual($table.find('tr:first-child').find('td:first-child').outerHeight(), 24, 3);
             assert.roughEqual(parseInt($highlightedElement.css('top')), 24, 3);
 
-            PointerMock($draggableElement).dragEnd();
+            pointerMockInstance.dragEnd();
         });
 
         test('Table highlighted element position is limited by minRowHeight option while the row has content-based height', function(assert) {
@@ -770,16 +758,12 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
                 .dragStart()
-                .drag(0, 40)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10);
+                .drag(0, 40);
+
+            dragLoop(pointerMockInstance, 6, [0, -10]);
 
             this.clock.tick(TIME_TO_WAIT);
 
@@ -787,7 +771,7 @@ module('Table resizing integration', {
 
             assert.roughEqual(parseInt($highlightedElement.css('top')), $table.find('tr:first-child').find('td:first-child').outerHeight(), 3);
 
-            PointerMock($draggableElement).dragEnd();
+            pointerMockInstance.dragEnd();
         });
 
         test('Table highlighted element position is limited by minRowHeight option while the row has content-based height 2', function(assert) {
@@ -806,13 +790,11 @@ module('Table resizing integration', {
 
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
 
-            PointerMock($draggableElement)
+            const pointerMockInstance = PointerMock($draggableElement)
                 .start()
-                .dragStart()
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10)
-                .drag(0, -10);
+                .dragStart();
+
+            dragLoop(pointerMockInstance, 4, [0, -10]);
 
             this.clock.tick(TIME_TO_WAIT);
 
@@ -820,7 +802,7 @@ module('Table resizing integration', {
 
             assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3);
 
-            PointerMock($draggableElement).dragEnd();
+            pointerMockInstance.dragEnd();
         });
 
         test('Check row resizers elements positions', function(assert) {
