@@ -229,7 +229,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @default 'underlined' [for](Material)
+     * @default 'underlined' &for(Material)
      * @public
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';

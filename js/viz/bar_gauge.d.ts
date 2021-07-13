@@ -188,7 +188,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
       /**
        * @docid
-       * @default 16 [prop](size)
+       * @default 16 &prop(size)
        */
       font?: Font,
       /**
