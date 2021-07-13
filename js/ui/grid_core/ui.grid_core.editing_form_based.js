@@ -228,11 +228,11 @@ export const editingFormBasedModule = {
                                     editPopup.option(args.value);
                                 }
                             }
+                            args.handled = true;
                         } else if(editPopup?.option('visible') && fullName.indexOf('editing.form') === 0) {
                             this._repaintEditPopup();
+                            args.handled = true;
                         }
-
-                        args.handled = true;
                     }
 
                     this.callBase.apply(this, arguments);
