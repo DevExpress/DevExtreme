@@ -622,7 +622,7 @@ const LayoutManager = Widget.inherit({
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {
-            $label = this._renderLabel(labelOptions).appendTo($container);
+            $label = that._renderLabel(labelOptions).appendTo($container);
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
