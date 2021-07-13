@@ -111,14 +111,6 @@ export class AppointmentPopup {
             onHiding: () => this.scheduler.focus(),
             contentTemplate: () => this._createPopupContent(),
             onShowing: e => this._onShowing(e),
-            defaultOptionsRules: [
-                {
-                    device: () => devices.current().android,
-                    options: {
-                        showTitle: false
-                    }
-                }
-            ],
             copyRootClassesToWrapper: true
         };
     }
@@ -401,12 +393,12 @@ export class AppointmentPopup {
     }
 
     _showLoadPanel() {
-        const $overlayContent = this._popup.$overlayContent();
+        const container = this.popup.$overlayContent();
 
         showLoading({
-            container: $overlayContent,
+            container,
             position: {
-                of: $overlayContent
+                of: container
             },
             copyRootClassesToWrapper: true
         });
