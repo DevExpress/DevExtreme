@@ -119,22 +119,22 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   getLocationWithinRange(value: number): number {
-    return this.scrollbar.getLocationWithinRange(value);
+    return this.scrollbar.getLocationWithinRange(value) as number;
   }
 
   @Method()
   getMinOffset(): number {
-    return this.scrollbar.getMinOffset();
+    return this.scrollbar.getMinOffset() as number;
   }
 
   @Method()
   validateEvent(event: DxMouseEvent): boolean {
-    return this.scrollbar.validateEvent(event);
+    return this.scrollbar.validateEvent(event) as boolean;
   }
 
   @Method()
   isThumb(element: EventTarget | null): boolean {
-    return this.scrollbar.isThumb(element);
+    return this.scrollbar.isThumb(element) as boolean;
   }
 
   @Method()
@@ -311,7 +311,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   getMaxOffset(): number {
-    return this.scrollbar.getMaxOffset();
+    return this.scrollbar.getMaxOffset() as number;
   }
 
   scrollStep(delta: number): void {

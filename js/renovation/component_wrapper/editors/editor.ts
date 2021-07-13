@@ -69,7 +69,7 @@ export default class Editor extends Component {
         validationMessageOffset: { h: 0, v: 0 },
         validationTooltipOptions: {},
       },
-    );
+    ) as Record<string, unknown>;
   }
 
   _bindInnerWidgetOptions(innerWidget: Component, optionsContainer: string): void {

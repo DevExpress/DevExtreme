@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { getHeaderCellText, formatWeekdayAndDay } from '../utils/base';
+import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount } from '../utils/base';
 
 export class DateHeaderDataGenerator {
     getCompleteDateHeaderMap(options, completeViewDataMap) {
@@ -23,14 +23,16 @@ export class DateHeaderDataGenerator {
 
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
-            groupByDate,
-            horizontalGroupCount,
+            isGroupedByDate,
             cellCountInDay,
             daysInView,
+            groups,
+            groupOrientation,
         } = options;
 
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+        const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
 
         const weekDaysRow = [];
 
@@ -52,10 +54,10 @@ export class DateHeaderDataGenerator {
     _generateHeaderDateRow(options, completeViewDataMap) {
         const {
             today,
-            groupByDate,
-            horizontalGroupCount,
+            isGroupedByDate,
             cellCountInGroupRow,
             groupOrientation,
+            groups,
             headerCellTextFormat,
             getDateForHeaderText,
             interval,
@@ -64,11 +66,12 @@ export class DateHeaderDataGenerator {
             cellCountInDay,
         } = options;
 
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-        const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const slicedByColumnsData = groupByDate
+        const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
             : completeViewDataMap[index];
 
@@ -98,8 +101,8 @@ export class DateHeaderDataGenerator {
                 text,
                 today: dateUtils.sameDate(startDate, today),
                 colSpan,
-                isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
-                isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+                isFirstGroupCell: isGroupedByDate || (isFirstGroupCell && !isVerticalGrouping),
+                isLastGroupCell: isGroupedByDate || (isLastGroupCell && !isVerticalGrouping),
             });
         });
     }
@@ -153,15 +156,17 @@ export class DateHeaderDataGenerator {
 
     _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
         const {
-            groupByDate,
-            horizontalGroupCount,
             startCellIndex,
             cellCount,
             totalCellCount,
             isProvideVirtualCellsWidth,
+            groups,
+            groupOrientation,
+            isGroupedByDate,
         } = options;
 
-        const colSpan = groupByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+        const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
+        const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
         const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
         const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
 

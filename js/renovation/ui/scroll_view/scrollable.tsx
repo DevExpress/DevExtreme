@@ -154,12 +154,12 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollableRef.content();
+    return this.scrollableRef.content() as HTMLDivElement;
   }
 
   @Method()
   container(): HTMLDivElement {
-    return this.scrollableRef.container();
+    return this.scrollableRef.container() as HTMLDivElement;
   }
 
   @Method()
@@ -174,7 +174,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   release(): void {
-    return this.scrollableRef.release();
+    return this.scrollableRef.release() as undefined;
   }
 
   @Method()
@@ -194,43 +194,43 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   scrollHeight(): number {
-    return this.scrollableRef.scrollHeight();
+    return this.scrollableRef.scrollHeight() as number;
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollableRef.scrollWidth();
+    return this.scrollableRef.scrollWidth() as number;
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollableRef.scrollOffset();
+    return this.scrollableRef.scrollOffset() as ScrollOffset;
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollableRef.scrollTop();
+    return this.scrollableRef.scrollTop() as number;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollableRef.scrollLeft();
+    return this.scrollableRef.scrollLeft() as number;
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollableRef.clientHeight();
+    return this.scrollableRef.clientHeight() as number;
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollableRef.clientWidth();
+    return this.scrollableRef.clientWidth() as number;
   }
 
   @Method()
   // TODO: it uses for DataGrid only
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
-    return this.scrollableRef.getElementLocation(element, direction);
+    return this.scrollableRef.getElementLocation(element, direction) as boolean;
   }
 
   @Method()
@@ -249,7 +249,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   validate(event: DxMouseEvent): boolean {
-    return this.scrollableRef.validate(event);
+    return this.scrollableRef.validate(event) as boolean;
   }
 
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react

@@ -19,8 +19,8 @@ const extendGroupItemsForGroupingByDate = (
         isFirstGroupCell: columnIndex === 0,
         isLastGroupCell: columnIndex === groupsRow.length - 1,
       })),
-    ];
-  }), []);
+    ] as GroupRenderItem[];
+  }), []) as GroupRenderItem[][];
 
 export const getGroupsRenderData = (
   groups: Group[],

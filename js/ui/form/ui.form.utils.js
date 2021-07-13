@@ -1,4 +1,11 @@
+import $ from '../../core/renderer';
 import { isDefined } from '../../core/utils/type';
+
+import {
+    WIDGET_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+    HIDDEN_LABEL_CLASS,
+} from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
@@ -52,3 +59,25 @@ export const getItemPath = (items, item, isTabs) => {
         }
     }
 };
+
+export function getLabelWidthByText(text, layoutManager, labelLocation) {
+    const $hiddenContainer = $('<div>')
+        .addClass(WIDGET_CLASS)
+        .addClass(HIDDEN_LABEL_CLASS)
+        .appendTo('body');
+
+    const $label = layoutManager._renderLabel({
+        text: ' ',
+        location: labelLocation
+    }).appendTo($hiddenContainer);
+
+    const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
+
+    // this code has slow performance
+    labelTextElement.innerHTML = text;
+    const result = labelTextElement.offsetWidth;
+
+    $hiddenContainer.remove();
+
+    return result;
+}
