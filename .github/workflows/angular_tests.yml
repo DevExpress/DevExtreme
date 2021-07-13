@@ -38,7 +38,7 @@ jobs:
 
     - name: Update angular metadata
       run: |
-        npm run internal-tool --  update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
+        npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
 
     - name: Build with Angular 7
       run: |
