@@ -106,17 +106,6 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
     assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.3, 'Row heights are equal');
 });
 
-QUnit.test('Header should be initialized with correct \'width\' option', function(assert) {
-    this.createInstance({
-        views: ['day', 'week'],
-        currentView: 'week',
-        width: 700
-    });
-    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-
-    assert.equal(header.option('width'), 700, 'Header has a right width');
-});
-
 QUnit.test('Header should be updated with correct \'width\' option', function(assert) {
     this.createInstance({
         views: ['day', 'week'],
