@@ -437,16 +437,32 @@ QUnit.module('number formatter', () => {
                 expected: ['11', '11', '11']
             },
             'wwhhmms': {
-                text: '1010100',
-                expected: ['10', '10', '10', '0']
+                text: '10101012',
+                expected: ['10', '10', '10', '12']
             },
             'wwHHmms': {
                 text: '1012100',
                 expected: ['10', '12', '10', '0']
             },
-            'wwHHmmssSSS': {
-                text: '1012101012',
-                expected: ['10', '12', '10', '10', '12']
+            'hhmmsSSS': {
+                text: '12100001',
+                expected: ['12', '10', '0', '001']
+            },
+            'HHmmsSSS': {
+                text: '121001001',
+                expected: ['12', '10', '01', '001']
+            },
+            'hhmmsSS': {
+                text: '12101201',
+                expected: ['12', '10', '12', '01']
+            },
+            'HHmmsSS': {
+                text: '1210001',
+                expected: ['12', '10', '0', '01']
+            },
+            'HHmms.SSS': {
+                text: '121010.34',
+                expected: ['12', '10', '10', '.', '34']
             }
         };
 
@@ -474,7 +490,7 @@ QUnit.module('number formatter', () => {
             'EEEdMMM hmm': 0,
             'ydMMM aaahhm': 1,
             'hhmmS': 0,
-            'hhmmsSS': 1,
+            'hhmmsSS': 0,
             'QQQyMMMdHHs': 1,
             'QQQ y MMM d HHs': 0,
         };

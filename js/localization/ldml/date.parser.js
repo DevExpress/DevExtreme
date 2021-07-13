@@ -15,7 +15,7 @@ const monthRegExpGenerator = function(count, dateParts) {
             }).join('|');
         }).join('|');
     }
-    return count === 2 ? '1[012]|0?[1-9]' : '0?[1-9]|1[012]';
+    return count === 2 ? '1[012]|0?[1-9]' : '0??[1-9]|1[012]';
 };
 
 const PATTERN_REGEXPS = {
@@ -24,7 +24,7 @@ const PATTERN_REGEXPS = {
         return `\\${dateParts.getTimeSeparator()}${countSuffix}`;
     },
     y: function(count) {
-        return count === 2 ? '[0-9]{2}' : '[0-9]+?';
+        return count === 2 ? `[0-9]{${count}}` : '[0-9]+?';
     },
     M: monthRegExpGenerator,
     L: monthRegExpGenerator,
@@ -41,25 +41,25 @@ const PATTERN_REGEXPS = {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], 'format').join('|');
     },
     d: function(count) {
-        return count === 2 ? '3[01]|[12][0-9]|0?[1-9]' : '0?[1-9]|[12][0-9]|3[01]';
+        return count === 2 ? '3[01]|[12][0-9]|0?[1-9]' : '0??[1-9]|[12][0-9]|3[01]';
     },
     H: function(count) {
-        return count === 2 ? '2[0-3]|1[0-9]|0?[0-9]' : '0?[0-9]|1[0-9]|2[0-3]';
+        return count === 2 ? '2[0-3]|1[0-9]|0?[0-9]' : '0??[0-9]|1[0-9]|2[0-3]';
     },
     h: function(count) {
-        return count === 2 ? '1[012]|0?[1-9]' : '0?[1-9]|1[012]';
+        return count === 2 ? '1[012]|0?[1-9]' : '0??[1-9]|1[012]';
     },
     m: function(count) {
-        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0??[0-9]|[1-5][0-9]';
     },
     s: function(count) {
-        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0??[0-9]|[1-5][0-9]';
     },
     S: function(count) {
         return `[0-9]{1,${count}}`;
     },
     w: function(count) {
-        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0?[0-9]|[1-5][0-9]';
+        return count === 2 ? '[1-5][0-9]|0?[0-9]' : '0??[0-9]|[1-5][0-9]';
     }
 };
 
@@ -156,6 +156,9 @@ const PATTERN_SETTERS = {
 
 const getSameCharCount = function(text, index) {
     const char = text[index];
+    if(!char) {
+        return 0;
+    }
     let count = 0;
 
     do {
@@ -182,8 +185,9 @@ export const getRegExpInfo = function(format, dateParts) {
 
     const addPreviousStub = function() {
         if(stubText) {
-            patterns.push('\'' + stubText + '\'');
-            regexpText += escapeRegExp(stubText) + ')';
+
+            patterns.push(`\'${stubText}\'`); // eslint-disable-line no-useless-escape
+            regexpText += `${escapeRegExp(stubText)})`;
             stubText = '';
         }
     };
@@ -207,7 +211,7 @@ export const getRegExpInfo = function(format, dateParts) {
             addPreviousStub();
             patterns.push(pattern);
 
-            regexpText += '(' + regexpPart(count, dateParts) + ')';
+            regexpText += `(${regexpPart(count, dateParts)})`;
             i += count - 1;
         } else {
             if(!stubText) {
@@ -224,7 +228,7 @@ export const getRegExpInfo = function(format, dateParts) {
 
     return {
         patterns: patterns,
-        regexp: new RegExp('^' + regexpText + '$', 'i')
+        regexp: new RegExp(`^${regexpText}$`, 'i')
     };
 };
 
@@ -239,7 +243,7 @@ export const isPossibleForParsingFormat = function(patterns) {
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
-        return pattern === 'SS' || pattern.length !== 2 && pattern !== 'S';
+        return pattern[0] !== 'S' && pattern.length !== 2;
     };
 
     let possibleForParsing = true;
