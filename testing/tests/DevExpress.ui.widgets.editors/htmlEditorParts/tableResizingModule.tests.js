@@ -49,11 +49,11 @@ const moduleConfig = {
                 off: () => {},
                 addContentInitializedCallback: (callback) => { setTimeout(callback, 0); },
                 addCleanCallback: () => {},
-                // option: (optionName) => {
-                //     if(optionName === 'rtlEnabled') {
-                //         return false;
-                //     }
-                // },
+                option: (optionName) => {
+                    if(optionName === 'rtlEnabled') {
+                        return false;
+                    }
+                },
                 $element: () => this.$element,
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getContent: () => this.$element,
@@ -66,6 +66,7 @@ const moduleConfig = {
             this.detachEventsSpy = sinon.spy(instance, '_detachEvents');
             this.createFrameSpy = sinon.spy(instance, '_createResizeFrames');
             this.updateFrameSpy = sinon.spy(instance, '_updateFramePosition');
+            this.detachSeparatorEventsSpy = sinon.spy(instance, '_detachSeparatorEvents');
         };
 
     },
@@ -105,7 +106,7 @@ module('Table resizing module', moduleConfig, () => {
         this.clock.tick();
 
         assert.strictEqual(this.attachEventsSpy.callCount, 1, 'Events are attached on module initialization');
-        assert.strictEqual(this.detachEventsSpy.callCount, 0, 'Events are attached on module initialization');
+        assert.strictEqual(this.detachEventsSpy.callCount, 0, 'Events are not detached on module initialization');
 
     });
 
@@ -113,10 +114,50 @@ module('Table resizing module', moduleConfig, () => {
         const resizingInstance = new TableResizing(this.quillMock, this.options);
 
         this.clock.tick();
-        assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'There is no resize frame element');
-        assert.notOk(resizingInstance.enabled, 'module disabled by default');
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('enabled', true);
+        resizingInstance.clean();
+
+        this.clock.tick();
+
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
+    });
+
+
+    test('module should detach events on clean', function(assert) {
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('enabled', true);
+        resizingInstance.clean();
+
+        this.clock.tick();
+
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
+        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module initialization');
+    });
+
+    test('module should detach events on tableResizng disabling at runtime', function(assert) {
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('enabled', true);
+
+        this.clock.tick();
+
+        resizingInstance.option('enabled', false);
+
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
+        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module initialization');
     });
 
 
     'Window resize callback should be cleaned after the widget dispose';
+
+    '_detachSeparatorEvents';
 });

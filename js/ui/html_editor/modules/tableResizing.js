@@ -35,21 +35,25 @@ export default class TableResizingModule extends BaseModule {
         this._tableData = [];
 
         if(this.enabled) {
-            this.editorInstance.addContentInitializedCallback(() => {
-                const $tables = this._findTables();
-                if($tables.length) {
-                    this._fixTablesWidths($tables);
-                    this._createResizeFrames($tables);
-                    this._updateFramesPositions();
-                    this._updateFramesSeparators();
-                }
-
-                this._attachEvents();
-            });
-
-            this.addCleanCallback(this.clean.bind(this));
-            this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+            this._applyResizing();
         }
+    }
+
+    _applyResizing() {
+        this.editorInstance.addContentInitializedCallback(() => {
+            const $tables = this._findTables();
+            if($tables.length) {
+                this._fixTablesWidths($tables);
+                this._createResizeFrames($tables);
+                this._updateFramesPositions();
+                this._updateFramesSeparators();
+            }
+
+            this._attachEvents();
+        });
+
+        this.addCleanCallback(this.clean.bind(this));
+        this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
     }
 
     _attachEvents() {
@@ -526,7 +530,7 @@ export default class TableResizingModule extends BaseModule {
 
         if(option === 'enabled') {
             this.enabled = value;
-            value ? this._attachEvents() : this._detachEvents();
+            value ? this._attachEvents() : this.clean();
         }
     }
 
