@@ -72,7 +72,7 @@ describe('ScrollView', () => {
       { name: 'scrollTo', calledWith: ['arg1'] },
       { name: 'scrollBy', calledWith: ['arg1'] },
       { name: 'content', calledWith: [] },
-      { name: 'update', calledWith: [] },
+      { name: 'updateHandler', calledWith: [] },
       { name: 'release', calledWith: [] },
       { name: 'startLoading', calledWith: [] },
       { name: 'finishLoading', calledWith: [] },
@@ -174,7 +174,6 @@ describe('ScrollView', () => {
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
               if (useNative) {

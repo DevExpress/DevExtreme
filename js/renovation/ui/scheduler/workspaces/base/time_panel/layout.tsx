@@ -13,7 +13,6 @@ import { CellBase } from '../cell';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
-  isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
@@ -28,7 +27,6 @@ export const viewFunction = ({
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
-  isVerticalGroupOrientation: isVerticalGrouping,
   restAttributes,
 }: TimePanelTableLayout): JSX.Element => (
   <Table
@@ -50,7 +48,6 @@ export const viewFunction = ({
             </Row>
           )}
           {dateTable.map((cell) => {
-            const { cellCountInGroupRow } = timePanelData;
             const {
               groups,
               startDate,
@@ -69,11 +66,11 @@ export const viewFunction = ({
                 <Cell
                   startDate={startDate}
                   text={text}
-                  groups={isVerticalGrouping ? groups : undefined}
-                  groupIndex={isVerticalGrouping ? groupIndex : undefined}
-                  isFirstGroupCell={isVerticalGrouping && isFirstGroupCell}
-                  isLastGroupCell={isVerticalGrouping && isLastGroupCell}
-                  index={Math.floor(cellIndex / cellCountInGroupRow)}
+                  groups={groups}
+                  groupIndex={groupIndex}
+                  isFirstGroupCell={isFirstGroupCell}
+                  isLastGroupCell={isLastGroupCell}
+                  index={cellIndex}
                   timeCellTemplate={timeCellTemplate}
                 />
               </Row>
@@ -85,12 +82,11 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class TimePanelTableLayoutProps {
+export class TimePaneLayoutProps {
   @OneWay() groupOrientation?: GroupOrientation;
 
   @OneWay() timePanelData: TimePanelData = {
     groupedData: [],
-    cellCountInGroupRow: 0,
     leftVirtualCellCount: 0,
     rightVirtualCellCount: 0,
     topVirtualRowCount: 0,
@@ -107,18 +103,12 @@ export class TimePanelTableLayoutProps {
     register: true,
   },
 })
-export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
+export class TimePanelTableLayout extends JSXComponent(TimePaneLayoutProps) {
   get topVirtualRowHeight(): number {
     return this.props.timePanelData.topVirtualRowHeight ?? 0;
   }
 
   get bottomVirtualRowHeight(): number {
     return this.props.timePanelData.bottomVirtualRowHeight ?? 0;
-  }
-
-  get isVerticalGroupOrientation(): boolean {
-    const { groupOrientation } = this.props;
-
-    return isVerticalGroupOrientation(groupOrientation);
   }
 }

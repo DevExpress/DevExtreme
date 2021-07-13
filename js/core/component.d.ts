@@ -97,7 +97,7 @@ export class Component<TProperties> {
    * @return this
    * @public
    */
-  on(events: any): this;
+  on(events: {[key: string]: Function}): this;
   /**
    * @docid
    * @publicName option()

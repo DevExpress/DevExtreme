@@ -119,11 +119,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @InternalState() forceReachBottom?: boolean;
 
   @Method()
-  update(): void {
-    this.scrollable.update();
-  }
-
-  @Method()
   release(preventScrollBottom: boolean): void {
     if (preventScrollBottom !== undefined) {
       this.toggleLoading(!preventScrollBottom);
@@ -141,7 +136,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollable.content();
+    return this.scrollable.content() as HTMLDivElement;
   }
 
   @Method()
@@ -166,37 +161,37 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollHeight(): number {
-    return this.scrollable.scrollHeight();
+    return this.scrollable.scrollHeight() as number;
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollable.scrollWidth();
+    return this.scrollable.scrollWidth() as number;
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollable.scrollOffset();
+    return this.scrollable.scrollOffset() as ScrollOffset;
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollable.scrollTop();
+    return this.scrollable.scrollTop() as number;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollable.scrollLeft();
+    return this.scrollable.scrollLeft() as number;
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollable.clientHeight();
+    return this.scrollable.clientHeight() as number;
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollable.clientWidth();
+    return this.scrollable.clientWidth() as number;
   }
 
   @Method()
@@ -220,6 +215,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Method()
   finishLoading(): void {
     this.scrollable.finishLoading();
+  }
+
+  updateHandler(): void {
+    this.scrollable.updateHandler();
   }
 
   get reachBottomEnabled(): boolean {

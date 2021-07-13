@@ -17,8 +17,8 @@ import {
 } from '../../events/index';
 
 import {
-    format
-} from '../../ui/widget/ui.widget';
+    Format
+} from '../../localization';
 
 import BaseWidget, {
     BaseWidgetLoadingIndicator,
@@ -338,7 +338,7 @@ export interface BaseGaugeScaleLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid BaseGaugeOptions.scale.label.overlappingBehavior
      * @type Enums.ScaleLabelOverlappingBehavior
@@ -567,7 +567,7 @@ export interface CommonIndicator {
        * @extends CommonVizFormat
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @default 0

@@ -164,7 +164,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-row-count='1'] .dx-scrollable {
+  &.dx-scheduler-group-row-count-one .dx-scrollable {
     &.dx-scheduler-date-table-scrollable,
     &.dx-scheduler-sidebar-scrollable {
       padding-bottom: $padding + $scheduler-group-header-table-cell-height;
@@ -172,7 +172,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-row-count='2'] .dx-scrollable {
+  &.dx-scheduler-group-row-count-two .dx-scrollable {
     &.dx-scheduler-date-table-scrollable,
     &.dx-scheduler-sidebar-scrollable {
       padding-bottom: $padding + $scheduler-group-header-table-cell-height * 2;
@@ -180,7 +180,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-row-count='3'] .dx-scrollable {
+  &.dx-scheduler-group-row-count-three .dx-scrollable {
     &.dx-scheduler-date-table-scrollable,
     &.dx-scheduler-sidebar-scrollable {
       padding-bottom: $padding + $scheduler-group-header-table-cell-height * 3;
@@ -217,15 +217,15 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin dx-scheduler-agenda-group-mixin($offset) {
-  &[dx-group-column-count='1'] {
+  &.dx-scheduler-group-column-count-one {
     @include set-offset-agenda-group-mixin($offset);
   }
 
-  &[dx-group-column-count='2'] {
+  &.dx-scheduler-group-column-count-two {
     @include set-offset-agenda-group-mixin($offset * 2);
   }
 
-  &[dx-group-column-count='3'] {
+  &.dx-scheduler-group-column-count-three {
     @include set-offset-agenda-group-mixin($offset * 3);
   }
 }
@@ -243,7 +243,7 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin dx-scheduler-all-day-title-mixin($base-top) {
-  &[dx-group-row-count='1'] {
+  &.dx-scheduler-group-row-count-one {
     $top-offset: $base-top + $scheduler-group-header-table-cell-height;
 
     .dx-scheduler-all-day-title {
@@ -256,7 +256,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-row-count='2'] {
+  &.dx-scheduler-group-row-count-two {
     $top-offset: $base-top + $scheduler-group-header-table-cell-height * 2;
 
     .dx-scheduler-all-day-title {
@@ -269,7 +269,7 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-row-count='3'] {
+  &.dx-scheduler-group-row-count-three {
     $top-offset: $base-top + $scheduler-group-header-table-cell-height * 3;
 
     .dx-scheduler-all-day-title {
@@ -284,19 +284,19 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin dx-scheduler-header-scrollable-mixin($base-height) {
-  &[dx-group-row-count='1'] {
+  &.dx-scheduler-group-row-count-one {
     .dx-scheduler-header-scrollable {
       height: $base-height + $scheduler-group-header-table-cell-height + 1;
     }
   }
 
-  &[dx-group-row-count='2'] {
+  &.dx-scheduler-group-row-count-two {
     .dx-scheduler-header-scrollable {
       height: $base-height + $scheduler-group-header-table-cell-height * 2 + 1;
     }
   }
 
-  &[dx-group-row-count='3'] {
+  &.dx-scheduler-group-row-count-three {
     .dx-scheduler-header-scrollable {
       height: $base-height + $scheduler-group-header-table-cell-height * 3 + 1;
     }
@@ -329,15 +329,15 @@ $scheduler-appointment-form-label-padding: 20px;
 
 @mixin dx-scheduler-timeline-horizontal-grouping-mixin($base-height) {
   &.dx-scheduler-work-space {
-    &[dx-group-row-count='1'] {
+    &.dx-scheduler-group-row-count-one {
       @include set-size-timeline-horizontal-grouping-mixin($base-height + 40px);
     }
 
-    &[dx-group-row-count='2'] {
+    &.dx-scheduler-group-row-count-two {
       @include set-size-timeline-horizontal-grouping-mixin($base-height + 80px);
     }
 
-    &[dx-group-row-count='3'] {
+    &.dx-scheduler-group-row-count-three {
       @include set-size-timeline-horizontal-grouping-mixin($base-height + 120px);
     }
   }
@@ -387,15 +387,15 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  &[dx-group-column-count='1'] {
+  &.dx-scheduler-group-column-count-one {
     @include set-size-timeline-group-table-mixin(100px);
   }
 
-  &[dx-group-column-count='2'] {
+  &.dx-scheduler-group-column-count-two {
     @include set-size-timeline-group-table-mixin(160px);
   }
 
-  &[dx-group-column-count='3'] {
+  &.dx-scheduler-group-column-count-three {
     @include set-size-timeline-group-table-mixin(240px);
   }
 }
@@ -527,15 +527,15 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin dx-scheduler-vertical-group-table-mixin($offset: 0) {
-  &[dx-group-column-count='1'] {
+  &.dx-scheduler-group-column-count-one {
     @include set-size-vertical-group-table-mixin($scheduler-left-column-width, $offset);
   }
 
-  &[dx-group-column-count='2'] {
+  &.dx-scheduler-group-column-count-two {
     @include set-size-vertical-group-table-mixin(1.5 * $scheduler-left-column-width, $offset);
   }
 
-  &[dx-group-column-count='3'] {
+  &.dx-scheduler-group-column-count-three {
     @include set-size-vertical-group-table-mixin(2 * $scheduler-left-column-width, $offset);
   }
 }
@@ -1656,6 +1656,10 @@ $scheduler-appointment-form-label-padding: 20px;
 
     .dx-scheduler-scrollable-appointments {
       top: 0;
+
+      &.dx-rtl {
+        left: 0;
+      }
     }
   }
 
@@ -1868,6 +1872,10 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-scrollable-appointments {
     position: absolute;
     top: 0;
+
+    &.dx-rtl {
+      left: 0;
+    }
   }
 
   .dx-scheduler-timeline .dx-scheduler-appointment,
@@ -2592,8 +2600,8 @@ $scheduler-appointment-form-label-padding: 20px;
           padding: 0 5px 0 10px;
         }
 
-        &[dx-group-column-count='2'],
-        &[dx-group-column-count='3'] {
+        &.dx-scheduler-group-column-count-two,
+        &.dx-scheduler-group-column-count-three {
           .dx-scheduler-group-header:last-child {
             text-align: right;
           }

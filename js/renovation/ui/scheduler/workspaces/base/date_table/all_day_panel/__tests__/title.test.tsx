@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as TitleView, AllDayPanelTitle } from '../title';
+import { viewFunction as TitleView, AllDayPanelTitle, AllDayPanelTitleProps } from '../title';
 
 describe('AllDayPanelTitle', () => {
   describe('Render', () => {
@@ -42,6 +42,7 @@ describe('AllDayPanelTitle', () => {
       describe('classes', () => {
         it('should not add "hidden" class if visible is true', () => {
           const title = new AllDayPanelTitle({
+            ...new AllDayPanelTitleProps(),
             className: 'some-class',
             visible: true,
           });
@@ -55,6 +56,7 @@ describe('AllDayPanelTitle', () => {
 
         it('should add "hidden" class if visible is false', () => {
           const title = new AllDayPanelTitle({
+            ...new AllDayPanelTitleProps(),
             className: 'some-class',
             visible: false,
           });
@@ -63,6 +65,19 @@ describe('AllDayPanelTitle', () => {
             .toEqual([
               'dx-scheduler-all-day-title',
               'dx-scheduler-all-day-title-hidden',
+              'some-class',
+            ]);
+        });
+
+        it('should not set title class when isSetTitleClass is false', () => {
+          const title = new AllDayPanelTitle({
+            className: 'some-class',
+            visible: true,
+            isSetTitleClass: false,
+          });
+
+          expect(title.classes.split(' '))
+            .toEqual([
               'some-class',
             ]);
         });

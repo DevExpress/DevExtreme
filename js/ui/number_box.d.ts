@@ -14,9 +14,9 @@ import {
     ValueChangedInfo
 } from './editor/editor';
 
-import {
-    format
-} from './widget/ui.widget';
+import { 
+    Format
+  } from '../localization';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox>;
@@ -83,7 +83,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default ""
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid
      * @default "Value must be a number"

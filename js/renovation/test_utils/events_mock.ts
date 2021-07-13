@@ -30,6 +30,9 @@ export const EVENT = {
   dragMove: 'dxdrag',
   drag: 'dxdrag',
   dragEnd: 'dxdragend',
+  dragEnter: 'dxdragenter',
+  dragLeave: 'dxdragleave',
+  drop: 'dxdrop',
 };
 
 export const defaultEvent = {

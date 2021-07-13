@@ -7,7 +7,7 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    animationConfig
+    AnimationConfig
 } from './fx';
 
 /**
@@ -22,18 +22,18 @@ export default class TransitionExecutor {
      * @docid
      * @publicName enter(elements, animation)
      * @param1 elements:jQuery
-     * @param2 animation:animationConfig|string
+     * @param2 animation:AnimationConfig|string
      * @public
      */
-    enter(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
+    enter(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
      * @param1 elements:jQuery
-     * @param2 animation:animationConfig|string
+     * @param2 animation:AnimationConfig|string
      * @public
      */
-    leave(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
+    leave(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
     /**
      * @docid
      * @publicName reset()

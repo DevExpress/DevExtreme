@@ -1,9 +1,9 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -67,7 +67,7 @@ export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxPopup>;
+export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
@@ -163,10 +163,10 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default false
@@ -221,13 +221,13 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
      * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} [for](iOS)
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopupOptions.animation.show
      * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} [for](iOS)
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopupToolbarItem {

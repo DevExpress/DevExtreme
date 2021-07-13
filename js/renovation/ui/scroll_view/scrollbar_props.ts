@@ -21,13 +21,13 @@ export class ScrollbarProps {
 
   @OneWay() bottomPocketSize = 0;
 
+  @OneWay() contentPaddingBottom = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() isScrollableHovered = false;
 
   @OneWay() forceVisibility = false;
-
-  @OneWay() forceUpdateScrollbarLocation = false;
 
   @OneWay() scrollLocation = 0;
 
@@ -36,6 +36,10 @@ export class ScrollbarProps {
   @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
   @Event() onAnimatorCancel?: EventCallback;
+
+  @Event() onLock?: EventCallback;
+
+  @Event() onUnlock?: EventCallback;
 
   @Event() onPullDown?: EventCallback;
 

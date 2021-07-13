@@ -16,6 +16,7 @@ import {
 import { getDateForHeaderText } from './utils/timeline_week';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import { formatWeekdayAndDay } from './utils/base';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -211,7 +212,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._startViewDate));
+        return dateUtils.trimTime(new Date(this.getStartViewDate()));
     }
 
     _getIntervalBetween(currentDate, allDay) {
@@ -330,7 +331,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
             getDateForHeaderText,
@@ -382,7 +382,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        this._startViewDate = this._calculateStartViewDate();
         this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
@@ -454,7 +453,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._startViewDate);
+            const firstViewDate = new Date(this.getStartViewDate());
             let currentDate = new Date(firstViewDate);
 
             const $cells = [];
@@ -474,7 +473,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
             for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(currentDate);
+                const text = formatWeekdayAndDay(currentDate);
 
                 if(cellTemplate) {
                     const templateOptions = {

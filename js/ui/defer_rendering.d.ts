@@ -1,5 +1,5 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
@@ -44,7 +44,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @default undefined
      * @public
      */
-    animation?: animationConfig;
+    animation?: AnimationConfig;
     /**
      * @docid
      * @default null

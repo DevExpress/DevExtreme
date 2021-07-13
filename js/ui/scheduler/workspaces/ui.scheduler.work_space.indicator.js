@@ -6,7 +6,7 @@ import { extend } from '../../../core/utils/extend';
 import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
-import { getTimeZoneCalculator } from '../instanceFactory';
+import { getToday } from './utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -14,14 +14,8 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
-    _getTimeZoneCalculator() {
-        return getTimeZoneCalculator(this.option('key'));
-    }
     _getToday() {
-        const todayDate = this.option('indicatorTime') || new Date();
-        const timeZoneCalculator = this._getTimeZoneCalculator();
-
-        return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+        return getToday(this.option('indicatorTime'), this.timeZoneCalculator);
     }
 
     isIndicationOnView() {
@@ -29,7 +23,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const today = this._getToday();
             const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-            return dateUtils.dateInRange(today, this._startViewDate, new Date(endViewDate.getTime() + toMs('day')));
+            return dateUtils.dateInRange(today, this.getStartViewDate(), new Date(endViewDate.getTime() + toMs('day')));
         }
         return false;
     }
@@ -140,7 +134,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _getIndicatorDuration() {
         const today = this._getToday();
-        const firstViewDate = new Date(this._startViewDate);
+        const firstViewDate = new Date(this.getStartViewDate());
         let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
             timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day'));
@@ -152,7 +146,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     getIndicationHeight() {
         const today = this._getToday();
         const cellHeight = this.getCellHeight();
-        const date = new Date(this._startViewDate);
+        const date = new Date(this.getStartViewDate());
 
         if(this.isIndicationOnView()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());

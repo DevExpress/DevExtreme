@@ -18,7 +18,7 @@ import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-l
 import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
-import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
 import { createDefaultOptionRules } from '../../../../core/options/utils';
 import devices from '../../../../core/devices';

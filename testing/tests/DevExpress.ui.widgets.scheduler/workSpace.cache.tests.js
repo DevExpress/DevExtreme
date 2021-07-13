@@ -2,10 +2,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod, getObserver } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createFactoryInstances } from 'ui/scheduler/instanceFactory.js';
 
 const {
     test,
@@ -19,15 +16,7 @@ testStart(function() {
 
 module('Work Space cellData Cache', {
     beforeEach: function() {
-
-        const key = createFactoryInstances({
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => {}
-        });
-        const observer = getObserver(key);
-
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({ observer }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance, { key });
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
     }
 }, () => {
     test('Workspace should be able to cache cellData', function(assert) {
@@ -243,8 +232,7 @@ module('Work Space cellData Cache', {
 
         const cache = workSpace.cache;
 
-        assert.equal(cache.size, 2, 'Cache has no cell data');
-        assert.ok(cache.get('cellWidth'), 'Has cached cell width');
-        assert.ok(cache.get('cellHeight'), 'Has cached cell height');
+        assert.equal(cache.size, 1, 'Cache has no cell data');
+        assert.ok(cache.get('cellElementsMeta'), 'Has cached cell sizes');
     });
 });

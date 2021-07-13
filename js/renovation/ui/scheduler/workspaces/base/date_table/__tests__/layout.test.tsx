@@ -35,7 +35,6 @@ describe('DateTableLayoutBase', () => {
       }]],
       groupIndex: 1,
     }],
-    cellCountInGroupRow: 1,
     leftVirtualCellCount: 32,
     rightVirtualCellCount: 44,
   };
@@ -67,7 +66,7 @@ describe('DateTableLayoutBase', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         classes: 'some-class',
-        props: { dataCellTemplate },
+        props: { dataCellTemplate, tableRef: 'tableRef' },
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
         leftVirtualCellWidth: 300,
@@ -91,6 +90,7 @@ describe('DateTableLayoutBase', () => {
           virtualCellsCount: 3,
           leftVirtualCellCount: 32,
           rightVirtualCellCount: 44,
+          tableRef: 'tableRef',
         });
       expect(table.hasClass('some-class'))
         .toBe(true);

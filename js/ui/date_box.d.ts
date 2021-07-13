@@ -20,8 +20,8 @@ import {
 } from './editor/editor';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     Properties as PopupProperties
@@ -145,7 +145,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default null
      * @public
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * @docid
      * @default 30

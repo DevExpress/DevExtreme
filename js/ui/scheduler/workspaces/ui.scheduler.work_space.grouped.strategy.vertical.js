@@ -1,8 +1,7 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import { cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
-
-const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
+import { getVerticalGroupCountClass } from './utils/base';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
@@ -99,11 +98,8 @@ class VerticalGroupedStrategy {
         return 0;
     }
 
-    getGroupCountAttr(groups) {
-        return {
-            attr: VERTICAL_GROUPED_ATTR,
-            count: groups?.length
-        };
+    getGroupCountClass(groups) {
+        return getVerticalGroupCountClass(groups);
     }
 
     getLeftOffset() {
@@ -117,7 +113,7 @@ class VerticalGroupedStrategy {
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
             const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
 
             if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
                 topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);

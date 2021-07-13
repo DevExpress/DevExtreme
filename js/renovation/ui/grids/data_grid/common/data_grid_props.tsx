@@ -8,6 +8,7 @@ import {
   Nested,
   Template,
 } from '@devextreme-generator/declarations';
+import type { dxToolbarItem } from '../../../../../ui/toolbar';
 import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
@@ -92,7 +93,7 @@ import type {
   AsyncRule,
 // eslint-disable-next-line import/extensions
 } from '../../../../../ui/validation_rules';
-import type { format } from '../../../../../ui/widget/ui.widget';
+import type { Format } from '../../../../../localization';
 import type { dxFormSimpleItem, dxFormOptions } from '../../../../../ui/form';
 import type Store from '../../../../../data/abstract_store';
 import messageLocalization from '../../../../../localization/message';
@@ -286,7 +287,7 @@ export class DataGridColumn {
   formItem?: dxFormSimpleItem;
 
   @OneWay()
-  format?: format;
+  format?: Format;
 
   @Nested()
   headerFilter?: DataGridColumnHeaderFilter;
@@ -681,7 +682,7 @@ export class DataGridSummaryGroupItem {
   summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
 
   @OneWay()
-  valueFormat?: format;
+  valueFormat?: Format;
 }
 
 @ComponentBindings()
@@ -714,7 +715,7 @@ export class DataGridSummaryTotalItem {
   summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
 
   @OneWay()
-  valueFormat?: format;
+  valueFormat?: Format;
 }
 
 @ComponentBindings()
@@ -1139,6 +1140,17 @@ export class DataGridCommonColumnSettings {
   @OneWay() falseText?: string;
 }
 
+type DataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+export interface DataGridToolbarItem extends dxToolbarItem {
+  name?: DataGridDefaultToolbarItemName | string;
+}
+
+@ComponentBindings()
+export class DataGridToolbar {
+  @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+}
+
 @ComponentBindings()
 export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
@@ -1355,6 +1367,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     trueText: messageLocalization.format('dxDataGrid-trueText'),
     falseText: messageLocalization.format('dxDataGrid-falseText'),
   };
+
+  @OneWay() toolbar?: DataGridToolbar;
 
   @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
 

@@ -1,17 +1,10 @@
-import {
-    DxPromise
-} from '../core/utils/deferred';
-
-import Store, {
-    StoreOptions
-} from './abstract_store';
-
-import {
-    CustomStoreOptions
-} from './custom_store';
+import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation } from './index';
+import { DxPromise } from '../core/utils/deferred';
+import Store, { StoreOptions } from './abstract_store';
+import { CustomStoreOptions } from './custom_store';
 
 /** @namespace DevExpress.data */
-export interface DataSourceOptions {
+export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
     /**
      * @docid
      * @public
@@ -27,20 +20,20 @@ export interface DataSourceOptions {
      * @type Filter expression
      * @public
      */
-    filter?: string | Array<any> | Function;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @type Group expression
      * @public
      */
-    group?: string | Array<any> | Function;
+    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @type_function_param1 dataItem:object
      * @type_function_return object
      * @public
      */
-    map?: ((dataItem: any) => any);
+    map?: ((dataItem: TSourceValue) => TMappedValue);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -48,7 +41,7 @@ export interface DataSourceOptions {
      * @action
      * @public
      */
-    onChanged?: ((e: { changes?: Array<any> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<TMappedValue> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -56,7 +49,7 @@ export interface DataSourceOptions {
      * @action
      * @public
      */
-    onLoadError?: ((error: { message?: string }) => void);
+    onLoadError?: ((error: { readonly message?: string }) => void);
     /**
      * @docid
      * @type_function_param1 isLoading:boolean
@@ -82,7 +75,7 @@ export interface DataSourceOptions {
      * @type_function_return Array<any>
      * @public
      */
-    postProcess?: ((data: Array<any>) => Array<any>);
+    postProcess?: ((data: Array<TMappedValue>) => Array<TValue>);
     /**
      * @docid
      * @default undefined
@@ -111,7 +104,7 @@ export interface DataSourceOptions {
      * @default "contains"
      * @public
      */
-    searchOperation?: string;
+    searchOperation?: SearchOperation;
     /**
      * @docid
      * @default null
@@ -123,18 +116,19 @@ export interface DataSourceOptions {
      * @type Select expression
      * @public
      */
-    select?: string | Array<any> | Function;
+    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * @docid
      * @type Sort expression
      * @public
      */
-    sort?: string | Array<any> | Function;
+    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * @docid
      * @public
+     * @type Store|StoreOptions|Array<any>
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
 }
 /**
  * @docid
@@ -142,10 +136,10 @@ export interface DataSourceOptions {
  * @export default
  * @public
  */
-export default class DataSource {
-    constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
-    constructor(store: Store);
+export default class DataSource<TKey = any, TValue = any> {
+    constructor(data: Array<TValue>);
+    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, any, TValue, any>);
+    constructor(store: Store<TKey, TValue>);
     constructor(url: string);
     /**
      * @docid
@@ -153,7 +147,7 @@ export default class DataSource {
      * @return boolean
      * @public
      */
-    cancel(): boolean;
+    cancel(operationId : number): boolean;
     /**
      * @docid
      * @publicName dispose()
@@ -166,28 +160,28 @@ export default class DataSource {
      * @return object
      * @public
      */
-    filter(): any;
+    filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
      * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @public
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
      * @docid
      * @publicName group()
      * @return object
      * @public
      */
-    group(): any;
+    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
     /**
      * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @public
      */
-    group(groupExpr: any): void;
+    group(groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName isLastPage()
@@ -222,7 +216,7 @@ export default class DataSource {
      * @return object|string|number
      * @public
      */
-    key(): any & string & number;
+    key(): string | Array<string>;
     /**
      * @docid
      * @publicName load()
@@ -236,7 +230,7 @@ export default class DataSource {
      * @return object
      * @public
      */
-    loadOptions(): any;
+    loadOptions(): LoadOptions<TValue>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -244,7 +238,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
@@ -253,7 +247,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
@@ -262,7 +256,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * @docid
      * @publicName on(events)
@@ -270,7 +264,7 @@ export default class DataSource {
      * @return this
      * @public
      */
-    on(events: any): this;
+    on(events: {[key in EventName]?: Function}): this;
     /**
      * @docid
      * @publicName pageIndex()
@@ -382,35 +376,35 @@ export default class DataSource {
      * @return any
      * @public
      */
-    select(): any;
+    select(): SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
     /**
      * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @public
      */
-    select(expr: any): void;
+    select(expr: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName sort()
      * @return any
      * @public
      */
-    sort(): any;
+    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
     /**
      * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @public
      */
-    sort(sortExpr: any): void;
+    sort(sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>): void;
     /**
      * @docid
      * @publicName store()
      * @return object
      * @public
      */
-    store(): any;
+    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
     /**
      * @docid
      * @publicName totalCount()
@@ -419,3 +413,5 @@ export default class DataSource {
      */
     totalCount(): number;
 }
+
+type EventName = 'changed'|'loadError'|'loadingChanged';

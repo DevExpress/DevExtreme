@@ -15,13 +15,17 @@ import {
     EventInfo
 } from '../../events/index';
 
-import {
-    format
-} from '../../ui/widget/ui.widget';
+import { 
+  Format
+} from '../../localization';
 
 import {
     DashStyleType
 } from '../common';
+
+import {
+    Rule
+} from '../../core/options/utils';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
 export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
@@ -516,7 +520,7 @@ export interface BaseWidgetTooltip {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid BaseWidgetOptions.tooltip.opacity
      * @default undefined
@@ -589,7 +593,7 @@ export default class BaseWidget<TProperties> extends DOMComponent<TProperties> {
      * @param1_field2 options:Object
      * @hidden
      */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    static defaultOptions<TProperties>(rule: Partial<Rule<TProperties>>): void;
     /**
      * @docid
      * @publicName exportTo(fileName, format)

@@ -5,7 +5,7 @@ import each from 'jest-each';
 import {
   RefObject,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../test_utils/events_mock';
@@ -254,17 +254,7 @@ each([{
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
-        it('UpdateHandler() should call update() method', () => {
-          const viewModel = new Scrollable({ });
-
-          viewModel.update = jest.fn();
-
-          viewModel.updateHandler();
-
-          expect(viewModel.update).toHaveBeenCalledTimes(1);
-        });
-
-        each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
+        each(optionValues.direction).describe('ScrollEffect params. Direction: %o', (direction) => {
           each([
             { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
             { eventName: 'dxscroll', effectName: 'move', passEvent: true },
@@ -590,10 +580,11 @@ each([{
         const viewModel = new Scrollable({ disabled: true });
 
         viewModel.locked = false;
-        viewModel.update = jest.fn();
+        viewModel.updateHandler = jest.fn();
 
         expect(viewModel.validate(event)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
+        expect(viewModel.updateHandler)
+          .toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
       it('validate(event), locked: true, disabled: false', () => {
@@ -601,10 +592,10 @@ each([{
         const viewModel = new Scrollable({});
 
         viewModel.locked = true;
-        viewModel.update = jest.fn();
+        viewModel.updateHandler = jest.fn();
 
         expect(viewModel.validate(event)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(0);
+        expect(viewModel.updateHandler).toHaveBeenCalledTimes(0);
       });
     });
 
@@ -619,7 +610,6 @@ each([{
 
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
 
               if (Scrollable === ScrollableNative) {

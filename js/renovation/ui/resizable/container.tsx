@@ -17,7 +17,7 @@ import type {
 import { ResizableHandle } from './handle';
 import { combineClasses } from '../../utils/combine_classes';
 import { triggerResizeEvent } from '../../../events/visibility_change';
-import { EffectReturn } from '../../utils/effect_return';
+import { EffectReturn } from '../../utils/effect_return.d';
 
 const getCssClasses = (
   disabled: boolean,
@@ -150,7 +150,7 @@ export class ResizableContainer extends JSXComponent(ResizableContainerProps) {
 
   get styles(): Record<string, string | number | undefined> {
     const { width, height } = this.props;
-    const style = this.restAttributes.style || {};
+    const style = this.restAttributes.style as Record<string, string | number> || {};
     return { ...style, height, width };
   }
 

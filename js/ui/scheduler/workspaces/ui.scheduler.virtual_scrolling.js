@@ -43,11 +43,11 @@ export default class VirtualScrollingDispatcher {
     get document() { return domAdapter.getDocument(); }
 
     get height() {
-        return this.workspace.invoke('getOption', 'height');
+        return this.workspace.option('schedulerHeight');
     }
 
     get width() {
-        return this.workspace.invoke('getOption', 'width');
+        return this.workspace.option('schedulerWidth');
     }
 
     get rowHeight() { return this._rowHeight; }
@@ -132,7 +132,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellHeight() {
-        const cellHeight = this.workspace.getCellHeight(false);
+        const cellHeight = this.workspace.getCellHeight();
         const result = cellHeight > 0
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
@@ -275,7 +275,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     updateDimensions(isForce) {
-        const cellHeight = this.getCellHeight(false);
+        const cellHeight = this.getCellHeight();
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
         if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;

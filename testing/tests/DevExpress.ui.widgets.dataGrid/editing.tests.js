@@ -8559,6 +8559,75 @@ QUnit.module('Editing with real dataController', {
         });
     });
 
+    // T1009400
+    QUnit.test('Roll back modified data when there are nested data items as class instances', function(assert) {
+        // arrange
+        let items;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const checkClassInstances = (items) => {
+            assert.ok(Object.prototype.isPrototypeOf.call(Data, items[0].data), 'item is an instance of the Data class');
+            assert.ok(Object.prototype.isPrototypeOf.call(Prop1, items[0].data.prop1), 'item prop is an instance of the Prop1 class');
+            assert.ok(Object.prototype.isPrototypeOf.call(Prop2, items[0].data.prop1.prop2), 'item prop is an instance of the Prop2 class');
+        };
+
+        class Data {
+            prop1
+        }
+        class Prop1 {
+            prop2
+        }
+
+        class Prop2 {
+            name
+        }
+
+        const dataSource = [{
+            prop1: {
+                prop2: {
+                    field: 'test'
+                }
+            }
+        }];
+        Object.setPrototypeOf(dataSource[0], Data);
+        Object.setPrototypeOf(dataSource[0].prop1, Prop1);
+        Object.setPrototypeOf(dataSource[0].prop1.prop2, Prop2);
+
+        $.extend(this.options.editing, {
+            mode: 'cell',
+            allowUpdating: true
+        });
+        this.options.dataSource = dataSource;
+        this.option('columns', ['prop1.prop2.field']);
+
+        this.dataController.init();
+        this.columnsController.init();
+        rowsView.render($testElement);
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'test', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+
+        // act
+        this.cellValue(0, 0, 'abc');
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'abc', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+
+        // act
+        this.cancelEditData();
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'test', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+    });
 
     QUnit.module('Editing state', {
         beforeEach: function() {
@@ -15256,6 +15325,133 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.equal(validationCallback.callCount, 1, 'validation callback was called');
+    });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - validationCallback data should contain the entire data item when changes are specified initially (T1010037)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const validationCallback = sinon.spy();
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true,
+                    changes: [
+                        {
+                            type: 'update',
+                            key: 1,
+                            data: { name: 'test1' }
+                        }
+                    ]
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback
+                    }]
+                }, 'description']
+            });
+
+            this.clock.tick(300);
+
+            // assert
+            assert.ok(validationCallback.called, 'validation callback was called');
+            assert.deepEqual(validationCallback.getCall(0).args[0].data, { id: 1, name: 'test1', description: 'test2' }, 'correct data');
+        });
+    });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - _getOldData should return correct data when changes are specified initially`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true,
+                    changes: [
+                        {
+                            type: 'update',
+                            key: 1,
+                            data: { name: 'test1' }
+                        }
+                    ]
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }]
+                }, 'description']
+            });
+
+            this.editCell(0, 0);
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(this.editingController._getOldData(1), { id: 1, name: 'test', description: 'test2' }, 'correct data');
+        });
+    });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.test(`Batch - Inserted row with an invalid cell should not be duplicated on saving (scrolling mode = ${scrollingMode}) (T1012405)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'batch',
+                    allowAdding: true
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [
+                        {
+                            type: 'required'
+                        }
+                    ]
+                }, 'description'],
+                scrolling: {
+                    mode: scrollingMode
+                }
+            });
+
+            // act
+            this.addRow();
+            this.clock.tick();
+            let newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after adding');
+
+            // act
+            this.saveEditData();
+            this.clock.tick();
+            newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after saving');
+        });
     });
 });
 

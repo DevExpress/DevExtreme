@@ -55,7 +55,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import dxSortable from './sortable';
 
 import {
-    dxToolbarOptions
+    dxToolbarOptions, dxToolbarItem
 } from './toolbar';
 
 import {
@@ -70,10 +70,13 @@ import {
     StringLengthRule
 } from './validation_rules';
 
-import Widget, {
-    format,
+import Widget, {    
     WidgetOptions
 } from './widget/ui.widget';
+
+import { 
+  Format
+} from '../localization';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
@@ -2524,7 +2527,7 @@ export interface ColumnBase {
      * @default ""
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid GridBaseColumn.headerFilter
      * @type object
@@ -3682,6 +3685,12 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     summary?: Summary;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    toolbar?: dxDataGridToolbar;
 }
 
 export interface ExcelCellInfo {
@@ -4008,7 +4017,7 @@ export interface SummaryGroupItem {
      * @docid dxDataGridOptions.summary.groupItems.valueFormat
      * @default undefined
      */
-    valueFormat?: format
+    valueFormat?: Format
 }
 
 export interface SummaryTotalItem {
@@ -4065,7 +4074,7 @@ export interface SummaryTotalItem {
    * @docid dxDataGridOptions.summary.totalItems.valueFormat
    * @default undefined
    */
-  valueFormat?: format
+  valueFormat?: Format
 }
 
 export interface SummaryTexts {
@@ -4114,6 +4123,36 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string
+}
+
+type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+/**
+ * @docid
+ * @inherits dxToolbarItem
+ * @namespace DevExpress.ui
+ */
+export interface dxDataGridToolbarItem extends dxToolbarItem {
+  /**
+   * @docid
+   * @type Enums.DataGridToolbarItem|string
+   * @public
+   */
+  name?: dxDataGridDefaultToolbarItemName | string
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxDataGridToolbar {
+  /**
+   * @docid
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
+   * @public
+   */
+  items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
 }
 
 /**
