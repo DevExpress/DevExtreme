@@ -12,6 +12,7 @@ import { Widget, viewFunction, WidgetProps } from '../widget';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
+import errors from '../../../../core/errors';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -19,6 +20,7 @@ jest.mock('../../../../events/utils/index', () => ({
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
 jest.mock('../../../../core/utils/resize_callbacks');
+jest.mock('../../../../core/errors');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -578,6 +580,19 @@ describe('Widget', () => {
           component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
           expect(component.props.rootElementRef?.current).toBeUndefined();
+        });
+      });
+
+      describe('checkDeprecation', () => {
+        it('check deprecation error', () => {
+          const component = new Widget({
+            width: () => {},
+            height: () => {},
+          } as WidgetProps);
+          component.checkDeprecation();
+          expect(errors.log).toBeCalledTimes(2);
+          expect(errors.log).toHaveBeenNthCalledWith(1, 'W0017', 'width');
+          expect(errors.log).toHaveBeenNthCalledWith(2, 'W0017', 'height');
         });
       });
     });

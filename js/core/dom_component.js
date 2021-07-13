@@ -11,7 +11,7 @@ import { extend } from './utils/extend';
 import { getPublicElement } from '../core/element';
 import { grep, noop } from './utils/common';
 import { inArray } from './utils/array';
-import { isString, isDefined } from './utils/type';
+import { isString, isDefined, isFunction } from './utils/type';
 import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
 
@@ -58,11 +58,23 @@ const DOMComponent = Component.inherit({
         return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
     },
 
+    _checkFunctionValueDeprecation: function(optionNames) {
+        if(!this.option('_ignoreFunctionValueDeprecation')) {
+            optionNames.forEach(optionName => {
+                if(isFunction(this.option(optionName))) {
+                    errors.log('W0017', optionName);
+                }
+            });
+
+        }
+    },
+
     _visibilityChanged: abstract,
     _dimensionChanged: abstract,
 
     _init() {
         this.callBase();
+        this._checkFunctionValueDeprecation(['width', 'height']);
         this._attachWindowResizeCallback();
         this._initTemplateManager();
     },

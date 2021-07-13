@@ -143,13 +143,13 @@ const Overlay = Widget.inherit({
                 at: 'center'
             },
 
-            width: function() { return $(window).width() * 0.8; },
+            width: '80vw',
 
             minWidth: null,
 
             maxWidth: null,
 
-            height: function() { return $(window).height() * 0.8; },
+            height: '80hw',
 
             minHeight: null,
 

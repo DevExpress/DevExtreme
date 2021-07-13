@@ -302,6 +302,7 @@ const Lookup = DropDownList.inherit({
 
                     dropDownOptions: {
                         closeOnOutsideClick: true,
+                        _ignoreFunctionValueDeprecation: true,
 
                         width: () => getElementWidth(this.$element()),
                         height: (function() { return this._getPopupHeight(); }).bind(this),
@@ -689,7 +690,7 @@ const Lookup = DropDownList.inherit({
             closeOnTargetScroll: false,
             onPositioned: null,
 
-            maxHeight: function() { return $(window).height(); },
+            maxHeight: '100hv',
 
             showTitle: this.option('dropDownOptions.showTitle'),
             title: this.option('dropDownOptions.title'),
