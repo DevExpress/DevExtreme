@@ -30,13 +30,9 @@ const DATE_NAVIGATOR = 'dateNavigator';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
 
-const SUNDAY_INDEX = 0;
-
-
 export class SchedulerToolbar extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            firstDayOfWeek: SUNDAY_INDEX,
             _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
         });
     }

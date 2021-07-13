@@ -573,7 +573,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
           .dx-button {
             &.dx-item-selected:not(.dx-state-focused) {
-              background-color: white; // TODO перенести в generic и material
+              background-color: white;
             }
 
             .dx-button-content {

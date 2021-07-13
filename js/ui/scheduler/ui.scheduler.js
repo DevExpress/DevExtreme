@@ -803,7 +803,7 @@ class Scheduler extends Widget {
         this._header.option('min', this._dateOption('min'));
         this._header.option('max', this._dateOption('max'));
         this._header.option('currentDate', this._dateOption('currentDate'));
-        this._header.option('firstDayOfWeek', this._getCurrentViewOption('firstDayOfWeek'));
+        this._header.option('firstDayOfWeek', this.getFirstDayOfWeek());
         this._header.option('currentView', this._currentView);
     }
 
@@ -1411,7 +1411,7 @@ class Scheduler extends Widget {
         const countConfig = this._getViewCountConfig();
 
         const result = extend({
-            firstDayOfWeek: this.option('firstDayOfWeek'),
+            firstDayOfWeek: this.getFirstDayOfWeek(),
             currentView: this._currentView,
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),

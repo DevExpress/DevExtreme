@@ -1,3 +1,4 @@
+import $ from '../../../core/renderer';
 import devices from '../../../core/devices';
 import registerComponent from '../../../core/component_registrator';
 
@@ -12,7 +13,9 @@ const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
 export default class SchedulerCalendar extends Widget {
     show(target) {
-        this._popover.option('target', target);
+        if(!this._isMobileLayout()) {
+            this._popover.option('target', target);
+        }
         this._popover.show();
         this._calendar.focus();
     }
@@ -58,9 +61,8 @@ export default class SchedulerCalendar extends Widget {
     }
 
     _createPopupContent() {
-        this._calendar = this._createComponent('<div>', Calendar, this._calendarOptions());
-        const result = this._calendar.$element();
-        result.addClass(CALENDAR_CLASS);
+        const result = $('<div>').addClass(CALENDAR_CLASS);
+        this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
 
         if(this._isMobileLayout()) {
             const scrollable = this._createScrollable(result);
@@ -89,6 +91,7 @@ export default class SchedulerCalendar extends Widget {
             onValueChanged: this.option('onValueChanged'),
             hasFocus: () => true,
             tabIndex: this.option('tabIndex'),
+            width: '100%',
         };
     }
 
