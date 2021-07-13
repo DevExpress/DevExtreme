@@ -66,6 +66,6 @@ export class VirtualRow extends JSXComponent(VirtualRowProps) {
   get virtualCells(): unknown[] {
     const { cellsCount } = this.props;
 
-    return [...Array(cellsCount)];
+    return [...Array(cellsCount)] as unknown[];
   }
 }

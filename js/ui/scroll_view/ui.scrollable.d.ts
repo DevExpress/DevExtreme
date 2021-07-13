@@ -27,7 +27,7 @@ export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
 export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @default true
      * @public
      */
@@ -81,21 +81,21 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     onUpdated?: ((e: ScrollEventInfo<TComponent>) => void);
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @default true
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @default false
      * @public
      */
     scrollByThumb?: boolean;
     /**
      * @docid
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @type string
      * @acceptValues 'onScroll'|'onHover'|'always'|'never'
      * @default 'onScroll'
@@ -104,7 +104,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
      * @docid
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @default true
      * @public
      */

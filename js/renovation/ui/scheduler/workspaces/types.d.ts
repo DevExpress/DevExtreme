@@ -40,7 +40,6 @@ interface GroupedViewDataBase {
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
-  cellCountInGroupRow: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   topVirtualRowCount: number;

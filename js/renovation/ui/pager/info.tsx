@@ -31,6 +31,6 @@ export class InfoText extends JSXComponent<InfoTextPropsType>() {
     return format(this.infoText,
       (pageIndex + 1).toString(),
       pageCount.toString(),
-      totalCount.toString());
+      totalCount.toString()) as string;
   }
 }
