@@ -1,5 +1,5 @@
 import { extend } from '../../core/utils/extend';
-import domAdapter from '../../core//dom_adapter';
+import domAdapter from '../../core/dom_adapter';
 import ToolbarStrategy from './ui.toolbar.strategy';
 import ToolbarMenu from './ui.toolbar.menu';
 import DropDownMenu from '../drop_down_menu';

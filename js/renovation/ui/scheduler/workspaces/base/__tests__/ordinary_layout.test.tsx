@@ -62,7 +62,6 @@ describe('OrdinaryLayout', () => {
   };
   const timePanelData = {
     groupedData: [],
-    cellCountInGroupRow: 0,
     leftVirtualCellCount: 0,
     rightVirtualCellCount: 0,
     topVirtualRowCount: 0,

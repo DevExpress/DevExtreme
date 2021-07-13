@@ -19,7 +19,6 @@ describe('AllDayPanelLayout', () => {
       dateTable: [[]],
       groupIndex: 1,
     }],
-    cellCountInGroupRow: 1,
     leftVirtualCellWidth: 100,
     rightVirtualCellWidth: 200,
     leftVirtualCellCount: 34,
@@ -123,7 +122,6 @@ describe('AllDayPanelLayout', () => {
               allDayPanel: undefined,
               groupIndex: 1,
             }],
-            cellCountInGroupRow: 1,
           } as any,
         });
 
