@@ -48,7 +48,6 @@ export const viewFunction = ({
             </Row>
           )}
           {dateTable.map((cell) => {
-            const { cellCountInGroupRow } = timePanelData;
             const {
               groups,
               startDate,
@@ -71,7 +70,7 @@ export const viewFunction = ({
                   groupIndex={groupIndex}
                   isFirstGroupCell={isFirstGroupCell}
                   isLastGroupCell={isLastGroupCell}
-                  index={Math.floor(cellIndex / cellCountInGroupRow)}
+                  index={cellIndex}
                   timeCellTemplate={timeCellTemplate}
                 />
               </Row>
@@ -88,7 +87,6 @@ export class TimePaneLayoutProps {
 
   @OneWay() timePanelData: TimePanelData = {
     groupedData: [],
-    cellCountInGroupRow: 0,
     leftVirtualCellCount: 0,
     rightVirtualCellCount: 0,
     topVirtualRowCount: 0,
