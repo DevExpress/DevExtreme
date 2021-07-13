@@ -367,7 +367,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
       /**
        * @docid
-       * @default '#767676' [prop](color)
+       * @default '#767676' &prop(color)
        */
       font?: Font,
       /**
