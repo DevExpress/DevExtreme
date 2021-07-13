@@ -55,6 +55,19 @@ const tableMarkupWidth = '\
     </table>\
     <br><br>';
 
+const tableMarkupHeight = '\
+    <table>\
+        <tr>\
+            <td>0_0</td>\
+            <td>0_1</td>\
+        </tr>\
+        <tr>\
+            <td height="50px">1_0</td>\
+            <td height="50px">1_1</td>\
+        </tr>\
+    </table>\
+    <br>';
+
 
 function getColumnBordersOffset($table) {
     const columnBorderOffsets = [];
@@ -687,8 +700,6 @@ module('Table resizing integration', {
             const $rowResizerElement = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`).eq(0);
             const $table = this.$element.find('table');
 
-            // this.instance.insertText(0, 'some text some test some text');
-
             $rowResizerElement
                 .trigger('dxpointerdown');
 
@@ -754,6 +765,39 @@ module('Table resizing integration', {
             PointerMock($draggableElement).dragEnd();
         });
 
+        test('Table highlighted element position is limited by minRowHeight option while the row has content-based height 2', function(assert) {
+            this.createWidget({
+                height: 300,
+                width: 430,
+                value: tableMarkupHeight
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $rowResizerElement = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`).eq(1);
+            const $table = this.$element.find('table');
+
+            $rowResizerElement
+                .trigger('dxpointerdown');
+
+            const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+
+            PointerMock($draggableElement)
+                .start()
+                .dragStart()
+                .drag(0, -10)
+                .drag(0, -10)
+                .drag(0, -10)
+                .drag(0, -10);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
+
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3);
+
+            PointerMock($draggableElement).dragEnd();
+        });
+
         test('Check row resizers elements positions', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -803,7 +847,7 @@ module('Table resizing integration', {
             assert.strictEqual(boundaryElement, $table.get(0));
         });
 
-        test('Boundary should be all Quill element if we drag last column', function(assert) {
+        test('Boundary should be Quill content element if we drag last column', function(assert) {
             this.createWidget({ width: 430, tableResizing: { enabled: true } });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -811,9 +855,13 @@ module('Table resizing integration', {
             $columnResizerElements.eq(3)
                 .trigger('dxpointerdown');
             const $draggableElement = this.$element.find(`.${DX_DRAGGABLE_CLASS}`).eq(0);
+            const draggableInstance = $draggableElement.dxDraggable('instance');
 
-            const boundaryElement = $($draggableElement.dxDraggable('instance').option('boundary')).get(0);
-            assert.strictEqual(boundaryElement, $(this.instance._getQuillContainer()).get(0));
+            const boundaryElement = draggableInstance.option('boundary').get(0);
+            const boundaryOffset = draggableInstance.option('boundOffset');
+            assert.strictEqual(boundaryElement, $(this.instance._getContent()).get(0));
+            assert.strictEqual(boundaryOffset.left, $(this.instance._getContent()).css('paddingLeft'));
+            assert.strictEqual(boundaryOffset.right, $(this.instance._getContent()).css('paddingRight'));
         });
     });
 

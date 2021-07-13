@@ -448,11 +448,9 @@ export default class TableResizingModule extends BaseModule {
 
         this._setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
 
-        if(Math.abs($determinantElements.eq(index).outerHeight() - currentLineNewSize) < 1) {
-            this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset) + 'px');
-        } else {
-            this._$highlightedElement.css(directionInfo.positionCoordinate, this._startLineSeparatorPosition + 'px');
-        }
+        const rowHeightDiff = $determinantElements.eq(index).outerHeight() - currentLineNewSize;
+
+        this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + rowHeightDiff) + 'px');
     }
 
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
@@ -501,7 +499,15 @@ export default class TableResizingModule extends BaseModule {
             if(!this._isLastColumnResizing(options)) {
                 result.boundary = options.frame.$table;
             } else {
-                result.boundary = $(this._quillContainer);
+                const $content = this.editorInstance._getContent();
+                result.boundary = $content;
+
+                result.boundOffset = {
+                    bottom: 0,
+                    top: 0,
+                    left: $content.css('paddingLeft'),
+                    right: $content.css('paddingRight')
+                };
             }
         }
 
