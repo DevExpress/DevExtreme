@@ -28,7 +28,6 @@ export const getDateNavigator = (header, item) => {
         options: {
             items,
             keyExpr: 'key',
-            height: '35px',
             stylingMode,
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);

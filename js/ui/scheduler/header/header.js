@@ -1,3 +1,4 @@
+import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import registerComponent from '../../../core/component_registrator';
 import errors from '../../../core/errors';
@@ -23,14 +24,19 @@ import {
     getStep,
 } from './utils';
 
+const DEFAULT_ELEMENT = 'defaultElement';
+const VIEW_SWITCHER = 'viewSwitcher';
+const DATE_NAVIGATOR = 'dateNavigator';
+
 const COMPONENT_CLASS = 'dx-scheduler-header';
 
-const DEFAULT_ELEMENT = 'defaultElement';
+const SUNDAY_INDEX = 0;
 
 
 export class SchedulerToolbar extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            firstDayOfWeek: SUNDAY_INDEX,
             _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
         });
     }
@@ -117,9 +123,10 @@ export class SchedulerToolbar extends Widget {
     _renderToolbar() {
         const config = this._createToolbarConfig();
 
-        this._toolbar = this._createComponent('<div>', Toolbar, config);
+        const toolbarElement = $('<div/>');
+        toolbarElement.appendTo(this.$element());
 
-        this._toolbar.$element().appendTo(this.$element());
+        this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
     }
 
     _createToolbarConfig() {
@@ -141,13 +148,13 @@ export class SchedulerToolbar extends Widget {
             const defaultElementType = item[DEFAULT_ELEMENT];
 
             switch(defaultElementType) {
-                case 'viewSwitcher':
+                case VIEW_SWITCHER:
                     if(this.option('useDropDownViewSwitcher')) {
                         return getDropDownViewSwitcher(this, item);
                     }
 
                     return getViewSwitcher(this, item);
-                case 'dateNavigator':
+                case DATE_NAVIGATOR:
                     this._renderCalendar();
 
                     return getDateNavigator(this, item);

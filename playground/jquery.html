@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -29,87 +27,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <div id="scheduler"></div>
+    <div id="button"></div>
     <script>
-
-        $(function () {
-            const toolbar = [
-                {
-                    location: 'before',
-                    defaultElement: 'dateNavigator',
-                },
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    options: {
-                        text: 'Today',
-                        onClick: function () {
-                            scheduler.option('currentDate', new Date());
-                        },
-                        height: '35px', // TODO
-                    },
-                },
-                {
-                    location: 'after',
-                    defaultElement: 'viewSwitcher',
-                },
-            ];
-
-            const scheduler = $("#scheduler").dxScheduler({
-                // view: 'week',
-                // views: [{
-                //     type: 'week',
-                //     intervalCount: 3,
-                //     startDate: new Date(2021, 6, 5),
-                // }],
-                // currentDate: new Date(2021, 6, 7),
-
-
-                dataSource: [],
-                views: [
-                    'day',
-                    'week',
-                    'workWeek',
-                    'month',
-                ],
-                currentView: "week",
-                min: new Date(2021, 4, 27),
-                currentDate: new Date(2021, 4, 27),
-                startDayHour: 9,
-                height: 600,
-                toolbar,
-            }).dxScheduler('instance');
-
-            // setTimeout(() => {
-            //     scheduler.option('useDropDownViewSwitcher', true);
-            // }, 1000);
-
-            // setTimeout(() => {
-            //     // scheduler.option('views', ['month', 'day']);
-            //     scheduler.option('currentView', 'week');
-            // }, 2000);
-
-            // time = Date.now();
-            // scheduler.option('currentView', 'week');
-            // console.log(Date.now() - time);
-
-            // this.startTime = performance.now();
-            // scheduler.option('views', ['month', 'day']);
-            // this.endTime = performance.now();
-            // console.log('Change views', this.endTime - this.startTime);
-
-            // this.startTime = performance.now();
-            // scheduler.option('currentDate', new Date(2020, 1, 1));
-            // this.endTime = performance.now();
-            // console.log('Change currentDate', this.endTime - this.startTime);
-
-            // setTimeout(() => {
-            //     scheduler.option('views', ['month', 'day']); // работает
-            // }, 2000);
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
-
 </html>

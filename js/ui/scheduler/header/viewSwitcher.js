@@ -29,7 +29,7 @@ export const getViewSwitcher = (header, item) => {
             keyExpr: 'name',
             selectedItemKeys: [selectedView],
             stylingMode: 'text',
-            height: '54px',
+            height: '55px',
             onItemClick: (e) => {
                 const view = e.itemData;
 
