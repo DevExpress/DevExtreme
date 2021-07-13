@@ -1,3 +1,5 @@
+import { isDateAndTimeView } from './utils/base';
+
 export class CellsSelectionController {
     handleArrowClick(options) {
         const {
@@ -75,7 +77,7 @@ export class CellsSelectionController {
             isGroupedByDate,
             groupCount,
             isMultiSelection,
-            isDateAndTimeView,
+            viewType,
         } = options;
         const {
             columnIndex,
@@ -103,7 +105,7 @@ export class CellsSelectionController {
             };
         }
 
-        return isDateAndTimeView ? focusedCellPosition : this._processEdgeCell({
+        return isDateAndTimeView(viewType) ? focusedCellPosition : this._processEdgeCell({
             nextColumnIndex,
             rowIndex,
             columnIndex,

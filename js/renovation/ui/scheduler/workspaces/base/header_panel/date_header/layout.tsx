@@ -14,7 +14,7 @@ import {
   Group,
 } from '../../../types.d';
 import { GroupOrientation } from '../../../../types.d';
-import { isHorizontalGroupOrientation } from '../../../utils';
+import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from './cell';
 
 export const viewFunction = ({
@@ -102,6 +102,6 @@ export class DateHeaderLayout extends JSXComponent<DateHeaderLayoutProps, 'dateH
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
+    return isHorizontalGroupingApplied(groups, groupOrientation) && !groupByDate;
   }
 }

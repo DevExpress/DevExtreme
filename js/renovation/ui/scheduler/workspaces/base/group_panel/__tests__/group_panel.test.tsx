@@ -66,6 +66,11 @@ describe('GroupPanel Vertical Layout', () => {
         it('should return vertical layout when groupOrientation is vertical', () => {
           const groupPanel = new GroupPanel({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
+            groups: [{
+              name: 'groupId',
+              items: [{ id: 1 }],
+              data: [{ id: 1 }],
+            }],
           });
 
           expect(groupPanel.layout)
@@ -75,6 +80,11 @@ describe('GroupPanel Vertical Layout', () => {
         it('should return horizontal layout when groupOrientation is horizontal', () => {
           const groupPanel = new GroupPanel({
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+            groups: [{
+              name: 'groupId',
+              items: [{ id: 1 }],
+              data: [{ id: 1 }],
+            }],
           });
 
           expect(groupPanel.layout)

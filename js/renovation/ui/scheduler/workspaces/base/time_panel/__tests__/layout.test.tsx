@@ -6,11 +6,9 @@ import { TimePanelCell as Cell } from '../cell';
 import * as utilsModule from '../../../utils';
 import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
 const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
-const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
 jest.mock('../../table', () => ({
   ...jest.requireActual('../../table'),
@@ -42,14 +40,13 @@ describe('TimePanelLayout', () => {
         text: '1:00 AM',
         groups: { id: 2 },
         groupIndex: 2,
-        index: 2,
+        index: 1,
         key: '3',
         isFirstGroupCell: false,
         isLastGroupCell: false,
       }],
       groupIndex: 2,
     }],
-    cellCountInGroupRow: 2,
   };
 
   describe('Render', () => {
@@ -65,7 +62,7 @@ describe('TimePanelLayout', () => {
     afterEach(jest.resetAllMocks);
 
     beforeEach(() => {
-      getKeyByGroup.mockImplementation((key) => key.toString());
+      getKeyByGroup.mockImplementation((key) => (key ? key.toString() : '0'));
     });
 
     it('should spread restAttributes', () => {
@@ -116,45 +113,28 @@ describe('TimePanelLayout', () => {
       expect(cells.at(0).props())
         .toMatchObject({
           startDate: dateTable[0].startDate,
-          groups: undefined,
-          groupIndex: undefined,
+          groups: dateTable[0].groups,
+          groupIndex: dateTable[0].groupIndex,
           index: 0,
           text: dateTable[0].text,
+          isFirstGroupCell: dateTable[0].isFirstGroupCell,
+          isLastGroupCell: dateTable[0].isLastGroupCell,
         });
       expect(cells.at(1).props())
         .toMatchObject({
           startDate: dateTable[1].startDate,
-          groups: undefined,
-          groupIndex: undefined,
+          groups: dateTable[1].groups,
+          groupIndex: dateTable[1].groupIndex,
           index: 1,
           text: dateTable[1].text,
+          isFirstGroupCell: dateTable[1].isFirstGroupCell,
+          isLastGroupCell: dateTable[1].isLastGroupCell,
         });
     });
 
-    it('should not pass groups and groupIndex to cells if groupOrientation is not vertical', () => {
+    it('should pass groups and groupIndex to cells', () => {
       const layout = render({
-        isVerticalGroupOrientation: false,
-      });
-
-      const cells = layout.find(Cell);
-      expect(cells)
-        .toHaveLength(2);
-
-      expect(cells.at(0).props())
-        .toMatchObject({
-          groups: undefined,
-          groupIndex: undefined,
-        });
-      expect(cells.at(1).props())
-        .toMatchObject({
-          groups: undefined,
-          groupIndex: undefined,
-        });
-    });
-
-    it('should pass groups and groupIndex to cells if groupOrientation is vertical', () => {
-      const layout = render({
-        isVerticalGroupOrientation: true,
+        isVerticalGroupingApplied: true,
       });
 
       const cells = layout.find(Cell);
@@ -173,84 +153,6 @@ describe('TimePanelLayout', () => {
           groups: dateTable[1].groups,
           groupIndex: dateTable[1].groupIndex,
         });
-    });
-
-    describe('firstGroupCell, lastGroupCell', () => {
-      const timePanelData = {
-        groupedData: [{
-          dateTable: [{
-            startDate: new Date(2020, 6, 9, 1),
-            text: '0:00 AM',
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-            key: '1',
-          }, {
-            startDate: new Date(2020, 6, 9, 2),
-            text: '1:00 AM',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-            key: '2',
-          }, {
-            startDate: new Date(2020, 6, 9, 3),
-            text: '2:00 AM',
-            isFirstGroupCell: false,
-            isLastGroupCell: false,
-            key: '3',
-          }, {
-            startDate: new Date(2020, 6, 9, 4),
-            text: '3:00 AM',
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-            key: '4',
-          }],
-          groupIndex: 10,
-        }],
-      };
-      const assert = (
-        cells: any,
-        index: number,
-        isFirstGroupCell: boolean,
-        isLastGroupCell: boolean,
-      ): void => {
-        const cell = cells.at(index);
-
-        expect(cell.prop('isFirstGroupCell'))
-          .toBe(isFirstGroupCell);
-        expect(cell.prop('isLastGroupCell'))
-          .toBe(isLastGroupCell);
-      };
-
-      it('should pass correct "isFirstGroupCell" and "isLastGroupCell" props to the cells', () => {
-        const layout = render({
-          props: { timePanelData },
-          isVerticalGroupOrientation: true,
-        });
-
-        const cells = layout.find(Cell);
-        expect(cells)
-          .toHaveLength(4);
-
-        assert(cells, 0, true, false);
-        assert(cells, 1, false, false);
-        assert(cells, 2, false, false);
-        assert(cells, 3, false, true);
-      });
-
-      it('should not pass "isFirstGroupCell" and "isLastGroupCell" props to the cells if grouping is not vertical', () => {
-        const layout = render({
-          props: { timePanelData },
-          isVerticalGroupOrientation: false,
-        });
-
-        const cells = layout.find(Cell);
-        expect(cells)
-          .toHaveLength(4);
-
-        assert(cells, 0, false, false);
-        assert(cells, 1, false, false);
-        assert(cells, 2, false, false);
-        assert(cells, 3, false, false);
-      });
     });
 
     it('should call getIsGroupedAllDayPanel with correct arguments', () => {
@@ -285,7 +187,6 @@ describe('TimePanelLayout', () => {
             dateTable: [],
             groupIndex: 33,
           }],
-          cellCountInGroupRow: 2,
           isGroupedAllDayPanel: true,
         };
         const layout = render({ props: { timePanelData } });
@@ -328,18 +229,6 @@ describe('TimePanelLayout', () => {
               .toEqual(value);
           });
         });
-      });
-
-      it('should calculate isVerticalGroupOrientation correctly', () => {
-        const layout = new TimePanelTableLayout({
-          groupOrientation: VERTICAL_GROUP_ORIENTATION,
-        });
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.isVerticalGroupOrientation;
-
-        expect(isVerticalGroupOrientation)
-          .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);
       });
     });
   });

@@ -5,7 +5,6 @@ import {
     getWeekendsCount,
     isDataOnWeekend,
     getFirstDayOfWeek,
-    calculateStartViewDate,
 } from './utils/work_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -43,16 +42,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
             date.setDate(date.getDate() + 2);
         }
         super._incrementDate(date);
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this._getIntervalDuration(),
-            this.option('firstDayOfWeek'),
-        );
     }
 }
 

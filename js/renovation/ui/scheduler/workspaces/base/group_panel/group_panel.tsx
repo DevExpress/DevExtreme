@@ -3,7 +3,7 @@ import {
   JSXComponent,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { isVerticalGroupOrientation } from '../../utils';
+import { isVerticalGroupingApplied } from '../../utils';
 import { GroupPanelProps } from './group_panel_props';
 import { GroupPanelVerticalLayout } from './vertical/layout';
 import { GroupPanelHorizontalLayout } from './horizontal/layout';
@@ -44,9 +44,9 @@ export const viewFunction = ({
 })
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
   get layout(): JSXTemplate<GroupPanelLayoutProps> {
-    const { groupOrientation } = this.props;
+    const { groupOrientation, groups } = this.props;
 
-    return isVerticalGroupOrientation(groupOrientation)
+    return isVerticalGroupingApplied(groups, groupOrientation)
       ? GroupPanelVerticalLayout
       : GroupPanelHorizontalLayout;
   }

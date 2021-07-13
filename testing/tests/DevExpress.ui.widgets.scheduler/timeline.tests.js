@@ -26,7 +26,7 @@ const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTime
 QUnit.module('Timeline Base', {
 
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 });
 
@@ -1012,7 +1012,6 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     isGroupedAllDayPanel: false
                 }],
-                cellCountInGroupRow: 2,
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
@@ -1058,7 +1057,6 @@ QUnit.module('Renovated Render', {
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
             const expectedViewData = {
-                cellCountInGroupRow: 2,
                 groupedData: [{
                     dateTable: [[{
                         ...cellsBase[0],
@@ -1160,7 +1158,6 @@ QUnit.module('Renovated Render', {
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
-                cellCountInGroupRow: 2,
                 isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
