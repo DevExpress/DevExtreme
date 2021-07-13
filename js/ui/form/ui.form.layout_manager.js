@@ -26,20 +26,14 @@ import {
     FIELD_ITEM_CLASS,
     FLEX_LAYOUT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
@@ -52,6 +46,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
+import { renderLabel } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -627,7 +622,7 @@ const LayoutManager = Widget.inherit({
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {
-            $label = that._renderLabel(labelOptions).appendTo($container);
+            $label = this._renderLabel(labelOptions).appendTo($container);
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
@@ -740,51 +735,17 @@ const LayoutManager = Widget.inherit({
         return labelOptions;
     },
 
-    _renderLabel: function(options) {
-        const { text, id, location, alignment, isRequired, labelID = null } = options;
+    _renderLabel: function(labelOptions) {
+        const markConfig = this._getRequiredMarksConfig();
 
-        if(isDefined(text) && text.length > 0) {
-            const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
-            const $label = $('<label>')
-                .addClass(labelClasses)
-                .attr('for', id)
-                .attr('id', labelID);
+        const markOptions = {
+            isRequiredMark: markConfig.showRequiredMark && labelOptions.isRequired,
+            requiredMark: markConfig.requiredMark,
+            isOptionalMark: markConfig.showOptionalMark && !labelOptions.isRequired,
+            optionalMark: markConfig.optionalMark
+        };
 
-            const $labelContent = $('<span>')
-                .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-                .appendTo($label);
-
-            $('<span>')
-                .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
-                .text(text)
-                .appendTo($labelContent);
-
-            if(alignment) {
-                $label.css('textAlign', alignment);
-            }
-
-            $labelContent.append(this._renderLabelMark(isRequired));
-
-            return $label;
-        }
-    },
-
-    _renderLabelMark: function(isRequired) {
-        let $mark;
-        const requiredMarksConfig = this._getRequiredMarksConfig();
-        const isRequiredMark = requiredMarksConfig.showRequiredMark && isRequired;
-        const isOptionalMark = requiredMarksConfig.showOptionalMark && !isRequired;
-
-        if(isRequiredMark || isOptionalMark) {
-            const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
-            const markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
-
-            $mark = $('<span>')
-                .addClass(markClass)
-                .text(String.fromCharCode(160) + markText);
-        }
-
-        return $mark;
+        return renderLabel({ ...labelOptions, markOptions });
     },
 
     _getRequiredMarksConfig: function() {

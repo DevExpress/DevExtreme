@@ -5,6 +5,11 @@ import {
     WIDGET_CLASS,
     FIELD_ITEM_LABEL_TEXT_CLASS,
     HIDDEN_LABEL_CLASS,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_LABEL_CONTENT_CLASS,
+    FIELD_ITEM_LABEL_LOCATION_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -60,15 +65,16 @@ export const getItemPath = (items, item, isTabs) => {
     }
 };
 
-export function getLabelWidthByText(text, layoutManager, labelLocation) {
+export function getLabelWidthByText(text, labelLocation, labelMarkOptions) {
     const $hiddenContainer = $('<div>')
         .addClass(WIDGET_CLASS)
         .addClass(HIDDEN_LABEL_CLASS)
         .appendTo('body');
 
-    const $label = layoutManager._renderLabel({
+    const $label = renderLabel({
         text: ' ',
-        location: labelLocation
+        location: labelLocation,
+        markOptions: labelMarkOptions
     }).appendTo($hiddenContainer);
 
     const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
@@ -80,4 +86,46 @@ export function getLabelWidthByText(text, layoutManager, labelLocation) {
     $hiddenContainer.remove();
 
     return result;
+}
+
+export function renderLabel({ text, id, location, alignment, labelID = null, markOptions }) {
+    if(isDefined(text) && text.length > 0) {
+        const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
+        const $label = $('<label>')
+            .addClass(labelClasses)
+            .attr('for', id)
+            .attr('id', labelID);
+
+        const $labelContent = $('<span>')
+            .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
+            .appendTo($label);
+
+        $('<span>')
+            .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
+            .text(text)
+            .appendTo($labelContent);
+
+        if(alignment) {
+            $label.css('textAlign', alignment);
+        }
+
+        $labelContent.append(_renderLabelMark(markOptions));
+
+        return $label;
+    }
+}
+
+function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
+    let $mark;
+
+    if(isRequiredMark || isOptionalMark) {
+        const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
+        const markText = isRequiredMark ? requiredMark : optionalMark;
+
+        $mark = $('<span>')
+            .addClass(markClass)
+            .text(String.fromCharCode(160) + markText);
+    }
+
+    return $mark;
 }
