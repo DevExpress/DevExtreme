@@ -181,11 +181,6 @@ function run_test_jest {
     npm run test-jest
 }
 
-function run_test_styles {
-    npm i
-    npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false
-}
-
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local last_suite_time=unknown
