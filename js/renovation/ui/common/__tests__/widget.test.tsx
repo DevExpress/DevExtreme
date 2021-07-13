@@ -594,6 +594,15 @@ describe('Widget', () => {
           expect(errors.log).toHaveBeenNthCalledWith(1, 'W0017', 'width');
           expect(errors.log).toHaveBeenNthCalledWith(2, 'W0017', 'height');
         });
+
+        it('no deprecation error', () => {
+          const component = new Widget({
+            width: '100px',
+            height: '100px',
+          } as WidgetProps);
+          component.checkDeprecation();
+          expect(errors.log).toBeCalledTimes(0);
+        });
       });
     });
 
