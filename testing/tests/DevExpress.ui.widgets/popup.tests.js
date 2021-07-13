@@ -591,33 +591,66 @@ QUnit.module('dimensions', {
         );
     });
 
-    QUnit.test('Popup should keep nested scroll position on dimension changed', function(assert) {
-        const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+    QUnit.module('Popup should keep nested scroll position on geometry rerendering', {
+        beforeEach: function() {
+            const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+            this.instance = $('#popup').dxPopup({
+                visible: true,
+                resizeEnabled: true,
+                width: 'auto',
+                contentTemplate: () => {
+                    const $content = $('<div>').height(3000);
+                    const $wrapper = $('<div>');
 
-        $('#popup').dxPopup({
-            visible: true,
-            contentTemplate: function($container) {
-                const $content = $('<div>').height(3000);
-                const $wrapper = $('<div>');
+                    return $wrapper
+                        .addClass(SCROLLABLE_CONTAINER_CLASS)
+                        .css({
+                            height: '100%',
+                            width: 50,
+                            overflow: 'auto'
+                        })
+                        .append($content);
+                }
+            }).dxPopup('instance');
+            this.$scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            this.$scrollableContainer.scrollTop(300);
+        }
+    }, () => {
+        QUnit.test('on window resize', function(assert) {
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is set');
 
-                $wrapper
-                    .addClass(SCROLLABLE_CONTAINER_CLASS)
-                    .css({
-                        height: '100%',
-                        overflow: 'auto'
-                    })
-                    .append($content)
-                    .appendTo($container);
-            }
+            resizeCallbacks.fire();
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
         });
 
-        const $scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        QUnit.test('on dimension option change', function(assert) {
+            this.instance.option('width', 100);
 
-        $scrollableContainer.scrollTop(100);
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position changed');
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
 
-        resizeCallbacks.fire();
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position still the same');
+        QUnit.test('on content dimension change', function(assert) {
+            const showingObserved = assert.async();
+            const contentResizingObserved = assert.async();
+            setTimeout(() => {
+                this.$scrollableContainer.width(300);
+                setTimeout(() => {
+                    assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+                    contentResizingObserved();
+                }, 100);
+                showingObserved();
+            });
+        });
+
+        QUnit.test('on resize', function(assert) {
+            const $overlayContent = this.instance.$overlayContent();
+            const $handle = $overlayContent.find('.dx-resizable-handle-right');
+            const pointer = pointerMock($handle);
+
+            pointer.start().dragStart().drag(100).dragEnd();
+
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
     });
 
     QUnit.test('popup should be repositioned correctly after change height from static to "auto"', function(assert) {
