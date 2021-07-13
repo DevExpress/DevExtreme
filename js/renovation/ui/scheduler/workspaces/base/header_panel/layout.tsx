@@ -10,7 +10,7 @@ import {
   DateHeaderData,
   DateTimeCellTemplateProps,
 } from '../../types.d';
-import { isHorizontalGroupOrientation } from '../../utils';
+import { isHorizontalGroupingApplied } from '../../utils';
 import { GroupPanel } from '../group_panel/group_panel';
 import { GroupPanelProps } from '../group_panel/group_panel_props';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
@@ -90,6 +90,6 @@ export class HeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dat
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation);
+    return isHorizontalGroupingApplied(groups, groupOrientation);
   }
 }

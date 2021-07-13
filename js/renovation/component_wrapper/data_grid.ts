@@ -38,7 +38,7 @@ export default class DataGridWrapper extends Component {
 
     if (internalInstance) {
       if (state === undefined) {
-        return internalInstance.state();
+        return internalInstance.state() as Record<string, unknown>;
       }
       internalInstance.state(state);
     }
