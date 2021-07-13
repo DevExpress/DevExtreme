@@ -19,7 +19,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
         super(...args);
 
         this._getWeekendsCount = getWeekendsCount;
-        this._isSkippedData = isDataOnWeekend;
     }
 
     _getElementClass() {
@@ -34,7 +33,9 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
         return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
-    _isSkippedData() { return isDataOnWeekend; }
+    _isSkippedData(date) {
+        return isDataOnWeekend(date);
+    }
 
     _incrementDate(date) {
         const day = date.getDay();

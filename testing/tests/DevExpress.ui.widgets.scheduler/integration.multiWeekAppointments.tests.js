@@ -255,10 +255,10 @@ QUnit.test('Multi-week appointments should be split by several parts', function(
     const fourthAppointmentTop = translator.locate($appointments.eq(3)).top;
 
     assert.equal($appointments.length, 4, 'Appointment is split by 3 parts');
-    assert.roughEqual($appointments.eq(0).outerWidth(), 600, 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(1).outerWidth(), 699, 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(2).outerWidth(), 699, 1.001, 'Appointment width is OK');
-    assert.roughEqual($appointments.eq(3).outerWidth(), 199, 1.001, 'Appointment width is OK');
+    assert.roughEqual($appointments.eq(0).outerWidth(), 600, 2.001, 'Appointment width is OK');
+    assert.roughEqual($appointments.eq(1).outerWidth(), 699, 2.001, 'Appointment width is OK');
+    assert.roughEqual($appointments.eq(2).outerWidth(), 699, 2.001, 'Appointment width is OK');
+    assert.roughEqual($appointments.eq(3).outerWidth(), 200, 2.001, 'Appointment width is OK');
 
     assert.roughEqual(firstAppointmentTop, rowHeight * 2 + appointmentTopOffsetInsideCell + 1, 3.51, 'The first appointment height is OK');
     assert.roughEqual(secondAppointmentTop, rowHeight * 3 + appointmentTopOffsetInsideCell + 1, 3.51, 'The second appointment height is OK');
