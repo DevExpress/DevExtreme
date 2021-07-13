@@ -850,12 +850,6 @@
       .dx-scrollable-scrollbar {
         z-index: 3;
       }
-
-      .dx-#{$widget-name}-content:not(.dx-#{$widget-name}-content-fixed) {
-        .dx-#{$widget-name}-bottom-load-panel {
-          visibility: hidden;
-        }
-      }
     }
 
     .dx-#{$widget-name}-content {

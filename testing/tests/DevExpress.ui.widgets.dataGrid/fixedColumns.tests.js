@@ -3189,11 +3189,6 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         // assert
         assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').length, 2, 'load panel count');
 
-        const fixedLoadPanel = $testElement.find('.dx-datagrid-bottom-load-panel.dx-datagrid-content-fixed');
-        const notFixedLoadPanel = $testElement.find('.dx-datagrid-bottom-load-panel:not(.dx-datagrid-content-fixed)');
-        assert.notStrictEqual(fixedLoadPanel.css('visibility'), 'hidden', 'first load panel is visible');
-        assert.strictEqual(notFixedLoadPanel.css('visibility'), 'hidden', 'second load panel is hidden');
-
         // act
         that.columnOption(0, 'fixed', false);
 
