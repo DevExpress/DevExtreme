@@ -867,7 +867,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
 export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -882,7 +882,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
 export interface dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -952,7 +952,7 @@ export interface dxPolarChartCommonAxisSettingsStripStyle {
 export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1918,8 +1918,8 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-     * @default '#FFFFFF' [prop](color)
-     * @default 14 [prop](size)
+     * @default '#FFFFFF' &prop(color)
+     * @default 14 &prop(size)
      * @public
      */
     font?: Font;
