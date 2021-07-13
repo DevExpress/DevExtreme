@@ -736,29 +736,19 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderLabel: function(labelOptions) {
-        const markConfig = this._getRequiredMarksConfig();
-
-        const markOptions = {
-            isRequiredMark: markConfig.showRequiredMark && labelOptions.isRequired,
-            requiredMark: markConfig.requiredMark,
-            isOptionalMark: markConfig.showOptionalMark && !labelOptions.isRequired,
-            optionalMark: markConfig.optionalMark
-        };
-
-        return renderLabel({ ...labelOptions, markOptions });
+        return renderLabel(this._getRenderLabelOptions(labelOptions));
     },
 
-    _getRequiredMarksConfig: function() {
-        if(!this._cashedRequiredConfig) {
-            this._cashedRequiredConfig = {
-                showRequiredMark: this.option('showRequiredMark'),
-                showOptionalMark: this.option('showOptionalMark'),
+    _getRenderLabelOptions: function(labelOptions = {}) {
+        return {
+            ...labelOptions,
+            markOptions: {
+                isRequiredMark: this.option('showRequiredMark') && labelOptions.isRequired,
                 requiredMark: this.option('requiredMark'),
+                isOptionalMark: this.option('showOptionalMark') && !labelOptions.isRequired,
                 optionalMark: this.option('optionalMark')
-            };
-        }
-
-        return this._cashedRequiredConfig;
+            }
+        };
     },
 
     _renderEditor: function(options) {

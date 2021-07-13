@@ -65,22 +65,17 @@ export const getItemPath = (items, item, isTabs) => {
     }
 };
 
-export function getLabelWidthByText(text, labelLocation, labelMarkOptions) {
+export function getLabelWidthByText(renderLabelOptions) {
     const $hiddenContainer = $('<div>')
         .addClass(WIDGET_CLASS)
         .addClass(HIDDEN_LABEL_CLASS)
         .appendTo('body');
 
-    const $label = renderLabel({
-        text: ' ',
-        location: labelLocation,
-        markOptions: labelMarkOptions
-    }).appendTo($hiddenContainer);
+    const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
 
     const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
 
     // this code has slow performance
-    labelTextElement.innerHTML = text;
     const result = labelTextElement.offsetWidth;
 
     $hiddenContainer.remove();

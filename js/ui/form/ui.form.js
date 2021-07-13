@@ -174,9 +174,11 @@ const Form = Widget.inherit({
 
         for(i = 0; i < $labelTextsLength; i++) {
             labelWidth = getLabelWidthByText(
-                this._getLabelText($labelTexts[i]),
-                this._labelLocation(),
-                layoutManager._getRequiredMarksConfig());
+                layoutManager._getRenderLabelOptions({
+                    text: this._getLabelText($labelTexts[i]),
+                    location: this._labelLocation(),
+                })
+            );
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
