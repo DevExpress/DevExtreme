@@ -1,4 +1,9 @@
+import $ from '../../core/renderer';
 import { isDefined } from '../../core/utils/type';
+
+const WIDGET_CLASS = 'dx-widget';
+const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
+const HIDDEN_LABEL_CLASS = 'dx-layout-manager-hidden-label';
 
 const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
@@ -53,6 +58,28 @@ const getItemPath = (items, item, isTabs) => {
     }
 };
 
+const getLabelWidthByText = (text, layoutManager, labelLocation) => {
+    const $hiddenContainer = $('<div>')
+        .addClass(WIDGET_CLASS)
+        .addClass(HIDDEN_LABEL_CLASS)
+        .appendTo('body');
+
+    const $label = layoutManager._renderLabel({
+        text: ' ',
+        location: labelLocation
+    }).appendTo($hiddenContainer);
+
+    const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
+
+    // this code has slow performance
+    labelTextElement.innerHTML = text;
+    const result = labelTextElement.offsetWidth;
+
+    $hiddenContainer.remove();
+
+    return result;
+};
+
 exports.getOptionNameFromFullName = getOptionNameFromFullName;
 exports.getFullOptionName = getFullOptionName;
 exports.getTextWithoutSpaces = getTextWithoutSpaces;
@@ -62,3 +89,4 @@ exports.concatPaths = concatPaths;
 exports.tryGetTabPath = tryGetTabPath;
 exports.isFullPathContainsTabs = isFullPathContainsTabs;
 exports.getItemPath = getItemPath;
+exports.getLabelWidthByText = getLabelWidthByText;
