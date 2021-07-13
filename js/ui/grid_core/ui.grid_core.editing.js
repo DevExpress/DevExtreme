@@ -33,8 +33,6 @@ import {
     EDIT_MODE_ROW,
     EDIT_MODES,
     ROW_BASED_MODES,
-    EDIT_MODE_POPUP,
-    EDIT_MODE_FORM
 } from './ui.grid_core.editing_constants';
 
 const READONLY_CLASS = 'readonly';
@@ -445,13 +443,13 @@ const EditingController = modules.ViewController.inherit((function() {
         optionChanged: function(args) {
             if(args.name === 'editing') {
                 const fullName = args.fullName;
-                const editMode = this.option('editing.mode');
 
                 if(fullName === EDITING_EDITROWKEY_OPTION_NAME) {
                     this._handleEditRowKeyChange(args);
                 } else if(fullName === EDITING_CHANGES_OPTION_NAME) {
                     this._handleChangesChange(args);
-                } else if(editMode !== EDIT_MODE_POPUP && editMode !== EDIT_MODE_FORM) {
+                } else if(!args.handled) {
+                    this._columnsController.reinit();
                     this.init();
                     this.resetChanges();
                     this._resetEditColumnName();
