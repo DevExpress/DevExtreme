@@ -93,29 +93,17 @@ export function renderLabel({ text, id, location, alignment, labelID = null, mar
         return null;
     }
 
-    const $label = $('<label>')
+    return $('<label>')
         .addClass(FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location)
         .attr('for', id)
-        .attr('id', labelID);
-
-    const $labelContent = $('<span>')
-        .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-        .appendTo($label);
-
-    $labelContent.append(
-        $('<span>')
-            .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
-            .text(text)
-            .appendTo($labelContent)
-    );
-
-    $labelContent.append(_renderLabelMark(markOptions));
-
-    if(alignment) {
-        $label.css('textAlign', alignment);
-    }
-
-    return $label;
+        .attr('id', labelID)
+        .css('textAlign', alignment)
+        .append(
+            $('<span>').addClass(FIELD_ITEM_LABEL_CONTENT_CLASS).append(
+                $('<span>').addClass(FIELD_ITEM_LABEL_TEXT_CLASS).text(text),
+                _renderLabelMark(markOptions)
+            )
+        );
 }
 
 function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
