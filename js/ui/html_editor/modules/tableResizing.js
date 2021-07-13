@@ -518,6 +518,18 @@ export default class TableResizingModule extends BaseModule {
         });
     }
 
+    option(option, value) {
+        if(option === 'tableResizing') {
+            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+            return;
+        }
+
+        if(option === 'enabled') {
+            this.enabled = value;
+            value ? this._attachEvents() : this._detachEvents();
+        }
+    }
+
     clean() {
         this._removeResizeFrames(true);
         this._detachEvents();
