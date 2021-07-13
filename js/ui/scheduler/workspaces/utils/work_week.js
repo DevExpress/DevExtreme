@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { getViewStartByOptions, setOptionHour } from './base';
+import { getValidStartDate } from './week';
 const MONDAY_INDEX = 1;
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
@@ -30,7 +31,7 @@ export const calculateStartViewDate = (
         startDate,
         currentDate,
         intervalDuration,
-        dateUtils.getFirstWeekDate(startDate, firstDayOfWeek),
+        getValidStartDate(startDate, firstDayOfWeek),
     );
 
     const firstViewDate = dateUtils.getFirstWeekDate(viewStart, getFirstDayOfWeek(firstDayOfWeekOption));
