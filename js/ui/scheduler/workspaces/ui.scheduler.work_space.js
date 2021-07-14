@@ -1048,7 +1048,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             hiddenInterval: this._hiddenInterval,
             calculateCellIndex,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
-            cellCountInDay: this._getCellCountInDay(),
             startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
@@ -2058,7 +2057,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const validColumnIndex = columnIndex % this._getCellCount();
             const options = this._getDateGenerationOptions(true);
             let startDate = getDateByCellIndices(
-                options, rowIndex, validColumnIndex, options.calculateCellIndex,
+                options, rowIndex, validColumnIndex, options.calculateCellIndex, this._getCellCountInDay(),
             );
 
             startDate = dateUtils.trimTime(startDate);

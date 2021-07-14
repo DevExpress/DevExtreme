@@ -343,13 +343,21 @@ export class ViewDataGenerator {
         const {
             groups,
             tableAllDay,
+            startDayHour,
             endDayHour,
             interval,
+            hoursInterval,
         } = options;
 
         const groupsList = getAllGroups(groups);
 
-        const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
+        const startDate = getDateByCellIndices(
+            options,
+            rowIndex,
+            columnIndex,
+            this._calculateCellIndex,
+            this.getCellCountInDay(startDayHour, endDayHour, hoursInterval),
+        );
         const endDate = this.calculateEndDate(startDate, interval, endDayHour);
 
         const data = {
