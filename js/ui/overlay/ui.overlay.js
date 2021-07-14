@@ -264,7 +264,6 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        // this.option('copyRootClassesToWrapper') && this.option('wrapperAttr', { class: `${this.option('wrapperAttr').class} ${$element.attr('class')}` });
         this.option('copyRootClassesToWrapper') && this._$wrapper.addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
