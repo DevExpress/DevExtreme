@@ -38,23 +38,24 @@ import {
 import '../validation_summary';
 import '../validation_group';
 
-const FORM_CLASS = 'dx-form';
-const FIELD_ITEM_CLASS = 'dx-field-item';
-const FORM_GROUP_CLASS = 'dx-form-group';
-const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
-const FIELD_ITEM_CONTENT_HAS_GROUP_CLASS = 'dx-field-item-has-group';
-const FIELD_ITEM_CONTENT_HAS_TABS_CLASS = 'dx-field-item-has-tabs';
-const FORM_GROUP_WITH_CAPTION_CLASS = 'dx-form-group-with-caption';
-const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
-const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
-const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
-const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
-const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
-const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
-const GROUP_COL_COUNT_ATTR = 'group-col-count';
-const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
-const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
-const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
+import {
+    FORM_CLASS,
+    FIELD_ITEM_CLASS,
+    FORM_GROUP_CLASS,
+    FORM_GROUP_CONTENT_CLASS,
+    FIELD_ITEM_CONTENT_HAS_GROUP_CLASS,
+    FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
+    FORM_GROUP_WITH_CAPTION_CLASS,
+    FORM_GROUP_CAPTION_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
+    FIELD_ITEM_LABEL_CONTENT_CLASS,
+    FIELD_ITEM_TAB_CLASS,
+    FORM_FIELD_ITEM_COL_CLASS,
+    GROUP_COL_COUNT_CLASS,
+    GROUP_COL_COUNT_ATTR,
+    FIELD_ITEM_CONTENT_CLASS,
+    FORM_VALIDATION_SUMMARY,
+    ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
@@ -286,7 +287,12 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = getLabelWidthByText(this._getLabelText($labelTexts[i]), layoutManager, this._labelLocation());
+            labelWidth = getLabelWidthByText(
+                layoutManager._getRenderLabelOptions({
+                    text: this._getLabelText($labelTexts[i]),
+                    location: this._labelLocation(),
+                })
+            );
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }

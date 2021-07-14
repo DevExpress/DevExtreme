@@ -22,44 +22,44 @@ import Widget from '../widget/ui.widget';
 import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
 import { isMaterial } from '../themes';
+import {
+    FIELD_ITEM_CLASS,
+    FLEX_LAYOUT_CLASS,
+    LAYOUT_MANAGER_ONE_COLUMN,
+    FIELD_ITEM_OPTIONAL_CLASS,
+    FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_HELP_TEXT_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FORM_LAYOUT_MANAGER_CLASS,
+    LABEL_VERTICAL_ALIGNMENT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+    FIELD_ITEM_LABEL_ALIGN_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
+    FIELD_EMPTY_ITEM_CLASS,
+    FIELD_BUTTON_ITEM_CLASS,
+    SINGLE_COLUMN_ITEM_CONTENT,
+    ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
 import '../text_box';
 import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
+import { renderLabel } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
-const FIELD_ITEM_CLASS = 'dx-field-item';
-const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
-const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
-const FIELD_ITEM_REQUIRED_CLASS = 'dx-field-item-required';
-const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
 const FIELD_ITEM_REQUIRED_MARK_CLASS = 'dx-field-item-required-mark';
 const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
 const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
-const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
 const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
-const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
-const FIELD_ITEM_CONTENT_LOCATION_CLASS = 'dx-field-item-content-location-';
-const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
-const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
-const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
 
-const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
-const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
-
-const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
 const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
-const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
-const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
-
-const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
 
 const INVALID_CLASS = 'dx-invalid';
 
@@ -746,64 +746,20 @@ const LayoutManager = Widget.inherit({
         return labelOptions;
     },
 
-    _renderLabel: function(options) {
-        const { text, id, location, alignment, isRequired, labelID = null } = options;
-
-        if(isDefined(text) && text.length > 0) {
-            const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
-            const $label = $('<label>')
-                .addClass(labelClasses)
-                .attr('for', id)
-                .attr('id', labelID);
-
-            const $labelContent = $('<span>')
-                .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-                .appendTo($label);
-
-            $('<span>')
-                .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
-                .text(text)
-                .appendTo($labelContent);
-
-            if(alignment) {
-                $label.css('textAlign', alignment);
-            }
-
-            $labelContent.append(this._renderLabelMark(isRequired));
-
-            return $label;
-        }
+    _renderLabel: function(labelOptions) {
+        return renderLabel(this._getRenderLabelOptions(labelOptions));
     },
 
-    _renderLabelMark: function(isRequired) {
-        let $mark;
-        const requiredMarksConfig = this._getRequiredMarksConfig();
-        const isRequiredMark = requiredMarksConfig.showRequiredMark && isRequired;
-        const isOptionalMark = requiredMarksConfig.showOptionalMark && !isRequired;
-
-        if(isRequiredMark || isOptionalMark) {
-            const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
-            const markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
-
-            $mark = $('<span>')
-                .addClass(markClass)
-                .html('&nbsp' + markText);
-        }
-
-        return $mark;
-    },
-
-    _getRequiredMarksConfig: function() {
-        if(!this._cashedRequiredConfig) {
-            this._cashedRequiredConfig = {
-                showRequiredMark: this.option('showRequiredMark'),
-                showOptionalMark: this.option('showOptionalMark'),
+    _getRenderLabelOptions: function(labelOptions = {}) {
+        return {
+            ...labelOptions,
+            markOptions: {
+                isRequiredMark: this.option('showRequiredMark') && labelOptions.isRequired,
                 requiredMark: this.option('requiredMark'),
+                isOptionalMark: this.option('showOptionalMark') && !labelOptions.isRequired,
                 optionalMark: this.option('optionalMark')
-            };
-        }
-
-        return this._cashedRequiredConfig;
+            }
+        };
     },
 
     _renderEditor: function(options) {
