@@ -539,8 +539,8 @@ class Scheduler extends Widget {
                 value = dateUtils.trimTime(new Date(value));
                 this.option('selectedCellData', []);
                 this._workSpace.option(name, new Date(value));
-                this._header.option(name, new Date(value)); // TODO объеденить эта две опции, чтобы в шедулер передавать только одну
-                this._header.option('displayedDate', this._workSpace._getViewStartByOptions()); // если задана disaplayed date, то любое измененение currentDate не должно оказывать воздействие?
+                this._header.option(name, new Date(value));
+                this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
                 this._filterAppointmentsByDate();
 
                 this._postponeDataSourceLoading();
