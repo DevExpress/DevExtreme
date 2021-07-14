@@ -3,8 +3,10 @@ import ResizeObserver from 'ui/overlay/resize_observer';
 import { getWindow, setWindow } from 'core/utils/window';
 const window = getWindow();
 
+const TIME_TO_WAIT = 15;
+
 QUnit.testStart(function() {
-    const markup = '<div id="root"></div>';
+    const markup = '<div id="root" style="width: 200px;"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -37,6 +39,17 @@ QUnit.module('Resize observer', () => {
             this.callback.reset();
         }
     }, () => {
+        QUnit.test('"observe" call should not invoke callback immediately', function(assert) {
+            const observeHandled = assert.async();
+
+            this.observer.observe(this.$element.get(0));
+
+            setTimeout(() => {
+                assert.ok(this.callback.notCalled);
+                observeHandled();
+            }, TIME_TO_WAIT);
+        });
+
         QUnit.test('callback should be raised after observable element resize', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
@@ -48,9 +61,9 @@ QUnit.module('Resize observer', () => {
                 setTimeout(() => {
                     assert.ok(this.callback.called);
                     resizeHandled();
-                }, 100);
+                }, TIME_TO_WAIT);
                 observeHandled();
-            });
+            }, TIME_TO_WAIT);
         });
 
         QUnit.test('callback should be raised on element resize if it was unobserved', function(assert) {
@@ -65,7 +78,7 @@ QUnit.module('Resize observer', () => {
                 setTimeout(() => {
                     assert.ok(this.callback.notCalled);
                     resizeHandled();
-                }, 100);
+                }, TIME_TO_WAIT);
                 observeHandled();
             });
         });
@@ -82,7 +95,7 @@ QUnit.module('Resize observer', () => {
                 setTimeout(() => {
                     assert.ok(this.callback.notCalled);
                     resizeHandled();
-                }, 100);
+                }, TIME_TO_WAIT);
                 observeHandled();
             });
         });
@@ -102,20 +115,9 @@ QUnit.module('Resize observer', () => {
                     setTimeout(() => {
                         assert.ok(this.callback.calledOnce);
                         secondResizeHandled();
-                    }, 100);
+                    }, TIME_TO_WAIT);
                     firstResizeHandled();
-                }, 100);
-                observeHandled();
-            });
-        });
-
-        QUnit.test('"observe" call should not invoke callback immediately', function(assert) {
-            const observeHandled = assert.async();
-
-            this.observer.observe(this.$element.get(0));
-
-            setTimeout(() => {
-                assert.ok(this.callback.notCalled);
+                }, TIME_TO_WAIT);
                 observeHandled();
             });
         });
