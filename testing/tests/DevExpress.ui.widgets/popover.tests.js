@@ -2090,7 +2090,11 @@ QUnit.module('renderGeometry', () => {
         fixtures.simple.create();
         try {
             const $popover = $('#what');
-            const instance = new Popover($popover, { visible: true });
+            this.positionedHandlerStub = sinon.stub();
+            const instance = new Popover($popover, {
+                visible: true,
+                onPositioned: this.positionedHandlerStub
+            });
             const newOptions = {
                 boundaryOffset: { h: 40, v: 40 },
                 arrowPosition: {
@@ -2099,14 +2103,13 @@ QUnit.module('renderGeometry', () => {
                 },
                 arrowOffset: 24
             };
-            const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
             for(const optionName in newOptions) {
-                const initialCallCount = renderGeometrySpy.callCount;
+                const initialCallCount = this.positionedHandlerStub.callCount;
 
                 instance.option(optionName, newOptions[optionName]);
 
-                assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
+                assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
             }
         } finally {
             fixtures.simple.drop();

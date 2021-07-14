@@ -1189,39 +1189,40 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
+        const positionedHandlerStub = sinon.stub();
+        this.instance.on('positioned', positionedHandlerStub);
 
         this.instance.option('toolbarItems[0].visible', true);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for visibility option');
 
         this.instance.option('toolbarItems', [{
             widget: 'dxButton',
             options: { text: 'Supprimer', type: 'danger' }
         }]);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
 
         this.instance.option('toolbarItems[0]', {
             widget: 'dxButton',
             options: { text: 'Supprimer', type: 'danger' }
         });
 
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
     });
 
 
     QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+        const positionedHandlerStub = sinon.stub();
         this.instance.option({
             visible: true,
             toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
         });
-
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
+        this.instance.on('positioned', positionedHandlerStub);
 
         this.instance.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+        assert.ok(positionedHandlerStub.notCalled, 'renderGeometry is not called on partial update of a widget');
 
         this.instance.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+        assert.ok(positionedHandlerStub.calledOnce, 'renderGeometry is called on item location changing');
     });
 
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
@@ -1845,8 +1846,10 @@ QUnit.module('templates', () => {
 
 QUnit.module('renderGeometry', () => {
     QUnit.test('option change', function(assert) {
+        this.positionedHandlerStub = sinon.stub();
         const instance = $('#popup').dxPopup({
-            visible: true
+            visible: true,
+            onPositioned: this.positionedHandlerStub
         }).dxPopup('instance');
         const options = instance.option();
         const newOptions = {
@@ -1859,14 +1862,13 @@ QUnit.module('renderGeometry', () => {
             useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
             useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
-        const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
         for(const optionName in newOptions) {
-            const initialCallCount = renderGeometrySpy.callCount;
+            const initialCallCount = this.positionedHandlerStub.callCount;
 
             instance.option(optionName, newOptions[optionName]);
 
-            assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
+            assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
         }
 
         instance.hide();
