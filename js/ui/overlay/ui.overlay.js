@@ -994,6 +994,7 @@ const Overlay = Widget.inherit({
 
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
+        this._renderGeometry();
 
         this._actions.onResizeEnd();
     },

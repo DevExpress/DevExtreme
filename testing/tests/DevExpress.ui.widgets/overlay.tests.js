@@ -4254,7 +4254,7 @@ QUnit.module('resizeObserver integration', {
         });
     });
 
-    test('resize end should not trigger geometry rendering', function(assert) {
+    test('resize end should trigger the single geometry rendering', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
         const $overlay = $('#overlay').dxOverlay({
@@ -4273,7 +4273,7 @@ QUnit.module('resizeObserver integration', {
         setTimeout(() => {
             pointer.start().dragStart().drag(10, 10).dragEnd();
             setTimeout(() => {
-                assert.ok(positionedHandlerStub.notCalled);
+                assert.ok(positionedHandlerStub.calledOnce);
                 resizeOnDraggingDone();
             }, 100);
             resizeOnOpeningDone();
