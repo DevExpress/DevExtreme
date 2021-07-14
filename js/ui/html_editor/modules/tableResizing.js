@@ -40,21 +40,27 @@ export default class TableResizingModule extends BaseModule {
         }
     }
 
-    _applyResizing() {
-        this.editorInstance.addContentInitializedCallback(() => {
-            const $tables = this._findTables();
-            if($tables.length) {
-                this._fixTablesWidths($tables);
-                this._createResizeFrames($tables);
-                this._updateFramesPositions();
-                this._updateFramesSeparators();
-            }
-
-            this._attachEvents();
-        });
+    _applyResizing(forcedStart) {
+        if(forcedStart) {
+            this._applyResizingImpl();
+        } else {
+            this.editorInstance.addContentInitializedCallback(this._applyResizingImpl.bind(this));
+        }
 
         this.addCleanCallback(this.clean.bind(this));
         this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+    }
+
+    _applyResizingImpl() {
+        const $tables = this._findTables();
+        if($tables.length) {
+            this._fixTablesWidths($tables);
+            this._createResizeFrames($tables);
+            this._updateFramesPositions();
+            this._updateFramesSeparators();
+        }
+
+        this._attachEvents();
     }
 
     _attachEvents() {
@@ -629,7 +635,9 @@ export default class TableResizingModule extends BaseModule {
 
         if(option === 'enabled') {
             this.enabled = value;
-            value ? this._attachEvents() : this.clean();
+            value ? this._applyResizing(true) : this.clean();
+        } else if(option === 'minColumnWidth' || option === 'minRowHeight') {
+            this['_' + option] = value;
         }
     }
 

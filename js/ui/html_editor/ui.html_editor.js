@@ -415,6 +415,22 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
+    _getModuleNameByOption: function() {
+        return this._$htmlContainer;
+    },
+
+    _tableResizingOptionChanged: function(args) {
+        const optionData = args.fullName?.split('.');
+        const optionName = optionData.length === 2 ? optionData[1] : args.name;
+        const shouldPassOptionsToModule = optionData.length === 2 || (args.previousValue && args.value);
+
+        if(shouldPassOptionsToModule) {
+            this._quillInstance.getModule('tableResizing').option(optionName, args.value);
+        } else {
+            this._invalidate();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value':
@@ -437,9 +453,11 @@ const HtmlEditor = Editor.inherit({
             case 'variables':
             case 'toolbar':
             case 'mentions':
-            case 'tableResizing':
             case 'customizeModules':
                 this._invalidate();
+                break;
+            case 'tableResizing':
+                this._tableResizingOptionChanged(args);
                 break;
             case 'valueType': {
                 this._prepareConverters();
