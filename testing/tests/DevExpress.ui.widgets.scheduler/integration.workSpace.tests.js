@@ -57,32 +57,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('currentDate'), new Date(2015, 1, 28), 'Work space has a right currentDate option');
     });
 
-    test('Work space should have correct min option', function(assert) {
-        const scheduler = createWrapper({
-            min: new Date(2015, 0, 28)
-        });
-        const $element = scheduler.instance.$element();
-
-        assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('min'), new Date(2015, 0, 28), 'Work space has a right currentDate option');
-
-        scheduler.instance.option('min', new Date(2015, 1, 28));
-
-        assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('min'), new Date(2015, 1, 28), 'Work space has a right currentDate option');
-    });
-
-    test('Work space should have correct max option', function(assert) {
-        const scheduler = createWrapper({
-            max: new Date(2015, 0, 28)
-        });
-        const $element = scheduler.instance.$element();
-
-        assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('max'), new Date(2015, 0, 28), 'Work space has a right currentDate option');
-
-        scheduler.instance.option('max', new Date(2015, 1, 28));
-
-        assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('max'), new Date(2015, 1, 28), 'Work space has a right currentDate option');
-    });
-
     test('Work space should have correct firstDayOfWeek option', function(assert) {
         const scheduler = createWrapper({
             currentView: 'week',

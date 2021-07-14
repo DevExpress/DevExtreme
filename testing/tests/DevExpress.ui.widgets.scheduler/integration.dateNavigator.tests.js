@@ -195,8 +195,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-next')).trigger('dxclick');
 
-        const workspace = this.instance.getWorkSpace();
-        assert.deepEqual(workspace._startViewDate, new Date(2017, 4, 3, 8, 0), 'New date is correct');
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 4, 3, 8, 0), 'New date is correct');
     });
 
     QUnit.test('Click on the \'previous\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', function(assert) {
@@ -214,8 +213,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-previous')).trigger('dxclick');
 
-        const workspace = this.instance.getWorkSpace();
-        assert.deepEqual(workspace._startViewDate, new Date(2017, 3, 27, 8, 0), 'New date is correct');
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 3, 27, 8, 0), 'New date is correct');
     });
 
     QUnit.test('Caption should be correct when intervalCount & startDate are set, month view', function(assert) {

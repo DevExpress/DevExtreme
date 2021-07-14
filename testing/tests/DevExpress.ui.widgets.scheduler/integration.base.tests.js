@@ -215,15 +215,12 @@ QUnit.test('The \'min\' option should be converted to Date obj before send to wo
         min: date.getTime()
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    this.compareDates(workSpace.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 
     date = new Date(1425243600000);
     this.instance.option('min', date.getTime());
-    this.compareDates(workSpace.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
@@ -233,15 +230,12 @@ QUnit.test('The \'max\' option should be converted to Date obj before send to wo
         max: date.getTime()
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    this.compareDates(workSpace.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 
     date = new Date(1425243600000);
     this.instance.option('max', date.getTime());
-    this.compareDates(workSpace.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
@@ -308,15 +302,12 @@ QUnit.test('max option should be parsed with ISO8601 dates before sending to wor
         max: '20170209'
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    assert.deepEqual(workSpace.option('max'), new Date(2017, 1, 9), 'max is OK');
     assert.deepEqual(header.option('max'), new Date(2017, 1, 9), 'max is OK');
 
     this.instance.option('max', '20170210');
 
-    assert.deepEqual(workSpace.option('max'), new Date(2017, 1, 10), 'max is OK after option change');
     assert.deepEqual(header.option('max'), new Date(2017, 1, 10), 'max is OK  after option change');
 });
 
@@ -328,14 +319,11 @@ QUnit.test('min option should be parsed with ISO8601 dates before sending to wor
         min: '20170207'
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    assert.deepEqual(workSpace.option('min'), new Date(2017, 1, 7), 'min is OK');
     assert.deepEqual(header.option('min'), new Date(2017, 1, 7), 'min is OK');
 
     this.instance.option('min', '20170206');
 
-    assert.deepEqual(workSpace.option('min'), new Date(2017, 1, 6), 'min is OK after option change');
     assert.deepEqual(header.option('min'), new Date(2017, 1, 6), 'min is OK  after option change');
 });
