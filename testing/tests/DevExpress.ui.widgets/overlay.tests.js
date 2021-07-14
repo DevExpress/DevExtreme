@@ -3894,8 +3894,11 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
-        this.overlayInstance = $('#overlay').dxOverlay({ deferRendering: false }).dxOverlay('instance');
-        this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
+        this.positionedHandlerStub = sinon.stub();
+        this.overlayInstance = $('#overlay').dxOverlay({
+            deferRendering: false,
+            onPositioned: this.positionedHandlerStub
+        }).dxOverlay('instance');
     },
     afterEach: function() {
         zIndex.clearStack();
@@ -3904,24 +3907,24 @@ testModule('renderGeometry', {
     }
 }, () => {
     test('visibility change', function(assert) {
-        assert.ok(this.renderGeometrySpy.notCalled, 'render geometry isn\'t called yet');
+        assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
 
         this.overlayInstance.show();
-        assert.ok(this.renderGeometrySpy.calledOnce, 'render geometry called once');
+        assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
     });
 
     test('dimension change', function(assert) {
         this.overlayInstance.show();
         resizeCallbacks.fire();
 
-        assert.strictEqual(this.renderGeometrySpy.callCount, 2);
+        assert.strictEqual(this.positionedHandlerStub.callCount, 2);
     });
 
     test('repaint', function(assert) {
         this.overlayInstance.show();
         this.overlayInstance.repaint();
 
-        assert.strictEqual(this.renderGeometrySpy.callCount, 2);
+        assert.strictEqual(this.positionedHandlerStub.callCount, 2);
     });
 
     test('option change', function(assert) {
@@ -3941,11 +3944,11 @@ testModule('renderGeometry', {
         this.overlayInstance.show();
 
         for(const optionName in newOptions) {
-            const initialCallCount = this.renderGeometrySpy.callCount;
+            const initialCallCount = this.positionedHandlerStub.callCount;
 
             this.overlayInstance.option(optionName, newOptions[optionName]);
 
-            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
+            assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
         }
     });
 });
