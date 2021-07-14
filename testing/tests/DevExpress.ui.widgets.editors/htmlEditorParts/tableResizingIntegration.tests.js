@@ -769,12 +769,12 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')), $table.find('tr:first-child').find('td:first-child').outerHeight(), 3);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.find('tr:first-child').find('td:first-child').outerHeight(), 3.01);
 
             pointerMockInstance.dragEnd();
         });
 
-        test('Table highlighted element position is limited by minRowHeight option while the row has content-based height 2', function(assert) {
+        test('Table highlighted element position is limited by minRowHeight option while the row has content-based height after last column drag', function(assert) {
             this.createWidget({
                 height: 300,
                 width: 430,
@@ -800,7 +800,7 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3.01);
 
             pointerMockInstance.dragEnd();
         });
