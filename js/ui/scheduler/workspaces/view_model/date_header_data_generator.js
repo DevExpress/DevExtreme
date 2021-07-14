@@ -84,6 +84,9 @@ export class DateHeaderDataGenerator {
             intervalCount, currentDate, viewType,
             hoursInterval, startDayHour, endDayHour,
         });
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(
+            startDayHour, endDayHour, hoursInterval,
+        );
 
         const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
@@ -105,9 +108,7 @@ export class DateHeaderDataGenerator {
                     interval,
                     startViewDate,
                     startDayHour,
-                    cellCountInDay: this._viewDataGenerator.getCellCountInDay(
-                        startDayHour, endDayHour, hoursInterval,
-                    ),
+                    cellCountInDay,
                 },
             );
 
