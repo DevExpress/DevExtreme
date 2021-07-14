@@ -1253,14 +1253,16 @@ const Overlay = Widget.inherit({
 
     _renderDimensions: function() {
         const content = this._$content.get(0);
+        const haveWindow = hasWindow();
+
         let isContentResized = false;
         ['width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach(dimension => {
-            const initialValue = this._$content.css(dimension);
             const newValue = this._getOptionValue(dimension, content);
-            if(initialValue !== newValue) {
-                this._$content.css(dimension, newValue);
-                isContentResized = true;
+            if(haveWindow) {
+                const initialValue = this._$content.css(dimension);
+                isContentResized = initialValue !== newValue;
             }
+            this._$content.css(dimension, newValue);
         });
 
         if(isContentResized) {
