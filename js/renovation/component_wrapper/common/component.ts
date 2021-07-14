@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   render, createRef, RefObject, VNode, Component,
 } from 'inferno';
@@ -524,3 +525,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 /// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
 /// #ENDDEBUG
+
+/* eslint-enable @typescript-eslint/ban-types */
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */
