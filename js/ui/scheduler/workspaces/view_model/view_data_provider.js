@@ -50,7 +50,7 @@ export default class ViewDataProvider {
 
         const viewDataGenerator = this.viewDataGenerator;
         const dateHeaderDataGenerator = new DateHeaderDataGenerator(viewDataGenerator);
-        const timePanelDataGenerator = new TimePanelDataGenerator();
+        const timePanelDataGenerator = new TimePanelDataGenerator(viewDataGenerator);
 
         const renderOptions = this._transformRenderOptions(options);
 

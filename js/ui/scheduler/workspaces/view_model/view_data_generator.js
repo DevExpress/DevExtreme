@@ -15,7 +15,6 @@ export class ViewDataGenerator {
 
     getCompleteViewDataMap(options) {
         const {
-            rowCountInGroup,
             groups,
             isGroupedByDate,
             isHorizontalGrouping,
@@ -37,6 +36,14 @@ export class ViewDataGenerator {
             startDayHour,
             endDayHour,
             hoursInterval,
+        });
+        const rowCountInGroup = this.getRowCount({
+            intervalCount,
+            currentDate,
+            viewType,
+            hoursInterval,
+            startDayHour,
+            endDayHour,
         });
 
         let viewDataMap = [];
@@ -442,7 +449,6 @@ export class ViewDataGenerator {
     _isFirstGroupCell(rowIndex, columnIndex, options) {
         const {
             groupOrientation,
-            rowCountInGroup,
             groups,
             isGroupedByDate,
             intervalCount,
@@ -462,6 +468,14 @@ export class ViewDataGenerator {
             endDayHour,
             hoursInterval,
         });
+        const rowCountInGroup = this.getRowCount({
+            intervalCount,
+            currentDate,
+            viewType,
+            hoursInterval,
+            startDayHour,
+            endDayHour,
+        });
 
         if(isGroupedByDate) {
             return columnIndex % groupCount === 0;
@@ -477,7 +491,6 @@ export class ViewDataGenerator {
     _isLastGroupCell(rowIndex, columnIndex, options) {
         const {
             groupOrientation,
-            rowCountInGroup,
             groups,
             isGroupedByDate,
             intervalCount,
@@ -496,6 +509,14 @@ export class ViewDataGenerator {
             startDayHour,
             endDayHour,
             hoursInterval,
+        });
+        const rowCountInGroup = this.getRowCount({
+            intervalCount,
+            currentDate,
+            viewType,
+            hoursInterval,
+            startDayHour,
+            endDayHour,
         });
 
         if(isGroupedByDate) {

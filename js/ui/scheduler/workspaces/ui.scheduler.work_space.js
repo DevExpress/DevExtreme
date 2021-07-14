@@ -618,7 +618,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     generateRenderOptions(isProvideVirtualCellsWidth) {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
-        const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
         const rowCount = this._getTotalRowCount(groupCount, isVerticalGrouping);
@@ -628,7 +627,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const options = {
             groupByDate: this.option('groupByDate'),
-            rowCountInGroup,
             cellCount,
             startRowIndex: 0,
             startCellIndex: 0,
