@@ -159,7 +159,8 @@ $transparent-border: 1px solid transparent;
     border-collapse: collapse;
   }
 
-  td {
+  td,
+  th {
     border: 1px solid #000;
     padding: 2px 5px;
   }
@@ -249,7 +250,8 @@ $transparent-border: 1px solid transparent;
     table-layout: fixed;
     width: 100%;
 
-    td {
+    td,
+    th {
       outline: none;
     }
   }
