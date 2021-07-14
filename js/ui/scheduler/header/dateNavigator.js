@@ -123,21 +123,21 @@ const getNextButtonOptions = (header) => {
 const isPreviousButtonDisabled = (header) => {
     let min = header.option('min');
 
+    if(!min) return false;
+
     const date = header.date;
     const caption = header._getCaption(date);
 
     min = min ? trimTime(min) : min;
 
-    if(min) {
-        const previousDate = header._getNextDate(-1, caption.endDate);
-        return previousDate < min;
-    }
-
-    return false;
+    const previousDate = header._getNextDate(-1, caption.endDate);
+    return previousDate < min;
 };
 
 const isNextButtonDisabled = (header) => {
     let max = header.option('max');
+
+    if(!max) return false;
 
     const date = header.date;
     const caption = header._getCaption(date);
@@ -145,10 +145,6 @@ const isNextButtonDisabled = (header) => {
     max = max ? trimTime(max) : max;
     max && max.setHours(23, 59, 59);
 
-    if(max) {
-        const nextDate = header._getNextDate(1, caption.startDate);
-        return nextDate > max;
-    }
-
-    return false;
+    const nextDate = header._getNextDate(1, caption.startDate);
+    return nextDate > max;
 };
