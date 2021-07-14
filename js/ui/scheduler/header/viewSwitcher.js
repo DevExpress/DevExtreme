@@ -9,14 +9,7 @@ const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdow
 export const getViewSwitcher = (header, item) => {
     const selectedView = getViewName(header.currentView);
 
-    let items = formatViews(header.views);
-
-    items = items.map(item => {
-        return {
-            ...item,
-            width: '100px',
-        };
-    });
+    const items = formatViews(header.views);
 
     return {
         ...item,
@@ -27,10 +20,9 @@ export const getViewSwitcher = (header, item) => {
             items,
             keyExpr: 'name',
             selectedItemKeys: [selectedView],
-            stylingMode: 'text',
-            height: '55px',
+            stylingMode: 'outlined',
             onItemClick: (e) => {
-                const view = e.itemData;
+                const view = e.itemData.view;
 
                 header._updateCurrentView(view);
             },
@@ -66,7 +58,7 @@ export const getDropDownViewSwitcher = (header, item) => {
                 class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
             },
             onItemClick: (e) => {
-                const view = e.itemData;
+                const view = e.itemData.view;
 
                 header._updateCurrentView(view);
             },

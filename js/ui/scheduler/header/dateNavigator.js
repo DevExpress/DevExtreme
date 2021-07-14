@@ -5,8 +5,7 @@ const { trimTime } = dateUtils;
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 
 const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
-const CALENDAR_CAPTION_CLASS = 'dx-scheduler-navigator-caption';
-const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-calendar-button';
+const CALENDAR_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
 const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
 
 const DIRECTION_LEFT = -1;
@@ -66,7 +65,7 @@ const getCalendarButtonOptions = (header) => {
     return {
         key: 'calendar',
         text: header.captionText,
-        elementAttr: { class: `${CALENDAR_CAPTION_CLASS} ${CALENDAR_BUTTON_CLASS}` },
+        elementAttr: { class: CALENDAR_BUTTON_CLASS },
         clickHandler: (e) => header._showCalendar(e),
         onContentReady: (e) => {
             const calendarButton = e.component;

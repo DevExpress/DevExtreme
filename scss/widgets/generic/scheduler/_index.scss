@@ -199,59 +199,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-header {
   background-color: $scheduler-header-bg;
-  border: baseScheduler.$scheduler-base-border;
   height: $generic-scheduler-header-height;
-
-  .dx-toolbar-items-container {
-    .dx-scheduler-view-switcher {
-      font-size: $generic-scheduler-view-switcher-font-size;
-
-      .dx-toolbar-item-content {
-        .dx-buttongroup {
-          .dx-button {
-            position: relative;
-
-            &.dx-item-selected::after,
-            &.dx-state-focused::after {
-              content: "";
-              position: absolute;
-              height: 100%;
-              right: -1px;
-              left: -1px;
-              bottom: -1px;
-              z-index: 1;
-              border-left: baseScheduler.$scheduler-base-border;
-              border-right: baseScheduler.$scheduler-base-border;
-            }
-
-            &.dx-item-selected {
-              background-color: $scheduler-tab-selected-bg;
-
-              &::before {
-                position: absolute;
-                bottom: -2px;
-                width: 100%;
-                height: 2px;
-                content: "";
-                right: 0;
-                background-color: $scheduler-tab-selected-before-bg;
-              }
-            }
-
-            &.dx-state-focused::after {
-              top: -1px;
-              border-top: $generic-scheduler-focused-tab-border;
-              border-bottom: none;
-            }
-
-            &.dx-state-hover {
-              background-color: $scheduler-tab-selected-bg;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .dx-scheduler-header-panel { // stylelint-disable-line no-duplicate-selectors

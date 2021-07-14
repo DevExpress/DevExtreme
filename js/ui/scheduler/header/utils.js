@@ -381,6 +381,6 @@ export const formatViews = (views) => {
         const type = getViewType(view);
         const name = getViewName(view);
 
-        return { text, type, name };
+        return { text, name, view: { text, type, name } };
     });
 };

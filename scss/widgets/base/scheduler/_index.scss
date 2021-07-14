@@ -559,6 +559,7 @@ $arrow-down: "\f016";
   }
 
   .dx-scheduler-header {
+    border: $scheduler-base-border;
     position: relative;
     z-index: 1;
     width: 100%;
@@ -568,40 +569,14 @@ $arrow-down: "\f016";
       background-color: transparent;
 
       .dx-toolbar-items-container {
-        .dx-scheduler-navigator {
-          padding: $scheduler-navigator-offset;
-
-          .dx-button {
-            &.dx-item-selected:not(.dx-state-focused) {
-              background-color: white;
-            }
-
-            .dx-button-content {
-              @include use-flex-center();
-            }
-          }
-
-          .dx-buttongroup-wrapper {
-            .dx-scheduler-navigator-calendar-button {
-              width: $scheduler-navigator-caption-width;
-            }
-          }
-        }
+        height: 100%;
       }
 
-      .dx-scheduler-view-switcher {
-        .dx-scheduler-view-switcher-dropdown-button {
-          margin: $scheduler-switcher-offset;
-        }
-
-        .dx-button-content {
-          @include use-flex-center();
-        }
+      .dx-toolbar-item-content {
+        padding: $scheduler-navigator-offset;
       }
 
       .dx-toolbar-menu-container {
-        padding: $toolbar-menu-container-offset;
-
         .dx-icon::before {
           content: $arrow-down;
         }

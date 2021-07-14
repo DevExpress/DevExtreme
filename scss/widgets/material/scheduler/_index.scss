@@ -397,63 +397,20 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header {
   background-color: $scheduler-header-bg;
-  border: baseScheduler.$scheduler-base-border;
+  height: $material-scheduler-header-height;
 
-  .dx-button-text {
-    text-transform: none;
+  .dx-button {
+    @include dx-button-flat-color-styling(
+      $button-default-bg,
+      $button-default-text-hover-bg,
+      $button-default-text-focused-bg,
+      $button-default-text-active-bg
+    );
   }
 
-  .dx-toolbar-items-container {
-    height: $material-scheduler-header-height;
-
-    .dx-scheduler-navigator {
-      padding: ($material-scheduler-header-height - $material-scheduler-navigator-height) * 0.5;
-
-      .dx-button {
-        @include dx-button-flat-color-styling(
-          $button-default-bg,
-          $button-default-text-hover-bg,
-          $button-default-text-focused-bg,
-          $button-default-text-active-bg
-        );
-      }
-    }
-
-    .dx-scheduler-view-switcher {
-      .dx-dropdownbutton {
-        background-color: rgba(0, 0, 0, 0.05);
-        border-radius: $base-border-radius;
-
-        .dx-button {
-          border: 0;
-
-          .dx-button-content {
-            padding: 6px;
-          }
-        }
-
-        .dx-button:first-child {
-          .dx-button-content {
-            padding-left: 14px;
-            padding-right: 8px;
-          }
-
-          &.dx-state-hover,
-          &.dx-state-focused {
-            background-color: transparent;
-          }
-        }
-
-        .dx-button:last-child {
-          &.dx-state-hover {
-            background-color: color.change($button-normal-bg-inverted, $alpha: 0.08);
-          }
-
-          .dx-icon::before {
-            content: baseScheduler.$arrow-down;
-          }
-        }
-      }
+  .dx-scheduler-view-switcher {
+    .dx-icon::before {
+      content: baseScheduler.$arrow-down;
     }
   }
 }
