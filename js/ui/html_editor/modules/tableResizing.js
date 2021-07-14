@@ -29,8 +29,8 @@ export default class TableResizingModule extends BaseModule {
         super(quill, options);
         this.enabled = !!options.enabled;
         this._tableResizeFrames = [];
-        this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
-        this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_ROW_HEIGHT;
+        this._minColumnWidth = this._minSizeLimit('minColumnWidth', options.minColumnWidth);
+        this._minRowHeight = this._minSizeLimit('minRowHeight', options.minRowHeight);
         this._quillContainer = this.editorInstance._getQuillContainer();
         this._tableData = [];
 
@@ -48,6 +48,14 @@ export default class TableResizingModule extends BaseModule {
 
         this.addCleanCallback(this.clean.bind(this));
         this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+    }
+
+    _minSizeLimit(property, newValue) {
+        if(isDefined(newValue)) {
+            return Math.max(newValue, 0);
+        } else {
+            return property === 'minColumnWidth' ? DEFAULT_MIN_COLUMN_WIDTH : DEFAULT_MIN_ROW_HEIGHT;
+        }
     }
 
     _applyResizingImpl() {
@@ -471,7 +479,7 @@ export default class TableResizingModule extends BaseModule {
 
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
-            $(element).attr('width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH) + 'px');
+            $(element).attr('width', Math.max(columnWidth, this._minColumnWidth) + 'px');
         });
     }
 
@@ -538,7 +546,7 @@ export default class TableResizingModule extends BaseModule {
             this.enabled = value;
             value ? this._applyResizing(true) : this.clean();
         } else if(option === 'minColumnWidth' || option === 'minRowHeight') {
-            this['_' + option] = value;
+            this[`_${option}`] = this._minSizeLimit(option, value);
         }
     }
 
