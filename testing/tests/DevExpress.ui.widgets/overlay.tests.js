@@ -477,6 +477,24 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
     });
 
+    test('resize should change overlay width/height options value', function(assert) {
+        const instance = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true,
+            width: 100,
+            height: 100
+        }).dxOverlay('instance');
+
+        const $content = $(instance.$content());
+        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(10, 10).dragEnd();
+
+        assert.strictEqual(instance.option('width'), 110, 'width is correct');
+        assert.strictEqual(instance.option('height'), 110, 'height is correct');
+    });
+
     testModule('wrapperAttr option', {
         beforeEach: function() {
             this.overlay = $('#overlay').dxOverlay({
@@ -3897,8 +3915,22 @@ testModule('renderGeometry', {
         this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
+            dragEnabled: false,
+            resizeEnabled: false,
             onPositioned: this.positionedHandlerStub
         }).dxOverlay('instance');
+        this.checkNoExcessResizeHandle = (assert) => {
+            const done = assert.async();
+            const initialPositionHandlerCallCount = this.positionedHandlerStub.callCount;
+            setTimeout(() => {
+                assert.strictEqual(
+                    this.positionedHandlerStub.callCount,
+                    initialPositionHandlerCallCount,
+                    'no resize observer callback was raised'
+                );
+                done();
+            });
+        };
     },
     afterEach: function() {
         zIndex.clearStack();
@@ -3909,46 +3941,71 @@ testModule('renderGeometry', {
     test('visibility change', function(assert) {
         assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
 
+        const showingResizeHandled = assert.async();
         this.overlayInstance.show();
-        assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
+
+        setTimeout(() => {
+            assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
+            this.checkNoExcessResizeHandle(assert);
+            showingResizeHandled();
+        });
     });
 
-    test('dimension change', function(assert) {
+    test('window resize', function(assert) {
+        const showingResizeHandled = assert.async();
         this.overlayInstance.show();
-        resizeCallbacks.fire();
 
-        assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+        setTimeout(() => {
+            resizeCallbacks.fire();
+            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            showingResizeHandled();
+        });
     });
 
     test('repaint', function(assert) {
+        const showingResizeHandled = assert.async();
         this.overlayInstance.show();
-        this.overlayInstance.repaint();
 
-        assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+        setTimeout(() => {
+            this.overlayInstance.repaint();
+            assert.strictEqual(this.positionedHandlerStub.callCount, 2);
+            showingResizeHandled();
+        });
     });
 
-    test('option change', function(assert) {
-        const options = this.overlayInstance.option();
+    QUnit.module('option change', {
+        // NOTE: option change can invoke '_renderGeometry' or 'invalidate'
+        // and also resize callback can be called after that.
+        // Not all appropriate options change is tested.
+
+        beforeEach: function() {
+            this.overlayInstance.show();
+        }
+    }, () => {
         const newOptions = {
-            dragEnabled: !options.dragEnabled,
-            resizeEnabled: !options.resizeEnabled,
+            dragEnabled: true,
+            resizeEnabled: true,
             width: 500,
             height: 500,
-            minWidth: 100,
-            maxWidth: 1000,
-            minHeight: 100,
-            maxHeight: 1000,
+            minWidth: 2000,
+            maxWidth: 10,
+            minHeight: 2000,
+            maxHeight: 10,
             boundaryOffset: { h: 10, v: 10 },
-            position: { of: this.overlayInstance.element() }
+            position: { of: 'body' }
         };
-        this.overlayInstance.show();
-
         for(const optionName in newOptions) {
-            const initialCallCount = this.positionedHandlerStub.callCount;
+            test(optionName, function(assert) {
+                // eslint-disable-next-line qunit/no-async-in-loops
+                const showingResizeHandled = assert.async();
+                setTimeout(() => {
+                    this.overlayInstance.option(optionName, newOptions[optionName]);
 
-            this.overlayInstance.option(optionName, newOptions[optionName]);
-
-            assert.ok(initialCallCount < this.positionedHandlerStub.callCount, 'renderGeomentry callCount has increased');
+                    assert.strictEqual(this.positionedHandlerStub.callCount, 2, 'renderGeomentry called 2 times');
+                    this.checkNoExcessResizeHandle(assert);
+                    showingResizeHandled();
+                });
+            });
         }
     });
 });
@@ -4109,7 +4166,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
     });
 });
 
-QUnit.module('resizeObserver integraion', {
+QUnit.module('resizeObserver integration', {
     beforeEach: function() {
         fx.off = true;
     },
@@ -4197,7 +4254,7 @@ QUnit.module('resizeObserver integraion', {
         });
     });
 
-    test('resize end should trigger the single geometry rendering', function(assert) {
+    test('resize end should not trigger geometry rendering', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
         const $overlay = $('#overlay').dxOverlay({
@@ -4213,11 +4270,10 @@ QUnit.module('resizeObserver integraion', {
         const positionedHandlerStub = sinon.stub();
         overlay.on('positioned', positionedHandlerStub);
 
-
         setTimeout(() => {
-            pointer.start().dragStart().drag(10).dragEnd();
+            pointer.start().dragStart().drag(10, 10).dragEnd();
             setTimeout(() => {
-                assert.ok(positionedHandlerStub.calledOnce);
+                assert.ok(positionedHandlerStub.notCalled);
                 resizeOnDraggingDone();
             }, 100);
             resizeOnOpeningDone();
