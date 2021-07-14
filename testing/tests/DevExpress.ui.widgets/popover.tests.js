@@ -2106,9 +2106,7 @@ QUnit.module('renderGeometry', () => {
 
                 instance.option(optionName, newOptions[optionName]);
 
-                const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
                 assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-                assert.notOk(isDimensionChanged);
             }
         } finally {
             fixtures.simple.drop();

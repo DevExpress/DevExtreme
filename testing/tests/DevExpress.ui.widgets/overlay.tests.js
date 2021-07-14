@@ -3908,25 +3908,20 @@ testModule('renderGeometry', {
 
         this.overlayInstance.show();
         assert.ok(this.renderGeometrySpy.calledOnce, 'render geometry called once');
-
-        const isDimensionChanged = !!this.renderGeometrySpy.getCall(0).args[0];
-        assert.notOk(isDimensionChanged);
     });
 
     test('dimension change', function(assert) {
         this.overlayInstance.show();
         resizeCallbacks.fire();
 
-        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
-        assert.ok(isDimensionChanged);
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2);
     });
 
     test('repaint', function(assert) {
         this.overlayInstance.show();
         this.overlayInstance.repaint();
 
-        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
-        assert.notOk(isDimensionChanged);
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2);
     });
 
     test('option change', function(assert) {
@@ -3950,9 +3945,7 @@ testModule('renderGeometry', {
 
             this.overlayInstance.option(optionName, newOptions[optionName]);
 
-            const isDimensionChanged = !!this.renderGeometrySpy.lastCall.args[0];
             assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-            assert.notOk(isDimensionChanged);
         }
     });
 });

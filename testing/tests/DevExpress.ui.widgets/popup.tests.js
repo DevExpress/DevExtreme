@@ -653,26 +653,36 @@ QUnit.module('dimensions', {
         });
     });
 
-    QUnit.test('popup should be repositioned correctly after change height from static to "auto"', function(assert) {
-        const getCenterY = (rect) => {
-            return (rect.bottom + rect.top) / 2;
-        };
+    QUnit.module('popup should be repositioned correctly after change height', {
+        beforeEach: function() {
+            this.getCenterY = (rect) => {
+                return (rect.bottom + rect.top) / 2;
+            };
+            this.popup = $('#popup').dxPopup({
+                visible: true,
+                height: 500,
+                contentTemplate: function($container) {
+                    return $('<div>').height(100);
+                }
+            }).dxPopup('instance');
 
-        const popup = $('#popup').dxPopup({
-            visible: true,
-            height: 500,
-            contentTemplate: function($container) {
-                return $('<div>').height(100);
-            }
-        }).dxPopup('instance');
+            this.contentElement = this.popup.$content().get(0);
+            this.initialContentRect = this.contentElement.getBoundingClientRect();
+        }
+    }, () => {
+        QUnit.test('from static to "auto"', function(assert) {
+            this.popup.option('height', 'auto');
 
-        const contentElement = popup.$content().get(0);
-        const initialContentRect = contentElement.getBoundingClientRect();
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
 
-        popup.option('height', 'auto');
+        QUnit.test('from static to function which returns "auto"', function(assert) {
+            this.popup.option('height', () => 'auto');
 
-        const contentRect = contentElement.getBoundingClientRect();
-        assert.roughEqual(getCenterY(contentRect), getCenterY(initialContentRect), 0.51, 'popup is repositioned correctly');
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
     });
 });
 
@@ -1856,9 +1866,7 @@ QUnit.module('renderGeometry', () => {
 
             instance.option(optionName, newOptions[optionName]);
 
-            const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
             assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-            assert.notOk(isDimensionChanged);
         }
 
         instance.hide();
