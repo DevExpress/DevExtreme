@@ -149,7 +149,7 @@ const Overlay = Widget.inherit({
 
             maxWidth: null,
 
-            height: '80hw',
+            height: '80vh',
 
             minHeight: null,
 
