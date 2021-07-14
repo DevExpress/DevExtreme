@@ -40,7 +40,7 @@ const getPreviousButtonOptions = (header) => {
     return {
         key: 'previous',
         icon: 'chevronprev',
-        elementAttr: { class: PREVIOUS_BUTTON_CLASS, ariaLabel: 'Previous period' },
+        elementAttr: { class: PREVIOUS_BUTTON_CLASS },
         clickHandler: () => header._updateDateInDirection(DIRECTION_LEFT),
         onContentReady: (e) => {
             const previousButton = e.component;
