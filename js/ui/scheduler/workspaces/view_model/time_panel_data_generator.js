@@ -11,7 +11,6 @@ export class TimePanelDataGenerator {
             cellDuration,
             startDayHour,
             isVerticalGrouping,
-            cellCountInGroupRow,
             intervalCount,
             currentDate,
             viewType,
@@ -20,12 +19,12 @@ export class TimePanelDataGenerator {
         } = options;
 
         const rowCountInGroup = this._viewDataGenerator.getRowCount({
-            intervalCount,
-            currentDate,
-            viewType,
-            hoursInterval,
-            startDayHour,
-            endDayHour,
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
         });
         let allDayRowsCount = 0;
 

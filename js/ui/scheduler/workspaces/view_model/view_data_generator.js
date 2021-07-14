@@ -47,7 +47,7 @@ export class ViewDataGenerator {
         });
 
         let viewDataMap = [];
-        const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow);
+        const allDayPanelData = this._generateAllDayPanelData(options, rowCountInGroup, cellCountInGroupRow);
         const viewCellsData = this._generateViewCellsData(options, rowCountInGroup, cellCountInGroupRow);
 
         allDayPanelData && viewDataMap.push(allDayPanelData);
