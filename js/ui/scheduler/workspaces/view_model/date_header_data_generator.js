@@ -168,6 +168,7 @@ export class DateHeaderDataGenerator {
         const {
             startCellIndex,
             cellCount,
+            totalCellCount,
             isProvideVirtualCellsWidth,
             groups,
             groupOrientation,
@@ -181,7 +182,6 @@ export class DateHeaderDataGenerator {
 
         const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
 
-        const totalCellCount = completeDateHeaderMap[completeDateHeaderMap.length - 1].length;
         const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
         const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
         const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
