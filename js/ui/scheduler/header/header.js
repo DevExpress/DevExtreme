@@ -235,7 +235,7 @@ export class SchedulerHeader extends Widget {
         return getCaption(options, useShortDateFormat, customizationFunction);
     }
 
-    _updateDateInDirection(direction) {
+    _updateDateByDirection(direction) {
         const date = this._getNextDate(direction);
 
         this._updateCurrentDate(date);

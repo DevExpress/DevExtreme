@@ -41,7 +41,7 @@ const getPreviousButtonOptions = (header) => {
         key: 'previous',
         icon: 'chevronprev',
         elementAttr: { class: PREVIOUS_BUTTON_CLASS },
-        clickHandler: () => header._updateDateInDirection(DIRECTION_LEFT),
+        clickHandler: () => header._updateDateByDirection(DIRECTION_LEFT),
         onContentReady: (e) => {
             const previousButton = e.component;
             previousButton.option('disabled', isPreviousButtonDisabled(header));
@@ -99,7 +99,7 @@ const getNextButtonOptions = (header) => {
         key: 'next',
         icon: 'chevronnext',
         elementAttr: { class: NEXT_BUTTON_CLASS },
-        clickHandler: () => header._updateDateInDirection(DIRECTION_RIGHT),
+        clickHandler: () => header._updateDateByDirection(DIRECTION_RIGHT),
         onContentReady: (e) => {
             const nextButton = e.component;
 
