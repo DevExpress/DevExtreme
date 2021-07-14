@@ -415,10 +415,6 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
-    _getModuleNameByOption: function() {
-        return this._$htmlContainer;
-    },
-
     _tableResizingOptionChanged: function(args) {
         const optionData = args.fullName?.split('.');
         const optionName = optionData.length === 2 ? optionData[1] : args.name;

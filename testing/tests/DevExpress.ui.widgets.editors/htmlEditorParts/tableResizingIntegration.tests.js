@@ -155,7 +155,7 @@ module('Table resizing integration', {
             assert.strictEqual($resizeFrame.length, 0, 'Frame is created for table');
         });
 
-        test('Frame is created for table by default if the tableResizing option sets at runtime', function(assert) {
+        test('Frame is created for table if the tableResizing option sets at runtime', function(assert) {
             this.createWidget({ tableResizing: { enabled: false } });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -194,7 +194,7 @@ module('Table resizing integration', {
 
             const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
-            assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
+            assert.strictEqual($resizeFrame.length, 0, 'Frame is removed');
         });
 
         test('Horizontal draggable element should be created on pointerDown event', function(assert) {
