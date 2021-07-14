@@ -3875,6 +3875,7 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
+        this.timeToWaitResize = 15;
         this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
@@ -3892,7 +3893,7 @@ testModule('renderGeometry', {
                     'no resize observer callback was raised'
                 );
                 done();
-            });
+            }, this.timeToWaitResize);
         };
     },
     afterEach: function() {
@@ -3911,7 +3912,7 @@ testModule('renderGeometry', {
             assert.ok(this.positionedHandlerStub.calledOnce, 'render geometry called once');
             this.checkNoExcessResizeHandle(assert);
             showingResizeHandled();
-        });
+        }, this.timeToWaitResize);
     });
 
     test('window resize', function(assert) {
@@ -3922,7 +3923,7 @@ testModule('renderGeometry', {
             resizeCallbacks.fire();
             assert.strictEqual(this.positionedHandlerStub.callCount, 2);
             showingResizeHandled();
-        });
+        }, this.timeToWaitResize);
     });
 
     test('repaint', function(assert) {
@@ -3933,7 +3934,7 @@ testModule('renderGeometry', {
             this.overlayInstance.repaint();
             assert.strictEqual(this.positionedHandlerStub.callCount, 2);
             showingResizeHandled();
-        });
+        }, this.timeToWaitResize);
     });
 
     QUnit.module('option change', {
@@ -3967,7 +3968,7 @@ testModule('renderGeometry', {
                     assert.strictEqual(this.positionedHandlerStub.callCount, 2, 'renderGeomentry called 2 times');
                     this.checkNoExcessResizeHandle(assert);
                     showingResizeHandled();
-                });
+                }, this.timeToWaitResize);
             });
         }
     });
@@ -4132,6 +4133,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
 QUnit.module('resizeObserver integration', {
     beforeEach: function() {
         fx.off = true;
+        this.timeToWaitResize = 15;
     },
     afterEach: function() {
         fx.off = false;
@@ -4152,9 +4154,9 @@ QUnit.module('resizeObserver integration', {
             setTimeout(() => {
                 assert.ok(positionedHandlerStub.calledOnce, 'overlay was repositioned only once');
                 resizeOnWindowResizeDone();
-            }, 100);
+            }, this.timeToWaitResize);
             resizeOnOpeningDone();
-        });
+        }, this.timeToWaitResize);
     });
 
     test('content resize should trigger overlay geometry rendering', function(assert) {
@@ -4189,7 +4191,7 @@ QUnit.module('resizeObserver integration', {
                 resizeOnRestylingDone();
             }, 100);
             resizeOnOpeningDone();
-        });
+        }, this.timeToWaitResize);
     });
 
     test('overlay content dimensions should be updated during resize', function(assert) {
@@ -4212,9 +4214,9 @@ QUnit.module('resizeObserver integration', {
             setTimeout(() => {
                 assert.strictEqual($overlayContent.width(), 210, 'width was changed before pointerdown');
                 resizeOnDraggingDone();
-            }, 100);
+            }, this.timeToWaitResize);
             resizeOnOpeningDone();
-        });
+        }, this.timeToWaitResize);
     });
 
     test('resize end should trigger the single geometry rendering', function(assert) {
@@ -4238,8 +4240,8 @@ QUnit.module('resizeObserver integration', {
             setTimeout(() => {
                 assert.ok(positionedHandlerStub.calledOnce);
                 resizeOnDraggingDone();
-            }, 100);
+            }, this.timeToWaitResize);
             resizeOnOpeningDone();
-        });
+        }, this.timeToWaitResize);
     });
 });
