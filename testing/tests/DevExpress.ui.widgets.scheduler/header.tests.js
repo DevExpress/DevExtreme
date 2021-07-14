@@ -3,6 +3,7 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import 'ui/drop_down_button';
+import { getCaption } from 'ui/scheduler/header/utils';
 
 testStart(() => initTestMarkup());
 
@@ -78,5 +79,85 @@ module('Toolbar config', {}, () => {
         scheduler.option('toolbar', []);
 
         assert.ok(stub.calledOnce, 'Render method is called');
+    });
+
+    test('should render default items with swapped positions', function(assert) {
+        const scheduler = createWrapper({
+            currentView: 'month',
+            views: ['month'],
+            toolbar: [
+                {
+                    location: 'before',
+                    defaultElement: 'viewSwitcher',
+                },
+                {
+                    location: 'after',
+                    defaultElement: 'dateNavigator',
+                }
+            ],
+        });
+
+        const viewSwitcher = scheduler.header.viewSwitcher.getElement();
+        const dateNavigator = scheduler.header.navigator.getElement();
+
+        assert.equal(viewSwitcher.length, 1, 'viewSwitcher disaplayed');
+        assert.equal(dateNavigator.length, 1, 'dateNavigator disaplayed');
+    });
+
+    test('should not display viewSwitcher and dateNavigator', function(assert) {
+        const scheduler = createWrapper({
+            currentView: 'month',
+            views: ['month'],
+            toolbar: [],
+        });
+
+        const viewSwitcher = scheduler.header.viewSwitcher.getElement();
+        const dateNavigator = scheduler.header.navigator.getElement();
+
+        assert.equal(viewSwitcher.length, 0, 'viewSwitcher not disaplayed');
+        assert.equal(dateNavigator.length, 0, 'dateNavigator not disaplayed');
+    });
+
+    test('should display custom today button', function(assert) {
+        assert.expect(1);
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2020, 6, 7),
+            currentView: 'month',
+            views: ['month'],
+            toolbar: [
+                {
+                    defaultElement: 'dateNavigator',
+                },
+                {
+                    location: 'after',
+                    widget: 'dxButton',
+                    options: {
+                        text: 'Today',
+                        elementAttr: {
+                            class: 'today-button'
+                        },
+                        onClick: function() {
+                            scheduler.option('currentDate', new Date());
+                        },
+                    },
+                }
+            ],
+        });
+
+        const todayButton = $('.today-button');
+        todayButton.trigger('dxclick');
+
+        const captionOptions = {
+            startDate: new Date(),
+            endDate: new Date(),
+            step: 'month',
+            date: new Date(),
+            firstDayOfWeek: 0,
+            intervalCount: 1,
+        };
+        const todayCaption = getCaption(captionOptions);
+
+        assert.equal(scheduler.header.navigator.getText(), todayCaption.text, 'Current date is changed');
     });
 });
