@@ -1153,22 +1153,11 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        const $content = this.$content();
-        const beforeReRender = {
-            width: $content.outerWidth(),
-            height: $content.outerHeight()
-        };
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         const resultPosition = this._renderPosition();
-
-        const isContentResized = beforeReRender.width !== $content.outerWidth()
-            || beforeReRender.height !== $content.outerHeight();
-        if(isContentResized) {
-            this._shouldSkipContentResizeHandler(isContentResized);
-        }
 
         this._actions.onPositioned({ position: resultPosition });
     },
@@ -1264,15 +1253,19 @@ const Overlay = Widget.inherit({
 
     _renderDimensions: function() {
         const content = this._$content.get(0);
-
-        this._$content.css({
-            minWidth: this._getOptionValue('minWidth', content),
-            maxWidth: this._getOptionValue('maxWidth', content),
-            minHeight: this._getOptionValue('minHeight', content),
-            maxHeight: this._getOptionValue('maxHeight', content),
-            width: this._getOptionValue('width', content),
-            height: this._getOptionValue('height', content)
+        let isContentResized = false;
+        ['width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach(dimension => {
+            const initialValue = this._$content.css(dimension);
+            const newValue = this._getOptionValue(dimension, content);
+            if(initialValue !== newValue) {
+                this._$content.css(dimension, newValue);
+                isContentResized = true;
+            }
         });
+
+        if(isContentResized) {
+            this._shouldSkipContentResizeHandler(isContentResized);
+        }
     },
 
     _renderPosition: function() {
