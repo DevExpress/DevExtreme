@@ -2,6 +2,10 @@ import dateUtils from '../../../../core/utils/date';
 import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount } from '../utils/base';
 
 export class DateHeaderDataGenerator {
+    constructor(viewDataGenerator) {
+        this._viewDataGenerator = viewDataGenerator;
+    }
+
     getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
             isGenerateWeekDaysHeaderData,
@@ -24,12 +28,15 @@ export class DateHeaderDataGenerator {
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
             isGroupedByDate,
-            cellCountInDay,
             daysInView,
             groups,
             groupOrientation,
+            startDayHour,
+            endDayHour,
+            hoursInterval
         } = options;
 
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
@@ -63,7 +70,6 @@ export class DateHeaderDataGenerator {
             interval,
             startViewDate,
             startDayHour,
-            cellCountInDay,
         } = options;
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
@@ -91,7 +97,7 @@ export class DateHeaderDataGenerator {
                     interval,
                     startViewDate,
                     startDayHour,
-                    cellCountInDay,
+                    cellCountInDay: this._viewDataGenerator.getCellCountInDay(),
                 },
             );
 
@@ -110,9 +116,11 @@ export class DateHeaderDataGenerator {
     generateDateHeaderData(completeDateHeaderMap, options) {
         const {
             isGenerateWeekDaysHeaderData,
-            cellCountInDay,
             cellWidth,
             isProvideVirtualCellsWidth,
+            startDayHour,
+            endDayHour,
+            hoursInterval
         } = options;
 
         const dataMap = [];
@@ -123,7 +131,9 @@ export class DateHeaderDataGenerator {
             weekDayRowConfig = this._generateDateHeaderDataRow(
                 options,
                 completeDateHeaderMap,
-                cellCountInDay,
+                this._viewDataGenerator.getCellCountInDay(
+                    startDayHour, endDayHour, hoursInterval,
+                ),
                 0,
                 validCellWidth,
             );
@@ -158,7 +168,6 @@ export class DateHeaderDataGenerator {
         const {
             startCellIndex,
             cellCount,
-            totalCellCount,
             isProvideVirtualCellsWidth,
             groups,
             groupOrientation,
@@ -172,6 +181,7 @@ export class DateHeaderDataGenerator {
 
         const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
 
+        const totalCellCount = completeDateHeaderMap[completeDateHeaderMap.length - 1].length;
         const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
         const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
         const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;

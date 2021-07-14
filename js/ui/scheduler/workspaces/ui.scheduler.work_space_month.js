@@ -10,7 +10,7 @@ import {
     calculateCellIndex,
     getCellText,
 } from './utils/month';
-import { formatWeekday } from './utils/base';
+import { calculateDayDuration, formatWeekday } from './utils/base';
 import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -20,8 +20,6 @@ const DATE_TABLE_CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
 const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
 const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
-
-const DAYS_IN_WEEK = 7;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -34,10 +32,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getRowCount() {
         return this._isWorkSpaceWithCount() ? 4 * this.option('intervalCount') + 2 : 6;
-    }
-
-    _getCellCount() {
-        return DAYS_IN_WEEK;
     }
 
     _getFormat() {
@@ -116,7 +110,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     getCellDuration() {
-        return this._calculateDayDuration() * 3600000;
+        return calculateDayDuration(this.option('startDayHour'), this.option('endDayHour')) * 3600000;
     }
 
     getIntervalDuration() {

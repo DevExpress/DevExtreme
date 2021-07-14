@@ -144,7 +144,7 @@ const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
-            this._viewDataProvider = new ViewDataProvider();
+            this._viewDataProvider = new ViewDataProvider(this.type);
         }
         return this._viewDataProvider;
     }
@@ -559,7 +559,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._getRowCount() + allDayRowCount;
     }
 
-    _getCellCount() { return noop(); }
+    _getCellCount() {
+        return this.viewDataProvider.getCellCount({
+            intervalCount: this.option('intervalCount'),
+            currentDate: this.option('currentDate'),
+            viewType: this.type,
+            hoursInterval: this.option('hoursInterval'),
+            startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
+        });
+    }
 
     isRenovatedRender() {
         return this.renovatedRenderSupported() && this.option('renovateRender');
@@ -612,7 +621,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.option('groupByDate'),
             rowCountInGroup,
             cellCount,
-            cellCountInGroupRow: this._getCellCount(),
             startRowIndex: 0,
             startCellIndex: 0,
             groupOrientation,
@@ -629,7 +637,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
             startDayHour: this.option('startDayHour'),
-            cellCountInDay: this._getCellCountInDay(),
             cellDuration: this.getCellDuration(),
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
@@ -869,12 +876,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCellCountInDay() {
-        const result = this._calculateDayDuration() / this.option('hoursInterval');
-        return Math.ceil(result);
-    }
+        const hoursInterval = this.option('hoursInterval');
+        const startDayHour = this.option('startDayHour');
+        const endDayHour = this.option('endDayHour');
 
-    _calculateDayDuration() {
-        return this.option('endDayHour') - this.option('startDayHour');
+        return this.viewDataProvider.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     }
 
     _getTotalCellCount(groupCount) {

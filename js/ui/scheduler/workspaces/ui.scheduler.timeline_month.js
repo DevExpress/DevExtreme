@@ -48,22 +48,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return true;
     }
 
-    _getCellCount() {
-        const currentDate = this.option('currentDate');
-        let cellCount = 0;
-        if(this._isWorkSpaceWithCount()) {
-            const intervalCount = this.option('intervalCount');
-
-            for(let i = 1; i <= intervalCount; i++) {
-                cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
-            }
-        } else {
-            cellCount = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-        }
-
-        return cellCount;
-    }
-
     _getFormat() {
         return formatWeekdayAndDay;
     }

@@ -183,3 +183,20 @@ export const getHorizontalGroupCount = (groups, groupOrientation) => {
 export const calculateIsGroupedAllDayPanel = (groups, groupOrientation, isAllDayPanelVisible) => {
     return isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 };
+
+export const calculateDayDuration = (startDayHour, endDayHour) => {
+    return endDayHour - startDayHour;
+};
+
+export const isHorizontalView = (viewType) => {
+    switch(viewType) {
+        case VIEWS.TIMELINE_DAY:
+        case VIEWS.TIMELINE_WEEK:
+        case VIEWS.TIMELINE_WORK_WEEK:
+        case VIEWS.TIMELINE_MONTH:
+        case VIEWS.MONTH:
+            return true;
+        default:
+            return false;
+    }
+};

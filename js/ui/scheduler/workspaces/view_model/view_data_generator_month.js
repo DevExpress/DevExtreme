@@ -10,6 +10,7 @@ import {
 } from '../utils/month';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
+const DAYS_IN_WEEK = 7;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellData(rowIndex, columnIndex, options, allDay) {
@@ -74,5 +75,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
         const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
         this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
+    }
+
+    getCellCount() {
+        return DAYS_IN_WEEK;
     }
 }

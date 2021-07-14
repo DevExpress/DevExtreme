@@ -15,10 +15,6 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         return this._getCellCountInDay();
     }
 
-    _getCellCount() {
-        return this.option('intervalCount');
-    }
-
     _renderDateHeader() {
         return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
     }

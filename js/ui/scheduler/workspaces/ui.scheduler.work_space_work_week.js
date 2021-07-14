@@ -24,10 +24,6 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
         return WORK_WEEK_CLASS;
     }
 
-    _getCellCount() {
-        return 5 * this.option('intervalCount');
-    }
-
     _firstDayOfWeek() {
         return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }

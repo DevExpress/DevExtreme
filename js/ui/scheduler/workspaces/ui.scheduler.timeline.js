@@ -43,10 +43,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return 1;
     }
 
-    _getCellCount() {
-        return this._getCellCountInDay() * this.option('intervalCount');
-    }
-
     getGroupTableWidth() {
         return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
     }
