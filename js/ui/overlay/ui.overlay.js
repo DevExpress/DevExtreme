@@ -34,6 +34,7 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
+import ResizeObserver from './resize_observer';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -276,7 +277,7 @@ const Overlay = Widget.inherit({
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
-        this._initContentResizeObserver();
+        this._initResizeObserver();
     },
 
     _initOptions: function(options) {
@@ -354,34 +355,16 @@ const Overlay = Widget.inherit({
         };
     },
 
-    _initContentResizeObserver: function() {
-        if(!hasWindow()) {
-            return;
-        }
-
-        this._contentResizeObserver = new window.ResizeObserver(() => {
-            if(!this._shouldSkipContentResizeHandler()) {
-                this._renderGeometry();
-            }
-            this._shouldSkipContentResizeHandler(false);
-        });
-    },
-
-    _shouldSkipContentResizeHandler: function(shouldSkip) {
-        if(!arguments.length) {
-            return this._shouldSkipContentResizeHandlerValue;
-        }
-
-        this._shouldSkipContentResizeHandlerValue = shouldSkip || undefined;
+    _initResizeObserver: function() {
+        this._resizeObserver = new ResizeObserver(() => { this._renderGeometry(); });
     },
 
     _observeContentResize: function() {
-        this._shouldSkipContentResizeHandler(true);
-        this._contentResizeObserver?.observe(this._$content.get(0));
+        this._resizeObserver.observe(this._$content.get(0));
     },
 
     _unobserveContentResize: function() {
-        this._contentResizeObserver?.unobserve(this._$content.get(0));
+        this._resizeObserver?.unobserve(this._$content.get(0));
     },
 
     _initMarkup() {
@@ -1266,7 +1249,7 @@ const Overlay = Widget.inherit({
         });
 
         if(isContentResized) {
-            this._shouldSkipContentResizeHandler(isContentResized);
+            this._resizeObserver.skipNextResize();
         }
     },
 
@@ -1377,8 +1360,8 @@ const Overlay = Widget.inherit({
 
         this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
-        this._contentResizeObserver?.disconnect();
-        this._contentResizeObserver = undefined;
+        this._resizeObserver.disconnect();
+        this._resizeObserver = undefined;
         this._$wrapper.remove();
         this._$content.remove();
     },

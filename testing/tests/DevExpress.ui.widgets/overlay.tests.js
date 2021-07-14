@@ -379,7 +379,7 @@ testModule('option', moduleConfig, () => {
         assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
     });
 
-    test('there is no errors when overlay has a subscription on \'onHiding\' event where the widget is desposed', function(assert) {
+    test('there is no errors when overlay has a subscription on \'onHiding\' even when the widget is disposed', function(assert) {
         const instance = $('#overlay').dxOverlay({
             visible: true,
             onHiding: function(e) {
@@ -387,15 +387,13 @@ testModule('option', moduleConfig, () => {
             }
         }).dxOverlay('instance');
 
-        let errorOccurred = false;
-
         try {
             instance.hide();
         } catch(e) {
-            errorOccurred = true;
+            assert.ok(false, `error: ${e.message}`);
         }
 
-        QUnit.assert.strictEqual(errorOccurred, false, 'error must not be occurred');
+        assert.ok(true, 'no errors');
     });
 
     test('visibility callbacks', function(assert) {
