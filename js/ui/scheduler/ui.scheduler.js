@@ -549,6 +549,7 @@ class Scheduler extends Widget {
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
                 this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+                this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
 
                 this._postponeDataSourceLoading();
