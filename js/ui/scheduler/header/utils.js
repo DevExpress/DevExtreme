@@ -4,6 +4,7 @@ import messageLocalization from '../../../localization/message';
 import { camelize } from '../../../core/utils/inflector';
 import { isFunction, isObject } from '../../../core/utils/type';
 import errors from '../../../core/errors';
+import { VIEWS } from '../constants';
 
 const DAY_FORMAT = 'd';
 
@@ -331,8 +332,6 @@ const STEP_MAP = {
     agenda: 'agenda'
 };
 
-const VIEWS = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'];
-
 export const getStep = (view) => {
     return STEP_MAP[getViewType(view)];
 };
@@ -357,11 +356,15 @@ export const getViewText = (view) => {
     return view.name || messageLocalization.format('dxScheduler-switcher' + camelize(view.type || view, true));
 };
 
+const isValidView = (view) => {
+    return Object.values(VIEWS).includes(view);
+};
+
 export const validateViews = (views) => {
     views.forEach(view => {
         const viewType = getViewType(view);
 
-        if(!VIEWS.includes(viewType)) {
+        if(!isValidView(viewType)) {
             errors.log('W0008', viewType);
         }
     });
