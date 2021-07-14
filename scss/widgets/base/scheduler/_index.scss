@@ -40,8 +40,6 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 
-$arrow-down: "\f016";
-
 $scheduler-navigator-offset: 9px;
 $scheduler-switcher-offset: 10px;
 $toolbar-menu-container-offset: 9px;
@@ -128,6 +126,8 @@ $scheduler-current-time-cell-border-size: 2px;
 $scheduler-timeline-min-height: 100px;
 
 $scheduler-appointment-form-label-padding: 20px;
+
+$arrow-down: "\f016";
 
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,

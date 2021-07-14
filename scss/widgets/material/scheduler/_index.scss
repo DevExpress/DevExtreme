@@ -45,8 +45,6 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$arrow-down: "\f016";
-
 $material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
 $material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
 
@@ -452,7 +450,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
           }
 
           .dx-icon::before {
-            content: $arrow-down;
+            content: baseScheduler.$arrow-down;
           }
         }
       }
