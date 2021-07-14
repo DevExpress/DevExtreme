@@ -40,7 +40,7 @@ import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrateg
 import { hide as hideLoading, show as showLoading } from './loading';
 import AppointmentCollection from './appointments/appointmentCollection';
 import AppointmentLayoutManager from './appointments.layout_manager';
-import { SchedulerToolbar } from './header/header';
+import { SchedulerHeader } from './header/header';
 import subscribes from './subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -1403,7 +1403,7 @@ class Scheduler extends Widget {
 
     _renderHeader() {
         const $header = $('<div>').appendTo(this.$element());
-        this._header = this._createComponent($header, SchedulerToolbar, this._headerConfig());
+        this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
     }
 
     _headerConfig() {

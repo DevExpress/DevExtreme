@@ -30,7 +30,7 @@ const DATE_NAVIGATOR = 'dateNavigator';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
 
-export class SchedulerToolbar extends Widget {
+export class SchedulerHeader extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
@@ -281,4 +281,4 @@ export class SchedulerToolbar extends Widget {
     }
 }
 
-registerComponent('dxSchedulerHeader', SchedulerToolbar);
+registerComponent('dxSchedulerHeader', SchedulerHeader);
