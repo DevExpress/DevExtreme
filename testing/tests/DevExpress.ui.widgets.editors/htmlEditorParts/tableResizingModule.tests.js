@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import TableResizing from 'ui/html_editor/modules/tableResizing';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 
@@ -117,27 +118,13 @@ module('Table resizing module', moduleConfig, () => {
 
         this.attachSpies(resizingInstance);
         resizingInstance.option('enabled', true);
+
+        this.clock.tick();
+
         resizingInstance.clean();
 
-        this.clock.tick();
-
-        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
-    });
-
-
-    test('module should detach events on clean', function(assert) {
-        const resizingInstance = new TableResizing(this.quillMock, this.options);
-
-        this.clock.tick();
-
-        this.attachSpies(resizingInstance);
-        resizingInstance.option('enabled', true);
-        resizingInstance.clean();
-
-        this.clock.tick();
-
-        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
-        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module initialization');
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
+        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
     });
 
     test('module should detach events on tableResizng disabling at runtime', function(assert) {
@@ -152,12 +139,85 @@ module('Table resizing module', moduleConfig, () => {
 
         resizingInstance.option('enabled', false);
 
-        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module initialization');
-        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module initialization');
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
+        assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
+    });
+
+    test('Window resize callback should be added', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        resizeCallbacks.fire();
+
+        assert.strictEqual(typeof resizingInstance._resizeHandler, 'object', '_resizeHandler is an object');
+    });
+
+    test('Window resize callback should be cleaned after the widget dispose', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        resizeCallbacks.fire();
+
+        resizingInstance.clean();
+
+        assert.strictEqual(resizingInstance._resizeHandler, undefined, '_resizeHandler has been cleared on clean()');
     });
 
 
-    'Window resize callback should be cleaned after the widget dispose';
+    test('minColumnWidth can be applied', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
 
-    '_detachSeparatorEvents';
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('minColumnWidth', 55);
+
+        assert.strictEqual(resizingInstance._minColumnWidth, 55, 'minColumnWidth is applied');
+        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'module is not reinited');
+    });
+
+    test('minRowHeight can be applied', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('minRowHeight', 45);
+
+        assert.strictEqual(resizingInstance._minRowHeight, 45, 'minRowHeight is applied');
+        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'module is not reinited');
+    });
+
+    test('minColumnWidth and minRowHeight as an object can be applied', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('tableResizing', { minColumnWidth: 55, minRowHeight: 45 });
+
+        assert.strictEqual(resizingInstance._minColumnWidth, 55, 'minColumnWidth is applied');
+        assert.strictEqual(resizingInstance._minRowHeight, 45, 'minRowHeight is applied');
+        assert.strictEqual(this.attachEventsSpy.callCount, 0, 'module is not reinited');
+    });
+
+    test('enabled as an object can be applied', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('tableResizing', { enabled: false });
+
+        assert.strictEqual(resizingInstance.enabled, false, 'enabled is applied');
+        assert.strictEqual(this.detachEventsSpy.callCount, 1, 'module events are disabled');
+    });
 });
