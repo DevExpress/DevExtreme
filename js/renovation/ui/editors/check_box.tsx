@@ -23,7 +23,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
-const ICON_FONT_SIZE_RATIO = isMaterial(current()) ? 18 / 22 : 16 / 22;
+const ICON_FONT_SIZE_RATIO = isMaterial(current()) ? 16 / 18 : 16 / 22;
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
