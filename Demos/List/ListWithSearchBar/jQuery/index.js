@@ -10,7 +10,7 @@ $(function(){
     }).dxList("instance");
 
     $("#searchMode").dxSelectBox({
-        dataSource: ["contains", "startswith"],
+        dataSource: ["contains", "startswith", "equals"],
         value: "contains",
         onValueChanged: function(data) {
             listWidget.option("searchMode", data.value);

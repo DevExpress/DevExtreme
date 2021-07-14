@@ -4,31 +4,24 @@
       <DxList
         :data-source="tasks"
         :height="400"
-        :allow-item-deleting="allowDeleting"
-        :item-delete-mode="deleteType"
-        :show-selection-controls="true"
-        v-model:selected-items="selectedItems"
-        selection-mode="multiple"
+        :allow-item-deleting="allowDeletion"
+        :item-delete-mode="itemDeleteMode"
       />
-      <div class="selected-data">
-        <span class="caption">Selected Tasks:</span>
-        <span>{{ selectedItems.join(", ") }}</span>
-      </div>
     </div>
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model:value="allowDeleting"
-          text="Allow deleting"
+          v-model:value="allowDeletion"
+          text="Allow deletion"
         />
       </div>
       <div class="option">
         <span>Item delete mode </span>
         <DxSelectBox
-          :disabled="!allowDeleting"
+          :disabled="!allowDeletion"
           :items="['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']"
-          v-model:value="deleteType"
+          v-model:value="itemDeleteMode"
         />
       </div>
     </div>
@@ -51,24 +44,17 @@ export default {
   data() {
     return {
       tasks,
-      selectedItems: [],
-      allowDeleting: false,
-      deleteType: 'toggle'
+      allowDeletion: false,
+      itemDeleteMode: 'toggle'
     };
   }
 };
 </script>
 <style>
-.selected-data,
 .options {
     margin-top: 20px;
     padding: 20px;
     background: rgba(191, 191, 191, 0.15);
-}
-
-.selected-data .caption {
-    font-weight: bold;
-    font-size: 115%;
 }
 
 .options .caption {

@@ -8,6 +8,7 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const dataSource = new DataSource({
   store: createStore({
+    key: 'ProductID',
     loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders'
   }),
   sort: 'ProductName',

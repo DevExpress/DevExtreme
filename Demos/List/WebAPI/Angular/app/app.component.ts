@@ -20,6 +20,7 @@ export class AppComponent {
     constructor() {
         this.listData = new DataSource({
             store: AspNetData.createStore({
+                key: "ProductID",
                 loadUrl: "https://js.devexpress.com/Demos/Mvc/api/ListData/Orders"
             }),
             sort: "ProductName",

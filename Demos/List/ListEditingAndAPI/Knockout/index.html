@@ -19,19 +19,15 @@
         <div id="list-api-demo">
             <div class="widget-container">
                 <div data-bind="dxList: listOptions"></div>
-                <div class="selected-data">
-                    <span class="caption">Selected Tasks:</span>
-                    <span data-bind="text: selectedItems().join(', ')"></span>
-                </div>
             </div>
             <div class="options">
                 <div class="caption">Options</div>
                 <div class="option">
-                    <div data-bind="dxCheckBox: allowEditingOptions"></div>
+                    <div data-bind="dxCheckBox: allowDeletionOptions"></div>
                 </div>
                 <div class="option">
                     <span>Item delete mode</span>
-                    <div data-bind="dxSelectBox: deleteTypeOptions"></div>
+                    <div data-bind="dxSelectBox: itemDeleteModeOptions"></div>
                 </div>
             </div>
         </div>    

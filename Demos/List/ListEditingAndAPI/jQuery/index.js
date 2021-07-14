@@ -1,30 +1,21 @@
 $(function() {
-    var updateSelectedItems = function(e) {
-        var selectedItems = e.component.option("selectedItems");
-        $("#selectedItems").text(selectedItems.join(", "));
-    };
-
     var listWidget = $("#simpleList").dxList({
         dataSource: tasks,
         height: 400,
         allowItemDeleting: false,
         itemDeleteMode: "toggle",
-        showSelectionControls: true,
-        selectionMode: "multiple",
-        onSelectionChanged: updateSelectedItems,
-        onItemDeleted: updateSelectedItems
     }).dxList("instance");
 
-    $("#allowEditing").dxCheckBox({
+    $("#allowDeletion").dxCheckBox({
         value: false,
-        text: "Allow deleting",
+        text: "Allow deletion",
         onValueChanged: function(data) {
             listWidget.option("allowItemDeleting", data.value);
-            deleteTypeChooser.option("disabled", !data.value);
+            itemDeleteModeChooser.option("disabled", !data.value);
         }
     });
 
-    var deleteTypeChooser = $("#deleteType").dxSelectBox({
+    var itemDeleteModeChooser = $("#itemDeleteMode").dxSelectBox({
         disabled: true,
         dataSource: ["static", "toggle", "slideButton", "slideItem", "swipe", "context"],
         value: "toggle",

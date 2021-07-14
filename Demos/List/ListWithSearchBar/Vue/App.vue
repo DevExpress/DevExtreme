@@ -20,7 +20,7 @@
       <div class="option">
         <span>Search mode </span>
         <DxSelectBox
-          :items="['contains', 'startsWith']"
+          :items="['contains', 'startsWith', 'equals']"
           v-model:value="searchMode"
         />
       </div>

@@ -1,7 +1,7 @@
 <div id="list-demo">
     <div class="widget-container">
         <dx-list           
-            [items]="plannedTasks"
+            [dataSource]="plannedTasks"
             [repaintChangesOnly]="true"
             keyExpr="id">
             <dxo-item-dragging
@@ -14,7 +14,7 @@
             </dxo-item-dragging>
         </dx-list>
         <dx-list
-            [items]="doingTasks"
+            [dataSource]="doingTasks"
             [repaintChangesOnly]="true"
             keyExpr="id">
             <dxo-item-dragging

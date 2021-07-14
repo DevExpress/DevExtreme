@@ -10,30 +10,21 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      allowDeleting: false,
-      deleteType: 'toggle',
-      selectedItems: []
+      allowDeletion: false,
+      itemDeleteMode: 'toggle',
     };
-    this.onAllowDeletingChange = this.onAllowDeletingChange.bind(this);
-    this.onDeleteTypeChange = this.onDeleteTypeChange.bind(this);
-    this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this);
+    this.onAllowDeletionChange = this.onAllowDeletionChange.bind(this);
+    this.onItemDeleteModeChange = this.onItemDeleteModeChange.bind(this);
   }
-  onAllowDeletingChange(args) {
+  onAllowDeletionChange(args) {
     this.setState({
-      allowDeleting: args.value
+      allowDeletion: args.value
     });
   }
-  onDeleteTypeChange(args) {
+  onItemDeleteModeChange(args) {
     this.setState({
-      deleteType: args.value
+      itemDeleteMode: args.value
     });
-  }
-  onSelectedItemsChange(args) {
-    if(args.name === 'selectedItems') {
-      this.setState({
-        selectedItems: args.value
-      });
-    }
   }
   render() {
     return (
@@ -42,34 +33,26 @@ class App extends React.Component {
           <List
             dataSource={tasks}
             height={400}
-            allowItemDeleting={this.state.allowDeleting}
-            itemDeleteMode={this.state.deleteType}
-            showSelectionControls={true}
-            selectionMode="multiple"
-            selectedItems={this.state.selectedItems}
-            onOptionChanged={this.onSelectedItemsChange}>
+            allowItemDeleting={this.state.allowDeletion}
+            itemDeleteMode={this.state.itemDeleteMode}>
           </List>
-          <div className="selected-data">
-            <span className="caption">Selected Tasks:</span>
-            <span>{this.state.selectedItems.join(', ')}</span>
-          </div>
         </div>
         <div className="options">
           <div className="caption">Options</div>
           <div className="option">
             <CheckBox
-              text="Allow deleting"
-              value={this.state.allowDeleting}
-              onValueChanged={this.onAllowDeletingChange}>
+              text="Allow deletion"
+              value={this.state.allowDeletion}
+              onValueChanged={this.onAllowDeletionChange}>
             </CheckBox>
           </div>
           <div className="option">
             <span>Item delete mode </span>
             <SelectBox
-              disabled={!this.state.allowDeleting}
+              disabled={!this.state.allowDeletion}
               items={['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']}
-              value={this.state.deleteType}
-              onValueChanged={this.onDeleteTypeChange}>
+              value={this.state.itemDeleteMode}
+              onValueChanged={this.onItemDeleteModeChange}>
             </SelectBox>
           </div>
         </div>

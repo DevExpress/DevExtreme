@@ -3,31 +3,24 @@
         <dx-list
             [dataSource]="tasks"
             [height]="400"
-            [allowItemDeleting]="allowDeleting"
-            [itemDeleteMode]="deleteType"
-            [showSelectionControls]="true"
-            selectionMode="multiple"
-            [(selectedItems)]="selectedItems">
+            [allowItemDeleting]="allowDeletion"
+            [itemDeleteMode]="itemDeleteMode">
         </dx-list>
-        <div class="selected-data">
-            <span class="caption">Selected Tasks:</span>
-            <span>{{selectedItems.join(", ")}}</span>
-        </div>
-    </div>    
+    </div>
     <div class="options">
         <div class="caption">Options</div>
         <div class="option">
             <dx-check-box
-                text="Allow deleting"
-                [(value)]="allowDeleting">
+                text="Allow deletion"
+                [(value)]="allowDeletion">
             </dx-check-box>
         </div>
         <div class="option">
             <span>Item delete mode</span>
             <dx-select-box
-                [disabled]="!allowDeleting"
+                [disabled]="!allowDeletion"
                 [items]="['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']"
-                [(value)]="deleteType">
+                [(value)]="itemDeleteMode">
             </dx-select-box>
         </div>
     </div>

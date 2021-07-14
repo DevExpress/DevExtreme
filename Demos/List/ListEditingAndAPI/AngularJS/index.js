@@ -1,34 +1,30 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
-    $scope.deleteType = "toggle";
-    $scope.allowEditing = false;
-    $scope.selectedItems = [];
+    $scope.itemDeleteMode = "toggle";
+    $scope.allowDeletion = false;
 
     $scope.listOptions = {
         dataSource: tasks,
         height: 400,
-        showSelectionControls: true,
-        selectionMode: "multiple",
         bindingOptions: {
-            allowItemDeleting: "allowEditing",
-            itemDeleteMode: "deleteType",
-            selectedItems: "selectedItems"
+            allowItemDeleting: "allowDeletion",
+            itemDeleteMode: "itemDeleteMode"
         }
     };
 
-    $scope.deleteTypeOptions = {
+    $scope.itemDeleteModeOptions = {
         dataSource: ["static", "toggle", "slideButton", "slideItem", "swipe", "context"],
         bindingOptions: {
-            disabled: "!allowEditing",
-            value: "deleteType"
+            disabled: "!allowDeletion",
+            value: "itemDeleteMode"
         }
     };
 
-    $scope.allowEditingOptions = {
-        text: "Allow deleting",
+    $scope.allowDeletionOptions = {
+        text: "Allow deletion",
         bindingOptions: {
-            value: "allowEditing"
+            value: "allowDeletion"
         }
     };
 });

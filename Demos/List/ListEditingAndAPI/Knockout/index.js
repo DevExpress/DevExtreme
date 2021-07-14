@@ -1,30 +1,25 @@
 window.onload = function() {
-    var selectedItems = ko.observableArray([]),
-        deleteType = ko.observable("toggle"),
-        allowEditing = ko.observable(false);
+    var itemDeleteMode = ko.observable("toggle"),
+        allowDeletion = ko.observable(false);
 
     var viewModel = {
         listOptions: {
             dataSource: tasks,
             height: 400,
-            allowItemDeleting: allowEditing,
-            itemDeleteMode: deleteType,
-            showSelectionControls: true,
-            selectionMode: "multiple",
-            selectedItems: selectedItems
+            allowItemDeleting: allowDeletion,
+            itemDeleteMode: itemDeleteMode,
         },
-        deleteTypeOptions: {
+        itemDeleteModeOptions: {
             dataSource: ["static", "toggle", "slideButton", "slideItem", "swipe", "context"],
             disabled: ko.computed(function() {
-                return !allowEditing();
+                return !allowDeletion();
             }),
-            value: deleteType
+            value: itemDeleteMode
         },
-        allowEditingOptions: {
-            value: allowEditing,
-            text: "Allow deleting"
-        },
-        selectedItems: selectedItems
+        allowDeletionOptions: {
+            value: allowDeletion,
+            text: "Allow deletion"
+        }
     };
 
     ko.applyBindings(viewModel, document.getElementById("list-api-demo"));

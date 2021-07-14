@@ -2,7 +2,7 @@
   <div id="list-demo">
     <div class="widget-container">
       <DxList
-        :items="plannedTasks"
+        :data-source="plannedTasks"
         :repaint-changes-only="true"
         key-expr="id"
       >
@@ -16,7 +16,7 @@
         />
       </DxList>
       <DxList
-        :items="doingTasks"
+        :data-source="doingTasks"
         :repaint-changes-only="true"
         key-expr="id"
       >

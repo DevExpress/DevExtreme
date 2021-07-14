@@ -13,7 +13,7 @@ window.onload = function() {
     	    }
         },
         searchModeOptions: {
-            dataSource: ["contains", "startsWith"],
+            dataSource: ["contains", "startsWith", "equals"],
             value: searchMode
         }
     };

@@ -40,7 +40,7 @@ class App extends React.Component {
     return (
       <div className="widget-container">
         <List
-          items={plannedTasks}
+          dataSource={plannedTasks}
           keyExpr="id"
           repaintChangesOnly={true}>
           <ItemDragging
@@ -54,7 +54,7 @@ class App extends React.Component {
           </ItemDragging>
         </List>
         <List
-          items={doingTasks}
+          dataSource={doingTasks}
           keyExpr="id"
           repaintChangesOnly={true}>
           <ItemDragging

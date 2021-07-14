@@ -1,13 +1,7 @@
-.selected-data,
 .options {
     margin-top: 20px;
     padding: 20px;
     background: rgba(191, 191, 191, 0.15);
-}
-
-.selected-data .caption {
-    font-weight: bold;
-    font-size: 115%;
 }
 
 .options .caption {
