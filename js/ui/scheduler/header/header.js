@@ -30,6 +30,31 @@ const DATE_NAVIGATOR = 'dateNavigator';
 const COMPONENT_CLASS = 'dx-scheduler-header';
 
 export class SchedulerHeader extends Widget {
+    get currentView() {
+        return this.option('currentView');
+    }
+
+    get views() {
+        return this.option('views');
+    }
+
+    get date() {
+        return this.option('displayedDate') || this.option('currentDate');
+    }
+
+    get captionText() {
+        return this._getCaption(this.date).text;
+    }
+
+    get intervalOptions() {
+        const step = getStep(this.option('currentView'));
+        const intervalCount = this.option('intervalCount');
+        const firstDayOfWeek = this.option('firstDayOfWeek');
+        const agendaDuration = this.option('agendaDuration');
+
+        return { step, intervalCount, firstDayOfWeek, agendaDuration };
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
@@ -252,31 +277,6 @@ export class SchedulerHeader extends Widget {
     _isDefaultItem(item) {
         return Object.prototype.hasOwnProperty
             .call(item, DEFAULT_ELEMENT);
-    }
-
-    get currentView() {
-        return this.option('currentView');
-    }
-
-    get views() {
-        return this.option('views');
-    }
-
-    get date() {
-        return this.option('displayedDate') || this.option('currentDate');
-    }
-
-    get captionText() {
-        return this._getCaption(this.date).text;
-    }
-
-    get intervalOptions() {
-        const step = getStep(this.option('currentView'));
-        const intervalCount = this.option('intervalCount');
-        const firstDayOfWeek = this.option('firstDayOfWeek');
-        const agendaDuration = this.option('agendaDuration');
-
-        return { step, intervalCount, firstDayOfWeek, agendaDuration };
     }
 }
 
