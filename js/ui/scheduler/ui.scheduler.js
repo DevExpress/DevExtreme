@@ -1439,12 +1439,13 @@ class Scheduler extends Widget {
             agendaDuration: this.option('agendaDuration') || DEFAULT_AGENDA_DURATION,
         }, currentViewOptions);
 
-        result.observer = this;
         result.intervalCount = countConfig.intervalCount;
         result.views = this.option('views');
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
+        result.setCurrentView = (name) => this.option('currentView', name);
+        result.setCurrentDate = (date) => this.option('currentDate', date);
 
         result.todayDate = () => {
             const result = getTimeZoneCalculator(this.key).createDate(new Date(), { path: 'toGrid' });

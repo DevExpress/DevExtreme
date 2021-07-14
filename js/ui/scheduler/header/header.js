@@ -164,7 +164,8 @@ export class SchedulerHeader extends Widget {
     }
 
     _updateCurrentView(view) {
-        this.notifyObserver('currentViewUpdated', view.name);
+        const setCurrentView = this.option('setCurrentView');
+        setCurrentView(view.name);
 
         const events = this.eventMap.get('currentView');
         if(Array.isArray(events)) {
@@ -173,7 +174,8 @@ export class SchedulerHeader extends Widget {
     }
 
     _updateCurrentDate(date) {
-        this.notifyObserver('currentDateUpdated', date);
+        const setCurrentDate = this.option('setCurrentDate');
+        setCurrentDate(date);
 
         const events = this.eventMap.get('currentDate');
         if(Array.isArray(events)) {
@@ -247,7 +249,7 @@ export class SchedulerHeader extends Widget {
         this._calendar.hide();
     }
 
-    _isDefaultItem = (item) => {
+    _isDefaultItem(item) {
         return Object.prototype.hasOwnProperty
             .call(item, DEFAULT_ELEMENT);
     }
@@ -275,13 +277,6 @@ export class SchedulerHeader extends Widget {
         const agendaDuration = this.option('agendaDuration');
 
         return { step, intervalCount, firstDayOfWeek, agendaDuration };
-    }
-
-    notifyObserver(subject, args) {
-        const observer = this.option('observer');
-        if(observer) {
-            observer.fire(subject, args);
-        }
     }
 }
 

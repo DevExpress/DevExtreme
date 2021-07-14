@@ -41,44 +41,6 @@ test('should rerender after useDropDownViewSwitcher option changes', function(as
     assert.ok(stub.calledOnce, 'Render method is called');
 });
 
-module('Interface Interaction', {}, () => {
-    test('should call notifyObserver after selecting view', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'day',
-            views: ['day', 'week'],
-            currentDate: new Date(2021, 6, 9),
-        });
-
-        const headerInstance = scheduler.instance._header;
-
-        const stub = sinon.stub(headerInstance, 'notifyObserver').withArgs('currentViewUpdated');
-
-        scheduler.header.viewSwitcher.getButton('Week').click();
-
-        assert.ok(stub.calledOnce, 'Observer is notified');
-        const args = stub.getCall(0).args;
-        assert.equal(args[1], 'week', 'Arguments are OK');
-    });
-
-    test('should call notifyObserver after selecting new date', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'day',
-            views: ['day', 'week'],
-            currentDate: new Date(2021, 6, 9),
-        });
-
-        const headerInstance = scheduler.instance._header;
-
-        const stub = sinon.stub(headerInstance, 'notifyObserver').withArgs('currentDateUpdated');
-
-        scheduler.header.navigator.nextButton.click();
-
-        assert.ok(stub.calledOnce, 'Observer is notified');
-        const args = stub.getCall(0).args;
-        assert.equal(args[1].toUTCString(), new Date(2021, 6, 10).toUTCString(), 'Arguments are OK');
-    });
-});
-
 module('Meterial theme', {
     beforeEach: function() {
         this.origIsMaterial = themes.isMaterial;
