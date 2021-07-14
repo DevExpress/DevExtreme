@@ -6,7 +6,7 @@ export const getCurrentDate = (
 ): Date => {
   const validCurrentDate = startDate ?? currentDate;
 
-  return dateUtils.trimTime(validCurrentDate);
+  return dateUtils.trimTime(validCurrentDate) as Date;
 };
 
 export const getFirstDayOfWeek = (
