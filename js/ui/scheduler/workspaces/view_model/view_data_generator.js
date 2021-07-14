@@ -292,27 +292,27 @@ export class ViewDataGenerator {
         };
     }
 
-    _generateViewCellsData(options, rowsCount, cellCountInGroupRow) {
+    _generateViewCellsData(options, rowCount, cellCountInGroupRow) {
         const viewCellsData = [];
 
-        for(let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
+        for(let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
             viewCellsData.push(this._generateCellsRow(
-                options, false, rowIndex, cellCountInGroupRow,
+                options, false, rowIndex, rowCount, cellCountInGroupRow,
             ));
         }
 
         return viewCellsData;
     }
 
-    _generateAllDayPanelData(options, cellCount) {
+    _generateAllDayPanelData(options, rowCount, columnCount) {
         if(!options.isAllDayPanelVisible) {
             return null;
         }
 
-        return this._generateCellsRow(options, true, 0, cellCount);
+        return this._generateCellsRow(options, true, 0, rowCount, columnCount);
     }
 
-    _generateCellsRow(options, allDay, rowIndex, columnCount) {
+    _generateCellsRow(options, allDay, rowIndex, rowCount, columnCount) {
         const cellsRow = [];
 
         for(let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
@@ -321,10 +321,10 @@ export class ViewDataGenerator {
             cellDataValue.index = rowIndex * columnCount + columnIndex;
 
             cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
-                rowIndex, columnIndex, options,
+                rowIndex, columnIndex, options, rowCount, columnCount,
             );
             cellDataValue.isLastGroupCell = this._isLastGroupCell(
-                rowIndex, columnIndex, options,
+                rowIndex, columnIndex, options, rowCount, columnCount,
             );
 
             cellsRow.push(cellDataValue);
@@ -446,88 +446,44 @@ export class ViewDataGenerator {
         };
     }
 
-    _isFirstGroupCell(rowIndex, columnIndex, options) {
+    _isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
         const {
             groupOrientation,
             groups,
             isGroupedByDate,
-            intervalCount,
-            currentDate,
-            viewType,
-            startDayHour,
-            endDayHour,
-            hoursInterval,
         } = options;
 
         const groupCount = getGroupCount(groups);
-        const cellCountInGroupRow = this.getCellCount({
-            intervalCount,
-            currentDate,
-            viewType,
-            startDayHour,
-            endDayHour,
-            hoursInterval,
-        });
-        const rowCountInGroup = this.getRowCount({
-            intervalCount,
-            currentDate,
-            viewType,
-            hoursInterval,
-            startDayHour,
-            endDayHour,
-        });
 
         if(isGroupedByDate) {
             return columnIndex % groupCount === 0;
         }
 
         if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
-            return columnIndex % cellCountInGroupRow === 0;
+            return columnIndex % columnCount === 0;
         }
 
-        return rowIndex % rowCountInGroup === 0;
+        return rowIndex % rowCount === 0;
     }
 
-    _isLastGroupCell(rowIndex, columnIndex, options) {
+    _isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
         const {
             groupOrientation,
             groups,
             isGroupedByDate,
-            intervalCount,
-            currentDate,
-            viewType,
-            startDayHour,
-            endDayHour,
-            hoursInterval,
         } = options;
 
         const groupCount = getGroupCount(groups);
-        const cellCountInGroupRow = this.getCellCount({
-            intervalCount,
-            currentDate,
-            viewType,
-            startDayHour,
-            endDayHour,
-            hoursInterval,
-        });
-        const rowCountInGroup = this.getRowCount({
-            intervalCount,
-            currentDate,
-            viewType,
-            hoursInterval,
-            startDayHour,
-            endDayHour,
-        });
 
         if(isGroupedByDate) {
             return (columnIndex + 1) % groupCount === 0;
         }
 
         if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
-            return (columnIndex + 1) % cellCountInGroupRow === 0;
+            return (columnIndex + 1) % columnCount === 0;
         }
 
-        return (rowIndex + 1) % rowCountInGroup === 0;
+        return (rowIndex + 1) % rowCount === 0;
     }
 
     markSelectedAndFocusedCells(viewDataMap, renderOptions) {
