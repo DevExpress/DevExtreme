@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import { PageSizeSmall, viewFunction as PageSizeSmallComponent } from '../small';
-import getElementComputedStyle from '../../../../utils/get_computed_style';
+import { getElementComputedStyle } from '../../../../utils/get_computed_style';
 
 jest.mock('../../../../utils/get_computed_style');
 jest.mock('../../../editors/drop_down_editors/select_box', () => ({ SelectBox: () => { } }));

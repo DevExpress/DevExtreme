@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
-import getElementComputedStyle from '../../../../utils/get_computed_style';
+import { getElementComputedStyle } from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
 import { createTestRef } from '../../../../test_utils/create_ref';
 

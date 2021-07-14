@@ -6,7 +6,7 @@ import { RootSvgElement } from '../renderers/svg_root';
 import { GrayScaleFilter } from '../renderers/gray_scale_filter';
 import { ConfigProvider } from '../../../common/config_provider';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
-import getElementComputedStyle from '../../../utils/get_computed_style';
+import { getElementComputedStyle } from '../../../utils/get_computed_style';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
 jest.mock('../../../utils/resolve_rtl');
