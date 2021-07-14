@@ -57,7 +57,7 @@ import {
 } from './types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
-import { getElementComputedStyle } from '../../utils/get_computed_style';
+import getElementComputedStyle from '../../utils/get_computed_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -1178,7 +1178,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const computedStyle = getElementComputedStyle(this.contentRef.current);
 
     /* istanbul ignore next */
-    if (computedStyle.overflowX === 'hidden') {
+    if (computedStyle?.overflowX === 'hidden') {
       return this.contentClientWidth;
     }
 
@@ -1196,7 +1196,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const computedStyle = getElementComputedStyle(this.contentRef.current);
 
     /* istanbul ignore next */
-    if (computedStyle.overflowY === 'hidden') {
+    if (computedStyle?.overflowY === 'hidden') {
       return this.contentClientHeight;
     }
 

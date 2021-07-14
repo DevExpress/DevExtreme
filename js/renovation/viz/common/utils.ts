@@ -1,15 +1,15 @@
 import { Format, FormatObject } from './types.d';
 import formatHelper from '../../../format_helper';
 import { isDefined } from '../../../core/utils/type';
-import { getElementComputedStyle } from '../../utils/get_computed_style';
+import getElementComputedStyle from '../../utils/get_computed_style';
 import { toNumber } from '../../utils/type_conversion';
 
 export function getElementWidth(element: Element | undefined | null): number {
-  const style = getElementComputedStyle(element as Element);
+  const style = getElementComputedStyle(element);
   return toNumber(style?.width) - toNumber(style?.paddingLeft) - toNumber(style?.paddingRight);
 }
 export function getElementHeight(element: Element | undefined | null): number {
-  const style = getElementComputedStyle(element as Element);
+  const style = getElementComputedStyle(element);
   return toNumber(style?.height) - toNumber(style?.paddingTop) - toNumber(style?.paddingBottom);
 }
 

@@ -19,7 +19,7 @@ import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
-import { getElementComputedStyle } from '../../../utils/get_computed_style';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 import {
   ScrollableSimulated as Scrollable,
 } from '../scrollable_simulated';

@@ -3,6 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 import {
   ResizableContainer,
   viewFunction as ResizableContainerComponent,
@@ -11,10 +12,10 @@ import {
 } from '../resizable_container';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
-jest.mock('../../../utils/get_computed_style', () => ({
-  getElementComputedStyle: (el) => el,
-}));
+jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/utils/resize_callbacks');
+
+(getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
 describe('resizable-container', () => {
   function getFakeHtml(width: number | null): HTMLDivElement | undefined {

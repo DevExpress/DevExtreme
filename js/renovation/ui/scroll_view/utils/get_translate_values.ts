@@ -1,4 +1,4 @@
-import { getElementComputedStyle } from '../../../utils/get_computed_style';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 
 export function getTranslateValues(element: Element | null): { left: number; top: number } {
   if (!element) return { left: 0, top: 0 };
