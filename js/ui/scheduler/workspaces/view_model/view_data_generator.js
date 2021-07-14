@@ -9,6 +9,8 @@ import {
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 
 export class ViewDataGenerator {
+    get dateTableAllDay() { return false; }
+
     getCompleteViewDataMap(options) {
         const {
             rowCountInGroup,
@@ -315,7 +317,6 @@ export class ViewDataGenerator {
     prepareCellData(options, rowIndex, columnIndex) {
         const {
             groups,
-            tableAllDay,
             endDayHour,
             interval,
         } = options;
@@ -328,7 +329,7 @@ export class ViewDataGenerator {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: tableAllDay,
+            allDay: this.dateTableAllDay,
             groupIndex: 0,
         };
 
