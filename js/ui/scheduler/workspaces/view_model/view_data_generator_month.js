@@ -80,4 +80,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellCount() {
         return DAYS_IN_WEEK;
     }
+
+    getRowCount(options) {
+        return 4 * options.intervalCount + 2;
+    }
 }

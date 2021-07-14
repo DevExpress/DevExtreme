@@ -604,11 +604,28 @@ export class ViewDataGenerator {
             endDayHour,
             hoursInterval,
         } = options;
+
         const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-        const columnsCountInDay = isHorizontalView(viewType)
+        const columnCountInDay = isHorizontalView(viewType)
             ? cellCountInDay
             : 1;
 
-        return this.daysInInterval * intervalCount * columnsCountInDay;
+        return this.daysInInterval * intervalCount * columnCountInDay;
+    }
+
+    getRowCount(options) {
+        const {
+            viewType,
+            startDayHour,
+            endDayHour,
+            hoursInterval,
+        } = options;
+
+        const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+        const rowCountInDay = !isHorizontalView(viewType)
+            ? cellCountInDay
+            : 1;
+
+        return rowCountInDay;
     }
 }

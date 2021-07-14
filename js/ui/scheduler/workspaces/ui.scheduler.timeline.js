@@ -39,10 +39,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
-    _getRowCount() {
-        return 1;
-    }
-
     getGroupTableWidth() {
         return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
     }

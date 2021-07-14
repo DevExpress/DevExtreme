@@ -30,10 +30,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return MONTH_CLASS;
     }
 
-    _getRowCount() {
-        return this._isWorkSpaceWithCount() ? 4 * this.option('intervalCount') + 2 : 6;
-    }
-
     _getFormat() {
         return formatWeekday;
     }

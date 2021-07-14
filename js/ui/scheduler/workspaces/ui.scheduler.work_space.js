@@ -551,7 +551,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getElementClass() { return noop(); }
 
-    _getRowCount() { return noop(); }
+    _getRowCount() {
+        return this.viewDataProvider.getRowCount({
+            intervalCount: this.option('intervalCount'),
+            currentDate: this.option('currentDate'),
+            viewType: this.type,
+            hoursInterval: this.option('hoursInterval'),
+            startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
+        });
+    }
 
     _getRowCountWithAllDayRows() {
         const allDayRowCount = this._isShowAllDayPanel() ? 1 : 0;

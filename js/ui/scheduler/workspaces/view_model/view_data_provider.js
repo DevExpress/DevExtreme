@@ -407,7 +407,11 @@ export default class ViewDataProvider {
         return this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     }
 
-    getCellCount(intervalCount, currentDate, viewType) {
-        return this.viewDataGenerator.getCellCount(intervalCount, currentDate, viewType);
+    getCellCount(options) {
+        return this.viewDataGenerator.getCellCount(options);
+    }
+
+    getRowCount(options) {
+        return this.viewDataGenerator.getRowCount(options);
     }
 }
