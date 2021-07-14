@@ -62,7 +62,7 @@ export default class SchedulerCalendar extends Widget {
 
     _createPopupContent() {
         const result = $('<div>').addClass(CALENDAR_CLASS);
-        this._calendar = this._createComponent(result, Calendar, this._calendarOptions());
+        this._calendar = this._createComponent(result, Calendar, this._getCalendarOptions());
 
         if(this._isMobileLayout()) {
             const scrollable = this._createScrollable(result);
@@ -81,7 +81,7 @@ export default class SchedulerCalendar extends Widget {
         return result;
     }
 
-    _calendarOptions() {
+    _getCalendarOptions() {
         return {
             value: this.option('date'),
             min: this.option('min'),

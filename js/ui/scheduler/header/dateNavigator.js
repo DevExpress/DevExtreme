@@ -14,9 +14,9 @@ const DIRECTION_RIGHT = 1;
 
 export const getDateNavigator = (header, item) => {
     const items = [
-        previousButtonOptions(header),
-        calendarButtonOptions(header),
-        nextButtonOptions(header),
+        getPreviousButtonOptions(header),
+        getCalendarButtonOptions(header),
+        getNextButtonOptions(header),
     ];
 
     const stylingMode = header.option('useDropDownViewSwitcher') ? 'text' : 'contained';
@@ -36,7 +36,7 @@ export const getDateNavigator = (header, item) => {
     };
 };
 
-const previousButtonOptions = (header) => {
+const getPreviousButtonOptions = (header) => {
     return {
         key: 'previous',
         icon: 'chevronprev',
@@ -62,7 +62,7 @@ const previousButtonOptions = (header) => {
     };
 };
 
-const calendarButtonOptions = (header) => {
+const getCalendarButtonOptions = (header) => {
     return {
         key: 'calendar',
         text: header.captionText,
@@ -94,7 +94,7 @@ const calendarButtonOptions = (header) => {
     };
 };
 
-const nextButtonOptions = (header) => {
+const getNextButtonOptions = (header) => {
     return {
         key: 'next',
         icon: 'chevronnext',

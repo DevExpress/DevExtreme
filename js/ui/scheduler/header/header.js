@@ -41,7 +41,7 @@ export class SchedulerToolbar extends Widget {
         const config = [
             {
                 key: 'items',
-                value: [this.repaint],
+                value: [this.repaint.bind(this)],
             },
             {
                 key: 'views',
@@ -65,15 +65,15 @@ export class SchedulerToolbar extends Widget {
             },
             {
                 key: 'tabIndex',
-                value: [this.repaint],
+                value: [this.repaint.bind(this)],
             },
             {
                 key: 'focusStateEnabled',
-                value: [this.repaint],
+                value: [this.repaint.bind(this)],
             },
             {
                 key: 'useDropDownViewSwitcher',
-                value: [this.repaint],
+                value: [this.repaint.bind(this)],
             },
         ];
 
@@ -95,11 +95,11 @@ export class SchedulerToolbar extends Widget {
     _optionChanged(args) {
         const { name, value } = args;
 
-        const events = this.eventMap.get(name);
-        if(Array.isArray(events)) {
+        if(this.eventMap.has(name)) {
+            const events = this.eventMap.get(name);
             events.forEach((event) => {
-                event.call(this, value);
-            }, this);
+                event(value);
+            });
         }
     }
 
