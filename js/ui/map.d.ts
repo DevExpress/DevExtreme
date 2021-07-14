@@ -120,7 +120,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     controls?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

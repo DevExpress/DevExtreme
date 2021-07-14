@@ -80,7 +80,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-internal-tools": "6.4.4",
+    "devextreme-internal-tools": "7.0.0-beta.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.3.1",
@@ -215,7 +215,8 @@
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch",
-    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false"
+    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
+    "qunit-in-docker": "gulp qunit-in-docker --constel"
   },
   "browserslist": [
     "last 2 versions",

@@ -468,6 +468,8 @@ class Scheduler extends Widget {
     }
 
     _getAppointmentSettingsGenerator(rawAppointment) {
+        const workspace = this.getWorkSpace();
+
         return new AppointmentSettingsGenerator({
             rawAppointment,
             key: this.key,
@@ -477,14 +479,20 @@ class Scheduler extends Widget {
             timeZone: this.option('timeZone'),
             firstDayOfWeek: this.getFirstDayOfWeek(),
             viewStartDayHour: this._getCurrentViewOption('startDayHour'),
+            viewEndDayHour: this._getCurrentViewOption('endDayHour'),
             layoutManager: this.getLayoutManager(),
             isVirtualScrolling: this.isVirtualScrolling(),
-            viewDataProvider: this.getWorkSpace().viewDataProvider,
-            supportAllDayRow: this.getWorkSpace().supportAllDayRow(),
-            dateRange: this.getWorkSpace().getDateRange(),
-            intervalDuration: this.getWorkSpace().getIntervalDuration(),
-            allDayIntervalDuration: this.getWorkSpace().getIntervalDuration(true),
-            workspace: this.getWorkSpace()
+            positionHelper: workspace.positionHelper,
+            groupedStrategy: workspace._groupedStrategy,
+            cellDuration: workspace.getCellDuration(),
+            viewDataProvider: workspace.viewDataProvider,
+            supportAllDayRow: workspace.supportAllDayRow(),
+            dateRange: workspace.getDateRange(),
+            intervalDuration: workspace.getIntervalDuration(),
+            allDayIntervalDuration: workspace.getIntervalDuration(true),
+            isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
+            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
+            DOMMetaData: workspace.getDOMElementsMetaData(),
         });
     }
 
@@ -1582,6 +1590,7 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),

@@ -16,8 +16,11 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     constructor(...args) {
         super(...args);
 
-        this._isSkippedData = isDataOnWeekend;
         this._getWeekendsCount = getWeekendsCount;
+    }
+
+    _isSkippedData(date) {
+        return isDataOnWeekend(date);
     }
 
     _getElementClass() {
