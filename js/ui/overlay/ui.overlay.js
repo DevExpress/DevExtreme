@@ -355,15 +355,23 @@ const Overlay = Widget.inherit({
         }
 
         this._contentResizeObserver = new window.ResizeObserver(() => {
-            if(!this._shouldSkipContentResizeHandler) {
-                this._dimensionChanged();
+            if(!this._shouldSkipContentResizeHandler()) {
+                this._renderGeometry();
             }
-            this._shouldSkipContentResizeHandler = undefined;
+            this._shouldSkipContentResizeHandler(false);
         });
     },
 
+    _shouldSkipContentResizeHandler: function(shouldSkip) {
+        if(!arguments.length) {
+            return this._shouldSkipContentResizeHandlerValue;
+        }
+
+        this._shouldSkipContentResizeHandlerValue = shouldSkip || undefined;
+    },
+
     _observeContentResize: function() {
-        this._shouldSkipContentResizeHandler = true;
+        this._shouldSkipContentResizeHandler(true);
         this._contentResizeObserver?.observe(this._$content.get(0));
     },
 
@@ -969,8 +977,8 @@ const Overlay = Widget.inherit({
         const width = this._resizable.option('width');
         const height = this._resizable.option('height');
 
-        width && this.option('width', width);
-        height && this.option('height', height);
+        width && this._setOptionWithoutOptionChange('width', width);
+        height && this._setOptionWithoutOptionChange('height', height);
 
         this._actions.onResizeEnd();
     },
@@ -1129,11 +1137,20 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
+        const $content = this.$content();
+        const beforeReRender = {
+            width: $content.outerWidth(),
+            height: $content.outerHeight()
+        };
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         const resultPosition = this._renderPosition();
+
+        const isContentResized = beforeReRender.width !== $content.outerWidth()
+            || beforeReRender.height !== $content.outerHeight();
+        this._shouldSkipContentResizeHandler(isContentResized);
 
         this._actions.onPositioned({ position: resultPosition });
     },
@@ -1310,7 +1327,6 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._shouldSkipContentResizeHandler = true;
         this._renderGeometry();
     },
 
