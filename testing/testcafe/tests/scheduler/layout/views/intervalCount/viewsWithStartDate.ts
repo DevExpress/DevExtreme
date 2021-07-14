@@ -72,3 +72,48 @@ fixture`Layout: Views: IntervalCount with StartDate`
     crossScrollingEnabled: true,
   }));
 });
+
+[{
+  view: 'week',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'timelineWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'workWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'timelineWorkWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}].forEach(({
+  view, currentDate, startDate, intervalCount,
+}) => {
+  test(`startDate should work in ${view} view when it indicates the same week as the start as currentDate`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(await takeScreenshot(`complex-start-date-in-${view}.png`))
+      .ok()
+
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxScheduler', {
+    views: [{
+      type: view,
+      intervalCount,
+      startDate,
+    }],
+    currentView: view,
+    currentDate,
+    dataSource: [],
+    crossScrollingEnabled: true,
+  }));
+});

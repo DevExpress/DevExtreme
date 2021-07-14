@@ -407,13 +407,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default true
-       * @default false [for](Android|iOS)
+       * @default false &for(Android|iOS)
        */
       allowDragging?: boolean,
       /**
        * @docid
        * @default true
-       * @default false [for](Android|iOS)
+       * @default false &for(Android|iOS)
        */
       allowResizing?: boolean,
       /**
@@ -454,7 +454,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -834,8 +834,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default false
-     * @default true [for](Android|iOS)
-     * @default true [for](Material)
+     * @default true &for(Android|iOS)
+     * @default true &for(Material)
      * @public
      */
     useDropDownViewSwitcher?: boolean;

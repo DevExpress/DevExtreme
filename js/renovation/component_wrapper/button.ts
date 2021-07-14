@@ -7,6 +7,7 @@ import type { Button } from '../ui/button';
 export default class ButtonWrapper extends Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get _validationGroupConfig(): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return ValidationEngine.getGroupConfig(this._findGroup());
   }
 

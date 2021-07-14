@@ -40,14 +40,13 @@ describe('TimePanelLayout', () => {
         text: '1:00 AM',
         groups: { id: 2 },
         groupIndex: 2,
-        index: 2,
+        index: 1,
         key: '3',
         isFirstGroupCell: false,
         isLastGroupCell: false,
       }],
       groupIndex: 2,
     }],
-    cellCountInGroupRow: 2,
   };
 
   describe('Render', () => {
@@ -188,7 +187,6 @@ describe('TimePanelLayout', () => {
             dateTable: [],
             groupIndex: 33,
           }],
-          cellCountInGroupRow: 2,
           isGroupedAllDayPanel: true,
         };
         const layout = render({ props: { timePanelData } });

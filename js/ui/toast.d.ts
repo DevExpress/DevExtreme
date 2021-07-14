@@ -51,7 +51,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
-     * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} [for](Android)
+     * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} &for(Android)
      * @public
      * @type object
      */
@@ -66,7 +66,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type_function_param1 event:event
      * @type_function_return Boolean
-     * @default true [for](Android)
+     * @default true &for(Android)
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
@@ -79,7 +79,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @default 2000
-     * @default 4000 [for](Material)
+     * @default 4000 &for(Material)
      * @public
      */
     displayTime?: number;
@@ -93,7 +93,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @type_function_return number|string
-     * @default 568 [for](Material)
+     * @default 568 &for(Material)
      * @public
      */
     maxWidth?: number | string | (() => number | string);
@@ -106,15 +106,15 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @type_function_return number|string
-     * @default 344 [for](Material)
+     * @default 344 &for(Material)
      * @public
      */
     minWidth?: number | string | (() => number | string);
     /**
      * @docid
      * @default "bottom center"
-     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} [for](Android)
-     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
+     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} &for(Android)
+     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } &for(phones_on_Android)
      * @public
      */
     position?: PositionConfig | string;
@@ -135,8 +135,8 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @docid
      * @type_function_return number|string
      * @default function() {return $(window).width() * 0.8 }
-     * @default 'auto' [for](Android)
-     * @default function() { return $(window).width(); } [for](phones_on_Android)
+     * @default 'auto' &for(Android)
+     * @default function() { return $(window).width(); } &for(phones_on_Android)
      * @public
      */
     width?: number | string | (() => number | string);

@@ -8,6 +8,7 @@ export class TimePanelDataGenerator {
             cellDuration,
             startDayHour,
             isVerticalGrouping,
+            cellCountInGroupRow,
         } = options;
 
         let allDayRowsCount = 0;
@@ -21,6 +22,7 @@ export class TimePanelDataGenerator {
                 groupIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
+                index: cellIndex,
                 ...restCellProps
             } = row[0];
 
@@ -39,6 +41,7 @@ export class TimePanelDataGenerator {
                 groupIndex: isVerticalGrouping ? groupIndex : undefined,
                 isFirstGroupCell: isVerticalGrouping && isFirstGroupCell,
                 isLastGroupCell: isVerticalGrouping && isLastGroupCell,
+                index: Math.floor(cellIndex / cellCountInGroupRow),
             };
         });
     }
@@ -49,7 +52,6 @@ export class TimePanelDataGenerator {
             rowCount,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
-            cellCountInGroupRow,
             isGroupedAllDayPanel,
             isVerticalGrouping,
             isAllDayPanelVisible,
@@ -65,7 +67,6 @@ export class TimePanelDataGenerator {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             isGroupedAllDayPanel,
-            cellCountInGroupRow,
         };
 
         const {

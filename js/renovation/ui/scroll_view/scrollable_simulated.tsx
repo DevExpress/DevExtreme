@@ -332,7 +332,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   release(): void {
     this.updateSizes();
-    this.eventHandler((scrollbar) => scrollbar.releaseHandler());
+    this.eventHandler((scrollbar): void => scrollbar.releaseHandler() as undefined);
   }
 
   @Method()
@@ -362,9 +362,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.prepareDirections(true);
     this.onStart();
     this.eventHandler(
-      (scrollbar) => scrollbar.scrollByHandler(
+      (scrollbar): void => scrollbar.scrollByHandler(
         { x: location.left ?? 0, y: location.top ?? 0 },
-      ),
+      ) as undefined,
     );
   }
 
@@ -766,14 +766,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const crossThumbScrolling = this.isCrossThumbScrolling(event);
 
     this.eventHandler(
-      (scrollbar) => scrollbar.initHandler(event, crossThumbScrolling),
+      (scrollbar): void => scrollbar.initHandler(event, crossThumbScrolling) as undefined,
     );
   }
 
   handleStart(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar) => scrollbar.startHandler());
+    this.eventHandler((scrollbar): void => scrollbar.startHandler() as undefined);
 
     this.onStart();
   }
@@ -789,24 +789,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    this.eventHandler((scrollbar) => scrollbar.moveHandler(e.delta));
+    this.eventHandler((scrollbar): void => scrollbar.moveHandler(e.delta) as undefined);
   }
 
   handleEnd(event: DxMouseEvent): void {
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
-
-    this.eventHandler((scrollbar) => scrollbar.endHandler(event.velocity, true));
+    this.eventHandler((scrollbar): void => scrollbar.endHandler(event.velocity, true) as undefined);
   }
 
   handleStop(): void {
-    this.eventHandler((scrollbar) => scrollbar.stopHandler());
+    this.eventHandler((scrollbar): void => scrollbar.stopHandler() as undefined);
   }
 
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
-
-    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }, false));
+    this.eventHandler(
+      (scrollbar): void => scrollbar.endHandler({ x: 0, y: 0 }, false) as undefined,
+    );
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
@@ -865,7 +865,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   validateEvent(event: DxMouseEvent, scrollbarRef: any): boolean {
     const { scrollByThumb, scrollByContent } = this.props;
 
-    return (scrollByThumb && scrollbarRef.validateEvent(event))
+    return (scrollByThumb && scrollbarRef.validateEvent(event) as boolean)
     || (scrollByContent && this.isContent(event.originalEvent.target));
   }
 

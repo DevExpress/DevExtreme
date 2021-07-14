@@ -2018,12 +2018,14 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.test('Should open master detail by click if row is edited in row mode (T845240)', function(assert) {
+        this.dataGrid.option({
+            loadingTimeout: null,
+            dataSource: [{ id: 1 }],
+        });
         ['click', 'dblClick'].forEach(startEditAction => {
             // arrange
             const masterDetailClass = 'master-detail-test';
             this.dataGrid.option({
-                loadingTimeout: null,
-                dataSource: [{ id: 1 }],
                 editing: {
                     startEditAction: startEditAction
                 },

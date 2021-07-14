@@ -136,7 +136,6 @@ describe('Workspaces utils', () => {
           }],
           groupIndex: 1,
         }],
-        cellCountInGroupRow: 1,
       };
 
       expect(getIsGroupedAllDayPanel(viewData, 0))
@@ -188,7 +187,6 @@ describe('Workspaces utils', () => {
           isGroupedAllDayPanel: true,
           groupIndex: 2,
         }],
-        cellCountInGroupRow: 1,
       };
 
       expect(getIsGroupedAllDayPanel(viewData, 0))
