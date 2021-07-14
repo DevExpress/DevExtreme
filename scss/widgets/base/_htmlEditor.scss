@@ -534,13 +534,6 @@ $transparent-border: 1px solid transparent;
     position: absolute;
     pointer-events: auto;
     background-color: transparent;
-
-    &.dx-draggable-dragging {
-      &::after {
-        content: '';
-        position: absolute;
-      }
-    }
   }
 
   .dx-htmleditor-column-resizer {
@@ -548,13 +541,12 @@ $transparent-border: 1px solid transparent;
     top: 0;
     height: 100%;
     cursor: col-resize;
+  }
 
-    &::after {
-      width: 3px;
-      top: 0;
-      left: 1px;
-      height: 100%;
-    }
+  .dx-htmleditor-highlighted-column {
+    width: 3px;
+    top: 0;
+    height: 100%;
   }
 
   .dx-htmleditor-row-resizer {
@@ -562,11 +554,11 @@ $transparent-border: 1px solid transparent;
     left: 0;
     width: 100%;
     cursor: row-resize;
+  }
 
-    &::after {
-      height: 3px;
-      top: 1px;
-      width: 100%;
-    }
+  .dx-htmleditor-highlighted-row {
+    height: 3px;
+    left: 0;
+    width: 100%;
   }
 }
