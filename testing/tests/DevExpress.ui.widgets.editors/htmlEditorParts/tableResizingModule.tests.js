@@ -167,7 +167,6 @@ module('Table resizing module', moduleConfig, () => {
         assert.strictEqual(resizingInstance._resizeHandler, undefined, '_resizeHandler has been cleared on clean()');
     });
 
-
     test('minColumnWidth can be applied', function(assert) {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
@@ -179,6 +178,20 @@ module('Table resizing module', moduleConfig, () => {
 
         assert.strictEqual(resizingInstance._minColumnWidth, 55, 'minColumnWidth is applied');
         assert.strictEqual(this.attachEventsSpy.callCount, 0, 'module is not reinited');
+    });
+
+    test('negative values of minColumnWidth and minRowHeight options should be transformed to zero for module calculations', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        this.attachSpies(resizingInstance);
+        resizingInstance.option('minColumnWidth', -20);
+        resizingInstance.option('minRowHeight', -10);
+
+        assert.strictEqual(resizingInstance._minColumnWidth, 0, 'minColumnWidth is applied');
+        assert.strictEqual(resizingInstance._minRowHeight, 0, 'minRowHeight is applied');
     });
 
     test('minRowHeight can be applied', function(assert) {
