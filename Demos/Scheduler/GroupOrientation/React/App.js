@@ -5,19 +5,6 @@ import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 import { data, priorityData } from './data.js';
 
 const currentDate = new Date(2021, 3, 21);
-const views = [{
-  type: 'workWeek',
-  name: 'Vertical Grouping',
-  groupOrientation: 'vertical',
-  cellDuration: 60,
-  intervalCount: 2
-}, {
-  type: 'workWeek',
-  name: 'Horizontal Grouping',
-  groupOrientation: 'horizontal',
-  cellDuration: 30,
-  intervalCount: 2
-}];
 
 const groups = ['priorityId'];
 
@@ -27,7 +14,6 @@ class App extends React.Component {
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
-        views={views}
         groups={groups}
         defaultCurrentView="Vertical Grouping"
         defaultCurrentDate={currentDate}
