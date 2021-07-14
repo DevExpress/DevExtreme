@@ -12,6 +12,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
+import { isMaterial, current } from '../../../ui/themes';
 import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
 import { Widget } from '../common/widget';
@@ -22,7 +23,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
-const ICON_FONT_SIZE_RATIO = 16 / 22;
+const ICON_FONT_SIZE_RATIO = isMaterial(current()) ? 18 / 22 : 16 / 22;
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
