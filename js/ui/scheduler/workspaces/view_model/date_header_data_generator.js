@@ -62,7 +62,6 @@ export class DateHeaderDataGenerator {
         const {
             today,
             isGroupedByDate,
-            cellCountInGroupRow,
             groupOrientation,
             groups,
             headerCellTextFormat,
@@ -70,12 +69,21 @@ export class DateHeaderDataGenerator {
             interval,
             startViewDate,
             startDayHour,
+            endDayHour,
+            hoursInterval,
+            intervalCount,
+            currentDate,
+            viewType,
         } = options;
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
 
         const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
@@ -97,7 +105,9 @@ export class DateHeaderDataGenerator {
                     interval,
                     startViewDate,
                     startDayHour,
-                    cellCountInDay: this._viewDataGenerator.getCellCountInDay(),
+                    cellCountInDay: this._viewDataGenerator.getCellCountInDay(
+                        startDayHour, endDayHour, hoursInterval,
+                    ),
                 },
             );
 
