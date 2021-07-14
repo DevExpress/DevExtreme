@@ -353,7 +353,10 @@ export const getViewName = (view) => {
 };
 
 export const getViewText = (view) => {
-    return view.name || messageLocalization.format('dxScheduler-switcher' + camelize(view.type || view, true));
+    if(view.name) return view.name;
+
+    const viewName = camelize(view.type || view, true);
+    return messageLocalization.format('dxScheduler-switcher' + viewName);
 };
 
 const isValidView = (view) => {
