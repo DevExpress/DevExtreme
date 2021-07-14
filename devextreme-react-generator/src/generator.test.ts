@@ -1,4 +1,4 @@
-import { IProp, IComplexProp } from './integration-data-model';
+import { IProp, IComplexProp } from 'devextreme-internal-tools/integration-data-model';
 import {
   collectIndependentEvents,
   collectSubscribableRecursively,

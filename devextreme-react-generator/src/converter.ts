@@ -1,4 +1,4 @@
-import { ICustomType, ITypeDescr } from './integration-data-model';
+import { ICustomType, ITypeDescr } from 'devextreme-internal-tools/integration-data-model';
 import { lowercaseFirst } from './helpers';
 
 const inputTypes = {

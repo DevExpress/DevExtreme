@@ -8,6 +8,8 @@ import {
   sep as pathSeparator,
 } from 'path';
 
+import { satisfies } from 'semver';
+
 import {
   IComplexProp,
   ICustomType,
@@ -15,10 +17,11 @@ import {
   IProp,
   ITypeDescr,
   IWidget,
-} from './integration-data-model';
+} from 'devextreme-internal-tools/integration-data-model';
 
 import { convertTypes } from './converter';
 import generateIndex, { IReExport } from './index-generator';
+import { dependencies } from '../package.json';
 
 import generateComponent, {
   generateReExport,
@@ -250,9 +253,15 @@ function generate({
     indexFileName: string
   },
   widgetsPackage: string
-}): void {
-  const modulePaths: IReExport[] = [];
+}): string | undefined {
+  if (!rawData.meta.toolsVersion) {
+    return 'Integration-data.json is built with old version of \'devextreme-internal-tools\' package. Update the integration-data.json file.';
+  }
+  if (!satisfies(rawData.meta.toolsVersion, dependencies['devextreme-internal-tools'])) {
+    return `Integration-data.json is built with incompatible (${rawData.meta.toolsVersion}) version of 'devextreme-internal-tools' package (you use ${dependencies['devextreme-internal-tools']}). Update your 'devextreme-internal-tools' dependency.`;
+  }
 
+  const modulePaths: IReExport[] = [];
   rawData.widgets.forEach((data) => {
     const widgetFile = mapWidget(
       data,
@@ -282,6 +291,7 @@ function generate({
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: 'utf8' });
+  return undefined;
 }
 
 export default generate;
