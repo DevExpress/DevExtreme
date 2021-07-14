@@ -2324,7 +2324,7 @@
           {
             "Title": "Load Data On Demand",
             "Name": "LoadDataOnDemand",
-            "Credits": "www.worldweatheronline.com",
+            "Credits": "www.kaggle.com",
             "Widget": "Charts",
             "Equivalents": "endless uploading, partial data uploading, adding data on demand, visualRange",
             "Modules": "whatwg-fetch",
@@ -2413,7 +2413,7 @@
             "Title": "Full Stacked Bar",
             "Name": "FullStackedBar",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2421,7 +2421,7 @@
             "Title": "Side-by-Side Stacked Bar",
             "Name": "SideBySideStackedBar",
             "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#stack",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2436,7 +2436,7 @@
             "Title": "Side-by-Side Full-Stacked Bar",
             "Name": "SideBySideFullStackedBar",
             "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#stack",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "fullStackedBar"
@@ -2445,7 +2445,7 @@
             "Title": "Auto-Calculated Bar Width",
             "Name": "AutoCalculatedBarWidth",
             "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#ignoreEmptyPoints",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "ignoreEmptyPoints"
@@ -2525,7 +2525,7 @@
             "Title": "Doughnut",
             "Name": "Doughnut",
             "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "formatNumber, connector"
@@ -2534,7 +2534,7 @@
             "Title": "Doughnut Selection",
             "Name": "DoughnutSelection",
             "DocUrl": "Guide/UI_Components/PieChart/Series/Selection/",
-            "Credits": "www.nytimes.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "hoverStyle"
@@ -2602,7 +2602,7 @@
           {
             "Title": "Points Aggregation",
             "Name": "PointsAggregationFinancialChart",
-            "Credits": "www.google.com",
+            "Credits": "www.kaggle.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/StockPrice.cs",
@@ -2619,7 +2619,7 @@
             "MvcAdditionalFiles": [
               "/Models/SampleData/AnnotationData.cs"
             ],
-            "Credits": "https://finance.yahoo.com, https://www.wikipedia.org/"
+            "Credits": "https://www.wikipedia.org/"
           }
         ]
       },
@@ -2666,7 +2666,7 @@
             "Title": "Step Line",
             "Name": "StepLine",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Line_Series/",
-            "Credits": "www.nytimes.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/SampleData/AustralianOlympicMedals.cs"
@@ -2707,7 +2707,7 @@
             "Title": "Pie",
             "Name": "Pie",
             "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
-            "Credits": "www.nationmaster.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2723,7 +2723,7 @@
             "Title": "Pie with Custom Labels",
             "Name": "PieWithCustomLabels",
             "DocUrl": "Guide/UI_Components/PieChart/Point_Labels/Relocate_Labels/",
-            "Credits": "www.nytimes.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2791,7 +2791,7 @@
             "Title": "Bubble",
             "Name": "Bubble",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bubble_Series/",
-            "Credits": "www.helpage.org",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2830,7 +2830,7 @@
             "Title": "Discrete Data",
             "Name": "DiscreteData",
             "DocUrl": "Guide/UI_Components/PolarChart/Series_Types/#Scatter",
-            "Credits": "www.weather.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2872,7 +2872,7 @@
             "Title": "Polar Chart with Annotations",
             "Name": "PolarChartAnnotations",
             "DocUrl": "",
-            "Credits": "www.weather.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/DiscreteScaleTemperature.cs",
@@ -2907,7 +2907,7 @@
             "Title": "Range Area",
             "Name": "RangeArea",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Range_Series/",
-            "Credits": "www.inflationdata.com",
+            "Credits": "www.kaggle.com",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "rangeArea"
@@ -2990,7 +2990,7 @@
             "Title": "Tiling Algorithms",
             "Name": "TilingAlgorithms",
             "DocUrl": "ApiReference/UI_Components/dxTreeMap/Configuration/#layoutAlgorithm",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "layoutAlgorithm"
@@ -3063,7 +3063,7 @@
             "Title": "Multiple Axes",
             "Name": "MultipleAxes",
             "DocUrl": "Guide/UI_Components/Chart/Axes/Multi-Axis_Chart/",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -3071,7 +3071,7 @@
             "Title": "Multiple Panes",
             "Name": "MultiplePanes",
             "DocUrl": "Guide/UI_Components/Chart/Panes/Multi-Pane_Chart/",
-            "Credits": "www.weatherbase.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -3092,7 +3092,7 @@
             "Title": "Error Bars",
             "Name": "ErrorBars",
             "DocUrl": "Guide/UI_Components/Chart/Error_Bars/",
-            "Credits": "www.weatherbase.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "valueErrorBar"
@@ -3201,7 +3201,7 @@
                 "Title": "Multiple Point Selection",
                 "Name": "MultiplePointSelection",
                 "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                "Credits": "www.nytimes.com",
+                "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
                 "DemoType": "Viz"
               },
@@ -3224,7 +3224,7 @@
                 "Title": "API - Display a Tooltip",
                 "Name": "APIDisplayATooltip",
                 "DocUrl": "Guide/UI_Components/Chart/Tooltips/Show_and_Hide_a_Tooltip/",
-                "Credits": "www.geohive.com",
+                "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
                 "DemoType": "Viz"
               },
