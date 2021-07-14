@@ -202,7 +202,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         }
     }
 
-    _getTableAllDay() { return noop(); } //
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 

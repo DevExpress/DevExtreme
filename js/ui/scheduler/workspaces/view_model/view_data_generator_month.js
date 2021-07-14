@@ -12,6 +12,8 @@ import {
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
+    get dateTableAllDay() { return false; }
+
     getCellData(rowIndex, columnIndex, options, allDay) {
         const data = super.getCellData(rowIndex, columnIndex, options, false);
 
