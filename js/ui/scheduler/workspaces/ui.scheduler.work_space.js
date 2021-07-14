@@ -644,14 +644,22 @@ class SchedulerWorkSpace extends WidgetObserver {
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
             startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
             cellDuration: this.getCellDuration(),
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
             hoursInterval: this.option('hoursInterval'),
             currentDate: this.option('currentDate'),
             startDate: this.option('startDate'),
-            firstDayOfWeek: this.option('firstDayOfWeek'),
-            ...this._getDateGenerationOptions(),
+            firstDayOfWeek: this._firstDayOfWeek(),
+
+            isWorkView: this.isWorkView,
+            columnsInDay: 1, // TODO: try to remove
+            hiddenInterval: this._hiddenInterval, // TODO: remove
+            calculateCellIndex,
+            tableAllDay: this._getTableAllDay(),
+            rowCountBase: this._getRowCount(), // TODO: remove
+            columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 

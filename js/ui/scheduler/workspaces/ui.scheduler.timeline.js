@@ -324,8 +324,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
             daysInView,
-            cellCountInDay: this._getCellCountInDay(),
             getDateForHeaderText,
+            columnsInDay: this._getCellCountInDay(),
         };
     }
 

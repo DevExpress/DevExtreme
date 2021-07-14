@@ -89,6 +89,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return {
             ...options,
             getDateForHeaderText: (_, date) => date,
+            columnsInDay: 1,
+            calculateCellIndex,
         };
     }
 }

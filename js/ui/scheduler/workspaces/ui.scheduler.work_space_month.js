@@ -50,6 +50,16 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         };
     }
 
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
+
+        return {
+            ...options,
+            columnsInDay: 1,
+            calculateCellIndex,
+        };
+    }
+
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
     // TODO: there is a test for this bug, when changing the layout, the test will also be useless
     getCellWidth() {
