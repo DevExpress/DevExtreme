@@ -128,7 +128,12 @@ const isPreviousButtonDisabled = (header) => {
 
     min = min ? trimTime(min) : min;
 
-    return min && !isNaN(min.getTime()) && header._getNextDate(-1, caption.endDate) < min;
+    if(min) {
+        const previousDate = header._getNextDate(-1, caption.endDate);
+        return previousDate < min;
+    }
+
+    return false;
 };
 
 const isNextButtonDisabled = (header) => {
@@ -140,5 +145,10 @@ const isNextButtonDisabled = (header) => {
     max = max ? trimTime(max) : max;
     max && max.setHours(23, 59, 59);
 
-    return max && !isNaN(max.getTime()) && header._getNextDate(1, caption.startDate) > max;
+    if(max) {
+        const nextDate = header._getNextDate(1, caption.startDate);
+        return nextDate > max;
+    }
+
+    return false;
 };
