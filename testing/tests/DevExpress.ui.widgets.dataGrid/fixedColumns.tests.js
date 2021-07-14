@@ -3257,7 +3257,6 @@ QUnit.module('Fixed columns with real dataController and columnController', {
     // T829901
     QUnit.test('The load panel should not be displayed when fixing and unfixing the column', function(assert) {
         // arrange
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         const that = this;
         const $testElement = $('#container').width(400);
         const generateData = () => {
