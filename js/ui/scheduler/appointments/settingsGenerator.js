@@ -6,6 +6,8 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { createResourcesTree, getGroupCount } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
+import { ExpressionUtils } from '../expressionUtils';
+import { isDateAndTimeView } from '../workspaces/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -21,15 +23,19 @@ export class DateGeneratorBaseStrategy {
     get viewDataProvider() { return this.options.viewDataProvider; }
     get appointmentTakesAllDay() { return this.options.appointmentTakesAllDay; }
     get supportAllDayRow() { return this.options.supportAllDayRow; }
+    get isAllDayRowAppointment() { return this.options.isAllDayRowAppointment; }
     get timeZone() { return this.options.timeZone; }
     get dateRange() { return this.options.dateRange; }
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
-    get layoutManager() { return this.options.layoutManager; }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get isAllDayAppointment() { return this.options.isAllDayAppointment; }
+    get viewEndDayHour() { return this.options.viewEndDayHour; }
+    get endViewDate() { return this.options.endViewDate; }
+    get viewType() { return this.options.viewType; }
+    get isGroupedByDate() { return this.options.isGroupedByDate; }
+    get isVerticalOrientation() { return this.options.isVerticalOrientation; }
 
-    getIntervalDuration(allDay) {
-        return allDay
+    getIntervalDuration() {
+        return this.appointmentTakesAllDay
             ? this.options.allDayIntervalDuration
             : this.options.intervalDuration;
     }
@@ -50,7 +56,11 @@ export class DateGeneratorBaseStrategy {
 
         dateSettings = this._cropAppointmentsByStartDayHour(dateSettings, this.rawAppointment);
 
-        dateSettings = this._getProcessedLongAppointmentsIfRequired(dateSettings, appointmentAdapter);
+        dateSettings = this._fillNormalizedEndDate(dateSettings, this.rawAppointment);
+
+        if(this._needSeparateAppointment()) {
+            dateSettings = this._processedLongAppointments(dateSettings, appointmentAdapter);
+        }
 
         return {
             dateSettings,
@@ -186,40 +196,81 @@ export class DateGeneratorBaseStrategy {
         return appointmentList;
     }
 
-    _getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment) {
-        const rawAppointment = appointment.source();
+    _needSeparateAppointment() {
+        return this.isVerticalOrientation
+            ? this.isGroupedByDate
+            : this.isGroupedByDate && this.appointmentTakesAllDay;
+    }
 
-        const allDay = this.appointmentTakesAllDay;
-        const renderingStrategy = this.layoutManager.getRenderingStrategyInstance();
+    normalizeEndDateByViewEnd(rawAppointment, endDate) {
+        let result = new Date(endDate.getTime());
+        const isAllDay = isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay;
 
-        if(renderingStrategy.needSeparateAppointment(allDay)) { // TODO move to the other place
-            let longStartDateParts = [];
-            let resultDates = [];
+        if(!isAllDay) {
+            const roundedEndViewDate = dateUtils.roundToHour(this.endViewDate);
 
-            gridAppointmentList.forEach(gridAppointment => {
-                const maxDate = new Date(this.dateRange[1]);
-                const endDateOfPart = renderingStrategy.normalizeEndDateByViewEnd(rawAppointment, gridAppointment.endDate);
-
-                longStartDateParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
-                    milliseconds: this.getIntervalDuration(allDay)
-                });
-
-                const list = longStartDateParts.filter(startDatePart => new Date(startDatePart) < maxDate)
-                    .map(date => {
-                        return {
-                            startDate: date,
-                            endDate: new Date(new Date(date).setMilliseconds(appointment.duration)),
-                            source: gridAppointment.source
-                        };
-                    });
-
-                resultDates = resultDates.concat(list);
-            });
-
-            gridAppointmentList = resultDates;
+            if(result > roundedEndViewDate) {
+                result = roundedEndViewDate;
+            }
         }
 
-        return gridAppointmentList;
+        const endDayHour = this.viewEndDayHour;
+        const allDay = ExpressionUtils.getField(this.key, 'allDay', rawAppointment);
+        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
+
+        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
+            result = currentViewEndTime;
+        }
+
+        return result;
+    }
+
+    _fillNormalizedEndDate(dateSettings, rawAppointment) {
+        return dateSettings.map((item) => {
+            const { endDate } = item;
+
+            const normalizedEndDate = this.normalizeEndDateByViewEnd(rawAppointment, endDate);
+
+            return {
+                ...item,
+                normalizedEndDate
+            };
+        });
+    }
+
+    _processedLongAppointments(gridAppointmentList, appointmentAdapter) {
+        let result = [];
+        let longStartDateParts = [];
+
+        gridAppointmentList.forEach((gridAppointment) => {
+            const maxDate = new Date(this.dateRange[1]);
+            const { normalizedEndDate: endDateOfPart } = gridAppointment;
+
+            longStartDateParts = dateUtils.getDatesOfInterval(
+                gridAppointment.startDate,
+                endDateOfPart,
+                {
+                    milliseconds: this.getIntervalDuration(this.appointmentTakesAllDay)
+                }
+            );
+
+            const list = longStartDateParts
+                .filter((startDatePart) => new Date(startDatePart) < maxDate)
+                .map((date) => {
+                    const endDate = new Date(new Date(date).setMilliseconds(appointmentAdapter.duration));
+                    const normalizedEndDate = this.normalizeEndDateByViewEnd(this.rawAppointment, endDate);
+                    return {
+                        startDate: date,
+                        endDate,
+                        normalizedEndDate,
+                        source: gridAppointment.source
+                    };
+                });
+
+            result = result.concat(list);
+        });
+
+        return result;
     }
 
     _createGridAppointmentList(appointmentList, appointment) {
@@ -247,21 +298,21 @@ export class DateGeneratorBaseStrategy {
         let startViewDate = this.appointmentTakesAllDay
             ? dateUtils.trimTime(this.dateRange[0])
             : this.dateRange[0];
-        let endViewDate = this.dateRange[1];
+        let endViewDateByEndDayHour = this.dateRange[1];
 
         if(this.timeZone) {
             startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
-            endViewDate = this.timeZoneCalculator.createDate(endViewDate, { path: 'fromGrid' });
+            endViewDateByEndDayHour = this.timeZoneCalculator.createDate(endViewDateByEndDayHour, { path: 'fromGrid' });
 
-            const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDate);
+            const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDateByEndDayHour);
             if(daylightOffset) {
-                endViewDate = new Date(endViewDate.getTime() + daylightOffset);
+                endViewDateByEndDayHour = new Date(endViewDateByEndDayHour.getTime() + daylightOffset);
             }
         }
 
         return [
             startViewDate,
-            endViewDate
+            endViewDateByEndDayHour
         ];
     }
 
@@ -333,7 +384,7 @@ export class DateGeneratorBaseStrategy {
                 firstViewDate
             });
 
-            return !this.isAllDayAppointment
+            return !this.isAllDayRowAppointment
                 ? appointment.endDate > appointment.startDate
                 : true;
         });
@@ -372,7 +423,7 @@ export class DateGeneratorBaseStrategy {
             endDate
         } = appointment;
 
-        return this.viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, this.isAllDayAppointment);
+        return this.viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, this.isAllDayRowAppointment);
     }
 
     _getGroupIndices(appointmentResources, resourceManager) {
@@ -473,11 +524,11 @@ export class AppointmentSettingsGenerator {
 
     get rawAppointment() { return this.options.rawAppointment; }
     get resourceManager() { return this.options.resourceManager; }
-    get isAllDayAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
+    get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
-            isAllDayAppointment: this.isAllDayAppointment
+            isAllDayRowAppointment: this.isAllDayRowAppointment
         };
 
         return this.options.isVirtualScrolling
@@ -510,7 +561,7 @@ export class AppointmentSettingsGenerator {
 
         return cellPositionCalculator.calculateCellPositions(
             itemGroupIndices,
-            this.isAllDayAppointment,
+            this.isAllDayRowAppointment,
             this.appointmentAdapter.isRecurrent
         );
     }
