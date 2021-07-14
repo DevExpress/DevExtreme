@@ -19,7 +19,6 @@ import {
 import {
     getCaption,
     getNextIntervalDate,
-    isDefaultItem,
     validateViews,
     getStep,
 } from './utils';
@@ -139,7 +138,7 @@ export class SchedulerHeader extends Widget {
     }
 
     _parseItem(item) {
-        const isDefaultElement = isDefaultItem(item);
+        const isDefaultElement = this._isDefaultItem(item);
 
         if(isDefaultElement) {
             const defaultElementType = item[DEFAULT_ELEMENT];
@@ -246,6 +245,11 @@ export class SchedulerHeader extends Widget {
 
     _hideCalendar() {
         this._calendar.hide();
+    }
+
+    _isDefaultItem = (item) => {
+        return Object.prototype.hasOwnProperty
+            .call(item, DEFAULT_ELEMENT);
     }
 
     get currentView() {

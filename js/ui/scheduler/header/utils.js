@@ -9,8 +9,6 @@ const DAY_FORMAT = 'd';
 
 const DAYS_IN_WORK_WEEK = 5;
 
-const DEFAULT_ELEMENT = 'defaultElement';
-
 const {
     correctDateWithUnitBeginning: getPeriodStart,
     getFirstWeekDate: getWeekStart,
@@ -367,11 +365,6 @@ export const validateViews = (views) => {
             errors.log('W0008', viewType);
         }
     });
-};
-
-export const isDefaultItem = (item) => {
-    return Object.prototype.hasOwnProperty
-        .call(item, DEFAULT_ELEMENT);
 };
 
 export const formatViews = (views) => {
