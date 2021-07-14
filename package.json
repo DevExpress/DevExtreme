@@ -215,7 +215,8 @@
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch",
-    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false"
+    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
+    "qunit-in-docker": "gulp qunit-in-docker --constel"
   },
   "browserslist": [
     "last 2 versions",
