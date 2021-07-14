@@ -1151,7 +1151,9 @@ const Overlay = Widget.inherit({
 
         const isContentResized = beforeReRender.width !== $content.outerWidth()
             || beforeReRender.height !== $content.outerHeight();
-        this._shouldSkipContentResizeHandler(isContentResized);
+        if(isContentResized) {
+            this._shouldSkipContentResizeHandler(isContentResized);
+        }
 
         this._actions.onPositioned({ position: resultPosition });
     },
