@@ -46,7 +46,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel } from './ui.form.utils';
+import { renderLabel, renderHelpText } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 const FIELD_ITEM_REQUIRED_MARK_CLASS = 'dx-field-item-required-mark';
@@ -685,7 +685,9 @@ const LayoutManager = Widget.inherit({
             }
         }
 
-        that._renderHelpText(item, $editor, helpID);
+        $container.append(
+            renderHelpText({ $target: $editor, helpText: item.helpText, isSimpleItem: (item.itemType === SIMPLE_ITEM_TYPE), helpID })
+        );
 
         that._attachClickHandler($label, $editor, item.editorType);
     },
@@ -1014,23 +1016,6 @@ const LayoutManager = Widget.inherit({
             $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
             $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-        }
-    },
-
-    _renderHelpText: function(fieldItem, $editor, helpID) {
-        const helpText = fieldItem.helpText;
-        const isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
-
-        if(helpText && isSimpleItem) {
-            const $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
-
-            $editor.wrap($editorWrapper);
-
-            $('<div>')
-                .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-                .attr('id', helpID)
-                .text(helpText)
-                .appendTo($editor.parent());
         }
     },
 

@@ -10,6 +10,8 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FIELD_ITEM_HELP_TEXT_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -100,6 +102,21 @@ export const renderLabel = ({ text, id, location, alignment, labelID = null, mar
             )
         );
 };
+
+export function renderHelpText({ $target, helpText, isSimpleItem, helpID }) {
+    if(helpText && isSimpleItem) {
+        $target.wrap(
+            // TODO: this code modifies internal elements of the passed '$target' element
+            // instead, try to wrap passed '$target' element without changes in internal details
+            $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
+        );
+
+        return $('<div>')
+            .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
+            .attr('id', helpID)
+            .text(helpText);
+    }
+}
 
 function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
     if(!isRequiredMark && !isOptionalMark) {
