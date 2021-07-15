@@ -228,12 +228,11 @@ export class DateGeneratorBaseStrategy {
     _fillNormalizedEndDate(dateSettings, rawAppointment) {
         return dateSettings.map((item) => {
             const { endDate } = item;
-
             const normalizedEndDate = this.normalizeEndDateByViewEnd(rawAppointment, endDate);
 
             return {
                 ...item,
-                normalizedEndDate
+                endDate: normalizedEndDate
             };
         });
     }
@@ -243,11 +242,11 @@ export class DateGeneratorBaseStrategy {
 
         gridAppointmentList.forEach((gridAppointment) => {
             const maxDate = new Date(this.dateRange[1]);
-            const { normalizedEndDate: endDateOfPart } = gridAppointment;
+            const { endDate } = gridAppointment;
 
             const longStartDateParts = dateUtils.getDatesOfInterval(
                 gridAppointment.startDate,
-                endDateOfPart,
+                endDate,
                 {
                     milliseconds: this.getIntervalDuration(this.appointmentTakesAllDay)
                 }
@@ -260,8 +259,7 @@ export class DateGeneratorBaseStrategy {
                     const normalizedEndDate = this.normalizeEndDateByViewEnd(this.rawAppointment, endDate);
                     return {
                         startDate: date,
-                        endDate,
-                        normalizedEndDate,
+                        endDate: normalizedEndDate,
                         source: gridAppointment.source
                     };
                 });

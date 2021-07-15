@@ -287,10 +287,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-        const { normalizedEndDate } = position.info.appointment;
+        const { endDate } = position.info.appointment;
 
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
-        const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
+        const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');
 
         let width = Math.ceil(durationInHours / 24) * cellWidth;
 
@@ -304,10 +304,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const startDate = position.info.appointment.startDate;
-        const { normalizedEndDate } = position.info.appointment;
+        const { endDate } = position.info.appointment;
         const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
-        const fullDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
-        const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, normalizedEndDate) / toMs('minute');
+        const fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
+        const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / toMs('minute');
 
         const height = durationInMinutes * this._getMinuteHeight();
 
