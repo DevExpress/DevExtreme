@@ -3990,7 +3990,6 @@
               {
                 "Title": "TreeView with Search Bar",
                 "Name": "TreeViewWithSearchBar",
-                "DocUrl": "Guide/UI_Components/TreeView/Search_Nodes/",
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/Product.cs",
