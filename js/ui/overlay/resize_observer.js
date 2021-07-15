@@ -2,14 +2,15 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 
 class ResizeObserver {
-    constructor(callback) {
+    constructor(options) {
         if(!hasWindow()) {
             return;
         }
 
         this._observer = new window.ResizeObserver((...args) => {
-            if(!this._shouldSkipNextResize) {
-                callback(...args);
+            const beforeEachResult = options.beforeEach?.(...args);
+            if(!this._shouldSkipNextResize && !beforeEachResult?.shouldSkip) {
+                options.callback(...args);
             }
             this._shouldSkipNextResize = false;
         });
@@ -20,7 +21,6 @@ class ResizeObserver {
     }
 
     observe(element) {
-        this.skipNextResize();
         this._observer?.observe(element);
     }
 

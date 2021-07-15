@@ -351,15 +351,29 @@ const Overlay = Widget.inherit({
     },
 
     _initResizeObserver: function() {
-        this._resizeObserver = new ResizeObserver(() => { this._renderGeometry(); });
+        this._resizeObserver = new ResizeObserver({
+            callback: () => { this._renderGeometry(); },
+            beforeEach: (entries) => {
+                if(entries.length === 1) {
+                    const entry = entries[0];
+                    if(
+                        entry.target === this._$content.get(0)
+                            && entry.contentRect.width === this._actualDimension.width
+                            && entry.contentRect.height === this._actualDimension.height
+                    ) {
+                        return { shouldSkip: true };
+                    }
+                }
+            }
+        });
     },
 
-    _observeContentResize: function() {
-        this._resizeObserver.observe(this._$content.get(0));
-    },
-
-    _unobserveContentResize: function() {
-        this._resizeObserver?.unobserve(this._$content.get(0));
+    _observeContentResize: function(shouldObserve) {
+        if(shouldObserve) {
+            this._resizeObserver.observe(this._$content.get(0));
+        } else {
+            this._resizeObserver?.unobserve(this._$content.get(0));
+        }
     },
 
     _initMarkup() {
@@ -451,6 +465,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderVisibilityAnimate: function(visible) {
+        this._observeContentResize(visible);
         this._stopAnimation();
 
         return visible ? this._show() : this._hide();
@@ -517,7 +532,6 @@ const Overlay = Widget.inherit({
                     that._isShown = true;
                     that._actions.onShown();
                     that._toggleSafariScrolling();
-                    that._observeContentResize();
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -585,7 +599,6 @@ const Overlay = Widget.inherit({
 
                 this._animate(hideAnimation,
                     function() {
-                        that._unobserveContentResize();
                         that._$content.css('pointerEvents', '');
                         that._renderVisibility(false);
 
@@ -941,11 +954,11 @@ const Overlay = Widget.inherit({
             handles: this.option('resizeEnabled') ? 'all' : 'none',
             onResizeEnd: (...args) => {
                 this._resizeEndHandler(...args);
-                this._observeContentResize();
+                this._observeContentResize(true);
             },
             onResize: this._actions.onResize.bind(this),
             onResizeStart: (...args) => {
-                this._unobserveContentResize();
+                this._observeContentResize(false);
                 this._actions.onResizeStart(...args);
             },
             minHeight: 100,
@@ -962,7 +975,6 @@ const Overlay = Widget.inherit({
 
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
-        this._renderGeometry();
 
         this._actions.onResizeEnd();
     },
@@ -1121,7 +1133,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        this._stopAnimation();
+        if(fx.isAnimating(this._$content)) {
+            this._currentVisible = false;
+            this._renderVisibilityAnimate(this.option('visible'));
+            return;
+        }
+
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
@@ -1221,20 +1238,21 @@ const Overlay = Widget.inherit({
 
     _renderDimensions: function() {
         const content = this._$content.get(0);
-        const haveWindow = hasWindow();
 
-        let isContentResized = false;
-        ['width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach(dimension => {
-            const newValue = this._getOptionValue(dimension, content);
-            if(haveWindow) {
-                const initialValue = this._$content.css(dimension);
-                isContentResized = initialValue !== newValue;
-            }
-            this._$content.css(dimension, newValue);
+        this._$content.css({
+            minWidth: this._getOptionValue('minWidth', content),
+            maxWidth: this._getOptionValue('maxWidth', content),
+            minHeight: this._getOptionValue('minHeight', content),
+            maxHeight: this._getOptionValue('maxHeight', content),
+            width: this._getOptionValue('width', content),
+            height: this._getOptionValue('height', content)
         });
 
-        if(isContentResized) {
-            this._resizeObserver.skipNextResize();
+        if(hasWindow()) {
+            this._actualDimension = {
+                width: this._$content.width(),
+                height: this._$content.height()
+            };
         }
     },
 
