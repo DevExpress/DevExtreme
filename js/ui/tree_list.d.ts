@@ -1202,7 +1202,7 @@ type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 export interface dxTreeListToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type Enums.TreeListToolbarItemName|string
+     * @type Enums.TreeListToolbarItem|string
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string
@@ -1216,7 +1216,7 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 export interface dxTreeListToolbar {
     /**
      * @docid
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItemName>
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
     items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];

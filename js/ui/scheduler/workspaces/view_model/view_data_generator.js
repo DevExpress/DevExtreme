@@ -1,5 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
+import { getAllGroups, getGroupCount } from '../../resources/utils';
 import {
     getDateByCellIndices,
     calculateCellIndex,
@@ -12,12 +13,15 @@ export class ViewDataGenerator {
         const {
             rowCountInGroup,
             cellCountInGroupRow,
-            groupsList,
-            groupByDate,
+            groups,
+            isGroupedByDate,
             isHorizontalGrouping,
             isVerticalGrouping,
             totalCellCount,
         } = options;
+
+        this._setVisibilityDates(options);
+        const groupsList = getAllGroups(groups);
 
         let viewDataMap = [];
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow);
@@ -26,7 +30,7 @@ export class ViewDataGenerator {
         allDayPanelData && viewDataMap.push(allDayPanelData);
         viewDataMap.push(...viewCellsData);
 
-        if(isHorizontalGrouping && !groupByDate) {
+        if(isHorizontalGrouping && !isGroupedByDate) {
             viewDataMap = this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
         }
 
@@ -34,7 +38,7 @@ export class ViewDataGenerator {
             viewDataMap = this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
         }
 
-        if(groupByDate) {
+        if(isGroupedByDate) {
             viewDataMap = this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
         }
 
@@ -149,10 +153,11 @@ export class ViewDataGenerator {
         const {
             rowCount,
             startCellIndex,
+            startRowIndex,
             cellCount,
-            isStandaloneAllDayPanel,
+            isVerticalGrouping,
+            isAllDayPanelVisible,
         } = options;
-        const { startRowIndex } = options;
 
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
@@ -171,7 +176,7 @@ export class ViewDataGenerator {
 
         let correctedStartRowIndex = startRowIndex;
         let allDayPanelMap = [];
-        if(isStandaloneAllDayPanel) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
             correctedStartRowIndex++;
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
@@ -186,13 +191,16 @@ export class ViewDataGenerator {
         };
     }
 
+    _isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
+        return !isVerticalGrouping && isAllDayPanelVisible;
+    }
+
     getViewDataFromMap(viewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
-            cellCountInGroupRow,
             totalCellCount,
             totalRowCount,
             cellCount,
@@ -201,7 +209,8 @@ export class ViewDataGenerator {
             startCellIndex,
             isProvideVirtualCellsWidth,
             isGroupedAllDayPanel,
-            isStandaloneAllDayPanel,
+            isVerticalGrouping,
+            isAllDayPanelVisible,
         } = options;
         const {
             allDayPanelMap,
@@ -237,7 +246,7 @@ export class ViewDataGenerator {
             };
         }, { previousGroupIndex: -1, previousGroupedData: [] });
 
-        if(isStandaloneAllDayPanel) {
+        if(this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
         }
 
@@ -247,7 +256,6 @@ export class ViewDataGenerator {
             bottomVirtualRowHeight,
             leftVirtualCellWidth: isProvideVirtualCellsWidth ? leftVirtualCellWidth : undefined,
             rightVirtualCellWidth: isProvideVirtualCellsWidth ? rightVirtualCellWidth : undefined,
-            cellCountInGroupRow,
             isGroupedAllDayPanel,
             leftVirtualCellCount: startCellIndex,
             rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
@@ -306,11 +314,13 @@ export class ViewDataGenerator {
 
     prepareCellData(options, rowIndex, columnIndex) {
         const {
-            groupsList,
+            groups,
             tableAllDay,
             endDayHour,
             interval,
         } = options;
+
+        const groupsList = getAllGroups(groups);
 
         const startDate = getDateByCellIndices(options, rowIndex, columnIndex, this._calculateCellIndex);
         const endDate = this.calculateEndDate(startDate, interval, endDayHour);
@@ -414,11 +424,13 @@ export class ViewDataGenerator {
             groupOrientation,
             rowCountInGroup,
             cellCountInGroupRow,
-            groupCount,
-            groupByDate,
+            groups,
+            isGroupedByDate,
         } = options;
 
-        if(groupByDate) {
+        const groupCount = getGroupCount(groups);
+
+        if(isGroupedByDate) {
             return columnIndex % groupCount === 0;
         }
 
@@ -434,11 +446,13 @@ export class ViewDataGenerator {
             groupOrientation,
             rowCountInGroup,
             cellCountInGroupRow,
-            groupCount,
-            groupByDate
+            groups,
+            isGroupedByDate
         } = options;
 
-        if(groupByDate) {
+        const groupCount = getGroupCount(groups);
+
+        if(isGroupedByDate) {
             return (columnIndex + 1) % groupCount === 0;
         }
 
@@ -523,4 +537,10 @@ export class ViewDataGenerator {
         }
         return this._interval;
     }
+
+    _getIntervalDuration(intervalCount) {
+        return dateUtils.dateToMilliseconds('day') * intervalCount;
+    }
+
+    _setVisibilityDates() {}
 }

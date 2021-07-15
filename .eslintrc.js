@@ -322,6 +322,7 @@ module.exports = {
                 '@typescript-eslint/no-misused-promises': 'error',
                 '@typescript-eslint/no-floating-promises': 'error',
                 'rulesdir/no-non-null-assertion': 'warn',
+                '@typescript-eslint/no-unsafe-return': 'error',
                 '@typescript-eslint/no-non-null-assertion': 'off'
                 /*
             "@typescript-eslint/no-non-null-assertion": "error",
@@ -331,7 +332,6 @@ module.exports = {
             "no-return-await": "off",
             "@typescript-eslint/no-extraneous-class": "error",
             "@typescript-eslint/no-explicit-any": "error",
-            "@typescript-eslint/no-unsafe-return": "error",
             "@typescript-eslint/no-unsafe-assignment": "error",
             "@typescript-eslint/restrict-template-expressions": "error",
             "@typescript-eslint/no-unsafe-call": "error",

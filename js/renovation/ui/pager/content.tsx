@@ -125,7 +125,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   } {
     return {
       option: (): boolean => false,
-      element: (): HTMLElement | null => this.widgetRootElementRef.current,
+      element: (): HTMLElement | null => this.widgetRootElementRef.current as HTMLElement,
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);

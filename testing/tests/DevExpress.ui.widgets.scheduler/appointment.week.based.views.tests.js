@@ -353,8 +353,8 @@ module('Integration: Appointment Day, Week views', {
                     width: 1700
                 }, this.clock);
 
-                const workSpace = scheduler.instance.getWorkSpace();
-                const spy = sinon.spy(workSpace, 'getCoordinatesByDateInGroup');
+                const { positionHelper } = scheduler.instance.getWorkSpace();
+                const spy = sinon.spy(positionHelper, 'getCoordinatesByDateInGroup');
 
                 scheduler.instance.option('dataSource', data);
 
@@ -365,7 +365,7 @@ module('Integration: Appointment Day, Week views', {
                     assert.roughEqual(value[0].top, 0, 1.001, 'Top is OK');
                     assert.roughEqual(value[0].left, itemShift, 1.001, 'Left is OK');
                 } finally {
-                    workSpace.getCoordinatesByDateInGroup.restore();
+                    positionHelper.getCoordinatesByDateInGroup.restore();
                 }
             });
 

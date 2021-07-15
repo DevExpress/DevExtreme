@@ -1,8 +1,8 @@
 import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
-import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 
 fixture`Appointment popup form`
   .page(url(__dirname, '../container.html'));

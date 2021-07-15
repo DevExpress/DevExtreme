@@ -198,7 +198,8 @@
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
   }
 }
@@ -333,9 +334,8 @@
 }
 
 .dx-table-resize-frame {
-  > .dx-draggable-dragging {
-    &::after {
-      background-color: color.change($base-accent, $alpha: 0.5);
-    }
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
   }
 }

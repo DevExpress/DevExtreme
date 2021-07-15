@@ -47,7 +47,7 @@ const checkHeaderCells = function($element, assert, interval, groupCount, viewDu
 
 const moduleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 };
 

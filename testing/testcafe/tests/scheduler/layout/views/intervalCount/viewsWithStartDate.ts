@@ -1,5 +1,5 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../../model/scheduler';
-import { createScreenshotsComparer } from '../../../../../helpers/screenshot-comparer';
 import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
@@ -56,6 +56,51 @@ fixture`Layout: Views: IntervalCount with StartDate`
       .doubleClick(scheduler.getDateTableCell(0, 0))
 
       .expect(await takeScreenshot(`start-date-in-${view}-with-form.png`))
+      .ok()
+
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxScheduler', {
+    views: [{
+      type: view,
+      intervalCount,
+      startDate,
+    }],
+    currentView: view,
+    currentDate,
+    dataSource: [],
+    crossScrollingEnabled: true,
+  }));
+});
+
+[{
+  view: 'week',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'timelineWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'workWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}, {
+  view: 'timelineWorkWeek',
+  currentDate: new Date(2020, 9, 6),
+  startDate: new Date(2020, 8, 16),
+  intervalCount: 3,
+}].forEach(({
+  view, currentDate, startDate, intervalCount,
+}) => {
+  test(`startDate should work in ${view} view when it indicates the same week as the start as currentDate`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(await takeScreenshot(`complex-start-date-in-${view}.png`))
       .ok()
 
       .expect(compareResults.isValid())

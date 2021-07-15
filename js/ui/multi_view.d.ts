@@ -70,7 +70,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
