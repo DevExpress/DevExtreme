@@ -14,8 +14,10 @@ import { extend } from '../../../core/utils/extend';
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
-const DEFAULT_MIN_COLUMN_WIDTH = 40;
-const DEFAULT_MIN_ROW_HEIGHT = DEFAULT_MIN_COLUMN_WIDTH / 2;
+const DEFAULTS = {
+    minColumnWidth: 40,
+    minRowHeight: 24
+};
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
 const ROUGH_OFFSET = 3;
@@ -51,12 +53,8 @@ export default class TableResizingModule extends BaseModule {
         this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
     }
 
-    _minSizeLimit(property, newValue) {
-        if(isDefined(newValue)) {
-            return Math.max(newValue, 0);
-        } else {
-            return property === 'minColumnWidth' ? DEFAULT_MIN_COLUMN_WIDTH : DEFAULT_MIN_ROW_HEIGHT;
-        }
+    _minSizeLimit(propertyName, newValue) {
+        return isDefined(newValue) ? Math.max(newValue, 0) : DEFAULTS[propertyName];
     }
 
     _applyResizingImpl() {
