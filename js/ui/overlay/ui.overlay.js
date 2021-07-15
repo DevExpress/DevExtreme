@@ -264,7 +264,9 @@ const Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        this.option('copyRootClassesToWrapper') && this._$wrapper.addClass($element.attr('class'));
+        if(this.option('copyRootClassesToWrapper')) {
+            this._$wrapper.addClass($element.attr('class'));
+        }
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
@@ -435,7 +437,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperAttributes() {
-        const { wrapperAttr } = this.option() || {};
+        const { wrapperAttr } = this.option();
         const attributes = extend({}, wrapperAttr);
         const classNames = attributes.class;
 

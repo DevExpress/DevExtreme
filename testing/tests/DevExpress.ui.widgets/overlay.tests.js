@@ -497,10 +497,28 @@ testModule('option', moduleConfig, () => {
             assert.strictEqual(this.$wrapper.attr('someAttr'), 'someValue');
         });
 
-        test('does not override old clases', function(assert) {
+        test('does not override default clases', function(assert) {
             this.overlay.option('wrapperAttr', { class: 'newClass' });
 
             assert.ok(this.$wrapper.hasClass(OVERLAY_WRAPPER_CLASS));
+        });
+
+        test('overrides custom clases', function(assert) {
+            this.overlay.option('wrapperAttr', { class: 'newClass' });
+
+            assert.ok(this.$wrapper.hasClass('newClass'));
+            assert.notOk(this.$wrapper.hasClass('someClass'));
+        });
+
+        test('with null/undefined value deletes old classes from wrapperAttr', function(assert) {
+            this.overlay.option('wrapperAttr', undefined);
+
+            assert.notOk(this.$wrapper.hasClass('someClass'));
+
+            this.overlay.option('wrapperAttr', { class: 'newClass' });
+            this.overlay.option('wrapperAttr', null);
+
+            assert.notOk(this.$wrapper.hasClass('newClass'));
         });
     });
 
