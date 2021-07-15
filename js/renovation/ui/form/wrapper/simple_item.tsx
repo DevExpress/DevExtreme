@@ -3,6 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { LabelProps } from './label_props';
 import { RequiredRule } from './required_rule_props';
+import { TextBoxProps } from './text_box_props';
 
 @ComponentBindings()
 export class SimpleItem {
@@ -24,8 +25,7 @@ export class SimpleItem {
 
   @OneWay() dataField?: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @OneWay() editorOptions?: any;
+  @OneWay() editorOptions?: TextBoxProps;
 
   @OneWay() editorType?: 'dxTextBox';
 
