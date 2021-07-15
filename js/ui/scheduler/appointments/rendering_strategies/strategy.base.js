@@ -17,13 +17,18 @@ const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 class BaseRenderingStrategy {
-    constructor(instance) {
-        this.instance = instance;
-        this.key = this.instance.key;
+    constructor(options) {
+        this.options = options;
         this._initPositioningStrategy();
     }
 
-    get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
+    get key() { return this.options.key; }
+    get instance() { return this.options.instance; } // TODO get rid of this
+    get cellWidth() { return this.options.getCellWidth(); }
+    get cellHeight() { return this.options.cellHeight(); }
+    get cellAllDayHeight() { return this.options.cellAllDayHeight(); }
+
+    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
     _isAdaptive() {
         return this.instance.fire('isAdaptive');
