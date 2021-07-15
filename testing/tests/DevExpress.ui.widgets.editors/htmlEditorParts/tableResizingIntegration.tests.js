@@ -20,6 +20,7 @@ const DX_HIGHLIGHTED_COLUMN_CLASS = 'dx-htmleditor-highlighted-column';
 const TIME_TO_WAIT = 200;
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
+const TABLE_BORDERS = 1;
 
 const tableMarkup = '\
     <table>\
@@ -867,7 +868,7 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.find('tr:first-child').find('td:first-child').outerHeight(), 3.01);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.find('tr:first-child').find('td:first-child').outerHeight(), 3);
 
             pointerMockInstance.dragEnd();
         });
@@ -898,7 +899,7 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3.01);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight() - TABLE_BORDERS, 3);
 
             pointerMockInstance.dragEnd();
         });
@@ -1461,7 +1462,7 @@ module('Table resizing integration', {
 
             $table = this.$element.find('table').eq(0);
 
-            assert.roughEqual($table.outerHeight(), tableHeight, 2, 'Table width is not changed');
+            assert.roughEqual($table.outerHeight(), tableHeight, 2, 'Table height is not changed');
         });
 
         test('Second table frame should update position after the insert row to the first table', function(assert) {

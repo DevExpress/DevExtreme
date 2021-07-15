@@ -416,12 +416,14 @@ const HtmlEditor = Editor.inherit({
     },
 
     _tableResizingOptionChanged: function(args) {
-        const optionData = args.fullName?.split('.');
-        const optionName = optionData.length === 2 ? optionData[1] : args.name;
-        const shouldPassOptionsToModule = optionData.length === 2 || (args.previousValue && args.value);
+        const tableResizingModule = this._quillInstance.getModule('tableResizing');
+        const shouldPassOptionsToModule = Boolean(tableResizingModule);
 
         if(shouldPassOptionsToModule) {
-            this._quillInstance.getModule('tableResizing').option(optionName, args.value);
+            const optionData = args.fullName?.split('.');
+            const optionName = optionData.length === 2 ? optionData[1] : args.name;
+
+            tableResizingModule.option(optionName, args.value);
         } else {
             this._invalidate();
         }
