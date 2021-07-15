@@ -48,7 +48,7 @@ export class GanttView extends Widget {
         return isDefined(value) ? value : dateLocalization.firstDayOfWeekIndex();
     }
     getTaskAreaContainer() {
-        return this._ganttViewCore.taskAreaContainer;
+        return this._ganttViewCore.getTaskAreaContainer();
     }
     getBarManager() {
         return this._ganttViewCore.barManager;
