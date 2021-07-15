@@ -500,7 +500,7 @@ const Overlay = Widget.inherit({
         const animation = this._getAnimationConfig() ?? {};
         const showAnimation = this._normalizeAnimation(animation.show, 'to');
         const startShowAnimation = showAnimation?.start ?? noop;
-        const completeShowAnimation = showAnimation.complete ?? noop;
+        const completeShowAnimation = showAnimation?.complete ?? noop;
 
         this._animate(
             showAnimation,
