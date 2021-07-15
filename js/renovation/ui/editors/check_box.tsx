@@ -23,8 +23,6 @@ import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
 
-const ICON_FONT_SIZE_RATIO = isMaterial(current()) ? 16 / 18 : 16 / 22;
-
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
     text, readOnly, isValid, value,
@@ -165,8 +163,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     if (iconElement !== null && iconElement !== undefined) {
       const width = typeof iconWidth === 'number' ? iconWidth : iconElement.offsetWidth;
       const height = typeof iconHeight === 'number' ? iconHeight : iconElement.offsetHeight;
-
-      const calculatedFontSize = `${Math.ceil(Math.min(width, height) * ICON_FONT_SIZE_RATIO)}px`;
+      const iconFontSizeRatio = isMaterial(current()) ? 16 / 18 : 16 / 22;
+      const calculatedFontSize = `${Math.ceil(Math.min(width, height) * iconFontSizeRatio)}px`;
 
       iconElement.style.fontSize = calculatedFontSize;
     }
