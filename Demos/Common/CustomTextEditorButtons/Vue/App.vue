@@ -108,11 +108,11 @@ export default {
           if(e.component.option('text') === '$') {
             e.component.option('text', '€');
             this.currencyFormat = '$ #.##';
-            this.currencyValue /= 0.891;
+            this.currencyValue /= 0.836;
           } else {
             e.component.option('text', '$');
             this.currencyFormat = '€ #.##';
-            this.currencyValue *= 0.891;
+            this.currencyValue *= 0.836;
           }
         }
       },

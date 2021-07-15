@@ -15,7 +15,7 @@ $(function(){
 
     var chartOptions = {
         dataSource: chartDataSource,
-        title: "Temperature in Barcelona, 2012",
+        title: "Temperature in Seattle , 2017",
         size: {
             height: 420
         },

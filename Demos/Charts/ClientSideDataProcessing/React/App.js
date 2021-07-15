@@ -18,7 +18,7 @@ import SelectBox from 'devextreme-react/select-box';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.temperature = [6, 7, 8, 9, 10, 11, 12];
+    this.temperature = [2, 4, 6, 8, 9, 10, 11];
     this.palette = ['#c3a2cc', '#b7b5e0', '#e48cba'];
     this.paletteIndex = 0;
     this.monthWeather = new DataSource({
@@ -30,7 +30,7 @@ class App extends React.Component {
         },
         loadMode: 'raw'
       }),
-      filter: ['t', '>', '6'],
+      filter: ['t', '>', '2'],
       paginate: false
     });
 
@@ -55,7 +55,7 @@ class App extends React.Component {
     return (
       <div id="chart-demo">
         <Chart
-          title="Temperature in Barcelona: January 2012"
+          title="Temperature in Seattle: October 2017"
           dataSource={this.monthWeather}
           customizePoint={this.customizePoint}>
           <Size height={420} />
@@ -76,7 +76,7 @@ class App extends React.Component {
             id="choose-temperature"
             dataSource={this.temperature}
             width={70}
-            defaultValue={6}
+            defaultValue={2}
             onValueChanged={this.changeTemperature} />
           <div className="label">Choose a temperature threshold, &deg;C:
           </div>

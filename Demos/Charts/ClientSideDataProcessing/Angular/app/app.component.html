@@ -3,7 +3,7 @@
         [dataSource]="monthWeather"
         [customizePoint]="customizePoint"
     >
-        <dxo-title text="Temperature in Barcelona: January 2012"></dxo-title>
+        <dxo-title text="Temperature in Seattle: October 2017"></dxo-title>
         <dxo-size [height]="420"></dxo-size>
         <dxi-series
             argumentField="day"
@@ -22,7 +22,7 @@
             id="choose-temperature"
             [dataSource]="temperature"
             [width]="70"
-            [value]="6"
+            [value]="2"
             (onValueChanged)="onValueChanged($event)"
         ></dx-select-box>
         <div class="label">Choose a temperature threshold, &deg;C:

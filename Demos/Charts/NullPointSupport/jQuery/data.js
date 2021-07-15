@@ -106,4 +106,12 @@ var dataSource = [{
     year: 2008,
     gold: 7,
     silver: 16
+}, {
+    year: 2012,
+    gold: 11,
+    silver: 11
+}, {
+    year: 2016,
+    gold: 18,
+    silver: 18
 }];

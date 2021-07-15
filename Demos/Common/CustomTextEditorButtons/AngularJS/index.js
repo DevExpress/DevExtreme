@@ -22,11 +22,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         if($scope.currencyInstance.option("text") === "$") {
             $scope.currencyInstance.option("text", "€");
             $scope.format = "$ #.##";
-            $scope.priceValue /= 0.891;
+            $scope.priceValue /= 0.836;
         } else {
             $scope.currencyInstance.option("text", "$");
             $scope.format = "€ #.##";
-            $scope.priceValue *= 0.891;
+            $scope.priceValue *= 0.836;
         }
     };
 

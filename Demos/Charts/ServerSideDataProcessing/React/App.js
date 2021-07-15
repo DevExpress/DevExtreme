@@ -48,7 +48,7 @@ class App extends React.Component {
     return (
       <div id="chart-demo">
         <Chart
-          title="Temperature in Barcelona, 2012"
+          title="Temperature in Seattle , 2017"
           dataSource={this.chartDataSource}>
           <Size height={420} />
           <ValueAxis

@@ -1,26 +1,26 @@
 export const grossProductData = [{
   state: 'Illinois',
-  year1998: 423.721,
-  year2001: 476.851,
-  year2004: 528.904
+  year2016: 803,
+  year2017: 823,
+  year2018: 863
 }, {
   state: 'Indiana',
-  year1998: 178.719,
-  year2001: 195.769,
-  year2004: 227.271
+  year2016: 316,
+  year2017: 332,
+  year2018: 332
 }, {
   state: 'Michigan',
-  year1998: 308.845,
-  year2001: 335.793,
-  year2004: 372.576
+  year2016: 452,
+  year2017: 459,
+  year2018: 470
 }, {
   state: 'Ohio',
-  year1998: 348.555,
-  year2001: 374.771,
-  year2004: 418.258
+  year2016: 621,
+  year2017: 642,
+  year2018: 675
 }, {
   state: 'Wisconsin',
-  year1998: 160.274,
-  year2001: 182.373,
-  year2004: 211.727
+  year2016: 290,
+  year2017: 294,
+  year2018: 301
 }];

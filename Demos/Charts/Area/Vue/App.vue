@@ -3,7 +3,7 @@
     <DxChart
       :data-source="dataSource"
       palette="Harmony Light"
-      title="Population: Age Structure (2000)"
+      title="Population: Age Structure (2018)"
     >
       <DxCommonSeriesSettings
         :type="type"

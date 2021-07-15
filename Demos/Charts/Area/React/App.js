@@ -32,7 +32,7 @@ class App extends React.Component {
       <div id="chart-demo">
         <Chart
           palette="Harmony Light"
-          title="Population: Age Structure (2000)"
+          title="Population: Age Structure (2018)"
           dataSource={dataSource}
         >
           <CommonSeriesSettings

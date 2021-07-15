@@ -18,7 +18,7 @@ if(!/localhost/.test(document.location.host)) {
     styleUrls: ['app/app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-    temperature: number[] = [6, 7, 8, 9, 10, 11, 12];
+    temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
     palette: string[] = ['#c3a2cc', '#b7b5e0', '#e48cba'];
     paletteIndex = 0;
     monthWeather: any = {};
@@ -35,7 +35,7 @@ export class AppComponent implements AfterViewInit {
                 },
                 loadMode: 'raw'
             }),
-            filter: ['t', '>', '6'],
+            filter: ['t', '>', '2'],
             paginate: false
         });
     }

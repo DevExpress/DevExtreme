@@ -15,7 +15,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             return d.promise();
         },
         loadMode: 'raw',
-        filter: ['t', '>', '6'],
+        filter: ['t', '>', '2'],
         paginate: false
     });
     
@@ -24,7 +24,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     
     $scope.chartOptions = {
         dataSource: source,
-        title: 'Temperature in Barcelona: January 2012',
+        title: 'Temperature in Seattle: October 2017',
         size: {
             height: 420
         },
@@ -60,9 +60,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
     
     $scope.temperatureOptions = {
-        dataSource: [6, 7, 8, 9, 10, 11, 12],
+        dataSource: [2, 4, 6, 8, 9, 10, 11],
         width: 70,
-        value: 6,
+        value: 2,
         onValueChanged: function (data) {
             source.filter(['t', '>', data.value]);
             source.load();

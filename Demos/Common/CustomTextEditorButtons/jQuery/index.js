@@ -36,11 +36,11 @@ $(function(){
                     if(e.component.option("text") === "$") {
                         e.component.option("text", "€");
                         currencyEditor.option("format", "$ #.##");
-                        currencyEditor.option("value", currencyEditor.option("value") / 0.891);
+                        currencyEditor.option("value", currencyEditor.option("value") / 0.836);
                     } else {
                         e.component.option("text", "$");
                         currencyEditor.option("format", "€ #.##");
-                        currencyEditor.option("value", currencyEditor.option("value") * 0.891);
+                        currencyEditor.option("value", currencyEditor.option("value") * 0.836);
                     }
                 }
             }

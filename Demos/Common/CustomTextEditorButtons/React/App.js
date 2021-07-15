@@ -39,13 +39,13 @@ class App extends React.Component {
           e.component.option('text', '€');
           this.setState({
             currencyFormat: '$ #.##',
-            currencyValue: this.state.currencyValue / 0.891
+            currencyValue: this.state.currencyValue / 0.836
           });
         } else {
           e.component.option('text', '$');
           this.setState({
             currencyFormat: '€ #.##',
-            currencyValue: this.state.currencyValue * 0.891
+            currencyValue: this.state.currencyValue * 0.836
           });
         }
       }

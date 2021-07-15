@@ -2,7 +2,7 @@
   <div id="chart-demo">
     <DxChart
       :data-source="chartDataSource"
-      title="Temperature in Barcelona, 2012"
+      title="Temperature in Seattle , 2017"
     >
       <DxSize :height="420"/>
       <DxValueAxis

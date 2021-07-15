@@ -24,16 +24,16 @@ class App extends React.Component {
         </CommonSeriesSettings>
         <Series
           argumentField="state"
-          valueField="year2004"
-          name="2004"
+          valueField="year2018"
+          name="2018"
         />
         <Series
-          valueField="year2001"
-          name="2001"
+          valueField="year2017"
+          name="2017"
         />
         <Series
-          valueField="year1998"
-          name="1998"
+          valueField="year2016"
+          name="2016"
         />
         <Legend verticalAlignment="bottom" horizontalAlignment="center"></Legend>
         <Export enabled={true} />

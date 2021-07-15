@@ -17,7 +17,7 @@ window.onload = function() {
             margin: {
                 bottom: 20
             },
-            title: "Population: Age Structure (2000)",
+            title: "Population: Age Structure (2018)",
             argumentAxis: {
                 valueMarginsEnabled: false
             },

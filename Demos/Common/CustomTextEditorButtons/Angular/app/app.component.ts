@@ -54,11 +54,11 @@ export class AppComponent {
                 if(e.component.option("text") === "$") {
                     e.component.option("text", "€");
                     this.currencyFormat = "$ #.##";
-                    this.priceValue /= 0.891;
+                    this.priceValue /= 0.836;
                 } else {
                     e.component.option("text", "$");
                     this.currencyFormat = "€ #.##";
-                    this.priceValue *= 0.891;
+                    this.priceValue *= 0.836;
                 }
             }
         };

@@ -2251,7 +2251,7 @@
             "Title": "Simple Array",
             "Name": "SimpleArray",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Local_Array/",
-            "Credits": "www.geohive.com",
+            "Credits": "www.datahub.io",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Scripts/data/populationData.js"
@@ -2270,7 +2270,7 @@
             "Title": "Client-Side Data Processing",
             "Name": "ClientSideDataProcessing",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
-            "Credits": "weatherbase.com",
+            "Credits": "www.kaggle.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Scripts/data/palette.js",
@@ -2283,7 +2283,7 @@
             "Title": "Server-Side Data Processing",
             "Name": "ServerSideDataProcessing",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/OData/",
-            "Credits": "weatherbase.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/SampleData/MonthNames.cs"
@@ -2346,7 +2346,7 @@
             "Title": "Area",
             "Name": "Area",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Area_Series/",
-            "Credits": "www.geohive.com",
+            "Credits": "wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "stackedarea, fullstackedarea"
@@ -2364,7 +2364,7 @@
             "Title": "Step Area",
             "Name": "StepArea",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Area_Series/",
-            "Credits": "www.nytimes.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
               "/Models/SampleData/AustralianOlympicMedals.cs"
@@ -2375,7 +2375,7 @@
             "Title": "Step Area with Gaps",
             "Name": "NullPointSupport",
             "DocUrl": "ApiReference/UI_Components/dxChart/Configuration/series/#ignoreEmptyPoints",
-            "Credits": "www.nytimes.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           }
@@ -2397,7 +2397,7 @@
             "Title": "Side-by-Side Bar",
             "Name": "SideBySideBar",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
-            "Credits": "www.bea.gov",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -2405,7 +2405,7 @@
             "Title": "Stacked Bar",
             "Name": "StackedBar",
             "DocUrl": "Guide/UI_Components/Chart/Series_Types/Bar_Series/",
-            "Credits": "www.geohive.com",
+            "Credits": "www.wikipedia.org",
             "Widget": "Charts",
             "DemoType": "Viz"
           },
@@ -4369,7 +4369,7 @@
             "Name": "CustomTextEditorButtons",
             "Widget": "Common",
             "DemoType": "Web",
-            "Credits": "The USD/EUR rate is taken from https://www.x-rates.com/ and is relevant on 31 March 2019"
+            "Credits": "The USD/EUR rate is taken from www.wikipedia.org and is relevant on 14 April 2021"
           }
         ]
       },

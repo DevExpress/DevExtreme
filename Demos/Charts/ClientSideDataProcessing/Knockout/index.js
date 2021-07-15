@@ -14,7 +14,7 @@ window.onload = function() {
             return d.promise();
         },
         loadMode: 'raw',
-        filter: ['t', '>', '6'],
+        filter: ['t', '>', '2'],
         paginate: false
     });
     
@@ -24,7 +24,7 @@ window.onload = function() {
     var viewModel = {
         chartOptions: {
             dataSource: source,
-            title: 'Temperature in Barcelona: January 2012',
+            title: 'Temperature in Seattle: October 2017',
             size: {
                 height: 420
             },
@@ -56,9 +56,9 @@ window.onload = function() {
             }
         },
         temperatureOptions: {
-            dataSource: [6, 7, 8, 9, 10, 11, 12],
+            dataSource: [2, 4, 6, 8, 9, 10, 11],
             width: 70,
-            value: 6,
+            value: 2,
             onValueChanged: function (data) {
                 var t = data.value;
                 source.filter(['t', '>', t]);

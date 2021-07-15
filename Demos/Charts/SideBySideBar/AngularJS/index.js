@@ -17,9 +17,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             }
         },
         series: [
-            { valueField: "year2004", name: "2004" },
-            { valueField: "year2001", name: "2001" },
-            { valueField: "year1998", name: "1998" }
+            { valueField: "year2018", name: "2018" },
+            { valueField: "year2017", name: "2017" },
+            { valueField: "year2016", name: "2016" }
         ],
         title: "Gross State Product within the Great Lakes Region",
         legend: {
