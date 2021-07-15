@@ -3426,7 +3426,9 @@ QUnit.module('search should be canceled only after popup hide animation completi
         this.keyboard.type('1');
         this.clock.tick(TIME_TO_WAIT);
 
-        this.keyboard.press('enter');
+        this.keyboard
+            .press('down')
+            .press('enter');
         assert.strictEqual(this.getListItems().length, 1, 'search was not canceled before animation end');
         this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
@@ -3684,7 +3686,7 @@ QUnit.module('search substitution', {
             assert.ok(true, 'the test is not actual for non-desktop devices');
             return;
         }
-
+        const clock = sinon.useFakeTimers();
         const dataSource = [
             { id: 1, text: 'test1' },
             { id: 2, text: 'test2' },
@@ -3705,7 +3707,6 @@ QUnit.module('search substitution', {
 
         const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
 
-        const clock = sinon.useFakeTimers();
         try {
             listItem.trigger('dxpointerdown');
             clock.tick();
