@@ -247,26 +247,6 @@ testModule('render', moduleConfig, () => {
         assert.ok($content.hasClass(HOVER_STATE_CLASS));
     });
 
-    test('overlay should stop animation on window resize', function(assert) {
-        const originalFxStop = fx.stop;
-
-        try {
-            $('#overlay').dxOverlay({
-                visible: true
-            });
-
-            let stopExecuted = false;
-            fx.stop = () => {
-                stopExecuted = true;
-            };
-            resizeCallbacks.fire();
-            assert.ok(stopExecuted, 'animation stopped');
-
-        } finally {
-            fx.stop = originalFxStop;
-        }
-    });
-
     test('default', function(assert) {
         const instance = $('#overlay').dxOverlay().dxOverlay('instance');
         const $content = instance.$content();
