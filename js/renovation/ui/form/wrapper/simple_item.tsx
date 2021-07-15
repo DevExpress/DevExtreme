@@ -2,7 +2,6 @@ import {
   ComponentBindings, OneWay,
 } from '@devextreme-generator/declarations';
 import { ItemBase } from './item_base';
-import { LabelProps } from './label_props';
 
 @ComponentBindings()
 export class SimpleItem extends ItemBase {
@@ -17,7 +16,8 @@ export class SimpleItem extends ItemBase {
 
   @OneWay() isRequired?: boolean;
 
-  @OneWay() label?: LabelProps;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay() label?: any;
 
   // TODO: not working yet
   // template?: template;
