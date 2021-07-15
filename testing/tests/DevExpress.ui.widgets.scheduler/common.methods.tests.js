@@ -499,43 +499,6 @@ QUnit.module('Methods', {
         assert.ok(!result, 'Appointment doesn\'t take all day');
     });
 
-    QUnit.test('Scheduler focus method should call workspace focus method when appointment wasn\'t updated', function(assert) {
-        const scheduler = createInstance({
-            dataSource: [],
-            currentView: 'day',
-            currentDate: new Date(2015, 10, 3)
-        });
-
-        const workspace = scheduler.instance.getWorkSpace();
-        const spy = sinon.spy(workspace, 'focus');
-
-        scheduler.instance.focus();
-
-        assert.ok(spy.calledOnce, 'focus is called');
-    });
-
-    QUnit.test('Scheduler focus method should call appointments focus method when appointment was updated', function(assert) {
-        const tasks = [{
-            text: 'a',
-            startDate: new Date(2015, 6, 8, 8, 0),
-            endDate: new Date(2015, 6, 8, 17, 0),
-            allDay: true
-        }];
-
-        const scheduler = createInstance({
-            dataSource: tasks,
-            currentDate: new Date(2015, 6, 8)
-        });
-
-        const appointments = scheduler.instance.getAppointmentsInstance();
-        const focusSpy = sinon.spy(appointments, 'focus');
-
-        scheduler.instance._editAppointmentData = tasks[0];
-        scheduler.instance.focus();
-
-        assert.ok(focusSpy.calledOnce, 'focus is called');
-    });
-
     QUnit.test('Scheduler getWorkSpaceDateTableOffset should return right dateTable offset', function(assert) {
         const scheduler = createInstance({
             dataSource: 'day',
