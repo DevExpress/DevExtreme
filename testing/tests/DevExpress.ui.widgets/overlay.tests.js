@@ -3882,7 +3882,7 @@ testModule('renderGeometry', {
         fx.off = false;
     }
 }, () => {
-    test('visibility change', function(assert) {
+    QUnit.testInActiveWindow('visibility change', function(assert) {
         assert.ok(this.positionedHandlerStub.notCalled, 'render geometry isn\'t called yet');
 
         const showingResizeHandled = assert.async();
@@ -3895,7 +3895,7 @@ testModule('renderGeometry', {
         }, this.timeToWaitResize);
     });
 
-    test('window resize', function(assert) {
+    QUnit.testInActiveWindow('window resize', function(assert) {
         const showingResizeHandled = assert.async();
         this.overlayInstance.show();
 
@@ -3906,7 +3906,7 @@ testModule('renderGeometry', {
         }, this.timeToWaitResize);
     });
 
-    test('repaint', function(assert) {
+    QUnit.testInActiveWindow('repaint', function(assert) {
         const showingResizeHandled = assert.async();
         this.overlayInstance.show();
 
@@ -3939,7 +3939,7 @@ testModule('renderGeometry', {
             position: { of: 'body' }
         };
         for(const optionName in newOptions) {
-            test(optionName, function(assert) {
+            QUnit.testInActiveWindow(optionName, function(assert) {
                 // eslint-disable-next-line qunit/no-async-in-loops
                 const showingResizeHandled = assert.async();
                 setTimeout(() => {
@@ -4119,7 +4119,7 @@ QUnit.module('resizeObserver integration', {
         fx.off = false;
     }
 }, () => {
-    test('overlay should be repositioned only once on window resize', function(assert) {
+    QUnit.testInActiveWindow('overlay should be repositioned only once on window resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnWindowResizeDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
@@ -4139,7 +4139,7 @@ QUnit.module('resizeObserver integration', {
         }, this.timeToWaitResize);
     });
 
-    test('content resize should trigger overlay geometry rendering', function(assert) {
+    QUnit.testInActiveWindow('content resize should trigger overlay geometry rendering', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnRestylingDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
@@ -4174,7 +4174,7 @@ QUnit.module('resizeObserver integration', {
         }, this.timeToWaitResize);
     });
 
-    test('overlay content dimensions should be updated during resize', function(assert) {
+    QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
         const $overlay = $('#overlay').dxOverlay({
@@ -4199,7 +4199,7 @@ QUnit.module('resizeObserver integration', {
         }, this.timeToWaitResize);
     });
 
-    test('resize end should trigger the single geometry rendering', function(assert) {
+    QUnit.testInActiveWindow('resize end should trigger the single geometry rendering', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
         const $overlay = $('#overlay').dxOverlay({
