@@ -1148,12 +1148,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        if(fx.isAnimating(this._$content)) {
-            this._currentVisible = false;
-            this._renderVisibilityAnimate(this.option('visible'));
-            return;
-        }
-
+        this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
