@@ -806,14 +806,17 @@ class Scheduler extends Widget {
     }
 
     _updateHeader() {
-        const viewCountConfig = this._getViewCountConfig();
-        this._header.option('intervalCount', viewCountConfig.intervalCount);
-        this._header.option('displayedDate', this._workSpace._getViewStartByOptions()); // TODO
-        this._header.option('min', this._dateOption('min'));
-        this._header.option('max', this._dateOption('max'));
-        this._header.option('currentDate', this._dateOption('currentDate'));
-        this._header.option('firstDayOfWeek', this.getFirstDayOfWeek());
-        this._header.option('currentView', this._currentView);
+        this._header.option(
+            {
+                'intervalCount': this._getViewCountConfig().intervalCount,
+                'displayedDate': this._workSpace._getViewStartByOptions(),
+                'min': this._dateOption('min'),
+                'max': this._dateOption('max'),
+                'currentDate': this._dateOption('currentDate'),
+                'firstDayOfWeek': this.getFirstDayOfWeek(),
+                'currentView': this._currentView,
+            }
+        );
     }
 
     _dateOption(optionName) {
@@ -1447,13 +1450,12 @@ class Scheduler extends Widget {
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.setCurrentView = (name) => this.option('currentView', name);
         result.setCurrentDate = (date) => this.option('currentDate', date);
+        result.items = this.option('toolbar');
 
         result.todayDate = () => {
             const result = getTimeZoneCalculator(this.key).createDate(new Date(), { path: 'toGrid' });
             return result;
         };
-
-        result.items = this.option('toolbar');
 
         return result;
     }

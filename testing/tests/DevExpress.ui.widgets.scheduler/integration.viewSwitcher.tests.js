@@ -75,7 +75,6 @@ QUnit.test('dataSource should be filtered if \'currentView\' option is changed',
     }], 'Data is filtered');
 });
 
-// TODO - переместить тест
 QUnit.test('Appointment should be rerendered only once if \'currentView\' option is changed', function(assert) {
     const options = {
         views: ['month', 'week'],

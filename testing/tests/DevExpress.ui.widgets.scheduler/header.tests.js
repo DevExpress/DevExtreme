@@ -8,13 +8,13 @@ import { getCaption } from 'ui/scheduler/header/utils';
 testStart(() => initTestMarkup());
 
 test('should has navigator and view switcher in basic configuration', function(assert) {
-    createWrapper({
+    const scheduler = createWrapper({
         views: ['day'],
         currentView: 'day',
     });
 
-    assert.equal($('.dx-scheduler-navigator').length, 1, 'Navigator is in DOM');
-    assert.equal($('.dx-scheduler-view-switcher').length, 1, 'View switcher is in DOM');
+    assert.ok(scheduler.header.navigator, 'Navigator is in DOM');
+    assert.ok(scheduler.header.viewSwitcher, 'View switcher is in DOM');
 });
 
 test('should have correct deafult views', function(assert) {
@@ -53,15 +53,19 @@ module('Meterial theme', {
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
-    test('should has navigator and dropDown viewSwitcher', function(assert) {
-        createWrapper({
+    test('should has navigator, viewSwitcher and dropDown viewSwitcher', function(assert) {
+        const scheduler = createWrapper({
             views: ['day'],
             currentView: 'day',
         });
 
-        assert.equal($('.dx-scheduler-navigator').length, 1, 'Navigator is in DOM');
-        assert.equal($('.dx-scheduler-view-switcher').length, 1, 'View switcher is in DOM');
-        assert.equal($('.dx-scheduler-view-switcher-dropdown-button').length, 1, 'Drop down button is in DOM');
+        const navigatorCount = scheduler.header.navigator.getElement().length;
+        const viewSwitcherCount = scheduler.header.viewSwitcher.getElement().length;
+        const dropDownButtonCount = scheduler.header.viewSwitcher.dropDownButton.getElement().length;
+
+        assert.equal(navigatorCount, 1, 'Navigator is in DOM');
+        assert.equal(viewSwitcherCount, 1, 'View switcher is in DOM');
+        assert.equal(dropDownButtonCount, 1, 'Drop down button is in DOM');
     });
 });
 
@@ -111,16 +115,14 @@ module('Toolbar config', {}, () => {
             toolbar: [],
         });
 
-        const viewSwitcher = scheduler.header.viewSwitcher.getElement();
-        const dateNavigator = scheduler.header.navigator.getElement();
+        const viewSwitcherCount = scheduler.header.viewSwitcher.getElement().length;
+        const dateNavigatorCount = scheduler.header.navigator.getElement().length;
 
-        assert.equal(viewSwitcher.length, 0, 'viewSwitcher not disaplayed');
-        assert.equal(dateNavigator.length, 0, 'dateNavigator not disaplayed');
+        assert.equal(viewSwitcherCount, 0, 'viewSwitcher not disaplayed');
+        assert.equal(dateNavigatorCount, 0, 'dateNavigator not disaplayed');
     });
 
     test('should display custom today button', function(assert) {
-        assert.expect(1);
-
         const scheduler = createWrapper({
             currentDate: new Date(2020, 6, 7),
             currentView: 'month',

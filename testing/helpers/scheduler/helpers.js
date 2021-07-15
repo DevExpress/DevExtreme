@@ -30,6 +30,7 @@ export const CLASSES = {
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
     viewSwitcher: '.dx-scheduler-view-switcher',
+    viewSwitcherDropDownButton: '.dx-scheduler-view-switcher-dropdown-button',
 
     calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
@@ -356,8 +357,8 @@ class ViewSwitcherWrapper extends ElementWrapper {
         super(CLASSES.viewSwitcher);
     }
 
-    getText() {
-        return this.getElement().text();
+    get dropDownButton() {
+        return new ElementWrapper(CLASSES.viewSwitcherDropDownButton);
     }
 
     get selected() {
@@ -377,7 +378,7 @@ class ViewSwitcherWrapper extends ElementWrapper {
         buttons.each((index, button) => {
             if($(button).text() === name) {
                 result = new ClickElementWrapper(CLASSES.button, parent, index);
-                // TODO return false;
+                return false;
             }
         });
 

@@ -649,7 +649,7 @@ QUnit.module('View with configuration', {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view 2', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view', function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 

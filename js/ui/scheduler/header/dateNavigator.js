@@ -45,7 +45,6 @@ const getPreviousButtonOptions = (header) => {
             const previousButton = e.component;
             previousButton.option('disabled', isPreviousButtonDisabled(header));
 
-
             header._addEvent('min', () => {
                 previousButton.option('disabled', isPreviousButtonDisabled(header));
             });

@@ -41,15 +41,15 @@ export default class SchedulerCalendar extends Widget {
     _renderPopover() {
         this.$element().addClass(CALENDAR_POPOVER_CLASS);
 
-        const _isMobileLayout = this._isMobileLayout();
+        const isMobileLayout = this._isMobileLayout();
 
-        const overlayType = _isMobileLayout ? Popup : Popover;
+        const overlayType = isMobileLayout ? Popup : Popover;
 
         this._popover = this._createComponent(this.$element(), overlayType, {
             contentTemplate: () => this._createPopupContent(),
             defaultOptionsRules: [
                 {
-                    device: () => _isMobileLayout,
+                    device: () => isMobileLayout,
                     options: {
                         fullScreen: true,
                         showCloseButton: false,

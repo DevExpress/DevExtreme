@@ -40,12 +40,9 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 
-$scheduler-navigator-offset: 9px;
-$scheduler-switcher-offset: 10px;
+$scheduler-toolbat-item-offset: 9px;
 $toolbar-menu-container-offset: 9px;
 $scheduler-default-header-height: 56px;
-
-$scheduler-navigator-caption-width: 180px;
 
 $scheduler-timepanel-cell-offset: 20px;
 
@@ -573,7 +570,7 @@ $arrow-down: "\f016";
       }
 
       .dx-toolbar-item-content {
-        padding: $scheduler-navigator-offset;
+        padding: $scheduler-toolbat-item-offset;
       }
 
       .dx-toolbar-menu-container {
@@ -2347,25 +2344,6 @@ $arrow-down: "\f016";
     .dx-scheduler-date-time-shader-all-day {
       margin-left: 0;
       margin-right: $scheduler-left-column-width;
-    }
-
-    .dx-scheduler-navigator {
-      float: right;
-      padding-left: 0;
-      padding-right: $scheduler-navigator-offset;
-
-      .dx-device-mobile & {
-        padding-right: $scheduler-navigator-offset * 0.5;
-      }
-    }
-
-    .dx-scheduler-view-switcher.dx-tabs {
-      float: left;
-    }
-
-    .dx-scheduler-view-switcher.dx-dropdownmenu {
-      left: $scheduler-switcher-offset;
-      right: auto;
     }
 
     .dx-scheduler-work-space-month {
