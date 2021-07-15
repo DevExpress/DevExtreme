@@ -15,7 +15,7 @@ describe('Form', () => {
       const componentProps = new FormProps();
       componentProps.items = [new SimpleItem()];
       componentProps.items[0].label = new LabelProps();
-      componentProps.items[0].editorOptions = [new TextBoxProps()];
+      componentProps.items[0].editorOptions = new TextBoxProps();
       componentProps.items[0].validationRules = [new RequiredRule()];
 
       const props = {
