@@ -237,6 +237,21 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
+        each(['material', 'generic'])
+          .it('should set fontSize properly for "%s" theme', (theme) => {
+            (current as Mock).mockImplementation(() => theme);
+            const checkBox = new CheckBox({ iconWidth: 22, iconHeight: 22 });
+            checkBox.iconRef = { current: { style: {} } } as any;
+            const icon = checkBox.iconRef.current;
+
+            checkBox.updateIconFontSize();
+
+            const iconFontSizeRatio = theme === 'material' ? 16 / 18 : 16 / 22;
+            const expectedValue = `${Math.ceil(iconFontSizeRatio * 22)}px`;
+
+            expect(icon?.style.fontSize).toEqual(expectedValue);
+          });
+
         it('should correctly change icon font size if "iconWidth"/"iconHeight" options are defined in pixels string', () => {
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
