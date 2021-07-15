@@ -376,7 +376,7 @@ const Overlay = Widget.inherit({
         if(shouldObserve) {
             this._resizeObserver.observe(this._$content.get(0));
         } else {
-            this._resizeObserver?.unobserve(this._$content.get(0));
+            this._resizeObserver.unobserve(this._$content.get(0));
         }
     },
 
@@ -1358,6 +1358,9 @@ const Overlay = Widget.inherit({
     },
 
     _dispose: function() {
+        this._resizeObserver.disconnect();
+        this._resizeObserver = undefined;
+
         fx.stop(this._$content, false);
         clearTimeout(this._deferShowTimer);
 
@@ -1372,8 +1375,6 @@ const Overlay = Widget.inherit({
 
         this._toggleSafariScrolling();
         zIndexPool.remove(this._zIndex);
-        this._resizeObserver.disconnect();
-        this._resizeObserver = undefined;
         this._$wrapper.remove();
         this._$content.remove();
     },
