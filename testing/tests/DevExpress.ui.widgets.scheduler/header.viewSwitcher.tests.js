@@ -50,27 +50,6 @@ module('Option Changing', {}, () => {
         );
     });
 
-    test('should change caption text after changing "currentView"', function(assert) {
-        const scheduler = createWrapper({
-            views: ['day', 'week', 'month', 'agenda'],
-            currentView: 'day',
-            currentDate: new Date(2021, 6, 7),
-        });
-
-        const navigator = scheduler.header.navigator;
-
-        assert.equal(navigator.getText(), '7 July 2021', 'Correct caption for day view');
-
-        scheduler.option('currentView', 'week');
-        assert.equal(navigator.getText(), '4-10 July 2021', 'Correct caption for week view');
-
-        scheduler.option('currentView', 'month');
-        assert.equal(navigator.getText(), 'July 2021', 'Correct caption for month view');
-
-        scheduler.option('currentView', 'agenda');
-        assert.equal(navigator.getText(), '7-13 July 2021', 'Correct caption for agenda view');
-    });
-
     test('should select view button after changing "currentView"', function(assert) {
         const scheduler = createWrapper({
             views: [

@@ -18,7 +18,7 @@ test('should has navigator and view switcher in basic configuration', function(a
 });
 
 test('should have correct deafult views', function(assert) {
-    const scheduler = createWrapper();
+    const scheduler = createWrapper({ 'useDropDownViewSwitcher': false });
 
     assert.equal(
         scheduler.header.viewSwitcher.getText(),
@@ -30,16 +30,16 @@ test('should have correct deafult views', function(assert) {
 test('should rerender after useDropDownViewSwitcher option changes', function(assert) {
     const scheduler = createWrapper({
         currentView: 'month',
-        views: ['month'],
+        views: ['day', 'month'],
     });
 
-    const headerInstance = scheduler.instance._header;
+    scheduler.option('useDropDownViewSwitcher', true);
 
-    const stub = sinon.stub(headerInstance, '_render');
-
-    scheduler.option('useDropDownViewSwitcher', []);
-
-    assert.ok(stub.calledOnce, 'Render method is called');
+    assert.equal(
+        scheduler.header.viewSwitcher.getText(),
+        'Month',
+        'Drop down view switcher displayed'
+    );
 });
 
 module('Meterial theme', {

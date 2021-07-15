@@ -8,10 +8,10 @@ test('should has correct caption', function(assert) {
     const scheduler = createWrapper({
         views: ['week'],
         currentView: 'week',
-        currentDate: new Date(2021, 6, 7),
+        currentDate: new Date(2021, 4, 7),
     });
 
-    assert.equal(scheduler.header.navigator.getText(), '4-10 July 2021');
+    assert.equal(scheduler.header.navigator.getText(), '2-8 May 2021');
 });
 
 test('should has correct caption(with firstDayOfWeek)', function(assert) {
@@ -19,10 +19,10 @@ test('should has correct caption(with firstDayOfWeek)', function(assert) {
         views: ['week'],
         currentView: 'week',
         firstDayOfWeek: 3,
-        currentDate: new Date(2021, 6, 7),
+        currentDate: new Date(2021, 4, 7),
     });
 
-    assert.equal(scheduler.header.navigator.getText(), '7-13 July 2021');
+    assert.equal(scheduler.header.navigator.getText(), '5-11 May 2021');
 });
 
 test('should has correct caption(with intervalCount and startDate in view)', function(assert) {
@@ -31,12 +31,12 @@ test('should has correct caption(with intervalCount and startDate in view)', fun
         views: [{
             type: 'week',
             intervalCount: 3,
-            startDate: new Date(2021, 6, 5),
+            startDate: new Date(2021, 4, 5),
         }],
-        currentDate: new Date(2021, 6, 7),
+        currentDate: new Date(2021, 4, 7),
     });
 
-    assert.equal(scheduler.header.navigator.getText(), '4-24 July 2021');
+    assert.equal(scheduler.header.navigator.getText(), '2-22 May 2021');
 });
 
 test('should has correct caption(with agendaDuration)', function(assert) {
@@ -47,13 +47,34 @@ test('should has correct caption(with agendaDuration)', function(assert) {
             agendaDuration: 4,
         }],
         firstDayOfWeek: 3,
-        currentDate: new Date(2021, 6, 7),
+        currentDate: new Date(2021, 4, 7),
     });
 
-    assert.equal(scheduler.header.navigator.getText(), '7-10 July 2021');
+    assert.equal(scheduler.header.navigator.getText(), '7-10 May 2021');
 });
 
 module('Option Changing', {}, () => {
+    test('should change caption text after changing "currentView"', function(assert) {
+        const scheduler = createWrapper({
+            views: ['day', 'week', 'month', 'agenda'],
+            currentView: 'day',
+            currentDate: new Date(2021, 4, 7),
+        });
+
+        const navigator = scheduler.header.navigator;
+
+        assert.equal(navigator.getText(), '7 May 2021', 'Correct caption for day view');
+
+        scheduler.option('currentView', 'week');
+        assert.equal(navigator.getText(), '2-8 May 2021', 'Correct caption for week view');
+
+        scheduler.option('currentView', 'month');
+        assert.equal(navigator.getText(), 'May 2021', 'Correct caption for month view');
+
+        scheduler.option('currentView', 'agenda');
+        assert.equal(navigator.getText(), '7-13 May 2021', 'Correct caption for agenda view');
+    });
+
     test('should toggle previous and next buttons depending on "min" & "max"', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2021, 6, 5),
@@ -85,28 +106,28 @@ module('Option Changing', {}, () => {
             currentView: 'day',
             currentDate: new Date(2020, 6, 7),
         });
-        scheduler.option('currentDate', new Date(2021, 5, 4));
-        assert.equal(scheduler.header.navigator.getText(), '4 June 2021', 'Caption is correct');
+        scheduler.option('currentDate', new Date(2021, 4, 4));
+        assert.equal(scheduler.header.navigator.getText(), '4 May 2021', 'Caption is correct');
     });
 
     test('should update caption after changing "currentView"', function(assert) {
         const scheduler = createWrapper({
             views: ['month', 'day'],
             currentView: 'day',
-            currentDate: new Date(2021, 6, 7),
+            currentDate: new Date(2021, 4, 7),
         });
         scheduler.option('currentView', 'month');
-        assert.equal(scheduler.header.navigator.getText(), 'July 2021', 'Caption is correct');
+        assert.equal(scheduler.header.navigator.getText(), 'May 2021', 'Caption is correct');
     });
 
     test('should update caption after changing "firstDayOfWeek"', function(assert) {
         const scheduler = createWrapper({
             views: ['week'],
             currentView: 'week',
-            currentDate: new Date(2021, 6, 7),
+            currentDate: new Date(2021, 4, 7),
         });
         scheduler.option('firstDayOfWeek', 4);
-        assert.equal(scheduler.header.navigator.getText(), '1-7 July 2021', 'Caption is correct');
+        assert.equal(scheduler.header.navigator.getText(), '6-12 May 2021', 'Caption is correct');
     });
 
 
@@ -117,14 +138,14 @@ module('Option Changing', {}, () => {
                 agendaDuration: 5,
             }],
             currentView: 'agemda',
-            currentDate: new Date(2021, 6, 7),
+            currentDate: new Date(2021, 4, 7),
         });
-        assert.equal(scheduler.header.navigator.getText(), '7-11 July 2021', 'Caption is correct');
+        assert.equal(scheduler.header.navigator.getText(), '7-11 May 2021', 'Caption is correct');
         scheduler.option('views', [{
             type: 'agenda',
             agendaDuration: 3,
         }]);
-        assert.equal(scheduler.header.navigator.getText(), '7-9 July 2021', 'Caption is correct');
+        assert.equal(scheduler.header.navigator.getText(), '7-9 May 2021', 'Caption is correct');
     });
 });
 
