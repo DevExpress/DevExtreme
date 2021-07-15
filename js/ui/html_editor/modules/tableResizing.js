@@ -642,7 +642,7 @@ export default class TableResizingModule extends BaseModule {
         if(option === 'enabled') {
             this.enabled = value;
             value ? this._applyResizing(true) : this.clean();
-        } else if(option === 'minColumnWidth' || option === 'minRowHeight') {
+        } else if(['minColumnWidth', 'minRowHeight'].includes(option)) {
             this[`_${option}`] = this._minSizeLimit(option, value);
         }
     }
