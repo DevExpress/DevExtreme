@@ -416,7 +416,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _tableResizingOptionChanged: function(args) {
-        const tableResizingModule = this._quillInstance.getModule('tableResizing');
+        const tableResizingModule = this._quillInstance?.getModule('tableResizing');
         const shouldPassOptionsToModule = Boolean(tableResizingModule);
 
         if(shouldPassOptionsToModule) {
