@@ -41,6 +41,12 @@ const RowDraggingExtender = {
         columnsController.columnOption('type:drag', 'visible', isHandleColumnVisible);
     },
 
+    _togglePointerEventsStyle: function(toggle) {
+        // T929503
+        const $el = this._sortableFixed?.$element();
+        $el?.css('pointerEvents', toggle ? 'auto' : '');
+    },
+
     _renderContent: function() {
         const rowDragging = this.option('rowDragging');
         const allowReordering = this._allowReordering();
@@ -50,10 +56,6 @@ const RowDraggingExtender = {
         const sortableFixedName = '_sortableFixed';
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
-        const togglePointerEventsStyle = (toggle) => {
-            // T929503
-            this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
-        };
 
         if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
@@ -75,13 +77,14 @@ const RowDraggingExtender = {
                     rowDragging.onDragStart?.(e);
                 },
                 onDragEnter: () => {
-                    togglePointerEventsStyle(true);
+                    this._togglePointerEventsStyle(true);
                 },
                 onDragLeave: () => {
-                    togglePointerEventsStyle(false);
+                    this._togglePointerEventsStyle(false);
                 },
                 onDragEnd: (e) => {
-                    togglePointerEventsStyle(false);
+                    this._togglePointerEventsStyle(false);
+                    e.toComponent.getView('rowsView')._togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
                 },
                 dropFeedbackMode: rowDragging.dropFeedbackMode,
