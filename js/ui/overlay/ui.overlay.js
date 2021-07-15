@@ -114,10 +114,10 @@ const Overlay = Widget.inherit({
             escape: function() {
                 this.hide();
             },
-            upArrow: move.bind(this, -offsetSize, 0),
-            downArrow: move.bind(this, offsetSize, 0),
-            leftArrow: move.bind(this, 0, -offsetSize),
-            rightArrow: move.bind(this, 0, offsetSize)
+            upArrow: (e) => { move.call(this, -offsetSize, 0, e); },
+            downArrow: (e) => { move.call(this, offsetSize, 0, e); },
+            leftArrow: (e) => { move.call(this, 0, -offsetSize, e); },
+            rightArrow: (e) => { move.call(this, 0, offsetSize, e); }
         });
     },
 
@@ -344,9 +344,8 @@ const Overlay = Widget.inherit({
     },
 
     _initCloseOnOutsideClickHandler: function() {
-        const that = this;
-        this._proxiedDocumentDownHandler = function() {
-            return that._documentDownHandler(...arguments);
+        this._proxiedDocumentDownHandler = (...args) => {
+            return this._documentDownHandler(...args);
         };
     },
 
@@ -449,7 +448,7 @@ const Overlay = Widget.inherit({
         viewPortChanged.remove(this._viewPortChangeHandle);
 
         if(toggle) {
-            this._viewPortChangeHandle = this._viewPortChangeHandler.bind(this);
+            this._viewPortChangeHandle = (...args) => { this._viewPortChangeHandler(...args); };
             viewPortChanged.add(this._viewPortChangeHandle);
         }
     },
@@ -483,12 +482,11 @@ const Overlay = Widget.inherit({
     },
 
     _show: function() {
-        const that = this;
         const deferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
         deferred.done(() => {
-            delete that._parentHidden;
+            delete this._parentHidden;
         });
 
         if(this._parentHidden) {
@@ -504,7 +502,7 @@ const Overlay = Widget.inherit({
 
         this._normalizePosition();
 
-        const animation = that._getAnimationConfig() || {};
+        const animation = this._getAnimationConfig() || {};
         const showAnimation = this._normalizeAnimation(animation.show, 'to');
         const startShowAnimation = (showAnimation && showAnimation.start) || noop;
         const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
@@ -522,21 +520,24 @@ const Overlay = Widget.inherit({
                     return;
                 }
 
-                this._animate(showAnimation, function() {
-                    if(that.option('focusStateEnabled')) {
-                        eventsEngine.trigger(that._focusTarget(), 'focus');
-                    }
+                this._animate(
+                    showAnimation,
+                    (...args) => {
+                        if(this.option('focusStateEnabled')) {
+                            eventsEngine.trigger(this._focusTarget(), 'focus');
+                        }
 
-                    completeShowAnimation.apply(this, arguments);
-                    that._showAnimationProcessing = false;
-                    that._isShown = true;
-                    that._actions.onShown();
-                    that._toggleSafariScrolling();
-                    deferred.resolve();
-                }, function() {
-                    startShowAnimation.apply(this, arguments);
-                    that._showAnimationProcessing = true;
-                });
+                        completeShowAnimation.call(this, ...args);
+                        this._showAnimationProcessing = false;
+                        this._isShown = true;
+                        this._actions.onShown();
+                        this._toggleSafariScrolling();
+                        deferred.resolve();
+                    },
+                    (...args) => {
+                        startShowAnimation.call(this, ...args);
+                        this._showAnimationProcessing = true;
+                    });
             };
 
             if(this.option('templatesRenderAsynchronously')) {
@@ -572,9 +573,8 @@ const Overlay = Widget.inherit({
         }
         this._currentVisible = false;
 
-        const that = this;
         const deferred = new Deferred();
-        const animation = that._getAnimationConfig() || {};
+        const animation = this._getAnimationConfig() || {};
         const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
         const startHideAnimation = (hideAnimation && hideAnimation.start) || noop;
         const completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop;
@@ -585,7 +585,7 @@ const Overlay = Widget.inherit({
         } else {
             this._actions.onHiding(hidingArgs);
 
-            that._toggleSafariScrolling();
+            this._toggleSafariScrolling();
 
             if(hidingArgs.cancel) {
                 this._isHidingActionCanceled = true;
@@ -597,22 +597,22 @@ const Overlay = Widget.inherit({
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
 
-                this._animate(hideAnimation,
-                    function() {
-                        that._$content.css('pointerEvents', '');
-                        that._renderVisibility(false);
+                this._animate(
+                    hideAnimation,
+                    (...args) => {
+                        this._$content.css('pointerEvents', '');
+                        this._renderVisibility(false);
 
-                        completeHideAnimation.apply(this, arguments);
-                        that._hideAnimationProcessing = false;
-                        that._actions?.onHidden();
+                        completeHideAnimation.call(this, ...args);
+                        this._hideAnimationProcessing = false;
+                        this._actions?.onHidden();
 
                         deferred.resolve();
                     },
-
-                    function() {
-                        that._$content.css('pointerEvents', 'none');
-                        startHideAnimation.apply(this, arguments);
-                        that._hideAnimationProcessing = true;
+                    (...args) => {
+                        this._$content.css('pointerEvents', 'none');
+                        startHideAnimation.call(this, ...args);
+                        this._hideAnimationProcessing = true;
                     }
                 );
             }
@@ -721,9 +721,8 @@ const Overlay = Widget.inherit({
     },
 
     _initTabTerminatorHandler: function() {
-        const that = this;
-        this._proxiedTabTerminatorHandler = function() {
-            that._tabKeyHandler(...arguments);
+        this._proxiedTabTerminatorHandler = (...args) => {
+            this._tabKeyHandler(...args);
         };
     },
 
@@ -945,21 +944,21 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        eventsEngine.on($dragTarget, startEventName, this._dragStartHandler.bind(this));
-        eventsEngine.on($dragTarget, updateEventName, this._dragUpdateHandler.bind(this));
+        eventsEngine.on($dragTarget, startEventName, (e) => { this._dragStartHandler(e); });
+        eventsEngine.on($dragTarget, updateEventName, (e) => { this._dragUpdateHandler(e); });
     },
 
     _renderResize: function() {
         this._resizable = this._createComponent(this._$content, Resizable, {
             handles: this.option('resizeEnabled') ? 'all' : 'none',
-            onResizeEnd: (...args) => {
-                this._resizeEndHandler(...args);
+            onResizeEnd: (e) => {
+                this._resizeEndHandler(e);
                 this._observeContentResize(true);
             },
-            onResize: this._actions.onResize.bind(this),
-            onResizeStart: (...args) => {
+            onResize: (e) => { this._actions.onResize(e); },
+            onResizeStart: (e) => {
                 this._observeContentResize(false);
-                this._actions.onResizeStart(...args);
+                this._actions.onResizeStart(e);
             },
             minHeight: 100,
             minWidth: 100,
@@ -967,7 +966,7 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _resizeEndHandler: function() {
+    _resizeEndHandler: function(e) {
         this._positionChangeHandled = true;
 
         const width = this._resizable.option('width');
@@ -976,7 +975,7 @@ const Overlay = Widget.inherit({
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
 
-        this._actions.onResizeEnd();
+        this._actions.onResizeEnd(e);
     },
 
     _renderScrollTerminator: function() {

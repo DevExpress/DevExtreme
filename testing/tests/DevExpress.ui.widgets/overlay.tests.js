@@ -451,8 +451,11 @@ testModule('option', moduleConfig, () => {
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
+        assert.strictEqual(onResizeStartFired.getCall(0).args.length, 1, 'event is passed');
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
+        assert.strictEqual(onResizeFired.getCall(0).args.length, 1, 'event is passed');
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+        assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
     test('resize should change overlay width/height options value', function(assert) {
