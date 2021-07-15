@@ -165,24 +165,8 @@ QUnit.test('Scheduler should handle events from units', function(assert) {
         assert.ok(spy.calledOn(this.instance), 'testFunction has a right context');
     };
 
-    checkSchedulerUnit.call(this, '.dx-scheduler-header', 'dxSchedulerHeader');
     checkSchedulerUnit.call(this, '.dx-scheduler-work-space', 'dxSchedulerWorkSpaceDay');
     checkSchedulerUnit.call(this, '.dx-scheduler-scrollable-appointments', 'dxSchedulerAppointments');
-});
-
-QUnit.test('Scheduler should throw an error if event is not added to subscribes', function(assert) {
-    this.createInstance();
-    const unit = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-
-    assert.throws(
-        function() {
-            unit.notifyObserver('someFn', { a: 1 });
-        },
-        function(e) {
-            return /E1031/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
 });
 
 QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
