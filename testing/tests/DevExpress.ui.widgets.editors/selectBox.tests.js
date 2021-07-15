@@ -3708,7 +3708,7 @@ QUnit.module('search substitution', {
         const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
 
         try {
-            listItem.trigger('dxpointerdown');
+            listItem.trigger('dxclick');
             clock.tick();
             let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
