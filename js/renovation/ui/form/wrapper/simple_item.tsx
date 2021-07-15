@@ -38,6 +38,5 @@ export class SimpleItem {
   // TODO: not working yet
   // template?: template;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() validationRules?: (RequiredRule)[];
 }
