@@ -916,7 +916,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     } = this.props;
 
     const classesMap = {
-      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform} dx-scrollable-renovated`]: true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${this.platform}`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar !== 'never' && this.useSimulatedScrollbar,
@@ -937,7 +937,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   get useSimulatedScrollbar(): boolean {
     if (!isDefined(this.props.useSimulatedScrollbar)) {
-      return nativeScrolling && this.platform === 'android' && !browser.mozilla;
+      return nativeScrolling as boolean && this.platform === 'android' && !browser.mozilla;
     }
 
     return this.props.useSimulatedScrollbar;

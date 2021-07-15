@@ -2646,6 +2646,131 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.strictEqual(selectBoxField2.option('value'), null, 'dropdowneditor value 2');
             assert.deepEqual(selectBoxField2.option('items'), [{ id: 5, name: 'name5', cat: 3 }, { id: 6, name: 'name6', cat: 3 }], 'dropdowneditor items 2');
         });
+
+        QUnit.testInActiveWindow(`Data store should not be updated when a boolean cell value is invalid (cell mode)(repaintChangesOnly=${repaintChangesOnly})(T1010440)`, function(assert) {
+            const data = [
+                { id: 1, field1: 'test', field2: true }
+            ];
+            const updateSpy = sinon.spy(function(_, values) {
+                data[0].field2 = values.field2;
+            });
+            const dataGrid = createDataGrid({
+                repaintChangesOnly,
+                dataSource: {
+                    key: 'id',
+                    load: function() {
+                        return data;
+                    },
+                    update: updateSpy
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    validationRules: [
+                        {
+                            type: 'custom',
+                            validationCallback: function(params) {
+                                return params.value;
+                            }
+                        }
+                    ]
+                }],
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'cell value after the first click');
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'cell invalid after the first click');
+            assert.notOk(updateSpy.called, 'update is not called after the first click');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 1), true, 'cell value after the second click');
+            assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'cell valid after the second click');
+            assert.strictEqual(updateSpy.callCount, 1, 'update is called after the first click');
+            assert.strictEqual(updateSpy.args[0][1].field2, true, 'update is called with valid value');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'cell value after the third click');
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'cell invalid after the third click');
+            assert.strictEqual(updateSpy.callCount, 1, 'update is not called after the third click');
+        });
+
+        QUnit.testInActiveWindow(`Data store should not be inserted when a boolean cell value is invalid (cell mode)(repaintChangesOnly=${repaintChangesOnly})(T1010440)`, function(assert) {
+            const data = [
+                { id: 1, field1: 'test', field2: true }
+            ];
+            const insertSpy = sinon.spy(function() {
+            });
+            const dataGrid = createDataGrid({
+                repaintChangesOnly,
+                dataSource: {
+                    key: 'id',
+                    load: function() {
+                        return data;
+                    },
+                    insert: insertSpy
+                },
+                columns: ['field1', {
+                    dataField: 'field2',
+                    validationRules: [
+                        {
+                            type: 'custom',
+                            validationCallback: function(params) {
+                                return params.value;
+                            }
+                        }
+                    ]
+                }],
+                editing: {
+                    mode: 'cell',
+                    allowAdding: true,
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+
+            // act
+            $(dataGrid.element()).find('.dx-datagrid-addrow-button').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-inserted'), 'first row is inserted');
+
+            // act
+            $(dataGrid.getRowElement(1)).trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'cell is invalid after the first click');
+            assert.notOk(insertSpy.called, 'insert is not called after the first click');
+
+            // act
+            $(dataGrid.getCellElement(0, 1)).trigger('dxclick');
+            this.clock.tick();
+            $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(insertSpy.callCount, 1, 'insert is called after the last click');
+            assert.strictEqual(insertSpy.args[0][0].field2, true, 'insert is called with valid value');
+        });
     });
 });
 
@@ -3271,6 +3396,34 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // assert
         const $addRowButton = dataGrid.$element().find('.dx-datagrid-addrow-button');
         assert.strictEqual($addRowButton.length, 1, 'add row button is rendered');
+    });
+
+    // T1012892
+    QUnit.test('change editing.allowUpdating option should update editing column', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ a: 1 }, { a: 2 }, { a: 3 }]
+        });
+
+        // assert
+        let $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, 0, 'edit button is not visible');
+
+        // act
+        dataGrid.option('editing.allowUpdating', true);
+        this.clock.tick();
+
+        // assert
+        $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, dataGrid.totalCount(), 'edit button is visible');
+
+        // act
+        dataGrid.option('editing.allowUpdating', false);
+        this.clock.tick();
+
+        // assert
+        $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, 0, 'edit button is not visible');
     });
 
     // T749733

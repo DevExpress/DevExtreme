@@ -270,7 +270,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       const id = keyboard.on(
         this.widgetRef.current,
         this.widgetRef.current,
-        (e: Event): void => onKeyDown(e),
+        (e: Event): void => onKeyDown(e) as undefined,
       );
 
       return (): void => keyboard.off(id);
@@ -321,7 +321,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     return undefined;
   }
 
-  get attributes(): { [key: string]: string } {
+  get attributes(): Record<string, string> {
     const {
       aria,
       disabled,
@@ -331,14 +331,14 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
     return {
-      ...extend({}, this.restAttributes, accessKey && { accessKey }),
+      ...extend({}, this.restAttributes, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
     };
   }
 
-  get styles(): { [key: string]: string | number } {
+  get styles(): Record<string, string | number> {
     const { width, height } = this.props;
-    const style = this.restAttributes.style || {};
+    const style = this.restAttributes.style as Record<string, string | number> || {};
 
     const computedWidth = normalizeStyleProp('width', getOptionValue(width));
     const computedHeight = normalizeStyleProp('height', getOptionValue(height));

@@ -26,7 +26,7 @@ const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTime
 QUnit.module('Timeline Base', {
 
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 });
 
@@ -188,7 +188,7 @@ QUnit.test('Group table cells should have correct height', function(assert) {
             renovateRender,
         });
 
-        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
         const $expectedCell = this.instance.$element()
             .find('.dx-scheduler-date-table-cell').eq(1);
         const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
@@ -206,7 +206,7 @@ QUnit.test('Group table cells should have correct height', function(assert) {
             renovateRender,
         });
 
-        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
         const $expectedCell = this.instance.$element()
             .find('.dx-scheduler-date-table-cell').eq(1);
 
@@ -226,7 +226,7 @@ QUnit.test('the "getCoordinatesByDate" method should return right coordinates fo
         { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
         { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
     ]);
-    const coordinates = instance.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
+    const coordinates = instance.positionHelper.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
     const expectedPosition = instance.$element()
         .find('.dx-scheduler-date-table-row').eq(1)
         .find('.dx-scheduler-date-table-cell').eq(2)
@@ -358,7 +358,7 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
         hoursInterval: 1
     });
 
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 9, 21, 6), 1);
+    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 9, 21, 6), 1);
     const expectedPosition = this.instance.$element()
         .find('.dx-scheduler-date-table-row').eq(0)
         .find('.dx-scheduler-date-table-cell').eq(4)
@@ -431,7 +431,7 @@ QUnit.test('The part of long appointment should have right coordinates on curren
         endDayHour: 10,
         hoursInterval: 0.5
     });
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
+    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
     const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(115);
 
     const expectedPositionLeft = $expectedCell.position().left;
@@ -451,7 +451,7 @@ QUnit.test('Timeline should find cell coordinates by date depend on start/end da
         hoursInterval: 0.75
     });
 
-    const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
+    const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
 
     assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(11).position().top, 'Cell coordinates are right');
     assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(11).position().left, 'Cell coordinates are right');
@@ -728,7 +728,7 @@ QUnit.test('\'getCoordinatesByDate\' should return right coordinates with view o
 
     const $element = this.instance.$element();
 
-    const coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false);
+    const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false);
     const targetCellPosition = $element.find('.dx-scheduler-date-table tbody td').eq(200).position();
 
     assert.equal(coords.top, targetCellPosition.top, 'Cell coordinates are right');
@@ -741,10 +741,10 @@ QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week 
         currentDate: new Date(2018, 4, 21),
     });
 
-    assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 26))[0]);
-    assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 27))[0]);
-    assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 23))[0]);
-    assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 28))[0]);
+    assert.ok(!this.instance.positionHelper.getCoordinatesByDateInGroup(new Date(2018, 4, 26))[0]);
+    assert.ok(!this.instance.positionHelper.getCoordinatesByDateInGroup(new Date(2018, 4, 27))[0]);
+    assert.ok(this.instance.positionHelper.getCoordinatesByDateInGroup(new Date(2018, 4, 23))[0]);
+    assert.ok(this.instance.positionHelper.getCoordinatesByDateInGroup(new Date(2018, 4, 28))[0]);
 });
 
 QUnit.module('TimelineWeek with grouping by date', {
@@ -887,14 +887,14 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
             renovateRender,
         });
 
-        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
+        let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
         const $element = this.instance.$element();
 
         assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
         assert.equal(coords.hMax, 16800, 'hMax is right');
 
-        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
+        coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
 
         assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().top, 'Top cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().left, 'Left cell coordinates are right');
@@ -1012,7 +1012,6 @@ QUnit.module('Renovated Render', {
                     groupIndex: 0,
                     isGroupedAllDayPanel: false
                 }],
-                cellCountInGroupRow: 2,
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
@@ -1058,7 +1057,6 @@ QUnit.module('Renovated Render', {
             const { viewData, viewDataMap } = this.instance.viewDataProvider;
 
             const expectedViewData = {
-                cellCountInGroupRow: 2,
                 groupedData: [{
                     dateTable: [[{
                         ...cellsBase[0],
@@ -1160,7 +1158,6 @@ QUnit.module('Renovated Render', {
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
-                cellCountInGroupRow: 2,
                 isGroupedAllDayPanel: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,

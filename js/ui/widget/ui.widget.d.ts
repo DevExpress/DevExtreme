@@ -1,3 +1,4 @@
+import { Format } from '../../localization';
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
@@ -109,38 +110,6 @@ export var dxItem: any;
 
 /**
  * @docid
- * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
- * @type_function_return string
- * @default undefined
- * @section Common
- * @namespace DevExpress.ui
- * @public
+ * @deprecated
  */
-export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
-  /**
-   * @docid
-   */
-  currency?: string,
-  /**
-   * @docid
-   * @type_function_param1 value:number|date
-   * @type_function_return string
-   */
-  formatter?: ((value: number | Date) => string),
-  /**
-   * @docid
-   * @type_function_param1 value:string
-   * @type_function_return number|date
-   */
-  parser?: ((value: string) => number | Date),
-  /**
-   * @docid
-   */
-  precision?: number,
-  /**
-   * @docid
-   * @type Enums.Format
-   */
-  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
-};
+export type format = Format;

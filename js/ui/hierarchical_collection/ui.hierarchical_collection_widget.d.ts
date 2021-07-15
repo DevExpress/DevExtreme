@@ -20,7 +20,7 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;

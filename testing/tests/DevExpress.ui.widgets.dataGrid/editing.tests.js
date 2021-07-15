@@ -15407,6 +15407,52 @@ QUnit.module('Editing with validation', {
             assert.deepEqual(this.editingController._getOldData(1), { id: 1, name: 'test', description: 'test2' }, 'correct data');
         });
     });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.test(`Batch - Inserted row with an invalid cell should not be duplicated on saving (scrolling mode = ${scrollingMode}) (T1012405)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'batch',
+                    allowAdding: true
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [
+                        {
+                            type: 'required'
+                        }
+                    ]
+                }, 'description'],
+                scrolling: {
+                    mode: scrollingMode
+                }
+            });
+
+            // act
+            this.addRow();
+            this.clock.tick();
+            let newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after adding');
+
+            // act
+            this.saveEditData();
+            this.clock.tick();
+            newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after saving');
+        });
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {

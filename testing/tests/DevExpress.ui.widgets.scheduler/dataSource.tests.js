@@ -269,9 +269,9 @@ module('Events', {
 
                 this.clock.tick();
 
-                const appointmentForm = scheduler.instance._appointmentPopup._appointmentForm;
+                const appointmentForm = scheduler.instance._appointmentPopup.form;
 
-                assert.deepEqual(appointmentForm.option('formData').startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
+                assert.deepEqual(appointmentForm.formData.startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
             } finally {
                 tzOffsetStub.restore();
             }

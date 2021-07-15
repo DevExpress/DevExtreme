@@ -13,8 +13,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import { HatchingDirectionType } from './common';
 
@@ -645,7 +645,7 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
@@ -867,7 +867,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
 export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -882,7 +882,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
 export interface dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -952,7 +952,7 @@ export interface dxPolarChartCommonAxisSettingsStripStyle {
 export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1274,7 +1274,7 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
@@ -1849,7 +1849,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    argumentFormat?: format;
+    argumentFormat?: Format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
      * @default undefined
@@ -1918,8 +1918,8 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-     * @default '#FFFFFF' [prop](color)
-     * @default 14 [prop](size)
+     * @default '#FFFFFF' &prop(color)
+     * @default 14 &prop(size)
      * @public
      */
     font?: Font;
@@ -1928,7 +1928,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
      * @type Enums.RelativePosition

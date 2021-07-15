@@ -1,9 +1,9 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: animationConfig,
+      hide?: AnimationConfig,
       /**
        * @docid
        * @default undefined
        */
-      show?: animationConfig
+      show?: AnimationConfig
     };
     /**
      * @docid
@@ -147,7 +147,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @publicName closeOnOutsideClick
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -164,14 +164,14 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](iPhone)
+     * @default true &for(iPhone)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -287,7 +287,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default function() { return $(window).height() * 0.8 }
      * @type_function_return number|string
-     * @default 'auto' [for](desktop|iPad)
+     * @default 'auto' &for(desktop|iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -296,7 +296,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default function() {return $(window).width() * 0.8 }
      * @type_function_return number|string
-     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
+     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } &for(iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -305,11 +305,11 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default undefined
      * @publicName position
-     * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
+     * @default { my: 'left top', at: 'left top', of: lookupContainer } &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default false
@@ -338,7 +338,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName searchEnabled
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     searchEnabled?: boolean;
@@ -359,7 +359,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName showCancelButton
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     showCancelButton?: boolean;
@@ -373,7 +373,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName showPopupTitle
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -397,23 +397,23 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @public
      */
     useNativeScrolling?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop|iOS)
+     * @default true &for(desktop|iOS)
      * @publicName usePopover
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     usePopover?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @public
      */
     dropDownCentered?: boolean;

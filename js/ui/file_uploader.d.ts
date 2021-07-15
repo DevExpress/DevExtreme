@@ -130,7 +130,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     chunkSize?: number;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -161,7 +161,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default "or Drop file here"
-     * @default "" [for](InternetExplorer|desktop)
+     * @default "" &for(InternetExplorer|desktop)
      * @public
      */
     labelText?: string;

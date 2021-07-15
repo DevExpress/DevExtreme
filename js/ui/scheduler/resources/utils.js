@@ -113,7 +113,7 @@ export const getCellGroups = (groupIndex, groups) => {
     return result;
 };
 
-export const getGroupCount = (groups) => { // TODO replace with viewDataProvider method
+export const getGroupCount = (groups) => {
     let result = 0;
 
     for(let i = 0, len = groups.length; i < len; i++) {
@@ -132,4 +132,17 @@ export const getGroupsObjectFromGroupsArray = (groupsArray) => {
         ...currentGroups,
         [name]: id,
     }), {});
+};
+
+export const getAllGroups = (groups) => {
+    const groupCount = getGroupCount(groups);
+
+    return [...(new Array(groupCount))].map((_, groupIndex) => {
+        const groupsArray = getCellGroups(
+            groupIndex,
+            groups,
+        );
+
+        return getGroupsObjectFromGroupsArray(groupsArray);
+    });
 };

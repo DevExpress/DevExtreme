@@ -1212,3 +1212,13 @@
  * @typedef {string} Enums.GridDataChangeType
  * @enum {'insert' | 'update' | 'remove'}
  */
+
+/**
+ * @typedef {string} Enums.DataGridToolbarItem
+ * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListToolbarItem
+ * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel'}
+ */

@@ -17,9 +17,9 @@ import {
     ChangedOptionInfo
 } from '../events/index';
 
-import {
-    format
-} from '../ui/widget/ui.widget';
+import { 
+  Format
+} from '../localization';
 
 import {
     dxChartCommonSeriesSettings
@@ -435,15 +435,15 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 11 [prop](size)
+         * @default '#767676' &prop(color)
+         * @default 11 &prop(size)
          */
         font?: Font,
         /**
          * @docid
          * @extends CommonVizFormat
          */
-        format?: format,
+        format?: Format,
         /**
          * @docid
          * @type Enums.ScaleLabelOverlappingBehavior
@@ -492,7 +492,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format
+          format?: Format
         },
         /**
          * @docid
@@ -709,15 +709,15 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
       /**
        * @docid
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
       font?: Font,
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @default 'red'

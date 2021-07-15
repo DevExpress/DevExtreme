@@ -26,8 +26,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -405,7 +405,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
         enabled?: boolean,
         /**
          * @docid
-         * @default '#2b2b2b' [prop](color)
+         * @default '#2b2b2b' &prop(color)
          */
         font?: Font
       },
@@ -748,7 +748,7 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.font
-     * @default '#2b2b2b' [prop](color)
+     * @default '#2b2b2b' &prop(color)
      * @public
      */
     font?: Font;
@@ -822,7 +822,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @docid dxVectorMapOptions.tooltip.format
      * @hidden
      */
-    format?: format;
+    format?: Format;
 }
 /**
  * @docid

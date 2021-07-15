@@ -151,3 +151,19 @@ it('change object item in double nested array option', () => {
   expect(props.item.items[1].value).toBe('item2');
   expect(props.item.objectProp).toBe(objectProp);
 });
+
+it('updating copies objects property', () => {
+  const props = {
+    item1: { item2: { value: 'item1' } },
+  };
+  const option = {
+    item1: props.item1,
+  };
+
+  option.item1 = { item2: { value: 'item1 modified' } };
+
+  updatePropsImmutable(props, option, 'item1', 'item1.item2');
+
+  expect(props.item1.item2.value).toBe('item1 modified');
+  expect(props.item1.item2).not.toBe(option.item1.item2);
+});

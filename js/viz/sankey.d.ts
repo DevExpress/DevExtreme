@@ -157,7 +157,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       customizeText?: ((itemInfo: dxSankeyNode) => string),
       /**
        * @docid
-       * @default '#FFFFFF' [prop](color)
+       * @default '#FFFFFF' &prop(color)
        */
       font?: Font,
       /**

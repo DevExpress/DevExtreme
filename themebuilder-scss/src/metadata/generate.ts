@@ -11,7 +11,7 @@ const metadataDestinationFile = './src/data/metadata/dx-theme-builder-metadata.t
 const jsonMetadataDestinationFile = './dart-compiler/metadata/dx-theme-builder-metadata.json';
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
-const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, ''));
+const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, '')) as string;
 
 const generate = async (): Promise<void> => {
   const collector = new MetadataCollector();

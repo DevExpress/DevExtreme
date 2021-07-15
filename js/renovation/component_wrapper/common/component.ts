@@ -133,7 +133,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         }),
         {},
       ),
-    );
+    ) as Record<string, unknown>;
   }
 
   _initMarkup(): void {
@@ -395,7 +395,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
-        return actionByOption(actArgs);
+        return actionByOption(actArgs) as undefined;
       };
     }
     this._actionsMap[event] = action;
@@ -472,7 +472,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
       }
 
       // NOTE: make it possible to pass onKeyDown property
-      return initialHandler?.(originalEvent, options);
+      return initialHandler?.(originalEvent, options) as Event;
     };
   }
 

@@ -3,6 +3,10 @@ import dateUtils from '../../../../core/utils/date';
 import { isDefined } from '../../../../core/utils/type';
 import dateLocalization from '../../../../localization/date';
 import timeZoneUtils from '../../utils.timeZone';
+import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
+import { VIEWS } from '../../constants';
+import { getGroupCount } from '../../resources/utils';
+import { isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
 
 export const isDateInRange = (date, startDate, endDate, diff) => {
     return diff > 0
@@ -150,4 +154,32 @@ export const getToday = (indicatorTime, timeZoneCalculator) => {
     const todayDate = indicatorTime || new Date();
 
     return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+};
+
+export const getVerticalGroupCountClass = (groups) => {
+    switch(groups?.length) {
+        case 1:
+            return VERTICAL_GROUP_COUNT_CLASSES[0];
+        case 2:
+            return VERTICAL_GROUP_COUNT_CLASSES[1];
+        case 3:
+            return VERTICAL_GROUP_COUNT_CLASSES[2];
+        default:
+            return undefined;
+    }
+};
+
+export const isDateAndTimeView = (viewType) => {
+    return viewType !== VIEWS.TIMELINE_MONTH && viewType !== VIEWS.MONTH;
+};
+
+export const getHorizontalGroupCount = (groups, groupOrientation) => {
+    const groupCount = getGroupCount(groups) || 1;
+    const isVerticalGrouping = isVerticalGroupingApplied(groups, groupOrientation);
+
+    return isVerticalGrouping ? 1 : groupCount;
+};
+
+export const calculateIsGroupedAllDayPanel = (groups, groupOrientation, isAllDayPanelVisible) => {
+    return isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 };

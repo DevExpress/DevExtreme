@@ -10,6 +10,7 @@ import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 import timeZoneUtils from '../../utils.timeZone';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../workspaces/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -699,8 +700,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
     filter() {
         const hourMs = toMs('hour');
-        const isCalculateStartAndEndDayHour = this.workspace.isDateAndTimeView;
-        const checkIntersectViewport = this.workspace.isDateAndTimeView && this.workspace.viewDirection === 'horizontal';
+        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.workspace.type);
+        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.workspace.viewDirection === 'horizontal';
 
         const isAllDayWorkspace = !this.workspace.supportAllDayRow();
         const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;

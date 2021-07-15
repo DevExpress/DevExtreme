@@ -27,8 +27,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -367,14 +367,14 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
       /**
        * @docid
-       * @default '#767676' [prop](color)
+       * @default '#767676' &prop(color)
        */
       font?: Font,
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @type Enums.HorizontalEdge

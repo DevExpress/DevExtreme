@@ -47,7 +47,7 @@ const checkHeaderCells = function($element, assert, interval, groupCount, viewDu
 
 const moduleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimeline({}).dxSchedulerTimeline('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
     }
 };
 
@@ -128,7 +128,7 @@ QUnit.module('Timeline markup', moduleConfig, () => {
         assert.equal($secondColumnCells.length, 4, 'Cell count is OK');
     });
 
-    QUnit.test('Timeline should have the right \'dx-group-column-count\' attr depend on group count', function(assert) {
+    QUnit.test('Timeline should have correct group-count class depending on group count', function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('groups', [
@@ -136,12 +136,11 @@ QUnit.module('Timeline markup', moduleConfig, () => {
             { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
         ]);
 
-        assert.equal($element.attr('dx-group-column-count'), '2', 'Attr is OK');
-        assert.notOk($element.attr('dx-group-row-count'), 'row-count attr is not applied');
+        assert.ok($element.hasClass('dx-scheduler-group-column-count-two'), 'Correct class');
 
         this.instance.option('groups', []);
 
-        assert.notOk($element.attr('dx-group-column-count'), 'column-count attr is not applied');
+        assert.notOk($element.hasClass('dx-scheduler-group-column-count-two'), 'group-count class was not applied');
     });
 });
 
