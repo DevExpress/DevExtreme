@@ -34,8 +34,8 @@ const getViewDataGeneratorByViewType = (viewType) => {
 };
 
 export default class ViewDataProvider {
-    constructor() {
-        this._viewDataGenerator = null;
+    constructor(viewType) {
+        this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
         this.viewData = [];
         this.completeViewDataMap = [];
         this.completeDateHeaderMap = [];
@@ -49,8 +49,8 @@ export default class ViewDataProvider {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
 
         const viewDataGenerator = this.viewDataGenerator;
-        const dateHeaderDataGenerator = new DateHeaderDataGenerator();
-        const timePanelDataGenerator = new TimePanelDataGenerator();
+        const dateHeaderDataGenerator = new DateHeaderDataGenerator(viewDataGenerator);
+        const timePanelDataGenerator = new TimePanelDataGenerator(viewDataGenerator);
 
         const renderOptions = this._transformRenderOptions(options);
 
@@ -401,5 +401,17 @@ export default class ViewDataProvider {
 
     getIntervalDuration(intervalCount) {
         return this.viewDataGenerator._getIntervalDuration(intervalCount);
+    }
+
+    getCellCountInDay(startDayHour, endDayHour, hoursInterval) {
+        return this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    }
+
+    getCellCount(options) {
+        return this.viewDataGenerator.getCellCount(options);
+    }
+
+    getRowCount(options) {
+        return this.viewDataGenerator.getRowCount(options);
     }
 }

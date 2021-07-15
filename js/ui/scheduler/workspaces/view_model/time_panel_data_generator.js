@@ -1,16 +1,31 @@
 import { getTimePanelCellText } from '../utils/week';
 
 export class TimePanelDataGenerator {
+    constructor(viewDataGenerator) {
+        this._viewDataGenerator = viewDataGenerator;
+    }
+
     getCompleteTimePanelMap(options, completeViewDataMap) {
         const {
-            rowCountInGroup,
             startViewDate,
             cellDuration,
             startDayHour,
             isVerticalGrouping,
-            cellCountInGroupRow,
+            intervalCount,
+            currentDate,
+            viewType,
+            hoursInterval,
+            endDayHour,
         } = options;
 
+        const rowCountInGroup = this._viewDataGenerator.getRowCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
         let allDayRowsCount = 0;
 
         return completeViewDataMap.map((row, index) => {
