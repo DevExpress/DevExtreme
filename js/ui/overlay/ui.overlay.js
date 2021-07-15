@@ -496,17 +496,43 @@ const Overlay = Widget.inherit({
         return animation;
     },
 
+    _animateShowing: function() {
+        const animation = this._getAnimationConfig() ?? {};
+        const showAnimation = this._normalizeAnimation(animation.show, 'to');
+        const startShowAnimation = showAnimation?.start ?? noop;
+        const completeShowAnimation = showAnimation.complete ?? noop;
+
+        this._animate(
+            showAnimation,
+            (...args) => {
+                if(this.option('focusStateEnabled')) {
+                    eventsEngine.trigger(this._focusTarget(), 'focus');
+                }
+
+                completeShowAnimation.call(this, ...args);
+                this._showAnimationProcessing = false;
+                this._isShown = true;
+                this._actions.onShown();
+                this._toggleSafariScrolling();
+                this._showingDeferred.resolve();
+            },
+            (...args) => {
+                startShowAnimation.call(this, ...args);
+                this._showAnimationProcessing = true;
+            });
+    },
+
     _show: function() {
-        const deferred = new Deferred();
+        this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
-        deferred.done(() => {
+        this._showingDeferred.done(() => {
             delete this._parentHidden;
         });
 
         if(this._parentHidden) {
             this._isHidden = true;
-            return deferred.resolve();
+            return this._showingDeferred.resolve();
         }
 
         if(this._currentVisible) {
@@ -517,42 +543,21 @@ const Overlay = Widget.inherit({
 
         this._normalizePosition();
 
-        const animation = this._getAnimationConfig() || {};
-        const showAnimation = this._normalizeAnimation(animation.show, 'to');
-        const startShowAnimation = (showAnimation && showAnimation.start) || noop;
-        const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
-            deferred.resolve();
+            this._showingDeferred.resolve();
         } else {
             const show = () => {
                 this._renderVisibility(true);
 
                 if(this._isShowingActionCanceled) {
                     delete this._isShowingActionCanceled;
-                    deferred.resolve();
+                    this._showingDeferred.resolve();
                     return;
                 }
 
-                this._animate(
-                    showAnimation,
-                    (...args) => {
-                        if(this.option('focusStateEnabled')) {
-                            eventsEngine.trigger(this._focusTarget(), 'focus');
-                        }
-
-                        completeShowAnimation.call(this, ...args);
-                        this._showAnimationProcessing = false;
-                        this._isShown = true;
-                        this._actions.onShown();
-                        this._toggleSafariScrolling();
-                        deferred.resolve();
-                    },
-                    (...args) => {
-                        startShowAnimation.call(this, ...args);
-                        this._showAnimationProcessing = true;
-                    });
+                this._animateShowing();
             };
 
             if(this.option('templatesRenderAsynchronously')) {
@@ -563,7 +568,7 @@ const Overlay = Widget.inherit({
             }
         }
 
-        return deferred.promise();
+        return this._showingDeferred.promise();
     },
 
     _normalizeAnimation: function(animation, prop) {
@@ -582,21 +587,43 @@ const Overlay = Widget.inherit({
         return animation;
     },
 
+    _animateHiding: function() {
+        const animation = this._getAnimationConfig() ?? {};
+        const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
+        const startHideAnimation = hideAnimation?.start ?? noop;
+        const completeHideAnimation = hideAnimation?.complete ?? noop;
+
+        this._animate(
+            hideAnimation,
+            (...args) => {
+                this._$content.css('pointerEvents', '');
+                this._renderVisibility(false);
+
+                completeHideAnimation.call(this, ...args);
+                this._hideAnimationProcessing = false;
+                this._actions?.onHidden();
+
+                this._hidingDeferred.resolve();
+            },
+            (...args) => {
+                this._$content.css('pointerEvents', 'none');
+                startHideAnimation.call(this, ...args);
+                this._hideAnimationProcessing = true;
+            }
+        );
+    },
+
     _hide: function() {
         if(!this._currentVisible) {
             return new Deferred().resolve().promise();
         }
         this._currentVisible = false;
 
-        const deferred = new Deferred();
-        const animation = this._getAnimationConfig() || {};
-        const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
-        const startHideAnimation = (hideAnimation && hideAnimation.start) || noop;
-        const completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop;
+        this._hidingDeferred = new Deferred();
         const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
-            deferred.resolve();
+            this._hidingDeferred.resolve();
         } else {
             this._actions.onHiding(hidingArgs);
 
@@ -605,34 +632,17 @@ const Overlay = Widget.inherit({
             if(hidingArgs.cancel) {
                 this._isHidingActionCanceled = true;
                 this.option('visible', true);
-                deferred.resolve();
+                this._hidingDeferred.resolve();
             } else {
                 this._forceFocusLost();
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
 
-                this._animate(
-                    hideAnimation,
-                    (...args) => {
-                        this._$content.css('pointerEvents', '');
-                        this._renderVisibility(false);
-
-                        completeHideAnimation.call(this, ...args);
-                        this._hideAnimationProcessing = false;
-                        this._actions?.onHidden();
-
-                        deferred.resolve();
-                    },
-                    (...args) => {
-                        this._$content.css('pointerEvents', 'none');
-                        startHideAnimation.call(this, ...args);
-                        this._hideAnimationProcessing = true;
-                    }
-                );
+                this._animateHiding();
             }
         }
-        return deferred.promise();
+        return this._hidingDeferred.promise();
     },
 
     _forceFocusLost: function() {
@@ -1147,6 +1157,8 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
+        const isAnimated = this._showAnimationProcessing;
+
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
@@ -1154,6 +1166,10 @@ const Overlay = Widget.inherit({
         const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
+
+        if(isAnimated) {
+            this._animateShowing();
+        }
     },
 
     _styleWrapperPosition: function() {
