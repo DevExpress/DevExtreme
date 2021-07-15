@@ -3708,7 +3708,7 @@ QUnit.module('search substitution', {
         const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
 
         try {
-            listItem.trigger('dxclick');
+            listItem.trigger('dxpointerdown');
             clock.tick();
             let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
@@ -3810,24 +3810,29 @@ QUnit.module('Scrolling', {
             .css('left', 0)
             .css('top', 0);
 
-        const instance = $('.selectBoxScrolling').dxSelectBox({
-            dataSource: dataSource,
-            deferRendering: false,
-            value: 1,
-            width: 200
-        }).dxSelectBox('instance');
+        try {
+            const instance = $('.selectBoxScrolling').dxSelectBox({
+                dataSource: dataSource,
+                deferRendering: false,
+                value: 1,
+                width: 200
+            }).dxSelectBox('instance');
 
-        instance.option('opened', true);
+            instance.option('opened', true);
 
-        const listInstance = $('.dx-list').dxList('instance');
-        const scrollingDistance = 1000;
+            const listInstance = $('.dx-list').dxList('instance');
+            const scrollingDistance = 1000;
 
-        listInstance.scrollTo(scrollingDistance);
+            listInstance.scrollTo(scrollingDistance);
 
-        setTimeout(() => {
-            assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
-        }, 0);
-        this.clock.tick(0);
+            setTimeout(() => {
+                assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
+            }, 0);
+            this.clock.tick(0);
+        } finally {
+            $('#qunit-fixture')
+                .css({ left: '', top: '' });
+        }
     });
 });
 
