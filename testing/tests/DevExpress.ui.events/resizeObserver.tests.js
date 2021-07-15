@@ -80,10 +80,10 @@ QUnit.module('Resize observer', () => {
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
-            });
+            }, TIME_TO_WAIT);
         });
 
-        QUnit.test('callback should be raised after "skipNextResuze" method call', function(assert) {
+        QUnit.test('callback should be raised after "skipNextResize" method call', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
 
@@ -97,10 +97,10 @@ QUnit.module('Resize observer', () => {
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
-            });
+            }, TIME_TO_WAIT);
         });
 
-        QUnit.test('only one callback should be skipped after "skipNextResuze" method call', function(assert) {
+        QUnit.test('only one callback should be skipped after "skipNextResize" method call', function(assert) {
             const observeHandled = assert.async();
             const firstResizeHandled = assert.async();
             const secondResizeHandled = assert.async();
@@ -119,7 +119,7 @@ QUnit.module('Resize observer', () => {
                     firstResizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
-            });
+            }, TIME_TO_WAIT);
         });
     });
 });
