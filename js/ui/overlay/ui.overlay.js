@@ -357,8 +357,8 @@ const Overlay = Widget.inherit({
                     const entry = entries[0];
                     if(
                         entry.target === this._$content.get(0)
-                            && entry.contentRect.width === this._actualDimension.width
-                            && entry.contentRect.height === this._actualDimension.height
+                            && entry.contentRect.width === this._actualDimensions?.width
+                            && entry.contentRect.height === this._actualDimensions?.height
                     ) {
                         return { shouldSkip: true };
                     }
@@ -1243,7 +1243,7 @@ const Overlay = Widget.inherit({
         });
 
         if(hasWindow()) {
-            this._actualDimension = {
+            this._actualDimensions = {
                 width: this._$content.width(),
                 height: this._$content.height()
             };
