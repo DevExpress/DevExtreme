@@ -58,8 +58,8 @@ export class DateGeneratorBaseStrategy {
 
         dateSettings = this._fillNormalizedEndDate(dateSettings, this.rawAppointment);
 
-        if(this._needSeparateAppointment()) {
-            dateSettings = this._processedLongAppointments(dateSettings, appointmentAdapter);
+        if(this._needSeparateLongParts()) {
+            dateSettings = this._separateLongParts(dateSettings, appointmentAdapter);
         }
 
         return {
@@ -196,7 +196,7 @@ export class DateGeneratorBaseStrategy {
         return appointmentList;
     }
 
-    _needSeparateAppointment() {
+    _needSeparateLongParts() {
         return this.isVerticalOrientation
             ? this.isGroupedByDate
             : this.isGroupedByDate && this.appointmentTakesAllDay;
@@ -238,15 +238,14 @@ export class DateGeneratorBaseStrategy {
         });
     }
 
-    _processedLongAppointments(gridAppointmentList, appointmentAdapter) {
+    _separateLongParts(gridAppointmentList, appointmentAdapter) {
         let result = [];
-        let longStartDateParts = [];
 
         gridAppointmentList.forEach((gridAppointment) => {
             const maxDate = new Date(this.dateRange[1]);
             const { normalizedEndDate: endDateOfPart } = gridAppointment;
 
-            longStartDateParts = dateUtils.getDatesOfInterval(
+            const longStartDateParts = dateUtils.getDatesOfInterval(
                 gridAppointment.startDate,
                 endDateOfPart,
                 {
