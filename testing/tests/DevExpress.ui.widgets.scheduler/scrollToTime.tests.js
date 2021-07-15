@@ -1,3 +1,4 @@
+import 'ui/drop_down_button';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';

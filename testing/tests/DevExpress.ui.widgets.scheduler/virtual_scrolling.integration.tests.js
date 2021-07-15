@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { getWindow } from 'core/utils/window';
 
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 
 import { DataSource } from 'data/data_source/data_source';
 import {

@@ -8,6 +8,7 @@ QUnit.testStart(() => {
 });
 
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 
 import translator from 'animation/translator';
 import fx from 'animation/fx';

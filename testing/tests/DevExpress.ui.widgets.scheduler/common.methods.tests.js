@@ -4,6 +4,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import 'ui/drop_down_button';
 
 initTestMarkup();
 

@@ -1,5 +1,6 @@
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import 'ui/drop_down_button';
 
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';

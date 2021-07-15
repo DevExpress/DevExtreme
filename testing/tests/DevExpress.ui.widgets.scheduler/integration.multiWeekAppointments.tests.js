@@ -7,6 +7,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 
 const { testStart } = QUnit;
 

@@ -10,6 +10,7 @@ import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
+import 'ui/drop_down_button';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';

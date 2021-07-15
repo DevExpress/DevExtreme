@@ -8,6 +8,7 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 
 QUnit.testStart(() => initTestMarkup());
 

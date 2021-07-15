@@ -4,6 +4,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { dateToMilliseconds } from 'core/utils/date';
+import 'ui/drop_down_button';
 
 const {
     module,

@@ -2,6 +2,7 @@ import fx from 'animation/fx';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import 'ui/drop_down_button';
 
 initTestMarkup();
 

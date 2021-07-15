@@ -4,6 +4,7 @@ import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 
 const { test, module } = QUnit;
 

@@ -18,6 +18,7 @@ import {
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import 'ui/drop_down_button';
 
 const { module, test, testStart } = QUnit;
 

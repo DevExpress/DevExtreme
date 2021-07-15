@@ -1,4 +1,5 @@
 import 'generic_light.css!';
+import 'ui/drop_down_button';
 import $ from 'jquery';
 
 import {
