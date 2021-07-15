@@ -11,6 +11,7 @@ import {
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
+const WEEKS_IN_MONTH = 4;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellData(rowIndex, columnIndex, options, allDay) {
@@ -82,7 +83,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     }
 
     getRowCount(options) {
-        return 4 * options.intervalCount + 2;
+        const edgeRowsCount = 2;
+
+        return WEEKS_IN_MONTH * options.intervalCount + edgeRowsCount;
     }
 
     getCellCountInDay() {
