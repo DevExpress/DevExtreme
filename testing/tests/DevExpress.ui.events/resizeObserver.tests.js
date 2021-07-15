@@ -117,7 +117,7 @@ QUnit.module('Resize observer', () => {
             }, TIME_TO_WAIT);
         });
 
-        QUnit.test('callback should be raised after "skipNextResize" method call', function(assert) {
+        QUnit.test('callback should not be raised after "skipNextResize" method call', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
 
