@@ -8,8 +8,8 @@ class ResizeObserver {
         }
 
         this._observer = new window.ResizeObserver((...args) => {
-            const beforeEachResult = options.beforeEach?.(...args);
-            if(!this._shouldSkipNextResize && !beforeEachResult?.shouldSkip) {
+            const shouldSkip = options.shouldSkipCallback?.(...args) || this._shouldSkipNextResize;
+            if(!shouldSkip) {
                 options.callback(...args);
             }
             this._shouldSkipNextResize = false;

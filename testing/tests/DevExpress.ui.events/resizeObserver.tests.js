@@ -28,7 +28,7 @@ QUnit.module('Resize observer', () => {
         }
     });
 
-    QUnit.module('beforeEach', {
+    QUnit.module('shouldSkipCallback', {
         beforeEach: function() {
             this.callback = sinon.stub();
             this.$element = $('#root');
@@ -40,15 +40,15 @@ QUnit.module('Resize observer', () => {
         QUnit.testInActiveWindow('should call passed "beforeEach" function before each callback', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
-            this.beforeEachCallback = sinon.stub();
+            this.shouldSkipCallback = sinon.stub();
 
-            this.observer = new ResizeObserver({ callback: this.callback, beforeEach: this.beforeEachCallback });
+            this.observer = new ResizeObserver({ callback: this.callback, shouldSkipCallback: this.shouldSkipCallback });
             this.observer.observe(this.$element.get(0));
 
             setTimeout(() => {
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.beforeEachCallback.called);
+                    assert.ok(this.shouldSkipCallback.called);
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
@@ -58,9 +58,9 @@ QUnit.module('Resize observer', () => {
         QUnit.testInActiveWindow('should not call "callback" if "beforeEach" returns object with "shouldSkip: true"', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
-            this.beforeEachCallback = sinon.stub().returns({ shouldSkip: true });
+            this.shouldSkipCallback = sinon.stub().returns(true);
 
-            this.observer = new ResizeObserver({ callback: this.callback, beforeEach: this.beforeEachCallback });
+            this.observer = new ResizeObserver({ callback: this.callback, shouldSkipCallback: this.shouldSkipCallback });
             this.observer.observe(this.$element.get(0));
 
             setTimeout(() => {
@@ -73,6 +73,7 @@ QUnit.module('Resize observer', () => {
             }, TIME_TO_WAIT);
         });
     });
+
     QUnit.module('base functionality', {
         beforeEach: function() {
             this.callback = sinon.stub();
