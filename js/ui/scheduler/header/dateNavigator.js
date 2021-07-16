@@ -125,10 +125,10 @@ const isPreviousButtonDisabled = (header) => {
     const date = header.date;
     const caption = header._getCaption(date);
 
-    min = min ? trimTime(min) : min;
+    min = trimTime(min);
 
     const previousDate = header._getNextDate(-1, caption.endDate);
-    return previousDate < min;
+    return previousDate < trimTime(min);
 };
 
 const isNextButtonDisabled = (header) => {
@@ -139,7 +139,7 @@ const isNextButtonDisabled = (header) => {
     const date = header.date;
     const caption = header._getCaption(date);
 
-    max = max ? trimTime(max) : max;
+    max = trimTime(max);
     max && max.setHours(23, 59, 59);
 
     const nextDate = header._getNextDate(1, caption.startDate);
