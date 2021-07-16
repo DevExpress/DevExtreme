@@ -65,7 +65,6 @@ const DOMComponent = Component.inherit({
                     errors.log('W0017', optionName);
                 }
             });
-
         }
     },
 
