@@ -14,8 +14,10 @@ import { extend } from '../../../core/utils/extend';
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
 const DX_ROW_RESIZER_CLASS = 'dx-htmleditor-row-resizer';
-const DEFAULT_MIN_COLUMN_WIDTH = 40;
-const DEFAULT_MIN_ROW_HEIGHT = DEFAULT_MIN_COLUMN_WIDTH / 2;
+const DEFAULTS = {
+    minColumnWidth: 40,
+    minRowHeight: 24
+};
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
 const ROUGH_OFFSET = 3;
@@ -30,27 +32,41 @@ export default class TableResizingModule extends BaseModule {
         super(quill, options);
         this.enabled = !!options.enabled;
         this._tableResizeFrames = [];
-        this._minColumnWidth = options.minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH;
-        this._minRowHeight = options.minRowHeight ?? DEFAULT_MIN_ROW_HEIGHT;
+        this._minColumnWidth = this._minSizeLimit('minColumnWidth', options.minColumnWidth);
+        this._minRowHeight = this._minSizeLimit('minRowHeight', options.minRowHeight);
         this._quillContainer = this.editorInstance._getQuillContainer();
         this._tableData = [];
 
         if(this.enabled) {
-            this.editorInstance.addContentInitializedCallback(() => {
-                const $tables = this._findTables();
-                if($tables.length) {
-                    this._fixTablesWidths($tables);
-                    this._createResizeFrames($tables);
-                    this._updateFramesPositions();
-                    this._updateFramesSeparators();
-                }
-
-                this._attachEvents();
-            });
-
-            this.addCleanCallback(this.clean.bind(this));
-            this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+            this._applyResizing();
         }
+    }
+
+    _applyResizing(forcedStart) {
+        if(forcedStart) {
+            this._applyResizingImpl();
+        } else {
+            this.editorInstance.addContentInitializedCallback(this._applyResizingImpl.bind(this));
+        }
+
+        this.addCleanCallback(this.clean.bind(this));
+        this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+    }
+
+    _minSizeLimit(propertyName, newValue) {
+        return isDefined(newValue) ? Math.max(newValue, 0) : DEFAULTS[propertyName];
+    }
+
+    _applyResizingImpl() {
+        const $tables = this._findTables();
+        if($tables.length) {
+            this._fixTablesWidths($tables);
+            this._createResizeFrames($tables);
+            this._updateFramesPositions();
+            this._updateFramesSeparators();
+        }
+
+        this._attachEvents();
     }
 
     _attachEvents() {
@@ -548,7 +564,7 @@ export default class TableResizingModule extends BaseModule {
         each(determinantElements, (index, element) => {
             const columnWidth = $(element).outerWidth();
             const $lineElements = this._getLineElements($table, index);
-            this._setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, DEFAULT_MIN_COLUMN_WIDTH));
+            this._setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, this._minColumnWidth));
         });
     }
 
@@ -615,6 +631,20 @@ export default class TableResizingModule extends BaseModule {
         each($tables, (index, table) => {
             this._updateColumnsWidth($(table), index);
         });
+    }
+
+    option(option, value) {
+        if(option === 'tableResizing') {
+            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+            return;
+        }
+
+        if(option === 'enabled') {
+            this.enabled = value;
+            value ? this._applyResizing(true) : this.clean();
+        } else if(option === 'minColumnWidth' || option === 'minRowHeight') {
+            this[`_${option}`] = this._minSizeLimit(option, value);
+        }
     }
 
     clean() {
