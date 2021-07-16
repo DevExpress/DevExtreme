@@ -19,13 +19,11 @@ class BaseStrategy {
                 isRecurrentAppointment
             });
 
-            coordinates
-                .filter((item) => !!item)
-                .forEach(item => {
-                    result.push(
-                        this._prepareObject(item, index)
-                    );
-                });
+            coordinates.forEach(item => {
+                !!item && result.push(
+                    this._prepareObject(item, index)
+                );
+            });
         });
 
         return result;
