@@ -20,6 +20,7 @@ const DX_HIGHLIGHTED_COLUMN_CLASS = 'dx-htmleditor-highlighted-column';
 const TIME_TO_WAIT = 200;
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
+const TABLE_BORDERS = 1;
 
 const tableMarkup = '\
     <table>\
@@ -146,6 +147,33 @@ module('Table resizing integration', {
             assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
         });
 
+        test('Frame is not created if tableResizing option is disabled on init', function(assert) {
+            this.createWidget({ tableResizing: { enabled: false } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+            assert.strictEqual($resizeFrame.length, 0, 'Frame is created for table');
+        });
+
+        test('Frame is created for table if the tableResizing option sets at runtime', function(assert) {
+            this.createWidget({ tableResizing: { enabled: false } });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.instance.option('tableResizing', { enabled: true });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+            const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            assert.strictEqual($resizeFrame.length, 1, 'Frame is created for table');
+            assert.strictEqual($columnResizerElements.length, 4, 'Column resizers are created for every column separator');
+            assert.strictEqual($rowResizerElements.length, 3, 'Row resizers are created for every row separator');
+            assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
+        });
+
         test('Frame is removed if tableResizing option is disabled at runtime', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -155,7 +183,19 @@ module('Table resizing integration', {
 
             const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
-            assert.strictEqual($resizeFrame.length, 0, 'Frame is created for table');
+            assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
+        });
+
+        test('Frame is removed if tableResizing.enabled option is disabled at runtime', function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.instance.option('tableResizing.enabled', false);
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+            assert.strictEqual($resizeFrame.length, 0, 'Frame is removed');
         });
 
         test('Horizontal draggable element should be created on pointerDown event', function(assert) {
@@ -496,6 +536,37 @@ module('Table resizing integration', {
             assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 35, 3);
         });
 
+        test('minColumnWidth can be applied at runtime', function(assert) {
+            this.createWidget({ width: 435 });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+
+            const checkingElement = $columnResizerElements.eq(0);
+
+            this.instance.option('tableResizing.minColumnWidth', 50);
+
+            const $table = this.$element.find('table');
+
+            $columnResizerElements.eq(3)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            PointerMock($draggableElements.eq(0))
+                .start()
+                .dragStart()
+                .drag(-30, 0)
+                .drag(-20, 0)
+                .drag(-10, 0)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 50, 3);
+            assert.ok(checkingElement.is(':visible'));
+        });
+
         test('Check last column min width limitation after drag', function(assert) {
             this.createWidget({ width: 430 });
             this.clock.tick(TIME_TO_WAIT);
@@ -707,6 +778,34 @@ module('Table resizing integration', {
             assert.roughEqual($table.find('tr:first-child').find('td:first-child').outerHeight(), 40, 3);
         });
 
+        test('minRowHeight can be applied at runtime', function(assert) {
+            this.createWidget({
+                height: 300
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.instance.option('tableResizing.minRowHeight', 40);
+
+            const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+            const $table = this.$element.find('table');
+            const offset = 5;
+
+            $rowResizerElements.eq(0)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            PointerMock($draggableElements.eq(0))
+                .start()
+                .dragStart()
+                .drag(0, offset)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.roughEqual($table.find('tr:first-child').find('td:first-child').outerHeight(), 40, 3);
+        });
+
         test('Table row height is limited by minRowHeight option', function(assert) {
             this.createWidget({
                 height: 300,
@@ -769,12 +868,12 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')), $table.find('tr:first-child').find('td:first-child').outerHeight(), 3);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.find('tr:first-child').find('td:first-child').outerHeight(), 3);
 
             pointerMockInstance.dragEnd();
         });
 
-        test('Table highlighted element position is limited by minRowHeight option while the row has content-based height 2', function(assert) {
+        test('Table highlighted element position is limited by minRowHeight option while the row has content-based height after last column drag', function(assert) {
             this.createWidget({
                 height: 300,
                 width: 430,
@@ -800,7 +899,7 @@ module('Table resizing integration', {
 
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_ROW_CLASS}`);
 
-            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight(), 3);
+            assert.roughEqual(parseInt($highlightedElement.css('top')) + DRAGGABLE_ELEMENT_OFFSET, $table.outerHeight() - TABLE_BORDERS, 3);
 
             pointerMockInstance.dragEnd();
         });
@@ -1363,7 +1462,7 @@ module('Table resizing integration', {
 
             $table = this.$element.find('table').eq(0);
 
-            assert.roughEqual($table.outerHeight(), tableHeight, 2, 'Table width is not changed');
+            assert.roughEqual($table.outerHeight(), tableHeight, 2, 'Table height is not changed');
         });
 
         test('Second table frame should update position after the insert row to the first table', function(assert) {
