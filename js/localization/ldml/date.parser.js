@@ -185,8 +185,7 @@ export const getRegExpInfo = function(format, dateParts) {
 
     const addPreviousStub = function() {
         if(stubText) {
-
-            patterns.push(`\'${stubText}\'`); // eslint-disable-line no-useless-escape
+            patterns.push(`'${stubText}'`);
             regexpText += `${escapeRegExp(stubText)})`;
             stubText = '';
         }
@@ -248,7 +247,7 @@ export const isPossibleForParsingFormat = function(patterns) {
 
     let possibleForParsing = true;
     let ambiguousDigitPatternsCount = 0;
-    patterns.every((pattern, index, patterns) => {
+    return patterns.every((pattern, index, patterns) => {
         if(isDigitPattern(pattern)) {
             if(isAmbiguousDigitPattern(pattern)) {
                 possibleForParsing = (++ambiguousDigitPatternsCount) < 2;
@@ -259,7 +258,6 @@ export const isPossibleForParsingFormat = function(patterns) {
         }
         return possibleForParsing;
     });
-    return possibleForParsing;
 };
 
 export const getPatternSetters = function() {
