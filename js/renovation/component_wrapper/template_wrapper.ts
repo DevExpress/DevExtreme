@@ -1,6 +1,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/vdom';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+import { isDefined } from '../../core/utils/type';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
@@ -8,6 +9,12 @@ import { removeDifferentElements } from './utils';
 import Number from '../../core/polyfills/number';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { EffectReturn } from '../utils/effect_return';
+import { shallowEquals } from '../utils/shallow_equals';
+
+export interface TemplateModel {
+  data: Record<string, unknown>;
+  index: number;
+}
 
 interface TemplateWrapperProps {
   template: FunctionTemplate;
@@ -42,8 +49,8 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
         this.props.template.render({
           container: getPublicElement($parent),
           transclude: this.props.transclude,
-          ...(!this.props.transclude ? { model: data } : {}),
-          ...(!this.props.transclude && Number.isFinite(index) ? { index } : {}),
+          ...!this.props.transclude ? { model: data } : {},
+          ...!this.props.transclude && Number.isFinite(index) ? { index } : {},
         });
 
         return (): void => {
@@ -69,6 +76,25 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
   componentWillUnmount(): void { }
+
+  shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
+    const { template, model } = this.props;
+    const { template: nextTemplate, model: nextModel } = nextProps;
+
+    const sameTemplate = template === nextTemplate;
+    if (!sameTemplate) {
+      return true;
+    }
+
+    if (isDefined(model) && isDefined(nextModel)) {
+      const { data, index } = model;
+      const { data: nextData, index: nextIndex } = nextModel;
+      return index !== nextIndex || !shallowEquals(data, nextData);
+    }
+
+    const sameModel = model === nextModel;
+    return !sameModel;
+  }
 
   render(): JSX.Element | null {
     return null;
