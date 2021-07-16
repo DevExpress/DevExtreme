@@ -73,7 +73,12 @@ const DOMComponent = Component.inherit({
 
     _init() {
         this.callBase();
-        this._checkFunctionValueDeprecation(['width', 'height']);
+        this._checkFunctionValueDeprecation([
+            'width', 'height',
+            'maxHeight', 'maxWidth',
+            'minHeight', 'minWidth',
+            'popupHeight', 'popupWidth'
+        ]);
         this._attachWindowResizeCallback();
         this._initTemplateManager();
     },
