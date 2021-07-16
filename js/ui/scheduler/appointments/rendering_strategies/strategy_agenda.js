@@ -158,10 +158,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getDropDownAppointmentWidth() {
     }
 
-    getDefaultCellWidth() {
-        return this._defaultWidth;
-    }
-
     getCollectorLeftOffset() {
     }
     getCollectorTopOffset() {

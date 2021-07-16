@@ -264,7 +264,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxWidth() {
-        return this.getDefaultCellWidth() || this.invoke('getCellWidth');
+        return this.getDefaultCellWidth() || this.cellWidth;
     }
 
     isAllDay(appointmentData) {

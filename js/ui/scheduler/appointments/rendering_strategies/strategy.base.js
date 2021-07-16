@@ -25,8 +25,8 @@ class BaseRenderingStrategy {
     get key() { return this.options.key; }
     get instance() { return this.options.instance; } // TODO get rid of this
     get cellWidth() { return this.options.getCellWidth(); }
-    get cellHeight() { return this.options.cellHeight(); }
-    get cellAllDayHeight() { return this.options.cellAllDayHeight(); }
+    get cellHeight() { return this.options.getCellHeight(); }
+    get allDayHeight() { return this.options.getAllDayHeight(); }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
@@ -76,9 +76,9 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.instance.fire('getCellWidth');
-        this._defaultHeight = this.instance.fire('getCellHeight');
-        this._allDayHeight = this.instance._allDayCellHeight;
+        this._defaultWidth = this.cellWidth;
+        this._defaultHeight = this.cellHeight;
+        this._allDayHeight = this.allDayHeight;
 
         const map = [];
         for(let i = 0; i < length; i++) {
