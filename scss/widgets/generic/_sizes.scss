@@ -4,44 +4,35 @@ $size: null !default;
 
 @use "colors" as *;
 
-$generic-size-postfix: null !default;
-$generic-base-font-size: null !default;
-$generic-base-line-height: null !default;
-$generic-base-inline-widget-height: null !default;
-$generic-base-inline-block-height: null !default;
-$generic-base-icon-size: null !default;
-$generic-base-more-adaptive-icon-size: null !default;
-$generic-base-inline-horizontal-padding: null !default;
+$new-font-size: null !default;
+$padding-ratio: 1 !default;
+$dencse-ratio: 1 !default;
+
 
 @if $size == "default" {
   $generic-size-postfix: "" !default;
 
-  // Font sizes
-  $generic-base-font-size: 14px !default;
-  $generic-base-line-height: 1.35715 !default; // 19px/14px
-
-  // Base sizes
-  $generic-base-inline-widget-height: 36px !default;
-  $generic-base-inline-block-height: 19px !default;
-  $generic-base-icon-size: 18px !default;
-  $generic-base-more-adaptive-icon-size: 21px !default;
-  $generic-base-inline-horizontal-padding: 10px !default;
+  // Default size variables
+  $new-font-size: 14px;
 }
 
 @if $size == "compact" {
   $generic-size-postfix: ".compact" !default;
 
-  // Font sizes
-  $generic-base-font-size: 12px !default;
-  $generic-base-line-height: 1.33334 !default; // 16px/12px
-
-  // Base sizes
-  $generic-base-inline-widget-height: 26px !default;
-  $generic-base-inline-block-height: 16px !default;
-  $generic-base-icon-size: 14px !default;
-  $generic-base-more-adaptive-icon-size: 17px !default;
-  $generic-base-inline-horizontal-padding: 6px !default;
+  // Compact size variables
+  $new-font-size: 12px;
 }
+
+// Font sizes
+$generic-base-font-size: $new-font-size !default;
+$generic-base-line-height: 1.35 !default;
+
+// Base sizes
+$generic-base-inline-widget-height: ceil(($new-font-size * 2.57) * $padding-ratio * $dencse-ratio) !default;
+$generic-base-inline-block-height: ceil(($new-font-size * 1.35) * $padding-ratio * $dencse-ratio) !default;
+$generic-base-icon-size: ceil($new-font-size * 1.29) !default;
+$generic-base-more-adaptive-icon-size: ceil($new-font-size * 1.5) !default;
+$generic-base-inline-horizontal-padding: ceil(($new-font-size * 0.7) * $padding-ratio) !default;
 
 // Base inline widgets paddings
 $generic-base-inline-widget-vertical-padding:
