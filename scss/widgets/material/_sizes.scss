@@ -11,18 +11,22 @@ $material-base-inline-horizontal-padding: null !default;
 $material-base-border-radius: null !default;
 $material-base-dropdown-widgets-shadow: null !default;
 
+// New variables
+$new-font-size: 14px;
+$padding-ratio: 1;
+$dencse-ratio: 1;
 
 @if $size == "default" {
   $material-size-postfix: "" !default;
 
   // Font sizes
-  $material-base-font-size: 14px !default;
+  $material-base-font-size: $new-font-size !default;
 
   // Base sizes
-  $material-base-inline-widget-height: 56px !default;
-  $material-base-inline-block-height: 18px !default;
-  $material-base-icon-size: 24px !default;
-  $material-base-inline-horizontal-padding: 10px !default;
+  $material-base-inline-widget-height: ceil(($new-font-size * 4) * $padding-ratio * $dencse-ratio) !default;
+  $material-base-inline-block-height: ceil(($new-font-size * 1.29) * $padding-ratio * $dencse-ratio) !default;
+  $material-base-icon-size: ceil($new-font-size * 1.71) !default;
+  $material-base-inline-horizontal-padding: ceil(($new-font-size * 0.71) * $padding-ratio) !default;
   $material-base-border-radius: 4px !default;
   $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color !default;
 }
