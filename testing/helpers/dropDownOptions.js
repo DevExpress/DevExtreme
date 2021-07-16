@@ -55,7 +55,7 @@ const defaultDropDownOptions = {
     toolbarItems: [],
     visible: false,
     width: null,
-    wrapperAttr: {}
+    wrapperAttr: { class: 'dx-dropdowneditor-overlay' }
 };
 
 export {

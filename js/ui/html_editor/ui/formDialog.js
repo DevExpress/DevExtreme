@@ -58,6 +58,7 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
+            copyRootClassesToWrapper: true,
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 

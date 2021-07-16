@@ -185,6 +185,7 @@ export const Navigator = Widget.inherit({
         const popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
         this._popover = this._createComponent(popoverContainer, overlayType, {
             contentTemplate: () => this._createPopupContent(),
+            copyRootClassesToWrapper: true,
             defaultOptionsRules: [
                 {
                     device: function() {
@@ -201,7 +202,8 @@ export const Navigator = Widget.inherit({
                         return devices.current().generic;
                     },
                     options: {
-                        target: this._caption.$element()
+                        target: this._caption.$element(),
+                        copyRootClassesToWrapper: true
                     }
                 }
             ]
