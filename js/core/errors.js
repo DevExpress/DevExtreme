@@ -241,5 +241,9 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0016
     */
-    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.',
+    W0016: 'The "{0}" option does not accept the "{1}" value since v{2}. {3}.',
+    /**
+    * @name ErrorsCore.W0017
+    */
+    W0017: 'Setting the "{0}" property with a function is deprecated since v21.2'
 });

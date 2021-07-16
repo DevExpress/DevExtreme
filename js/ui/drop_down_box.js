@@ -291,6 +291,7 @@ const DropDownBox = DropDownEditor.inherit({
                 of: this.$element(),
             }),
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 const popupLocation = this._popupPosition?.v.location;
 

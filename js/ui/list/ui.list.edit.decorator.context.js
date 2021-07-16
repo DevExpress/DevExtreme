@@ -53,6 +53,7 @@ registerDecorator(
                         }
                     }
                 },
+                _ignoreFunctionValueDeprecation: true,
                 height: (function() { return this._$menuList ? this._$menuList.outerHeight() : 0; }).bind(this),
                 width: (function() { return this._list.$element().outerWidth(); }).bind(this),
                 onContentReady: this._renderMenuContent.bind(this)
