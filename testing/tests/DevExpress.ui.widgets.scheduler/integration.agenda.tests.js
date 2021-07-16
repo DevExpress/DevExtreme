@@ -10,7 +10,6 @@ import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
-import 'ui/drop_down_button';
 
 const {
     module,

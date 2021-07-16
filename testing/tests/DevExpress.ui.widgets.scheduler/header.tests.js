@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
-import 'ui/drop_down_button';
 import { getCaption } from 'ui/scheduler/header/utils';
 
 testStart(() => initTestMarkup());

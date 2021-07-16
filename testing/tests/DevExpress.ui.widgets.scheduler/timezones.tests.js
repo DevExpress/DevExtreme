@@ -15,7 +15,6 @@ import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import dragEvents from 'events/drag';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
-import 'ui/drop_down_button';
 
 const { testStart, test, module } = QUnit;
 

@@ -10,7 +10,6 @@ import {
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 import 'generic_light.css!';
-import 'ui/drop_down_button';
 
 const {
     module,

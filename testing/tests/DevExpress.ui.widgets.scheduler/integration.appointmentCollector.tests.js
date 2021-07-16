@@ -9,7 +9,6 @@ import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
-import 'ui/drop_down_button';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';

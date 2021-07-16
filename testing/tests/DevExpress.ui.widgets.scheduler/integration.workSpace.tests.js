@@ -12,7 +12,6 @@ import CustomStore from 'data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'animation/translator';
-import 'ui/drop_down_button';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);

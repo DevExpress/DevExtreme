@@ -2,7 +2,6 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from 'core/devices';
-import 'ui/drop_down_button';
 
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {

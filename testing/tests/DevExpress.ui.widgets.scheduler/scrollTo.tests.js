@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import 'generic_light.css!';
-import 'ui/drop_down_button';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';

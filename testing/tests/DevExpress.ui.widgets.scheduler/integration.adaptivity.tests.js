@@ -10,7 +10,6 @@ import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import 'ui/switch';
-import 'ui/drop_down_button';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';

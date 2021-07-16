@@ -13,7 +13,6 @@ import CustomStore from 'data/custom_store';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
-import 'ui/drop_down_button';
 
 const { module, test } = QUnit;
 

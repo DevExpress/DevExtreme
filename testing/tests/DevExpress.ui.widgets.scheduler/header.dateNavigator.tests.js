@@ -1,6 +1,5 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
-import 'ui/drop_down_button';
 
 testStart(() => initTestMarkup());
 

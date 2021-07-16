@@ -11,7 +11,6 @@ import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import 'ui/drop_down_button';
 
 initTestMarkup();
 

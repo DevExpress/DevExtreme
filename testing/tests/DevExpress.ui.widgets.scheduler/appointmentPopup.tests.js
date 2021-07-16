@@ -13,7 +13,6 @@ import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointmentPopup/form
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'ui/drop_down_button';
 
 const { module, test } = QUnit;
 

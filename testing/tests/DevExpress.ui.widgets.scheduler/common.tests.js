@@ -4,7 +4,6 @@ import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
-import 'ui/drop_down_button';
 
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';

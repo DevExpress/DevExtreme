@@ -7,7 +7,6 @@ import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import 'ui/drop_down_button';
 
 initTestMarkup();
 

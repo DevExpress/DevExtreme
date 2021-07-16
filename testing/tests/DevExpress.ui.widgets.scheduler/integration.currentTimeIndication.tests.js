@@ -3,7 +3,6 @@ import { dateToMilliseconds as toMs } from 'core/utils/date';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
-import 'ui/drop_down_button';
 
 const { testStart, module, test } = QUnit;
 

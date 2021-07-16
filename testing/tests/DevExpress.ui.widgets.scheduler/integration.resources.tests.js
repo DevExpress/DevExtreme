@@ -10,7 +10,6 @@ import Color from 'color';
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
-import 'ui/drop_down_button';
 import { getResourceManager } from 'ui/scheduler/instanceFactory';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';

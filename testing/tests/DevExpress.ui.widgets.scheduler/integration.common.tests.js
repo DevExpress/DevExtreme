@@ -2,7 +2,6 @@ import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpe
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
-import 'ui/drop_down_button';
 
 const { testStart, module, test } = QUnit;
 

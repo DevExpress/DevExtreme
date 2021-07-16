@@ -12,7 +12,6 @@ import {
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'ui/drop_down_button';
 
 const {
     module,
