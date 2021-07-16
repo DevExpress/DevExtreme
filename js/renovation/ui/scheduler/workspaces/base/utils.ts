@@ -51,3 +51,12 @@ export const getHiddenInterval = (
 
   return DAY_MS - visibleInterval;
 };
+
+export const createCellElementMetaData = (
+  tableRect: ClientRect,
+  cellRect: ClientRect,
+): ClientRect => ({
+  ...cellRect,
+  left: cellRect.left - tableRect.left,
+  top: cellRect.top - tableRect.top,
+});

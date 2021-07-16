@@ -40,6 +40,7 @@ describe('WorkSpaceBase', () => {
         shadeUntilCurrentTime: true,
         selectedCellData: [],
         scrolling: { mode: 'standard' },
+        onViewRendered: () => null,
       };
 
       const workSpace = renderComponent({ props });

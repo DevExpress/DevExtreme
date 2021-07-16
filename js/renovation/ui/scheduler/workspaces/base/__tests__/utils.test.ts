@@ -1,6 +1,7 @@
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { Group } from '../../types';
 import {
+  createCellElementMetaData,
   getHiddenInterval,
   getRowCountWithAllDayRow,
   getTotalCellCount,
@@ -84,6 +85,25 @@ describe('Workspace base utils', () => {
 
       expect(getHiddenInterval(3, 5))
         .toBe(9 * 60 * 60 * 1000);
+    });
+  });
+
+  describe('createCellElementMetaData', () => {
+    it('should update cellRect based on tableRect', () => {
+      const cellRect: any = {
+        left: 150,
+        top: 350,
+      };
+      const tableRect: any = {
+        left: 100,
+        top: 200,
+      };
+
+      expect(createCellElementMetaData(tableRect, cellRect))
+        .toEqual({
+          left: 50,
+          top: 150,
+        });
     });
   });
 });

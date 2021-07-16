@@ -29,6 +29,7 @@ export const viewFunction = ({
     shadeUntilCurrentTime,
     selectedCellData,
     scrolling,
+    onViewRendered,
   },
 }: WorkSpaceWeek): JSX.Element => (
   <WorkSpaceBase
@@ -51,6 +52,7 @@ export const viewFunction = ({
     shadeUntilCurrentTime={shadeUntilCurrentTime}
     selectedCellData={selectedCellData}
     scrolling={scrolling}
+    onViewRendered={onViewRendered}
     isWorkWeekView={false}
     type="week"
     isAllDayPanelSupported
@@ -67,4 +69,4 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpaceWeek extends JSXComponent<WorkSpaceBaseProps, 'currentDate'>() {}
+export class WorkSpaceWeek extends JSXComponent<WorkSpaceBaseProps, 'currentDate' | 'onViewRendered'>() {}

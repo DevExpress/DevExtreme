@@ -3,9 +3,11 @@ import {
   ComponentBindings,
   Effect,
   Event,
+  ForwardRef,
   JSXComponent,
   JSXTemplate,
   OneWay,
+  RefObject,
   Template,
 } from '@devextreme-generator/declarations';
 import {
@@ -27,6 +29,7 @@ import { TimePaneLayoutProps } from './time_panel/layout';
 
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
+  createCellElementMetaData,
   getHiddenInterval, getRowCountWithAllDayRow, getTotalCellCount, getTotalRowCount,
 } from './utils';
 
@@ -68,6 +71,8 @@ export const viewFunction = ({
   layout: Layout,
   isAllDayPanelVisible,
   viewDataProvider,
+  dateTableRef,
+  allDayPanelRef,
 
   props: {
     dataCellTemplate,
@@ -110,6 +115,8 @@ export const viewFunction = ({
     isAllDayPanelVisible={isAllDayPanelVisible}
 
     className={className}
+    dateTableRef={dateTableRef}
+    allDayPanelRef={allDayPanelRef}
   />
 );
 
@@ -171,7 +178,7 @@ export class WorkSpaceBaseProps {
     mode: 'standard',
   };
 
-  @Event() onViewRendered?: (viewMetaData: ViewMetaData) => void;
+  @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
   // ---------------------
   // Internal for workspaces templates
@@ -205,9 +212,15 @@ export class WorkSpaceBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate'>() {
+export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate' | 'onViewRendered'>() {
+  @ForwardRef()
+  dateTableRef!: RefObject<HTMLTableElement>;
+
+  @ForwardRef()
+  allDayPanelRef!: RefObject<HTMLTableElement>;
+
   get layout(): JSXTemplate<
-  OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
+  OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
   > {
     return this.props.crossScrollingEnabled
       ? OrdinaryLayout // TODO: CrossScrollingLayout
@@ -357,14 +370,80 @@ export class WorkSpaceBase extends JSXComponent<WorkSpaceBaseProps, 'currentDate
 
   @Effect()
   onViewRendered(): void {
-    const { onViewRendered } = this.props;
+    const {
+      onViewRendered,
+      intervalCount,
+      currentDate,
+      type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      groupOrientation,
+      groups,
+    } = this.props;
 
-    onViewRendered?.({
+    const cellCount = this.viewDataProvider.getCellCount({
+      intervalCount,
+      currentDate,
+      viewType: type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+    });
+    const totalCellCount = getTotalCellCount(cellCount, groupOrientation, groups);
+
+    const dateTableCellsMeta = this.createDateTableElementsMeta(totalCellCount);
+    const allDayPanelCellsMeta = this.createAllDayPanelElementsMeta();
+
+    onViewRendered({
       viewDataProvider: this.viewDataProvider,
       cellsMetaData: {
-        dateTableCellsMeta: [],
-        allDayPanelCellsMeta: [],
+        dateTableCellsMeta,
+        allDayPanelCellsMeta,
       },
     });
+  }
+
+  createDateTableElementsMeta(totalCellCount: number): ClientRect[][] {
+    const dateTableCells = this.dateTableRef.current!.querySelectorAll('td');
+    const dateTableRect = this.dateTableRef.current!.getBoundingClientRect();
+    const dateTableCellsMeta: ClientRect[][] = [];
+
+    dateTableCells.forEach((cellElement, index) => {
+      if (index % totalCellCount === 0) {
+        dateTableCellsMeta.push([]);
+      }
+
+      const cellRect = cellElement.getBoundingClientRect();
+      const validCellRect = createCellElementMetaData(
+        dateTableRect,
+        cellRect,
+      );
+
+      dateTableCellsMeta[dateTableCellsMeta.length - 1].push(validCellRect);
+    });
+
+    return dateTableCellsMeta;
+  }
+
+  createAllDayPanelElementsMeta(): ClientRect[] {
+    if (!this.allDayPanelRef.current) {
+      return [];
+    }
+
+    const allDayPanelCells = this.allDayPanelRef.current.querySelectorAll('td');
+    const allDayPanelRect = this.allDayPanelRef.current.getBoundingClientRect();
+    const allDayPanelCellsMeta: ClientRect[] = [];
+
+    allDayPanelCells.forEach((cellElement) => {
+      const cellRect = cellElement.getBoundingClientRect();
+
+      allDayPanelCellsMeta.push(createCellElementMetaData(
+        allDayPanelRect,
+        cellRect,
+      ));
+    });
+
+    return allDayPanelCellsMeta;
   }
 }
