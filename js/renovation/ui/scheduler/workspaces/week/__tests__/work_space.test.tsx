@@ -1,17 +1,19 @@
-import { mount } from 'enzyme';
+import React from 'react';
+import { shallow } from 'enzyme';
 import { formatWeekdayAndDay } from '../../../../../../ui/scheduler/workspaces/utils/base';
-import { DateTableLayoutBase } from '../../base/date_table/layout';
-import { HeaderPanelLayout } from '../../base/header_panel/layout';
 import { TimePanelTableLayout } from '../../base/time_panel/layout';
-import { WorkSpaceBase } from '../../base/work_space';
 import {
   viewFunction as WorkSpaceLayout,
 } from '../work_space';
 
-describe('WorkSpaceBase', () => {
+jest.mock('../../base/work_space', () => ({
+  WorkSpaceBase: (props) => <div {...props} />,
+}));
+
+describe('WorkSpaceWeek', () => {
   describe('Render', () => {
     const currentDate = new Date();
-    const renderComponent = (viewModel) => mount(WorkSpaceLayout({
+    const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
       ...viewModel,
       props: {
         currentDate,
@@ -45,9 +47,6 @@ describe('WorkSpaceBase', () => {
 
       const workSpace = renderComponent({ props });
 
-      expect(workSpace.is(WorkSpaceBase))
-        .toBe(true);
-
       expect(workSpace.props())
         .toEqual({
           ...props,
@@ -56,8 +55,6 @@ describe('WorkSpaceBase', () => {
           isAllDayPanelSupported: true,
           groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
           className: 'dx-scheduler-work-space-week',
-          headerPanelTemplate: HeaderPanelLayout,
-          dateTableTemplate: DateTableLayoutBase,
           timePanelTemplate: TimePanelTableLayout,
           headerCellTextFormat: formatWeekdayAndDay,
         });

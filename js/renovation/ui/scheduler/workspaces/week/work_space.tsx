@@ -3,8 +3,6 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { formatWeekdayAndDay } from '../../../../../ui/scheduler/workspaces/utils/base';
-import { DateTableLayoutBase } from '../base/date_table/layout';
-import { HeaderPanelLayout } from '../base/header_panel/layout';
 import { TimePanelTableLayout } from '../base/time_panel/layout';
 import { WorkSpaceBase, WorkSpaceBaseProps } from '../base/work_space';
 
@@ -58,8 +56,6 @@ export const viewFunction = ({
     isAllDayPanelSupported
     groupPanelClassName="dx-scheduler-work-space-vertical-group-table"
     className="dx-scheduler-work-space-week"
-    headerPanelTemplate={HeaderPanelLayout}
-    dateTableTemplate={DateTableLayoutBase}
     timePanelTemplate={TimePanelTableLayout}
     headerCellTextFormat={formatWeekdayAndDay}
   />
