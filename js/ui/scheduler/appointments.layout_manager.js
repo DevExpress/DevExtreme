@@ -37,7 +37,14 @@ class AppointmentLayoutManager {
 
     initRenderingStrategy(renderingStrategy) {
         const Strategy = RENDERING_STRATEGIES[renderingStrategy];
-        this._renderingStrategyInstance = new Strategy(this.instance);
+        this._renderingStrategyInstance = new Strategy({
+            key: this.instance.key,
+            instance: this.instance,
+            isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
+            getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
+            getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
+        });
         this.renderingStrategy = renderingStrategy;
     }
 

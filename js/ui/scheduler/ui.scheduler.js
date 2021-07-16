@@ -519,6 +519,11 @@ class Scheduler extends Widget {
         return resolveCallbacks.promise();
     }
 
+    reinitRenderingStrategy() {
+        const strategy = this._getAppointmentsRenderingStrategy();
+        this.getLayoutManager().initRenderingStrategy(strategy);
+    }
+
     _optionChanged(args) {
         let value = args.value;
         const name = args.name;
@@ -575,7 +580,7 @@ class Scheduler extends Widget {
 
                 this._validateDayHours();
 
-                this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
+                this.reinitRenderingStrategy();
 
                 this._validateCellDuration();
 
@@ -927,7 +932,7 @@ class Scheduler extends Widget {
             this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             this._workSpace._dimensionChanged();
 
-            const appointments = this._layoutManager.createAppointmentsMap(filteredItems);
+            const appointments = this.getLayoutManager().createAppointmentsMap(filteredItems);
 
             this._appointments.option('items', appointments);
         }
@@ -1124,9 +1129,10 @@ class Scheduler extends Widget {
 
     _getAppointmentsToRepaint() {
         const { filteredItems } = getAppointmentDataProvider(this.key);
+        const layoutManager = this.getLayoutManager();
 
-        const appointments = this._layoutManager.createAppointmentsMap(filteredItems);
-        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
+        const appointments = layoutManager.createAppointmentsMap(filteredItems);
+        return layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
     }
 
     _initExpressions(fields) {
@@ -2089,7 +2095,7 @@ class Scheduler extends Widget {
     }
 
     getRenderingStrategyInstance() {
-        return this._layoutManager.getRenderingStrategyInstance();
+        return this.getLayoutManager().getRenderingStrategyInstance();
     }
 
     getActions() {

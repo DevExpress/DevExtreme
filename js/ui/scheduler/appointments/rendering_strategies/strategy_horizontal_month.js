@@ -1,4 +1,4 @@
-import HorizontalMonthLineAppointmentsStrategy from './strategy_horizontal_month_line';
+import HorizontalMonthLineRenderingStrategy from './strategy_horizontal_month_line';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
@@ -6,7 +6,7 @@ const MONTH_APPOINTMENT_MAX_OFFSET = 30;
 const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
-class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
+class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
     _getLeftPosition(settings) {
         const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
 
@@ -53,7 +53,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
 
         for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
-            const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
+            const topPosition = settings.top + this.cellHeight * chunkIndex;
             const isTailChunk = hasTailChunk && (chunkIndex === chunkCount - 1);
 
             result.push({ ...settings, ...{
@@ -120,7 +120,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
             return this.getDropDownButtonAdaptiveSize();
         }
         const offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
-        return this.getDefaultCellWidth() - offset;
+        return this.cellWidth - offset;
     }
 
     needCorrectAppointmentDates() {
