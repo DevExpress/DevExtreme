@@ -139,8 +139,7 @@ const isNextButtonDisabled = (header) => {
     const date = header.date;
     const caption = header._getCaption(date);
 
-    max = trimTime(max);
-    max && max.setHours(23, 59, 59);
+    max = max.setHours(23, 59, 59);
 
     const nextDate = header._getNextDate(1, caption.startDate);
     return nextDate > max;
