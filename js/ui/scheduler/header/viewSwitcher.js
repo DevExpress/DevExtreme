@@ -21,7 +21,6 @@ export const getViewSwitcher = (header, item) => {
     const { selectedView, views } = getViewsAndSelectedView(header);
 
     return {
-        ...item,
         widget: 'dxButtonGroup',
         locateInMenu: 'auto',
         cssClass: VIEW_SWITCHER_CLASS,
@@ -41,8 +40,10 @@ export const getViewSwitcher = (header, item) => {
                 header._addEvent('currentView', (view) => {
                     viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
                 });
-            }
+            },
+            ...item.options,
         },
+        ...item,
     };
 };
 
@@ -50,7 +51,6 @@ export const getDropDownViewSwitcher = (header, item) => {
     const { selectedView, views } = getViewsAndSelectedView(header);
 
     return {
-        ...item,
         widget: 'dxDropDownButton',
         locateInMenu: 'never',
         cssClass: VIEW_SWITCHER_CLASS,
@@ -75,7 +75,9 @@ export const getDropDownViewSwitcher = (header, item) => {
                 header._addEvent('currentView', (view) => {
                     viewSwitcher.option('selectedItemKey', getViewName(view));
                 });
-            }
+            },
+            ...item.options,
         },
+        ...item,
     };
 };

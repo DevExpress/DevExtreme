@@ -21,7 +21,6 @@ export const getDateNavigator = (header, item) => {
     const stylingMode = header.option('useDropDownViewSwitcher') ? 'text' : 'contained';
 
     return {
-        ...item,
         widget: 'dxButtonGroup',
         cssClass: DATE_NAVIGATOR_CLASS,
         options: {
@@ -30,7 +29,9 @@ export const getDateNavigator = (header, item) => {
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);
             },
+            ...item.options,
         },
+        ...item,
     };
 };
 
