@@ -1156,9 +1156,18 @@ const Overlay = Widget.inherit({
         this._$wrapper.appendTo(renderContainer);
     },
 
-    _renderGeometry: function() {
+    _renderGeometry: function(options) {
         if(this.option('visible') && hasWindow()) {
+            const isAnimated = this._showAnimationProcessing;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation;
+            this._isAnimationPaused = shouldRepeatAnimation || undefined;
+
             this._renderGeometryImpl();
+
+            if(shouldRepeatAnimation) {
+                this._animateShowing();
+                this._isAnimationPaused = undefined;
+            }
         }
     },
 
@@ -1170,9 +1179,6 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        const isAnimated = this._showAnimationProcessing;
-
-        this._isAnimationPaused = isAnimated || undefined;
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
@@ -1181,11 +1187,6 @@ const Overlay = Widget.inherit({
         const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
-
-        if(isAnimated) {
-            this._animateShowing();
-            this._isAnimationPaused = undefined;
-        }
     },
 
     _styleWrapperPosition: function() {
@@ -1543,7 +1544,7 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
-            this._renderGeometry();
+            this._renderGeometry({ forceStopAnimation: true });
             triggerResizeEvent(this._$content);
         } else {
             this.callBase();
