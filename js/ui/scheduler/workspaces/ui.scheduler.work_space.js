@@ -2337,10 +2337,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleGroupByDateClass();
     }
 
-    _initGroupedStrategy() {
-        const strategyName = this.option('groups').length ? this.option('groupOrientation') : this._getDefaultGroupStrategy();
+    isVerticalOrientation() {
+        const orientation = this.option('groups').length
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
-        const Strategy = strategyName === 'vertical' ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        return orientation === 'vertical';
+    }
+
+    _initGroupedStrategy() {
+        const Strategy = this.isVerticalOrientation()
+            ? VerticalGroupedStrategy
+            : HorizontalGroupedStrategy;
 
         this._groupedStrategy = new Strategy(this);
     }
