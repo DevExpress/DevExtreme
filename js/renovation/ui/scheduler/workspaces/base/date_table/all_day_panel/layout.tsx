@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
@@ -18,6 +18,7 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
       <Table
         className="dx-scheduler-all-day-table"
         height={viewModel.emptyTableHeight}
+        tableRef={viewModel.props.tableRef}
       >
         <AllDayPanelTableBody
           viewData={viewModel.allDayPanelData}
@@ -37,6 +38,8 @@ export class AllDayPanelLayoutProps extends LayoutProps {
   @OneWay() className = '';
 
   @OneWay() visible? = true;
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({

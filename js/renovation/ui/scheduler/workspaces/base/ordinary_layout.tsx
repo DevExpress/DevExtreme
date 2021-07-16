@@ -34,7 +34,6 @@ export const viewFunction = ({
   isRenderGroupPanel,
   isStandaloneAllDayPanel,
   isSetAllDayTitleClass,
-  dateTableRef,
   groupPanelHeight,
 
   props: {
@@ -58,6 +57,9 @@ export const viewFunction = ({
     timeCellTemplate,
     dateCellTemplate,
     resourceCellTemplate,
+
+    dateTableRef,
+    allDayPanelRef,
   },
 }: OrdinaryLayout): JSX.Element => (
   <Widget
@@ -89,6 +91,7 @@ export const viewFunction = ({
         visible={isStandaloneAllDayPanel}
         viewData={viewData}
         dataCellTemplate={dataCellTemplate}
+        tableRef={allDayPanelRef}
       />
     )}
     <Scrollable
@@ -174,6 +177,10 @@ export class OrdinaryLayoutProps extends LayoutProps {
   @OneWay() isAllDayPanelSupported = false;
 
   @OneWay() isAllDayPanelVisible = false;
+
+  @ForwardRef() dateTableRef!: RefObject<HTMLTableElement>;
+
+  @ForwardRef() allDayPanelRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({
@@ -181,13 +188,10 @@ export class OrdinaryLayoutProps extends LayoutProps {
   view: viewFunction,
 })
 export class OrdinaryLayout extends JSXComponent<
-OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
+OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
 >() {
   @InternalState()
   groupPanelHeight: number | undefined;
-
-  @ForwardRef()
-  dateTableRef!: RefObject<HTMLTableElement>;
 
   get classes(): string {
     const {
@@ -252,6 +256,6 @@ OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderDa
 
   @Effect()
   groupPanelHeightEffect(): void {
-    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
+    this.groupPanelHeight = this.props.dateTableRef.current?.getBoundingClientRect().height;
   }
 }
