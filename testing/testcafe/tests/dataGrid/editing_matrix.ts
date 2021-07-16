@@ -17,7 +17,9 @@ const editingModes = [
   'popup',
 ];
 const columnInfos = [
-  { columnIndex: 0, dataField: 'text', newValue: 'new text' },
+  {
+    columnIndex: 0, dataField: 'text', newValue: 'xxxx', newMaskValue: 'xxxxx',
+  },
   {
     columnIndex: 1, dataField: 'number', newValue: '-9', newMaskValue: '9-',
   },
@@ -69,7 +71,12 @@ const createDataGrid = ({
     allowUpdating: true,
   },
   columns: [
-    { dataField: 'text' },
+    {
+      dataField: 'text',
+      editorOptions: {
+        mask: useMask ? 'cccc' : undefined,
+      },
+    },
     {
       dataField: 'number',
       editorOptions: {
@@ -315,7 +322,7 @@ const setEditorValue = async (
     mode, dataField, useKeyboard, useMask, newMaskValue, newValue,
   }, editor: Selector,
 ): Promise<void> => {
-  const value = useMask ? newMaskValue : newValue;
+  const value: string = useMask ? newMaskValue : newValue;
   if (dataField === 'date' && !useKeyboard && !useMask) {
     await t.click(editor.parent().parent().find('.dx-dropdowneditor-button'));
     await t.click(Selector('.dx-calendar-cell').withText(value.split('/')[1]));
@@ -413,7 +420,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test(`Update cell value ${JSON.stringify({
+            test.only(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;
@@ -434,7 +441,7 @@ editingModes.forEach((mode) => {
 
             if (isBasicColumn && !isAdding) {
               test(`Edit next cell ${JSON.stringify({
-                mode, dataField, repaintChangesOnly, useKeyboard,
+                mode, dataField, repaintChangesOnly, useKeyboard, useMask,
               })}`, async (t) => {
                 const rowIndex = 0;
 
