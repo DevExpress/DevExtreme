@@ -30,7 +30,6 @@ export const Navigator = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             date: new Date(),
-            displayedDate: undefined,
             step: 'day',
             intervalCount: 1,
             min: undefined,
@@ -59,7 +58,6 @@ export const Navigator = Widget.inherit({
             case 'step':
             case 'date':
             case 'intervalCount':
-            case 'displayedDate':
                 this._validateStep();
                 this._updateButtonsState();
                 this._renderCaption();
@@ -135,7 +133,7 @@ export const Navigator = Widget.inherit({
         let min = this.option('min');
         let max = this.option('max');
 
-        const date = this.option('displayedDate') || this.option('date');
+        const date = this.option('date');
         const caption = this._getCaption(date);
 
         min = min ? dateUtils.trimTime(min) : min;
@@ -267,7 +265,7 @@ export const Navigator = Widget.inherit({
     },
 
     _renderCaption: function() {
-        const date = this.option('displayedDate') || this.option('date');
+        const date = this.option('date');
 
         const caption = this._getCaption(date);
 
