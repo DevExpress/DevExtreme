@@ -1561,7 +1561,7 @@ QUnit.module('Header Filter', {
 
         // act
         that.headerFilterController.showHeaderFilterMenu(0);
-
+        that.clock.tick(500);
 
         // assert
         $popupContainer = that.headerFilterView.getPopupContainer().$overlayContent();
