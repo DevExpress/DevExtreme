@@ -22,29 +22,28 @@
   background-position: 0 0;
   background-size: cover;
   background-repeat: no-repeat;
-  flex-shrink: 0;
-  max-height: 100%;
-  max-width: 100%;
 }
 
 .dx-checkbox-container {
+  @include dx-overflow();
+
   height: 100%;
   width: 100%;
-  display: flex;
-  align-items: center;
-
-  @include dx-overflow();
+  display: inline-block;
+  vertical-align: middle;
+  text-overflow: clip;
 }
 
 .dx-checkbox-has-text {
   .dx-checkbox-icon,
   .dx-checkbox-text {
+    display: inline-block;
     vertical-align: middle;
   }
 }
 
 .dx-checkbox-text {
-  word-break: break-word;
+  word-wrap: break-word;
   white-space: pre-wrap;
   line-height: normal;
   height: 100%;
@@ -55,7 +54,7 @@
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
     margin: 0;
-    padding: 0;
+    padding: 0 5px 0 0;
   }
 }
 
