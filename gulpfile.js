@@ -75,7 +75,9 @@ function createDefaultBatch(dev) {
     tasks.push(dev ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev) {
         tasks.push('npm');
-        tasks.push('themebuilder-npm');
+        if(!env.SKIP_THEMEBUILDER) {
+            tasks.push('themebuilder-npm');
+        }
         tasks.push('check-license-notices');
     }
     return gulp.series(tasks);
