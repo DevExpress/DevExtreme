@@ -28,6 +28,11 @@ function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<voi
         pageX: cellOffset.left + x,
         pageY: cellOffset.top + y,
         pointers: [{ pointerId: 1 }],
+      }))
+      .trigger($.Event('dxpointerup', {
+        pageX: cellOffset.left + x,
+        pageY: cellOffset.top + y,
+        pointers: [{ pointerId: 1 }],
       }));
   },
   {
@@ -152,6 +157,18 @@ test('The cross-component drag and drop rows should work when there are fixed co
     .ok()
     .expect(getPlaceholderOffset())
     .eql(dataRowOffset);
+
+  const [fixedPointerEvents, otherFixedPointerEvents] = await ClientFunction(() => [
+    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(0)').css('pointer-events'),
+    $('.dx-datagrid-rowsview .dx-datagrid-content-fixed:eq(1)').css('pointer-events'),
+  ], { dependencies: { dataGrid, otherDataGrid } })();
+
+  // T1013088
+  await t
+    .expect(fixedPointerEvents)
+    .eql('none')
+    .expect(otherFixedPointerEvents)
+    .eql('none');
 }).before(async (t) => {
   await t.maximizeWindow();
 
