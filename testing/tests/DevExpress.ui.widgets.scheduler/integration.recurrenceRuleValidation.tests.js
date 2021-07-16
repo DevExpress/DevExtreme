@@ -14,6 +14,7 @@ const dragEvents = require('events/drag');
 const DataSource = require('data/data_source/data_source').DataSource;
 
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.module('Integration: recurrence rules validation', {
     beforeEach: function() {

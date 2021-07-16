@@ -7,6 +7,7 @@ const dataUtils = require('core/element_data');
 
 require('generic_light.css!');
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');

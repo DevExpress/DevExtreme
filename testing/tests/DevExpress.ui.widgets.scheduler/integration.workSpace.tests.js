@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
 import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1067,37 +1066,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 'Cashed cells is correct',
             );
         });
-    });
-
-    test('Scheduler timeline workweek should contain two spans in header panel cell in Material theme', function(assert) {
-        const origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
-
-        const scheduler = createWrapper({
-            views: [ 'week' ],
-            currentDate: new Date(2015, 9, 29),
-            firstDayOfWeek: 1,
-            startDayHour: 4,
-            endDayHour: 5,
-            currentView: 'week'
-        });
-
-        const $rows = scheduler.instance.$element().find('.dx-scheduler-header-row');
-        const $firstRowCells = $rows.first().find('th');
-        const startDate = 26;
-
-        const formatWeekdayAndDay = function(date) {
-            return dateLocalization.getDayNames('abbreviated')[date.getDay()] + ' ' + dateLocalization.format(date, 'day');
-        };
-
-        for(let i = 0; i < 5; i++) {
-            const $cell = $firstRowCells.eq(i);
-            assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), 'Cell text is OK');
-            assert.equal($cell.find('span').length, 2, 'Cell contains two spans in material theme');
-            assert.ok($cell.find('span').first().hasClass('dx-scheduler-header-panel-cell-date'), 'first span has correct class');
-            assert.ok($cell.find('span').last().hasClass('dx-scheduler-header-panel-cell-date'), 'second span has correct class');
-        }
-        themes.isMaterial = origIsMaterial;
     });
 
     test('Vertical scrollable should work after switching currentDate if allDayPanel and crossScrollingEnabled are turned on', function(assert) {
