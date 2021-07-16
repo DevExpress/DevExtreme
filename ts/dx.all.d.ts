@@ -505,8 +505,8 @@ declare global {
     dxVectorMap(options: string): any;
     dxVectorMap(options: string, ...params: any[]): any;
   }
-  interface JQueryEventObject {}
-  interface JQueryPromise<T> {}
+  interface JQueryEventObject extends JQuery.Event {}
+  interface JQueryPromise<T> extends JQuery.Deferred.Callback<T> {}
 }
 declare module DevExpress {
   /**
