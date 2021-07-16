@@ -365,7 +365,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxHeight() {
-        return this.getDefaultAllDayCellHeight() || this.getAppointmentMinSize();
+        return this.allDayHeight || this.getAppointmentMinSize();
     }
 
     _needVerticalGroupBounds(allDay) {

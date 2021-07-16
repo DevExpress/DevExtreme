@@ -20,7 +20,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         const renderingStrategy = this.getRenderingStrategy();
 
         if(renderingStrategy.hasAllDayAppointments() && allDay) {
-            return (renderingStrategy.getDefaultAllDayCellHeight() - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
+            return (renderingStrategy.allDayHeight - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
         } else {
             return this.getRenderingStrategy().cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
         }

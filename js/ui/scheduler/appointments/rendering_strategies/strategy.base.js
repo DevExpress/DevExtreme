@@ -558,10 +558,6 @@ class BaseRenderingStrategy {
         return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
     }
 
-    getDefaultAllDayCellHeight() {
-        return this.allDayHeight;
-    }
-
     getCollectorTopOffset(allDay) {
         return this.getPositioningStrategy().getCollectorTopOffset(allDay);
     }
