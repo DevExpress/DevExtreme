@@ -2528,8 +2528,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(!this.option('crossScrollingEnabled')) {
             this._attachTableClasses();
-            this._attachHeaderTableClasses();
         }
+        this._attachHeaderTableClasses();
 
         this._toggleGroupedClass();
         this._toggleFixedScrollableClass();
