@@ -3893,7 +3893,7 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 15;
+        this.timeToWaitResize = 25;
         this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
@@ -4151,7 +4151,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
 QUnit.module('resizeObserver integration', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 15;
+        this.timeToWaitResize = 25;
     },
     afterEach: function() {
         fx.off = false;
