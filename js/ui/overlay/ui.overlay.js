@@ -357,7 +357,7 @@ const Overlay = Widget.inherit({
     _initResizeObserver: function() {
         this._resizeObserver = new ResizeObserver({
             callback: () => { this._renderGeometry(); },
-            beforeEach: (entries) => {
+            shouldSkipCallback: (entries) => {
                 if(entries.length === 1) {
                     const entry = entries[0];
                     if(
@@ -365,7 +365,7 @@ const Overlay = Widget.inherit({
                             && entry.contentRect.width === this._actualDimensions?.width
                             && entry.contentRect.height === this._actualDimensions?.height
                     ) {
-                        return { shouldSkip: true };
+                        return true;
                     }
                 }
             }
@@ -1436,6 +1436,7 @@ const Overlay = Widget.inherit({
             case 'maxHeight':
             case 'boundaryOffset':
                 this._renderGeometry();
+                // triggerResizeEvent(this._$content);
                 break;
             case 'position':
                 this._positionChangeHandled = false;
