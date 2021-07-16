@@ -62,49 +62,19 @@ export class SchedulerHeader extends Widget {
     }
 
     _createEventMap() {
-        const config = [
-            {
-                key: 'items',
-                value: [this.repaint.bind(this)],
-            },
-            {
-                key: 'views',
-                value: [validateViews],
-            },
-            {
-                key: 'currentDate',
-                value: [this._getCalendarDateUpdater()],
-            },
-            {
-                key: 'displayedDate',
-                value: [this._getCalendarDateUpdater()],
-            },
-            {
-                key: 'min',
-                value: [this._getCalendarOptionUpdater('min')],
-            },
-            {
-                key: 'max',
-                value: [this._getCalendarOptionUpdater('max')],
-            },
-            {
-                key: 'tabIndex',
-                value: [this.repaint.bind(this)],
-            },
-            {
-                key: 'focusStateEnabled',
-                value: [this.repaint.bind(this)],
-            },
-            {
-                key: 'useDropDownViewSwitcher',
-                value: [this.repaint.bind(this)],
-            },
-        ];
-
-        this.eventMap = new Map();
-
-        config.forEach(({ key, value }) =>
-            this.eventMap.set(key, value));
+        this.eventMap = new Map(
+            [
+                ['items', [this.repaint.bind(this)]],
+                ['views', [validateViews]],
+                ['currentDate', [this._getCalendarDateUpdater()]],
+                ['displayedDate', [this._getCalendarDateUpdater()]],
+                ['min', [this._getCalendarOptionUpdater('min')]],
+                ['max', [this._getCalendarOptionUpdater('max')]],
+                ['tabIndex', [this.repaint.bind(this)]],
+                ['focusStateEnabled', [this.repaint.bind(this)]],
+                ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+            ]
+        );
     }
 
     _addEvent(name, event) {
