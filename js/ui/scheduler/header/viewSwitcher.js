@@ -6,10 +6,19 @@ import {
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
 
-export const getViewSwitcher = (header, item) => {
-    const selectedView = getViewName(header.currentView);
+const getViewsAndSelectedView = (header) => {
+    const views = formatViews(header.views);
+    let selectedView = getViewName(header.currentView);
 
-    const items = formatViews(header.views);
+    const isSelectedViewInViews = views.some(view => view.name === selectedView);
+
+    selectedView = isSelectedViewInViews ? isSelectedViewInViews : undefined;
+
+    return { selectedView, views };
+};
+
+export const getViewSwitcher = (header, item) => {
+    const { selectedView, views } = getViewsAndSelectedView(header);
 
     return {
         ...item,
@@ -17,7 +26,7 @@ export const getViewSwitcher = (header, item) => {
         locateInMenu: 'auto',
         cssClass: VIEW_SWITCHER_CLASS,
         options: {
-            items,
+            items: views,
             keyExpr: 'name',
             selectedItemKeys: [selectedView],
             stylingMode: 'outlined',
@@ -38,9 +47,7 @@ export const getViewSwitcher = (header, item) => {
 };
 
 export const getDropDownViewSwitcher = (header, item) => {
-    const selectedView = getViewName(header.currentView);
-
-    const items = formatViews(header.views);
+    const { selectedView, views } = getViewsAndSelectedView(header);
 
     return {
         ...item,
@@ -48,7 +55,7 @@ export const getDropDownViewSwitcher = (header, item) => {
         locateInMenu: 'never',
         cssClass: VIEW_SWITCHER_CLASS,
         options: {
-            items,
+            items: views,
             useSelectMode: true,
             keyExpr: 'name',
             selectedItemKey: selectedView,
