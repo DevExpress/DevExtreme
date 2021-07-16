@@ -113,7 +113,7 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _getItemPosition(appointment) {
@@ -205,7 +205,7 @@ class BaseRenderingStrategy {
     }
 
     _getCompactAppointmentParts(appointmentWidth) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return Math.round(appointmentWidth / cellWidth);
     }
@@ -234,7 +234,7 @@ class BaseRenderingStrategy {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
-        return result > this.getDefaultCellWidth() / 2;
+        return result > this.cellWidth / 2;
     }
 
     isAllDay() {
@@ -556,10 +556,6 @@ class BaseRenderingStrategy {
 
     getDropDownButtonAdaptiveSize() {
         return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
-    }
-
-    getDefaultCellWidth() {
-        return this.cellWidth;
     }
 
     getDefaultCellHeight() {

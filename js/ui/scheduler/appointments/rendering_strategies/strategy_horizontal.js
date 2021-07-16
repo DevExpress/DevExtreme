@@ -14,7 +14,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     calculateAppointmentWidth(appointment, position) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
@@ -54,7 +54,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return itemLeft + cellWidth * index;
     }
@@ -90,14 +90,14 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     getDropDownAppointmentWidth() {
-        return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
+        return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
     }
 
     getDeltaTime(args, initialSize) {
         let deltaTime = 0;
         const deltaWidth = args.width - initialSize.width;
 
-        deltaTime = toMs('minute') * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
+        deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.instance.getAppointmentDurationInMinutes());
 
         return deltaTime;
     }

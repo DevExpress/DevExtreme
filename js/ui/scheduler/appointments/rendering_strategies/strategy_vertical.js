@@ -29,7 +29,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
         } else if(this._getMaxAppointmentCountPerCellByType() === 0) {
             const cellHeight = this.getDefaultCellHeight();
-            const cellWidth = this.getDefaultCellWidth();
+            const cellWidth = this.cellWidth;
 
             coordinates.top += (cellHeight - this.getDropDownButtonAdaptiveSize()) / 2;
             coordinates.left += (cellWidth - this.getDropDownButtonAdaptiveSize()) / 2;
@@ -173,7 +173,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const cellsDiff = this.instance.fire('isGroupedByDate')
             ? this.instance.fire('getGroupCount')
             : 1;
-        const offset = this.getDefaultCellWidth() * cellsDiff;
+        const offset = this.cellWidth * cellsDiff;
         const left = appointmentSettings.left + offset;
 
         if(tailHeight > 0) {
@@ -205,7 +205,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     _getCompactLeftCoordinate(itemLeft, index) {
         const cellBorderSize = 1;
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return itemLeft + (cellBorderSize + cellWidth) * index;
     }
@@ -264,7 +264,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxWidth() {
-        return this.getDefaultCellWidth() || this.cellWidth;
+        return this.cellWidth || this.cellWidth;
     }
 
     isAllDay(appointmentData) {
@@ -278,7 +278,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth() - this._getAppointmentDefaultOffset();
+        return this.cellWidth - this._getAppointmentDefaultOffset();
     }
 
     calculateAppointmentWidth(appointment, position) {
@@ -289,7 +289,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const { normalizedEndDate } = position.info.appointment;
 
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
 
         let width = Math.ceil(durationInHours / 24) * cellWidth;

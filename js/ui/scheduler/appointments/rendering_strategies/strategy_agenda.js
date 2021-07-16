@@ -108,7 +108,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _needVerifyItemSize() {

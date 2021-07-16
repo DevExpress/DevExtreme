@@ -120,7 +120,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
             return this.getDropDownButtonAdaptiveSize();
         }
         const offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
-        return this.getDefaultCellWidth() - offset;
+        return this.cellWidth - offset;
     }
 
     needCorrectAppointmentDates() {
