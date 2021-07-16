@@ -558,10 +558,6 @@ class BaseRenderingStrategy {
         return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
     }
 
-    getDefaultCellHeight() {
-        return this.cellHeight;
-    }
-
     getDefaultAllDayCellHeight() {
         return this.allDayHeight;
     }

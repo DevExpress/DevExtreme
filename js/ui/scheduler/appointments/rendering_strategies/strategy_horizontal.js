@@ -60,7 +60,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxHeight() {
-        return this.getDefaultCellHeight() || this.getAppointmentMinSize();
+        return this.cellHeight || this.getAppointmentMinSize();
     }
 
     _getAppointmentCount(overlappingMode, coordinates) {

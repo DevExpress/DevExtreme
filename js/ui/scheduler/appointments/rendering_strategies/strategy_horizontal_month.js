@@ -53,7 +53,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
         const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
 
         for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
-            const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
+            const topPosition = settings.top + this.cellHeight * chunkIndex;
             const isTailChunk = hasTailChunk && (chunkIndex === chunkCount - 1);
 
             result.push({ ...settings, ...{

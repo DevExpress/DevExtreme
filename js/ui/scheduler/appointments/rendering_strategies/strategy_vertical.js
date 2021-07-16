@@ -19,7 +19,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             deltaTime = this._getDeltaWidth(args, initialSize) * toMs('day');
         } else {
             const deltaHeight = args.height - initialSize.height;
-            deltaTime = toMs('minute') * Math.round(deltaHeight / this.getDefaultCellHeight() * this.instance.getAppointmentDurationInMinutes());
+            deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.instance.getAppointmentDurationInMinutes());
         }
         return deltaTime;
     }
@@ -28,7 +28,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         if(isAllDay) {
             super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
         } else if(this._getMaxAppointmentCountPerCellByType() === 0) {
-            const cellHeight = this.getDefaultCellHeight();
+            const cellHeight = this.cellHeight;
             const cellWidth = this.cellWidth;
 
             coordinates.top += (cellHeight - this.getDropDownButtonAdaptiveSize()) / 2;
@@ -200,7 +200,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMinuteHeight() {
-        return this.getDefaultCellHeight() / this.instance.getAppointmentDurationInMinutes();
+        return this.cellHeight / this.instance.getAppointmentDurationInMinutes();
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
