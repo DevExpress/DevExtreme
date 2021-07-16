@@ -6,7 +6,6 @@ import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
 
 import timeZoneUtils from '../../utils.timeZone';
-import { ExpressionUtils } from '../../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -89,6 +88,7 @@ class BaseRenderingStrategy {
 
         const positionArray = this._getSortedPositions(map);
         const resultPositions = this._getResultPositions(positionArray);
+
         return this._getExtendedPositionMap(map, resultPositions);
     }
 
@@ -492,28 +492,6 @@ class BaseRenderingStrategy {
                 result.push(compactPart);
             }
         }
-        return result;
-    }
-
-    normalizeEndDateByViewEnd(appointment, endDate) {
-        let result = new Date(endDate.getTime());
-
-        if(!this.isAllDay(appointment)) {
-            const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
-
-            if(result > viewEndDate) {
-                result = viewEndDate;
-            }
-        }
-
-        const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
-        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
-
-        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
-            result = currentViewEndTime;
-        }
-
         return result;
     }
 

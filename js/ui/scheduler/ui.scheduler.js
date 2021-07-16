@@ -468,23 +468,33 @@ class Scheduler extends Widget {
     }
 
     _getAppointmentSettingsGenerator(rawAppointment) {
+        const workspace = this.getWorkSpace();
+
         return new AppointmentSettingsGenerator({
-            rawAppointment,
             key: this.key,
+            rawAppointment,
             timeZoneCalculator: getTimeZoneCalculator(this.key),
             resourceManager: getResourceManager(this.key),
             appointmentTakesAllDay: this.appointmentTakesAllDay(rawAppointment),
             timeZone: this.option('timeZone'),
             firstDayOfWeek: this.getFirstDayOfWeek(),
             viewStartDayHour: this._getCurrentViewOption('startDayHour'),
-            layoutManager: this.getLayoutManager(),
+            viewEndDayHour: this._getCurrentViewOption('endDayHour'),
             isVirtualScrolling: this.isVirtualScrolling(),
-            viewDataProvider: this.getWorkSpace().viewDataProvider,
-            supportAllDayRow: this.getWorkSpace().supportAllDayRow(),
-            dateRange: this.getWorkSpace().getDateRange(),
-            intervalDuration: this.getWorkSpace().getIntervalDuration(),
-            allDayIntervalDuration: this.getWorkSpace().getIntervalDuration(true),
-            workspace: this.getWorkSpace()
+            viewType: workspace.type,
+            endViewDate: workspace.getEndViewDate(),
+            positionHelper: workspace.positionHelper,
+            isGroupedByDate: workspace.isGroupedByDate(),
+            cellDuration: workspace.getCellDuration(),
+            viewDataProvider: workspace.viewDataProvider,
+            supportAllDayRow: workspace.supportAllDayRow(),
+            dateRange: workspace.getDateRange(),
+            intervalDuration: workspace.getIntervalDuration(),
+            isVerticalOrientation: workspace.isVerticalOrientation(),
+            allDayIntervalDuration: workspace.getIntervalDuration(true),
+            isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
+            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
+            DOMMetaData: workspace.getDOMElementsMetaData(),
         });
     }
 
@@ -1582,6 +1592,7 @@ class Scheduler extends Widget {
             horizontalVirtualScrollingAllowed;
 
         const result = extend({
+            key: this.key,
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),
