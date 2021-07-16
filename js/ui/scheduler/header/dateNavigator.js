@@ -26,7 +26,6 @@ export const getDateNavigator = (header, item) => {
         cssClass: DATE_NAVIGATOR_CLASS,
         options: {
             items,
-            keyExpr: 'key',
             stylingMode,
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);

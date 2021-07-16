@@ -578,6 +578,14 @@ $arrow-down: "\f016";
           content: $arrow-down;
         }
       }
+
+      .dx-scheduler-navigator {
+        .dx-button {
+          &.dx-item-selected:not(.dx-state-focused) {
+            background-color: white;
+          }
+        }
+      }
     }
   }
 
