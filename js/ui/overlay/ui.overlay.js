@@ -1156,6 +1156,13 @@ const Overlay = Widget.inherit({
         }
     },
 
+    _cacheDimensions: function() {
+        this._actualDimensions = {
+            width: this._$content.width(),
+            height: this._$content.height()
+        };
+    },
+
     _renderGeometryImpl: function() {
         const isAnimated = this._showAnimationProcessing;
 
@@ -1163,6 +1170,7 @@ const Overlay = Widget.inherit({
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
+        this._cacheDimensions();
         const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
@@ -1272,13 +1280,6 @@ const Overlay = Widget.inherit({
             width: this._getOptionValue('width', content),
             height: this._getOptionValue('height', content)
         });
-
-        if(hasWindow()) {
-            this._actualDimensions = {
-                width: this._$content.width(),
-                height: this._$content.height()
-            };
-        }
     },
 
     _renderPosition: function() {
