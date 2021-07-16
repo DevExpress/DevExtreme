@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import ViewDataProvider from '../../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {
@@ -97,11 +98,15 @@ describe('WorkSpaceBase', () => {
         headerPanelTemplate: () => null,
         dateTableTemplate: () => null,
         timePanelTemplate: () => null,
+        className: 'custom',
       };
-      const viewModel = {
+      const viewDataProvider = {
         dateHeaderData,
         viewData,
         timePanelData,
+      };
+      const viewModel = {
+        viewDataProvider,
         isAllDayPanelVisible: true,
       };
 
@@ -116,10 +121,49 @@ describe('WorkSpaceBase', () => {
 
       expect(workSpace.props())
         .toEqual({
-          ...viewModel,
           ...props,
           isAllDayPanelCollapsed: true,
+          isAllDayPanelVisible: true,
+          dateHeaderData,
+          viewData,
+          timePanelData,
         });
+    });
+  });
+
+  describe('Behaviour', () => {
+    describe('Effects', () => {
+      describe('onViewRendered', () => {
+        it('should not do anything if onViewRendered is not provided', () => {
+          const workSpace = new WorkSpaceBase({} as any);
+
+          expect(workSpace.onViewRendered())
+            .toBeUndefined();
+        });
+
+        it('should call onViewRendered with correct parameters', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpaceBase({
+            ...new WorkSpaceBaseProps(),
+            onViewRendered,
+            currentDate: new Date(),
+          });
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(1);
+          expect(onViewRendered)
+            .toBeCalledWith({
+              viewDataProvider: expect.any(ViewDataProvider),
+              cellsMetaData: {
+                dateTableCellsMeta: [],
+                allDayPanelCellsMeta: [],
+              },
+            });
+        });
+      });
     });
   });
 
