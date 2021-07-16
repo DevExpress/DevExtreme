@@ -189,8 +189,8 @@ export class SchedulerHeader extends Widget {
     }
 
     _updateCurrentView(view) {
-        const setCurrentView = this.option('setCurrentView');
-        setCurrentView(view.name);
+        const onCurrentViewChange = this.option('onCurrentViewChange');
+        onCurrentViewChange(view.name);
 
         if(this.eventMap.has('currentView')) {
             const events = this.eventMap.get('currentView');
@@ -199,8 +199,8 @@ export class SchedulerHeader extends Widget {
     }
 
     _updateCurrentDate(date) {
-        const setCurrentDate = this.option('setCurrentDate');
-        setCurrentDate(date);
+        const onCurrentDateChange = this.option('onCurrentDateChange');
+        onCurrentDateChange(date);
 
         if(this.eventMap.has('currentDate')) {
             const events = this.eventMap.get('currentDate');

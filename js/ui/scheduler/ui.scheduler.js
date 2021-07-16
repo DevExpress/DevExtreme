@@ -1448,8 +1448,8 @@ class Scheduler extends Widget {
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
-        result.setCurrentView = (name) => this.option('currentView', name);
-        result.setCurrentDate = (date) => this.option('currentDate', date);
+        result.onCurrentViewChange = (name) => this.option('currentView', name);
+        result.onCurrentDateChange = (date) => this.option('currentDate', date);
         result.items = this.option('toolbar');
 
         result.todayDate = () => {
