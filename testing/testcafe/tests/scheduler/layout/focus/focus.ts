@@ -46,7 +46,7 @@ test('Appointment should be focus on click', async (t) => {
 
   await t
     .doubleClick(scheduler.getAppointment('A').element, { speed: 0.1 })
-    .expect(await takeScreenshot('popup-focused-after-show.png', scheduler.element))
+    .expect(await takeScreenshot('popup-focused-after-show.png'))
     .ok();
 
   await t
