@@ -3449,6 +3449,8 @@ QUnit.module('search should be canceled only after popup hide animation completi
 
 QUnit.module('search substitution', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
         this.testItem = 'abc';
 
         this.$selectBox = $('#selectBox').dxSelectBox({
@@ -3476,6 +3478,9 @@ QUnit.module('search substitution', {
             this._init();
         };
         this._init();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 }, () => {
     // T434197
