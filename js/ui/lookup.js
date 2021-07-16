@@ -690,7 +690,7 @@ const Lookup = DropDownList.inherit({
             closeOnTargetScroll: false,
             onPositioned: null,
 
-            maxHeight: '100hv',
+            maxHeight: '100vh',
 
             showTitle: this.option('dropDownOptions.showTitle'),
             title: this.option('dropDownOptions.title'),
