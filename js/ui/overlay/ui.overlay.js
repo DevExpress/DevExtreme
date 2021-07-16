@@ -1437,7 +1437,6 @@ const Overlay = Widget.inherit({
             case 'maxHeight':
             case 'boundaryOffset':
                 this._renderGeometry();
-                // triggerResizeEvent(this._$content);
                 break;
             case 'position':
                 this._positionChangeHandled = false;
