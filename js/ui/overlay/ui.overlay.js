@@ -505,6 +505,9 @@ const Overlay = Widget.inherit({
         this._animate(
             showAnimation,
             (...args) => {
+                if(this._isAnimationPaused) {
+                    return;
+                }
                 if(this.option('focusStateEnabled')) {
                     eventsEngine.trigger(this._focusTarget(), 'focus');
                 }
@@ -517,6 +520,9 @@ const Overlay = Widget.inherit({
                 this._showingDeferred.resolve();
             },
             (...args) => {
+                if(this._isAnimationPaused) {
+                    return;
+                }
                 startShowAnimation.call(this, ...args);
                 this._showAnimationProcessing = true;
             });
@@ -1166,6 +1172,7 @@ const Overlay = Widget.inherit({
     _renderGeometryImpl: function() {
         const isAnimated = this._showAnimationProcessing;
 
+        this._isAnimationPaused = isAnimated || undefined;
         this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
@@ -1177,6 +1184,7 @@ const Overlay = Widget.inherit({
 
         if(isAnimated) {
             this._animateShowing();
+            this._isAnimationPaused = undefined;
         }
     },
 
