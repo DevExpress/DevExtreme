@@ -597,9 +597,9 @@ QUnit.module('Appointments', moduleOptions, () => {
                 getAppointmentDurationInMinutes: function() {
                     return 30;
                 }
-            }
+            },
+            getCellHeight: () => 50
         });
-        strategy._defaultHeight = 50;
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');

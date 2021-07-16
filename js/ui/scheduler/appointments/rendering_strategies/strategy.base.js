@@ -76,10 +76,6 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.cellWidth;
-        this._defaultHeight = this.cellHeight;
-        this._allDayHeight = this.allDayHeight;
-
         const map = [];
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
@@ -563,15 +559,15 @@ class BaseRenderingStrategy {
     }
 
     getDefaultCellWidth() {
-        return this._defaultWidth;
+        return this.cellWidth;
     }
 
     getDefaultCellHeight() {
-        return this._defaultHeight;
+        return this.cellHeight;
     }
 
     getDefaultAllDayCellHeight() {
-        return this._allDayHeight;
+        return this.allDayHeight;
     }
 
     getCollectorTopOffset(allDay) {
