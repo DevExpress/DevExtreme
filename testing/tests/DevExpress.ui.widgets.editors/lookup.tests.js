@@ -3429,8 +3429,9 @@ QUnit.module('default options', {
         const $lookup = $('<div>').prependTo('body');
         const materialLookupPadding = 8;
 
-        try {
+        const clock = sinon.useFakeTimers();
 
+        try {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'red', 'green', 'yellow'], value: 'blue' }).dxLookup('instance');
 
             $(lookup.field()).trigger('dxclick');
@@ -3476,6 +3477,7 @@ QUnit.module('default options', {
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, 0, 1, 'offset of the lookup if not selected item');
         } finally {
+            clock.restore();
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
         }
@@ -3508,6 +3510,8 @@ QUnit.module('default options', {
 
         const $lookup = $('<div>').prependTo('body');
         const materialLookupPadding = 8;
+
+        const clock = sinon.useFakeTimers();
 
         try {
 
@@ -3594,6 +3598,7 @@ QUnit.module('default options', {
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
         } finally {
             $lookup.remove();
+            clock.restore();
             themes.isMaterial = origIsMaterial;
         }
     });

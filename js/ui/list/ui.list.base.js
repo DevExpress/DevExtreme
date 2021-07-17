@@ -380,10 +380,16 @@ export const ListBase = CollectionWidget.inherit({
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
         const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
-        this._scrollView = this._createComponent(this.$element(), getScrollView(), {
+        this._createScrollViewActions();
+
+        this._createComponent(this.$element(), getScrollView(), {
+            height: this.option('height'),
+            width: this.option('width'),
             disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
+            pullDownEnabled: pullRefreshEnabled,
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+            reachBottomEnabled: autoPagingEnabled,
             onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
             showScrollbar: this.option('showScrollbar'),
             useNative: this.option('useNativeScrolling'),
@@ -394,7 +400,10 @@ export const ListBase = CollectionWidget.inherit({
             pulledDownText: this.option('pulledDownText'),
             refreshingText: this.option('refreshingText'),
             reachBottomText: this.option('pageLoadingText'),
-            useKeyboard: false
+            useKeyboard: false,
+            onInitialized: (e) => {
+                this._scrollView = e.component;
+            }
         });
 
         this._$container = $(this._scrollView.content());
@@ -403,7 +412,6 @@ export const ListBase = CollectionWidget.inherit({
             this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
         }
 
-        this._createScrollViewActions();
     },
 
     _createScrollViewActions: function() {
@@ -589,6 +597,7 @@ export const ListBase = CollectionWidget.inherit({
 
         this._refreshItemElements();
         this._updateLoadingState(true);
+        this._scrollView && this._scrollView.update();
     },
 
     _attachGroupCollapseEvent: function() {
@@ -929,6 +938,7 @@ export const ListBase = CollectionWidget.inherit({
             case 'width':
             case 'height':
                 this.callBase(args);
+                this._scrollView.option(args.name, args.value);
                 this._scrollView.update();
                 break;
             case 'indicateLoading':
@@ -1043,7 +1053,7 @@ export const ListBase = CollectionWidget.inherit({
     scrollToItem: function(itemElement) {
         const $item = this._editStrategy.getItemElement(itemElement);
 
-        this._scrollView.scrollToElement($item);
+        this._scrollView.scrollToElement($item?.get(0));
     },
 
     _dimensionChanged: function() {

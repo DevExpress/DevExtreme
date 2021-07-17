@@ -251,7 +251,9 @@ QUnit.module('markup', {
             items: this.treeItems,
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0);
+        const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($rootNodeFirstItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
         assert.equal($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);

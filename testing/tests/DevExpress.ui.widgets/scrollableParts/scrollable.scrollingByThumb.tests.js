@@ -3,6 +3,9 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
+// eslint-disable-next-line spellcheck/spell-checker
+import { rerender as reRender } from 'inferno';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -48,9 +51,17 @@ const getScrollOffset = function($scrollable) {
     };
 };
 
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+
 QUnit.module('scrolling by thumb', moduleConfig);
 
 QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
+    if(isRenovation) {
+        // test not relevant for renovated scrollable
+        assert.ok(true);
+        return;
+    }
+
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: true,
         useNative: false
@@ -196,10 +207,12 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after scrollable creation');
 
     $container.trigger('mouseenter');
+    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 
     $container.trigger('mouseleave');
+    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after mouse leave');
 });
@@ -217,6 +230,7 @@ QUnit.test('thumb is visible after update when content became more then containe
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.trigger('mouseenter');
+    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden when content less then container');
 
@@ -390,8 +404,8 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     const $scrollableScroll = $scrollableContainer.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
-    $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
-    $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $wrapScrollableContainer.trigger('mouseenter');
+    $scrollableContainer.trigger('mouseenter');
 
     assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for inner scrollable');
     assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden for outer scrollable');
@@ -407,7 +421,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
     const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    $container.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $container.trigger('mouseenter');
 
     pointerMock($container)
         .start()
@@ -417,7 +431,7 @@ QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of s
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible');
 
-    $container.trigger($.Event('mouseleave', { originalEvent: {} }));
+    $container.trigger('mouseleave');
 
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible after mouseleave');
 });
@@ -446,9 +460,9 @@ QUnit.test('leaving inner scroller and releasing in outer scroller should hide i
     const $wrapScrollableScroll = $wrapScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($scrollableScroll);
 
     // enter outer
-    $wrapScrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $wrapScrollableContainer.trigger('mouseenter');
     // enter inner
-    $scrollableContainer.trigger($.Event('mouseenter', { originalEvent: {} }));
+    $scrollableContainer.trigger('mouseenter');
 
     // start scrolling inner
     pointerMock($scrollableContainer).start().down().move(0, 10);

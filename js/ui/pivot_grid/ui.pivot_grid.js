@@ -95,14 +95,17 @@ function getScrollBarInfo(useNativeScrolling) {
     let scrollBarWidth = 0;
     const options = {};
 
-    const container = $(DIV).css({
+    const $emptyContainer = $('<div>').appendTo('body');
+    const container = $('<div>').appendTo($emptyContainer);
+
+    container.css({
         position: 'absolute',
         visibility: 'hidden',
         top: -1000,
         left: -1000,
         width: 100,
         height: 100
-    }).appendTo('body');
+    });
 
     const content = $('<p>').css({
         width: '100%',
