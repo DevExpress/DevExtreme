@@ -19,11 +19,14 @@ import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
@@ -127,7 +130,11 @@ const TextEditorBase = Editor.inherit({
 
             stylingMode: config().editorStylingMode || 'outlined',
 
-            showValidationMark: true
+            showValidationMark: true,
+
+            label: '',
+
+            labelMode: 'static'
         });
     },
 
@@ -140,7 +147,9 @@ const TextEditorBase = Editor.inherit({
                     return isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: config().editorStylingMode || 'underlined'
+                    stylingMode: config().editorStylingMode || 'underlined',
+                    label: '',
+                    labelMode: 'floating'
                 }
             }
         ]);
@@ -201,6 +210,7 @@ const TextEditorBase = Editor.inherit({
         this.callBase();
 
         this._renderValue();
+        this._renderLabel();
     },
 
     _render: function() {
@@ -436,6 +446,45 @@ const TextEditorBase = Editor.inherit({
 
     _toggleSpellcheckState: function() {
         this._input().prop('spellcheck', this.option('spellcheck'));
+    },
+
+    _renderLabel: function(container) {
+        const TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS = 'dx-texteditor-with-custom-buttons';
+
+        if(this._$label) {
+            this._$label.remove();
+            this._$label = null;
+        }
+
+        this.$element()
+            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
+
+        if(!this.option('label') || this.option('labelMode') === 'hidden') return;
+
+        this.$element().addClass(this.option('labelMode') === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
+
+        const labelText = this.option('label');
+        const $label = this._$label = $('<div>')
+            .addClass(TEXTEDITOR_LABEL_CLASS)
+            .html('<span>' + labelText + '</span>');
+
+
+        if(this._$beforeButtonsContainer) {
+            const $container = container || this.$element();
+            const $textEditorInputContainer = $container.find('.' + TEXTEDITOR_INPUT_CONTAINER_CLASS);
+
+            $label.appendTo($textEditorInputContainer);
+
+            if(this.option('stylingMode') === 'outlined') {
+                this.$element().addClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
+            }
+        } else if(this.NAME === 'dxLookup') {
+            $label.appendTo(container);
+        } else {
+            $label.appendTo(this._$textEditorContainer);
+        }
     },
 
     _renderPlaceholder: function() {
@@ -700,6 +749,10 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
+                break;
+            case 'label':
+            case 'labelMode':
+                this._renderLabel();
                 break;
             case 'readOnly':
             case 'disabled':

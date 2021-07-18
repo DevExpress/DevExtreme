@@ -17,6 +17,7 @@ $material-base-standard-texteditor-input-horizontal-padding: 0;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px;
 $material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
 $material-editor-custom-button-margin: 5px;
+$material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 
 @mixin dx-texteditor-icon() {
@@ -144,6 +145,20 @@ $material-editor-custom-button-margin: 5px;
 
   &::after {
     @include dx-texteditor-borders-position();
+  }
+
+  &.dx-state-focused,
+  &.dx-state-focused.dx-state-hover {
+    .dx-texteditor-label {
+      color: $base-accent;
+      font-size: $material-texteditor-label-font-size;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
   }
 
   &.dx-state-focused,
@@ -336,6 +351,542 @@ $material-editor-custom-button-margin: 5px;
   font-size: $material-texteditor-font-size;
 }
 
+.dx-texteditor-label {
+  position: absolute;
+  font-size: $material-texteditor-label-font-size;
+  color: $texteditor-label-color;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  .dx-invalid & {
+    color: $base-invalid-color;
+  }
+
+  .dx-rtl & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dx-editor-filled {
+  $input-vertical-diff: 6px;
+  $label-position-top: floor(math.div($material-filled-texteditor-input-top-padding, 2));
+
+  .dx-texteditor-label {
+    left: $material-filled-texteditor-input-horizontal-padding;
+  }
+
+  &.dx-rtl {
+    .dx-texteditor-label {
+      right: $material-filled-texteditor-input-horizontal-padding;
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
+      padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
+      padding-bottom: $material-filled-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+
+    .dx-texteditor-label {
+      font-size: $material-texteditor-label-font-size;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
+      top: $label-position-top;
+      margin-top: 0;
+    }
+
+    .dx-placeholder {
+      top: $input-vertical-diff;
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-texteditor-label {
+        transition: $material-editor-label-transition;
+        font-size: $material-texteditor-font-size;
+        top: 50%;
+        margin-top: math.div(-$material-texteditor-font-size, 2);
+        height: $material-texteditor-font-size;
+        line-height: $material-texteditor-font-size;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
+          margin-top: 0;
+          font-size: $material-texteditor-font-size;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-textarea.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-texteditor-label {
+        font-size: $material-texteditor-label-font-size;
+        height: $material-texteditor-label-font-size;
+        line-height: $material-texteditor-label-font-size;
+        top: $label-position-top;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.dx-editor-outlined {
+  $label-offset-y: math.div($material-texteditor-label-font-size, 2);
+  $label-default-transform: translate(0, 0);
+
+  @mixin dx-state($borderColor, $shadowOffset) {
+    box-shadow: inset #{$shadowOffset}px 0 $borderColor, inset -#{$shadowOffset}px 0 $borderColor, inset 0 -#{$shadowOffset}px $borderColor;
+    outline: none;
+
+    .dx-texteditor-label {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      margin-top: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
+
+      span {
+        transform: translate(0, -$label-offset-y);
+        font-size: $material-texteditor-label-font-size;
+      }
+
+      &::before,
+      &::after {
+        box-shadow: inset 0 #{$shadowOffset}px $borderColor;
+      }
+    }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 #{$shadowOffset}px $borderColor;
+      }
+    }
+  }
+
+  @mixin dx-state-empty($borderColor, $shadowOffset) {
+    box-shadow: inset 0 0 0 #{$shadowOffset}px $borderColor;
+    outline: none;
+
+    .dx-texteditor-label {
+      top: 50%;
+      margin-top: math.div(-$material-texteditor-font-size, 2);
+      height: $material-texteditor-font-size;
+      line-height: $material-texteditor-font-size;
+
+      span {
+        transition: $material-editor-label-transition;
+        transform: $label-default-transform;
+        font-size: $material-texteditor-font-size;
+      }
+
+      &::before,
+      &::after {
+        box-shadow: inset 0 #{$shadowOffset}px transparent;
+      }
+    }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 #{$shadowOffset}px transparent;
+      }
+    }
+
+    &.dx-textarea {
+      .dx-texteditor-label {
+        top: $material-filled-texteditor-input-top-padding;
+        margin-top: 0;
+      }
+    }
+
+    .dx-placeholder {
+      display: none;
+    }
+  }
+
+  &.dx-texteditor-with-custom-buttons {
+    .dx-texteditor-label {
+      &::after,
+      &::before {
+        border-radius: 0;
+      }
+
+      &::before {
+        padding-left: 1px;
+        margin-left: -1px;
+      }
+
+      &::after {
+        padding-right: 1px;
+        margin-right: -1px;
+      }
+    }
+  }
+
+  .dx-texteditor-label {
+    display: flex;
+    top: 0;
+    margin-top: 0;
+    height: $material-texteditor-label-font-size;
+    line-height: $material-texteditor-label-font-size;
+
+    span {
+      position: relative;
+      font-size: $material-texteditor-font-size;
+      padding: 0 4px;
+    }
+
+    &::after,
+    &::before {
+      content: "";
+      display: block;
+      box-sizing: border-box;
+      margin-top: 0;
+      min-width: $material-filled-texteditor-input-horizontal-padding - 4px;
+      min-height: 1px;
+      box-shadow: inset 0 0 transparent;
+    }
+
+    &::before {
+      border-radius: $texteditor-input-border-radius 0;
+    }
+
+    &::after {
+      flex-grow: 1;
+      border-radius: 0 $texteditor-input-border-radius;
+    }
+  }
+
+  &.dx-texteditor-with-label {
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    &.dx-state-disabled {
+      @include dx-state(color.change($texteditor-color, $alpha: 0.5), 1);
+    }
+
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, 1);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 1);
+      }
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty {
+      @include dx-state-empty($texteditor-border-color, 1);
+
+      &.dx-invalid {
+        @include dx-state-empty($texteditor-invalid-faded-border-color, 1);
+      }
+
+      &.dx-state-readonly,
+      &.dx-state-readonly.dx-state-hover,
+      &.dx-state-disabled {
+        @include dx-state-empty(color.change($texteditor-color, $alpha: 0.5), 1);
+
+        &.dx-state-focused,
+        &.dx-state-focused.dx-state-hover,
+        &.dx-textarea.dx-state-focused.dx-state-hover,
+        &.dx-textarea.dx-state-focused {
+          @include dx-state-empty($texteditor-focused-border-color, 2);
+
+          &.dx-invalid {
+            @include dx-state-empty($texteditor-invalid-focused-border-color, 2);
+          }
+        }
+      }
+
+      &.dx-state-hover {
+        @include dx-state-empty($texteditor-hover-border-color, 1);
+
+        &.dx-invalid {
+          @include dx-state-empty($texteditor-invalid-focused-border-color, 1);
+        }
+      }
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    border: none;
+    box-shadow:
+      inset 1px 0 $texteditor-border-color,
+      inset -1px 0 $texteditor-border-color,
+      inset 0 -1px $texteditor-border-color;
+    outline: none;
+
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    &.dx-state-disabled {
+      @include dx-state(color.change($texteditor-color, $alpha: 0.5), 1);
+    }
+
+    &.dx-invalid {
+      box-shadow:
+        inset 1px 0 $texteditor-invalid-faded-border-color,
+        inset -1px 0 $texteditor-invalid-faded-border-color,
+        inset 0 -1px $texteditor-invalid-faded-border-color;
+
+      .dx-texteditor-label {
+        &::before,
+        &::after {
+          box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
+        }
+      }
+
+      &.dx-texteditor-with-custom-buttons {
+        .dx-texteditor-buttons-container {
+          box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
+        }
+      }
+    }
+
+    .dx-texteditor-container,
+    .dx-dropdowneditor-input-wrapper {
+      overflow: visible;
+    }
+
+    &.dx-texteditor-with-custom-buttons {
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 1px $texteditor-border-color;
+
+        &:first-child {
+          border-radius: $texteditor-input-border-radius 0;
+        }
+
+        &:last-child {
+          border-radius: 0 $texteditor-input-border-radius;
+        }
+      }
+    }
+
+    .dx-texteditor-label {
+      width: 100%;
+      top: 0;
+      margin-top: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
+
+      span {
+        transform: translate(0, -$label-offset-y);
+        font-size: $material-texteditor-label-font-size;
+      }
+
+      &::before,
+      &::after {
+        box-shadow: inset 0 1px $texteditor-border-color;
+      }
+    }
+
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, 1);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 1);
+      }
+    }
+
+    &.dx-textarea.dx-state-focused,
+    &.dx-textarea.dx-state-focused.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-focused.dx-state-hover {
+      @include dx-state($texteditor-focused-border-color, 2);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, 2);
+      }
+
+      .dx-placeholder {
+        display: block;
+      }
+    }
+  }
+}
+
+.dx-editor-underlined {
+  $input-vertical-diff: 2px;
+  $input-top-padding: $material-standard-texteditor-input-top-padding + $input-vertical-diff * 2;
+  $label-transform: translate(0, 0);
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    .dx-texteditor-label {
+      transform: $label-transform;
+      top: 0;
+      margin-top: 0;
+      height: $material-texteditor-label-font-size;
+      line-height: $material-texteditor-label-font-size;
+    }
+
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
+      padding-top: $input-top-padding;
+      padding-bottom: $material-standard-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-texteditor-label {
+        transition: $material-editor-label-transition;
+        transform: translate(0, 0);
+        font-size: $material-texteditor-font-size;
+        top: 50%;
+        margin-top: math.div(-$material-texteditor-font-size, 2) + $input-vertical-diff;
+        height: $material-texteditor-font-size;
+        line-height: $material-texteditor-font-size;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $input-top-padding;
+          margin-top: 0;
+          transform: translate(0, 0);
+          font-size: $material-texteditor-font-size;
+          line-height: $material-texteditor-font-size;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-textarea.dx-state-focused {
+      .dx-texteditor-label {
+        transform: $label-transform;
+        font-size: $material-texteditor-label-font-size;
+        height: $material-texteditor-label-font-size;
+        line-height: $material-texteditor-label-font-size;
+        top: 0;
+        margin-top: 0;
+      }
+
+      .dx-placeholder {
+        top: $input-vertical-diff;
+        display: block;
+      }
+    }
+  }
+
+  .dx-texteditor-buttons-container {
+    > .dx-button.dx-button-mode-text {
+      height: $material-underlined-editor-button-height;
+      margin: 1px $material-editor-custom-button-margin 3px;
+
+      .dx-button-content {
+        display: flex;
+        justify-content: center;
+        padding-top: $material-button-vertical-padding - 1px;
+
+        .dx-icon {
+          align-self: center;
+          margin-top: 1px;
+        }
+      }
+
+      &.dx-button-has-text {
+        .dx-button-content .dx-icon {
+          margin-top: 3px;
+        }
+      }
+
+      &:not(.dx-button-has-text) {
+        min-width: $material-underlined-editor-button-height;
+
+        .dx-button-content {
+          padding: 2px;
+        }
+      }
+    }
+
+    &:first-child {
+      > .dx-button {
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    &:last-child {
+      > .dx-button {
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      &:first-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $material-editor-custom-button-margin;
+            margin-right: 0;
+          }
+        }
+      }
+
+      &:last-child {
+        > .dx-button {
+          &:first-child {
+            margin-left: $material-editor-custom-button-margin;
+            margin-right: $material-editor-custom-button-margin;
+          }
+
+          &:last-child {
+            margin-left: 0;
+            margin-right: $material-editor-custom-button-margin;
+          }
+        }
+      }
+    }
+  }
+}
+
+
 .dx-texteditor-input {
   margin: 0;
   background-color: transparent;
@@ -448,81 +999,6 @@ $material-editor-custom-button-margin: 5px;
         > .dx-numberbox-spin-container:last-child {
           margin-left: 8px;
           margin-right: 0;
-        }
-      }
-    }
-  }
-}
-
-.dx-editor-underlined {
-  .dx-texteditor-buttons-container {
-    > .dx-button.dx-button-mode-text {
-      height: $material-underlined-editor-button-height;
-      margin: 1px $material-editor-custom-button-margin 3px;
-
-      .dx-button-content {
-        display: flex;
-        justify-content: center;
-        padding-top: $material-button-vertical-padding - 1px;
-
-        .dx-icon {
-          align-self: center;
-          margin-top: 1px;
-        }
-      }
-
-      &.dx-button-has-text {
-        .dx-button-content .dx-icon {
-          margin-top: 3px;
-        }
-      }
-
-      &:not(.dx-button-has-text) {
-        min-width: $material-underlined-editor-button-height;
-
-        .dx-button-content {
-          padding: 2px;
-        }
-      }
-    }
-
-    &:first-child {
-      > .dx-button {
-        &:first-child {
-          margin-left: 0;
-        }
-      }
-    }
-
-    &:last-child {
-      > .dx-button {
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-
-    @at-root #{selector-append(".dx-rtl", &)} {
-      &:first-child {
-        > .dx-button {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: 0;
-          }
-        }
-      }
-
-      &:last-child {
-        > .dx-button {
-          &:first-child {
-            margin-left: $material-editor-custom-button-margin;
-            margin-right: $material-editor-custom-button-margin;
-          }
-
-          &:last-child {
-            margin-left: 0;
-            margin-right: $material-editor-custom-button-margin;
-          }
         }
       }
     }
