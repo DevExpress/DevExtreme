@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-underscore-dangle */
 import Component from '../../../../component';
 
 export default class BaseTestComponent extends Component {

@@ -1,11 +1,9 @@
-// eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../../core/renderer';
+import type { dxElementWrapper } from '../../../core/renderer';
 import Editor from './editor';
 import { Option } from '../common/types';
 import { addAttributes, getAriaName } from '../utils/utils';
 
 export default class CheckBox extends Editor {
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

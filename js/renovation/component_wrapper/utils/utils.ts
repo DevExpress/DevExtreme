@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../../core/renderer';
+import type { dxElementWrapper } from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 
 export const addAttributes = (

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ComponentBindings,
@@ -70,13 +69,11 @@ export default class TestWidget extends JSXComponent(TestWidgetProps) {
   }
 
   @Method()
-  // eslint-disable-next-line class-methods-use-this
   methodWithElementParam(arg: HTMLDivElement | number): any {
     return { arg };
   }
 
   @Method()
-  // eslint-disable-next-line class-methods-use-this
   methodReturnElement(arg: HTMLDivElement): HTMLDivElement {
     return arg;
   }
