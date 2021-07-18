@@ -1,131 +1,30 @@
 import $ from '../core/renderer';
 import Widget from './widget/ui.widget';
-import Button from './button';
-import CollectionWidget from './collection/ui.collection_widget.edit';
+import ButtonCollection from '../ui/button_group/button_collection';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import { isDefined, isFunction } from '../core/utils/type';
-import { BindableTemplate } from '../core/templates/bindable_template';
+import { isDefined } from '../core/utils/type';
 
 // STYLE buttonGroup
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
-const BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item';
-const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
 const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
-const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
-
-const ButtonCollection = CollectionWidget.inherit({
-    _initTemplates() {
-        this.callBase();
-        /**
-         * @name dxButtonGroupItem.html
-         * @hidden
-         */
-        this._templateManager.addDefaultTemplates({
-            item: new BindableTemplate((($container, data, model) => {
-                this._prepareItemStyles($container);
-                const template = this.option('buttonTemplate');
-                this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                    _templateData: this._hasCustomTemplate(template) ? model : {},
-                    template: model.template || template
-                }));
-            }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'))
-        });
-    },
-
-    _getBasicButtonOptions() {
-        return {
-            focusStateEnabled: false,
-            onClick: null,
-            hoverStateEnabled: this.option('hoverStateEnabled'),
-            activeStateEnabled: this.option('activeStateEnabled'),
-            stylingMode: this.option('stylingMode')
-        };
-    },
-
-    _getDefaultOptions: function _getDefaultOptions() {
-        return extend(this.callBase(), {
-            itemTemplateProperty: null
-        });
-    },
-
-    _hasCustomTemplate(template) {
-        return isFunction(template) || this.option('integrationOptions.templates')[template];
-    },
-
-    _prepareItemStyles($item) {
-        const itemIndex = $item.data('dxItemIndex');
-        itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
-
-        const items = this.option('items');
-        items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
-
-        $item.addClass(SHAPE_STANDARD_CLASS);
-    },
-
-    _renderItemContent(args) {
-        args.container = $(args.container).parent();
-        return this.callBase(args);
-    },
-
-    _renderItemContentByNode: function(args, $node) {
-        args.container = $(args.container.children().first());
-        return this.callBase(args, $node);
-    },
-
-    _focusTarget() {
-        return this.$element().parent();
-    },
-
-    _keyboardEventBindingTarget() {
-        return this._focusTarget();
-    },
-
-    _refreshContent() {
-        this._prepareContent();
-        this._renderContent();
-    },
-
-    _itemClass() {
-        return BUTTON_GROUP_ITEM_CLASS;
-    },
-
-    _itemSelectHandler: function(e) {
-        if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
-            return;
-        }
-
-        this.callBase(e);
-    }
-});
 
 const ButtonGroup = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             hoverStateEnabled: true,
-
             focusStateEnabled: true,
-
             selectionMode: 'single',
-
             selectedItems: [],
-
             selectedItemKeys: [],
-
             stylingMode: 'contained',
-
             keyExpr: 'text',
-
             items: [],
-
-
             buttonTemplate: 'content',
-
             onSelectionChanged: null,
-
             onItemClick: null
         });
     },
