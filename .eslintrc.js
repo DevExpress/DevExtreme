@@ -321,11 +321,10 @@ module.exports = {
                 'no-return-await': 'off',
                 '@typescript-eslint/no-misused-promises': 'error',
                 '@typescript-eslint/no-floating-promises': 'error',
-                'rulesdir/no-non-null-assertion': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'error',
+                'rulesdir/no-non-null-assertion': 'error',
                 '@typescript-eslint/no-non-null-assertion': 'off'
                 /*
-            "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
 
             "@typescript-eslint/explicit-function-return-type": "error",

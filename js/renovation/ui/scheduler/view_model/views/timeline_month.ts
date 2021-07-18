@@ -5,8 +5,7 @@ export const getStartViewDate = (
   _firstDayOfWeek: number,
   currentDate: Date,
 ): Date => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const result = dateUtils.getFirstMonthDate(currentDate)!;
+  const result = dateUtils.getFirstMonthDate(currentDate) as Date;
   result.setHours(startDayHour);
 
   return result;
