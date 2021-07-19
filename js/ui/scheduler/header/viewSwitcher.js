@@ -12,7 +12,7 @@ const getViewsAndSelectedView = (header) => {
 
     const isSelectedViewInViews = views.some(view => view.name === selectedView);
 
-    selectedView = isSelectedViewInViews ? isSelectedViewInViews : undefined;
+    selectedView = isSelectedViewInViews ? selectedView : undefined;
 
     return { selectedView, views };
 };
