@@ -240,4 +240,14 @@ export class PositionHelper {
 
         return getMaxPosition(groupIndex);
     }
+
+    getResizableStep() {
+        const cellWidth = getCellWidth(this.getDOMMetaData());
+
+        if(this.isGroupedByDate) {
+            return this.groupCount * cellWidth;
+        }
+
+        return cellWidth;
+    }
 }

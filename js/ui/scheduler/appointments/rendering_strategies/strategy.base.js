@@ -27,6 +27,7 @@ class BaseRenderingStrategy {
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
+    get resizableStep() { return this.options.getResizableStep(); }
     get isAdaptive() { return this.options.isAdaptive; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
@@ -93,7 +94,7 @@ class BaseRenderingStrategy {
     }
 
     _getDeltaWidth(args, initialSize) {
-        const intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize();
+        const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
         const initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);

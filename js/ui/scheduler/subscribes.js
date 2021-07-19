@@ -240,17 +240,6 @@ const subscribes = {
         return this.getWorkSpace().getCellHeight();
     },
 
-    getResizableStep: function() {
-        const workSpace = this.getWorkSpace();
-        const cellWidth = workSpace.getCellWidth();
-
-        if(workSpace.isGroupedByDate()) {
-            return workSpace._getGroupCount() * cellWidth;
-        }
-
-        return cellWidth;
-    },
-
     getRenderingStrategy: function() {
         return this._getAppointmentsRenderingStrategy();
     },
