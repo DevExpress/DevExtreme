@@ -238,7 +238,9 @@ export const isPossibleForParsingFormat = function(patterns) {
             return false;
         }
         const char = pattern[0];
-        return ['y', 'S'].includes(char) || digitFieldSymbols.includes(char) && pattern.length < 3;
+        const yearOrFractionalSecond = char === 'y' || char === 'S';
+        const digitFieldSymbol = digitFieldSymbols.indexOf(char) !== -1;
+        return yearOrFractionalSecond || digitFieldSymbol && pattern.length < 3;
     };
 
     const isAmbiguousDigitPattern = (pattern) => {
