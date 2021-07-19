@@ -9,7 +9,7 @@ import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';
 import { sessionStorage as SessionStorage } from './utils/storage';
-import { changeCallback, value as viewPort } from './utils/view_port';
+import { changeCallback } from './utils/view_port';
 import Config from './config';
 
 const navigator = getNavigator();
@@ -352,11 +352,6 @@ changeCallback.add((viewPort, prevViewport) => {
     devices.detachCssClasses(prevViewport);
     devices.attachCssClasses(viewPort);
 });
-
-const currentViewPort = viewPort();
-if(currentViewPort) {
-    devices.attachCssClasses(currentViewPort);
-}
 
 ///#DEBUG
 devices.Devices = Devices;

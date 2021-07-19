@@ -408,11 +408,6 @@ viewPortChanged.add(function(viewPort, prevViewPort) {
     });
 });
 
-const currentViewPort = viewPort();
-if(currentViewPort) {
-    attachCssClasses(currentViewPort);
-}
-
 devices.changed.add(function() {
     init({ _autoInit: true });
 });
