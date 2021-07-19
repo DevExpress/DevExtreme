@@ -6,7 +6,6 @@ import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
 
 import timeZoneUtils from '../../utils.timeZone';
-import { ExpressionUtils } from '../../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -18,13 +17,18 @@ const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 class BaseRenderingStrategy {
-    constructor(instance) {
-        this.instance = instance;
-        this.key = this.instance.key;
+    constructor(options) {
+        this.options = options;
         this._initPositioningStrategy();
     }
 
-    get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
+    get key() { return this.options.key; }
+    get instance() { return this.options.instance; } // TODO get rid of this
+    get cellWidth() { return this.options.getCellWidth(); }
+    get cellHeight() { return this.options.getCellHeight(); }
+    get allDayHeight() { return this.options.getAllDayHeight(); }
+
+    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
     _isAdaptive() {
         return this.instance.fire('isAdaptive');
@@ -72,10 +76,6 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.instance.fire('getCellWidth');
-        this._defaultHeight = this.instance.fire('getCellHeight');
-        this._allDayHeight = this.instance._allDayCellHeight;
-
         const map = [];
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
@@ -89,6 +89,7 @@ class BaseRenderingStrategy {
 
         const positionArray = this._getSortedPositions(map);
         const resultPositions = this._getResultPositions(positionArray);
+
         return this._getExtendedPositionMap(map, resultPositions);
     }
 
@@ -112,7 +113,7 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _getItemPosition(appointment) {
@@ -204,7 +205,7 @@ class BaseRenderingStrategy {
     }
 
     _getCompactAppointmentParts(appointmentWidth) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return Math.round(appointmentWidth / cellWidth);
     }
@@ -233,7 +234,7 @@ class BaseRenderingStrategy {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
-        return result > this.getDefaultCellWidth() / 2;
+        return result > this.cellWidth / 2;
     }
 
     isAllDay() {
@@ -495,28 +496,6 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    normalizeEndDateByViewEnd(appointment, endDate) {
-        let result = new Date(endDate.getTime());
-
-        if(!this.isAllDay(appointment)) {
-            const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
-
-            if(result > viewEndDate) {
-                result = viewEndDate;
-            }
-        }
-
-        const endDayHour = this.instance._getCurrentViewOption('endDayHour');
-        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
-        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
-
-        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
-            result = currentViewEndTime;
-        }
-
-        return result;
-    }
-
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
         const daylightDiff = timeZoneUtils.getDaylightOffset(startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
@@ -577,18 +556,6 @@ class BaseRenderingStrategy {
 
     getDropDownButtonAdaptiveSize() {
         return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
-    }
-
-    getDefaultCellWidth() {
-        return this._defaultWidth;
-    }
-
-    getDefaultCellHeight() {
-        return this._defaultHeight;
-    }
-
-    getDefaultAllDayCellHeight() {
-        return this._allDayHeight;
     }
 
     getCollectorTopOffset(allDay) {

@@ -2,6 +2,10 @@ import dateUtils from '../../../../core/utils/date';
 import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount } from '../utils/base';
 
 export class DateHeaderDataGenerator {
+    constructor(viewDataGenerator) {
+        this._viewDataGenerator = viewDataGenerator;
+    }
+
     getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
             isGenerateWeekDaysHeaderData,
@@ -24,12 +28,15 @@ export class DateHeaderDataGenerator {
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
             isGroupedByDate,
-            cellCountInDay,
             daysInView,
             groups,
             groupOrientation,
+            startDayHour,
+            endDayHour,
+            hoursInterval
         } = options;
 
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
@@ -55,7 +62,6 @@ export class DateHeaderDataGenerator {
         const {
             today,
             isGroupedByDate,
-            cellCountInGroupRow,
             groupOrientation,
             groups,
             headerCellTextFormat,
@@ -63,13 +69,24 @@ export class DateHeaderDataGenerator {
             interval,
             startViewDate,
             startDayHour,
-            cellCountInDay,
+            endDayHour,
+            hoursInterval,
+            intervalCount,
+            currentDate,
+            viewType,
         } = options;
 
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
+        const cellCountInDay = this._viewDataGenerator.getCellCountInDay(
+            startDayHour, endDayHour, hoursInterval,
+        );
 
         const slicedByColumnsData = isGroupedByDate
             ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
@@ -110,9 +127,11 @@ export class DateHeaderDataGenerator {
     generateDateHeaderData(completeDateHeaderMap, options) {
         const {
             isGenerateWeekDaysHeaderData,
-            cellCountInDay,
             cellWidth,
             isProvideVirtualCellsWidth,
+            startDayHour,
+            endDayHour,
+            hoursInterval
         } = options;
 
         const dataMap = [];
@@ -123,7 +142,9 @@ export class DateHeaderDataGenerator {
             weekDayRowConfig = this._generateDateHeaderDataRow(
                 options,
                 completeDateHeaderMap,
-                cellCountInDay,
+                this._viewDataGenerator.getCellCountInDay(
+                    startDayHour, endDayHour, hoursInterval,
+                ),
                 0,
                 validCellWidth,
             );

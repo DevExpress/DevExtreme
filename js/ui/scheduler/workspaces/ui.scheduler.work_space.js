@@ -152,7 +152,7 @@ const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 class SchedulerWorkSpace extends WidgetObserver {
     get viewDataProvider() {
         if(!this._viewDataProvider) {
-            this._viewDataProvider = new ViewDataProvider();
+            this._viewDataProvider = new ViewDataProvider(this.type);
         }
         return this._viewDataProvider;
     }
@@ -559,7 +559,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getElementClass() { return noop(); }
 
-    _getRowCount() { return noop(); }
+    _getRowCount() {
+        return this.viewDataProvider.getRowCount({
+            intervalCount: this.option('intervalCount'),
+            currentDate: this.option('currentDate'),
+            viewType: this.type,
+            hoursInterval: this.option('hoursInterval'),
+            startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
+        });
+    }
 
     _getRowCountWithAllDayRows() {
         const allDayRowCount = this._isShowAllDayPanel() ? 1 : 0;
@@ -567,7 +576,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._getRowCount() + allDayRowCount;
     }
 
-    _getCellCount() { return noop(); }
+    _getCellCount() {
+        return this.viewDataProvider.getCellCount({
+            intervalCount: this.option('intervalCount'),
+            currentDate: this.option('currentDate'),
+            viewType: this.type,
+            hoursInterval: this.option('hoursInterval'),
+            startDayHour: this.option('startDayHour'),
+            endDayHour: this.option('endDayHour'),
+        });
+    }
 
     isRenovatedRender() {
         return this.renovatedRenderSupported() && this.option('renovateRender');
@@ -608,7 +626,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     generateRenderOptions(isProvideVirtualCellsWidth) {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
-        const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
         const rowCount = this._getTotalRowCount(groupCount, isVerticalGrouping);
@@ -618,9 +635,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const options = {
             groupByDate: this.option('groupByDate'),
-            rowCountInGroup,
             cellCount,
-            cellCountInGroupRow: this._getCellCount(),
             startRowIndex: 0,
             startCellIndex: 0,
             groupOrientation,
@@ -637,15 +652,22 @@ class SchedulerWorkSpace extends WidgetObserver {
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
             startDayHour: this.option('startDayHour'),
-            cellCountInDay: this._getCellCountInDay(),
+            endDayHour: this.option('endDayHour'),
             cellDuration: this.getCellDuration(),
             viewType: this.type,
             intervalCount: this.option('intervalCount'),
             hoursInterval: this.option('hoursInterval'),
             currentDate: this.option('currentDate'),
             startDate: this.option('startDate'),
-            firstDayOfWeek: this.option('firstDayOfWeek'),
-            ...this._getDateGenerationOptions(),
+            firstDayOfWeek: this._firstDayOfWeek(),
+
+            isWorkView: this.isWorkView,
+            columnsInDay: 1, // TODO: try to remove
+            hiddenInterval: this._hiddenInterval, // TODO: remove
+            calculateCellIndex,
+            tableAllDay: this._getTableAllDay(),
+            rowCountBase: this._getRowCount(), // TODO: remove
+            columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -877,12 +899,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCellCountInDay() {
-        const result = this._calculateDayDuration() / this.option('hoursInterval');
-        return Math.ceil(result);
-    }
+        const hoursInterval = this.option('hoursInterval');
+        const startDayHour = this.option('startDayHour');
+        const endDayHour = this.option('endDayHour');
 
-    _calculateDayDuration() {
-        return this.option('endDayHour') - this.option('startDayHour');
+        return this.viewDataProvider.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     }
 
     _getTotalCellCount(groupCount) {
@@ -1043,7 +1064,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             hiddenInterval: this._hiddenInterval,
             calculateCellIndex,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
-            cellCountInDay: this._getCellCountInDay(),
             startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
@@ -1885,7 +1905,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const validColumnIndex = columnIndex % this._getCellCount();
             const options = this._getDateGenerationOptions(true);
             let startDate = getDateByCellIndices(
-                options, rowIndex, validColumnIndex, options.calculateCellIndex,
+                options, rowIndex, validColumnIndex, options.calculateCellIndex, this._getCellCountInDay(),
             );
 
             startDate = dateUtils.trimTime(startDate);
@@ -2317,10 +2337,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleGroupByDateClass();
     }
 
-    _initGroupedStrategy() {
-        const strategyName = this.option('groups').length ? this.option('groupOrientation') : this._getDefaultGroupStrategy();
+    isVerticalOrientation() {
+        const orientation = this.option('groups').length
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
-        const Strategy = strategyName === 'vertical' ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        return orientation === 'vertical';
+    }
+
+    _initGroupedStrategy() {
+        const Strategy = this.isVerticalOrientation()
+            ? VerticalGroupedStrategy
+            : HorizontalGroupedStrategy;
 
         this._groupedStrategy = new Strategy(this);
     }
