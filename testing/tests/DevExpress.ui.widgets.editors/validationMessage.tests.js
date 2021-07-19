@@ -33,14 +33,19 @@ QUnit.module('options', moduleSetup, () => {
     });
 
     QUnit.test('position should be recalculated after target option runtime change', function(assert) {
-        const $element = $('<div>');
+        const $element = $('<div>').css({
+            position: 'absolute',
+            left: 100
+        });
+        const onShowingSpy = sinon.spy();
 
         try {
             $element.appendTo('#qunit-fixture');
+            this._validationMessage.on('showing', onShowingSpy);
 
             this._validationMessage.option('target', $element);
 
-            assert.strictEqual(this._validationMessage.option('position').of, $element, 'position is recalculated');
+            assert.strictEqual(onShowingSpy.callCount, 1, 'position is recalculated');
         } finally {
             $element.remove();
         }

@@ -1319,7 +1319,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -1342,7 +1350,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -2475,11 +2491,11 @@ testModule('container', moduleConfig, () => {
 });
 
 
-testModule('target', moduleConfig, () => {
-    test('target option should be present in positions', function(assert) {
-        const $target = $('#container');
-
-        const OverlayTarget = Overlay.inherit({
+testModule('target', {
+    beforeEach() {
+        moduleConfig.beforeEach.apply(this, arguments);
+        this.animate = sinon.stub(fx, 'animate');
+        this.baseOverlayOptions = {
 
             _defaultOptionsRules: function() {
                 return [];
@@ -2489,7 +2505,6 @@ testModule('target', moduleConfig, () => {
                 return $.extend(
                     this.callBase(),
                     {
-                        position: { of: $(window) },
                         animation: {
                             show: {
                                 to: { position: { of: $(window) } },
@@ -2504,22 +2519,68 @@ testModule('target', moduleConfig, () => {
                 );
             }
 
-        });
+        };
+    },
+    afterEach() {
+        moduleConfig.afterEach.apply(this, arguments);
+        this.animate.restore();
+    }
+}, () => {
+    test('target option should be present in show animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
 
         const $overlay = $('#overlay');
         const overlay = new OverlayTarget($overlay, {
             target: $target
         });
 
-        $.each([
-            'position.of',
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ], function(_, item) {
-            assert.strictEqual(overlay.option(item).get(0), $target.get(0), item + ' set');
+        overlay.show();
+
+        const animationShowSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationShowSettings.to.position.of.get(0), $target.get(0), 'animation.show.to.position.of');
+        assert.strictEqual(animationShowSettings.from.position.of.get(0), $target.get(0), 'animation.show.from.position.of');
+    });
+
+    test('target option should be present in hide animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
+
+        const $overlay = $('#overlay');
+        const overlay = new OverlayTarget($overlay, {
+            target: $target
         });
+
+        overlay.show();
+        this.animate.reset();
+        overlay.hide();
+
+        const animationHideSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationHideSettings.to.position.of.get(0), $target.get(0), 'animation.hide.to.position.of');
+        assert.strictEqual(animationHideSettings.from.position.of.get(0), $target.get(0), 'animation.hide.from.position.of');
+    });
+
+    test('target participation in position calculation', function(assert) {
+        const $target = $('#container').css({
+            position: 'absolute',
+            left: 100
+        });
+
+        const overlay = new Overlay($('#overlay'), {
+            target: $target
+        });
+
+        overlay.show();
+
+        const $wrapper = overlay.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS));
+
+        assert.strictEqual($wrapper.css('transform'), 'matrix(1, 0, 0, 1, 100, 21)');
     });
 });
 
@@ -3905,7 +3966,6 @@ testModule('renderGeometry', {
             maxWidth: 1000,
             minHeight: 100,
             maxHeight: 1000,
-            boundaryOffset: { h: 10, v: 10 },
             position: { of: this.overlayInstance.element() }
         };
         this.overlayInstance.show();

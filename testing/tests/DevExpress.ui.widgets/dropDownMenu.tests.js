@@ -482,12 +482,17 @@ QUnit.module('position', {
         $(element.dxDropDownMenu('instance')._button.$element()).trigger('dxclick');
 
         positionConfig = instance._popup.option('position');
-        assert.equal(positionConfig, instance.option('popupPosition'));
+
+        assert.equal(positionConfig.at, instance.option('popupPosition').at);
+        assert.equal(positionConfig.my, instance.option('popupPosition').my);
+        assert.equal(positionConfig.collision, instance.option('popupPosition').collision);
 
         instance.option('rtlEnabled', true);
         positionConfig = instance._popup.option('position');
 
-        assert.equal(positionConfig, instance.option('popupPosition'));
+        assert.equal(positionConfig.at, instance.option('popupPosition').at);
+        assert.equal(positionConfig.my, instance.option('popupPosition').my);
+        assert.equal(positionConfig.collision, instance.option('popupPosition').collision);
     });
 });
 

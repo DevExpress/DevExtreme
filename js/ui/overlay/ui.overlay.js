@@ -72,6 +72,8 @@ const POSITION_ALIASES = {
     'left top': { my: 'left top', at: 'left top' }
 };
 
+const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+
 const getElement = value => {
     if(isEvent(value)) {
         value = value.target;
@@ -138,10 +140,7 @@ const Overlay = Widget.inherit({
 
             wrapperAttr: {},
 
-            position: {
-                my: 'center',
-                at: 'center'
-            },
+            position: extend({}, POSITION_ALIASES.center),
 
             width: function() { return $(window).width() * 0.8; },
 
@@ -205,7 +204,6 @@ const Overlay = Widget.inherit({
             hideTopOverlayHandler: () => { this.hide(); },
             closeOnTargetScroll: false,
             onPositioned: null,
-            boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
@@ -274,7 +272,6 @@ const Overlay = Widget.inherit({
     },
 
     _initOptions: function(options) {
-        this._initTarget(options.target);
         const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
 
@@ -283,35 +280,6 @@ const Overlay = Widget.inherit({
 
     _initInnerOverlayClass: function() {
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
-    },
-
-    _initTarget: function(target) {
-        if(!isDefined(target)) {
-            return;
-        }
-
-        const options = this.option();
-        each([
-            'position.of',
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ], (_, path) => {
-            const pathParts = path.split('.');
-
-            let option = options;
-            while(option) {
-                if(pathParts.length === 1) {
-                    if(isPlainObject(option)) {
-                        option[pathParts.shift()] = target;
-                    }
-                    break;
-                } else {
-                    option = option[pathParts.shift()];
-                }
-            }
-        });
     },
 
     _initContainer: function(container) {
@@ -444,12 +412,42 @@ const Overlay = Widget.inherit({
 
     _normalizePosition: function() {
         const position = this.option('position');
-        this._position = typeof position === 'function' ? position() : position;
+        const defaultPositions = {
+            of: this.option('target'),
+            boundaryOffset: DEFAULT_BOUNDARY_OFFSET
+        };
+        if(isFunction(position)) {
+            this._position = extend(true, {}, defaultPositions, position());
+        } else {
+            if(isDefined(position)) {
+                this._position = extend(true, {}, defaultPositions, this._getPositionOptions(POSITION_ALIASES));
+            }
+        }
     },
 
     _getAnimationConfig: function() {
         let animation = this.option('animation');
         if(isFunction(animation)) animation = animation.call(this);
+        const target = this.option('target');
+
+        if(isDefined(target)) {
+            ['show.from.position.of', 'show.to.position.of', 'hide.from.position.of', 'hide.to.position.of' ].forEach(path => {
+                const pathParts = path.split('.');
+
+                let option = animation;
+                while(option) {
+                    if(pathParts.length === 1) {
+                        if(isPlainObject(option)) {
+                            option[pathParts.shift()] = target;
+                        }
+                        break;
+                    } else {
+                        option = option[pathParts.shift()];
+                    }
+                }
+            });
+        }
+
         return animation;
     },
 
@@ -1053,7 +1051,7 @@ const Overlay = Widget.inherit({
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
         const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
-        const boundaryOffset = this.option('boundaryOffset');
+        const boundaryOffset = this._position?.boundaryOffset || DEFAULT_BOUNDARY_OFFSET;
 
         return {
             top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
@@ -1218,18 +1216,17 @@ const Overlay = Widget.inherit({
                 left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
             });
         } else {
-            this._renderOverlayBoundaryOffset();
+            const position = this._position;
+            this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
 
             resetPosition(this._$content);
 
-            const position = this._transformStringPosition(this._position, POSITION_ALIASES);
-            const resultPosition = positionUtils.setup(this._$content, position);
-
-            return resultPosition;
+            return positionUtils.setup(this._$content, position);
         }
     },
 
-    _transformStringPosition: function(position, positionAliases) {
+    _getPositionOptions: function(positionAliases) {
+        let position = this.option('position');
         if(isString(position)) {
             position = extend({}, positionAliases[position]);
         }
@@ -1237,9 +1234,7 @@ const Overlay = Widget.inherit({
         return position;
     },
 
-    _renderOverlayBoundaryOffset: function() {
-        const boundaryOffset = this.option('boundaryOffset');
-
+    _renderOverlayBoundaryOffset: function({ boundaryOffset }) {
         this._$content.css('margin', boundaryOffset.v + 'px ' + boundaryOffset.h + 'px');
     },
 
@@ -1359,7 +1354,6 @@ const Overlay = Widget.inherit({
             case 'maxWidth':
             case 'minHeight':
             case 'maxHeight':
-            case 'boundaryOffset':
                 this._renderGeometry();
                 break;
             case 'position':
@@ -1377,7 +1371,6 @@ const Overlay = Widget.inherit({
                 });
                 break;
             case 'target':
-                this._initTarget(value);
                 this._invalidate();
                 break;
             case 'container':
