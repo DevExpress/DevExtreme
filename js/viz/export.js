@@ -1,16 +1,8 @@
-import {
-    exportFromMarkup,
-    getMarkup,
-    exportWidgets,
-    combineMarkups,
-    ExportMenu,
-    plugin } from './core/export';
+import * as Export from './core/export';
 
-export {
-    exportFromMarkup,
-    getMarkup,
-    exportWidgets,
-    combineMarkups,
-    ExportMenu,
-    plugin
-};
+export const exportFromMarkup = Export.exportFromMarkup;
+export const getMarkup = Export.getMarkup;
+export const exportWidgets = Export.exportWidgets;
+export const combineMarkups = Export.combineMarkups;
+export const ExportMenu = Export.ExportMenu;
+export const plugin = Export.plugin;
