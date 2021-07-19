@@ -1,15 +1,15 @@
 import {
-    exportWidgets,
     exportFromMarkup,
     getMarkup,
+    exportWidgets,
     combineMarkups,
     ExportMenu,
     plugin } from './core/export';
 
 export {
-    exportWidgets,
     exportFromMarkup,
     getMarkup,
+    exportWidgets,
     combineMarkups,
     ExportMenu,
     plugin
