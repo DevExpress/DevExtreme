@@ -29,6 +29,7 @@ class BaseRenderingStrategy {
     get allDayHeight() { return this.options.getAllDayHeight(); }
     get resizableStep() { return this.options.getResizableStep(); }
     get isAdaptive() { return this.options.isAdaptive; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
@@ -80,7 +81,7 @@ class BaseRenderingStrategy {
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
 
-            if(this._isRtl()) {
+            if(this.rtlEnabled) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
 
@@ -160,7 +161,7 @@ class BaseRenderingStrategy {
                     }, position[j]);
 
 
-                    if(this._isRtl()) {
+                    if(this.rtlEnabled) {
                         position[j].left = currentMaxAllowedPosition;
                     }
 
@@ -196,10 +197,6 @@ class BaseRenderingStrategy {
         return this.instance.fire('createAppointmentSettings', appointment);
     }
 
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
-    }
-
     _getAppointmentParts() {
         return [];
     }
@@ -211,7 +208,7 @@ class BaseRenderingStrategy {
     }
 
     _reduceMultiWeekAppointment(sourceAppointmentWidth, bound) {
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             sourceAppointmentWidth = Math.floor(bound.left - bound.right);
         } else {
             sourceAppointmentWidth = bound.right - Math.floor(bound.left);
@@ -230,7 +227,7 @@ class BaseRenderingStrategy {
     isAppointmentGreaterThan(etalon, comparisonParameters) {
         let result = comparisonParameters.left + comparisonParameters.width - etalon;
 
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
