@@ -212,7 +212,8 @@ const Overlay = Widget.inherit({
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
-            _fixWrapperPosition: false
+            _fixWrapperPosition: false,
+            _observeContentResize: true
         });
     },
 
@@ -355,6 +356,10 @@ const Overlay = Widget.inherit({
     },
 
     _initResizeObserver: function() {
+        if(!this.option('_observeContentResize')) {
+            return;
+        }
+
         this._resizeObserver = new ResizeObserver({
             callback: () => { this._renderGeometry(); },
             shouldSkipCallback: (entries) => {
@@ -373,6 +378,10 @@ const Overlay = Widget.inherit({
     },
 
     _observeContentResize: function(shouldObserve) {
+        if(!this.option('_observeContentResize')) {
+            return;
+        }
+
         if(shouldObserve) {
             this._resizeObserver.observe(this._$content.get(0));
         } else {
@@ -1157,9 +1166,11 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometry: function(options) {
-        if(this.option('visible') && hasWindow()) {
+        const { visible, _observeContentResize } = this.option();
+
+        if(visible && hasWindow()) {
             const isAnimated = this._showAnimationProcessing;
-            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && _observeContentResize;
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
             this._renderGeometryImpl();
@@ -1172,6 +1183,10 @@ const Overlay = Widget.inherit({
     },
 
     _cacheDimensions: function() {
+        if(!this.option('_observeContentResize')) {
+            return;
+        }
+
         this._actualDimensions = {
             width: this._$content.width(),
             height: this._$content.height()
@@ -1384,7 +1399,7 @@ const Overlay = Widget.inherit({
     },
 
     _dispose: function() {
-        this._resizeObserver.disconnect();
+        this._resizeObserver?.disconnect();
         this._resizeObserver = undefined;
 
         fx.stop(this._$content, false);
