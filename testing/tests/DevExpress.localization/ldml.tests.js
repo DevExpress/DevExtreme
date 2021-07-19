@@ -467,7 +467,7 @@ QUnit.module('number formatter', () => {
         };
 
         Object.keys(formatsTestsData).forEach((format) => {
-            const { text, expected } = formatsTestsData(format);
+            const { text, expected } = formatsTestsData[format];
             const regExpInfo = getRegExpInfo(format);
             const parenthesizedResult = regExpInfo.regexp.exec(text).slice(1);
             assert.deepEqual(parenthesizedResult, expected, `Fromat '${format}' parse dateString '${text}' - ok.`);
@@ -497,7 +497,7 @@ QUnit.module('number formatter', () => {
         };
 
         Object.keys(expectedWarningsCount).forEach((format) => {
-            const warningCalls = expectedWarningsCount(format);
+            const warningCalls = expectedWarningsCount[format];
             spy.callCount = 0;
             getRegExpInfo(format, dateLocalization);
             assert.equal(spy.callCount, warningCalls, `Format '${format}' calls ${warningCalls} warnings.`);
