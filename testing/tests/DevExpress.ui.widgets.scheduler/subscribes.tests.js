@@ -1457,7 +1457,7 @@ module('Grouping By Date', {
         const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellWidth = $cell.get(0).getBoundingClientRect().width;
 
-        assert.roughEqual(this.instance.fire('getResizableStep'), cellWidth * 3, 3, 'Step is OK');
+        assert.roughEqual(this.instance.getWorkSpace().positionHelper.getResizableStep(), cellWidth * 3, 3, 'Step is OK');
     });
 
     test('Appointment is rendered in allDay panel if endDate is out of view, groupByDate = true (T742932)', function(assert) {
