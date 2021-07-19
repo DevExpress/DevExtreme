@@ -11,10 +11,19 @@ if(devices.current().deviceType === 'desktop') {
             currentView: 'day',
         });
 
+        const viewSwitcher = scheduler.header.viewSwitcher;
+
         assert.equal(
-            scheduler.header.viewSwitcher.getText(),
-            'DayWeekMonth',
-            'view switcher should has correct text'
+            viewSwitcher.getButton('Day').getElement().length, 1,
+            'Day button displayed'
+        );
+        assert.equal(
+            viewSwitcher.getButton('Week').getElement().length, 1,
+            'Week button displayed'
+        );
+        assert.equal(
+            viewSwitcher.getButton('Month').getElement().length, 1,
+            'Month button displayed'
         );
     });
 
@@ -43,10 +52,23 @@ if(devices.current().deviceType === 'desktop') {
                 'workWeek'
             ]);
 
+            const viewSwitcher = scheduler.header.viewSwitcher;
+
             assert.equal(
-                scheduler.header.viewSwitcher.getText(),
-                'WEEKdAyTiMiLineWeekWork Week',
-                'view switcher should has correct text'
+                viewSwitcher.getButton('WEEK').getElement().length, 1,
+                '"WEEK" button has correct name'
+            );
+            assert.equal(
+                viewSwitcher.getButton('dAy').getElement().length, 1,
+                '"dAy" button has correct name'
+            );
+            assert.equal(
+                viewSwitcher.getButton('TiMiLine').getElement().length, 1,
+                '"TiMiLine" button has correct name'
+            );
+            assert.equal(
+                viewSwitcher.getButton('Work Week').getElement().length, 1,
+                '"Work Week" button has correct name'
             );
         });
 
@@ -66,16 +88,16 @@ if(devices.current().deviceType === 'desktop') {
 
             const viewSwitcher = scheduler.header.viewSwitcher;
 
-            assert.equal(viewSwitcher.selected.getText(), 'Month', 'current view is correct');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
 
             scheduler.option('currentView', 'week');
-            assert.equal(viewSwitcher.selected.getText(), 'Week', 'current view is correct');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Week', 'current view is correct');
 
             scheduler.option('currentView', 'TestDay');
-            assert.equal(viewSwitcher.selected.getText(), 'TestDay', 'current view is correct');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'TestDay', 'current view is correct');
 
             scheduler.option('currentView', 'Month');
-            assert.equal(viewSwitcher.selected.getText(), 'Month', 'current view is correct');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
         });
 
         test('should select view button after changing "currentView" and "views"', function(assert) {
@@ -89,12 +111,12 @@ if(devices.current().deviceType === 'desktop') {
 
             scheduler.option('currentView', 'month');
 
-            assert.equal(viewSwitcher.selected.getText(), '', 'no one button is selected');
+            assert.equal(viewSwitcher.selectedButton.getText(), '', 'no one button is selected');
 
             scheduler.option('views', ['day', 'month']);
 
 
-            assert.equal(viewSwitcher.selected.getText(), 'Month', 'Month button is selected');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'Month button is selected');
         });
 
         test('should save selected view button when "views" changes', function(assert) {
@@ -107,7 +129,7 @@ if(devices.current().deviceType === 'desktop') {
 
             scheduler.option('views', ['month', 'week', 'day']);
 
-            assert.equal(viewSwitcher.selected.getText(), 'Day', 'current view is Day');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Day', 'current view is Day');
         });
 
         test('should render dropDownButton after enabling "useDropDownViewSwitcher"', function(assert) {
@@ -126,7 +148,45 @@ if(devices.current().deviceType === 'desktop') {
         });
     });
 
-    module('Interface Interaction', {}, () => {
+    module('Selected view', {}, () => {
+        test('should be no buttons selected if the "currentView" is not set', function(assert) {
+            const scheduler = createWrapper({
+                views: ['month'],
+            });
+
+            assert.equal(
+                scheduler.header.viewSwitcher.selectedButton.getText(),
+                '',
+                'no one element is selected'
+            );
+        });
+
+        test('should be no buttons selected if the "currentView" is not in views', function(assert) {
+            const scheduler = createWrapper({
+                views: ['month'],
+                currentView: 'day',
+            });
+
+            assert.equal(
+                scheduler.header.viewSwitcher.selectedButton.getText(),
+                '',
+                'no one element is selected'
+            );
+        });
+
+        test('should be the selected button if "currentView" in views', function(assert) {
+            const scheduler = createWrapper({
+                currentView: 'month',
+                views: ['month'],
+            });
+
+            assert.equal(
+                scheduler.header.viewSwitcher.selectedButton.getText(),
+                'Month',
+                'currentView button is selected'
+            );
+        });
+
         test('should select view button after click', function(assert) {
             const scheduler = createWrapper({
                 views: [
@@ -146,59 +206,19 @@ if(devices.current().deviceType === 'desktop') {
 
             const viewSwitcher = scheduler.header.viewSwitcher;
 
-            assert.equal(viewSwitcher.selected.getText(), 'Month', 'select Month view button');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'Month view button is selected');
 
             viewSwitcher.getButton('Week').click();
-            assert.equal(viewSwitcher.selected.getText(), 'Week', 'select Week view button');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Week', 'Week view button is selected');
 
             viewSwitcher.getButton('workWeek').click();
-            assert.equal(viewSwitcher.selected.getText(), 'workWeek', 'select workWeek view button');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'workWeek', 'workWeek view button is selected');
 
             viewSwitcher.getButton('TestDay').click();
-            assert.equal(viewSwitcher.selected.getText(), 'TestDay', 'select TestDay view button');
+            assert.equal(viewSwitcher.selectedButton.getText(), 'TestDay', 'TestDay view button is selected');
 
             viewSwitcher.getButton('Month').click();
-            assert.equal(viewSwitcher.selected.getText(), 'Month', 'select Month view button');
-        });
-    });
-
-    module('Selected view', {}, () => {
-        test('should be no buttons selected if the "currentView" is not set', function(assert) {
-            const scheduler = createWrapper({
-                views: ['month'],
-            });
-
-            assert.equal(
-                scheduler.header.viewSwitcher.selected.getText(),
-                '',
-                'no one element is selected'
-            );
-        });
-
-        test('should be no buttons selected if the "currentView" is not in views', function(assert) {
-            const scheduler = createWrapper({
-                views: ['month'],
-                currentView: 'day',
-            });
-
-            assert.equal(
-                scheduler.header.viewSwitcher.selected.getText(),
-                '',
-                'no one element is selected'
-            );
-        });
-
-        test('should be the selected buttons if "currentView" in views', function(assert) {
-            const scheduler = createWrapper({
-                currentView: 'month',
-                views: ['month'],
-            });
-
-            assert.equal(
-                scheduler.header.viewSwitcher.selected.getText(),
-                'Month',
-                'currentView button is selected'
-            );
+            assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'Month view button is selected');
         });
     });
 }
@@ -214,7 +234,7 @@ module('Meterial theme', {
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
-    test('dropdown button should has correct label', function(assert) {
+    test('dropdown button should have correct label', function(assert) {
         const scheduler = createWrapper({
             currentView: 'workWeek',
             views: ['workWeek'],
@@ -223,7 +243,7 @@ module('Meterial theme', {
         assert.equal(
             scheduler.header.viewSwitcher.getText(),
             'Work Week',
-            'view switcher should has correct label'
+            'view switcher should have correct label'
         );
     });
 });

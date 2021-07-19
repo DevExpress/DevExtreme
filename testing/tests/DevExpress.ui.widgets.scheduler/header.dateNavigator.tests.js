@@ -149,10 +149,31 @@ module('Option Changing', {}, () => {
 });
 
 module('Interface Interaction', {}, () => {
-    test('should disabled previous and next buttons depending on "min" & "max"', function(assert) {
+    test('should disabled previous button depending on "min"', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2021, 6, 5),
             min: new Date(2021, 6, 4),
+            views: ['day'],
+            currentView: 'day',
+            height: 600,
+        });
+
+        const navigator = scheduler.header.navigator;
+
+        assert.equal(navigator.prevButton.isDisabled(), false, 'previous button is endabled');
+
+        navigator.prevButton.click();
+
+        assert.equal(navigator.prevButton.isDisabled(), true, 'previous button is disabled');
+
+        navigator.nextButton.click();
+
+        assert.equal(navigator.prevButton.isDisabled(), false, 'previous button is endabled');
+    });
+
+    test('should disabled next button depending on "max"', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2021, 6, 5),
             max: new Date(2021, 6, 6),
             views: ['day', 'week', 'month'],
             currentView: 'day',
@@ -161,18 +182,14 @@ module('Interface Interaction', {}, () => {
 
         const navigator = scheduler.header.navigator;
 
-        assert.equal(navigator.prevButton.isDisabled(), false, 'previous button endabled');
-        assert.equal(navigator.nextButton.isDisabled(), false, 'next button endabled');
+        assert.equal(navigator.nextButton.isDisabled(), false, 'next button is endabled');
+
+        navigator.nextButton.click();
+
+        assert.equal(navigator.nextButton.isDisabled(), true, 'next button is disables');
 
         navigator.prevButton.click();
 
-        assert.equal(navigator.prevButton.isDisabled(), true, 'previous button disabled');
-        assert.equal(navigator.nextButton.isDisabled(), false, 'next button endabled');
-
-        navigator.nextButton.click();
-        navigator.nextButton.click();
-
-        assert.equal(navigator.prevButton.isDisabled(), false, 'previous button endabled');
-        assert.equal(navigator.nextButton.isDisabled(), true, 'next button disabled');
+        assert.equal(navigator.nextButton.isDisabled(), false, 'next button is enabled');
     });
 });

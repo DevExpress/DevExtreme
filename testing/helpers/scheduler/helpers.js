@@ -362,7 +362,7 @@ class ViewSwitcherWrapper extends ElementWrapper {
         return new ElementWrapper(CLASSES.viewSwitcherDropDownButton);
     }
 
-    get selected() {
+    get selectedButton() {
         return new ClickElementWrapper(CLASSES.selected);
     }
 

@@ -6,7 +6,7 @@ import { getCaption } from 'ui/scheduler/header/utils';
 
 testStart(() => initTestMarkup());
 
-test('should has navigator and view switcher in basic configuration', function(assert) {
+test('should have navigator and view switcher in basic configuration', function(assert) {
     const scheduler = createWrapper({
         views: ['day'],
         currentView: 'day',
@@ -22,7 +22,7 @@ test('should have correct deafult views', function(assert) {
     assert.equal(
         scheduler.header.viewSwitcher.getText(),
         'DayWeek',
-        'view switcher should has correct views'
+        'view switcher should have correct views'
     );
 });
 
@@ -52,7 +52,7 @@ module('Meterial theme', {
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
-    test('should has navigator, viewSwitcher and dropDown viewSwitcher', function(assert) {
+    test('should have navigator, viewSwitcher and dropDown viewSwitcher', function(assert) {
         const scheduler = createWrapper({
             views: ['day'],
             currentView: 'day',
