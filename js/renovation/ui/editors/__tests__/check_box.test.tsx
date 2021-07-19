@@ -252,12 +252,26 @@ describe('CheckBox', () => {
             expect(icon?.style.fontSize).toEqual(expectedValue);
           });
 
-        it('should correctly change icon font size if "iconWidth"/"iconHeight" options are defined in pixels string', () => {
+        it("should correctly change icon font size if 'offsetHeight'/'offsetWidth' options are defined in pixels string", () => {
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             offsetHeight: parseInt(`${checkBox.props.iconHeight}`, 10),
             offsetWidth: parseInt(`${checkBox.props.iconWidth}`, 10),
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        it("should set default font size if icon element's 'offsetHeight'/'offsetWidth' fields are not defined", () => {
+          const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            offsetHeight: undefined,
+            offsetWidth: undefined,
             style: {},
           } as any;
           checkBox.updateIconFontSize();
