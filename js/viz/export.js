@@ -1,2 +1,16 @@
-import * as Export from './core/export';
-export default Export;
+import {
+    exportWidgets,
+    exportFromMarkup,
+    getMarkup,
+    combineMarkups,
+    ExportMenu,
+    plugin } from './core/export';
+
+export {
+    exportWidgets,
+    exportFromMarkup,
+    getMarkup,
+    combineMarkups,
+    ExportMenu,
+    plugin
+};
