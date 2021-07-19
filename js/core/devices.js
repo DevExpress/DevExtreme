@@ -348,9 +348,9 @@ class Devices {
 
 const devices = new Devices();
 
-const existViewPort = viewPort();
-if(existViewPort) {
-    devices.attachCssClasses(existViewPort);
+const viewPortElement = viewPort();
+if(viewPortElement) {
+    devices.attachCssClasses(viewPortElement);
 }
 
 changeCallback.add((viewPort, prevViewport) => {
