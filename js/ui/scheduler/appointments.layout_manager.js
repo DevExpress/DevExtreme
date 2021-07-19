@@ -41,6 +41,7 @@ class AppointmentLayoutManager {
             key: this.instance.key,
             instance: this.instance,
             isAdaptive: this.instance.option('adaptivityEnabled'),
+            rtlEnabled: this.instance.option('rtlEnabled'),
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
             getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
             getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
