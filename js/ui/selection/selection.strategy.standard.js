@@ -77,6 +77,7 @@ export default SelectionStrategy.inherit({
     },
 
     _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll) {
+        // console.log('_loadSelectedItemsCore ' + new Date().getTime());
         let deferred = new Deferred();
         const key = this.options.key();
 
@@ -111,6 +112,7 @@ export default SelectionStrategy.inherit({
             deferred = this._loadFilteredData(combinedFilter, localFilter, null, isSelectAll);
         }
 
+        // console.log('_loadSelectedItemsCore end (should be sync for array store) ' + new Date().getTime());
         return deferred;
     },
 
@@ -162,6 +164,7 @@ export default SelectionStrategy.inherit({
     },
 
     _collectLastRequestData: function(keys, isDeselect, isSelectAll) {
+        // console.log('_collectLastRequestData ' + new Date().getTime());
         const isDeselectAll = isDeselect && isSelectAll;
         const oldRequestItems = {
             added: [],
@@ -186,8 +189,9 @@ export default SelectionStrategy.inherit({
                     lastRequestData = {};
                 }
             }
-
+            // console.log('_concatRequestsItems start ' + new Date().getTime());
             lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
+            // console.log('_concatRequestsItems end ' + new Date().getTime());
         }
 
         return lastRequestData;
@@ -219,6 +223,7 @@ export default SelectionStrategy.inherit({
 
         that._lastLoadDeferred = deferred;
 
+        // console.log('_loadSelectedItems return deferred ' + new Date().getTime());
         return deferred;
     },
 
