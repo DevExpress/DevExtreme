@@ -1,19 +1,20 @@
 import { getGroupCount } from './resources/utils';
+import { getResourceManager } from './instanceFactory';
 
 export class ModelProvider {
-    constructor(options) {
-        this.options = options;
+    constructor(model) {
+        this.model = model;
     }
 
-    get model() { return this.options.model; }
-    get resourceManager() { return this.options.resourceManager; }
-    get loadedResources() { return this.options.resourceManager.loadedResources; }
+    get key() { return this.model.key; }
+    get resourceManager() { return getResourceManager(this.key); }
+    get loadedResources() { return this.resourceManager.loadedResources; }
 
     _isHorizontalGroupedWorkSpace() {
         return !!this.loadedResources.length && this.model['groupOrientation'] === 'horizontal';
     }
 
-    isGroupedByDate() { // TODO move to the ModelProvider
+    isGroupedByDate() {
         return this.model['groupByDate']
             && this._isHorizontalGroupedWorkSpace()
             && getGroupCount(this.loadedResources) > 0;
