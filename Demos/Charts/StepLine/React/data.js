@@ -149,4 +149,14 @@ export const olympicAchievements = [{
   gold: 14,
   silver: 15,
   bronze: 17
+}, {
+  year: 2012,
+  gold: 8,
+  silver: 15,
+  bronze: 12
+}, {
+  year: 2016,
+  gold: 8,
+  silver: 11,
+  bronze: 10
 }];
