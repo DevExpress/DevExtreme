@@ -56,7 +56,7 @@ const subscribes = {
         return this._getAppointmentSettingsGenerator(appointment).create();
     },
 
-    isGroupedByDate: function() {
+    isGroupedByDate: function() { // TODO replace with ModelProvider
         return this.getWorkSpace().isGroupedByDate();
     },
 
