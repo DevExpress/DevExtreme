@@ -105,10 +105,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     isAllDay(appointmentData) {
         return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
     }
-
-    needSeparateAppointment() {
-        return this.instance.fire('isGroupedByDate');
-    }
 }
 
 export default HorizontalRenderingStrategy;
