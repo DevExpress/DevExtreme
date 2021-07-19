@@ -27,12 +27,9 @@ class BaseRenderingStrategy {
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
+    get isAdaptive() { return this.options.isAdaptive; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
-
-    _isAdaptive() {
-        return this.instance.fire('isAdaptive');
-    }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
@@ -40,7 +37,9 @@ class BaseRenderingStrategy {
     }
 
     _initPositioningStrategy() {
-        this._positioningStrategy = this._isAdaptive() ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
+        this._positioningStrategy = this.isAdaptive
+            ? new AdaptivePositioningStrategy(this)
+            : new BasePositioningStrategy(this);
     }
 
     getPositioningStrategy() {
@@ -578,7 +577,7 @@ class BaseRenderingStrategy {
         const left = coordinates.left;
 
         if(coordinates.isCompact) {
-            this._isAdaptive() && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
+            this.isAdaptive && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
@@ -688,8 +687,10 @@ class BaseRenderingStrategy {
         return this._getAppointmentDefaultHeight();
     }
 
-    _getAppointmentHeightByTheme() {
-        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    _getAppointmentHeightByTheme() { // TODO get rid of depending from themes
+        return this._isCompactTheme()
+            ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT
+            : APPOINTMENT_DEFAULT_HEIGHT;
     }
 
     _getAppointmentDefaultWidth() {
