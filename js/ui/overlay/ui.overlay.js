@@ -1505,6 +1505,7 @@ const Overlay = Widget.inherit({
             case 'closeOnOutsideClick':
             case 'animation':
             case 'propagateOutsideClick':
+            case '_observeContentResize':
                 break;
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
