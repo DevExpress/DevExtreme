@@ -1321,27 +1321,22 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
-            layoutData: {
-                name: 'Alex',
-                lastName: 'Johnson',
-                state: 'CA'
-            },
             items: [{
-                dataField: 'name',
-                helpText: 'Type a name'
+                dataField: 'field1',
+                helpText: 'field1 help text'
             }, {
-                dataField: 'lastName'
+                dataField: 'field2'
             }]
         });
 
         const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'First field item has widget wrapper');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'First field item has help text element');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).text(), 'Type a name', 'Correct help text');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'total FIELD_ITEM_CONTENT_WRAPPER_CLASS');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'total FIELD_ITEM_HELP_TEXT_CLASS');
 
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 0, 'Second field item has\'t widget wrapper');
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 0, 'Second field item has\'t help text element');
+        const $field1HelpText = $fieldItems.eq(0).find('>.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS + '>.' + FIELD_ITEM_HELP_TEXT_CLASS);
+        assert.equal($field1HelpText.length, 1, '$field1HelpText.length');
+        assert.equal($field1HelpText.text(), 'field1 help text');
     });
 
     test('Change the order of items', function(assert) {
