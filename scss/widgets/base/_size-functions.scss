@@ -1,0 +1,26 @@
+@use "sass:math";
+$base-font-size: null !default;
+$padding-ratio: null !default;
+$dense-ratio: null !default;
+
+@function -calc-raw-font-size($value) {
+  $key-font-size: 14px; // key value for generic theme (never changed) - used to calc sizes
+
+  @return math.div($value, $key-font-size) * $base-font-size;
+}
+
+@mixin set-font-size($font-size) {
+  $base-font-size: $font-size !global;
+}
+
+@function calc-font-size($value) {
+  @return ceil(-calc-raw-font-size($value));
+}
+
+@function calc-horizontal-indent($value) {
+  @return ceil(-calc-raw-font-size($value) * $padding-ratio);
+}
+
+@function calc-vertical-indent($value) {
+  @return ceil(-calc-raw-font-size($value) * $padding-ratio * $dense-ratio);
+}

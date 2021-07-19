@@ -1,11 +1,8 @@
 @use "../sizes" as *;
-
-
+@use "../../base/size-functions" as s;
 
 // adduse
 
-$generic-button-horizontal-padding: null !default;
-$generic-button-icon-horizontal-padding: null !default;
 $generic-button-box-shadow-size: null !default;
 $generic-editor-button-icononly-bottom-padding: null !default;
 $generic-editor-button-icononly-horizontal-padding: null !default;
@@ -14,18 +11,16 @@ $generic-editor-button-top-padding: $generic-base-inline-widget-top-padding - $g
 $generic-editor-button-bottom-padding: $generic-base-inline-widget-bottom-padding - $generic-button-border-weight - 2px !default;
 $generic-editor-button-icononly-top-padding: $generic-editor-button-top-padding + 1px !default;
 
+$generic-button-horizontal-padding: s.calc-horizontal-indent(18px) !default;
+$generic-button-icon-horizontal-padding: s.calc-horizontal-indent(8px) !default;
 
 @if $size == "default" {
-  $generic-button-horizontal-padding: ceil(($new-font-size * 1.29) * $padding-ratio) !default;
-  $generic-button-icon-horizontal-padding: ceil(($new-font-size * 0.57) * $padding-ratio)  !default;
   $generic-button-box-shadow-size: 0 1px 3px !default;
   $generic-editor-button-icononly-bottom-padding: $generic-editor-button-bottom-padding !default;
   $generic-editor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;
 }
 
 @else if $size == "compact" {
-  $generic-button-horizontal-padding: 10px !default;
-  $generic-button-icon-horizontal-padding: 5px !default;
   $generic-button-box-shadow-size: 0 1px 2px !default;
   $generic-editor-button-icononly-bottom-padding: $generic-editor-button-bottom-padding + 1px !default;
   $generic-editor-button-icononly-horizontal-padding: $generic-button-icon-horizontal-padding - 2px !default;

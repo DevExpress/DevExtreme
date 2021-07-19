@@ -3,36 +3,39 @@
 $size: null !default;
 
 @use "colors" as *;
+@use "./variables" as *;
 
-$new-font-size: null !default;
+$generic-size-postfix: null !default;
+$generic-base-font-size: null !default;
 $padding-ratio: 1 !default;
-$dencse-ratio: 1 !default;
+$dense-ratio: 1 !default;
 
+@use "../base/size-functions" as s with (
+  $padding-ratio: $padding-ratio,
+  $dense-ratio: $dense-ratio
+);
 
 @if $size == "default" {
   $generic-size-postfix: "" !default;
-
-  // Default size variables
-  $new-font-size: 14px;
+  $generic-base-font-size: 14px;
 }
 
 @if $size == "compact" {
   $generic-size-postfix: ".compact" !default;
-
-  // Compact size variables
-  $new-font-size: 12px;
+  $generic-base-font-size: 12px;
 }
 
+@include s.set-font-size($generic-base-font-size);
+
 // Font sizes
-$generic-base-font-size: $new-font-size !default;
 $generic-base-line-height: 1.35 !default;
 
 // Base sizes
-$generic-base-inline-widget-height: ceil(($new-font-size * 2.57) * $padding-ratio * $dencse-ratio) !default;
-$generic-base-inline-block-height: ceil(($new-font-size * 1.35) * $padding-ratio * $dencse-ratio) !default;
-$generic-base-icon-size: ceil($new-font-size * 1.29) !default;
-$generic-base-more-adaptive-icon-size: ceil($new-font-size * 1.5) !default;
-$generic-base-inline-horizontal-padding: ceil(($new-font-size * 0.7) * $padding-ratio) !default;
+$generic-base-inline-widget-height: s.calc-vertical-indent(36px) !default;
+$generic-base-inline-block-height: s.calc-vertical-indent(19px) !default;
+$generic-base-icon-size: s.calc-font-size(18px) !default;
+$generic-base-more-adaptive-icon-size: s.calc-font-size(21px) !default;
+$generic-base-inline-horizontal-padding: s.calc-horizontal-indent(6px) !default;
 
 // Base inline widgets paddings
 $generic-base-inline-widget-vertical-padding:

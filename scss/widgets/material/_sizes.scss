@@ -1,50 +1,41 @@
 $size: null !default;
 
 @use "colors" as *;
+@use "./variables" as *;
 
 $material-size-postfix: null !default;
 $material-base-font-size: null !default;
-$material-base-inline-widget-height: null !default;
-$material-base-inline-block-height: null !default;
-$material-base-icon-size: null !default;
-$material-base-inline-horizontal-padding: null !default;
 $material-base-border-radius: null !default;
 $material-base-dropdown-widgets-shadow: null !default;
 
-// New variables
-$new-font-size: 14px;
 $padding-ratio: 1;
-$dencse-ratio: 1;
+$dense-ratio: 1;
+
+@use "../base/size-functions" as s with (
+  $padding-ratio: $padding-ratio,
+  $dense-ratio: $dense-ratio
+);
 
 @if $size == "default" {
   $material-size-postfix: "" !default;
-
-  // Font sizes
-  $material-base-font-size: $new-font-size !default;
-
-  // Base sizes
-  $material-base-inline-widget-height: ceil(($new-font-size * 4) * $padding-ratio * $dencse-ratio) !default;
-  $material-base-inline-block-height: ceil(($new-font-size * 1.29) * $padding-ratio * $dencse-ratio) !default;
-  $material-base-icon-size: ceil($new-font-size * 1.71) !default;
-  $material-base-inline-horizontal-padding: ceil(($new-font-size * 0.71) * $padding-ratio) !default;
+  $material-base-font-size: 14px !default;
   $material-base-border-radius: 4px !default;
   $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color !default;
 }
 
 @if $size == "compact" {
   $material-size-postfix: ".compact" !default;
-
-  // Font sizes
   $material-base-font-size: 13px !default;
-
-  // Base sizes
-  $material-base-inline-widget-height: 40px !default;
-  $material-base-inline-block-height: 15px !default;
-  $material-base-icon-size: 18px !default;
-  $material-base-inline-horizontal-padding: 8px !default;
   $material-base-border-radius: 2px !default;
   $material-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color !default;
 }
+
+@include s.set-font-size($material-base-font-size);
+
+$material-base-inline-widget-height: s.calc-vertical-indent(56px) !default;
+$material-base-inline-block-height: s.calc-vertical-indent(18px) !default;
+$material-base-icon-size: s.calc-font-size(24px) !default;
+$material-base-inline-horizontal-padding: s.calc-horizontal-indent(10px) !default;
 
 // Base bordered inline widgets sizes
 $material-base-border-width: 1px !default;
