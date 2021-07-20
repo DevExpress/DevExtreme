@@ -35,6 +35,7 @@ import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
 import ResizeObserver from './resize_observer';
+import { compare as compareVersions } from '../../core/utils/version';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -227,6 +228,17 @@ const Overlay = Widget.inherit({
                 height: null,
                 animation: null,
                 _checkParentVisibility: false
+            }
+        }, {
+            device: function() {
+                const device = devices.real();
+                const platform = device.platform;
+                const version = device.version;
+                return platform === 'ios' && compareVersions(version, '13.3') <= 0
+                    || platform === 'android' && compareVersions(version, '4.4.4') <= 0;
+            },
+            options: {
+                _observeContentResize: false
             }
         }]);
     },
