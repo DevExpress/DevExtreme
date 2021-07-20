@@ -347,8 +347,8 @@ module.exports = {
         },
         {
             'files': [
-                'js/renovation/**/*.d.ts',
-                'js/renovation/**/*.d.tsx'
+                '*.d.ts',
+                '*.d.tsx'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [

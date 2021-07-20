@@ -1171,7 +1171,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)?.overflowX === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowX === 'hidden';
 
     /* istanbul ignore next */
     if (isOverflowHidden) {
@@ -1189,7 +1189,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)?.overflowY === 'hidden';
+    const isOverflowHidden = getElementComputedStyle(this.contentRef.current)!.overflowY === 'hidden';
 
     /* istanbul ignore next */
     if (isOverflowHidden) {
