@@ -30,6 +30,7 @@ class BaseRenderingStrategy {
     get resizableStep() { return this.options.getResizableStep(); }
     get isAdaptive() { return this.options.isAdaptive; }
     get rtlEnabled() { return this.options.rtlEnabled; }
+    get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
@@ -238,12 +239,10 @@ class BaseRenderingStrategy {
         return false;
     }
 
-    cropAppointmentWidth(width, cellWidth) {
-        if(this.instance.fire('isGroupedByDate')) {
-            width = cellWidth;
-        }
-
-        return width;
+    cropAppointmentWidth(width, cellWidth) { // TODO get rid of this
+        return this.isGroupedByDate
+            ? cellWidth
+            : width;
     }
 
     _getSortedPositions(positionList) {
@@ -634,10 +633,6 @@ class BaseRenderingStrategy {
 
     _needVerifyItemSize() {
         return false;
-    }
-
-    needSeparateAppointment(allDay) {
-        return this.instance.fire('isGroupedByDate') && allDay;
     }
 
     _getMaxAppointmentCountPerCell() {

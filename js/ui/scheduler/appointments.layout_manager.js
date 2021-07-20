@@ -43,6 +43,7 @@ class AppointmentLayoutManager {
             isAdaptive: this.instance.option('adaptivityEnabled'),
             rtlEnabled: this.instance.option('rtlEnabled'),
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
             getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
             getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
             getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
