@@ -14,8 +14,6 @@ import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
-import 'ui/button_group';
-
 import 'generic_light.css!';
 import 'ui/button';
 import 'ui/tabs';
@@ -301,6 +299,13 @@ QUnit.module('render', {
         assert.equal(this.$element.find('.custom-template').length, 1);
     });
 
+    ['dxButtonGroup', 'dxDropDownButton'].forEach(widget => {
+        QUnit.test(`Toolbar.item.widget=${widget}`, function(assert) {
+            $('#widget').dxToolbar({ items: [ { widget: widget } ] });
+
+            assert.ok('Test not crashed');
+        });
+    });
 
     [true, false].forEach(deferRendering => {
         function renderToolbar(container, toolbarItems) {

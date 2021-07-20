@@ -9,6 +9,13 @@ import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
+// t1015648
+// eslint-disable-next-line
+import { button_group } from './button_group';
+
+// eslint-disable-next-line
+import { drop_down_button } from './drop_down_button';
+
 // STYLE toolbar
 
 const STRATEGIES = {
