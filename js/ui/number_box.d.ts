@@ -106,7 +106,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @type Enums.NumberBoxMode
      * @default "text"
-     * @default 'number' [for](mobile_devices)
+     * @default 'number' &for(mobile_devices)
      * @public
      */
     mode?: 'number' | 'text' | 'tel';
@@ -125,7 +125,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     useLargeSpinButtons?: boolean;

@@ -931,6 +931,7 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    background-color: $datagrid-base-background-color;
   }
 
   .dx-#{$widget-name}-pager {

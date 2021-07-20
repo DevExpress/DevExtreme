@@ -1080,7 +1080,6 @@ const PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             $(TR)
-                .toggleClass('dx-ie', coreBrowserUtils.msie === true)
                 .append(rowHeaderContainer)
                 .append(columnsAreaElement)
                 .appendTo(tableElement);

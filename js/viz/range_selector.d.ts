@@ -10,7 +10,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -54,7 +53,7 @@ export type ExportedEvent = EventInfo<dxRangeSelector>;
 export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxRangeSelector>;
+export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
@@ -435,8 +434,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
         customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 11 [prop](size)
+         * @default '#767676' &prop(color)
+         * @default 11 &prop(size)
          */
         font?: Font,
         /**
@@ -709,8 +708,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
       /**
        * @docid
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
       font?: Font,
       /**

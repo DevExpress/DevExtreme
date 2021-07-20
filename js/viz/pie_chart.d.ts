@@ -8,7 +8,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -73,7 +72,7 @@ export type ExportedEvent = EventInfo<dxPieChart>;
 export type ExportingEvent = EventInfo<dxPieChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxPieChart>;
+export type FileSavingEvent = FileSavingEventInfo<dxPieChart>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxPieChart> & IncidentInfo;
@@ -668,8 +667,8 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       customizeText?: ((pointInfo: any) => string),
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.font
-       * @default '#FFFFFF' [prop](color)
-       * @default 14 [prop](size)
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
        */
       font?: Font,
       /**

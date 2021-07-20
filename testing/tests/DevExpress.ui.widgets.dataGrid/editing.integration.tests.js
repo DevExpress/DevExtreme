@@ -3398,6 +3398,34 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual($addRowButton.length, 1, 'add row button is rendered');
     });
 
+    // T1012892
+    QUnit.test('change editing.allowUpdating option should update editing column', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ a: 1 }, { a: 2 }, { a: 3 }]
+        });
+
+        // assert
+        let $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, 0, 'edit button is not visible');
+
+        // act
+        dataGrid.option('editing.allowUpdating', true);
+        this.clock.tick();
+
+        // assert
+        $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, dataGrid.totalCount(), 'edit button is visible');
+
+        // act
+        dataGrid.option('editing.allowUpdating', false);
+        this.clock.tick();
+
+        // assert
+        $deleteButton = dataGrid.$element().find('.dx-command-edit .dx-link-edit');
+        assert.strictEqual($deleteButton.length, 0, 'edit button is not visible');
+    });
+
     // T749733
     QUnit.test('Change editing.popup option should not reload data', function(assert) {
         // arrange

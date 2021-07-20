@@ -39,14 +39,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
-    _getRowCount() {
-        return 1;
-    }
-
-    _getCellCount() {
-        return this._getCellCountInDay() * this.option('intervalCount');
-    }
-
     getGroupTableWidth() {
         return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
     }
@@ -332,8 +324,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
             daysInView,
-            cellCountInDay: this._getCellCountInDay(),
             getDateForHeaderText,
+            columnsInDay: this._getCellCountInDay(),
         };
     }
 

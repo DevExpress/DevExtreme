@@ -37,7 +37,18 @@ class AppointmentLayoutManager {
 
     initRenderingStrategy(renderingStrategy) {
         const Strategy = RENDERING_STRATEGIES[renderingStrategy];
-        this._renderingStrategyInstance = new Strategy(this.instance);
+        this._renderingStrategyInstance = new Strategy({
+            key: this.instance.key,
+            instance: this.instance,
+            isAdaptive: this.instance.option('adaptivityEnabled'),
+            rtlEnabled: this.instance.option('rtlEnabled'),
+            isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
+            getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
+            getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
+            getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
+            getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0
+        });
         this.renderingStrategy = renderingStrategy;
     }
 

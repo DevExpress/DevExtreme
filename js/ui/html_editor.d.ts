@@ -401,7 +401,7 @@ export interface dxHtmlEditorMediaResizing {
    minColumnWidth?: number;
   /**
    * @docid
-   * @default 20
+   * @default 24
    * @public
    */
   minRowHeight?: number;

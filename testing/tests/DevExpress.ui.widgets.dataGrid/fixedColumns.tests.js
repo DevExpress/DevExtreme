@@ -3287,6 +3287,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
 
         // assert
         assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').length, 2, 'load panel count');
+        assert.strictEqual($testElement.find('.dx-datagrid-bottom-load-panel').css('background-color'), 'rgb(255, 255, 255)', 'load panel background'); // T1011801
 
         // act
         that.columnOption(0, 'fixed', false);
