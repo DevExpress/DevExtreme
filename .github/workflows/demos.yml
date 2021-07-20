@@ -61,6 +61,8 @@ jobs:
         python -m http.server 8080 &
 
     - name: Run TestCafe tests
+      env:
+        CONSTEL: jquery(1/1)
       run: |
         cd ./devextreme-demos
         npm run test-testcafe
