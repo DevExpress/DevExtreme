@@ -14,14 +14,14 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     calculateAppointmentWidth(appointment, position) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
-        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
+        const { normalizedEndDate } = position.info.appointment;
 
-        let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
+        let appointmentDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
-        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
+        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, normalizedEndDate);
 
         const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
         const durationInCells = appointmentDuration / cellDuration;
@@ -54,13 +54,13 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return itemLeft + cellWidth * index;
     }
 
     _getMaxHeight() {
-        return this.getDefaultCellHeight() || this.getAppointmentMinSize();
+        return this.cellHeight || this.getAppointmentMinSize();
     }
 
     _getAppointmentCount(overlappingMode, coordinates) {
@@ -90,24 +90,20 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     getDropDownAppointmentWidth() {
-        return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
+        return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
     }
 
     getDeltaTime(args, initialSize) {
         let deltaTime = 0;
         const deltaWidth = args.width - initialSize.width;
 
-        deltaTime = toMs('minute') * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
+        deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.instance.getAppointmentDurationInMinutes());
 
         return deltaTime;
     }
 
     isAllDay(appointmentData) {
         return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
-    }
-
-    needSeparateAppointment() {
-        return this.instance.fire('isGroupedByDate');
     }
 }
 

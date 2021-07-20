@@ -4603,7 +4603,6 @@ QUnit.module('Field Panel', {
 
         assert.strictEqual($('.dx-pivotgrid-toolbar').parent()[0], pivotGrid.$element().find('.dx-filter-header')[0]);
         assert.ok(pivotGrid.$element().find('.dx-area-description-cell').hasClass('dx-pivotgrid-background'), 'description with background');
-        assert.strictEqual(pivotGrid.$element().find('.dx-area-description-cell').parent().hasClass('dx-ie'), !!browser.msie);
         assert.ok(pivotGrid.$element().find('.dx-filter-header').hasClass('dx-bottom-border'));
         assert.ok(pivotGrid.$element().find('.dx-column-header').hasClass('dx-bottom-border'));
     });

@@ -2,8 +2,8 @@ import 'generic_light.css!';
 import 'ui/scheduler/subscribes';
 import 'ui/scheduler/ui.scheduler';
 import {
-    AppointmentSettingsGeneratorBaseStrategy,
-    AppointmentSettingsGeneratorVirtualStrategy
+    DateGeneratorBaseStrategy,
+    DateGeneratorVirtualStrategy
 } from 'ui/scheduler/appointments/settingsGenerator';
 import { getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
@@ -96,14 +96,14 @@ module('Subscribes', {
     [
         {
             scrollingMode: 'standard',
-            expectedType: AppointmentSettingsGeneratorBaseStrategy
+            expectedType: DateGeneratorBaseStrategy
         },
         {
             scrollingMode: 'virtual',
-            expectedType: AppointmentSettingsGeneratorVirtualStrategy
+            expectedType: DateGeneratorVirtualStrategy
         }
     ].forEach(option => {
-        test(`Appointment settings generator strategy should be created with correct type if scrolling.mode: ${option.scrollingMode}`, function(assert) {
+        test(`Appointment dates generator strategy should has correct type if scrolling.mode: ${option.scrollingMode}`, function(assert) {
             this.createInstance({
                 currentView: 'day',
                 scrolling: {
@@ -111,9 +111,9 @@ module('Subscribes', {
                 }
             });
 
-            const { settingsStrategy } = this.instance._getAppointmentSettingsGenerator();
+            const { dateSettingsStrategy } = this.instance._getAppointmentSettingsGenerator();
 
-            assert.ok(settingsStrategy instanceof option.expectedType, 'Appointment settings type is correct');
+            assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
         });
     });
 
@@ -1457,7 +1457,7 @@ module('Grouping By Date', {
         const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellWidth = $cell.get(0).getBoundingClientRect().width;
 
-        assert.roughEqual(this.instance.fire('getResizableStep'), cellWidth * 3, 3, 'Step is OK');
+        assert.roughEqual(this.instance.getWorkSpace().positionHelper.getResizableStep(), cellWidth * 3, 3, 'Step is OK');
     });
 
     test('Appointment is rendered in allDay panel if endDate is out of view, groupByDate = true (T742932)', function(assert) {

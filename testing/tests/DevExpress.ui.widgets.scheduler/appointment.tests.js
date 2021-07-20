@@ -22,8 +22,6 @@ const createInstance = () => {
                     return CELL_HEIGHT;
                 case 'getCellWidth':
                     return CELL_WIDTH;
-                case 'getResizableStep':
-                    return CELL_WIDTH;
                 case 'isGroupedByDate':
                     return false;
                 case 'getAppointmentColor':
@@ -98,7 +96,8 @@ module('Appointments', moduleOptions, () => {
 
         instance.option({
             direction: 'horizontal',
-            cellWidth: 25
+            cellWidth: 25,
+            getResizableStep: () => 25
         });
 
         assert.ok(instance.$element().dxResizable, 'appointment has right class');

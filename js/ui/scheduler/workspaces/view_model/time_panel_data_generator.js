@@ -1,19 +1,44 @@
 import { getTimePanelCellText } from '../utils/week';
 
 export class TimePanelDataGenerator {
+    constructor(viewDataGenerator) {
+        this._viewDataGenerator = viewDataGenerator;
+    }
+
     getCompleteTimePanelMap(options, completeViewDataMap) {
         const {
-            rowCountInGroup,
             startViewDate,
             cellDuration,
             startDayHour,
+            isVerticalGrouping,
+            intervalCount,
+            currentDate,
+            viewType,
+            hoursInterval,
+            endDayHour,
         } = options;
 
+        const rowCountInGroup = this._viewDataGenerator.getRowCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
+        const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+            intervalCount, currentDate, viewType,
+            hoursInterval, startDayHour, endDayHour,
+        });
         let allDayRowsCount = 0;
 
         return completeViewDataMap.map((row, index) => {
             const {
-                allDay, startDate, endDate, ...restCellProps
+                allDay,
+                startDate,
+                endDate,
+                groups,
+                groupIndex,
+                isFirstGroupCell,
+                isLastGroupCell,
+                index: cellIndex,
+                ...restCellProps
             } = row[0];
 
             if(allDay) {
@@ -27,6 +52,11 @@ export class TimePanelDataGenerator {
                 startDate,
                 allDay,
                 text: getTimePanelCellText(timeIndex, startDate, startViewDate, cellDuration, startDayHour),
+                groups: isVerticalGrouping ? groups : undefined,
+                groupIndex: isVerticalGrouping ? groupIndex : undefined,
+                isFirstGroupCell: isVerticalGrouping && isFirstGroupCell,
+                isLastGroupCell: isVerticalGrouping && isLastGroupCell,
+                index: Math.floor(cellIndex / cellCountInGroupRow),
             };
         });
     }
@@ -37,7 +67,6 @@ export class TimePanelDataGenerator {
             rowCount,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
-            cellCountInGroupRow,
             isGroupedAllDayPanel,
             isVerticalGrouping,
             isAllDayPanelVisible,
@@ -53,7 +82,6 @@ export class TimePanelDataGenerator {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             isGroupedAllDayPanel,
-            cellCountInGroupRow,
         };
 
         const {

@@ -1,5 +1,4 @@
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -28,7 +27,7 @@ export type ExportedEvent = EventInfo<dxBullet>;
 export type ExportingEvent = EventInfo<dxBullet> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBullet>;
+export type FileSavingEvent = FileSavingEventInfo<dxBullet>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxBullet> & IncidentInfo;

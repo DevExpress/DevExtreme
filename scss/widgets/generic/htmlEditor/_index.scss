@@ -169,7 +169,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
   }
 }
@@ -308,9 +309,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 }
 
 .dx-table-resize-frame {
-  > .dx-draggable-dragging {
-    &::after {
-      background-color: $htmleditor-cells-separator-bg;
-    }
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: $htmleditor-cells-separator-bg;
   }
 }

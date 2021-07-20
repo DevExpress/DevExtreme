@@ -171,12 +171,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
       min-width: $pivotgrid-empty-column-width;
     }
   }
-
-  .dx-ie {
-    .dx-pivotgrid-fields-area {
-      @include dx-base-typography();
-    }
-  }
 }
 
 .dx-pivotgridfieldchooser {

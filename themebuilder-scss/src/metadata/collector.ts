@@ -28,7 +28,7 @@ export default class MetadataCollector {
       const res = resolve(dirName, directory.name);
       return directory.isDirectory() ? this.getFileList(res) : [res];
     }));
-    return Array.prototype.concat(...files);
+    return Array.prototype.concat(...files) as string[];
   }
 
   async readFiles(
