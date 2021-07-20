@@ -37,7 +37,7 @@ QUnit.module('Resize observer', () => {
             this.observer.disconnect();
         }
     }, () => {
-        QUnit.testInActiveWindow('should call passed "beforeEach" function before each callback', function(assert) {
+        QUnit.testInActiveWindow('should call passed "shouldSkipCallback" function before each callback', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
             this.shouldSkipCallback = sinon.stub();
@@ -55,7 +55,7 @@ QUnit.module('Resize observer', () => {
             }, TIME_TO_WAIT);
         });
 
-        QUnit.testInActiveWindow('should not call "callback" if "beforeEach" returns object with "shouldSkip: true"', function(assert) {
+        QUnit.testInActiveWindow('should not call "callback" if "shouldSkipCallback" returns true', function(assert) {
             const observeHandled = assert.async();
             const resizeHandled = assert.async();
             this.shouldSkipCallback = sinon.stub().returns(true);

@@ -493,7 +493,7 @@ const Popup = Overlay.inherit({
     _renderGeometryImpl: function() {
         // NOTE: for correct new position calculation
         this._resetContentHeight();
-        this.callBase(...arguments);
+        this.callBase();
         this._setContentHeight();
     },
 

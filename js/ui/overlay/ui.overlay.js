@@ -363,16 +363,9 @@ const Overlay = Widget.inherit({
         this._resizeObserver = new ResizeObserver({
             callback: () => { this._renderGeometry(); },
             shouldSkipCallback: (entries) => {
-                if(entries.length === 1) {
-                    const entry = entries[0];
-                    if(
-                        entry.target === this._$content.get(0)
-                            && entry.contentRect.width === this._actualDimensions?.width
-                            && entry.contentRect.height === this._actualDimensions?.height
-                    ) {
-                        return true;
-                    }
-                }
+                const contentRect = entries[0].contentRect;
+                return contentRect.width === this._renderedDimensions?.width
+                    && contentRect.height === this._renderedDimensions?.height;
             }
         });
     },
@@ -382,10 +375,11 @@ const Overlay = Widget.inherit({
             return;
         }
 
+        const contentElement = this._$content.get(0);
         if(shouldObserve) {
-            this._resizeObserver.observe(this._$content.get(0));
+            this._resizeObserver.observe(contentElement);
         } else {
-            this._resizeObserver.unobserve(this._$content.get(0));
+            this._resizeObserver.unobserve(contentElement);
         }
     },
 
@@ -1187,7 +1181,7 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        this._actualDimensions = {
+        this._renderedDimensions = {
             width: this._$content.width(),
             height: this._$content.height()
         };

@@ -3426,9 +3426,7 @@ QUnit.module('search should be canceled only after popup hide animation completi
         this.keyboard.type('1');
         this.clock.tick(TIME_TO_WAIT);
 
-        this.keyboard
-            .press('down')
-            .press('enter');
+        this.keyboard.press('enter');
         assert.strictEqual(this.getListItems().length, 1, 'search was not canceled before animation end');
         this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');

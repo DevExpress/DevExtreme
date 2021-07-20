@@ -4263,7 +4263,7 @@ QUnit.module('resizeObserver integration', {
         }, this.timeToWaitResize);
     });
 
-    QUnit.testInActiveWindow('showing and shown events should be raise only when content is resized during animation', function(assert) {
+    QUnit.testInActiveWindow('showing and shown events should be raised only once when content is resized during animation', function(assert) {
         fx.off = false;
 
         const showingHandled = assert.async();
