@@ -25,12 +25,13 @@
 }
 
 .dx-checkbox-container {
+  @include dx-overflow();
+
   height: 100%;
   width: 100%;
   display: inline-block;
   vertical-align: middle;
-
-  @include dx-overflow();
+  text-overflow: clip;
 }
 
 .dx-checkbox-has-text {
@@ -43,16 +44,19 @@
 .dx-checkbox-text {
   display: inline-block;
   vertical-align: middle;
+  text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
   height: 100%;
   width: 100%;
+  padding-left: 5px;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
     margin: 0;
-    padding: 0;
+    padding: 0 5px 0 0;
+    text-align: right;
   }
 }
 

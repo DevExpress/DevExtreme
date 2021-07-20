@@ -19,7 +19,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -27,8 +26,8 @@ import {
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -79,7 +78,7 @@ export type ExportedEvent = EventInfo<dxFunnel>;
 export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxFunnel>;
+export type FileSavingEvent = FileSavingEventInfo<dxFunnel>;
 
 /** @public */
 export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
@@ -367,14 +366,14 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
       /**
        * @docid
-       * @default '#767676' [prop](color)
+       * @default '#767676' &prop(color)
        */
       font?: Font,
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @type Enums.HorizontalEdge

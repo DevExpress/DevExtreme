@@ -40,7 +40,6 @@ interface GroupedViewDataBase {
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
-  cellCountInGroupRow: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   topVirtualRowCount: number;
@@ -134,3 +133,6 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
 }
+
+export type ViewType = 'day' | 'week' | 'workWeek' | 'month'
+| 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda';

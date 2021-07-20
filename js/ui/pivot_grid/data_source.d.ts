@@ -12,9 +12,9 @@ import {
     dxPivotGridSummaryCell
 } from '../pivot_grid';
 
-import {
-    format
-} from '../widget/ui.widget';
+import { 
+    Format
+  } from '../../localization';
 
 import XmlaStore, {
     XmlaStoreOptions
@@ -219,7 +219,7 @@ export interface PivotGridDataSourceField {
      * @default ''
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupIndex
      * @default undefined

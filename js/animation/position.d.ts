@@ -6,6 +6,7 @@ import {
  * @docid
  * @namespace DevExpress
  * @type object
+ * @public
  */
 export interface PositionConfig {
     /**
@@ -105,5 +106,8 @@ export interface PositionConfig {
     };
 }
 
-/** @deprecated Use the PositionConfig type instead*/
+/**
+ * @public
+ * @deprecated Use the PositionConfig type instead
+ */
 export interface positionConfig extends PositionConfig { }

@@ -20,8 +20,8 @@ import {
 } from './editor/editor';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     Properties as PopupProperties
@@ -145,7 +145,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default null
      * @public
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * @docid
      * @default 30
@@ -174,10 +174,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @docid
      * @type Enums.DateBoxPickerType
      * @default 'calendar'
-     * @default 'native' [for](iOS)
-     * @default 'native' [for](Android)
-     * @default 'rollers' [for](Android_below_version_4.4)
-     * @default 'rollers' [for](mobile_devices)
+     * @default 'native' &for(iOS)
+     * @default 'native' &for(Android)
+     * @default 'rollers' &for(Android_below_version_4.4)
+     * @default 'rollers' &for(mobile_devices)
      * @public
      */
     pickerType?: 'calendar' | 'list' | 'native' | 'rollers';

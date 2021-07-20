@@ -140,7 +140,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     bounceEnabled?: boolean;
@@ -166,7 +166,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -202,8 +202,8 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ListItemDeleteMode
      * @default 'static'
-     * @default 'slideItem' [for](iOS)
-     * @default 'swipe' [for](Android)
+     * @default 'slideItem' &for(iOS)
+     * @default 'swipe' &for(Android)
      * @public
      */
     itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
@@ -228,7 +228,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @docid
        * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
-       * @return void
+       * @type_function_return void
        */
       action?: ((itemElement: DxElement, itemData: any) => any),
       /**
@@ -240,7 +240,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ListMenuMode
      * @default 'context'
-     * @default 'slide' [for](iOS)
+     * @default 'slide' &for(iOS)
      * @public
      */
     menuMode?: 'context' | 'slide';
@@ -428,14 +428,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
-     * @default "nextButton" [for](desktop except Mac)
+     * @default "nextButton" &for(desktop except Mac)
      * @public
      */
     pageLoadMode?: 'nextButton' | 'scrollBottom';
     /**
      * @docid
      * @default "Loading..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pageLoadingText?: string;
@@ -448,21 +448,21 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default "Release to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @default "" [for](Material)
+     * @default "" &for(Material)
      * @public
      */
     refreshingText?: string;
@@ -475,14 +475,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid
      * @default true
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     scrollByContent?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     scrollByThumb?: boolean;
@@ -510,7 +510,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @public
      */
     showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
@@ -522,7 +522,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     showSelectionControls?: boolean;
     /**
      * @docid
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @default true
      * @public
      */

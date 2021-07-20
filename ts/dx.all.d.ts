@@ -511,7 +511,6 @@ declare global {
 declare module DevExpress {
   /**
    * [descr:AnimationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type AnimationConfig = {
     /**
@@ -813,7 +812,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:DOMComponent.dispose()]
@@ -973,34 +972,25 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type Format =
-    | FormatObject
-    | PredefinedFormat
-    | string
-    | ((value: number | Date) => string)
-    | ExternalFormat;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export interface FormatObject {
     /**
-     * [descr:FormatObject.currency]
+     * [descr:Format.currency]
      */
     currency?: string;
     /**
-     * [descr:FormatObject.formatter]
+     * [descr:Format.formatter]
      */
     formatter?: (value: number | Date) => string;
     /**
-     * [descr:FormatObject.parser]
+     * [descr:Format.parser]
      */
     parser?: (value: string) => number | Date;
     /**
-     * [descr:FormatObject.precision]
+     * [descr:Format.precision]
      */
     precision?: number;
     /**
-     * [descr:FormatObject.type]
+     * [descr:Format.type]
      */
     type?: PredefinedFormat;
   }
@@ -1125,7 +1115,6 @@ declare module DevExpress {
   export function hideTopOverlay(): boolean;
   /**
    * [descr:PositionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PositionConfig {
     /**
@@ -1380,16 +1369,49 @@ declare module DevExpress {
 }
 declare module DevExpress.animation {
   /**
+   * @deprecated Use the AnimationConfig type instead
+   */
+  export type animationConfig = AnimationConfig;
+  /**
    * [descr:AnimationState]
    */
   export type AnimationState =
     | string
     | number
-    | { opacity: number }
-    | { scale: number }
-    | { position: PositionConfig }
-    | { left: number }
-    | { top: number };
+    | {
+        /**
+         * [descr:AnimationState.opacity]
+         */
+        opacity: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.scale]
+         */
+        scale: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.position]
+         */
+        position: PositionConfig;
+      }
+    | {
+        /**
+         * [descr:AnimationState.left]
+         */
+        left: number;
+      }
+    | {
+        /**
+         * [descr:AnimationState.top]
+         */
+        top: number;
+      };
+  /**
+   * @deprecated Use the PositionConfig type instead
+   */
+  export interface positionConfig extends PositionConfig {}
 }
 declare module DevExpress.core {
   /**
@@ -2522,7 +2544,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupIndex]
      */
@@ -3869,7 +3891,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatDate(value, format)]
    */
-  export function formatDate(value: Date, format: Format): string;
+  export function formatDate(value: Date, format: DevExpress.ui.Format): string;
   /**
    * [descr:localization.formatMessage(key, value)]
    */
@@ -3877,7 +3899,10 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.formatNumber(value, format)]
    */
-  export function formatNumber(value: number, format: Format): string;
+  export function formatNumber(
+    value: number,
+    format: DevExpress.ui.Format
+  ): string;
   /**
    * [descr:localization.loadMessages(messages)]
    */
@@ -3893,11 +3918,14 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.parseDate(text, format)]
    */
-  export function parseDate(text: string, format: Format): Date;
+  export function parseDate(text: string, format: DevExpress.ui.Format): Date;
   /**
    * [descr:localization.parseNumber(text, format)]
    */
-  export function parseNumber(text: string, format: Format): number;
+  export function parseNumber(
+    text: string,
+    format: DevExpress.ui.Format
+  ): number;
 }
 declare module DevExpress.pdfExporter {
   /**
@@ -5085,6 +5113,14 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
+     * [descr:dxCheckBoxOptions.iconHeight]
+     */
+    iconHeight?: number | string;
+    /**
+     * [descr:dxCheckBoxOptions.iconWidth]
+     */
+    iconWidth?: number | string;
+    /**
      * [descr:dxCheckBoxOptions.name]
      */
     name?: string;
@@ -5777,7 +5813,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:GridBaseColumn.headerFilter]
        */
@@ -7615,7 +7651,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7708,7 +7744,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
-      valueFormat?: format;
+      valueFormat?: Format;
     }
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
@@ -8049,7 +8085,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.displayFormat]
      */
-    displayFormat?: format;
+    displayFormat?: Format;
     /**
      * [descr:dxDateBoxOptions.interval]
      */
@@ -11590,7 +11626,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxFilterBuilderField.lookup]
      */
@@ -12800,6 +12836,10 @@ declare module DevExpress.ui {
        * [descr:dxGanttOptions.validation.autoUpdateParentTasks]
        */
       autoUpdateParentTasks?: boolean;
+      /**
+       * [descr:dxGanttOptions.validation.enablePredecessorGap]
+       */
+      enablePredecessorGap?: boolean;
     };
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
@@ -15129,7 +15169,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.format]
      */
-    format?: format;
+    format?: Format;
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
      */
@@ -15225,6 +15265,10 @@ declare module DevExpress.ui {
       | ((
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
+     */
+    copyRootClassesToWrapper?: boolean;
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */
@@ -18169,7 +18213,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.label.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.label.position]
        */
@@ -18202,7 +18246,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.tooltip.format]
        */
-      format?: format;
+      format?: Format;
       /**
        * [descr:dxSliderBaseOptions.tooltip.position]
        */
@@ -21130,10 +21174,14 @@ declare module DevExpress.ui {
     type: 'email';
   }
   /**
-   * [descr:format]
-   * @deprecated [depNote:format]
+   * [descr:Format]
    */
-  export type format = Format;
+  export type Format =
+    | FormatObject
+    | PredefinedFormat
+    | string
+    | ((value: number | Date) => string)
+    | ExternalFormat;
   /**
    * [descr:GridBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -22095,6 +22143,14 @@ declare module DevExpress.ui {
      */
     repaint(): void;
   }
+  module Widget {
+    /**
+     * [descr:format]
+     * @deprecated [depNote:format]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type format = Format;
+  }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -22453,7 +22509,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:BaseChartOptions.tooltip.contentTemplate]
      */
@@ -22745,7 +22801,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
@@ -23274,7 +23330,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]
@@ -23316,13 +23372,13 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface FileSavingEventInfo<T> {
+    export type FileSavingEventInfo<T> = DevExpress.events.Cancelable & {
       readonly component: T;
       readonly element: DevExpress.core.DxElement;
       readonly fileName: string;
       readonly format: string;
       readonly data: Blob;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -23839,7 +23895,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:BaseWidgetOptions.tooltip.opacity]
      */
@@ -24114,7 +24170,7 @@ declare module DevExpress.viz {
       /**
        * [descr:CommonIndicator.text.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:CommonIndicator.text.indent]
        */
@@ -24172,7 +24228,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxBarGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxBarGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxBarGauge> &
@@ -24214,7 +24270,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.legend.itemTextFormat]
      */
-    itemTextFormat?: DevExpress.ui.format;
+    itemTextFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxBarGaugeOptions.legend.markerTemplate]
      */
@@ -24303,7 +24359,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxBarGaugeOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxBarGaugeOptions.label.indent]
        */
@@ -24394,7 +24450,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxBullet>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxBullet> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxBullet>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxBullet> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -24497,7 +24553,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxChart>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -24783,7 +24839,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25491,7 +25547,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.horizontalLine.label.visible]
                */
@@ -25534,7 +25590,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChartOptions.crosshair.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxChartOptions.crosshair.label.visible]
          */
@@ -25580,7 +25636,7 @@ declare module DevExpress.viz {
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.format]
                */
-              format?: DevExpress.ui.format;
+              format?: DevExpress.ui.Format;
               /**
                * [descr:dxChartOptions.crosshair.verticalLine.label.visible]
                */
@@ -26511,7 +26567,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
      */
@@ -26565,7 +26621,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
      */
@@ -28024,7 +28080,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28078,7 +28134,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxCircularGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxCircularGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxCircularGauge> &
@@ -28196,7 +28252,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxFunnel>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxFunnel> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxFunnel>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28530,7 +28586,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxFunnelOptions.label.horizontalAlignment]
        */
@@ -28663,7 +28719,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxLinearGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxLinearGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxLinearGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxLinearGauge> &
@@ -28786,7 +28842,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxPieChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxPieChart>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxPieChart> &
@@ -29141,7 +29197,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat]
        */
-      argumentFormat?: DevExpress.ui.format;
+      argumentFormat?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor]
        */
@@ -29195,7 +29251,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.position]
        */
@@ -29338,7 +29394,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxPolarChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxPolarChart>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
@@ -29564,7 +29620,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30452,7 +30508,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
      */
-    argumentFormat?: DevExpress.ui.format;
+    argumentFormat?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor]
      */
@@ -30506,7 +30562,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
      */
@@ -30856,7 +30912,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.label.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30925,7 +30981,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxRangeSelector>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxRangeSelector> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxRangeSelector>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxRangeSelector> &
@@ -31237,7 +31293,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.format]
          */
-        format?: DevExpress.ui.format;
+        format?: DevExpress.ui.Format;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
@@ -31277,7 +31333,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxRangeSelectorOptions.scale.marker.label.format]
            */
-          format?: DevExpress.ui.format;
+          format?: DevExpress.ui.Format;
         };
         /**
          * [descr:dxRangeSelectorOptions.scale.marker.separatorHeight]
@@ -31451,7 +31507,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.format]
        */
-      format?: DevExpress.ui.format;
+      format?: DevExpress.ui.Format;
       /**
        * [descr:dxRangeSelectorOptions.sliderMarker.invalidRangeColor]
        */
@@ -31506,7 +31562,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxSankey>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxSankey>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -32008,7 +32064,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxSparkline>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxSparkline> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxSparkline>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxSparkline> &
@@ -32171,7 +32227,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxTreeMap>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxTreeMap> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxTreeMap>;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
@@ -32701,7 +32757,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxVectorMap>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxVectorMap> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxVectorMap>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxVectorMap> &
@@ -33191,7 +33247,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.tooltip.format]
      */
-    format?: DevExpress.ui.format;
+    format?: DevExpress.ui.Format;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]

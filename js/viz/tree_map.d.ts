@@ -19,7 +19,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -65,7 +64,7 @@ export type ExportedEvent = EventInfo<dxTreeMap>;
 export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxTreeMap>;
+export type FileSavingEvent = FileSavingEventInfo<dxTreeMap>;
 
 /** @public */
 export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
@@ -225,8 +224,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       label?: {
         /**
          * @docid
-         * @default '#767676' [prop](color)
-         * @default 600 [prop](weight)
+         * @default '#767676' &prop(color)
+         * @default 600 &prop(weight)
          */
         font?: Font,
         /**
@@ -469,8 +468,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       label?: {
         /**
          * @docid
-         * @default '#FFFFFF' [prop](color)
-         * @default 300 [prop](weight)
+         * @default '#FFFFFF' &prop(color)
+         * @default 300 &prop(weight)
          */
         font?: Font,
         /**

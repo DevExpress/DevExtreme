@@ -2,7 +2,7 @@
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
  * @param1 value:date
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -30,7 +30,7 @@ export function formatMessage(key: string, ...values: Array<string>): string;
  * @docid localization.formatNumber
  * @publicName formatNumber(value, format)
  * @param1 value:number
- * @param2 format:format
+ * @param2 format:Format
  * @return string
  * @static
  * @module localization
@@ -80,7 +80,7 @@ export function locale(locale: string): void;
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return date
  * @static
  * @module localization
@@ -94,7 +94,7 @@ export function parseDate(text: string, format: Format): Date;
  * @docid localization.parseNumber
  * @publicName parseNumber(text, format)
  * @param1 text:string
- * @param2 format:format
+ * @param2 format:Format
  * @return number
  * @static
  * @module localization
@@ -107,30 +107,46 @@ export function parseNumber(text: string, format: Format): number;
 type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 export interface FormatObject {
     /**
-     * @docid
+     * @docid Format.currency
+     * @public
      */
    currency?: string,
    /**
-    * @docid
+    * @docid Format.formatter
+    * @public
     * @type_function_param1 value:number|date
     * @type_function_return string
     */
    formatter?: ((value: number | Date) => string),
    /**
-    * @docid
+    * @docid Format.parser
+    * @public
     * @type_function_param1 value:string
     * @type_function_return number|date
     */
    parser?: ((value: string) => number | Date),
    /**
-    * @docid
+    * @docid Format.precision
+    * @public
     */
    precision?: number,
    /**
-    * @docid
+    * @docid Format.type
+    * @public
     * @type Enums.Format
     */
    type?: PredefinedFormat
 }
 type ExternalFormat = any;
+
+/**
+ * @docid
+ * @type Object|Enums.Format|string|function
+ * @type_function_param1 value:number|date
+ * @type_function_return string
+ * @default undefined
+ * @section Common
+ * @namespace DevExpress.ui
+ * @public
+ */
 export type Format = FormatObject | PredefinedFormat | string | ((value: number | Date) => string) | ExternalFormat;

@@ -14,9 +14,9 @@ import {
     ValueChangedInfo
 } from './editor/editor';
 
-import {
-    format
-} from './widget/ui.widget';
+import { 
+    Format
+  } from '../localization';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox>;
@@ -83,7 +83,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default ""
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid
      * @default "Value must be a number"
@@ -106,7 +106,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @docid
      * @type Enums.NumberBoxMode
      * @default "text"
-     * @default 'number' [for](mobile_devices)
+     * @default 'number' &for(mobile_devices)
      * @public
      */
     mode?: 'number' | 'text' | 'tel';
@@ -125,7 +125,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     useLargeSpinButtons?: boolean;

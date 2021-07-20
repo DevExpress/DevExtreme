@@ -13,15 +13,14 @@ import {
 } from '../core/templates/template';
 
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+    Format
+} from '../localization';
 
 import {
     BaseLegend,
@@ -92,7 +91,7 @@ export type ExportedEvent = EventInfo<dxBarGauge>;
 export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBarGauge>;
+export type FileSavingEvent = FileSavingEventInfo<dxBarGauge>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
@@ -188,14 +187,14 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
       /**
        * @docid
-       * @default 16 [prop](size)
+       * @default 16 &prop(size)
        */
       font?: Font,
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: format,
+      format?: Format,
       /**
        * @docid
        * @default 20
@@ -328,7 +327,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @extends CommonVizFormat
      * @public
      */
-    itemTextFormat?: format;
+    itemTextFormat?: Format;
     /**
      * @docid dxBarGaugeOptions.legend.markerTemplate
      * @default undefined

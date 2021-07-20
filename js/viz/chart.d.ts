@@ -11,9 +11,9 @@ import {
     ChangedOptionInfo
 } from '../events/index';
 
-import {
-    format
-} from '../ui/widget/ui.widget';
+import { 
+    Format
+  } from '../localization';
 
 import {
     template
@@ -75,7 +75,7 @@ export type ExportedEvent = EventInfo<dxChart>;
 export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxChart>;
+export type FileSavingEvent = FileSavingEventInfo<dxChart>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
@@ -704,14 +704,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
           /**
            * @docid
-           * @default '#FFFFFF' [prop](color)
+           * @default '#FFFFFF' &prop(color)
            */
           font?: Font,
           /**
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format,
+          format?: Format,
           /**
            * @docid
            * @default false
@@ -755,14 +755,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
         /**
          * @docid
-         * @default '#FFFFFF' [prop](color)
+         * @default '#FFFFFF' &prop(color)
          */
         font?: Font,
         /**
          * @docid
          * @extends CommonVizFormat
          */
-        format?: format,
+        format?: Format,
         /**
          * @docid
          * @default false
@@ -810,14 +810,14 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string),
           /**
            * @docid
-           * @default '#FFFFFF' [prop](color)
+           * @default '#FFFFFF' &prop(color)
            */
           font?: Font,
           /**
            * @docid
            * @extends CommonVizFormat
            */
-          format?: format,
+          format?: Format,
           /**
            * @docid
            * @default false
@@ -1513,7 +1513,7 @@ export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStripStyle {
@@ -1850,7 +1850,7 @@ export interface dxChartCommonAxisSettingsConstantLineStyle {
 export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1897,7 +1897,7 @@ export interface dxChartCommonAxisSettingsLabel {
     displayMode?: 'rotate' | 'stagger' | 'standard';
     /**
      * @docid dxChartOptions.commonAxisSettings.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -1979,7 +1979,7 @@ export interface dxChartCommonAxisSettingsStripStyle {
 export interface dxChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxChartOptions.commonAxisSettings.stripStyle.label.font
-     * @default '#767676' [prop](color)
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
@@ -2009,8 +2009,8 @@ export interface dxChartCommonAxisSettingsTitle {
     alignment?: 'center' | 'left' | 'right';
     /**
      * @docid dxChartOptions.commonAxisSettings.title.font
-     * @default '#767676' [prop](color)
-     * @default 16 [prop](size)
+     * @default '#767676' &prop(color)
+     * @default 16 &prop(size)
      * @public
      */
     font?: Font;
@@ -2586,7 +2586,7 @@ export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripStyle {
@@ -3671,7 +3671,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    argumentFormat?: format;
+    argumentFormat?: Format;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.backgroundColor
      * @default undefined
@@ -3740,8 +3740,8 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.font
-     * @default '#FFFFFF' [prop](color)
-     * @default 14 [prop](size)
+     * @default '#FFFFFF' &prop(color)
+     * @default 14 &prop(size)
      * @public
      */
     font?: Font;
@@ -3750,7 +3750,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @extends CommonVizFormat
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.horizontalOffset
      * @default 0

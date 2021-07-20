@@ -9,7 +9,7 @@ import * as utilsModule from '../../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
 import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
-const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
+const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
 describe('TimelineDateHeaderLayout', () => {
   const dateHeaderData: any = {
@@ -264,7 +264,7 @@ describe('TimelineDateHeaderLayout', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('isHorizontalGrouping', () => {
-        it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
+        it('should call "isHorizontalGroupingApplied" with correct parameters', () => {
           const groups = [];
           const layout = new TimelineDateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
@@ -275,7 +275,7 @@ describe('TimelineDateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(false);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
         });
 
@@ -291,7 +291,7 @@ describe('TimelineDateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(false);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
         });
 
@@ -307,7 +307,7 @@ describe('TimelineDateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(true);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
         });
       });

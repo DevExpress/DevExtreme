@@ -1,5 +1,4 @@
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -34,7 +33,7 @@ export type ExportedEvent = EventInfo<dxSparkline>;
 export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSparkline>;
+export type FileSavingEvent = FileSavingEventInfo<dxSparkline>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;

@@ -174,7 +174,6 @@ describe('ScrollView', () => {
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollview'));
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
 
               if (useNative) {

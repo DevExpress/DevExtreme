@@ -38,7 +38,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -48,6 +48,18 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @public
      */
     hoverStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    iconHeight?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+     iconWidth?: number | string;
     /**
      * @docid
      * @hidden false

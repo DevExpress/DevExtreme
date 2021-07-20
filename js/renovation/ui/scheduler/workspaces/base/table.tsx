@@ -1,5 +1,13 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
+  Component,
+  ComponentBindings,
+  CSSAttributes,
+  ForwardRef,
+  JSXComponent,
+  OneWay,
+  Ref,
+  RefObject,
+  Slot,
 } from '@devextreme-generator/declarations';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual_row';
@@ -8,7 +16,6 @@ export const viewFunction = ({
   hasBottomVirtualRow,
   hasTopVirtualRow,
   style,
-  restAttributes,
   props: {
     virtualCellsCount,
     className,
@@ -19,13 +26,13 @@ export const viewFunction = ({
     rightVirtualCellWidth,
     leftVirtualCellCount,
     rightVirtualCellCount,
+    tableRef,
   },
 }: Table): JSX.Element => (
   <table
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
     style={style}
+    ref={tableRef}
   >
     <tbody>
       {hasTopVirtualRow && (
@@ -74,6 +81,8 @@ export class TableProps {
   @OneWay() height?: number;
 
   @Slot() children?: JSX.Element | JSX.Element[];
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({
@@ -81,6 +90,9 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
+  @Ref()
+  elementRef!: RefObject<HTMLTableElement>;
+
   get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;
