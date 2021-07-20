@@ -19,7 +19,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -65,7 +64,7 @@ export type ExportedEvent = EventInfo<dxTreeMap>;
 export type ExportingEvent = EventInfo<dxTreeMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxTreeMap>;
+export type FileSavingEvent = FileSavingEventInfo<dxTreeMap>;
 
 /** @public */
 export type HoverChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
