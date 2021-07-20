@@ -59,6 +59,9 @@ jobs:
       run: |
         cd ./devextreme-demos
         python -m http.server 8080 &
+        python -m http.server 8081 &
+        python -m http.server 8082 &
+        python -m http.server 8083 &
 
     - name: Run TestCafe tests
       env:
