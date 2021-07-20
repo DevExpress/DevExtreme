@@ -228,7 +228,7 @@ const checkEditCell = async (
 
 const getEditorValue = async (dataField: string, editor: Selector): Promise<string> => {
   if (dataField === 'boolean') {
-    return (await editor.hasClass('dx-checkbox-checked')) ? 'true' : 'false';
+    return await editor.hasClass('dx-checkbox-checked') ? 'true' : 'false';
   }
 
   return editor.value;
@@ -420,7 +420,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test.only(`Update cell value ${JSON.stringify({
+            test(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;
