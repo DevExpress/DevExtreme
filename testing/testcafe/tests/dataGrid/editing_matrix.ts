@@ -418,7 +418,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test.only(`Update cell value ${JSON.stringify({
+            test(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;
