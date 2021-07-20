@@ -21,18 +21,20 @@
       />
       <DxColumn
         :width="140"
-        :header-filter="{ groupInterval: 10000 }"
         data-field="OrderNumber"
         caption="Invoice Number"
-      />
+      >
+        <DxHeaderFilter :group-interval="10000"/>
+      </DxColumn>
       <DxColumn
         :width="120"
         :calculate-filter-expression="calculateFilterExpression"
-        :header-filter="{ dataSource: orderHeaderFilter }"
         data-field="OrderDate"
         alignment="right"
         data-type="date"
-      />
+      >
+        <DxHeaderFilter :data-source="orderDateHeaderFilter"/>
+      </DxColumn>
       <DxColumn
         :width="180"
         data-field="DeliveryDate"
@@ -41,18 +43,20 @@
         format="M/d/yyyy, HH:mm"
       />
       <DxColumn
-        :header-filter="{ dataSource: saleAmountHeaderFilter }"
-        :editor-options="{ format: 'currency', showClearButton: true }"
+        :editor-options="saleAmountEditorOptions"
         data-field="SaleAmount"
         alignment="right"
         format="currency"
-      />
+      >
+        <DxHeaderFilter :data-source="saleAmountHeaderFilter"/>
+      </DxColumn>
       <DxColumn data-field="Employee"/>
       <DxColumn
-        :header-filter="{ allowSearch: true }"
         data-field="CustomerStoreCity"
         caption="City"
-      />
+      >
+        <DxHeaderFilter :allow-search="true"/>
+      </DxColumn>
     </DxDataGrid>
     <div class="options">
       <div class="caption">Options</div>
@@ -126,7 +130,8 @@ export default {
       showFilterRow: true,
       showHeaderFilter: true,
       applyFilterTypes,
-      saleAmountHeaderFilter:  [{
+      saleAmountEditorOptions: { format: 'currency', showClearButton: true },
+      saleAmountHeaderFilter: [{
         text: 'Less than $3000',
         value: ['SaleAmount', '<', 3000]
       }, {
@@ -163,7 +168,7 @@ export default {
     };
   },
   methods: {
-    orderHeaderFilter(data) {
+    orderDateHeaderFilter(data) {
       data.dataSource.postProcess = (results) => {
         results.push({
           text: 'Weekends',
