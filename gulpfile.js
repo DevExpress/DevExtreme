@@ -12,7 +12,7 @@ gulp.task('build.components', gulp.series(
   (done) => 
     mkdir(config.oldComponentsDir, {}, done),
   (done) => {
-    const error = generateSync(
+    generateSync(
       JSON.parse(fs.readFileSync(config.metadataPath).toString()),
       config.baseComponent,
       config.configComponent,
@@ -24,7 +24,7 @@ gulp.task('build.components', gulp.series(
       config.widgetsPackage
     );
   
-    done(error);
+    done();
   }
 ));
 

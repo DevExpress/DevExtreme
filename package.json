@@ -19,7 +19,7 @@
     "css-loader": "^2.1.1",
     "del": "^3.0.0",
     "devextreme": "~21.1.4",
-    "devextreme-vue-generator": "^1.1.0",
+    "devextreme-vue-generator": "^1.2.0",
     "gulp": "^4.0.0",
     "gulp-typescript": "^5.0.0",
     "jest": "^24.8.0",
