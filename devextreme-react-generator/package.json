@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-react-generator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "DevExtreme React UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "clean": "del-cli ./dist",
-    "build": "npm run clean && tsc -p src/tsconfig.json",
+    "build": "npm run clean && tsc",
     "pack": "npm run build && npm pack",
     "postpack": "cpy './*.tgz' dist && del-cli './*.tgz'",
     "test": "jest"
@@ -26,11 +26,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@types/semver": "^7.3.6",
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "^7.0.0-beta.1",
-    "dot": "^1.1.2",
-    "semver": "^7.3.5"
+    "devextreme-internal-tools": "^6.4.5",
+    "dot": "^1.1.2"
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.5",

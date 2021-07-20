@@ -37,7 +37,7 @@
     "@types/react-dom": "^16.0.9",
     "del": "^3.0.0",
     "devextreme": "~21.1.2-beta",
-    "devextreme-react-generator": "^1.1.0",
+    "devextreme-react-generator": "^1.2.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "gulp": "^4.0.0",

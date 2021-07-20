@@ -34,7 +34,7 @@ gulp.task(OLD_OUTPUTDIR_CREATE, (done) =>
 );
 
 gulp.task(GEN_RUN, (done) => {
-  const error = generateSync({
+  generateSync({
     metaData: JSON.parse(fs.readFileSync(config.metadataPath).toString()),
     components: {
       baseComponent: config.baseComponent,
@@ -49,7 +49,7 @@ gulp.task(GEN_RUN, (done) => {
     widgetsPackage: 'devextreme'
   });
 
-  done(error);
+  done();
 });
 
 gulp.task(GENERATE, gulp.series(
