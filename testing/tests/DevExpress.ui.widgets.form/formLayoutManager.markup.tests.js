@@ -1321,22 +1321,27 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
-            items: [{
-                dataField: 'field1',
-                helpText: 'field1 help text'
-            }, {
-                dataField: 'field2'
-            }]
+            items: [
+                { dataField: 'field1', helpText: 'field1 help text' },
+                { dataField: 'field1', helpText: null },
+                { dataField: 'field1', helpText: undefined },
+                'field3',
+                { dataField: 'field2' },
+                { itemType: 'empty', helpText: 'should be rendered for simple only' },
+                { itemType: 'group', helpText: 'should be rendered for simple only' },
+                { itemType: 'tabbed', helpText: 'should be rendered for simple only' },
+                { itemType: 'button', helpText: 'should be rendered for simple only' },
+            ]
         });
 
         const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($testContainer.find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'total FIELD_ITEM_CONTENT_WRAPPER_CLASS');
-        assert.equal($testContainer.find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'total FIELD_ITEM_HELP_TEXT_CLASS');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'FIELD_ITEM_CONTENT_WRAPPER_CLASS.length');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'FIELD_ITEM_HELP_TEXT_CLASS.length');
 
-        const $field1HelpText = $fieldItems.eq(0).find('>.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS + '>.' + FIELD_ITEM_HELP_TEXT_CLASS);
-        assert.equal($field1HelpText.length, 1, '$field1HelpText.length');
-        assert.equal($field1HelpText.text(), 'field1 help text');
+        const $fieldHelpText = $fieldItems.eq(0).find('>.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS + '>.' + FIELD_ITEM_HELP_TEXT_CLASS + ':last-child');
+        assert.equal($fieldHelpText.length, 1, '$field1HelpText.length');
+        assert.equal($fieldHelpText.text(), 'field1 help text');
     });
 
     test('Change the order of items', function(assert) {
