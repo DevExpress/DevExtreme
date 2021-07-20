@@ -221,7 +221,6 @@
   "browserslist": [
     "last 2 versions",
     "ios > 8",
-    "ie > 10",
     "> 1%"
   ],
   "jest": {
