@@ -1364,10 +1364,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return this._isCellValid($cell);
     },
     _isLastRow: function(rowIndex) {
+        const dataController = this._dataController;
+
         if(this._isVirtualRowRender()) {
-            return rowIndex >= this._dataController.totalItemsCount() - 1;
+            const groupFooterCount = dataController.groupFooterRowCount?.() ?? 0;
+            const maxRowIndex = this._dataController.totalItemsCount() + groupFooterCount - 1;
+            return rowIndex >= maxRowIndex;
         }
-        return rowIndex === this._dataController.items().length - 1;
+        return rowIndex === dataController.items().length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
