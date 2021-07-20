@@ -58,7 +58,7 @@ jobs:
     - name: Run Web Server
       run: |
         cd ./devextreme-demos
-        npm run webserver &
+        python -m http.server 8080 &
 
     - name: Run TestCafe tests
       run: |
