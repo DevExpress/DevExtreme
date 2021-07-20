@@ -1,4 +1,4 @@
-name: Demos TestCafe tests
+name: Demos visual tests
 
 on:
   push:
