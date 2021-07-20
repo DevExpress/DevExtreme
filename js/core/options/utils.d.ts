@@ -2,19 +2,23 @@ import {
     Device
 } from '../devices';
 
-export declare type Rule<T> = {
-    device: ((device: Device) => boolean) | Device | Device[];
-    options: Partial<T>;
+export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>;
 };
 
-export declare function convertRulesToOptions<T>(rules: Rule<T>[]): T;
+export type Rule<T> = {
+    device: ((device: Device) => boolean) | Device | Device[];
+    options: RecursivePartial<T>;
+};
 
-export declare function normalizeOptions(options: string | object, value): { [name: string]: string };
+export function convertRulesToOptions<T>(rules: Rule<T>[]): T;
 
-export declare function deviceMatch(device: Device, filter): boolean;
+export function normalizeOptions(options: string | object, value): { [name: string]: string };
 
-export declare function getFieldName(fullName: string): string;
+export function deviceMatch(device: Device, filter): boolean;
 
-export declare function getParentName(fullName: string): string;
+export function getFieldName(fullName: string): string;
+
+export function getParentName(fullName: string): string;
 
 export function createDefaultOptionRules<T>(options?: Rule<T>[]): Rule<T>[];

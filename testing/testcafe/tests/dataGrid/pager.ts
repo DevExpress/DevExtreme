@@ -1,7 +1,7 @@
+import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import { createScreenshotsComparer, compareScreenshot } from '../../helpers/screenshot-comparer';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 
@@ -25,7 +25,7 @@ async function createDataGridWithPager(): Promise<any> {
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'))
   .beforeEach(createDataGridWithPager)
-  .afterEach(() => disposeWidgets());
+  .afterEach(async () => disposeWidgets());
 
 test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');

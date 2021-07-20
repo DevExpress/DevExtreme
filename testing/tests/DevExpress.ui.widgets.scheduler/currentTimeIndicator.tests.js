@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
@@ -21,21 +20,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });
 
-const stubInvokeMethod = function(instance, options) {
-    options = options || {};
-    sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
-    });
-};
-
-
 QUnit.module('DateTime indicator on Day View', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -51,7 +35,6 @@ QUnit.module('DateTime indicator on Day View', {
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -457,7 +440,6 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             endDayHour: 14,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -604,7 +586,6 @@ QUnit.module('DateTime indicator on Week View', () => {
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -726,7 +707,7 @@ QUnit.module('DateTime indicator on Week View', () => {
                 indicatorTime: testCase.indicatorTime,
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
-                hoursInterval: 1
+                hoursInterval: 1,
             }).dxSchedulerWorkSpaceWeek('instance');
 
             const $element = instance.$element();
@@ -811,7 +792,7 @@ QUnit.module('DateTime indicator on Week View', () => {
             startDayHour: 8,
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             rtlEnabled: true,
-            intervalCount: 2
+            intervalCount: 2,
         }).dxSchedulerWorkSpaceWeek('instance');
 
         const $element = workspace.$element();
@@ -834,7 +815,6 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             startDayHour: 8,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -843,7 +823,7 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
         const instance = createInstance({
             endDayHour: 18,
             currentDate: new Date(2017, 8, 2),
-            indicatorTime: new Date(2017, 7, 30, 19, 45)
+            indicatorTime: new Date(2017, 7, 30, 19, 45),
         });
 
         instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],);
@@ -875,7 +855,7 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             endDayHour: 18,
             groupByDate: true,
             currentDate: new Date(2017, 8, 2),
-            indicatorTime: new Date(2017, 7, 30, 19, 45)
+            indicatorTime: new Date(2017, 7, 30, 19, 45),
         });
 
         instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],);
@@ -1037,7 +1017,6 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             height: 307,
             ...options,
         }).dxSchedulerTimelineDay('instance');
-        stubInvokeMethod(instance);
 
         return instance;
     };
@@ -1181,7 +1160,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 indicatorTime: testCase.indicatorTime,
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
-                hoursInterval: 1
+                hoursInterval: 1,
             }).dxSchedulerTimelineWeek('instance');
 
             const $element = instance.$element();
@@ -1221,7 +1200,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 indicatorTime: testCase.indicatorTime,
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
-                hoursInterval: 1
+                hoursInterval: 1,
             }).dxSchedulerTimelineMonth('instance');
             const $element = instance.$element();
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -1242,7 +1221,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             startDayHour: 8,
             height: 307,
             indicatorTime: new Date(2017, 8, 5, 12, 30),
-            hoursInterval: 1
+            hoursInterval: 1,
         }).dxSchedulerTimelineWeek('instance');
 
         const $element = instance.$element();
@@ -1258,7 +1237,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             startDayHour: 8,
             height: 307,
             indicatorTime: new Date(2017, 8, 16, 12, 0),
-            hoursInterval: 1
+            hoursInterval: 1,
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();
@@ -1276,7 +1255,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            indicatorTime: new Date(2017, 8, 15, 12, 30)
+            indicatorTime: new Date(2017, 8, 15, 12, 30),
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();

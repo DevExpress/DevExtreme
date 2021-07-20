@@ -154,7 +154,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal($visibleColumns.eq(1).text(), 'Last Name', 'it is \'lastName\' column');
         assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'firstName', '\'firstName\' column is hidden');
         // T824145
-        if(browser.msie || browser.chrome) {
+        if(browser.chrome) {
             assert.equal(parseInt($hiddenColumn.css('border-right-width')), 0, 'no right border');
             assert.equal(parseInt($hiddenColumn.css('border-left-width')), 0, 'no left border');
         }
@@ -310,37 +310,4 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal(column.dataField, 'lastName', 'dataField of column');
         assert.equal(columnIndex, 1, 'index of column');
     });
-
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        QUnit.test('Update the scrollable for IE browsers when the adaptive column is hidden', function(assert) {
-            // arrange
-
-
-            const dataGrid = createDataGrid({
-                dataSource: [{
-                    'ID': 4,
-                    'OrderNumber': 35711,
-                    'OrderDate': '2014/01/12'
-                }],
-                columnAutoWidth: true,
-                columnHidingEnabled: true,
-                columns: ['ID', 'OrderNumber', 'OrderDate']
-            });
-
-            this.clock.tick();
-
-            // act
-            const scrollable = dataGrid.$element().find('.dx-scrollable').data('dxScrollable');
-            sinon.spy(scrollable, 'update');
-            dataGrid.updateDimensions();
-            this.clock.tick();
-
-            // assert
-            const $lastDataCell = dataGrid.$element().find('.dx-last-data-cell');
-            assert.equal($lastDataCell.text(), '2014/01/12', 'text of last data cell');
-            assert.equal(scrollable.update.callCount, 2);
-
-
-        });
-    }
 });

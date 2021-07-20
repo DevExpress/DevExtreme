@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { createResourcesTree } from 'ui/scheduler/resources/utils';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -29,24 +30,34 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
+        const resources = options && options.groups || { };
+        const key = createFactoryInstances({
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => {},
+            resources,
+        });
+
+        const resourceManager = getResourceManager(key);
+        resourceManager.createReducedResourcesTree = () => createResourcesTree(options.groups);
+
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
             },
             observer: {
-                fire: (functionName, args) => {
+                fire: (functionName) => {
                     if(functionName === 'getLayoutManager') {
                         return {
                             getRenderingStrategyInstance: () => {
                                 return { calculateRows: () => rows };
                             }
                         };
-                    }
-                    if(functionName === 'createReducedResourcesTree') {
-                        return new ResourceManager().createResourcesTree(options.groups);
+                    } else if(functionName === 'getAppointmentDataProvider') {
+                        return getAppointmentDataProvider(key);
                     }
                 }
-            }
+            },
+            resourceManager,
         };
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });
@@ -437,7 +448,7 @@ module('Agenda', {}, () => {
         assert.roughEqual($groupTableRows.eq(5).outerHeight(), 914, 3.001, 'Row height is OK');
     });
 
-    test('Agenda should have the right \'dx-group-column-count\' attr depend on group count', function(assert) {
+    test('Agenda should have the right group count class depending on group count', function(assert) {
         const instance = createInstance({
             groups: [
                 { name: 'roomId', items: [{ id: 1, text: 'r1' }, { id: 2, text: 'r2' }] },
@@ -447,12 +458,11 @@ module('Agenda', {}, () => {
 
         const $element = instance.$element();
 
-        assert.equal($element.attr('dx-group-column-count'), '2', 'Attr is OK');
-        assert.notOk($element.attr('dx-group-row-count'), 'row-count attr is not applied');
+        assert.ok($element.hasClass('dx-scheduler-group-column-count-two'), 'Correct class');
 
         instance.option('groups', []);
 
-        assert.notOk($element.attr('dx-group-column-count'), 'column-count attr is not applied');
+        assert.notOk($element.hasClass('dx-scheduler-group-column-count-two'), 'column count class was not applied');
     });
 
     test('Agenda should not create scrollable elements, if crossSCrollingEnabled=true ', function(assert) {

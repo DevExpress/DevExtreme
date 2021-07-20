@@ -3,10 +3,9 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
-import { setupRenovation } from '../../helpers/renovationHelper.js';
 
 import 'generic_light.css!';
-import ActionSheet from 'ui/action_sheet';
+import 'ui/action_sheet';
 
 QUnit.testStart(function() {
     const markup =
@@ -20,8 +19,6 @@ QUnit.testStart(function() {
 });
 
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
-
-setupRenovation(ActionSheet);
 
 QUnit.module('action sheet', {
     beforeEach: function() {

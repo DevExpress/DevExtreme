@@ -31,7 +31,7 @@ function run_ts {
         echo "TS is up-to-date"
     fi
 
-    npx gulp ts-compilation-check ts-jquery-check ts-modules-check
+    npm run validate-ts
 }
 
 function run_test {
@@ -179,11 +179,6 @@ function run_test_jest {
     npm i
     npx gulp localization
     npm run test-jest
-}
-
-function run_test_styles {
-    npm i
-    npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false
 }
 
 function start_runner_watchdog {

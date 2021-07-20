@@ -5,7 +5,7 @@ import each from 'jest-each';
 import {
   RefObject,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../test_utils/events_mock';
@@ -193,7 +193,7 @@ each([{
 
         Object.defineProperties(viewModel, {
           cssClasses: {
-            get() { return (cssClasses); },
+            get() { return cssClasses; },
           },
         });
 
@@ -241,7 +241,7 @@ each([{
             viewModel.containerRef = React.createRef();
             viewModel.scrollableRef = React.createRef();
 
-            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollable = mount(viewFunction(viewModel) as JSX.Element);
             const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
             expect(scrollableTabIndex).toEqual(null);
@@ -254,17 +254,7 @@ each([{
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
-        it('UpdateHandler() should call update() method', () => {
-          const viewModel = new Scrollable({ });
-
-          viewModel.update = jest.fn();
-
-          viewModel.updateHandler();
-
-          expect(viewModel.update).toHaveBeenCalledTimes(1);
-        });
-
-        each([optionValues.direction]).describe('ScrollEffect params. Direction: %o', (direction) => {
+        each(optionValues.direction).describe('ScrollEffect params. Direction: %o', (direction) => {
           each([
             { eventName: 'dxscrollinit', effectName: 'init', passEvent: true },
             { eventName: 'dxscroll', effectName: 'move', passEvent: true },
@@ -272,7 +262,7 @@ each([{
             { eventName: 'dxscrollend', effectName: 'end' },
           ]).describe('Event: %o', (eventInfo) => {
             it(`should subscribe to ${eventInfo.eventName} event`, () => {
-              const e = { ...defaultEvent };
+              const event = { ...defaultEvent };
               const viewModel = new Scrollable({ direction });
 
               const { eventName, effectName, passEvent } = eventInfo;
@@ -282,12 +272,12 @@ each([{
               viewModel.containerRef = React.createRef();
 
               viewModel[`${effectName}Effect`]();
-              emit(eventName, e);
+              emit(eventName, event);
 
               expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
 
               if (passEvent) {
-                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(event);
               }
             });
           });
@@ -321,7 +311,7 @@ each([{
               { eventName: 'dxscrollcancel', effectName: 'cancel', passEvent: true },
             ]).describe('Event: %o', (eventInfo) => {
               it(`should subscribe to ${eventInfo.eventName} event`, () => {
-                const e = { ...defaultEvent };
+                const event = { ...defaultEvent };
                 const viewModel = new Scrollable({ direction });
 
                 const { eventName, effectName, passEvent } = eventInfo;
@@ -331,12 +321,12 @@ each([{
                 viewModel.containerRef = React.createRef();
 
                 viewModel[`${effectName}Effect`]();
-                emit(eventName, e);
+                emit(eventName, event);
 
                 expect(viewModel[eventHandlerName]).toHaveBeenCalledTimes(1);
 
                 if (passEvent) {
-                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(e);
+                  expect(viewModel[eventHandlerName]).toHaveBeenCalledWith(event);
                 }
               });
             });
@@ -465,7 +455,7 @@ each([{
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
 
-                        const e = { ...defaultEvent };
+                        const event = { ...defaultEvent };
                         const helper = new ScrollableTestHelper({
                           direction,
                           pullDownEnabled,
@@ -474,7 +464,7 @@ each([{
                           rtlEnabled,
                         });
 
-                        helper.viewModel.eventForUserAction = e;
+                        helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
                         helper.viewModel.handlePocketState = jest.fn();
 
@@ -520,7 +510,7 @@ each([{
         const viewModel = new Scrollable({ needScrollViewContentWrapper });
 
         const contentEl = { clientHeight: 100 };
-        const scrollViewContentEl = { clientHeight: 100 };
+        const scrollViewContentEl = { clientHeight: 200 };
 
         viewModel.contentRef = { current: contentEl } as RefObject<HTMLDivElement>;
         viewModel.scrollViewContentRef = {
@@ -530,6 +520,16 @@ each([{
         const expectedContentEl = needScrollViewContentWrapper ? scrollViewContentEl : contentEl;
 
         expect(viewModel.content()).toEqual(expectedContentEl);
+      });
+
+      it('Container()', () => {
+        const viewModel = new Scrollable({});
+
+        const containerElement = { clientHeight: 100 };
+
+        viewModel.containerRef = { current: containerElement } as RefObject<HTMLDivElement>;
+
+        expect(viewModel.container()).toEqual(containerElement);
       });
 
       describe('ScrollOffset', () => {
@@ -575,26 +575,27 @@ each([{
     });
 
     describe('Methods', () => {
-      it('validate(e), locked: false, disabled: true', () => {
-        const e = { ...defaultEvent } as any;
+      it('validate(event), locked: false, disabled: true', () => {
+        const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({ disabled: true });
 
         viewModel.locked = false;
-        viewModel.update = jest.fn();
+        viewModel.updateHandler = jest.fn();
 
-        expect((viewModel as any).validate(e)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
+        expect(viewModel.validate(event)).toEqual(false);
+        expect(viewModel.updateHandler)
+          .toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
       });
 
-      it('validate(e), locked: true, disabled: false', () => {
-        const e = { ...defaultEvent } as any;
+      it('validate(event), locked: true, disabled: false', () => {
+        const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({});
 
         viewModel.locked = true;
-        viewModel.update = jest.fn();
+        viewModel.updateHandler = jest.fn();
 
-        expect((viewModel as any).validate(e)).toEqual(false);
-        expect(viewModel.update).toHaveBeenCalledTimes(0);
+        expect(viewModel.validate(event)).toEqual(false);
+        expect(viewModel.updateHandler).toHaveBeenCalledTimes(0);
       });
     });
 
@@ -609,7 +610,6 @@ each([{
 
               expect(rootClasses).toEqual(expect.not.stringMatching('dx-widget'));
               expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable'));
-              expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-renovated'));
               expect(rootClasses).toEqual(expect.stringMatching(`dx-scrollable-${direction}`));
 
               if (Scrollable === ScrollableNative) {

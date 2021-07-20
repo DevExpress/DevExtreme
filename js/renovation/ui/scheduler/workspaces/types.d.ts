@@ -12,6 +12,8 @@ export interface ViewCellData {
   isLastGroupCell: boolean;
   key: number;
   firstDayOfMonth?: boolean;
+  isSelected?: boolean;
+  isFocused?: boolean;
 }
 
 export interface DateHeaderCellData extends ViewCellData {
@@ -38,7 +40,6 @@ interface GroupedViewDataBase {
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
-  cellCountInGroupRow: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   topVirtualRowCount: number;
@@ -132,3 +133,6 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
 }
+
+export type ViewType = 'day' | 'week' | 'workWeek' | 'month'
+| 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda';

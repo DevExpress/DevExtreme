@@ -321,7 +321,7 @@ const FilterBuilder = Widget.inherit({
                     onItemClick: (e) => {
                         if(groupMenuItem !== e.itemData) {
                             setGroupValue(criteria, e.itemData.value);
-                            $operationButton.html(e.itemData.text);
+                            $operationButton.text(e.itemData.text);
                             groupMenuItem = e.itemData;
                             this._updateFilter();
                         }
@@ -782,6 +782,7 @@ const FilterBuilder = Widget.inherit({
                 // T852701
                 this.repaint();
             },
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
             },

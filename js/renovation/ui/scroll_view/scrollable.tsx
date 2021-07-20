@@ -7,6 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import {
+  DxMouseEvent,
   ScrollableDirection,
   ScrollOffset,
 } from './types.d';
@@ -21,7 +22,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
 import { nativeScrolling, touch } from '../../../core/utils/support';
-import { ScrollableWrapper } from '../../component_wrapper/scrollable';
+import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable';
 import { WidgetProps } from '../common/widget';
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
@@ -37,12 +38,12 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
       needScrollViewLoadPanel, useSimulatedScrollbar, inertiaEnabled,
       pulledDownText, pullingDownText, refreshingText, reachBottomText,
-      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
+      onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce, onVisibilityChange,
     },
     restAttributes,
   } = viewModel;
 
-  return (useNative
+  return useNative
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
@@ -103,6 +104,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
 
+        onVisibilityChange={onVisibilityChange}
         inertiaEnabled={inertiaEnabled}
         bounceEnabled={bounceEnabled}
         scrollByContent={scrollByContent}
@@ -115,18 +117,17 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       >
         {children}
       </ScrollableSimulated>
-    )
-  );
+    );
 };
 
 type ScrollablePropsType = ScrollableProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'visible'>
 & Pick<ScrollableNativeProps, 'useSimulatedScrollbar'>
 & Pick<ScrollableSimulatedProps, 'inertiaEnabled' | 'useKeyboard' | 'onStart' | 'onEnd' | 'onBounce'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
-  device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
+  device: (device): boolean => !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic',
   options: {
     bounceEnabled: false,
     scrollByContent: touch,
@@ -153,7 +154,12 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollableRef.content();
+    return this.scrollableRef.content() as HTMLDivElement;
+  }
+
+  @Method()
+  container(): HTMLDivElement {
+    return this.scrollableRef.container() as HTMLDivElement;
   }
 
   @Method()
@@ -162,13 +168,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
-  update(): void {
-    this.scrollableRef.update();
+  updateHandler(): void {
+    this.scrollableRef.updateHandler();
   }
 
   @Method()
   release(): void {
-    return this.scrollableRef.release();
+    return this.scrollableRef.release() as undefined;
   }
 
   @Method()
@@ -188,47 +194,43 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   @Method()
   scrollHeight(): number {
-    return this.scrollableRef.scrollHeight();
+    return this.scrollableRef.scrollHeight() as number;
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollableRef.scrollWidth();
+    return this.scrollableRef.scrollWidth() as number;
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollableRef.scrollOffset();
+    return this.scrollableRef.scrollOffset() as ScrollOffset;
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollableRef.scrollTop();
+    return this.scrollableRef.scrollTop() as number;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollableRef.scrollLeft();
+    return this.scrollableRef.scrollLeft() as number;
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollableRef.clientHeight();
+    return this.scrollableRef.clientHeight() as number;
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollableRef.clientWidth();
-  }
-
-  validate(e: Event): boolean {
-    return this.scrollableRef.validate(e);
+    return this.scrollableRef.clientWidth() as number;
   }
 
   @Method()
   // TODO: it uses for DataGrid only
   getScrollElementPosition(element: HTMLElement, direction: ScrollableDirection): boolean {
-    return this.scrollableRef.getElementLocation(element, direction);
+    return this.scrollableRef.getElementLocation(element, direction) as boolean;
   }
 
   @Method()
@@ -236,6 +238,22 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     this.scrollableRef.scrollToElement(element, { block: 'start', inline: 'start' });
   }
 
+  @Method()
+  startLoading(): void {
+    this.scrollableRef.startLoading();
+  }
+
+  @Method()
+  finishLoading(): void {
+    this.scrollableRef.finishLoading();
+  }
+
+  validate(event: DxMouseEvent): boolean {
+    return this.scrollableRef.validate(event) as boolean;
+  }
+
+  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;

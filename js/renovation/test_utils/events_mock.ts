@@ -1,4 +1,5 @@
 import { keyboard } from '../../events/short';
+import { AbstractFunction } from '../common/types';
 
 let eventHandlers = {};
 let keyboardHandlers = {};
@@ -27,7 +28,11 @@ export const EVENT = {
   resize: 'dxresize',
   dragStart: 'dxdragstart',
   dragMove: 'dxdrag',
+  drag: 'dxdrag',
   dragEnd: 'dxdragend',
+  dragEnter: 'dxdragenter',
+  dragLeave: 'dxdragleave',
+  drop: 'dxdrop',
 };
 
 export const defaultEvent = {
@@ -49,9 +54,9 @@ export const fakeClickEvent = {
   pageY: 0,
 };
 
-export const getEventHandlers = (e): Record<string, ((event: any) => void)[]> => eventHandlers[e];
+export const getEventHandlers = (e: string): Record<string, AbstractFunction[]> => eventHandlers[e];
 
-export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
+export const emitKeyboard = (key: string, which = key, e = defaultEvent): void => {
   Object.keys(keyboardHandlers).forEach((id) => {
     keyboardHandlers[id].forEach(
       (handler) => handler({ originalEvent: e, keyName: key, which }),
@@ -59,7 +64,7 @@ export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
   });
 };
 
-export const emit = (event, e = defaultEvent, element = null): void => {
+export const emit = (event: string, e = defaultEvent, element: HTMLElement | null = null): void => {
   eventHandlers[event]?.forEach(({ handler, el }) => {
     if (!element || el === element) {
       handler(e);
@@ -69,7 +74,7 @@ export const emit = (event, e = defaultEvent, element = null): void => {
 
 let keyboardSubscriberId = 0;
 
-keyboard.on = (el, focusTarget, handler): string => {
+keyboard.on = (_el, _focusTarget, handler): string => {
   keyboardSubscriberId += 1;
   keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
   keyboardHandlers[keyboardSubscriberId].push(handler);
@@ -77,7 +82,7 @@ keyboard.on = (el, focusTarget, handler): string => {
   return keyboardSubscriberId.toString();
 };
 
-keyboard.off = (id): boolean => delete keyboardHandlers[id];
+keyboard.off = (id) => { keyboardHandlers[id] = []; };
 
 jest.mock('../../events/core/events_engine', () => {
   const originalEventsEngine = jest.requireActual('../../events/core/events_engine').default;
@@ -87,21 +92,40 @@ jest.mock('../../events/core/events_engine', () => {
       ...originalEventsEngine,
 
       on: (el, eventName, ...args): void => {
-        const event = eventName.split('.')[0];
+        if (typeof eventName === 'string') {
+          const event = eventName.split('.')[0];
 
-        if (!eventHandlers[event]) {
-          eventHandlers[event] = [];
+          if (!eventHandlers[event]) {
+            eventHandlers[event] = [];
+          }
+          eventHandlers[event].push({
+            handler: args[args.length - 1],
+            el,
+          });
+        } else {
+          Object.keys(eventName).forEach((event) => {
+            const name = event.split('.')[0];
+
+            if (!eventHandlers[name]) {
+              eventHandlers[name] = [];
+            }
+            eventHandlers[name].push({
+              handler: eventName[event],
+              el,
+            });
+          });
         }
-
-        eventHandlers[event].push({
-          handler: args[args.length - 1],
-          el,
-        });
       },
 
       off: (_, eventName): void => {
-        const event = eventName.split('.')[0];
-        eventHandlers[event] = [];
+        if (typeof eventName === 'string') {
+          const event = eventName.split('.')[0];
+          eventHandlers[event] = [];
+        } else {
+          Object.keys(eventHandlers).forEach((event) => {
+            eventHandlers[event] = eventHandlers[event]?.filter(({ el }) => el !== _);
+          });
+        }
       },
 
       trigger: (element, event): void => {

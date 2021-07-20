@@ -7,13 +7,28 @@ import MetadataGenerator from './generator';
 export default class MetadataCollector {
   generator = new MetadataGenerator();
 
+  static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
+    await Promise.all((await files).map(async (file) => {
+      const absolutePath = resolve(join(destination, file.path));
+      const directory = dirname(absolutePath);
+      await fs.mkdir(directory, { recursive: true });
+      await fs.writeFile(absolutePath, file.content);
+    }));
+  }
+
+  static getStringFromObject(
+    object: ThemesMetadata | string[] | FlatStylesDependencies,
+  ): string {
+    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
+  }
+
   async getFileList(dirName: string): Promise<string[]> {
     const directories = await fs.readdir(dirName, { withFileTypes: true });
     const files = await Promise.all(directories.map((directory) => {
       const res = resolve(dirName, directory.name);
       return directory.isDirectory() ? this.getFileList(res) : [res];
     }));
-    return Array.prototype.concat(...files);
+    return Array.prototype.concat(...files) as string[];
   }
 
   async readFiles(
@@ -29,21 +44,6 @@ export default class MetadataCollector {
       modifiedContent = handler(modifiedContent);
       return { path: relativePath, content: modifiedContent };
     }));
-  }
-
-  static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
-    (await files).forEach(async (file) => {
-      const absolutePath = resolve(join(destination, file.path));
-      const directory = dirname(absolutePath);
-      await fs.mkdir(directory, { recursive: true });
-      await fs.writeFile(absolutePath, file.content);
-    });
-  }
-
-  static getStringFromObject(
-    object: ThemesMetadata | string[] | FlatStylesDependencies,
-  ): string {
-    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
   }
 
   async saveMetadata(

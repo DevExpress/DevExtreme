@@ -1,8 +1,8 @@
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 
 fixture`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../container.html'));
@@ -24,7 +24,7 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
     .ok();
 
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-after-drag.png')).ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource,
   startDayHour: 1,
   recurrenceEditMode: 'series',

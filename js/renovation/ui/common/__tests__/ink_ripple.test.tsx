@@ -31,7 +31,7 @@ describe('InkRipple', () => {
 
       describe('hideWave', () => {
         it('should call hide wave function', () => {
-          new InkRipple({}).hideWave(event);
+          new InkRipple({}).hideWave(event as Event);
 
           expect(hideWave).toHaveBeenCalledTimes(1);
           expect(hideWave).toHaveBeenCalledWith('config', event);
@@ -40,7 +40,7 @@ describe('InkRipple', () => {
 
       describe('showWave', () => {
         it('should call show wave function', () => {
-          new InkRipple({}).showWave(event);
+          new InkRipple({}).showWave(event as Event);
 
           expect(showWave).toHaveBeenCalledTimes(1);
           expect(showWave).toHaveBeenCalledWith('config', event);

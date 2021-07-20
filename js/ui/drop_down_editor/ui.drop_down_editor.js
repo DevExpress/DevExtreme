@@ -202,7 +202,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER);
+        return this.$element().find('.' + DROP_DOWN_EDITOR_INPUT_WRAPPER).first();
     },
 
     _init: function() {
@@ -567,9 +567,11 @@ const DropDownEditor = TextBox.inherit({
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
+            _ignoreFunctionValueDeprecation: true,
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
+            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             closeOnTargetScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {

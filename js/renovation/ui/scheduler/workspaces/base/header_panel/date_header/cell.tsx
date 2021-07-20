@@ -58,9 +58,8 @@ export const viewFunction = ({
           />
         )}
       </Fragment>
-    ) : (
-      text
-    )}
+    )
+      : text}
   </th>
 );
 

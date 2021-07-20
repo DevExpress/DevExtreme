@@ -13,7 +13,8 @@ const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtu
 const scrollingOrientations = {
     vertical: 'vertical',
     horizontal: 'horizontal',
-    both: 'both'
+    both: 'both',
+    none: 'none'
 };
 const DefaultScrollingOrientation = scrollingOrientations.both;
 
@@ -33,8 +34,6 @@ export default class VirtualScrollingDispatcher {
 
     get renderer() { return this._renderer; }
 
-    get isVirtualScrolling() { return this.workspace.isVirtualScrolling(); }
-
     get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
     set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
 
@@ -44,11 +43,11 @@ export default class VirtualScrollingDispatcher {
     get document() { return domAdapter.getDocument(); }
 
     get height() {
-        return this.workspace.invoke('getOption', 'height');
+        return this.workspace.option('schedulerHeight');
     }
 
     get width() {
-        return this.workspace.invoke('getOption', 'width');
+        return this.workspace.option('schedulerWidth');
     }
 
     get rowHeight() { return this._rowHeight; }
@@ -103,7 +102,13 @@ export default class VirtualScrollingDispatcher {
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
     get scrollingOrientation() {
-        return this.workspace.option('scrolling.orientation') || DefaultScrollingOrientation;
+        const scrolling = this.workspace.option('scrolling');
+
+        if(scrolling.mode === 'standard') {
+            return scrollingOrientations.none;
+        }
+
+        return scrolling.orientation || DefaultScrollingOrientation;
     }
 
     get verticalScrollingAllowed() {
@@ -127,7 +132,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellHeight() {
-        const cellHeight = this.workspace.getCellHeight(false);
+        const cellHeight = this.workspace.getCellHeight();
         const result = cellHeight > 0
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
@@ -270,7 +275,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     updateDimensions(isForce) {
-        const cellHeight = this.getCellHeight(false);
+        const cellHeight = this.getCellHeight();
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
         if(needUpdateVertical || isForce) {
             this.rowHeight = cellHeight;

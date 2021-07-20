@@ -1,29 +1,61 @@
-import {
-    DxElement
-} from '../core/element';
+import { DxElement } from '../core/element';
+import { DxPromise } from '../core/utils/deferred';
+import { PositionConfig } from './position';
 
-import {
-    DxPromise
-} from '../core/utils/deferred';
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type AnimationState = string | number | {
+    /**
+     * @docid
+     * @public
+     */
+    opacity: number;
+} | {
+    /**
+     * @docid
+     * @public
+     */
+    scale: number;
+} | {
+    /**
+     * @docid
+     * @public
+     */
+    position: PositionConfig;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    left: number;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    top: number;
+};
 
 /**
  * @docid
  * @namespace DevExpress
  * @type object
+ * @public
  */
-export interface animationConfig {
+export type AnimationConfig = {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
      * @type_function_param2 config:object
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: DxElement, config: any) => void);
+    complete?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     delay?: number;
@@ -31,62 +63,60 @@ export interface animationConfig {
      * @docid
      * @type Enums.Direction
      * @default undefined
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     direction?: 'bottom' | 'left' | 'right' | 'top';
     /**
      * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     duration?: number;
     /**
      * @docid
      * @default 'ease'
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     easing?: string;
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    from?: number | string | any;
+    from?: AnimationState;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     staggerDelay?: number;
     /**
      * @docid
      * @type_function_param1 $element:DxElement
-     * @type_function_param2 config:object
-     * @prevFileNamespace DevExpress.animation
+     * @type_function_param2 config:AnimationConfig
      * @public
      */
-    start?: (($element: DxElement, config: any) => void);
+    start?: (($element: DxElement, config: AnimationConfig) => void);
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    to?: number | string | any;
+    to?: AnimationState;
     /**
      * @docid
      * @type Enums.AnimationType
      * @default 'custom'
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
+
+/**
+ * @public
+ * @deprecated Use the AnimationConfig type instead 
+ */
+export type animationConfig = AnimationConfig;
 
 /**
  * @docid
@@ -100,13 +130,12 @@ declare const fx: {
      * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
-     * @param2 config:animationConfig
+     * @param2 config:AnimationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): DxPromise<void>;
+    animate(element: Element, config: AnimationConfig): DxPromise<void>;
 
     /**
      * @docid
@@ -114,7 +143,6 @@ declare const fx: {
      * @param1 element:Element
      * @return boolean
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     isAnimating(element: Element): boolean;
@@ -125,7 +153,6 @@ declare const fx: {
      * @param1 element:Element
      * @param2 jumpToEnd:boolean
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;

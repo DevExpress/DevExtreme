@@ -19,3 +19,15 @@ export interface ScrollOffset {
   top: number;
   left: number;
 }
+
+export interface DxMouseEvent extends MouseEvent {
+  originalEvent: DxMouseEvent;
+  delta: number;
+  isScrollingEvent: boolean;
+  cancel: boolean;
+  velocity: { x: number; y: number };
+}
+
+export interface DxKeyboardEvent extends KeyboardEvent {
+  originalEvent: DxKeyboardEvent;
+}

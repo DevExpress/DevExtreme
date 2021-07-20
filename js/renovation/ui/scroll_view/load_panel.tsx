@@ -9,7 +9,7 @@ import {
 
 import { isDefined } from '../../../core/utils/type';
 import messageLocalization from '../../../localization/message';
-import { LoadPanel, LoadPanelProps } from '../load_panel';
+import { LoadPanel, LoadPanelProps } from '../overlays/load_panel';
 
 const SCROLLVIEW_LOADPANEL = 'dx-scrollview-loadpanel';
 

@@ -9,11 +9,23 @@ import { compileGetter, compileSetter } from '../../../core/utils/data';
 import { when, Deferred } from '../../../core/utils/deferred';
 
 import { AgendaResourceProcessor } from './agendaResourceProcessor';
-import { getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource } from './utils';
+import {
+    createResourcesTree,
+    getCellGroups,
+    getDisplayExpr,
+    getFieldExpr,
+    getValueExpr,
+    getWrappedDataSource,
+} from './utils';
 
 export class ResourceManager {
     constructor(resources) {
+        this.loadedResources = [];
         this._resourceLoader = {};
+        this._dataAccessors = {
+            getter: {},
+            setter: {}
+        };
         this.agendaProcessor = new AgendaResourceProcessor();
 
         this.setResources(resources);
@@ -194,7 +206,23 @@ export class ResourceManager {
         return result;
     }
 
+    isLoaded() {
+        return isDefined(this.loadedResources);
+    }
+
     loadResources(groups) {
+        const result = new Deferred();
+
+        this.loadResourcesCore(groups).done((resources) => {
+
+            this.loadedResources = resources;
+
+            result.resolve(resources);
+        });
+
+        return result.promise();
+    }
+    loadResourcesCore(groups) {
         const result = new Deferred();
         const that = this;
         const deferreds = [];
@@ -263,7 +291,6 @@ export class ResourceManager {
         const resourceDataLength = resourceData.length;
         let color;
 
-
         if(resourceDataLength) {
             for(let i = 0; i < resourceDataLength; i++) {
                 if(valueGetter(resourceData[i]) === value) {
@@ -308,41 +335,6 @@ export class ResourceManager {
         }
 
         return result;
-    }
-
-    createResourcesTree(groups) {
-        let leafIndex = 0;
-
-        function make(group, groupIndex, result, parent) {
-            result = result || [];
-
-            for(let i = 0; i < group.items.length; i++) {
-                const currentGroupItem = group.items[i];
-                const resultItem = {
-                    name: group.name,
-                    value: currentGroupItem.id,
-                    title: currentGroupItem.text,
-                    data: group.data && group.data[i],
-                    children: [],
-                    parent: parent ? parent : null
-                };
-                result.push(resultItem);
-                const nextGroupIndex = groupIndex + 1;
-
-                if(groups[nextGroupIndex]) {
-                    make.call(this,
-                        groups[nextGroupIndex], nextGroupIndex, resultItem.children, resultItem);
-                }
-                if(!resultItem.children.length) {
-                    resultItem.leafIndex = leafIndex;
-                    leafIndex++;
-                }
-            }
-
-            return result;
-        }
-
-        return make.call(this, groups[0], 0);
     }
 
     _hasGroupItem(appointmentResources, groupName, itemValue) {
@@ -396,8 +388,37 @@ export class ResourceManager {
         return result;
     }
 
-    groupAppointmentsByResources(appointments, resources) {
-        const tree = this.createResourcesTree(resources);
+    groupAppointmentsByResources(appointments, groups) {
+        let result = { '0': appointments };
+
+        if(groups && groups.length && this.getResourcesData().length) {
+            result = this.groupAppointmentsByResourcesCore(appointments, this.loadedResources);
+        }
+
+        let totalResourceCount = 0;
+
+        each(this.loadedResources, function(i, resource) {
+            if(!i) {
+                totalResourceCount = resource.items.length;
+            } else {
+                totalResourceCount *= resource.items.length;
+            }
+        });
+
+        for(let j = 0; j < totalResourceCount; j++) {
+            const index = j.toString();
+
+            if(result[index]) {
+                continue;
+            }
+
+            result[index] = [];
+        }
+
+        return result;
+    }
+    groupAppointmentsByResourcesCore(appointments, resources) {
+        const tree = createResourcesTree(resources);
         const result = {};
 
         each(appointments, (function(_, appointment) {
@@ -415,6 +436,37 @@ export class ResourceManager {
         }).bind(this));
 
         return result;
+    }
+
+    getAppointmentColor(options) {
+        const { groups } = options;
+        const resourceForPainting = this.getResourceForPainting(groups);
+        let response = new Deferred().resolve().promise();
+
+        if(resourceForPainting) {
+            const field = getFieldExpr(resourceForPainting);
+            const {
+                groupIndex,
+                itemData
+            } = options;
+            const cellGroups = getCellGroups(groupIndex, this.loadedResources);
+            const resourceValues = wrapToArray(this.getDataAccessors(field, 'getter')(itemData));
+
+            let groupId = resourceValues.length
+                ? resourceValues[0]
+                : undefined;
+
+            for(let i = 0; i < cellGroups.length; i++) {
+                if(cellGroups[i].name === field) {
+                    groupId = cellGroups[i].id;
+                    break;
+                }
+            }
+
+            response = this.getResourceColor(field, groupId);
+        }
+
+        return response;
     }
 
     reduceResourcesTree(tree, existingAppointments, _result) {
@@ -528,5 +580,10 @@ export class ResourceManager {
         }, true);
 
         return result;
+    }
+
+    createReducedResourcesTree(appointments) {
+        const tree = createResourcesTree(this.loadedResources);
+        return this.reduceResourcesTree(tree, appointments);
     }
 }

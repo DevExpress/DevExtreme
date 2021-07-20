@@ -17,9 +17,9 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 };
 
 export const getKeyByGroup = (
-  groupIndex: number, groupOrientation: GroupOrientation | undefined,
+  groupIndex: number | undefined, groupOrientation: GroupOrientation | undefined,
 ): string => {
-  if (groupOrientation === VERTICAL_GROUP_ORIENTATION) {
+  if (groupOrientation === VERTICAL_GROUP_ORIENTATION && !!groupIndex) {
     return groupIndex.toString();
   }
 
@@ -31,7 +31,7 @@ const addToStyle = (
   value: string,
   style?: CSSAttributes,
 ): CSSAttributes => {
-  const nextStyle = style || {};
+  const nextStyle = style ?? {};
   const result = { ...nextStyle };
 
   result[attr] = value || nextStyle[attr];
@@ -70,16 +70,28 @@ export const getIsGroupedAllDayPanel = (
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel);
-  const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
+  const isAllDayPanel = !!groupData?.allDayPanel;
+  const isGroupedAllDayPanel = !!groupData?.isGroupedAllDayPanel;
 
   return isAllDayPanel && isGroupedAllDayPanel;
 };
 
-export const isVerticalGroupOrientation = (
+export const isVerticalGroupingApplied = (
+  groups: Group[],
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
+  && !!groups.length;
 
-export const isHorizontalGroupOrientation = (
+export const isHorizontalGroupingApplied = (
   groups: Group[], groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+
+export const isGroupingByDate = (
+  groups: Group[],
+  groupOrientation: GroupOrientation | undefined,
+  groupByDate: boolean,
+): boolean => {
+  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+
+  return groupByDate && isHorizontalGrouping;
+};

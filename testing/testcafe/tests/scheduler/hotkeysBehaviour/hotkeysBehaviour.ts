@@ -25,7 +25,7 @@ fixture`Hotkeys for appointments update and navigation`
       .notOk()
       .expect(firstAppointment.isFocused)
       .ok();
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     views: [view],
     currentView: view,
     dataSource,
@@ -41,7 +41,7 @@ fixture`Hotkeys for appointments update and navigation`
       .pressKey('delete')
       .expect(appointment.element.exists)
       .notOk();
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     views: [view],
     currentView: view,
     dataSource,
@@ -58,7 +58,7 @@ fixture`Hotkeys for appointments update and navigation`
       .pressKey('enter')
       .expect(appointmentPopup.isVisible())
       .ok();
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     views: [view],
     currentView: view,
     dataSource,
@@ -84,7 +84,7 @@ fixture`Hotkeys for appointments update and navigation`
       .notOk()
       .expect(appointmentPopup.isVisible())
       .ok();
-  }).before(() => createScheduler({
+  }).before(async () => createScheduler({
     views: [view],
     currentView: view,
     dataSource,

@@ -1,19 +1,19 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/ban-types */
 import Component from './common/component';
-import { Option } from './common/types.ts';
+import { Option } from './common/types';
 
 export class GridPagerWrapper extends Component {
   _optionChanged(args: Option): void {
     switch (args.name) {
       case 'pageIndex': {
-        const pageIndexChanged = this.option('pageIndexChanged');
+        const pageIndexChanged = this.option('pageIndexChanged') as Function;
         if (pageIndexChanged) {
           pageIndexChanged(args.value);
         }
         break;
       }
       case 'pageSize': {
-        const pageSizeChanged = this.option('pageSizeChanged');
+        const pageSizeChanged = this.option('pageSizeChanged') as Function;
         if (pageSizeChanged) {
           pageSizeChanged(args.value);
         }

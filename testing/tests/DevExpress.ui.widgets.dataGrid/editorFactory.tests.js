@@ -28,7 +28,7 @@ QUnit.testStart(function() {
 });
 
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/lookup';
 import 'ui/switch';
 import TextArea from 'ui/text_area';
@@ -41,6 +41,7 @@ import SelectBox from 'ui/select_box';
 import { MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
+import { noop } from 'core/utils/common';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -75,6 +76,8 @@ QUnit.module('Editor Factory', {
         // assert
         assert.ok(textBox, 'dxTextBox created');
         assert.equal(textBox.option('value'), 'A', 'text editor value');
+        assert.ok(textBox._supportedKeys().enter, 'enter handler is defined'); // T1013643
+        assert.notEqual(textBox._supportedKeys().enter, noop, 'enter handler is not noop'); // T1013643
 
         // act
         textBox.option('value', 'B');
@@ -147,116 +150,6 @@ QUnit.module('Editor Factory', {
 
         devices.real(originalDevice);
     });
-
-    if(browser.msie) {
-        QUnit.test('Enter does not change the text editor value in IE, EDGE (T305674, T336478, T635192)', function(assert) {
-            const $container = $('#container');
-            let value = 'A';
-            let setValueCallCount = 0;
-
-            // act
-            this.editorFactoryController.createEditor($container, {
-                value: value,
-                setValue: function(newValue) {
-                    setValueCallCount++;
-                    value = newValue;
-                }
-            });
-            const textBox = $container.dxTextBox('instance');
-
-            // assert
-            assert.ok(textBox, 'dxTextBox created');
-            assert.equal(textBox.option('value'), 'A', 'text editor value');
-
-            // mock for real blur
-            $($container.find('input')).get(0).blur = function() {
-                $container.find('input').trigger('change');
-            };
-
-            // act
-            $container.find('input').focus();
-            $container.find('input').val('AB');
-            $container.find('input').trigger($.Event('keydown', { key: 'Enter' }));
-
-            this.clock.tick();
-
-            // assert
-            assert.equal(value, 'AB', 'value after enter key');
-            assert.equal(setValueCallCount, 1, 'setValue call count');
-        });
-
-        // T426951
-        QUnit.test('DateBox editor enter work in IE', function(assert) {
-            const $container = $('#container');
-            let value = new Date(2015, 10, 5);
-            // act
-            this.editorFactoryController.createEditor($container, {
-                dataType: 'date',
-                value: value,
-                setValue: function(newValue) {
-                    value = newValue;
-                }
-            });
-            const dateBox = $container.dxDateBox('instance');
-
-            const methods = [];
-
-            if(dateBox.focus) {
-                dateBox.focus = function() {
-                    methods.push('focus');
-                };
-            }
-
-            if(dateBox.blur) {
-                dateBox.blur = function() {
-                    methods.push('blur');
-                };
-            }
-
-            assert.ok(dateBox, 'dxTextBox created');
-
-            // act
-            $container.find('input').trigger($.Event('keydown', { key: 'Enter' }));
-
-            // assert
-            assert.deepEqual(methods, ['blur', 'focus'], 'blur and focus called');
-        });
-
-        // T305674
-        QUnit.test('Text editor value on lost focus', function(assert) {
-            const $container = $('#container');
-            let value = 'A';
-            let setValueCallCount = 0;
-
-            // act
-            this.editorFactoryController.createEditor($container, {
-                value: value,
-                setValue: function(newValue) {
-                    setValueCallCount++;
-                    value = newValue;
-                }
-            });
-            const textBox = $container.dxTextBox('instance');
-
-            // assert
-            assert.ok(textBox, 'dxTextBox created');
-            assert.equal(textBox.option('value'), 'A', 'text editor value');
-
-            // act
-            textBox.focus();
-            $container.find('input').val('AB');
-            $container.find('input').trigger($.Event('keyup'));
-            $(window).trigger('focus');
-            // mock change on focus change
-            $container.find('input').trigger('change');
-
-            this.clock.tick();
-            // assert
-            assert.equal(textBox.option('valueChangeEvent'), 'change', 'valueChangeEvent');
-            assert.equal(textBox.option('value'), 'AB', 'value');
-            assert.equal(setValueCallCount, 1, 'setValue call count');
-        });
-    }
 
     QUnit.test('Text editor with set onEditorPreparing', function(assert) {
     // arrange

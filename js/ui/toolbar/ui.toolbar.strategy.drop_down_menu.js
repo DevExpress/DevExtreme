@@ -1,7 +1,10 @@
 import { extend } from '../../core/utils/extend';
+import domAdapter from '../../core/dom_adapter';
 import ToolbarStrategy from './ui.toolbar.strategy';
 import ToolbarMenu from './ui.toolbar.menu';
 import DropDownMenu from '../drop_down_menu';
+import devices from '../../core/devices';
+import { POPOVER_BOUNDARY_OFFSET } from '../popover_contants';
 
 const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
 
@@ -29,19 +32,25 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
         }
     },
 
-    _menuWidgetClass: function() {
+    _menuWidget: function() {
         return DropDownMenu;
     },
 
     _widgetOptions: function() {
-        const that = this;
+        const topAndBottomOffset = 2 * POPOVER_BOUNDARY_OFFSET;
         return extend(this.callBase(), {
             deferRendering: true,
-            container: that._toolbar.option('menuContainer'),
+            container: this._toolbar.option('menuContainer'),
+            popupMaxHeight: (devices.current().platform === 'android') // T1010948
+                ? domAdapter.getDocumentElement().clientHeight - topAndBottomOffset
+                : undefined,
             menuWidget: ToolbarMenu,
-            onOptionChanged: function(e) {
-                if(e.name === 'items') {
-                    that._updateMenuVisibility(e.value);
+            onOptionChanged: ({ name, value }) => {
+                if(name === 'opened') {
+                    this._toolbar.option('overflowMenuVisible', value);
+                }
+                if(name === 'items') {
+                    this._updateMenuVisibility(value);
                 }
             },
             popupPosition: {

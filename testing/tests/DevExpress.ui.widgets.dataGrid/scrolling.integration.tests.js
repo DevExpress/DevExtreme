@@ -32,6 +32,7 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
@@ -45,22 +46,117 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
 }
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
-    QUnit.test('Correct start scroll position when RTL', function(assert) {
-        createDataGrid({
-            width: 100,
-            rtlEnabled: true,
-            columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }],
-            dataSource: {
-                store: [{ field1: '1', field2: '2' }]
-            }
+    [true, false].forEach(nativeScrolling => {
+        const isRtlNegative = nativeScrolling && !(getScrollRtlBehavior().positive && getScrollRtlBehavior().decreasing);
+
+        QUnit.test(`Correct start scroll position when RTL with nativeScrolling: ${nativeScrolling}`, function(assert) {
+            // arrange, act
+            const dataGrid = createDataGrid({
+                width: 100,
+                rtlEnabled: true,
+                scrolling: {
+                    useNative: nativeScrolling
+                },
+                columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }],
+                dataSource: {
+                    store: [{ field1: '1', field2: '2' }]
+                }
+            });
+
+            this.clock.tick(100);
+
+            const scrollLeft = $('.dx-scrollable').scrollLeft();
+            const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
+
+            // assert
+            assert.equal(scrollLeft, 0);
+            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100);
         });
 
-        this.clock.tick();
+        QUnit.test(`Correct start scroll position when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
+            // arrange, act
+            const dataGrid = createDataGrid({
+                width: 100,
+                height: 100,
+                rtlEnabled: true,
+                scrolling: {
+                    useNative: nativeScrolling
+                },
+                columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }],
+                dataSource: {
+                    store: [
+                        { field1: '1', field2: '1' },
+                        { field1: '2', field2: '2' },
+                        { field1: '3', field2: '3' },
+                        { field1: '4', field2: '4' },
+                        { field1: '5', field2: '5' }
+                    ]
+                }
+            });
 
-        const scrollLeft = $('.dx-scrollable').dxScrollable('instance').scrollLeft();
+            this.clock.tick(100);
 
-        assert.equal(scrollLeft, 100);
+            const scrollLeft = $('.dx-scrollable').scrollLeft();
+            const $headerScrollContainer = $(dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container'));
+
+            // assert
+            assert.equal(scrollLeft, 0);
+            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100);
+        });
+
+        QUnit.test(`Correct scroll position after resizing when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
+            // arrange, act
+            const dataGrid = createDataGrid({
+                width: 100,
+                height: 100,
+                rtlEnabled: true,
+                scrolling: {
+                    useNative: nativeScrolling
+                },
+                columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }],
+                dataSource: {
+                    store: [
+                        { field1: '1', field2: '1' },
+                        { field1: '2', field2: '2' },
+                        { field1: '3', field2: '3' },
+                        { field1: '4', field2: '4' },
+                        { field1: '5', field2: '5' }
+                    ]
+                }
+            });
+
+            this.clock.tick(100);
+
+            const $dataGrid = dataGrid.$element();
+            const $scrollable = $('.dx-scrollable');
+            const scrollable = $scrollable.dxScrollable('instance');
+            const $scrollContainer = $scrollable.find('.dx-scrollable-container');
+
+            // act
+            scrollable.scrollTo({ x: 50 });
+            $scrollContainer.trigger('scroll');
+            this.clock.tick(500);
+
+            $dataGrid.css('width', 500);
+            dataGrid.updateDimensions();
+            $scrollContainer.trigger('scroll');
+
+            // assert
+            assert.notOk(dataGrid.getView('rowsView').isScrollbarVisible(true), 'scrollbar is hidden');
+
+            // act
+            $dataGrid.css('width', 100);
+            dataGrid.updateDimensions();
+            this.clock.tick(500);
+
+            // assert
+            assert.equal($scrollable.scrollLeft(), 0, 'scrollable');
+
+            const $headerScrollContainer = dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container');
+            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100, 'headers');
+        });
     });
+
 
     // T388508
     QUnit.test('Correct start scroll position when RTL and detached container of the datagrid', function(assert) {
@@ -135,7 +231,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
                 const scrollRightAfterGrouping = getRightScrollOffset(scrollable);
                 assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('tbody > tr').first().hasClass('dx-group-row'));
-                assert.equal(scrollRightAfterGrouping, scrollRight, 'scroll position after grouping');
+                assert.roughEqual(scrollRightAfterGrouping, scrollRight, 0.5, 'scroll position after grouping');
                 done();
             });
         });
@@ -434,13 +530,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.option('width', 400);
 
         // assert
-        if(browser.msie && parseInt(browser.version) > 11) {
-            assert.notEqual($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is not zero');
-            assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() > 0, 'vertical scrollBar exists');
-        } else {
-            assert.equal($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is zero');
-            assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(), 0, 'vertical scrollBar not exists');
-        }
+        assert.equal($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is zero');
+        assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(), 0, 'vertical scrollBar not exists');
         assert.notEqual($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-bottom'), '0px', 'margin-bottom is not zero');
     });
 
@@ -795,7 +886,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
         const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
 
-        assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
+        assert.roughEqual(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 1.1, 'Content height is correct');
     });
 
     // T628787
@@ -1041,5 +1132,40 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.pageSize(), 10, 'pageSize from stateStoring is applied');
+    });
+
+    // T1004507
+    QUnit.test('Header container should have padding-right after expanding the master detail when using native scrolling', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 0, field1: 'test1', field2: 'test2', field3: 'test3' }],
+            keyExpr: 'id',
+            columns: ['field1', 'field2', 'field3'],
+            columnMinWidth: 100,
+            scrolling: {
+                useNative: true
+            },
+            width: 150,
+            height: 200,
+            masterDetail: {
+                enabled: true,
+                template: function() {
+                    return $('<div/>').css({
+                        height: '300px',
+                        width: '100px'
+                    });
+                }
+            }
+        });
+
+        // assert
+        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
+
+        // act
+        dataGrid.expandRow(0);
+
+        // assert
+        assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
     });
 });

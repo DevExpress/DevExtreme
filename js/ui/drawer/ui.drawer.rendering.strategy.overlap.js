@@ -2,7 +2,7 @@ import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import { ensureDefined } from '../../core/utils/common';
 import { camelize } from '../../core/utils/inflector';
 
@@ -35,7 +35,8 @@ class OverlapStrategy extends DrawerStrategy {
                 this._processOverlayZIndex(args.component.content());
             },
             visible: true,
-            propagateOutsideClick: true
+            propagateOutsideClick: true,
+            copyRootClassesToWrapper: true
         });
     }
 

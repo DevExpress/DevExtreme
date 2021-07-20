@@ -1,30 +1,29 @@
 import Store, {
     StoreOptions
 } from './abstract_store';
+import { Query } from './query';
 
 /** @namespace DevExpress.data */
-export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
+     * @type Array<any>
      */
-    data?: Array<any>;
+    data?: Array<TValue>;
 }
 /**
  * @docid
  * @inherits Store
  * @module data/array_store
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
-export default class ArrayStore extends Store {
-    constructor(options?: ArrayStoreOptions)
+export default class ArrayStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
+    constructor(options?: ArrayStoreOptions<TKey, TValue>)
     /**
      * @docid
      * @publicName clear()
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     clear(): void;
@@ -32,8 +31,7 @@ export default class ArrayStore extends Store {
      * @docid
      * @publicName createQuery()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    createQuery(): any;
+    createQuery(): Query;
 }

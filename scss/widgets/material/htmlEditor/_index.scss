@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -12,7 +13,6 @@
 @use "../../base/htmlEditor";
 
 // adduse
-
 
 .dx-htmleditor {
   border-color: transparent;
@@ -198,7 +198,8 @@
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
   }
 }
@@ -296,7 +297,7 @@
   border-left-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
-    height: $material-toolbar-height / 2;
+    height: math.div($material-toolbar-height, 2);
   }
 }
 
@@ -330,4 +331,11 @@
 
 .dx-suggestion-list-wrapper {
   @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
+  }
 }

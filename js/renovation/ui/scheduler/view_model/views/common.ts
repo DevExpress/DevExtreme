@@ -4,17 +4,17 @@ export const getCurrentDate = (
   currentDate: Date,
   startDate?: Date,
 ): Date => {
-  const validCurrentDate = startDate || currentDate;
+  const validCurrentDate = startDate ?? currentDate;
 
-  return dateUtils.trimTime(validCurrentDate);
+  return dateUtils.trimTime(validCurrentDate) as Date;
 };
 
 export const getFirstDayOfWeek = (
   includedDays: number[],
   firstDayOfWeek: number,
 ): number => {
-  const isFirstDayOfWeekInIncludedDays = includedDays.indexOf(firstDayOfWeek) !== -1;
-  const sortedIncludedDays = includedDays.slice().sort();
+  const isFirstDayOfWeekInIncludedDays = includedDays.includes(firstDayOfWeek);
+  const sortedIncludedDays = includedDays.slice().sort((a, b) => a - b);
 
   return isFirstDayOfWeekInIncludedDays
     ? firstDayOfWeek
@@ -22,7 +22,7 @@ export const getFirstDayOfWeek = (
 };
 
 export const getStartViewDate = (
-  startDayHour: number,
-  firstDayOfWeek: number,
+  _startDayHour: number,
+  _firstDayOfWeek: number,
   currentDate: Date,
 ): Date => currentDate;

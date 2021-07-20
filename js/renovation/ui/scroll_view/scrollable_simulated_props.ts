@@ -1,7 +1,7 @@
 import {
   ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import {
   ScrollableProps,
 } from './scrollable_props';
@@ -29,10 +29,13 @@ export class ScrollableSimulatedProps extends ScrollableProps {
 
   @Event()
   scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number) => void;
+
+  @Event()
+  pocketStateChange?: (newState: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps
-& Pick<WidgetProps, 'aria'>
+& Pick<WidgetProps, 'aria' | 'onVisibilityChange'>
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
 & Pick<BottomPocketProps, 'reachBottomText'>;

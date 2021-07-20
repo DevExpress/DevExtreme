@@ -1,11 +1,11 @@
-import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
+import { isPlainObject, isEmptyObject, isDefined, isObject } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
 import { extend, extendFromObject } from '../core/utils/extend';
 import { errors } from './errors';
 import { deepExtendArraySafe } from '../core/utils/object';
 import { compileGetter } from '../core/utils/data';
-import dataUtils from './utils';
+import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
     let key;
@@ -80,11 +80,26 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function createObjectWithChanges(target, changes) {
-    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
-    const targetWithoutPrototype = extendFromObject({}, target);
+function cloneInstance(instance) {
+    const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};
+    const instanceWithoutPrototype = extendFromObject({}, instance);
 
-    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+    for(const name in instanceWithoutPrototype) {
+        const prop = instanceWithoutPrototype[name];
+
+        if(isObject(prop) && !isPlainObject(prop)) {
+            instanceWithoutPrototype[name] = cloneInstance(prop);
+        }
+    }
+
+    deepExtendArraySafe(result, instanceWithoutPrototype, true, true);
+
+    return result;
+}
+
+function createObjectWithChanges(target, changes) {
+    const result = cloneInstance(target);
+
     return deepExtendArraySafe(result, changes, true, true);
 }
 
@@ -106,7 +121,7 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
 }
 
 function getErrorResult(isBatch, logError, errorCode) {
-    return !isBatch ? dataUtils.rejectedPromise(errors.Error(errorCode)) : logError && errors.log(errorCode);
+    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : logError && errors.log(errorCode);
 }
 
 function applyChanges(data, changes, options = {}) {
@@ -133,7 +148,7 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     const keyExpr = keyInfo.key();
 
     if(keyExpr) {
-        if(hasKey(data, keyExpr) && !dataUtils.keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
+        if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
             return getErrorResult(isBatch, logError, 'E4017');
         }
 
@@ -149,7 +164,7 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
             if(immutable === true && isDefined(target)) {
                 const newTarget = createObjectWithChanges(target, data);
                 array[index] = newTarget;
-                return !isBatch && dataUtils.trivialPromise(newTarget, key);
+                return !isBatch && trivialPromise(newTarget, key);
             }
         }
     } else {
@@ -159,9 +174,9 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     deepExtendArraySafe(target, data, extendComplexObject);
     if(!isBatch) {
         if(config().useLegacyStoreResult) {
-            return dataUtils.trivialPromise(key, data);
+            return trivialPromise(key, data);
         } else {
-            return dataUtils.trivialPromise(target, key);
+            return trivialPromise(target, key);
         }
     }
 }
@@ -196,7 +211,7 @@ function insert(keyInfo, array, data, index, isBatch, logError) {
     setDataByKeyMapValue(array, keyValue, obj);
 
     if(!isBatch) {
-        return dataUtils.trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
+        return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
     }
 }
 
@@ -207,7 +222,7 @@ function remove(keyInfo, array, key, isBatch, logError) {
         setDataByKeyMapValue(array, key, null);
     }
     if(!isBatch) {
-        return dataUtils.trivialPromise(key);
+        return trivialPromise(key);
     } else if(index < 0) {
         return getErrorResult(isBatch, logError, 'E4009');
     }
@@ -221,7 +236,7 @@ function indexByKey(keyInfo, array, key) {
     }
 
     for(let i = 0, arrayLength = array.length; i < arrayLength; i++) {
-        if(dataUtils.keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
+        if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
             return i;
         }
     }

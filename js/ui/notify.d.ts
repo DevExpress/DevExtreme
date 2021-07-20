@@ -9,7 +9,6 @@
  * @param3 displayTime:integer|undefined
  * @module ui/notify
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 declare function notify(message: string, type?: string, displayTime?: number): void;
@@ -23,7 +22,6 @@ declare function notify(message: string, type?: string, displayTime?: number): v
  * @param3 displayTime:integer|undefined
  * @module ui/notify
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
 declare function notify(options: any, type?: string, displayTime?: number): void;

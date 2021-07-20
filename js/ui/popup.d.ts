@@ -1,9 +1,9 @@
 import {
-    animationConfig
+    AnimationConfig
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig
 } from '../animation/position';
 
 import {
@@ -67,7 +67,7 @@ export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxPopup>;
+export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
@@ -76,11 +76,10 @@ export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
+export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
     /**
      * @docid
-     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} [for](iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} &for(iOS)
      * @public
      * @type object
      */
@@ -88,29 +87,25 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     container?: string | UserDefinedElement;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     dragEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     fullScreen?: boolean;
@@ -118,7 +113,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @docid
      * @type_function_return number|string
      * @fires dxPopupOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
@@ -130,7 +124,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResize?: ((e: ResizeEvent) => void);
@@ -142,7 +135,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
@@ -154,7 +146,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
@@ -167,43 +158,37 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
-     * @type Enums.PositionAlignment|positionConfig|function
-     * @prevFileNamespace DevExpress.ui
+     * @type Enums.PositionAlignment|PositionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     resizeEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     showCloseButton?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showTitle?: boolean;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;
@@ -212,14 +197,12 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @default "title"
      * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Array<Object>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbarItems?: Array<dxPopupToolbarItem>;
@@ -227,7 +210,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @docid
      * @type_function_return number|string
      * @fires dxPopupOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
@@ -236,31 +218,27 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
 export interface dxPopupAnimation extends dxOverlayAnimation {
     /**
      * @docid dxPopupOptions.animation.hide
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} [for](iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} &for(iOS)
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopupOptions.animation.show
-     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} [for](iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} &for(iOS)
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopupToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.disabled
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
      * @docid dxPopupOptions.toolbarItems.html
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     html?: string;
@@ -268,25 +246,21 @@ export interface dxPopupToolbarItem {
      * @docid dxPopupOptions.toolbarItems.location
      * @type Enums.ToolbarItemLocation
      * @default 'center'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     location?: 'after' | 'before' | 'center';
     /**
      * @docid dxPopupOptions.toolbarItems.options
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     options?: any;
     /**
      * @docid dxPopupOptions.toolbarItems.template
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     template?: template;
     /**
      * @docid dxPopupOptions.toolbarItems.text
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
@@ -294,21 +268,18 @@ export interface dxPopupToolbarItem {
      * @docid dxPopupOptions.toolbarItems.toolbar
      * @type Enums.Toolbar
      * @default 'top'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbar?: 'bottom' | 'top';
     /**
      * @docid dxPopupOptions.toolbarItems.visible
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
     /**
      * @docid dxPopupOptions.toolbarItems.widget
      * @type Enums.ToolbarItemWidget
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
@@ -319,20 +290,19 @@ export interface dxPopupToolbarItem {
  * @hasTranscludedContent
  * @module ui/popup
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxPopup extends dxOverlay {
-    constructor(element: UserDefinedElement, options?: dxPopupOptions)
-}
+export default class dxPopup<TProperties = Properties> extends dxOverlay<TProperties> {}
+
+interface PopupInstance extends dxPopup<Properties> { }
 
 /** @public */
-export type Properties = dxPopupOptions;
+export type Properties = dxPopupOptions<PopupInstance>;
 
 /** @deprecated use Properties instead */
-export type Options = dxPopupOptions;
+export type Options = Properties;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxPopupOptions;
+export type IOptions = Properties;
 export type ToolbarItem = dxPopupToolbarItem;

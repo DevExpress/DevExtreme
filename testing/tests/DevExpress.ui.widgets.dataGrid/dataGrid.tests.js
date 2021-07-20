@@ -56,7 +56,6 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
-
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 const ROW_INSERTED_CLASS = 'dx-datagrid-row-inserted-animation';
@@ -1040,6 +1039,85 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar sarch panel is aligned');
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 'toolbar custom item is aligned');
     });
+
+    QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            sorting: { mode: 'none' },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.roughEqual($cellContent.width(), 35.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when column is sorted (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter is visible (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50 }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.roughEqual($cellContent.width(), 18.5, 1, 'correct width');
+    });
+
+    QUnit.test('Column caption should have correct width when header filter and sorting are enabled (T1009923)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataGrid: [],
+            headerFilter: {
+                visible: true
+            },
+            columns: [
+                { caption: 'my field', dataField: 'field1', width: 50, sortIndex: 0, sortOrder: 'asc' }
+            ]
+        });
+
+        // act
+        const $cellElements = $(dataGrid.element()).find('.dx-datagrid-headers .dx-header-row').children();
+        const $cellContent = $cellElements.eq(0).find('.dx-datagrid-text-content');
+
+        // assert
+        assert.ok($cellContent.hasClass('dx-header-filter-indicator'), 'header filter');
+        assert.ok($cellContent.hasClass('dx-sort-indicator'), 'sorted');
+        assert.roughEqual($cellContent.width(), 4.5, 1, 'correct width');
+    });
 });
 
 
@@ -1556,7 +1634,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('columnChooser', { mode: 'select' });
         assert.equal(headerPanel._getToolbarOptions.callCount, 3, 'Toolbar items are updated after columnChooser options change');
 
-        dataGrid.option('export', { allowExportSelectedData: false });
+        dataGrid.option('export', { allowExportSelectedData: true });
         assert.equal(headerPanel._getToolbarOptions.callCount, 4, 'Toolbar items are updated after export options change');
 
         dataGrid.option('groupPanel', { emptyPanelText: 'test' });
@@ -1650,12 +1728,13 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
             }
         });
+
+        this.clock.tick();
 
         const changedSpy = sinon.spy();
         const loadingSpy = sinon.spy();
@@ -1668,6 +1747,8 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             pageIndex: 1,
             pageSize: 2
         });
+
+        this.clock.tick();
 
         // assert
         assert.strictEqual(changedSpy.callCount, 1, 'changed is called');
@@ -1843,6 +1924,24 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.ok(dataGrid._disposed, 'DataGrid is disposed');
+    });
+
+    QUnit.test('Set the same options after reset (T1010114)', function(assert) {
+        const editing = {
+            mode: 'row',
+            useIcons: true
+        };
+        const dataGrid = createDataGrid({
+            editing,
+            dataSource: [{ id: 1 }]
+        });
+        this.clock.tick();
+
+        dataGrid.resetOption('editing');
+        dataGrid.option('editing', editing);
+
+        // assert
+        assert.ok(dataGrid.option('editing').changes, 'Custom and default options are merged');
     });
 
     // T243908
@@ -2203,6 +2302,250 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
+    });
+
+    QUnit.test('Change toolbar.items[i].prop at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1].location', 'after');
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items[i] at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items[1]', { name: 'addRowButton', location: 'after' });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar.items at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar.items', [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }]);
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Change toolbar at runtime', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columnChooser: {
+                enabled: true,
+                title: 'Column chooser'
+            },
+            editing: {
+                allowAdding: true
+            },
+            toolbar: {
+                items: [
+                    {
+                        name: 'columnChooserButton',
+                        location: 'before'
+                    },
+                    {
+                        name: 'addRowButton',
+                        location: 'before'
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $buttonsBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+
+        // act
+        dataGrid.option('toolbar', { items: [{
+            name: 'columnChooserButton',
+            location: 'before'
+        }, {
+            name: 'addRowButton',
+            location: 'after'
+        }] });
+
+        const $buttonBefore = dataGrid.$element().find('.dx-toolbar-before .dx-item .dx-button');
+        const $buttonAfter = dataGrid.$element().find('.dx-toolbar-after .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonBefore.length, 1, 'count button');
+        assert.equal($buttonAfter.length, 1, 'count button');
+
+        assert.ok($buttonBefore.hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonAfter.hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('Changing toolbar.items[i].prop saves the state of button', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ field1: 1, field2: 2 }],
+            toolbar: {
+                items: [
+                    {
+                        location: 'before',
+                        widget: 'dxSelectBox',
+                        cssClass: 'my-test-button',
+                        options: {
+                            items: ['item1', 'item2'],
+                            value: 'item1',
+                        }
+                    }
+                ]
+            }
+        });
+
+        // act
+        const $selectBox = dataGrid.$element().find('.my-test-button .dx-selectbox');
+        const selectBox = $selectBox.dxSelectBox('instance');
+        selectBox.option('value', 'item2');
+
+        // assert
+        assert.equal(selectBox.option('value'), 'item2', 'selectbox state is right');
+
+        // act
+        dataGrid.option('toolbar.items[0].disabled', true);
+
+        // assert
+        const $selectBoxDisabledContainer = dataGrid.$element().find('.my-test-button');
+        assert.ok($selectBoxDisabledContainer.hasClass('dx-state-disabled'), 'button option changed');
+
+        const $selectBoxDisabled = $selectBoxDisabledContainer.find('.dx-selectbox');
+        const selectBoxDisabled = $selectBoxDisabled.dxSelectBox('instance');
+        assert.equal(selectBoxDisabled.option('value'), 'item2', 'selectbox state saved');
     });
 });
 
@@ -2635,6 +2978,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok(!dataGrid.getController('data').isLoading(), 'is not loading');
     });
 
+    QUnit.test('getSelectedRowKeys in onInitialized', function(assert) {
+        // arrange, act
+        let initializedComponent;
+        const dataGrid = createDataGrid({
+            onInitialized: function(e) {
+                assert.deepEqual(e.component.getSelectedRowKeys(), [], 'selectedRowKeys');
+                initializedComponent = e.component;
+            },
+            dataSource: [{ id: 1111 }]
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(initializedComponent, dataGrid, 'component in onInitialized callback is correct');
+    });
+
     // T461925
     QUnit.test('columnOption in onInitialized', function(assert) {
         // arrange, act
@@ -2658,6 +3018,23 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($commandColumnCells.eq(0).index(), 0, 'command cell 1 in first td');
         assert.equal($commandColumnCells.eq(1).index(), 0, 'command cell 2 in first td');
         assert.equal($commandColumnCells.eq(2).index(), 0, 'command cell 3 in first td');
+    });
+
+    QUnit.test('onColumnsChanging should be fired if change column option', function(assert) {
+        const onColumnsChanging = sinon.spy();
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            onColumnsChanging,
+            dataSource: [],
+            columns: ['id', 'name']
+        });
+        onColumnsChanging.reset();
+
+        // act
+        dataGrid.columnOption('name', 'visible', false);
+
+        // assert
+        assert.ok(onColumnsChanging.calledOnce, 'onColumnsChanging is called once');
     });
 
     QUnit.test('Repaint row', function(assert) {
@@ -3280,6 +3657,151 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(visibleColumns[0].dataField, 'field1', 'dataField of the first column in the second row');
         assert.strictEqual(visibleColumns[1].dataField, 'field2', 'dataField of the second column in the second row');
         assert.strictEqual(visibleColumns[2].dataField, 'field3', 'dataField of the third column in the second row');
+    });
+
+    QUnit.test('navigateToRow should return promise', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ 'id': 0 }, { 'id': 1 }, { 'id': 2 }, { 'id': 3 }],
+            keyExpr: 'id',
+            paging: {
+                pageSize: 2
+            }
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(3);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    QUnit.test('navigateToRow should return promise: remoteOperations is true', function(assert) {
+        // arrange
+        let items = [];
+        let deferred;
+        const dataStore = new ArrayStore([{ 'id': 0 }, { 'id': 1 }, { 'id': 2 }, { 'id': 3 }]);
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            remoteOperations: true,
+            dataSource: {
+                key: 'id',
+                load: function(loadOptions) {
+                    deferred = $.Deferred();
+
+                    dataStore.load(loadOptions).done(function(data) {
+                        items = data;
+                    });
+
+                    return deferred.promise();
+                }
+            },
+            paging: {
+                pageSize: 2
+            }
+        });
+
+        // act
+        deferred.resolve(items, { totalCount: 4 }); // resolve first page that is already visible
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'visible row count is correct');
+
+        // act
+        const d = dataGrid.navigateToRow(3);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'page isn\'t resolved yet');
+
+        // act
+        deferred.resolve(items); // search for item's index
+        deferred.resolve(items, { totalCount: 3 }); // search for item's page
+        deferred.resolve(items, { totalCount: 4 }); // resolve second page
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'page is resolved');
+    });
+
+    QUnit.test('navigateToRow should return promise: one large page', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 20
+            },
+            scrolling: {
+                useNative: true
+            },
+            height: 100
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(15);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
+
+        // act
+        $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
+    });
+
+    QUnit.test('navigateToRow should return promise: virtual scrolling', function(assert) {
+        // arrange
+        const data = [];
+
+        for(let i = 0; i < 20; i++) {
+            data.push({
+                id: i
+            });
+        }
+
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: data,
+            keyExpr: 'id',
+            paging: {
+                pageSize: 20
+            },
+            scrolling: {
+                useNative: true,
+                mode: 'virtual',
+                rowRenderingMode: 'virtual'
+            },
+            height: 100
+        });
+
+        // act
+        const d = dataGrid.navigateToRow(18);
+
+        // assert
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
+        assert.strictEqual(d.state(), 'pending', 'row is not navigated');
+
+        // act
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        this.clock.tick(500);
+
+        // assert
+        assert.strictEqual(d.state(), 'resolved', 'row is navigated');
     });
 });
 

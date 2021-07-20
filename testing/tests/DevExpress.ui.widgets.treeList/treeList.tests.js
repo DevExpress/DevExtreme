@@ -118,7 +118,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         const treeList = createTreeList({
             width: 400,
             allowColumnResizing: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1, firstName: 'Dmitriy', lastName: 'Semenov', room: 101, birthDay: '1992/08/06' }],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         });
@@ -150,7 +150,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         // arrange
         const treeList = createTreeList({
             allowColumnReordering: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ id: 1, firstName: '1', lastName: '2', room: '3', birthDay: '4' }],
             columns: ['firstName', 'lastName', 'room', 'birthDay']
         });
@@ -172,7 +172,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         let $cellElement;
         const treeList = createTreeList({
             width: 200,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{ id: 1, firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
             columns: ['firstName', 'lastName']
@@ -206,7 +206,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         const treeList = createTreeList({
             height: 200,
             showColumnHeaders: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [
                 { id: 1, name: 'Name 1', age: 10 },
@@ -1157,7 +1157,7 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
         const treeList = createTreeList({
             dataSource: array,
             autoExpandAll: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             parentIdExpr: 'parentId',
             rootValue: 0,
@@ -1195,7 +1195,7 @@ QUnit.module('Expand/Collapse rows', () => {
         const clock = sinon.useFakeTimers();
         const treeList = createTreeList({
             height: 120,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 enabled: true,
                 pageSize: 2
@@ -1253,7 +1253,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
         const done = assert.async();
         const treeList = createTreeList({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual',
                 useNative: false
@@ -1280,7 +1280,7 @@ QUnit.module('Expand/Collapse rows', () => {
         // arrange
         const treeList = createTreeList({
             height: 120,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             repaintChangesOnly: true,
             dataSource: [
                 { id: 1, name: 'node_1' },
@@ -1546,40 +1546,54 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     });
 
     QUnit.test('TreeList navigateTo', function(assert) {
-        // arrange, act
+        // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
             }
         });
+        const callback = sinon.spy();
 
-        this.clock.tick();
+        // act
+        const d = treeList.navigateToRow(12);
+        d.done(callback);
 
-        treeList.navigateToRow(12);
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 6, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 1, 'page is changed');
         assert.ok(treeList.getRowIndexByKey(12) >= 0, 'key is visible');
     });
 
     QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
-        // arrange, act
+        // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
             }
         });
+        const callback = sinon.spy();
 
+        // act
         this.clock.tick();
 
-        treeList.navigateToRow(2);
+        const d = treeList.navigateToRow(2);
+        d.done(callback);
+
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 1, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 0, 'page is not changed');
         assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
@@ -1589,6 +1603,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
         // arrange
         const treeList = createTreeList({
+            loadingTimeout: null,
             height: 100,
             dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
                 id: 5,
@@ -1597,17 +1612,25 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             scrolling: {
                 mode: 'standard',
             },
+            paging: {
+                enabled: true
+            },
             keyExpr: 'id',
             parentIdExpr: 'parent_id',
             columns: ['id']
         });
+        const callback = sinon.spy();
 
-        this.clock.tick();
+        const d = treeList.navigateToRow(5);
+        d.done(callback);
 
-        treeList.navigateToRow(5);
+        $(treeList.getScrollable()._container()).trigger('scroll');
         this.clock.tick();
 
         // assert
+        assert.strictEqual(d.state(), 'resolved', 'promise is resolved');
+        assert.strictEqual(callback.getCall(0).args[0], 4, 'promise value is correct');
+
         assert.deepEqual(treeList.option('expandedRowKeys'), [4], 'parent node is expanded');
         assert.ok(treeList.getRowIndexByKey(5) >= 0, 'key is visible');
     });
@@ -2073,7 +2096,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             ],
             keyExpr: 'ID',
             parentIdExpr: 'Head_ID',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             searchPanel: {
                 visible: true,
 
@@ -2084,6 +2107,38 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         // assert
         assert.equal(treeList.getVisibleRows().length, 2, 'filtered row count');
+    });
+});
+
+QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
+    QUnit.test('New mode. Expand/collapse button should be updated on click', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            dataSource: [
+                { ID: 1, Head_ID: 0, Name: 'John' },
+                { ID: 2, Head_ID: 1, Name: 'Alex' },
+                { ID: 3, Head_ID: 100, Name: 'Alex' }
+            ],
+            keyExpr: 'ID',
+            parentIdExpr: 'Head_ID',
+            loadingTimeout: undefined,
+            scrolling: {
+                mode: 'virtual',
+                newMode: true
+            },
+        });
+
+        // act
+        $(treeList.getCellElement(0, 0)).find('.dx-treelist-collapsed').trigger('dxclick');
+
+        // assert
+        assert.strictEqual($(treeList.getCellElement(0, 0)).find('.dx-treelist-expanded').length, 1, 'row expanded');
+
+        // act
+        $(treeList.getCellElement(0, 0)).find('.dx-treelist-expanded').trigger('dxclick');
+
+        // assert
+        assert.strictEqual($(treeList.getCellElement(0, 0)).find('.dx-treelist-collapsed').length, 1, 'row collapsed');
     });
 });
 

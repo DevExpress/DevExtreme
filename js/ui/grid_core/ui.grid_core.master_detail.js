@@ -223,15 +223,24 @@ export const masterDetailModule = {
                         if(masterDataGrid.getView('rowsView').isFixedColumns()) {
                             return this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
                         } else {
+                            if(masterDataGrid.option('scrolling.useNative') === true) {
+                                return masterDataGrid.updateDimensions();
+                            }
+
                             const scrollable = masterDataGrid.getScrollable();
+
                             // T607490
-                            return scrollable && scrollable.update();
+                            return scrollable?.update();
                         }
                     }
                 },
                 _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
                     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
-                    if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                    const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
+                    const rowsNotEqual = $rows?.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height();
+                    const tablesNotEqual = $tables?.length === 2 && $tables.eq(0).height() !== $tables.eq(1).height();
+
+                    if(rowsNotEqual || tablesNotEqual) {
                         const detailElementWidth = $detailElement.width();
                         return masterDataGrid.updateDimensions().done(() => {
                             const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;

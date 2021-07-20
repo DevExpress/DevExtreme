@@ -16,6 +16,7 @@ import {
 import '../../../events/click';
 import '../../../events/hover';
 
+import { isFunction } from '../../../core/utils/type';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
@@ -29,17 +30,22 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
+import errors from '../../../core/errors';
 
-const getAria = (args: Record<string, unknown>):
-{ [name: string]: string } => Object.keys(args).reduce((r, key) => {
-  if (args[key]) {
-    return {
-      ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
-    };
-  }
-  return r;
-}, {});
+const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
+const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
+
+const getAria = (args: Record<string, unknown>): Record<string, string> => Object
+  .keys(args)
+  .reduce((r, key) => {
+    if (args[key]) {
+      return {
+        ...r,
+        [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
+      };
+    }
+    return r;
+  }, {});
 
 export const viewFunction = (viewModel: Widget): JSX.Element => {
   const widget = (
@@ -70,9 +76,9 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 export class WidgetProps extends BaseWidgetProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() _feedbackHideTimeout?: number = 400;
+  @OneWay() _feedbackHideTimeout?: number = DEFAULT_FEEDBACK_HIDE_TIMEOUT;
 
-  @OneWay() _feedbackShowTimeout?: number = 30;
+  @OneWay() _feedbackShowTimeout?: number = DEFAULT_FEEDBACK_SHOW_TIMEOUT;
 
   @OneWay() activeStateUnit?: string;
 
@@ -82,11 +88,9 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
 
-  @OneWay() addWidgetClass = true;
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 
@@ -193,6 +197,16 @@ export class Widget extends JSXComponent(WidgetProps) {
     focus.trigger(this.widgetRef.current);
   }
 
+  @Method()
+  activate(): void {
+    this.active = true;
+  }
+
+  @Method()
+  deactivate(): void {
+    this.active = false;
+  }
+
   @Effect()
   focusEffect(): EffectReturn {
     const {
@@ -239,7 +253,7 @@ export class Widget extends JSXComponent(WidgetProps) {
           !this.active && (this.hovered = true);
           onHoverStart?.(event);
         },
-        ({ event }: { event: Event }) => {
+        (event: Event) => {
           this.hovered = false;
           onHoverEnd?.(event);
         },
@@ -258,7 +272,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       const id = keyboard.on(
         this.widgetRef.current,
         this.widgetRef.current,
-        (e: Event): void => onKeyDown(e),
+        (e: Event): void => onKeyDown(e) as undefined,
       );
 
       return (): void => keyboard.off(id);
@@ -309,7 +323,18 @@ export class Widget extends JSXComponent(WidgetProps) {
     return undefined;
   }
 
-  get attributes(): { [key: string]: string } {
+  @Effect()
+  checkDeprecation(): void {
+    const { width, height } = this.props;
+    if (isFunction(width)) {
+      errors.log('W0017', 'width');
+    }
+    if (isFunction(height)) {
+      errors.log('W0017', 'height');
+    }
+  }
+
+  get attributes(): Record<string, string> {
     const {
       aria,
       disabled,
@@ -319,17 +344,16 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
     return {
-      ...extend({}, this.restAttributes, accessKey && { accessKey }),
+      ...extend({}, this.restAttributes, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
     };
   }
 
-  get styles(): { [key: string]: string | number } {
+  get styles(): Record<string, string | number> {
     const { width, height } = this.props;
-    const style = this.restAttributes.style || {};
-
-    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
-    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
+    const style = this.restAttributes.style as Record<string, string | number> || {};
+    const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
+    const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
 
     return {
       ...style,
@@ -355,7 +379,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': addWidgetClass,
+      'dx-widget': !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

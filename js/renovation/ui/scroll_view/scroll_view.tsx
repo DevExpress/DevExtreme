@@ -8,7 +8,7 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { ScrollViewWrapper } from '../../component_wrapper/scroll_view';
+import { ScrollViewWrapper } from '../../component_wrapper/navigation/scroll_view';
 import { current, isMaterial } from '../../../ui/themes';
 import { isDefined } from '../../../core/utils/type';
 
@@ -119,12 +119,11 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @InternalState() forceReachBottom?: boolean;
 
   @Method()
-  update(): void {
-    this.scrollable.update();
-  }
+  release(preventScrollBottom: boolean): void {
+    if (preventScrollBottom !== undefined) {
+      this.toggleLoading(!preventScrollBottom);
+    }
 
-  @Method()
-  release(): void {
     this.scrollable.release();
   }
 
@@ -137,7 +136,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollable.content();
+    return this.scrollable.content() as HTMLDivElement;
   }
 
   @Method()
@@ -162,42 +161,40 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollHeight(): number {
-    return this.scrollable.scrollHeight();
+    return this.scrollable.scrollHeight() as number;
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollable.scrollWidth();
+    return this.scrollable.scrollWidth() as number;
   }
 
   @Method()
   scrollOffset(): ScrollOffset {
-    return this.scrollable.scrollOffset();
+    return this.scrollable.scrollOffset() as ScrollOffset;
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollable.scrollTop();
+    return this.scrollable.scrollTop() as number;
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollable.scrollLeft();
+    return this.scrollable.scrollLeft() as number;
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollable.clientHeight();
+    return this.scrollable.clientHeight() as number;
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollable.clientWidth();
+    return this.scrollable.clientWidth() as number;
   }
 
   @Method()
-  /* istanbul ignore next */
-  // TODO: avoid using this method in List
   toggleLoading(showOrHide: boolean): void {
     this.forceReachBottom = showOrHide;
   }
@@ -210,8 +207,21 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     // TODO: this.clientHeight() should be containerRef.current.clientHeight
   }
 
+  @Method()
+  startLoading(): void {
+    this.scrollable.startLoading();
+  }
+
+  @Method()
+  finishLoading(): void {
+    this.scrollable.finishLoading();
+  }
+
+  updateHandler(): void {
+    this.scrollable.updateHandler();
+  }
+
   get reachBottomEnabled(): boolean {
-    /* istanbul ignore next */
     if (isDefined(this.forceReachBottom)) {
       return this.forceReachBottom;
     }
@@ -258,6 +268,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return isMaterial(current()) ? '' : undefined;
   }
 
+  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollable(): any {
     return this.scrollableRef.current!;
   }

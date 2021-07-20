@@ -12,7 +12,7 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
@@ -548,10 +548,8 @@ QUnit.module('Pager', {
         this.options.pager = { visible: 'auto' };
         this.dataControllerOptions.pageCount = 2;
 
-        pagerView.isVisible();
-
         // assert
-        assert.equal(pagerView._isVisible, true, 'isVisible');
+        assert.equal(pagerView.isVisible(), true, 'isVisible');
 
         // act
         pagerView.component.resize = function() {
@@ -563,7 +561,7 @@ QUnit.module('Pager', {
         pagerView.option('dataSource', [{}]);
 
         // assert
-        assert.equal(pagerView._isVisible, true, 'isVisible');
+        assert.equal(pagerView.isVisible(), true, 'isVisible');
         assert.equal(isInvalidateCalled, undefined, 'invalidate');
         assert.equal(isResizeCalled, undefined, 'resize');
     });
@@ -679,7 +677,7 @@ QUnit.module('Pager', {
         this.option('paging.pageSize', 6);
 
         // assert
-        assert.ok(this.pagerView._isVisible, 'pager visible');
+        assert.ok(this.pagerView.isVisible(), 'pager visible');
         assert.strictEqual(this.pagerView._invalidate.callCount, 0, 'render not execute');
         this.pagerView._invalidate.restore();
     });
@@ -743,6 +741,28 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(this.pagerView.element().find('.dx-info').css('direction'), 'rtl', 'infoText has rtl direction');
+    });
+
+    // T1011042
+    QUnit.test('Pager container is hidden after refresh if its content is not visible', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.dataControllerOptions = {};
+        this.options.pager = {
+            visible: 'auto'
+        };
+        this.pagerView.render($testElement);
+
+        // assert
+        assert.strictEqual($('.dx-datagrid-pager').length, 1, 'pager container exists');
+        assert.notOk($('.dx-datagrid-pager').hasClass('dx-hidden'), 'pager container is visible');
+
+        // act
+        this.dataController.updatePagesCount(1);
+
+        // assert
+        assert.ok($('.dx-datagrid-pager').hasClass('dx-hidden'), 'pager is not visible');
     });
 });
 

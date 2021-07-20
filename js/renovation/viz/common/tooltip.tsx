@@ -73,6 +73,7 @@ export const viewFunction = ({
   cssClassName,
   correctedCoordinates,
   isEmptyContainer,
+  fontStyles,
   props: {
     font, shadow, opacity, interactive, zIndex,
     contentTemplate: TooltipTemplate, data, visible, rtl,
@@ -86,7 +87,7 @@ export const viewFunction = ({
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
-  let styles = interactive ? {
+  let styles: Record<string, unknown> = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
@@ -144,7 +145,7 @@ export const viewFunction = ({
               rotateX={correctedCoordinates.x}
               rotateY={correctedCoordinates.y}
             />
-            {(customizedOptions.html || TooltipTemplate) ? null
+            {customizedOptions.html || TooltipTemplate ? null
               : (
                 <g
                   textAnchor="middle"
@@ -154,11 +155,7 @@ export const viewFunction = ({
                   <TextSvgElement
                     text={customizedOptions.text}
                     styles={{
-                      fill: customizedOptions.fontColor,
-                      fontFamily: font.family,
-                      fontSize: font.size,
-                      fontWeight: font.weight,
-                      opacity: font.opacity,
+                      ...fontStyles,
                       pointerEvents,
                     }}
                   />
@@ -382,7 +379,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
         return propsContainer;
       }
     }
-    return domAdapter.getBody();
+    return domAdapter.getBody() as HTMLBodyElement;
   }
 
   get customizedOptions(): CustomizedOptions {
@@ -419,6 +416,20 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     };
 
     return combineClasses(classesMap);
+  }
+
+  get fontStyles(): Record<string, string> {
+    const { font } = this.props;
+    const result: Record<string, string> = {};
+
+    font.family !== undefined && (result.fontFamily = font.family);
+    font.size !== undefined && (result.fontSize = String(font.size));
+    font.weight !== undefined && (result.fontWeight = String(font.weight));
+    font.opacity !== undefined && (result.opacity = String(font.opacity));
+    this.customizedOptions.fontColor !== undefined
+      && (result.fill = this.customizedOptions.fontColor);
+
+    return result;
   }
 
   get correctedCoordinates(): TooltipCoordinates | false {

@@ -2,15 +2,23 @@ import {
   Component,
   JSXComponent,
   Fragment,
+  ComponentBindings,
+  Template,
+  JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
+import { DataCellTemplateProps, ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { DateTableLayoutProps } from './layout_props';
+import { LayoutProps } from '../layout_props';
+import { DateTableCellBase } from './cell';
+
+export interface CellTemplateProps extends ViewCellData {
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
+}
 
 export const viewFunction = ({
   props: {
@@ -52,6 +60,8 @@ export const viewFunction = ({
                 index: cellIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
+                isSelected,
+                isFocused,
                 key,
                 text,
                 otherMonth,
@@ -72,6 +82,8 @@ export const viewFunction = ({
                   today={today}
                   otherMonth={otherMonth}
                   firstDayOfMonth={firstDayOfMonth}
+                  isSelected={isSelected}
+                  isFocused={isFocused}
                 />
               ))}
             </Row>
@@ -81,8 +93,13 @@ export const viewFunction = ({
   </Fragment>
 );
 
+@ComponentBindings()
+export class DateTableBodyProps extends LayoutProps {
+  @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {}

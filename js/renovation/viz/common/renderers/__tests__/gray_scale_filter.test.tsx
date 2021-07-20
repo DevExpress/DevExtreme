@@ -9,7 +9,7 @@ describe('GrayScaleFilter', () => {
         props: { id: 'DevExpress_1' } as GrayScaleFilterProps,
       };
       // eslint-disable-next-line max-len
-      const filter = shallow(<GrayScaleFilterComponent {...vm as GrayScaleFilter} /> as JSX.Element);
+      const filter = shallow(<GrayScaleFilterComponent {...vm as GrayScaleFilter} />);
 
       expect(filter.find('filter').props()).toStrictEqual({
         id: 'DevExpress_1',

@@ -10,7 +10,7 @@ import * as utilsModule from '../../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
 import { DateHeaderCell } from '../cell';
 
-const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
+const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
 describe('DateHeaderLayout', () => {
   const dateHeaderData: any = {
@@ -50,7 +50,7 @@ describe('DateHeaderLayout', () => {
       <LayoutView
         {...viewModel}
         props={{
-          ...(new DateHeaderLayoutProps()),
+          ...new DateHeaderLayoutProps(),
           dateHeaderData,
           ...viewModel.props,
         }}
@@ -157,7 +157,7 @@ describe('DateHeaderLayout', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('isHorizontalGrouping', () => {
-        it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
+        it('should call "isHorizontalGroupingApplied" with correct parameters', () => {
           const groups = [];
           const layout = new DateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
@@ -169,7 +169,7 @@ describe('DateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(false);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
         });
 
@@ -185,7 +185,7 @@ describe('DateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(false);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
         });
 
@@ -201,7 +201,7 @@ describe('DateHeaderLayout', () => {
           expect(layout.isHorizontalGrouping)
             .toBe(true);
 
-          expect(isHorizontalGroupOrientation)
+          expect(isHorizontalGroupingApplied)
             .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
         });
       });

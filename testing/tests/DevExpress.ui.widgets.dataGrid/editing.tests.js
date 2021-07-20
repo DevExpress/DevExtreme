@@ -14,14 +14,13 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/color_box';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/drop_down_box';
 import 'ui/drop_down_button';
 import 'ui/switch';
 import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
@@ -2520,154 +2519,6 @@ QUnit.module('Editing', {
         assert.strictEqual($editCellElement.find('.dx-icon-revert').text(), '', 'text of the icon revert');
     });
 
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        QUnit.test('Update value for row edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'row'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            const $input = $editor.find('input').first();
-            const keyboard = keyboardMock($input);
-            keyboard.type('new value');
-            keyboard.change();
-
-            // assert
-            assert.equal(resultValue, 'new value');
-        });
-
-        QUnit.test('Update value for form edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'form'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            const $input = $editor.find('input').first();
-            const keyboard = keyboardMock($input);
-            keyboard.type('new value');
-            keyboard.change();
-
-            // assert
-            assert.equal(resultValue, 'new value');
-        });
-
-        QUnit.test('Do not update value on keyup event for row edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'row'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            $editor.find('input').first()
-                .val('new value')
-                .trigger('keyup');
-
-            // assert
-            assert.equal(resultValue, undefined);
-        });
-
-        QUnit.test('Do not update value on keyup event for form edit mode', function(assert) {
-            // arrange
-            $.extend(this.options.editing, {
-                allowUpdating: true,
-                mode: 'form'
-            });
-
-            this.editingController.editRow(0);
-
-            let resultValue;
-            const $editor = $('<div/>').appendTo($('#container'));
-            const template = this.editingController.getColumnTemplate({
-                rowType: 'data',
-                row: {
-                    rowIndex: 0
-                },
-                column: {
-                    allowEditing: true,
-                    setCellValue: $.noop
-                }
-            });
-
-            // act
-            template($editor, {
-                setValue: function(value) {
-                    resultValue = value;
-                }
-            });
-            $editor.find('input').first()
-                .val('new value')
-                .trigger('keyup');
-
-            // assert
-            assert.equal(resultValue, undefined);
-        });
-    }
-
     // T620297
     QUnit.test('The text of the colorBox should not be overlaps in a grid cell', function(assert) {
         // arrange
@@ -4214,7 +4065,8 @@ QUnit.module('Editing with real dataController', {
 
         const headerPanelElement = that.gridContainer.find('.dx-datagrid-header-panel').first();
 
-        rowsView.scrollChanged.add(function() {
+        const scrollHandler = function() {
+            rowsView.scrollChanged.remove(scrollHandler);
             // act
             that.click(headerPanelElement, '.dx-datagrid-addrow-button');
 
@@ -4234,7 +4086,9 @@ QUnit.module('Editing with real dataController', {
             delete that.array[7].__KEY__;
             assert.deepEqual(that.array[7], { name: 'Test' }, 'added item');
             done();
-        });
+        };
+
+        rowsView.scrollChanged.add(scrollHandler);
 
         rowsView.element().dxScrollable('instance').scrollTo(45);
     });
@@ -7914,8 +7768,7 @@ QUnit.module('Editing with real dataController', {
         const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
 
         // assert
-        const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
-        assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+        assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, 'auto', 'dx-svg-icon allows pointer events');
         assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
     });
 
@@ -8031,6 +7884,87 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual($linkElements.length, 2, 'link count');
         assert.ok($linkElements.eq(0).hasClass('dx-link-save'), 'the save link');
         assert.ok($linkElements.eq(1).hasClass('dx-link-cancel'), 'the cancel link');
+    });
+
+    QUnit.test('Should not be able to click on disabled edit link', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        let clicked = false;
+
+        this.options.columns.push({
+            type: 'buttons',
+            buttons: [{
+                text: 'My button',
+                disabled: true,
+                onClick: function() {
+                    clicked = true;
+                }
+            }]
+        });
+        this.columnsController.reset();
+        rowsView.render($testElement);
+
+        let $linkElement = $testElement.find('.dx-command-edit').first().find('.dx-link').first();
+
+        // act
+        $linkElement.trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok(!clicked, 'not clicked when disabled');
+
+        // arrange
+        this.columnOption(5, 'buttons[0].disabled', false);
+        $linkElement = $testElement.find('.dx-command-edit').first().find('.dx-link').first();
+
+        // act
+        $linkElement.trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.ok(clicked, 'clicked when isn\'t disabled');
+    });
+
+    QUnit.test('Disabled option of button works when it is a function', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        const disabledSpy = sinon.spy(function(e) {
+            return e.row.data.stateId === 1;
+        });
+
+        this.options.columns.push({
+            type: 'buttons',
+            buttons: [{
+                text: 'My button',
+                disabled: disabledSpy
+            }]
+        });
+
+        this.columnsController.reset();
+        rowsView.render($testElement);
+
+        const rows = this.getVisibleRows();
+        const buttonColumn = this.getVisibleColumns()[5];
+
+        assert.ok(rows.length > 0, 'grid has rows');
+
+        rows.forEach((row, i) => {
+            const args = disabledSpy.getCall(i).args;
+
+            assert.strictEqual(buttonColumn, args[0].column, 'right column');
+            assert.strictEqual(row, args[0].row, 'right row');
+            assert.strictEqual(this, args[0].component, 'right component');
+
+            const $row = this.getRowElement(i);
+            const $link = $($row[0]).find('.dx-command-edit').first().find('.dx-link').first();
+
+            const mustHaveClass = row.data.stateId === 1;
+            assert.strictEqual($link.hasClass('dx-state-disabled'), mustHaveClass, 'row\'s state is right');
+        });
     });
 
     QUnit.test('Clicking on the edit link should not work when the link is set via the \'buttons\' option and allowUpdating is false', function(assert) {
@@ -8625,6 +8559,75 @@ QUnit.module('Editing with real dataController', {
         });
     });
 
+    // T1009400
+    QUnit.test('Roll back modified data when there are nested data items as class instances', function(assert) {
+        // arrange
+        let items;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const checkClassInstances = (items) => {
+            assert.ok(Object.prototype.isPrototypeOf.call(Data, items[0].data), 'item is an instance of the Data class');
+            assert.ok(Object.prototype.isPrototypeOf.call(Prop1, items[0].data.prop1), 'item prop is an instance of the Prop1 class');
+            assert.ok(Object.prototype.isPrototypeOf.call(Prop2, items[0].data.prop1.prop2), 'item prop is an instance of the Prop2 class');
+        };
+
+        class Data {
+            prop1
+        }
+        class Prop1 {
+            prop2
+        }
+
+        class Prop2 {
+            name
+        }
+
+        const dataSource = [{
+            prop1: {
+                prop2: {
+                    field: 'test'
+                }
+            }
+        }];
+        Object.setPrototypeOf(dataSource[0], Data);
+        Object.setPrototypeOf(dataSource[0].prop1, Prop1);
+        Object.setPrototypeOf(dataSource[0].prop1.prop2, Prop2);
+
+        $.extend(this.options.editing, {
+            mode: 'cell',
+            allowUpdating: true
+        });
+        this.options.dataSource = dataSource;
+        this.option('columns', ['prop1.prop2.field']);
+
+        this.dataController.init();
+        this.columnsController.init();
+        rowsView.render($testElement);
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'test', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+
+        // act
+        this.cellValue(0, 0, 'abc');
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'abc', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+
+        // act
+        this.cancelEditData();
+
+        // assert
+        items = this.dataController.items();
+        checkClassInstances(items);
+        assert.strictEqual(items[0].data.prop1.prop2.field, 'test', 'item prop value');
+        assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+    });
 
     QUnit.module('Editing state', {
         beforeEach: function() {
@@ -12009,6 +12012,40 @@ QUnit.module('Editing with validation', {
         assert.equal($errorRow.find('.dx-error-message').text(), errorText, 'errorText is correct');
     });
 
+    QUnit.test('rowValidating should not throw errors when a native promise is used (T999928)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'row'
+            },
+            columns: ['name'],
+            onRowValidating: function(options) {
+                options.promise = new Promise(resolve => {
+                    resolve();
+                });
+            }
+        });
+
+        // act
+        this.addRow();
+
+        try {
+            this.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.ok(true, 'no errors');
+        } catch(error) {
+            // assert
+            assert.ok(false, `error is thrown: ${error.message}`);
+        }
+    });
+
     // T241920
     QUnit.testInActiveWindow('Cell editor invalid value don\'t miss focus on saveEditData', function(assert) {
         // arrange
@@ -12056,10 +12093,6 @@ QUnit.module('Editing with validation', {
 
     // T284398
     QUnit.testInActiveWindow('Show invalid message on focus for an invalid cell of the inserted row', function(assert) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            assert.ok(true, 'test is ignored in IE11 because it failes on farm');
-            return;
-        }
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -12127,7 +12160,8 @@ QUnit.module('Editing with validation', {
             }
         });
 
-        rowsView.scrollChanged.add(function() {
+        const scrollHandler = function() {
+            rowsView.scrollChanged.remove(scrollHandler);
             // act
             that.addRow();
 
@@ -12144,8 +12178,11 @@ QUnit.module('Editing with validation', {
             assert.ok(that.gridContainer.find('tbody > tr').eq(1).hasClass('dx-row-inserted'), 'has inserted row');
             assert.ok(that.gridContainer.find('tbody > tr').eq(2).hasClass('dx-error-row'), 'has error row');
             assert.strictEqual(that.gridContainer.find('tbody > tr').eq(2).text(), 'Test');
+
             done();
-        });
+        };
+
+        rowsView.scrollChanged.add(scrollHandler);
 
         rowsView.element().dxScrollable('instance').scrollTo(45);
     });
@@ -15288,6 +15325,133 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.equal(validationCallback.callCount, 1, 'validation callback was called');
+    });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - validationCallback data should contain the entire data item when changes are specified initially (T1010037)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const validationCallback = sinon.spy();
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true,
+                    changes: [
+                        {
+                            type: 'update',
+                            key: 1,
+                            data: { name: 'test1' }
+                        }
+                    ]
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback
+                    }]
+                }, 'description']
+            });
+
+            this.clock.tick(300);
+
+            // assert
+            assert.ok(validationCallback.called, 'validation callback was called');
+            assert.deepEqual(validationCallback.getCall(0).args[0].data, { id: 1, name: 'test1', description: 'test2' }, 'correct data');
+        });
+    });
+
+    ['Cell', 'Batch'].forEach(mode => {
+        QUnit.test(`${mode} - _getOldData should return correct data when changes are specified initially`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true,
+                    changes: [
+                        {
+                            type: 'update',
+                            key: 1,
+                            data: { name: 'test1' }
+                        }
+                    ]
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: function() {
+                            return false;
+                        }
+                    }]
+                }, 'description']
+            });
+
+            this.editCell(0, 0);
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(this.editingController._getOldData(1), { id: 1, name: 'test', description: 'test2' }, 'correct data');
+        });
+    });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.test(`Batch - Inserted row with an invalid cell should not be duplicated on saving (scrolling mode = ${scrollingMode}) (T1012405)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            rowsView.render($testElement);
+
+            this.applyOptions({
+                dataSource: [{ id: 1, name: 'test', description: 'test2' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: 'batch',
+                    allowAdding: true
+                },
+                columns: [{
+                    dataField: 'name',
+                    validationRules: [
+                        {
+                            type: 'required'
+                        }
+                    ]
+                }, 'description'],
+                scrolling: {
+                    mode: scrollingMode
+                }
+            });
+
+            // act
+            this.addRow();
+            this.clock.tick();
+            let newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after adding');
+
+            // act
+            this.saveEditData();
+            this.clock.tick();
+            newRowCount = this.getVisibleRows().filter(r => r.isNewRow).length;
+
+            // assert
+            assert.strictEqual(newRowCount, 1, 'single new row after saving');
+        });
     });
 });
 

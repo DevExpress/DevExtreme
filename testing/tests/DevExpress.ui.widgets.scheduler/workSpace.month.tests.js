@@ -2,8 +2,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
@@ -21,8 +19,7 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
-            stubInvokeMethod(this.instance);
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({}).dxSchedulerWorkSpaceMonth('instance');
         }
     }, () => {
         [true, false].forEach((renovateRender) => {
@@ -53,7 +50,7 @@ module('Work Space Month', () => {
             this.instance.option('firstDayOfWeek', 1);
             this.instance.option('currentDate', new Date(2015, 2, 4));
 
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 0, 0));
+            const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 0, 0));
             const expectedCoordinates = $element.find('.dx-scheduler-date-table tbody td').eq(10).position();
 
             assert.roughEqual(coords.top, Math.floor(expectedCoordinates.top), 1.001, 'Cell coordinates are right');
@@ -67,7 +64,7 @@ module('Work Space Month', () => {
             this.instance.option('firstDayOfWeek', 7);
             this.instance.option('startDayHour', 5);
 
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
+            const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().top, 1, 'Cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
@@ -79,7 +76,7 @@ module('Work Space Month', () => {
             this.instance.option('firstDayOfWeek', 7);
             this.instance.option('endDayHour', 10);
 
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
+            const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().top, 1, 'Cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
@@ -116,7 +113,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 5, 0),
                 endDate: new Date(2015, 1, 24, 0, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -134,7 +130,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 10, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -153,7 +148,6 @@ module('Work Space Month', () => {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2015, 1, 23, 0, 0),
                 endDate: new Date(2015, 1, 23, 5, 0),
-                allDay: undefined,
                 groupIndex: 0,
             });
         });
@@ -168,7 +162,7 @@ module('Work Space Month', () => {
 
                 const $lastCell = this.instance.$element().find('.dx-scheduler-date-table').find('td').eq(6);
 
-                assert.deepEqual(this.instance.getMaxAllowedPosition(),
+                assert.equal(Math.round(this.instance.getMaxAllowedPosition()),
                     Math.round($lastCell.position().left + $lastCell.outerWidth()), 'Max left position is correct');
             });
 
@@ -194,10 +188,10 @@ module('Work Space Month', () => {
                 const $fourthGroupLastCell = $cells.eq(27);
 
                 const expectedResult = [
-                    Math.round($firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width),
-                    Math.round($fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width)
+                    $firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width,
+                    $secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width,
+                    $thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width,
+                    $fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width
                 ];
 
                 const actualResult = [0, 1, 2, 3].map((groupIndex) => {
@@ -227,29 +221,19 @@ module('Work Space Month', () => {
         test('Get cell count to last view dates', function(assert) {
             this.instance.option('renovateRender', false);
 
-            const origGetFirstViewDate = this.instance.getStartViewDate;
+            this.instance.option({
+                currentDate: new Date(2016, 2, 14, 0, 0),
+                startDayHour: 5,
+                firstDayOfWeek: 1,
+            });
 
-            this.instance.getStartViewDate = function() {
-                return new Date(2016, 1, 29, 6, 0);
-            };
+            const $cell = this.instance._getCells().eq(14);
 
-            try {
-                this.instance.option({
-                    currentDate: new Date(2016, 2, 14, 0, 0),
-                    startDayHour: 5
-                });
-
-                const $cell = this.instance._getCells().eq(14);
-
-                assert.deepEqual($cell.data('dxCellData'), {
-                    startDate: new Date(2016, 2, 14, 5, 0),
-                    endDate: new Date(2016, 2, 15, 0, 0),
-                    allDay: undefined,
-                    groupIndex: 0,
-                }, 'data of the cell is right');
-            } finally {
-                this.instance.getStartViewDate = origGetFirstViewDate;
-            }
+            assert.deepEqual($cell.data('dxCellData'), {
+                startDate: new Date(2016, 2, 14, 5, 0),
+                endDate: new Date(2016, 2, 15, 0, 0),
+                groupIndex: 0,
+            }, 'data of the cell is right');
         });
 
         test('Cells have right cellData in horizontal grouped WorkSpace Month view', function(assert) {
@@ -280,15 +264,12 @@ module('Work Space Month', () => {
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }],
             }).dxSchedulerWorkSpaceMonth('instance');
-
-            stubInvokeMethod(this.instance);
-
-            this.instance.option('groups', [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }]);
         }
     }, () => {
         test('Work space should find cell coordinates by date, groupByDate = true', function(assert) {
@@ -296,13 +277,13 @@ module('Work Space Month', () => {
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
 
-            let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4), 1, false);
+            let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4), 1, false);
 
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(7).position().top, 1.1, 'Top cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(7).position().left, 1.1, 'Left cell coordinates are right');
             assert.roughEqual(coords.hMax, 998, 1.1, 'hMax is right');
 
-            coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 21), 0, false);
+            coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 21), 0, false);
 
             assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(40).position().top, 1.1, 'Top cell coordinates are right');
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(40).position().left, 1.1, 'Left cell coordinates are right');
@@ -315,15 +296,12 @@ module('Work Space Month', () => {
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
-                crossScrollingEnabled: true
+                crossScrollingEnabled: true,
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }],
             }).dxSchedulerWorkSpaceMonth('instance');
-
-            stubInvokeMethod(this.instance);
-
-            this.instance.option('groups', [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }]);
         }
     }, () => {
         test('Group table content should have right height', function(assert) {
@@ -354,7 +332,6 @@ module('Work Space Month', () => {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth(options).dxSchedulerWorkSpaceMonth('instance');
-                stubInvokeMethod(this.instance);
             };
         }
     }, () => {

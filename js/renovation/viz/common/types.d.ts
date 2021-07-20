@@ -1,24 +1,26 @@
-type FormatType = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
-export interface FormatObject {
-  type?: FormatType;
-  precision?: number;
-  currency?: string;
+// eslint-disable-next-line import/named
+import { Format as LocalizationFormat, FormatObject as LocalizationFormatObject } from '../../../localization';
+
+interface ChartFormatObject {
   percentPrecision?: number;
 }
-export type Format = FormatObject | FormatType | string | ((value: number|Date) => string);
+export interface FormatObject extends LocalizationFormatObject, ChartFormatObject { }
+export type Format = LocalizationFormat & FormatObject;
 export interface Point {
   size: number;
-  tag: any;
+  tag: unknown;
   originalArgument: Date | string | number;
   originalValue: Date | string | number;
 }
 
 export interface Translator {
-  translate: (value: number|string|Date) => number;
+  translate: (value: number | string | Date) => number;
 }
 
 export interface BaseEventData {
-  readonly component: any; // TODO: after improve refs use ref of the widget
+  // TODO: after improve refs use ref of the widget
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly component: any;
 }
 
 export interface EventData<T> extends BaseEventData {
@@ -48,7 +50,7 @@ export interface CustomizedOptions {
   borderColor?: string;
   fontColor?: string;
 }
-export type CustomizeTooltipFn = (info: any) => CustomizedOptions;
+export type CustomizeTooltipFn = (info: Record<string, unknown>) => CustomizedOptions;
 export type Location = 'center' | 'edge';
 export type Container = string | HTMLElement;
 export interface TooltipData {

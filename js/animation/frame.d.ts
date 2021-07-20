@@ -5,7 +5,6 @@
  * @namespace DevExpress.utils
  * @module animation/frame
  * @export cancel
- * @prevFileNamespace DevExpress.animation
  * @public
  */
 export function cancelAnimationFrame(requestID: number): void;
@@ -18,7 +17,6 @@ export function cancelAnimationFrame(requestID: number): void;
  * @namespace DevExpress.utils
  * @module animation/frame
  * @export request
- * @prevFileNamespace DevExpress.animation
  * @public
  */
 export function requestAnimationFrame(callback: Function): number;

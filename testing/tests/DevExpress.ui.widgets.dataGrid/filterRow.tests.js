@@ -11,7 +11,7 @@ QUnit.testStart(function() {
 
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/tag_box';
 
 import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
@@ -26,7 +26,6 @@ import fx from 'animation/fx';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
-import browser from 'core/utils/browser';
 
 const device = devices.real();
 
@@ -1311,8 +1310,7 @@ QUnit.module('Filter Row', {
 
     // T904124
     [true, false].forEach(rtlEnabled => {
-        const leftTextAlign = browser.msie ? 'left' : 'start';
-        const textAlign = rtlEnabled ? 'right' : leftTextAlign;
+        const textAlign = rtlEnabled ? 'right' : 'start';
         QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
             // arrange
             const $testElement = $('#container');
@@ -1877,7 +1875,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
     // T306826
     QUnit.test('Apply filter by range when entering the filter value quickly', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const $testElement = $('#container').addClass('dx-datagrid-borders');
 
@@ -1919,6 +1917,42 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(filter[1], 'and');
         assert.strictEqual(filter[2][1], '<=', 'selectedFilterOperation of the second filter');
         assert.equal(filter[2][2], 18, 'value of the second filter');
+    });
+
+    // T1013123
+    QUnit.test('changed event should be fired once on entering filter by range', function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container').addClass('dx-datagrid-borders');
+
+        that.options.columns[1] = { dataField: 'age', selectedFilterOperation: 'between' };
+        setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+
+        that.columnHeadersView.render($testElement);
+
+        $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
+        that.clock.tick();
+
+        const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($startRangeInput.length, 1, 'has input');
+        const $endRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($endRangeInput.length, 1, 'has input');
+
+        const changedSpy = sinon.spy();
+        that.dataController.changed.add(changedSpy);
+
+        // act
+        $startRangeInput.val(17);
+        $($startRangeInput).trigger('change');
+        $endRangeInput.val(18);
+        $($endRangeInput).trigger('change');
+        that.clock.tick(750);
+
+        // assert
+        assert.strictEqual(changedSpy.callCount, 1, 'changed is called once');
+        assert.ok(that.getCombinedFilter(), 'has filter');
     });
 
     // T318603

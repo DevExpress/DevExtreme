@@ -193,6 +193,28 @@ module('Renovated Views', () => {
         });
     });
 
+    ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => {
+        test(`${view}'s cells should have correct height when current date changes`, function(assert) {
+            const scheduler = createWrapper({
+                views: [view],
+                currentView: view,
+                crossScrollingEnabled: true,
+                renovateRender: true,
+                height: 600,
+                currentDate: new Date(2020, 0, 1),
+            });
+
+            const cellHeight = scheduler.workSpace.getCellHeight();
+
+            scheduler.option('currentDate', 2021, 0, 1);
+
+            const cellHeightAfterCurrentDateChange = scheduler.workSpace.getCellHeight();
+
+            assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell hieght');
+        });
+    });
+
+
     [{
         groupOrientation: 'horizontal',
         groupByDate: true,

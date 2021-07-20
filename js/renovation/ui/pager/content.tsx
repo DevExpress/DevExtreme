@@ -15,7 +15,7 @@ import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
-import { EventCallback } from '../common/event_callback.d';
+import { EventCallback } from '../common/event_callback';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
 
 export const viewFunction = ({
@@ -111,6 +111,13 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      rootElementRef.current = this.widgetRootElementRef.current;
+    }
+  }
+
   private createFakeInstance(): {
     option: () => boolean;
     element: () => HTMLElement | null;
@@ -118,7 +125,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   } {
     return {
       option: (): boolean => false,
-      element: (): HTMLElement | null => this.widgetRootElementRef.current,
+      element: (): HTMLElement | null => this.widgetRootElementRef.current as HTMLElement,
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);
@@ -135,13 +142,6 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
           return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
         },
     };
-  }
-
-  @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
-    if (rootElementRef) {
-      rootElementRef.current = this.widgetRootElementRef.current;
-    }
   }
 
   get infoVisible(): boolean {
@@ -162,7 +162,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible && (this.props.pageCount as number) > 0;
+    return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {

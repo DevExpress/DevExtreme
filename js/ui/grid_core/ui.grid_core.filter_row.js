@@ -8,7 +8,7 @@ import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import Editor from '../editor/editor';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import Menu from '../menu';
 import { selectView } from '../shared/accessibility';
 
@@ -157,7 +157,12 @@ const ColumnHeadersViewFilterRowExtender = (function() {
         if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-        that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue', normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
+
+        const columnOptionName = isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue';
+        const normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
+        const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
+        const notFireEvent = options.notFireEvent || isBetween && Array.isArray(normalizedValue) && normalizedValue.indexOf(undefined) >= 0;
+        that._columnsController.columnOption(column.index, columnOptionName, normalizedValue, notFireEvent);
     };
 
     return {
@@ -254,6 +259,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 focusStateEnabled: false,
                 closeOnTargetScroll: false,
                 closeOnOutsideClick: true,
+                copyRootClassesToWrapper: true,
                 animation: false,
                 position: {
                     my: 'top',

@@ -1,11 +1,12 @@
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
-import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'));
 
-const createScheduler = async (groups: void | string[], rtlEnabled: boolean): Promise<void> => {
+const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
+Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: [{
       text: 'Website Re-Design Plan',

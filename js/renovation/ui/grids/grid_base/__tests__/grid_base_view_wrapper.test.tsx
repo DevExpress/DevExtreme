@@ -33,7 +33,24 @@ describe('DataGridViews', () => {
       expect(component.props.view).toMatchObject({
         _$element: $(viewRef.current),
       });
-      expect((component.props.view.render)).toHaveBeenCalledTimes(1);
+      expect(component.props.view.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('onRendered event should be fired after view render', () => {
+      const viewRef = createRef() as any;
+      const view = {
+        render: jest.fn(),
+      };
+      const props = {
+        view,
+        onRendered: jest.fn(),
+      } as any;
+      const component = new GridBaseViewWrapper(props);
+      component.viewRef = viewRef;
+
+      component.renderView();
+
+      expect(component.props.onRendered).toHaveBeenCalledTimes(1);
     });
   });
 });

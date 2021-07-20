@@ -767,5 +767,3 @@ QUnit.module('Methods', {
         }, 'Updated data is correct');
     });
 });
-
-

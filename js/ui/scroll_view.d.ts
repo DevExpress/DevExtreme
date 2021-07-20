@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     DxPromise
 } from '../core/utils/deferred';
 
@@ -51,7 +47,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onPullDown?: ((e: PullDownEvent) => void);
@@ -63,39 +58,34 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     onReachBottom?: ((e: ReachBottomEvent) => void);
     /**
      * @docid
      * @default "Release to refresh..."
-     * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default "" &for(Material)
      * @public
      */
     pulledDownText?: string;
     /**
      * @docid
      * @default "Pull down to refresh..."
-     * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default "" &for(Material)
      * @public
      */
     pullingDownText?: string;
     /**
      * @docid
      * @default "Loading..."
-     * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default "" &for(Material)
      * @public
      */
     reachBottomText?: string;
     /**
      * @docid
      * @default "Refreshing..."
-     * @default "" [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default "" &for(Material)
      * @public
      */
     refreshingText?: string;
@@ -106,16 +96,13 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @hasTranscludedContent
  * @module ui/scroll_view
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxScrollView extends dxScrollable {
-    constructor(element: UserDefinedElement, options?: dxScrollViewOptions)
+export default class dxScrollView extends dxScrollable<dxScrollViewOptions> {
     /**
      * @docid
      * @publicName refresh()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     refresh(): void;
@@ -124,7 +111,6 @@ export default class dxScrollView extends dxScrollable {
      * @publicName release(preventScrollBottom)
      * @param1 preventScrollBottom:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     release(preventScrollBottom: boolean): DxPromise<void>;

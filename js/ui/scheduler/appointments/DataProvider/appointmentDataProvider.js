@@ -6,52 +6,73 @@ const FilterStrategies = {
     standard: 'standard'
 };
 
-export default class AppointmentDataProvider {
-    constructor(scheduler, dataSource, dataAccessors) {
-        this.scheduler = scheduler;
-        this.dataSource = dataSource;
-        this.dataAccessors = dataAccessors;
+export class AppointmentDataProvider {
+    constructor(options) {
+        this.options = options;
+        this.key = this.options.key;
+        this.scheduler = this.options.scheduler;
+        this.dataSource = this.options.dataSource;
+        this.dataAccessors = this.options.getDataAccessors(this.key);
+        this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
-        this.initStrategy();
+
+        this.initFilterStrategy();
     }
 
     get filterMaker() { return this.getFilterStrategy().filterMaker; }
     get keyName() { return this.appointmentDataSource.keyName; }
     get filterStrategyName() {
-        return this.scheduler.isVirtualScrolling()
+        return this.options.getIsVirtualScrolling()
             ? FilterStrategies.virtual
             : FilterStrategies.standard;
     }
 
+    getDataAccessors() {
+        return this.dataAccessors;
+    }
+
     getFilterStrategy() {
         if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
-            this.initStrategy();
+            this.initFilterStrategy();
         }
 
         return this.filterStrategy;
     }
 
-    initStrategy() {
+    initFilterStrategy() {
+        const filterOptions = {
+            key: this.key,
+            scheduler: this.scheduler,
+            dataSource: this.dataSource,
+            dataAccessors: this.dataAccessors,
+            startDayHour: this.options.startDayHour,
+            endDayHour: this.options.endDayHour,
+            appointmentDuration: this.options.appointmentDuration,
+            showAllDayPanel: this.options.showAllDayPanel,
+            timeZoneCalculator: this.options.timeZoneCalculator,
+            resourceManager: this.options.resourceManager
+        };
+
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
-            ? new AppointmentFilterVirtualStrategy(this.scheduler, this.dataSource, this.dataAccessors)
-            : new AppointmentFilterBaseStrategy(this.scheduler, this.dataSource, this.dataAccessors);
+            ? new AppointmentFilterVirtualStrategy(filterOptions)
+            : new AppointmentFilterBaseStrategy(filterOptions);
     }
 
     setDataSource(dataSource) {
         this.dataSource = dataSource;
-        this.initStrategy();
+        this.initFilterStrategy();
         this.appointmentDataSource.setDataSource(this.dataSource);
     }
 
-    setDataAccessors(dataAccessors) {
+    updateDataAccessors(dataAccessors) {
         this.dataAccessors = dataAccessors;
-        this.initStrategy();
+        this.initFilterStrategy();
     }
 
     // Filter mapping
     filter() {
-        return this.getFilterStrategy().filter();
+        this.filteredItems = this.getFilterStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {

@@ -25,7 +25,7 @@ import { FieldsArea } from './ui.pivot_grid.fields_area';
 
 import PivotGridFieldChooser from './ui.pivot_grid.field_chooser';
 import PivotGridFieldChooserBase from './ui.pivot_grid.field_chooser_base';
-import { ExportMixin } from './ui.pivot_grid.export';
+import { ExportController } from './ui.pivot_grid.export';
 import chartIntegrationMixin from './ui.pivot_grid.chart_integration';
 import Popup from '../popup';
 import ContextMenu from '../context_menu';
@@ -456,8 +456,13 @@ const PivotGrid = Widget.inherit({
                 break;
             case 'loadPanel':
                 if(hasWindow()) {
-                    that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
-                    that._invalidate();
+                    if(args.fullName === 'loadPanel.enabled') {
+                        clearTimeout(this._hideLoadingTimeoutID);
+                        that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                    } else {
+                        that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+                        that._invalidate();
+                    }
                 }
                 break;
             case 'fieldPanel':
@@ -605,6 +610,7 @@ const PivotGrid = Widget.inherit({
             height: fieldChooserOptions.height,
             showCloseButton: true,
             resizeEnabled: true,
+            copyRootClassesToWrapper: true,
             minWidth: fieldChooserOptions.minWidth,
             minHeight: fieldChooserOptions.minHeight,
             toolbarItems: toolbarItems,
@@ -1074,7 +1080,6 @@ const PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             $(TR)
-                .toggleClass('dx-ie', coreBrowserUtils.msie === true)
                 .append(rowHeaderContainer)
                 .append(columnsAreaElement)
                 .appendTo(tableElement);
@@ -1423,7 +1428,7 @@ const PivotGrid = Widget.inherit({
 
                 const updateScrollableResults = [];
 
-                dataArea.processScroll(scrollBarInfo.scrollBarUseNative, hasColumnsScroll, hasRowsScroll);
+                dataArea.processScroll(scrollBarInfo.scrollBarUseNative, that.option('rtlEnabled'), hasColumnsScroll, hasRowsScroll);
                 each([columnsArea, rowsArea, dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
@@ -1450,7 +1455,7 @@ const PivotGrid = Widget.inherit({
         this._dataController.applyPartialDataSource(area, path, dataSource);
     }
 })
-    .inherit(ExportMixin)
+    .inherit(ExportController)
     .include(chartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);

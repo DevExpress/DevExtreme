@@ -2,10 +2,9 @@ import {
   ComponentBindings,
   OneWay,
   Event,
-  TwoWay,
 } from '@devextreme-generator/declarations';
+import { EventCallback } from '../common/event_callback';
 
-import noop from '../../utils/noop';
 import { TopPocketState } from './common/consts';
 
 @ComponentBindings()
@@ -22,31 +21,33 @@ export class ScrollbarProps {
 
   @OneWay() bottomPocketSize = 0;
 
+  @OneWay() contentPaddingBottom = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() isScrollableHovered = false;
 
   @OneWay() forceVisibility = false;
 
-  @OneWay() forceUpdateScrollbarLocation = false;
-
   @OneWay() scrollLocation = 0;
 
-  @TwoWay() pocketState = TopPocketState.STATE_RELEASED; // TODO: avoid twoWay
+  @OneWay() pocketState = TopPocketState.STATE_RELEASED;
 
-  @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
+  @Event() onAnimatorStart?: (animator: 'inertia' | 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
-  @Event() onAnimatorCancel?: () => void = noop;
+  @Event() onAnimatorCancel?: EventCallback;
 
-  @Event() pocketStateChange?: (state: number) => void;
+  @Event() onLock?: EventCallback;
 
-  @Event() onPullDown?: () => void = noop;
+  @Event() onUnlock?: EventCallback;
 
-  @Event() onReachBottom?: () => void = noop;
+  @Event() onPullDown?: EventCallback;
 
-  @Event() onRelease?: () => void = noop;
+  @Event() onReachBottom?: EventCallback;
 
-  @Event() onScroll?: () => void = noop;
+  @Event() onRelease?: EventCallback;
 
-  @Event() onEnd?: (direction: string) => void = noop;
+  @Event() onScroll?: EventCallback;
+
+  @Event() onEnd?: EventCallback<string>;
 }

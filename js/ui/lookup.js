@@ -7,7 +7,6 @@ import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
@@ -274,8 +273,7 @@ const Lookup = DropDownList.inherit({
                         height: 'auto'
                     },
 
-                    usePopover: true,
-                    useInkRipple: false
+                    usePopover: true
                 }
             },
             {
@@ -304,6 +302,7 @@ const Lookup = DropDownList.inherit({
 
                     dropDownOptions: {
                         closeOnOutsideClick: true,
+                        _ignoreFunctionValueDeprecation: true,
 
                         width: () => getElementWidth(this.$element()),
                         height: (function() { return this._getPopupHeight(); }).bind(this),
@@ -401,16 +400,10 @@ const Lookup = DropDownList.inherit({
             .append(this._$field)
             .append($arrow)
             .appendTo(this.$element());
-
-        this.option('useInkRipple') && this._renderInkRipple();
     },
 
     _getInputContainer() {
         return this._$fieldWrapper;
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render();
     },
 
     _toggleOpenState: function() {
@@ -418,25 +411,6 @@ const Lookup = DropDownList.inherit({
 
         if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._setPopupPosition();
-        }
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase(...arguments);
-
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: this._inputWrapper(),
-            event: e
-        };
-
-        if(value) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
         }
     },
 
@@ -669,10 +643,10 @@ const Lookup = DropDownList.inherit({
                 showEvent: null,
                 hideEvent: null,
                 target: this.$element(),
-                _fixedPosition: false,
                 fullScreen: false,
                 shading: false,
                 closeOnTargetScroll: true,
+                _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
                     ? (function() { return this.$element().outerWidth(); }).bind(this)
                     : this._popupConfig().width
@@ -716,7 +690,7 @@ const Lookup = DropDownList.inherit({
             closeOnTargetScroll: false,
             onPositioned: null,
 
-            maxHeight: function() { return $(window).height(); },
+            maxHeight: '100vh',
 
             showTitle: this.option('dropDownOptions.showTitle'),
             title: this.option('dropDownOptions.title'),
@@ -865,7 +839,7 @@ const Lookup = DropDownList.inherit({
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option('valueChangeEvent'),
-                onValueChanged: this._searchHandler.bind(this)
+                onValueChanged: (e) => { this._searchHandler(e); }
             });
 
             this._registerSearchKeyHandlers();
@@ -1033,7 +1007,6 @@ const Lookup = DropDownList.inherit({
     _clean: function() {
         this._$fieldWrapper.remove();
         this._$searchBox = null;
-        delete this._inkRipple;
         this.callBase();
     },
 

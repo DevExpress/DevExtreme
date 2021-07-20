@@ -33,7 +33,7 @@ fixture`Resize appointments in the Scheduler basic views`
     .eql('400px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [view],
   currentView: view,
   dataSource,
@@ -66,7 +66,7 @@ test('Resize in the "timelineMonth" view', async (t) => {
     .eql('200px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['timelineMonth'],
   currentView: 'timelineMonth',
   dataSource,
@@ -82,7 +82,7 @@ test('Resize appointment on timelineWeek view with custom startDayHour & endDayH
     .expect(appointment.size.width).eql('200px')
     .expect(appointment.date.time)
     .eql('2:00 PM - 3:00 PM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'timelineWeek', startDayHour: 10, endDayHour: 16, cellDuration: 60,
   }],
@@ -105,7 +105,7 @@ test('Resize should work correctly when cell\'s width is not an integer', async 
     .drag(appointment.resizableHandle.right, 100, 0)
     .expect(appointment.date.time)
     .eql('12:00 AM - 4:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'timelineDay',
     cellDuration: 120,

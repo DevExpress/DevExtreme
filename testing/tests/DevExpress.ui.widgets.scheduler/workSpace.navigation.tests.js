@@ -4,8 +4,6 @@ import { isRenderer } from 'core/utils/type';
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_work_week';
@@ -44,10 +42,11 @@ module('Workspace navigation', () => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             ...options,
                         });
                     };
+
                 },
             }, () => {
                 test('Month workspace navigation by arrows', function(assert) {
@@ -144,35 +143,31 @@ module('Workspace navigation', () => {
                 });
 
                 test('Workspace should handle enter/space key', function(assert) {
+                    const onSelectedCellsClick = sinon.stub();
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
-                        currentDate: new Date(2015, 3, 1)
+                        currentDate: new Date(2015, 3, 1),
+                        onSelectedCellsClick,
                     }, 'dxSchedulerWorkSpaceMonth');
                     const keyboard = keyboardMock($element);
-                    const instance = $element.dxSchedulerWorkSpaceMonth('instance');
-                    const updateSpy = sinon.spy(noop);
-
-                    instance.invoke = updateSpy;
 
                     $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
 
                     keyboard.keyDown('enter');
-                    assert.notOk(updateSpy.called, 'enter is not handled');
+                    assert.notOk(onSelectedCellsClick.called, 'enter is not handled');
 
                     $($element).trigger('focusin');
                     keyboard.keyDown('enter');
-                    assert.equal(updateSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
 
-                    assert.deepEqual(updateSpy.getCall(0).args[1], {
+                    assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
                         startDate: new Date(2015, 2, 30),
                         endDate: new Date(2015, 2, 31)
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right');
                     keyboard.keyDown('space');
-                    assert.equal(updateSpy.getCall(1).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-                    assert.deepEqual(updateSpy.getCall(1).args[1], {
+                    assert.deepEqual(onSelectedCellsClick.getCall(1).args[0], {
                         startDate: new Date(2015, 2, 31),
                         endDate: new Date(2015, 3, 1)
                     }, 'Arguments are OK');
@@ -190,6 +185,7 @@ module('Workspace navigation', () => {
                         firstDayOfWeek: 1,
                         currentDate: new Date(2015, 3, 1),
                         onCellClick: updateSpy,
+                        onSelectedCellsClick: () => {},
                     }, 'dxSchedulerWorkSpaceMonth');
                     const keyboard = keyboardMock($element);
 
@@ -464,33 +460,30 @@ module('Workspace navigation', () => {
                 });
 
                 test('Workspace should handle enter/space key for several selected cells', function(assert) {
+                    const onSelectedCellsClick = sinon.stub();
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
-                        currentDate: new Date(2015, 3, 1)
+                        currentDate: new Date(2015, 3, 1),
+                        onSelectedCellsClick,
                     }, 'dxSchedulerWorkSpaceMonth');
                     const keyboard = keyboardMock($element);
-                    const instance = $element.dxSchedulerWorkSpaceMonth('instance');
-                    const updateSpy = sinon.spy(noop);
-
-                    instance.invoke = updateSpy;
 
                     $($element.find('.' + CELL_CLASS).eq(0)).trigger('focusin');
 
                     $($element).trigger('focusin');
                     keyboard.keyDown('down', { shiftKey: true });
                     keyboard.keyDown('enter');
-                    assert.equal(updateSpy.getCall(0).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
 
-                    assert.deepEqual(updateSpy.getCall(0).args[1], {
+                    assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
                         startDate: new Date(2015, 2, 30),
                         endDate: new Date(2015, 3, 7)
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right', { shiftKey: true });
                     keyboard.keyDown('space');
-                    assert.equal(updateSpy.getCall(1).args[0], 'showAddAppointmentPopup', 'Correct method of observer is called');
-                    assert.deepEqual(updateSpy.getCall(1).args[1], {
+
+                    assert.deepEqual(onSelectedCellsClick.getCall(1).args[0], {
                         startDate: new Date(2015, 2, 30),
                         endDate: new Date(2015, 3, 8)
                     }, 'Arguments are OK');
@@ -520,13 +513,13 @@ module('Workspace navigation', () => {
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
                         currentDate: new Date(2015, 3, 1),
-                        height: 400
+                        height: 400,
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceMonth');
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
 
-                    stubInvokeMethod(instance),
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+                    instance.option();
 
                     const cells = $element.find('.' + CELL_CLASS);
 
@@ -558,8 +551,6 @@ module('Workspace navigation', () => {
                     }, 'dxSchedulerWorkSpaceMonth');
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
-
-                    stubInvokeMethod(instance),
                     instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -650,13 +641,10 @@ module('Workspace navigation', () => {
                         startDayHour: 3,
                         endDayHour: 10,
                         hoursInterval: 0.5,
-                        currentDate: new Date(2015, 3, 1)
+                        currentDate: new Date(2015, 3, 1),
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceDay');
-                    const instance = $element.dxSchedulerWorkSpaceDay('instance');
                     const keyboard = keyboardMock($element);
-
-                    stubInvokeMethod(instance),
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
 
@@ -876,11 +864,8 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
+                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]
                             }, workSpace.class);
-
-                            const instance = $element[workSpace.class]('instance');
-                            stubInvokeMethod(instance);
-                            instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                             const keyboard = keyboardMock($element);
                             const cells = $element.find('.' + CELL_CLASS);
@@ -923,11 +908,8 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
+                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                             }, workSpace.class);
-
-                            const instance = $element[workSpace.class]('instance');
-                            stubInvokeMethod(instance);
-                            instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                             const keyboard = keyboardMock($element);
                             const cells = $element.find('.' + CELL_CLASS);
@@ -953,7 +935,7 @@ module('Workspace navigation', () => {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: scrollingMode === 'virtual',
+                            renovateRender: true,
                             currentDate: new Date(2021, 0, 10),
                             ...options,
                         });
@@ -1077,13 +1059,10 @@ module('Workspace navigation', () => {
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
                             e.component._attachTablesEvents();
-                        }
+                        },
+                        onSelectedCellsClick: () => {},
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceWeek');
-                    const instance = $element.dxSchedulerWorkSpaceWeek('instance');
-
-                    stubInvokeMethod(instance);
-
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
                     let cell = cells.eq(14).get(0);
@@ -1128,11 +1107,8 @@ module('Workspace navigation', () => {
                             e.component.initDragBehavior();
                             e.component._attachTablesEvents();
                         },
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceMonth');
-                    const instance = $element.dxSchedulerWorkSpaceMonth('instance');
-
-                    stubInvokeMethod(instance),
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
 
@@ -1237,23 +1213,20 @@ module('Workspace navigation', () => {
 
                 test('Popup should be shown when onCellClick', function(assert) {
                     assert.expect(1);
-
+                    const onSelectedCellsClick = sinon.stub();
 
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         onCellClick: function(e) {
                             e.cancel = true;
-                        }
+                        },
+                        onSelectedCellsClick,
                     }, 'dxSchedulerWorkSpaceMonth');
-                    const instance = $element.dxSchedulerWorkSpaceMonth('instance');
-
-                    const stub = sinon.stub(instance, 'notifyObserver').withArgs('showAddAppointmentPopup');
-
                     const $cell = $element.find('.' + CELL_CLASS).eq(1);
 
                     pointerMock($cell).start().click().click();
 
-                    assert.notOk(stub.called, 'showAddAppointmentPopup doesn\'t shown');
+                    assert.notOk(onSelectedCellsClick.called, 'onSelectedCellsClick isn\'t called');
                 });
 
                 test('onCellContextMenu should be fired after trigger context menu event', function(assert) {
@@ -1310,12 +1283,8 @@ module('Workspace navigation', () => {
                         groupOrientation: 'horizontal',
                         startDayHour: 0,
                         endDayHour: 4,
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceDay');
-
-                    const instance = $element.dxSchedulerWorkSpaceDay('instance');
-
-                    stubInvokeMethod(instance);
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
                     let cell = cells.eq(13).get(0);
@@ -1354,12 +1323,8 @@ module('Workspace navigation', () => {
                         },
                         intervalCount: 3,
                         groupOrientation: 'horizontal',
+                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                     }, 'dxSchedulerWorkSpaceDay');
-
-                    const instance = $element.dxSchedulerWorkSpaceDay('instance');
-
-                    stubInvokeMethod(instance);
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
                     let cell = cells.eq(12).get(0);
@@ -1431,12 +1396,8 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 height: 500,
+                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
                             }, workSpace.class);
-
-                            const instance = $element[workSpace.class]('instance');
-
-                            stubInvokeMethod(instance);
-                            instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
                             const cells = $element.find('.' + CELL_CLASS);
                             const $table = $element.find('.dx-scheduler-date-table');
@@ -1484,15 +1445,11 @@ module('Workspace navigation', () => {
                         startDayHour: 0,
                         endDayHour: 2,
                         showAllDayPanel: true,
+                        groups: [
+                            { name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] },
+                            { name: 'b', items: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }] },
+                        ],
                     }, 'dxSchedulerWorkSpaceWeek');
-
-                    const instance = $element.dxSchedulerWorkSpaceWeek('instance');
-
-                    stubInvokeMethod(instance);
-                    instance.option('groups', [
-                        { name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] },
-                        { name: 'b', items: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }] },
-                    ]);
 
                     const cells = $element.find('.' + CELL_CLASS);
                     const $table = $element.find('.dx-scheduler-date-table');

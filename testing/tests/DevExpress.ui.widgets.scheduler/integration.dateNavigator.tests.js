@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
+import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import 'generic_light.css!';
 import dxPopup from 'ui/popup';
@@ -211,8 +212,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-next')).trigger('dxclick');
 
-        const workspace = this.instance.getWorkSpace();
-        assert.deepEqual(workspace._firstViewDate, new Date(2017, 4, 3, 8, 0), 'New date is correct');
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 4, 3, 8, 0), 'New date is correct');
     });
 
     QUnit.test('Click on the \'previous\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', function(assert) {
@@ -230,8 +230,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-previous')).trigger('dxclick');
 
-        const workspace = this.instance.getWorkSpace();
-        assert.deepEqual(workspace._firstViewDate, new Date(2017, 3, 27, 8, 0), 'New date is correct');
+        assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 3, 27, 8, 0), 'New date is correct');
     });
 
     QUnit.test('Caption should be correct when intervalCount & startDate are set, month view', function(assert) {
@@ -432,13 +431,13 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     QUnit.test('Tasks should be rerendered after click on next/prev button', function(assert) {
         this.createInstance({ currentDate: new Date(2015, 1, 24) });
 
-        const spy = sinon.spy(this.instance.appointmentDataProvider, 'filterByDate');
+        const spy = sinon.spy(getAppointmentDataProvider(this.instance.key), 'filterByDate');
 
         try {
             $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
             assert.ok(spy.calledOnce, 'filterByDate is called');
         } finally {
-            this.instance.appointmentDataProvider.filterByDate.restore();
+            getAppointmentDataProvider(this.instance.key).filterByDate.restore();
         }
     });
 

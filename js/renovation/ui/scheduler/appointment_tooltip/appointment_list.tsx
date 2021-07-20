@@ -7,7 +7,6 @@ import {
   Event,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
-import noop from '../../../utils/noop';
 import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
@@ -22,6 +21,7 @@ import getCurrentAppointment from './utils/get_current_appointment';
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
 } from './utils/default_functions';
+import { EventCallback } from '../../common/event_callback';
 
 interface ItemTemplateProps {
   item: AppointmentItem;
@@ -66,11 +66,11 @@ export class AppointmentListProps {
 
   @OneWay() target?: HTMLElement;
 
-  @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
+  @Event() showAppointmentPopup?: ShowAppointmentPopupFn;
 
-  @Event() onHide?: () => void = noop;
+  @Event() onHide?: EventCallback;
 
-  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
+  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn;
 
   @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 

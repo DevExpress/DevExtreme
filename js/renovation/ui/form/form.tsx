@@ -26,7 +26,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
       screenByWidth={viewModel.props.screenByWidth}
     />
   );
-  return (scrollingEnabled
+  return scrollingEnabled
     ? (
       <Scrollable
         aria={aria}
@@ -51,8 +51,7 @@ export const viewFunction = (viewModel: Form): JSX.Element => {
       >
         {rootLayoutManager}
       </Widget>
-    )
-  );
+    );
 };
 
 @Component({

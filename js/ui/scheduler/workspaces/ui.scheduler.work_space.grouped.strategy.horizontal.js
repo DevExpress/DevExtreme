@@ -1,40 +1,36 @@
 
 import { getBoundingRect } from '../../../core/utils/position';
-import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
+import { FIRST_GROUP_CELL_CLASS, HORIZONTAL_GROUP_COUNT_CLASSES, LAST_GROUP_CELL_CLASS } from '../classes';
 
-const HORIZONTAL_GROUPED_ATTR = 'dx-group-row-count';
+class HorizontalGroupedStrategy {
+    constructor(workSpace) {
+        this._workSpace = workSpace;
+    }
 
-class HorizontalGroupedStrategy extends GroupedStrategy {
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDay) {
         const groupByDay = this._workSpace.isGroupedByDate();
 
         if(!groupByDay) {
             return {
                 rowIndex: cellCoordinates.rowIndex,
-                cellIndex: cellCoordinates.cellIndex + groupIndex * this._workSpace._getCellCount()
+                columnIndex: cellCoordinates.columnIndex + groupIndex * this._workSpace._getCellCount()
             };
         } else {
             return {
                 rowIndex: cellCoordinates.rowIndex,
-                cellIndex: cellCoordinates.cellIndex * this._workSpace._getGroupCount() + groupIndex
+                columnIndex: cellCoordinates.columnIndex * this._workSpace._getGroupCount() + groupIndex
             };
         }
     }
 
-    calculateCellIndex(rowIndex, cellIndex) {
-        cellIndex = cellIndex % this._workSpace._getCellCount();
-
-        return this._workSpace._getRowCount() * cellIndex + rowIndex;
-    }
-
-    getGroupIndex(rowIndex, cellIndex) {
+    getGroupIndex(rowIndex, columnIndex) {
         const groupByDay = this._workSpace.isGroupedByDate();
         const groupCount = this._workSpace._getGroupCount();
 
         if(groupByDay) {
-            return cellIndex % groupCount;
+            return columnIndex % groupCount;
         } else {
-            return Math.floor(cellIndex / this._workSpace._getCellCount());
+            return Math.floor(columnIndex / this._workSpace._getCellCount());
         }
     }
 
@@ -54,56 +50,6 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
 
     getTotalRowCount() {
         return this._workSpace._getRowCount();
-    }
-
-    addAdditionalGroupCellClasses(cellClass, index, i, j, applyUnconditionally = false) {
-        cellClass = this._addLastGroupCellClass(cellClass, index, applyUnconditionally);
-
-        return this._addFirstGroupCellClass(cellClass, index, applyUnconditionally);
-    }
-
-    _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
-        if(applyUnconditionally) {
-            return `${cellClass} ${this.getLastGroupCellClass()}`;
-        }
-
-        const groupByDate = this._workSpace.isGroupedByDate();
-
-        if(groupByDate) {
-            if(index % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
-            }
-        } else {
-            if(index % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getLastGroupCellClass()}`;
-            }
-        }
-
-        return cellClass;
-    }
-
-    _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
-        if(applyUnconditionally) {
-            return `${cellClass} ${this.getFirstGroupCellClass()}`;
-        }
-
-        const groupByDate = this._workSpace.isGroupedByDate();
-
-        if(groupByDate) {
-            if((index - 1) % this._workSpace._getGroupCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
-            }
-        } else {
-            if((index - 1) % this._workSpace._getCellCount() === 0) {
-                return `${cellClass} ${this.getFirstGroupCellClass()}`;
-            }
-        }
-
-        return cellClass;
-    }
-
-    getHorizontalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedPosition(groupIndex);
     }
 
     getVerticalMax(groupIndex) {
@@ -131,11 +77,17 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     }
 
-    getGroupCountAttr(groups) {
-        return {
-            attr: HORIZONTAL_GROUPED_ATTR,
-            count: groups?.length
-        };
+    getGroupCountClass(groups) {
+        switch(groups?.length) {
+            case 1:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[0];
+            case 2:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[1];
+            case 3:
+                return HORIZONTAL_GROUP_COUNT_CLASSES[2];
+            default:
+                return undefined;
+        }
     }
 
     getLeftOffset() {
@@ -166,21 +118,7 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
     }
 
-    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        if(this._workSpace.isGroupedByDate()) {
-            return this._getGroupedByDateBoundOffset($cells, cellWidth);
-        }
-
-        const cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
-        const groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
-        const startCellIndex = groupIndex * cellCount;
-
-        const startCell = $cells.eq(startCellIndex);
-        const endCell = $cells.eq(startCellIndex + cellCount - 1);
-        return this._createGroupBoundOffset(startCell, endCell, cellWidth);
-    }
-
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
+    getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
         if(this._workSpace.isGroupedByDate()) {
             return this._getGroupedByDateBoundOffset($cells, cellWidth);
         }
@@ -199,8 +137,8 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
             const groupStartPosition = currentCellGroup[0][0].position;
             const groupEndPosition = currentCellGroup[0][groupRowLength - 1].position;
 
-            startCell = $cells.eq(groupStartPosition.cellIndex);
-            endCell = $cells.eq(groupEndPosition.cellIndex);
+            startCell = $cells.eq(groupStartPosition.columnIndex);
+            endCell = $cells.eq(groupEndPosition.columnIndex);
         }
 
         return this._createGroupBoundOffset(startCell, endCell, cellWidth);
@@ -256,11 +194,62 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }
 
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const cellIndex = $cell.index();
+    _getOffsetByAllDayPanel() {
+        return 0;
+    }
 
-        return this.getGroupIndex(rowIndex, cellIndex);
+    _getGroupTop() {
+        return 0;
+    }
+
+    // ---------------
+    // We do not need these nethods in renovation
+    // ---------------
+
+    addAdditionalGroupCellClasses(cellClass, index, i, j, applyUnconditionally = false) {
+        cellClass = this._addLastGroupCellClass(cellClass, index, applyUnconditionally);
+
+        return this._addFirstGroupCellClass(cellClass, index, applyUnconditionally);
+    }
+
+    _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+        }
+
+        const groupByDate = this._workSpace.isGroupedByDate();
+
+        if(groupByDate) {
+            if(index % this._workSpace._getGroupCount() === 0) {
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+            }
+        } else {
+            if(index % this._workSpace._getCellCount() === 0) {
+                return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+            }
+        }
+
+        return cellClass;
+    }
+
+    _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+        }
+
+        const groupByDate = this._workSpace.isGroupedByDate();
+
+        if(groupByDate) {
+            if((index - 1) % this._workSpace._getGroupCount() === 0) {
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+            }
+        } else {
+            if((index - 1) % this._workSpace._getCellCount() === 0) {
+                return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+            }
+        }
+
+        return cellClass;
     }
 }
 

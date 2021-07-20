@@ -12,8 +12,9 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 import type DomComponent from '../../../core/dom_component';
+import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { EventCallback } from './event_callback.d';
+import { EventCallback } from './event_callback';
 import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
@@ -30,19 +31,17 @@ export const viewFunction = ({
   />
 );
 
-interface WidgetInstanceType { option: (properties: Record<string, unknown>) => void }
-
 @ComponentBindings()
 export class DomComponentWrapperProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() componentType!: typeof DomComponent & {
-    getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
   @OneWay() componentProps!: {
     className?: string;
     itemTemplate?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueChange?: EventCallback<any>;
   };
 }
@@ -57,6 +56,9 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
   @Mutable()
   instance!: DomComponent | null;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   @Method()
   getInstance(): DomComponent | null {
@@ -89,9 +91,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     this.getInstance()?.option(this.properties);
   }
 
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
-
   get properties(): Record<string, unknown> {
     const {
       itemTemplate,
@@ -100,7 +99,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     } = this.props.componentProps;
 
     const properties = ({
-      rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
+      rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {

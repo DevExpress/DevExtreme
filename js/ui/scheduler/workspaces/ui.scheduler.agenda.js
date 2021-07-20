@@ -8,13 +8,24 @@ import WorkSpace from './ui.scheduler.work_space';
 import { extend } from '../../../core/utils/extend';
 import dateLocalization from '../../../localization/date';
 import tableCreatorModule from '../table_creator';
+import {
+    TIME_PANEL_CLASS,
+    DATE_TABLE_CLASS,
+    DATE_TABLE_ROW_CLASS,
+    GROUP_ROW_CLASS,
+    GROUP_HEADER_CONTENT_CLASS,
+} from '../classes';
+import { getPathToLeaf } from '../resources/utils';
+import { calculateStartViewDate } from './utils/agenda';
+import { formatWeekday, getVerticalGroupCountClass } from './utils/base';
+import { VIEWS } from '../constants';
+import dateUtils from '../../../core/utils/date';
+
 const { tableCreator } = tableCreatorModule;
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';
 const AGENDA_DATE_CLASS = 'dx-scheduler-agenda-date';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
-
-const AGENDA_GROUPED_ATTR = 'dx-group-column-count';
 
 const TIME_PANEL_ROW_CLASS = 'dx-scheduler-time-panel-row';
 const TIME_PANEL_CELL_CLASS = 'dx-scheduler-time-panel-cell';
@@ -26,7 +37,13 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends WorkSpace {
+    get type() { return VIEWS.AGENDA; }
+
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
+
+    getStartViewDate() {
+        return this._startViewDate;
+    }
 
     _init() {
         super._init();
@@ -58,7 +75,7 @@ class SchedulerAgenda extends WorkSpace {
                     if(this._$groupTable) {
                         this._$groupTable.remove();
                         this._$groupTable = null;
-                        this._detachGroupCountAttr();
+                        this._detachGroupCountClass();
                     }
                 } else {
                     if(!this._$groupTable) {
@@ -89,9 +106,8 @@ class SchedulerAgenda extends WorkSpace {
         return AGENDA_CLASS;
     }
 
-    _setFirstViewDate() {
-        this._firstViewDate = new Date(this.option('currentDate'));
-        this._setStartDayHour(this._firstViewDate);
+    _calculateStartViewDate() {
+        return calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
     }
 
     _getRowCount() {
@@ -106,20 +122,14 @@ class SchedulerAgenda extends WorkSpace {
         return this.option('agendaDuration');
     }
 
-    _getDateByIndex() { return noop(); }
-
-    _getFormat() {
-        return 'd ddd';
-    }
-
     _renderAllDayPanel() { return noop(); }
 
     _toggleAllDayVisibility() { return noop(); }
 
     _initWorkSpaceUnits() {
         this._initGroupTable();
-        this._$timePanel = $('<table>').addClass(this._getTimePanelClass());
-        this._$dateTable = $('<table>').addClass(this._getDateTableClass());
+        this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS);
+        this._$dateTable = $('<table>').addClass(DATE_TABLE_CLASS);
     }
 
     _initGroupTable() {
@@ -130,7 +140,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _renderView() {
-        this._setFirstViewDate();
+        this._startViewDate = this._calculateStartViewDate();
         this._rows = [];
     }
 
@@ -200,12 +210,9 @@ class SchedulerAgenda extends WorkSpace {
         return result;
     }
 
-    _detachGroupCountAttr() {
-        this.$element().removeAttr(AGENDA_GROUPED_ATTR);
-    }
-
-    _attachGroupCountAttr() {
-        this.$element().attr(AGENDA_GROUPED_ATTR, this.option('groups').length);
+    _attachGroupCountClass() {
+        const className = getVerticalGroupCountClass(this.option('groups'));
+        this.$element().addClass(className);
     }
 
     _removeEmptyRows(rows) {
@@ -230,15 +237,17 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const tree = this.invoke('createReducedResourcesTree');
+        const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
+        const resourceManager = this.option('resourceManager');
+        const tree = resourceManager.createReducedResourcesTree(filteredItems); // TODO refactoring
         const cellTemplate = this.option('resourceCellTemplate');
-        const getGroupHeaderContentClass = this._getGroupHeaderContentClass();
+        const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;
         const cellTemplates = [];
 
         const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, tree, {
             cellTag: 'th',
             groupTableClass: GROUP_TABLE_CLASS,
-            groupRowClass: this._getGroupRowClass(),
+            groupRowClass: GROUP_ROW_CLASS,
             groupCellClass: this._getGroupHeaderClass(),
             groupCellCustomContent(cell, cellText, index, data) {
                 const container = domAdapter.createElement('div');
@@ -272,7 +281,7 @@ class SchedulerAgenda extends WorkSpace {
         });
 
         return {
-            elements: $(table).find('.' + this._getGroupRowClass()),
+            elements: $(table).find(`.${GROUP_ROW_CLASS}`),
             cellTemplates: cellTemplates
         };
     }
@@ -309,7 +318,7 @@ class SchedulerAgenda extends WorkSpace {
     _renderDateTable() {
         this._renderTableBody({
             container: getPublicElement(this._$dateTable),
-            rowClass: this._getDateTableRowClass(),
+            rowClass: DATE_TABLE_ROW_CLASS,
             cellClass: this._getDateTableCellClass()
         });
     }
@@ -326,7 +335,7 @@ class SchedulerAgenda extends WorkSpace {
         const groupsOpt = this.option('groups');
         const groups = {};
         const isGroupedView = !!groupsOpt.length;
-        const path = isGroupedView && this._getPathToLeaf(rowIndex) || [];
+        const path = isGroupedView && getPathToLeaf(rowIndex, groupsOpt) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
@@ -366,7 +375,7 @@ class SchedulerAgenda extends WorkSpace {
                 if(options.getStartDate) {
                     date = options.getStartDate && options.getStartDate(rowIndex);
                     cellDateNumber = dateLocalization.format(date, 'd');
-                    cellDayName = dateLocalization.format(date, this._formatWeekday);
+                    cellDayName = dateLocalization.format(date, formatWeekday);
                 }
 
                 if(cellTemplateOpt && cellTemplateOpt.render) {
@@ -508,8 +517,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     updateScrollPosition(date) {
-        const scheduler = this.option('observer');
-        const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         const bounds = this.getVisibleBounds();
         const startDateHour = newDate.getHours();
@@ -539,6 +547,12 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     renovatedRenderSupported() { return false; }
+
+    _setSelectedCellsByCellData() {}
+
+    _getIntervalDuration() {
+        return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
+    }
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

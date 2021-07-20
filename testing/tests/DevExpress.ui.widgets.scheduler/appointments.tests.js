@@ -3,8 +3,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
-import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
+import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
@@ -12,11 +13,11 @@ import translator from 'animation/translator';
 import dataCoreUtils from 'core/utils/data';
 import commonUtils from 'core/utils/common';
 import typeUtils, { isRenderer } from 'core/utils/type';
-import dateUtils from 'core/utils/date';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
+import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -58,21 +59,18 @@ const dataAccessors = {
     }
 };
 
+ExpressionUtils.getField = (_, field, obj) => {
+    if(typeUtils.isDefined(dataAccessors.getter[field])) {
+        return dataAccessors.getter[field](obj);
+    }
+};
+
+ExpressionUtils.setField = (_, field, obj, value) => {
+    return dataAccessors.setter[field](obj, value);
+};
+
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
-    getAppointmentColor: () => {
-        return $.Deferred().resolve('red').promise();
-    },
-    getField: (field, obj) => {
-        if(!typeUtils.isDefined(dataAccessors.getter[field])) {
-            return;
-        }
-
-        return dataAccessors.getter[field](obj);
-    },
-    setField: (field, obj, value) => {
-        return dataAccessors.setter[field](obj, value);
-    },
     getTimeZoneCalculator: () => {
         return {
             createDate: date => date
@@ -83,9 +81,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     },
     getAppointmentDurationInMs: function(options) {
         return options.endDate.getTime() - options.startDate.getTime();
-    },
-    getResourcesFromItem: () => {
-        return { someId: ['with space'] };
     },
     getAppointmentGeometry: (settings) => {
         return {
@@ -99,15 +94,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getCellWidth: () => cellWidth,
     getStartDayHour: () => 8,
     getEndDayHour: () => 20,
-    appointmentTakesSeveralDays: (appointment) => {
-        const startDate = new Date(appointment.startDate);
-        const endDate = new Date(appointment.endDate);
-
-        const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        const endDateCopy = dateUtils.trimTime(new Date(endDate));
-
-        return startDateCopy.getTime() !== endDateCopy.getTime();
-    },
     mapAppointmentFields: (config) => {
         const result = {
             appointmentData: config.itemData,
@@ -117,6 +103,12 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
         return result;
     },
     appendSingleAppointmentData: (data) => data,
+    getResourceManager: () => {
+        return getResourceManager(0);
+    },
+    getAppointmentDataProvider: () => {
+        return getAppointmentDataProvider(0);
+    }
 });
 
 const createInstance = (options, subscribesConfig) => {
@@ -135,13 +127,31 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
+    const key = createFactoryInstances({
+        resources: options.resources,
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => dataAccessors
+    });
+
+    getResourceManager(key).getResourcesFromItem = () => {
+        return { someId: ['with space'] };
+    };
+
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
-        observer: observer,
+        key,
+        observer,
         ...options,
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
         draggingMode: 'default',
+        observer: {
+            fire: (functionName) => {
+                if(functionName === 'getResourceManager') {
+                    return getResourceManager(key);
+                }
+            }
+        }
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());
@@ -566,9 +576,12 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
         const strategy = new HorizontalMonthAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            option: commonUtils.noop,
-            fire: commonUtils.noop
+            instance: {
+                notifyObserver: commonUtils.noop,
+                option: commonUtils.noop,
+                fire: commonUtils.noop,
+            },
+            getResizableStep: () => 0
         });
         const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
@@ -577,15 +590,17 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
         const strategy = new VerticalAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            invoke: commonUtils.noop,
-            fire: commonUtils.noop,
-            appointmentTakesAllDay: commonUtils.noop,
-            getAppointmentDurationInMinutes: function() {
-                return 30;
-            }
+            instance: {
+                notifyObserver: commonUtils.noop,
+                invoke: commonUtils.noop,
+                fire: commonUtils.noop,
+                appointmentTakesAllDay: commonUtils.noop,
+                getAppointmentDurationInMinutes: function() {
+                    return 30;
+                }
+            },
+            getCellHeight: () => 50
         });
-        strategy._defaultHeight = 50;
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
@@ -697,6 +712,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             currentDate: new Date(2015, 10, 3),
             items: [item],
         }, testConfig);
+
 
         const $appointment = $('.dx-scheduler-appointment').eq(0);
         assert.equal($appointment.filter('[data-someid-with__32__space]').length, 1, 'attr is right');

@@ -3,7 +3,7 @@ import Widget from '../widget/ui.widget';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { compileSetter, compileGetter } from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -808,7 +808,17 @@ class Diagram extends Widget {
         this._bindDiagramData();
     }
     _getChangesKeys(changes) {
-        return changes.map(change => change.internalKey || change.key).filter(key => !!key);
+        return changes.map(
+            (change) => {
+                if(isDefined(change.internalKey)) {
+                    return change.internalKey;
+                } else if(isDefined(change.key)) {
+                    return change.key;
+                } else {
+                    return null;
+                }
+            }
+        ).filter(key => isDefined(key));
     }
 
     _createOptionGetter(optionName) {
@@ -1088,6 +1098,10 @@ class Diagram extends Widget {
     _getToolboxGroups() {
         return DiagramToolboxManager.getGroups(this.option('toolbox.groups'));
     }
+    _updateAllCustomShapes() {
+        this._diagramInstance.removeAllCustomShapes();
+        this._updateCustomShapes(this._getCustomShapes());
+    }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
             this._diagramInstance.removeCustomShapes(prevCustomShapes.map(s => s.type));
@@ -1244,8 +1258,9 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
         this.toggleFullscreenLock--;
     }
-    _onShowContextMenu(x, y, selection) {
+    _onShowContextMenu(x, y, isTouchMode, selection) {
         if(this._contextMenu) {
+            this._contextMenu._isTouchMode = isTouchMode;
             this._contextMenu._show(x, y, selection);
         }
     }
@@ -1256,6 +1271,11 @@ class Diagram extends Widget {
     }
     _onShowContextToolbox(x, y, side, category, callback) {
         if(this._contextToolbox) {
+            const rect = this._diagramInstance.getBoundingClientRectangle();
+            if(rect) {
+                x -= rect.x;
+                y -= rect.y;
+            }
             this._contextToolbox._show(x, y, side, category, callback);
         }
     }
@@ -1993,13 +2013,6 @@ class Diagram extends Widget {
             });
         }
     }
-    _invalidatePropertiesPanelTabs() {
-        if(this._propertiesPanel) {
-            this._propertiesPanel.option({
-                propertyTabs: this.option('propertiesPanel.tabs')
-            });
-        }
-    }
     _invalidateMainToolbarCommands() {
         if(this._mainToolbar) {
             this._mainToolbar.option({
@@ -2092,7 +2105,7 @@ class Diagram extends Widget {
                 this._updatePageColorState();
                 break;
             case 'nodes':
-                if(args.fullName === 'nodes.autoLayout') {
+                if(args.fullName.indexOf('nodes.autoLayout') === 0) {
                     this._refreshDataSources();
                 } else {
                     this._refreshNodesDataSource();
@@ -2102,7 +2115,11 @@ class Diagram extends Widget {
                 this._refreshEdgesDataSource();
                 break;
             case 'customShapes':
-                this._updateCustomShapes(args.value, args.previousValue);
+                if(args.fullName !== args.name) { // customShapes[i].<property>
+                    this._updateAllCustomShapes();
+                } else {
+                    this._updateCustomShapes(args.value, args.previousValue);
+                }
                 this._invalidate();
                 break;
             case 'contextMenu':
@@ -2116,11 +2133,7 @@ class Diagram extends Widget {
                 this._invalidate();
                 break;
             case 'propertiesPanel':
-                if(args.name === 'propertiesPanel.tabs') {
-                    this._invalidatePropertiesPanelTabs();
-                } else {
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'toolbox':
                 if(args.fullName === 'toolbox.groups') {

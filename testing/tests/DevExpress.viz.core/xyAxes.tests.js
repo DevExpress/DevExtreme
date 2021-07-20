@@ -98,10 +98,11 @@ const environment = {
             discreteAxisDivisionMode: 'crossLabels'
         };
 
+        this.templateRender = sinon.spy();
         this.incidentOccurred = sinon.spy();
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
@@ -110,7 +111,11 @@ const environment = {
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
             eventTrigger: () => { },
-            getTemplate() {}
+            getTemplate: sinon.spy(() => {
+                return {
+                    render: this.templateRender
+                };
+            })
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -520,7 +525,11 @@ QUnit.module('Axis shift', environment2DTranslator);
 QUnit.test('axis without shifting', function(assert) {
     this.options.isHorizontal = false;
     const axis = this.createDrawnAxis({ position: 'left' });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 0);
+
+    assert.equal(labelsGroup.returnValue.attr.callCount, 1);
 });
 
 QUnit.test('axis shifted', function(assert) {
@@ -528,7 +537,13 @@ QUnit.test('axis shifted', function(assert) {
     const axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 40);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: 40
+    });
 });
 
 QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
@@ -537,7 +552,12 @@ QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
     const axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 20);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: -20
+    });
 });
 
 QUnit.module('API methods', environment2DTranslator);
@@ -5377,4 +5397,18 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
     assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
+});
+
+QUnit.module('Axis templates with overlapping behavior', overlappingEnvironment);
+
+QUnit.test('Axis template was removed before rendered', function(assert) {
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', template() {} } });
+
+    // act
+    const count = this.templateRender.callCount;
+    for(let i = 0; i < count; i++) {
+        this.templateRender.getCall(i).args[0].onRendered();
+    }
+
+    assert.ok(true); // no errors
 });

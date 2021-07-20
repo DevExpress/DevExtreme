@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
-import { viewFunction as TableBodyView } from '../table_body';
+import { DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
@@ -26,6 +26,8 @@ describe('DateTableBody', () => {
           today: true,
           otherMonth: true,
           firstDayOfMonth: true,
+          isSelected: true,
+          isFocused: false,
         }], [{
           startDate: new Date(2020, 6, 9, 1),
           endDate: new Date(2020, 6, 9, 1, 30),
@@ -39,6 +41,8 @@ describe('DateTableBody', () => {
           today: false,
           otherMonth: false,
           firstDayOfMonth: true,
+          isSelected: true,
+          isFocused: true,
         }], [{
           startDate: new Date(2020, 6, 9, 2),
           endDate: new Date(2020, 6, 9, 2, 30),
@@ -52,6 +56,8 @@ describe('DateTableBody', () => {
           today: false,
           otherMonth: false,
           firstDayOfMonth: false,
+          isSelected: false,
+          isFocused: false,
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
         groupIndex: 1,
@@ -67,6 +73,7 @@ describe('DateTableBody', () => {
       <TableBodyView
         {...viewModel}
         props={{
+          ...new DateTableBodyProps(),
           viewData,
           cellTemplate,
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
@@ -122,6 +129,8 @@ describe('DateTableBody', () => {
           isFirstGroupCell,
           isLastGroupCell,
           key,
+          isFocused,
+          isSelected,
         } = data;
 
         expect(cell.props())
@@ -138,6 +147,8 @@ describe('DateTableBody', () => {
             isFirstGroupCell,
             isLastGroupCell,
             dataCellTemplate,
+            isFocused,
+            isSelected,
           });
         expect(cell.key())
           .toBe(key.toString());

@@ -3,7 +3,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'localization/date';
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
@@ -34,7 +33,7 @@ module('Work Space Base', {
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2017, 4, 25),
-            firstDayOfWeek: 0
+            firstDayOfWeek: 0,
         }).dxSchedulerWorkSpaceWeek('instance');
 
         assert.notOk(dateLocalizationSpy.called, 'dateLocalization.firstDayOfWeekIndex wasn\'t called');
@@ -61,8 +60,7 @@ module('Work Space Base', {
     }].forEach(({ viewName, view }) => {
         QUnit.module(viewName, {
             beforeEach: function() {
-                this.instance = $('#scheduler-work-space')[view]()[view]('instance');
-                stubInvokeMethod(this.instance);
+                this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
             }
         }, () => {
             test('Scheduler workspace should have a right default intervalCount and startDate', function(assert) {
@@ -112,20 +110,6 @@ module('Work Space Base', {
 
                     this.instance.option('width', 900);
                     assert.equal(this.instance.getWorkSpaceMinWidth(), 800, 'minWidth is ok');
-                });
-
-                test('Workspace should throw an error if target index is incorrect in getCoordinatesByDate method ', function(assert) {
-                    const instance = this.instance;
-
-                    assert.throws(
-                        function() {
-                            instance.getCoordinatesByDate(new Date(), 100, 0);
-                        },
-                        function(e) {
-                            return /E1039/.test(e.message);
-                        },
-                        'Exception messages should be correct'
-                    );
                 });
             }
 

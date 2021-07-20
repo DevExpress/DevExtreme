@@ -1,4 +1,4 @@
-import Overlay from '../../overlay';
+import Overlay from '../../overlay/ui.overlay';
 import { TooltipStrategyBase } from './tooltipStrategyBase';
 import { getWindow } from '../../../core/utils/window';
 import $ from '../../../core/renderer';
@@ -85,7 +85,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
 
             onShowing: () => this._onShowing(),
             onShown: this._onShown.bind(this),
-            contentTemplate: this._getContentTemplate(dataList)
+            contentTemplate: this._getContentTemplate(dataList),
+            copyRootClassesToWrapper: true
         });
     }
 }

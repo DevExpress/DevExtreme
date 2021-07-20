@@ -1,7 +1,7 @@
 import DropDownEditor from './drop_down_editor/ui.drop_down_editor';
 import DataExpressionMixin from './editor/ui.data_expression';
-import { ensureDefined, noop, grep } from '../core/utils/common';
-import { isObject } from '../core/utils/type';
+import { noop, grep } from '../core/utils/common';
+import { isDefined, isObject } from '../core/utils/type';
 import { map } from '../core/utils/iterator';
 import { tabbable } from './widget/selectors';
 import { when, Deferred } from '../core/utils/deferred';
@@ -130,6 +130,7 @@ const DropDownBox = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
+        this._rejectValueLoading();
         const callBase = this.callBase.bind(this);
         const values = [];
 
@@ -139,14 +140,16 @@ const DropDownBox = DropDownEditor.inherit({
         }
 
         const currentValue = this._getCurrentValue();
-        let keys = ensureDefined(currentValue, []);
+        let keys = currentValue ?? [];
 
         keys = Array.isArray(keys) ? keys : [keys];
 
         const itemLoadDeferreds = map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
                 const displayValue = this._displayGetter(item);
-                values.push(ensureDefined(displayValue, key));
+                if(isDefined(displayValue)) {
+                    values.push(displayValue);
+                }
             }).bind(this));
         }).bind(this));
 
@@ -174,6 +177,10 @@ const DropDownBox = DropDownEditor.inherit({
                     deferred.resolve(item);
                 })
                 .fail(function(args) {
+                    if(args?.shouldSkipCallback) {
+                        return;
+                    }
+
                     if(that.option('acceptCustomValue')) {
                         deferred.resolve(value);
                     } else {
@@ -284,6 +291,7 @@ const DropDownBox = DropDownEditor.inherit({
                 of: this.$element(),
             }),
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 const popupLocation = this._popupPosition?.v.location;
 

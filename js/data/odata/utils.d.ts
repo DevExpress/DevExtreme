@@ -3,7 +3,6 @@
  * @namespace DevExpress.data
  * @module data/odata/utils
  * @export EdmLiteral
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export class EdmLiteral {
@@ -12,7 +11,6 @@ export class EdmLiteral {
      * @docid
      * @publicName valueOf()
      * @return string
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     valueOf(): string;
@@ -24,7 +22,6 @@ export class EdmLiteral {
  * @namespace DevExpress.data.utils.odata
  * @module data/odata/utils
  * @export keyConverters
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export var keyConverters: any;

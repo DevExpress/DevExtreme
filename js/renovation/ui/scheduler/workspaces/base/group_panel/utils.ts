@@ -7,7 +7,7 @@ import {
 const extendGroupItemsForGroupingByDate = (
   groupRenderItems: GroupRenderItem[][],
   columnCountPerGroup: number,
-): GroupRenderItem[][] => [...(new Array(columnCountPerGroup))]
+): GroupRenderItem[][] => [...new Array(columnCountPerGroup)]
   .reduce((currentGroupItems, _, index) => groupRenderItems.map((groupsRow, rowIndex) => {
     const currentRow = currentGroupItems[rowIndex] || [];
 
@@ -19,8 +19,8 @@ const extendGroupItemsForGroupingByDate = (
         isFirstGroupCell: columnIndex === 0,
         isLastGroupCell: columnIndex === groupsRow.length - 1,
       })),
-    ];
-  }), []);
+    ] as GroupRenderItem[];
+  }), []) as GroupRenderItem[][];
 
 export const getGroupsRenderData = (
   groups: Group[],

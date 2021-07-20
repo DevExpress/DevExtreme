@@ -1,9 +1,9 @@
 import { equalByValue } from '../../core/utils/common';
-import VerticalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.vertical';
-import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
-import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
-import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
-import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
+import VerticalAppointmentsStrategy from './appointments/rendering_strategies/strategy_vertical';
+import HorizontalAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal';
+import HorizontalMonthLineAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month_line';
+import HorizontalMonthAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month';
+import AgendaAppointmentsStrategy from './appointments/rendering_strategies/strategy_agenda';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -37,7 +37,18 @@ class AppointmentLayoutManager {
 
     initRenderingStrategy(renderingStrategy) {
         const Strategy = RENDERING_STRATEGIES[renderingStrategy];
-        this._renderingStrategyInstance = new Strategy(this.instance);
+        this._renderingStrategyInstance = new Strategy({
+            key: this.instance.key,
+            instance: this.instance,
+            isAdaptive: this.instance.option('adaptivityEnabled'),
+            rtlEnabled: this.instance.option('rtlEnabled'),
+            isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
+            getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
+            getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
+            getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
+            getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0
+        });
         this.renderingStrategy = renderingStrategy;
     }
 
@@ -59,12 +70,8 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.leftVirtualCellsCount
-            : 0;
-        const virtualRowCount = virtualScrollingDispatcher
-            ? virtualScrollingDispatcher.topVirtualRowsCount
-            : 0;
+        const virtualCellCount = virtualScrollingDispatcher.leftVirtualCellsCount;
+        const virtualRowCount = virtualScrollingDispatcher.topVirtualRowsCount;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -88,8 +95,10 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const updatedData = this.instance.getUpdatedAppointment();
-        return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
+        const appointmentDataProvider = this.instance.fire('getAppointmentDataProvider');
+
+        const updatedData = appointmentDataProvider.getUpdatedAppointment();
+        return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
     }
 
     _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {
@@ -104,12 +113,12 @@ class AppointmentLayoutManager {
         const createSettingsToCompare = (settings, index) => {
             const virtualCellCount = settings.virtualCellCount || 0;
             const virtualRowCount = settings.virtualRowCount || 0;
-            const cellIndex = settings[index].cellIndex + virtualCellCount;
+            const columnIndex = settings[index].columnIndex + virtualCellCount;
             const rowIndex = settings[index].rowIndex + virtualRowCount;
 
             return {
                 ...settings[index],
-                cellIndex: cellIndex,
+                columnIndex,
                 rowIndex: rowIndex,
                 virtualCellCount: -1,
                 virtualRowCount: -1

@@ -595,10 +595,12 @@ function fixTimezoneGap(oldDate, newDate) {
 }
 
 const roundToHour = function(date) {
-    date.setHours(date.getHours() + 1);
-    date.setMinutes(0);
+    const result = new Date(date.getTime());
 
-    return date;
+    result.setHours(result.getHours() + 1);
+    result.setMinutes(0);
+
+    return result;
 };
 
 function getTimezonesDifference(min, max) {

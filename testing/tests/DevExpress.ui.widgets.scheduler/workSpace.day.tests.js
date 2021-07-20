@@ -4,10 +4,7 @@ import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'localization/date';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -23,19 +20,9 @@ testStart(function() {
 
 module('Work Space Day', {
     beforeEach: function() {
-        this.createInstance = function(options) {
-            if(this.instance) {
-                this.instance.invoke.restore();
-                delete this.instance;
-            }
-
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
-            this.instance.initDragBehavior();
-            this.instance._attachTablesEvents();
-            stubInvokeMethod(this.instance, options);
-        };
-
-        this.createInstance();
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({}).dxSchedulerWorkSpaceDay('instance');
+        this.instance.initDragBehavior();
+        this.instance._attachTablesEvents();
     }
 }, () => {
     test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', function(assert) {
@@ -50,7 +37,7 @@ module('Work Space Day', {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2015, 2, 4));
-        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0));
+        let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0));
 
         assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().top, 'Top cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 'Left cell coordinates are right');
@@ -59,11 +46,11 @@ module('Work Space Day', {
         const $cell = $element.find('.dx-scheduler-date-table tbody td').eq(5);
         const position = $cell.position();
 
-        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 30));
+        coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 30));
         assert.equal(coords.top, position.top, 'Cell coordinates are right');
         assert.equal(coords.left, position.left, 'Cell coordinates are right');
 
-        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 45));
+        coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 45));
 
         position.top += $cell.outerHeight() * 0.5;
         assert.equal(coords.top, position.top, 'Cell coordinates are right');
@@ -76,7 +63,7 @@ module('Work Space Day', {
         this.instance.option('currentDate', new Date(2017, 5, 16));
         this.instance.option('hoursInterval', 1);
 
-        const coords = this.instance.getCoordinatesByDate(new Date(2017, 5, 16, 1, 1, 30));
+        const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2017, 5, 16, 1, 1, 30));
         const $cell = $element.find('.dx-scheduler-date-table tbody td').eq(1);
         const top = $cell.position().top + (1.5 / 60) * $cell.outerHeight();
 
@@ -90,7 +77,7 @@ module('Work Space Day', {
         this.instance.option('currentDate', new Date(2015, 2, 4));
         this.instance.option('startDayHour', 5);
 
-        const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
+        const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
 
         assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(2).position().top, 1, 'Cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(2).position().left, 'Cell coordinates are right');
@@ -102,7 +89,7 @@ module('Work Space Day', {
         this.instance.option('currentDate', new Date(2015, 2, 4));
         this.instance.option('startDayHour', 5.5);
 
-        const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
+        const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
 
         assert.roughEqual(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(1).position().top, 1, 'Cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(1).position().left, 'Cell coordinates are right');
@@ -114,25 +101,10 @@ module('Work Space Day', {
         this.instance.option('currentDate', new Date(2015, 2, 4));
         this.instance.option('endDayHour', 10);
 
-        const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
+        const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
 
         assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().top, 'Cell coordinates are right');
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().left, 'Cell coordinates are right');
-    });
-
-    [true, false].forEach((renovateRender) => {
-        test(`Work space should return coordinates of first cell for dates before first view date when renovateRender is ${renovateRender}`, function(assert) {
-            this.instance.option({
-                currentDate: new Date(2015, 2, 4),
-                renovateRender,
-            });
-
-            const $element = this.instance.$element();
-            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 3, 0, 0));
-
-            assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(0).position().top, 'Cell coordinates are right');
-            assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(0).position().left, 'Cell coordinates are right');
-        });
     });
 
     test('getDataByDroppableCell should work right with the single group', function(assert) {
@@ -146,13 +118,13 @@ module('Work Space Day', {
             }
         ]);
 
-        this.instance.$element().find('.' + CELL_CLASS).eq(5).addClass('dx-scheduler-date-table-droppable-cell');
+        this.instance.$element().find('.' + CELL_CLASS).eq(3).addClass('dx-scheduler-date-table-droppable-cell');
 
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             allDay: false,
-            startDate: new Date(2015, 1, 18, 1),
-            endDate: undefined,
+            startDate: new Date(2015, 1, 18, 0, 30),
+            endDate: new Date(2015, 1, 18, 1),
             groups: {
                 res: 2
             }
@@ -187,7 +159,7 @@ module('Work Space Day', {
         const data = this.instance.getDataByDroppableCell();
         assert.deepEqual(data, {
             startDate: new Date(2015, 1, 18, 0, 30),
-            endDate: undefined,
+            endDate: new Date(2015, 1, 18, 1, 0),
             allDay: false,
             groups: {
                 one: 2,
@@ -275,15 +247,12 @@ module('Work Space Day with grouping by date', () => {
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
                 intervalCount: 2,
-                showCurrentTimeIndicator: false
+                showCurrentTimeIndicator: false,
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }],
             }).dxSchedulerWorkSpaceDay('instance');
-
-            stubInvokeMethod(this.instance);
-
-            this.instance.option('groups', [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }]);
         }
     }, () => {
         test('Get date range', function(assert) {
@@ -423,12 +392,12 @@ module('Work Space Day with grouping by date', () => {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
-            let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+            let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
 
             assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
             assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
 
-            coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 1, false);
+            coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 1, false);
 
             assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(19).position().top, 'Top cell coordinates are right');
             assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(19).position().left, 'Left cell coordinates are right');
@@ -438,13 +407,13 @@ module('Work Space Day with grouping by date', () => {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
-            let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, true);
+            let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
             assert.equal(coords.hMax, 998, 'hMax cell coordinates are right');
             assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
 
-            coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
+            coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
 
             assert.equal(coords.top, 0, 'Top cell coordinates are right');
             assert.equal(coords.hMax, 998, 'hMax cell coordinates are right');
@@ -456,7 +425,6 @@ module('Work Space Day with grouping by date', () => {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
-                stubInvokeMethod(this.instance);
             };
         }
     }, () => {

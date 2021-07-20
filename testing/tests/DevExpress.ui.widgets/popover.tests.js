@@ -15,6 +15,7 @@ const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
 const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
+const POPOVER_TITLE_CLASS = 'dx-popup-title';
 
 const positionAtWindowCenter = function(element) {
     positionUtils.setup(element, {
@@ -135,7 +136,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should not render arrow when the position side is center (T701940)', function(assert) {
+    QUnit.test('popover should not render arrow when the position side is center (T701940)', function(assert) {
         fixtures.simple.create();
 
         const popover = new Popover($('#what'), {
@@ -149,7 +150,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should render correctly when it\'s position.of is event', function(assert) {
+    QUnit.test('popover should render correctly when it\'s position.of is event', function(assert) {
         fixtures.collisionBottomLeft.create();
         try {
             const $target = $('#where');
@@ -226,6 +227,24 @@ QUnit.module('render', () => {
             popover._refresh();
 
             assert.equal(wrapper().find('.' + POPOVER_ARROW_CLASS).length, 1, 'popover has only one arrow');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
+    QUnit.test('popover title should have border-top-radius style (T1010399)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover, {
+                visible: true,
+                showTitle: true,
+                title: 'title'
+            });
+            const $popoverTitle = wrapper().find('.' + POPOVER_TITLE_CLASS);
+
+            assert.strictEqual($popoverTitle.css('border-top-left-radius'), '6px', 'popover has border-top-left-radius');
+            assert.strictEqual($popoverTitle.css('border-top-right-radius'), '6px', 'popover has border-top-right-radius');
         } finally {
             fixtures.simple.drop();
         }
@@ -1523,8 +1542,7 @@ QUnit.module('behavior', () => {
             fixtures.simple.create();
             this.$target = $('#where');
             this.$popover = $('#what');
-            this.stub = sinon.stub();
-            errors.log = this.stub;
+            this.stub = sinon.stub(errors, 'log');
             this.popover = new Popover(this.$popover, {
                 target: this.$target,
                 hideEvent: 'mouseleave',
@@ -1533,7 +1551,7 @@ QUnit.module('behavior', () => {
         },
         afterEach: function() {
             fixtures.simple.drop();
-            this.stub.reset();
+            this.stub.restore();
         }
     }, () => {
         QUnit.test('on init', function(assert) {
@@ -1545,6 +1563,13 @@ QUnit.module('behavior', () => {
             this.popover.option('hideEvent', 'click');
 
             assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
+        });
+
+        QUnit.test('at runtime to null', function(assert) {
+            this.popover.option('hideEvent', null);
+
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
             assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
         });
     });

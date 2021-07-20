@@ -1,7 +1,7 @@
 import { getUpdatedOptions } from '../get_updated_options';
 
 describe('get_updated_options', () => {
-  class DummyDataSource {}
+  class DummyDataSource { dummy = true; }
 
   it('simple props changed', () => {
     expect(getUpdatedOptions({ visible: true }, { visible: false }))
@@ -124,10 +124,35 @@ describe('get_updated_options', () => {
       .toEqual([{ path: 'focusedRowKey', value: 0, previousValue: null }]);
   });
 
+  it('deep diff if plain object', () => {
+    const oldObj = { items: [{ location: 'before' }] };
+    const obj = { items: [{ location: 'after' }] };
+    const diff = getUpdatedOptions(oldObj, obj);
+    expect(diff).toEqual([{
+      path: 'items[0].location',
+      value: 'after',
+      previousValue: 'before',
+    }]);
+  });
+
   it('deep diff only for plain object', () => {
     const oldObj = { dataSource: new DummyDataSource() };
     const obj = { dataSource: new DummyDataSource() };
     expect(getUpdatedOptions(oldObj, obj))
       .toEqual([{ path: 'dataSource', value: obj.dataSource, previousValue: oldObj.dataSource }]);
+  });
+
+  it('using notDeepDiffArrays param', () => {
+    const oldObj = { toolbar: { items: [{ value: 1 }] } };
+    const obj = { toolbar: { items: [{ value: 2 }] } };
+    expect(getUpdatedOptions(oldObj, obj, ['toolbar.items']))
+      .toEqual([{ path: 'toolbar.items', value: [{ value: 2 }], previousValue: [{ value: 1 }] }]);
+  });
+
+  it('using defaultNotDeepDiffArrays', () => {
+    const oldObj = { toolbar: { dataSource: [{ value: 1 }] } };
+    const obj = { toolbar: { dataSource: [{ value: 2 }] } };
+    expect(getUpdatedOptions(oldObj, obj))
+      .toEqual([{ path: 'toolbar.dataSource', value: [{ value: 2 }], previousValue: [{ value: 1 }] }]);
   });
 });

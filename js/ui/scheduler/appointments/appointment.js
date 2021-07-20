@@ -21,8 +21,10 @@ import {
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
     APPOINTMENT_CONTENT_CLASSES
-} from '../constants';
+} from '../classes';
 import { Deferred } from '../../../core/utils/deferred';
+import { ExpressionUtils } from '../expressionUtils';
+import { getResourceManager } from '../instanceFactory';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -43,6 +45,7 @@ export class Appointment extends DOMComponent {
         return extend(super._getDefaultOptions(), {
             data: {},
             groupIndex: -1,
+            groups: [],
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -101,12 +104,14 @@ export class Appointment extends DOMComponent {
             body: '',
             tail: this.option('rtlEnabled') ? 'left' : 'right'
         };
+        const getResizableStep = this.option('getResizableStep');
+        const step = getResizableStep ? getResizableStep() : 0;
 
         return {
             handles: this.option('reduced') ? reducedHandles[this.option('reduced')] : DEFAULT_HORIZONTAL_HANDLES,
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
-            step: this.invoke('getResizableStep'),
+            step,
             roundStepValue: false,
         };
     }
@@ -133,7 +138,9 @@ export class Appointment extends DOMComponent {
         this._renderDirection();
 
         this.$element().data('dxAppointmentStartDate', this.option('startDate'));
-        this.$element().attr('title', this.invoke('getField', 'text', this.rawAppointment));
+
+        const text = ExpressionUtils.getField(this.option('key'), 'text', this.rawAppointment);
+        this.$element().attr('title', text);
         this.$element().attr('role', 'button');
 
         this._renderRecurrenceClass();
@@ -143,9 +150,11 @@ export class Appointment extends DOMComponent {
     }
 
     _setResourceColor() {
-        const deferredColor = this.invoke('getAppointmentColor', {
+        const resourceManager = getResourceManager(this.option('key'));
+        const deferredColor = resourceManager.getAppointmentColor({
             itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
+            groups: this.option('groups'),
         });
 
         deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));
@@ -210,7 +219,7 @@ export class Appointment extends DOMComponent {
     }
 
     _getEndDate() {
-        const result = this.invoke('getField', 'endDate', this.rawAppointment);
+        const result = ExpressionUtils.getField(this.option('key'), 'endDate', this.rawAppointment);
         if(result) {
             return new Date(result);
         }
@@ -226,7 +235,7 @@ export class Appointment extends DOMComponent {
     }
 
     _renderRecurrenceClass() {
-        const rule = this.invoke('getField', 'recurrenceRule', this.rawAppointment);
+        const rule = ExpressionUtils.getField(this.option('key'), 'recurrenceRule', this.rawAppointment);
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);

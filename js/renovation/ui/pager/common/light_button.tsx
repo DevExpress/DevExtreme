@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.d';
-import { EventCallback } from '../../common/event_callback.d';
+import { EventCallback } from '../../common/event_callback';
 import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_action_context';
 
 export const viewFunction = ({
@@ -50,6 +50,6 @@ export class LightButton extends JSXComponent<LightButtonProps, 'onClick'>() {
   }
 
   @Effect() subscribeToClick(): EffectReturn {
-    return subscribeToClickEvent(this.widgetRef.current!, this.props.onClick);
+    return subscribeToClickEvent(this.widgetRef.current, this.props.onClick);
   }
 }

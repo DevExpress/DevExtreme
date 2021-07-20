@@ -2,6 +2,20 @@ import {
     DxPromise
 } from '../../core/utils/deferred';
 
+export interface ODataRequestOptions {
+    accepts: any;
+    async: boolean;
+    contentType: string | boolean;
+    data: any;
+    dataType: string;
+    headers: any;
+    jsonp?: boolean;
+    method: string;
+    timeout: number;
+    url: string;
+    xhrFields: any;
+}
+
 /** @namespace DevExpress.data */
 export interface ODataContextOptions {
     /**
@@ -14,19 +28,16 @@ export interface ODataContextOptions {
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     entities?: any;
@@ -36,26 +47,22 @@ export interface ODataContextOptions {
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
@@ -63,14 +70,12 @@ export interface ODataContextOptions {
      * @docid
      * @default 2
      * @acceptValues 2|3|4
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     version?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     withCredentials?: boolean;
@@ -79,7 +84,6 @@ export interface ODataContextOptions {
  * @docid
  * @module data/odata/context
  * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export default class ODataContext {
@@ -90,7 +94,6 @@ export default class ODataContext {
      * @param1 operationName:string
      * @param2 params:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     get(operationName: string, params: any): DxPromise<any>;
@@ -99,20 +102,20 @@ export default class ODataContext {
      * @publicName invoke(operationName, params, httpMethod)
      * @param1 operationName:string
      * @param2 params:object
-     * @param3 httpMethod:object
+     * @param3 httpMethod:string
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): DxPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)
      * @param1 entityAlias:string
      * @param2 key:object|string|number
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     objectLink(entityAlias: string, key: any | string | number): any;
 }
+
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';

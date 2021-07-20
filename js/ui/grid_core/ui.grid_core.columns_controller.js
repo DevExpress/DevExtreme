@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter, compileSetter } from '../../core/utils/data';
-import { grep } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
 import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -960,6 +959,23 @@ export const columnsControllerModule = {
                 return column;
             };
 
+            const sortColumns = (columns, sortOrder) => {
+                if(sortOrder !== 'asc' && sortOrder !== 'desc') {
+                    return columns;
+                }
+
+                const sign = sortOrder === 'asc' ? 1 : -1;
+
+                columns.sort(function(column1, column2) {
+                    const caption1 = column1.caption || '';
+                    const caption2 = column2.caption || '';
+
+                    return sign * caption1.localeCompare(caption2);
+                });
+
+                return columns;
+            };
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1096,7 +1112,6 @@ export const columnsControllerModule = {
                         case 'groupPanel':
                         case 'regenerateColumnsByVisibleItems':
                         case 'customizeColumns':
-                        case 'editing':
                         case 'columnHidingEnabled':
                         case 'dateSerializationFormat':
                         case 'columnResizingMode':
@@ -1104,16 +1119,7 @@ export const columnsControllerModule = {
                         case 'columnWidth': {
                             args.handled = true;
                             const ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'];
-                            const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
-                            const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
-                            const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
-                            const isEditColumnName = args.fullName?.indexOf('editing.editColumnName') === 0;
-                            const isChanges = args.fullName?.indexOf('editing.changes') === 0;
-                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges && !isEditColumnName;
-
-                            if(needReinit) {
-                                this.reinit(ignoreColumnOptionNames);
-                            }
+                            this.reinit(ignoreColumnOptionNames);
                             break;
                         }
                         case 'rtlEnabled':
@@ -1584,8 +1590,11 @@ export const columnsControllerModule = {
                 },
                 getChooserColumns: function(getAllColumns) {
                     const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
+                    const columnChooserColumns = columns.filter(column => column.showInColumnChooser);
 
-                    return grep(columns, function(column) { return column.showInColumnChooser; });
+                    const sortOrder = this.option('columnChooser.sortOrder');
+
+                    return sortColumns(columnChooserColumns, sortOrder);
                 },
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     const that = this;

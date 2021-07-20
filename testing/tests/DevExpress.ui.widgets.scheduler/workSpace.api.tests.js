@@ -1,8 +1,6 @@
 import 'generic_light.css!';
 import $ from 'jquery';
 
-import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
-
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 
@@ -19,16 +17,11 @@ testStart(function() {
 module('API', () => {
     module('Get cell index by coordinates', {
         beforeEach: function() {
-            this.createInstance = function(type, options, skipInvokeStub) {
+            this.createInstance = function(type, options) {
                 const workSpace = 'dxSchedulerWorkSpace' + type;
-
-                if(!skipInvokeStub) {
-                    this.instance = $('#scheduler-work-space')[workSpace]()[workSpace]('instance');
-                    stubInvokeMethod(this.instance);
-                    this.instance.option(options);
-                } else {
-                    this.instance = $('#scheduler-work-space')[workSpace](options)[workSpace]('instance');
-                }
+                this.instance = $('#scheduler-work-space')[workSpace]({
+                    ...options,
+                })[workSpace]('instance');
             };
         }
     }, () => {
@@ -47,7 +40,7 @@ module('API', () => {
         });
 
         test('Week view: rtl mode', function(assert) {
-            this.createInstance('Week', { width: 800, height: 800, rtlEnabled: true }, true);
+            this.createInstance('Week', { width: 800, height: 800, rtlEnabled: true });
             const index = this.instance.getCellIndexByCoordinates({ left: 411, top: 50 });
 
             assert.equal(index, 9, 'Index is OK');
@@ -82,9 +75,8 @@ module('API', () => {
                 width: 800,
                 height: 800,
                 groupOrientation: 'vertical'
-            }, true);
+            });
 
-            stubInvokeMethod(this.instance);
             this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
             const index = this.instance.getCellIndexByCoordinates({ left: 200, top: 55 });

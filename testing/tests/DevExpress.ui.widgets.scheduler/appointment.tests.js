@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { Appointment } from 'ui/scheduler/appointments/appointment';
+import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 
@@ -13,27 +14,37 @@ testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
 });
 
-const observer = {
-    fire: (command, field, obj, value) => {
-        switch(command) {
-            case 'getCellHeight':
-                return CELL_HEIGHT;
-            case 'getCellWidth':
-                return CELL_WIDTH;
-            case 'getResizableStep':
-                return CELL_WIDTH;
-            case 'isGroupedByDate':
-                return false;
-            case 'getAppointmentColor':
-                return new Deferred().resolve().promise();
-            default:
-                break;
-        }
-    }
-};
-
 const createInstance = () => {
-    return $('#scheduler-appointment').dxSchedulerAppointment({ observer }).dxSchedulerAppointment('instance');
+    const observer = {
+        fire: (command) => {
+            switch(command) {
+                case 'getCellHeight':
+                    return CELL_HEIGHT;
+                case 'getCellWidth':
+                    return CELL_WIDTH;
+                case 'isGroupedByDate':
+                    return false;
+                case 'getAppointmentColor':
+                    return new Deferred().resolve().promise();
+                case 'getResourceManager':
+                    return getResourceManager(key);
+                case 'getAppointmentDataProvider':
+                    return getAppointmentDataProvider(key);
+                default:
+                    break;
+            }
+        }
+    };
+
+    const key = createFactoryInstances({
+        getIsVirtualScrolling: () => false,
+        getDataAccessors: () => ({
+            getter: {},
+            setter: {}
+        })
+    });
+
+    return $('#scheduler-appointment').dxSchedulerAppointment({ key, observer }).dxSchedulerAppointment('instance');
 };
 
 const moduleOptions = {
@@ -85,7 +96,8 @@ module('Appointments', moduleOptions, () => {
 
         instance.option({
             direction: 'horizontal',
-            cellWidth: 25
+            cellWidth: 25,
+            getResizableStep: () => 25
         });
 
         assert.ok(instance.$element().dxResizable, 'appointment has right class');

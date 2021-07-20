@@ -3,7 +3,6 @@ import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { deferRender } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import * as inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';
@@ -110,10 +109,6 @@ class RadioCollection extends CollectionWidget {
 }
 
 class RadioGroup extends Editor {
-    _clean() {
-        delete this._inkRipple;
-        super._clean();
-    }
 
     _dataSourceOptions() {
         return { paginate: false };
@@ -156,11 +151,7 @@ class RadioGroup extends Editor {
 
             activeStateEnabled: true,
 
-            layout: 'vertical',
-
-            useInkRipple: false
-
-
+            layout: 'vertical'
         }));
     }
 
@@ -184,7 +175,6 @@ class RadioGroup extends Editor {
         this._renderSubmitElement();
         this.setAria('role', 'radiogroup');
         this._renderRadios();
-        this.option('useInkRipple') && this._renderInkRipple();
         this._renderLayout();
         super._initMarkup();
     }
@@ -200,8 +190,16 @@ class RadioGroup extends Editor {
         }
     }
 
+    _getSelectedItemKeys(value = this.option('value')) {
+        const isNullSelectable = this.option('valueExpr') !== 'this';
+        const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
+
+        return shouldSelectValue ? [value] : [];
+    }
+
     _setSelection(currentValue) {
-        this._setCollectionWidgetOption('selectedItemKeys', [this._unwrappedValue(currentValue)]);
+        const value = this._unwrappedValue(currentValue);
+        this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
     }
 
     _optionChanged(args) {
@@ -210,7 +208,6 @@ class RadioGroup extends Editor {
         this._dataExpressionOptionChanged(args);
 
         switch(name) {
-            case 'useInkRipple':
             case 'dataSource':
                 this._invalidate();
                 break;
@@ -251,14 +248,6 @@ class RadioGroup extends Editor {
         this._updateItemsSize();
     }
 
-    _renderInkRipple() {
-        this._inkRipple = inkRipple.render({
-            waveSizeCoefficient: 3.3,
-            useHoldAnimation: false,
-            isCentered: true
-        });
-    }
-
     _renderLayout() {
         const layout = this.option('layout');
         const $element = this.$element();
@@ -271,15 +260,12 @@ class RadioGroup extends Editor {
         this._areRadiosCreated = new Deferred();
         const $radios = $('<div>').appendTo(this.$element());
         const {
-            value,
             displayExpr,
             accessKey,
             focusStateEnabled,
             itemTemplate,
-            tabIndex,
-            valueExpr
+            tabIndex
         } = this.option();
-        const isNullSelectable = valueExpr !== 'this';
 
         this._createComponent($radios, RadioCollection, {
             onInitialized: ({ component }) => {
@@ -299,7 +285,7 @@ class RadioGroup extends Editor {
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: 'single',
-            selectedItemKeys: isNullSelectable || isDefined(value) ? [value] : [],
+            selectedItemKeys: this._getSelectedItemKeys(),
             tabIndex
         });
         this._areRadiosCreated.resolve();
@@ -328,19 +314,6 @@ class RadioGroup extends Editor {
 
     _setCollectionWidgetOption() {
         this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
-    }
-
-    _toggleActiveState($element, value, e) {
-        super._toggleActiveState($element, value, e);
-
-        if(this._inkRipple) {
-            const event = {
-                element: $element.find(`.${RADIO_BUTTON_ICON_CLASS}`),
-                event: e
-            };
-
-            value ? this._inkRipple.showWave(event) : this._inkRipple.hideWave(event);
-        }
     }
 
     _updateItemsSize() {

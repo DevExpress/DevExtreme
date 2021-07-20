@@ -8,13 +8,14 @@ import './utils/test_components/base';
 import './utils/test_components/options';
 import './utils/test_components/templated';
 import './utils/test_components/non_templated';
+import './utils/test_components/children';
 import {
   defaultEvent,
   emitKeyboard,
   KEY,
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
-import * as UpdatePropsImmutable from '../../utils/update-props-immutable';
+import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -22,6 +23,7 @@ const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrap
   dxOptionsTestWidget: any;
   dxTemplatedTestWidget: any;
   dxNonTemplatedTestWidget: any;
+  dxChildrenTestWidget: any;
 };
 
 beforeEach(() => {
@@ -60,6 +62,23 @@ describe('Misc cases', () => {
     $('#components').empty();
 
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
+    expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
+  });
+
+  it('on repaint should clean effects', () => {
+    const subscribeEffect = jest.fn();
+    const unsubscribeEffect = jest.fn();
+    const instance = $('#component').dxTestWidget({
+      subscribeEffect,
+      unsubscribeEffect,
+    }).dxTestWidget('instance');
+
+    expect(subscribeEffect).toHaveBeenCalledTimes(1);
+    expect(unsubscribeEffect).toHaveBeenCalledTimes(0);
+
+    instance.repaint();
+
+    expect(subscribeEffect).toHaveBeenCalledTimes(2);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
   });
 
@@ -497,6 +516,26 @@ describe('option', () => {
     });
   });
 
+  it('set to undefined should fall back to default value including default option rules', () => {
+    $('#component').dxOptionsTestWidget({
+      oneWayWithDefaultRule: 10,
+      twoWayWithDefaultRule: 10,
+      oneWayWithValueDefaultRule: 10,
+    });
+
+    $('#component').dxOptionsTestWidget({
+      oneWayWithDefaultRule: undefined,
+      oneWayWithValueDefaultRule: undefined,
+      twoWayWithDefaultRule: undefined,
+    });
+
+    expect($('#component').dxOptionsTestWidget('getLastPassedProps')).toMatchObject({
+      oneWayWithDefaultRule: 15,
+      oneWayWithValueDefaultRule: 15,
+      twoWayWithDefaultRule: 15,
+    });
+  });
+
   describe('Options with Element type', () => {
     it('pass DOM node to component if provided option is jQuery wrapper', () => {
       const element = document.createElement('div');
@@ -721,7 +760,7 @@ describe('templates and slots', () => {
 
   it('insert template content to templates root', () => {
     $('#component').dxTemplatedTestWidget({
-      template(data, element) {
+      template(_data, element) {
         $(element).html('<span>Template content</span>');
       },
     });
@@ -780,6 +819,90 @@ describe('templates and slots', () => {
     const root = $('#component').children('.templates-root')[0];
 
     expect($(root.firstChild)[0]).toBe(template[0]);
+  });
+
+  it('should render content in right order if children placed between other nodes', () => {
+    const slotContent = $('<span>').html('Default slot');
+    $('#component').append(slotContent);
+    const slotBefore = $('<span>').html('Additional slot before').insertBefore(slotContent);
+    const slotAfter = $('<span>').html('Additional slot after').insertAfter(slotContent);
+    $('#component').dxChildrenTestWidget({});
+
+    const children = $('#component')[0].childNodes;
+    expect(children.length).toBe(5);
+    expect(children[1]).toBe(slotBefore[0]);
+    expect(children[2]).toBe(slotContent[0]);
+    expect(children[3]).toBe(slotAfter[0]);
+  });
+
+  it('should not fail if template returned parent node', () => {
+    const template = (_: never, element: HTMLElement) => $(element)
+      .append($('<span>').text('text'))
+      .addClass('modified_container');
+
+    expect(() => $('#component').dxTemplatedTestWidget({ template })).not.toThrowError();
+  });
+
+  it('should have default templates for jQuery', () => {
+    const instance = $('#component')
+      .dxTemplatedTestWidget()
+      .dxTemplatedTestWidget('instance');
+
+    const templateNames = instance._propsInfo.templates;
+    const defaultTemplates = instance._templatesInfo;
+    const innerOptions = instance._props;
+    const publicOptions = instance.option();
+
+    templateNames.forEach((name) => {
+      expect(innerOptions[name]).toBe(defaultTemplates[name]);
+      expect(publicOptions[name]).toBe(null);
+    });
+  });
+
+  it('should remove content after template removed', () => {
+    const template = () => $('<div>');
+
+    $('#component').dxTemplatedTestWidget({
+      template,
+    });
+
+    expect($('#component').children('.templates-root').length).toBe(1);
+
+    $('#component').dxTemplatedTestWidget({
+      template: null,
+    });
+    expect($('#component').children('.templates-root').length).toBe(0);
+  });
+
+  it('should not re-render template if new data shadow equal', () => {
+    const template = jest.fn();
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      elementTemplate: template,
+      elementTemplatePayload: { value: 'test' },
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('elementTemplatePayload', { value: 'test' });
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('elementTemplatePayload', { value: 'newValue' });
+    expect(template).toBeCalledTimes(2);
+  });
+
+  it('should not re-render template if non-related option changed', () => {
+    const template = jest.fn();
+
+    const instance = $('#component').dxTemplatedTestWidget({
+      elementTemplate: template,
+      elementTemplatePayload: { value: 'test' },
+    }).dxTemplatedTestWidget('instance');
+
+    expect(template).toBeCalledTimes(1);
+
+    instance.option('text', { value: 'test' });
+    expect(template).toBeCalledTimes(1);
   });
 });
 
@@ -946,7 +1069,7 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 
   it('should be raised on appropriate option change on endUpdate', () => {
@@ -964,7 +1087,7 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 
   it('should not be raised on option change if it is not specified in getContentReadyOptions', () => {
@@ -992,6 +1115,19 @@ describe('onContentReady', () => {
 
     expect(contentReadyHandler).toHaveBeenCalledTimes(1);
     expect(contentReadyHandler)
-      .toHaveBeenCalledWith({ component: instance, element: instance.$element() });
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
+  });
+
+  it('should be raised on repaint if subscribe using on', () => {
+    const contentReadyHandler = jest.fn();
+    $('#component').dxTestWidget({});
+    const instance = $('#component').dxTestWidget('instance');
+    instance.on('contentReady', contentReadyHandler);
+
+    instance.repaint();
+
+    expect(contentReadyHandler).toHaveBeenCalledTimes(1);
+    expect(contentReadyHandler)
+      .toHaveBeenCalledWith({ component: instance, element: instance.element() });
   });
 });

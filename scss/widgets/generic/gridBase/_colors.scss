@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
@@ -97,7 +98,9 @@ $datagrid-menu-icon-color: null !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: null !default;
-$datagrid-row-removed-bg: color.change($base-success, $alpha: 0.5) !default;
+$datagrid-cell-removed-border-color: null !default;
+$datagrid-row-removed-bg: null !default;
+$datagrid-cell-removed-text-color: null !default;
 
 /**
 * $name 45. Invalidate data faded color
@@ -202,6 +205,9 @@ $datagrid-columnchooser-overlay-border-radius: null !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
@@ -240,6 +246,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/carmine/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "contrast" {
@@ -280,6 +289,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius + 2px !default;
   $datagrid-column-separator-bg: darken($datagrid-base-background-color, 13.5%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/contrast/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $base-accent !default;
+  $datagrid-row-removed-bg: $base-accent !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "dark" {
@@ -320,6 +332,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/dark/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "darkmoon" {
@@ -360,6 +375,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default;
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/darkmoon/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "darkviolet" {
@@ -400,6 +418,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/darkviolet/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "greenmist" {
@@ -440,6 +461,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/greenmist/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "light" {
@@ -480,6 +504,9 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/light/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $color == "softblue" {
@@ -520,5 +547,8 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png') !default;
+  $datagrid-cell-removed-border-color: $datagrid-border-color !default;
+  $datagrid-row-removed-bg: $datagrid-border-color !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 

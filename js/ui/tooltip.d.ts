@@ -1,8 +1,4 @@
 import {
-    UserDefinedElement
-} from '../core/element';
-
-import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
@@ -32,7 +28,7 @@ export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
 /** @public */
-export type ShowingEvent = EventInfo<dxTooltip>;
+export type ShowingEvent = Cancelable & EventInfo<dxTooltip>;
 
 /** @public */
 export type ShownEvent = EventInfo<dxTooltip>;
@@ -49,13 +45,10 @@ export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
  * @hasTranscludedContent
  * @module ui/tooltip
  * @export default
- * @prevFileNamespace DevExpress.ui
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTooltip extends dxPopover {
-    constructor(element: UserDefinedElement, options?: dxTooltipOptions)
-}
+export default class dxTooltip extends dxPopover<dxTooltipOptions> { }
 
 /** @public */
 export type Properties = dxTooltipOptions;

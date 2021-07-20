@@ -34,7 +34,7 @@ export const viewFunction = ({
     />
     <PathSvgElement
       d={d}
-      strokeWidth={hatching?.width || 1}
+      strokeWidth={Number(hatching?.width) || 1}
       stroke={color}
     />
   </pattern>
@@ -56,7 +56,7 @@ export class SvgPatternProps {
 })
 export class SvgPattern extends JSXComponent(SvgPatternProps) {
   get step(): number {
-    return this.props.hatching?.step || 6;
+    return Number(this.props.hatching?.step) || 6;
   }
 
   get d(): string {

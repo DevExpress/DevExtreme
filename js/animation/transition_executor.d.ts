@@ -7,7 +7,7 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    animationConfig
+    AnimationConfig
 } from './fx';
 
 /**
@@ -15,7 +15,6 @@ import {
  * @namespace DevExpress
  * @module animation/transition_executor
  * @export default
- * @prevFileNamespace DevExpress.animation
  * @public
  */
 export default class TransitionExecutor {
@@ -23,24 +22,21 @@ export default class TransitionExecutor {
      * @docid
      * @publicName enter(elements, animation)
      * @param1 elements:jQuery
-     * @param2 animation:animationConfig|string
-     * @prevFileNamespace DevExpress.animation
+     * @param2 animation:AnimationConfig|string
      * @public
      */
-    enter(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
+    enter(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
      * @param1 elements:jQuery
-     * @param2 animation:animationConfig|string
-     * @prevFileNamespace DevExpress.animation
+     * @param2 animation:AnimationConfig|string
      * @public
      */
-    leave(elements: UserDefinedElementsArray, animation: animationConfig | string): void;
+    leave(elements: UserDefinedElementsArray, animation: AnimationConfig | string): void;
     /**
      * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     reset(): void;
@@ -48,14 +44,12 @@ export default class TransitionExecutor {
      * @docid
      * @publicName start()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     start(): DxPromise<void>;
     /**
      * @docid
      * @publicName stop()
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     stop(): void;

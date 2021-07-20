@@ -61,6 +61,6 @@ export class PageSizeSelector
 
   get normalizedPageSizes(): FullPageSize[] {
     const { pageSizes } = this.props;
-    return pageSizes.map((p) => (((p === 'all' || p === 0) ? { text: getAllText(), value: 0 } : { text: String(p), value: p }) as FullPageSize));
+    return pageSizes.map((p) => ((p === 'all' || p === 0 ? { text: getAllText(), value: 0 } : { text: String(p), value: p }) as FullPageSize));
   }
 }

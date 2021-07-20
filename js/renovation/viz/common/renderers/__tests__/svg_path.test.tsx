@@ -25,7 +25,7 @@ describe('PathSvgElement', () => {
         d: 'M 1 2 L 3 4',
         computedProps: props,
       };
-      const path = shallow(<PathSvgComponent {...viewModel as any} /> as JSX.Element);
+      const path = shallow(<PathSvgComponent {...viewModel as any} />);
 
       expect(path.props()).toMatchObject({
         d: 'M 1 2 L 3 4',
@@ -41,7 +41,7 @@ describe('PathSvgElement', () => {
         d: 'M 1 2 L 3 4',
         computedProps: props,
       };
-      const path = shallow(<PathSvgComponent {...viewModel as any} /> as JSX.Element);
+      const path = shallow(<PathSvgComponent {...viewModel as any} />);
 
       expect(path.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
       expect(utilsModule.getGraphicExtraProps).toHaveBeenCalledWith(props);

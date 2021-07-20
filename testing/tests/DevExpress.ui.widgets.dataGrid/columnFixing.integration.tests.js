@@ -14,6 +14,8 @@ import { DataSource } from 'data/data_source/data_source';
 import commonUtils from 'core/utils/common';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import 'ui/radio_group';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -166,6 +168,50 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         $dataRow = rowsViewWrapper.getDataRow(1).getElement();
         assert.deepEqual($fixedRow.position(), $dataRow.position(), '2nd row position');
         assert.equal($fixedRow.height(), $dataRow.height(), '2nd row height');
+    });
+
+    QUnit.test('DataGrid - A fixed rows should be synchronized after edit form if editCellTemplate is asynchronous (T1013095)', function(assert) {
+        // arrange
+        const radioGroupEditCellTemplate = function(cellElement) {
+            commonUtils.deferUpdate(function() {
+                $('<div>').appendTo(cellElement).dxRadioGroup({
+                    dataSource: [1, 2, 3, 4],
+                });
+            });
+        };
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 1 }],
+            columnAutoWidth: true,
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'form',
+                form: {
+                    colCount: 1
+                }
+            },
+            columnFixing: {
+                enabled: true
+            },
+            columns: [
+                {
+                    dataField: 'Foo1',
+                    editCellTemplate: radioGroupEditCellTemplate
+                },
+                {
+                    dataField: 'Foo2',
+                    editCellTemplate: radioGroupEditCellTemplate
+                }
+            ]
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.editRow(0);
+
+        // arrange, assert
+        const $row = dataGrid.getRowElement(0);
+        assert.equal($row[0].clientHeight, $row[1].clientHeight, '1st row heights are synchronized');
     });
 
     QUnit.test('Column widths should be correct after resize column to show scroll if fixed column is exists', function(assert) {
@@ -526,5 +572,69 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 assert.ok($cell.find('.dx-texteditor-input').is(':focus'), `${rowIndex} ${columnIndex} input focused`);
             }
         }
+    });
+
+    QUnit.test('Master grid should scroll its content on mousewheel of an element in a detail grid (T1004881)', function(assert) {
+        // arrange, act
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 9; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Test ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            columns: [{
+                dataField: 'id',
+                fixed: true
+            }, 'name'],
+            scrolling: {
+                useNative: false,
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    const $detailGridContainer = $('<div>').addClass('mygrid');
+                    createDataGrid({
+                        loadingTimeout: null,
+                        dataSource: getData(),
+                        keyExpr: 'id',
+                        columns: ['id', 'name'],
+                        scrolling: {
+                            useNative: false,
+                        },
+                        columnAutoWidth: true,
+                    }, $detailGridContainer);
+                    $detailGridContainer.appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+        const $detailGridContainer = $(dataGrid.element()).find('.mygrid');
+
+        // assert
+        assert.strictEqual($detailGridContainer.length, 1, 'one detail grid');
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'initial scroll top');
+
+        // act
+        const pointer = pointerMock($detailGridContainer.find('.dx-data-row:eq(0)'));
+        pointer.start().wheel(-50);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 50, 'scroll top on mousewheel');
     });
 });

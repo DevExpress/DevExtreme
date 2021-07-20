@@ -1,13 +1,16 @@
 import { getBoundingRect } from '../../../core/utils/position';
-import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
 import { cache } from './cache';
-
-const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
+import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
+import { calculateDayDuration, getVerticalGroupCountClass } from './utils/base';
 
 const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
-class VerticalGroupedStrategy extends GroupedStrategy {
+class VerticalGroupedStrategy {
+    constructor(workSpace) {
+        this._workSpace = workSpace;
+    }
+
     prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
         let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
 
@@ -21,14 +24,8 @@ class VerticalGroupedStrategy extends GroupedStrategy {
 
         return {
             rowIndex: rowIndex,
-            cellIndex: cellCoordinates.cellIndex
+            columnIndex: cellCoordinates.columnIndex
         };
-    }
-
-    calculateCellIndex(rowIndex, cellIndex) {
-        rowIndex = rowIndex % this._workSpace._getRowCount();
-
-        return this._workSpace._getRowCount() * cellIndex + rowIndex;
     }
 
     getGroupIndex(rowIndex) {
@@ -49,36 +46,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
 
     getTotalRowCount() {
         return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
-    }
-
-    addAdditionalGroupCellClasses(cellClass, index, i, j) {
-        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
-
-        return this._addFirstGroupCellClass(cellClass, i + 1);
-    }
-
-    _addLastGroupCellClass(cellClass, index) {
-        if(index % this._workSpace._getRowCount() === 0) {
-            return cellClass + ' ' + this.getLastGroupCellClass();
-        }
-
-        return cellClass;
-    }
-
-    _addFirstGroupCellClass(cellClass, index) {
-        if((index - 1) % this._workSpace._getRowCount() === 0) {
-            return cellClass + ' ' + this.getFirstGroupCellClass();
-        }
-
-        return cellClass;
-    }
-
-    getHorizontalMax(groupIndex) {
-        if(this._workSpace.isRenovatedRender()) {
-            return this._workSpace.getMaxAllowedPosition(groupIndex);
-        }
-
-        return this._workSpace.getMaxAllowedPosition(0);
     }
 
     getVerticalMax(groupIndex) {
@@ -131,11 +98,8 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return 0;
     }
 
-    getGroupCountAttr(groups) {
-        return {
-            attr: VERTICAL_GROUPED_ATTR,
-            count: groups?.length
-        };
+    getGroupCountClass(groups) {
+        return getVerticalGroupCountClass(groups);
     }
 
     getLeftOffset() {
@@ -147,9 +111,13 @@ class VerticalGroupedStrategy extends GroupedStrategy {
             const groupIndex = coordinates.groupIndex;
             const startOffset = $cells.eq(0).offset().left;
             const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
-            const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
+            const startDayHour = this._workSpace.option('startDayHour');
+            const endDayHour = this._workSpace.option('endDayHour');
+            const hoursInterval = this._workSpace.option('hoursInterval');
+
+            const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
 
             if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
                 topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
@@ -164,10 +132,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
                 bottom: bottomOffset
             };
         });
-    }
-
-    getVirtualScrollingGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        return this.getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates);
     }
 
     shiftIndicator($indicator, height, rtlOffset, i) {
@@ -221,11 +185,30 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return this._workSpace.getScrollable().scrollTop();
     }
 
-    getGroupIndexByCell($cell) {
-        const rowIndex = $cell.parent().index();
-        const rowCount = this._workSpace._getRowCountWithAllDayRows();
+    // ------------
+    // We do not need these methods in renovation
+    // ------------
 
-        return Math.ceil((rowIndex + 1) / rowCount);
+    addAdditionalGroupCellClasses(cellClass, index, i, j) {
+        cellClass = this._addLastGroupCellClass(cellClass, i + 1);
+
+        return this._addFirstGroupCellClass(cellClass, i + 1);
+    }
+
+    _addLastGroupCellClass(cellClass, index) {
+        if(index % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
+    }
+
+    _addFirstGroupCellClass(cellClass, index) {
+        if((index - 1) % this._workSpace._getRowCount() === 0) {
+            return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
+        }
+
+        return cellClass;
     }
 }
 

@@ -386,6 +386,10 @@ const Accordion = CollectionWidget.inherit({
                 if(this._tryParseItemPropertyName(args.fullName) === 'visible') {
                     this._updateItemHeightsWrapper(true);
                 }
+                if(this.option('repaintChangesOnly') === true && args.fullName === 'items') {
+                    this._updateItemHeightsWrapper(true);
+                    this._renderSelection(this._getSelectedItemIndices(), []);
+                }
                 break;
             case 'animationDuration':
             case 'onItemTitleClick':

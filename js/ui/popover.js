@@ -14,6 +14,7 @@ import { addNamespace } from '../events/utils/index';
 import errors from './widget/ui.errors';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
+import { POPOVER_BOUNDARY_OFFSET } from './popover_contants';
 
 // STYLE popover
 
@@ -67,12 +68,12 @@ const getEventDelay = function(that, optionName) {
     return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
-    const { target, shading, disabled } = that.option();
+    const { target, shading, disabled, hideEvent } = that.option();
     const isSelector = isString(target);
     const shouldIgnoreHideEvent = shading && name === 'hide';
     const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
 
-    if(shouldIgnoreHideEvent) {
+    if(shouldIgnoreHideEvent && hideEvent) {
         errors.log('W1020');
     }
 
@@ -197,8 +198,9 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 },
-            _fixedPosition: true
+            boundaryOffset: { h: POPOVER_BOUNDARY_OFFSET, v: POPOVER_BOUNDARY_OFFSET },
+
+            _fixWrapperPosition: true
 
             /**
             * @name dxPopoverOptions.focusStateEnabled

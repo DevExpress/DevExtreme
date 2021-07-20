@@ -2,7 +2,6 @@ import $ from 'jquery';
 import SchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
-import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
@@ -43,40 +42,6 @@ const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWork
 const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
 
 const toSelector = cssClass => '.' + cssClass;
-
-const stubInvokeMethod = function(instance, options) {
-    options = options || {};
-    sinon.stub(instance, 'invoke', function() {
-        const subscribe = arguments[0];
-        if(subscribe === 'createResourcesTree') {
-            return new ResourceManager().createResourcesTree(arguments[1]);
-        }
-        if(subscribe === 'getResourceTreeLeaves') {
-            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
-        }
-        if(subscribe === 'getTimezone') {
-            return options.tz || 3;
-        }
-        if(subscribe === 'getTimezoneOffset') {
-            return -180 * 60000;
-        }
-        if(subscribe === 'convertDateByTimezone') {
-            let date = new Date(arguments[1]);
-
-            const tz = options.tz;
-
-            if(tz) {
-                const tzOffset = new Date().getTimezoneOffset() * 60000;
-                const dateInUTC = date.getTime() + tzOffset;
-
-                date = new Date(dateInUTC + (tz * 3600000));
-            }
-
-            return date;
-        }
-    });
-};
 
 const checkRowsAndCells = function($element, assert, interval, start, end, groupCount) {
     interval = interval || 0.5;
@@ -131,8 +96,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
-            this.instance = $('#scheduler-work-space')[view]()[view]('instance');
-            stubInvokeMethod(this.instance);
+            this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
         }
     };
 
@@ -240,11 +204,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
                 }]);
 
                 assert.ok(this.instance.$element().hasClass('dx-scheduler-work-space-grouped'), '\'grouped\' class is applied');
-                assert.equal(this.instance.$element().attr('dx-group-row-count'), 1, '\'dx-group-row-count\' is right');
+                assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-one'), 'correct class');
 
                 this.instance.option('groups', []);
                 assert.ok(!this.instance.$element().hasClass('dx-scheduler-work-space-grouped'), '\'grouped\' class is not applied');
-                assert.notOk(this.instance.$element().attr('dx-group-row-count'), '\'dx-group-row-count\' isn\'t applied');
+                assert.notOk(this.instance.$element().hasClass('dx-scheduler-group-row-count-one'), 'Group count class has been removed');
             });
         }
 
@@ -332,7 +296,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             const secondRowCells = rows.eq(1).find('.dx-scheduler-group-header');
 
             assert.equal(rows.length, 2, 'There are two group rows');
-            assert.equal(this.instance.$element().attr('dx-group-row-count'), 2, '\'dx-group-row-count\' is right');
+            assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-two'), 'Correct class');
 
             assert.equal(firstRowCells.length, 2, 'The first group row contains two group headers');
             assert.equal(firstRowCells.attr('colspan'), `${3 * baseColSpan}`, 'Cells of the first group row have a right colspan attr');
@@ -374,8 +338,7 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 
 const dayModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance);
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({}).dxSchedulerWorkSpaceDay('instance');
     }
 };
 
@@ -548,11 +511,9 @@ const dayWithGroupingModuleConfig = {
             showCurrentTimeIndicator: false,
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceDay('instance');
-        stubInvokeMethod(this.instance);
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -651,9 +612,8 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 const weekModuleConfig = {
     beforeEach: function() {
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
     }
 };
 
@@ -788,7 +748,7 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
         const secondRowCells = rows.eq(1).find('.dx-scheduler-group-header');
 
         assert.equal(rows.length, 2, 'There are two group rows');
-        assert.equal(this.instance.$element().attr('dx-group-row-count'), 2, '\'dx-group-row-count\' is right');
+        assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-two'), 'Correct class');
 
         assert.equal(firstRowCells.length, 14, 'The first group row contains 14 group headers');
         assert.equal(firstRowCells.attr('colspan'), '3', 'Cells of the first group row have a right colspan attr');
@@ -841,11 +801,9 @@ const weekWithGroupingModuleConfig = {
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceWeek('instance');
-        stubInvokeMethod(this.instance);
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -889,8 +847,7 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
 
 const workWeekModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek('instance');
-        stubInvokeMethod(this.instance);
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWorkWeek({}).dxSchedulerWorkSpaceWorkWeek('instance');
     }
 };
 
@@ -1117,8 +1074,7 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
 
 const monthModuleConfig = {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance);
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({}).dxSchedulerWorkSpaceMonth('instance');
     }
 };
 
@@ -1361,11 +1317,9 @@ const monthWithGroupingModuleConfig = {
             groupOrientation: 'vertical',
             startDayHour: 8,
             showAllDayPanel: false,
-            endDayHour: 20
+            endDayHour: 20,
+            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
         }).dxSchedulerWorkSpaceMonth('instance');
-        stubInvokeMethod(this.instance);
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
     }
 };
 
@@ -1492,7 +1446,7 @@ const scrollingModuleConfig = {
     beforeEach: function() {
         this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
             crossScrollingEnabled: true,
-            width: 100
+            width: 100,
         }).dxSchedulerWorkSpaceWeek('instance');
     }
 };
@@ -1580,7 +1534,6 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         groupOrientation: 'horizontal',
                         ...options,
                     })[workspaceClass]('instance');
-                    stubInvokeMethod(instance);
 
                     return instance;
                 };

@@ -31,7 +31,7 @@ test('The column reordering should work correctly when there is a fixed column w
     .eql('Field 3')
     .expect(getVisibleColumns(dataGrid))
     .eql(['field1', 'fake', 'field3', 'field2', 'field4']);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   width: 800,
   dataSource: [
     {

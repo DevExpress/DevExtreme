@@ -39,73 +39,75 @@ const MS_INVALID_LIST_PARAGRAPH = '<p class=\'MsoListParagraphCxSpFirst\'><span>
 
 const { module: testModule, test } = QUnit;
 
-testModule('Paste from MS Word', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    test('paste bullet list with indent', function(assert) {
-        const done = assert.async();
-        const instance = $('#htmlEditor')
-            .dxHtmlEditor({
-                onValueChanged: ({ value }) => {
-                    assert.equal(value, '<ul><li>1<ul><li>2<ul><li>3</li></ul></li></ul></li></ul>');
-                    done();
-                }
-            })
-            .dxHtmlEditor('instance');
+export default function() {
+    testModule('Paste from MS Word', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        test('paste bullet list with indent', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<ul><li>1<ul><li>2<ul><li>3</li></ul></li></ul></li></ul>');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_BULLET_LIST });
-        instance._quillInstance.setContents(newDelta);
+            const newDelta = instance._quillInstance.clipboard.convert({ html: MS_BULLET_LIST });
+            instance._quillInstance.setContents(newDelta);
+        });
+
+        test('paste ordered list with indent', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<ol><li>1<ol><li>2<ol><li>3</li></ol></li></ol></li></ol>');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
+
+            const newDelta = instance._quillInstance.clipboard.convert({ html: MS_ORDERED_LIST });
+            instance._quillInstance.setContents(newDelta);
+        });
+
+        test('paste list paragraph without styles', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<p>test</p>');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
+
+            const newDelta = instance._quillInstance.clipboard.convert({ html: MS_INVALID_LIST_PARAGRAPH });
+            instance._quillInstance.setContents(newDelta);
+        });
     });
 
-    test('paste ordered list with indent', function(assert) {
-        const done = assert.async();
-        const instance = $('#htmlEditor')
-            .dxHtmlEditor({
-                onValueChanged: ({ value }) => {
-                    assert.equal(value, '<ol><li>1<ol><li>2<ol><li>3</li></ol></li></ol></li></ol>');
-                    done();
-                }
-            })
-            .dxHtmlEditor('instance');
+    testModule('Text with decoration', () => {
+        test('paste text with text-decoration style', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<p><u>test1</u><s>test2<u>test3</u></s></p>', 'correct value');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
 
-        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_ORDERED_LIST });
-        instance._quillInstance.setContents(newDelta);
+            const newDelta = instance._quillInstance.clipboard.convert({ html: TEXT_WITH_DECORATION });
+            instance._quillInstance.setContents(newDelta);
+        });
     });
-
-    test('paste list paragraph without styles', function(assert) {
-        const done = assert.async();
-        const instance = $('#htmlEditor')
-            .dxHtmlEditor({
-                onValueChanged: ({ value }) => {
-                    assert.equal(value, '<p>test</p>');
-                    done();
-                }
-            })
-            .dxHtmlEditor('instance');
-
-        const newDelta = instance._quillInstance.clipboard.convert({ html: MS_INVALID_LIST_PARAGRAPH });
-        instance._quillInstance.setContents(newDelta);
-    });
-});
-
-testModule('Text with decoration', () => {
-    test('paste text with text-decoration style', function(assert) {
-        const done = assert.async();
-        const instance = $('#htmlEditor')
-            .dxHtmlEditor({
-                onValueChanged: ({ value }) => {
-                    assert.equal(value, '<p><u>test1</u><s>test2<u>test3</u></s></p>', 'correct value');
-                    done();
-                }
-            })
-            .dxHtmlEditor('instance');
-
-        const newDelta = instance._quillInstance.clipboard.convert({ html: TEXT_WITH_DECORATION });
-        instance._quillInstance.setContents(newDelta);
-    });
-});
+}

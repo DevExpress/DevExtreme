@@ -18,8 +18,11 @@ import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import columnStateMixin from './ui.grid_core.column_state_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
+import { nativeScrolling } from '../../core/utils/support';
+
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
+const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
 const GROUP_SPACE_CLASS = 'group-space';
 const CONTENT_CLASS = 'content';
 const TABLE_CLASS = 'table';
@@ -248,7 +251,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const columnIndex = $cell.index();
                 const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
                 const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
-                const msieCorrection = browser.msie ? 1 : 0;
 
                 if(!isMasterDetailRow && !isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
@@ -258,7 +260,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    const difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; // T598499
+                    const difference = $element[0].scrollWidth - $element[0].clientWidth; // T598499
                     if(difference > 0 && !isDefined($element.attr('title'))) {
                         $element.attr('title', $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
@@ -668,7 +670,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     if(row) {
-                        updateFunc(newValue, oldValue);
+                        updateFunc(newValue, row);
                     }
                     oldValue = newValue;
                 }
@@ -825,6 +827,11 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _wrapTableInScrollContainer: function($table) {
         const $scrollContainer = $('<div>');
+        const useNative = this.option('scrolling.useNative');
+
+        if(useNative === false || (useNative === 'auto' && !nativeScrolling)) {
+            $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
+        }
 
         eventsEngine.on($scrollContainer, 'scroll', () => {
             const scrollLeft = $scrollContainer.scrollLeft();
