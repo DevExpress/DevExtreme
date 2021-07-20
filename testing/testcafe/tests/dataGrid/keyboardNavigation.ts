@@ -2608,3 +2608,116 @@ test('Focus next cell using tab after adding row if some another row is focused 
   focusedRowKey: 1,
   columns: ['ID', 'FirstName'],
 }));
+
+test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act (forward)
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element.focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(4, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(4, 1).isFocused)
+    .ok();
+
+  // act (backward)
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getGroupRow(0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'test1' },
+    { id: 2, name: 'test2' },
+  ],
+  keyExpr: 'id',
+  grouping: {
+    autoExpandAll: true,
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+  summary: {
+    groupItems: [{
+      column: 'id',
+      summaryType: 'count',
+      showInGroupFooter: true,
+    }],
+  },
+  columns: ['id', {
+    dataField: 'name',
+    groupIndex: 0,
+  }],
+}));
