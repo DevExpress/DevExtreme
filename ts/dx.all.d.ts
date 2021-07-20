@@ -20996,7 +20996,8 @@ declare module DevExpress.ui {
           | 'longDateLongTime'
           | 'minute'
           | 'second'
-          | 'shortDateShortTime';
+          | 'shortDateShortTime'
+          | string;
       };
   /**
    * [descr:GridBase]
