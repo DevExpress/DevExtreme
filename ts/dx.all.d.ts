@@ -992,7 +992,7 @@ declare module DevExpress {
     /**
      * [descr:Format.type]
      */
-    type?: PredefinedFormat;
+    type?: PredefinedFormat | string;
   }
   /**
    * [descr:fx]
