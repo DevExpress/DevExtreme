@@ -133,9 +133,9 @@ export interface FormatObject {
    /**
     * @docid Format.type
     * @public
-    * @type Enums.Format
+    * @type Enums.Format|string
     */
-   type?: PredefinedFormat
+   type?: PredefinedFormat | string
 }
 type ExternalFormat = any;
 
