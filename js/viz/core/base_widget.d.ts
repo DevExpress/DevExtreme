@@ -3,6 +3,10 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
+  Device
+} from '../../core/devices';
+
+import {
     UserDefinedElement,
     DxElement
 } from '../../core/element';
