@@ -62,6 +62,9 @@ jobs:
 
     - name: Run TestCafe tests
       env:
+        BROWSERS: chrome:headless
+        CONCURRENCY: 4
+        TCQUARANTINE: true
         CONSTEL: jquery(1/1)
       run: |
         cd ./devextreme-demos
