@@ -27,6 +27,7 @@ const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
+const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
@@ -345,7 +346,8 @@ const DropDownButton = Widget.inherit({
                 collision: 'flipfit',
                 my: horizontalAlignment + ' top',
                 at: horizontalAlignment + ' bottom'
-            }
+            },
+            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY_CLASS }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },
 
