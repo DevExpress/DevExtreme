@@ -78,6 +78,6 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   }
 
   valueChange(value: number): void {
-    this.props.pageIndexChange(value - 1);
+    this.props.pageIndexChange!(value - 1);
   }
 }
