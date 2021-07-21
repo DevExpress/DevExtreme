@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import {
-  ComponentBindings, OneWay, Nested, Event,
+  ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
 
 import { BaseWidgetProps } from '../common/base_props';
@@ -496,7 +496,7 @@ export class ToolbarItem extends CollectionWidgetItem {
   //
   // - TODO: prepare jquery, angular, vue code samples
   //
-  @Nested()
+  @OneWay()
   options?: ToolbarItemOptionType;
 
   //
@@ -539,7 +539,7 @@ export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
   //
   // - TODO: prepare jquery, angular, vue code samples
   //
-  @Nested() items?: (string | ToolbarItemType)[]; // TODO: any
+  @OneWay() items?: (string | ToolbarItemType)[]; // TODO: any
 
   // TODO: write to us if you need this property
   // dataSource?: string | Array<string | dxToolbarItem | any> |
