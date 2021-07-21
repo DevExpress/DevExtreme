@@ -511,7 +511,6 @@ declare global {
 declare module DevExpress {
   /**
    * [descr:AnimationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type AnimationConfig = {
     /**
@@ -813,7 +812,7 @@ declare module DevExpress {
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:DOMComponent.dispose()]
@@ -993,7 +992,7 @@ declare module DevExpress {
     /**
      * [descr:Format.type]
      */
-    type?: PredefinedFormat;
+    type?: PredefinedFormat | string;
   }
   /**
    * [descr:fx]
@@ -1116,7 +1115,6 @@ declare module DevExpress {
   export function hideTopOverlay(): boolean;
   /**
    * [descr:PositionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PositionConfig {
     /**
@@ -1371,9 +1369,7 @@ declare module DevExpress {
 }
 declare module DevExpress.animation {
   /**
-   * [descr:animationConfig]
-   * @deprecated [depNote:animationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * @deprecated Use the AnimationConfig type instead
    */
   export type animationConfig = AnimationConfig;
   /**
@@ -1413,9 +1409,7 @@ declare module DevExpress.animation {
         top: number;
       };
   /**
-   * [descr:positionConfig]
-   * @deprecated [depNote:positionConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   * @deprecated Use the PositionConfig type instead
    */
   export interface positionConfig extends PositionConfig {}
 }
@@ -5118,6 +5112,14 @@ declare module DevExpress.ui {
      * [descr:dxCheckBoxOptions.hoverStateEnabled]
      */
     hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxCheckBoxOptions.iconHeight]
+     */
+    iconHeight?: number | string;
+    /**
+     * [descr:dxCheckBoxOptions.iconWidth]
+     */
+    iconWidth?: number | string;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
@@ -15264,6 +15266,10 @@ declare module DevExpress.ui {
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
+     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
+     */
+    copyRootClassesToWrapper?: boolean;
+    /**
      * [descr:dxOverlayOptions.deferRendering]
      */
     deferRendering?: boolean;
@@ -23324,7 +23330,7 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     static defaultOptions<TProperties>(
-      rule: DevExpress.core.Rule<TProperties>
+      rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
     /**
      * [descr:BaseWidget.exportTo(fileName, format)]
@@ -23366,13 +23372,13 @@ declare module DevExpress.viz {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface FileSavingEventInfo<T> {
+    export type FileSavingEventInfo<T> = DevExpress.events.Cancelable & {
       readonly component: T;
       readonly element: DevExpress.core.DxElement;
       readonly fileName: string;
       readonly format: string;
       readonly data: Blob;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -24222,7 +24228,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxBarGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxBarGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxBarGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxBarGauge> &
@@ -24444,7 +24450,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxBullet>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxBullet> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxBullet>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxBullet> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -24547,7 +24553,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxChart>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -28128,7 +28134,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxCircularGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxCircularGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxCircularGauge> &
@@ -28246,7 +28252,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxFunnel>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxFunnel> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxFunnel>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28713,7 +28719,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxLinearGauge>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxLinearGauge> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxLinearGauge>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxLinearGauge> &
@@ -28836,7 +28842,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxPieChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxPieChart>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxPieChart> &
@@ -29388,7 +29394,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxPolarChart>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxPolarChart>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
@@ -30975,7 +30981,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxRangeSelector>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxRangeSelector> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxRangeSelector>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxRangeSelector> &
@@ -31556,7 +31562,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxSankey>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxSankey>;
     export type IncidentOccurredEvent = DevExpress.events.EventInfo<dxSankey> &
       DevExpress.viz.BaseWidget.IncidentInfo;
@@ -32058,7 +32064,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxSparkline>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxSparkline> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxSparkline>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxSparkline> &
@@ -32221,7 +32227,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxTreeMap>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxTreeMap> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxTreeMap>;
     export type HoverChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
@@ -32751,7 +32757,7 @@ declare module DevExpress.viz {
     export type ExportedEvent = DevExpress.events.EventInfo<dxVectorMap>;
     export type ExportingEvent = DevExpress.events.EventInfo<dxVectorMap> &
       DevExpress.viz.BaseWidget.ExportInfo;
-    export type FileSavingEvent = DevExpress.events.Cancelable &
+    export type FileSavingEvent =
       DevExpress.viz.BaseWidget.FileSavingEventInfo<dxVectorMap>;
     export type IncidentOccurredEvent =
       DevExpress.events.EventInfo<dxVectorMap> &

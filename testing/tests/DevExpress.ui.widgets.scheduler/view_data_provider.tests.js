@@ -154,16 +154,15 @@ const verticalGroupingRenderOptions = {
     cellCount: 2,
     topVirtualRowHeight: undefined,
     bottomVirtualRowHeight: undefined,
-    cellCountInGroupRow: undefined,
     groupOrientation: 'vertical',
     isProvideVirtualCellsWidth: true,
-    isVerticalGrouping: true,
-    isStandaloneAllDayPanel: false,
-    isGroupedAllDayPanel: true,
     isAllDayPanelVisible: true,
-    isDateAndTimeView: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
+    groups: [{
+        name: 'groupId',
+        items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+    }],
 };
 const horizontalGroupingRenderOptions = {
     startRowIndex: 0,
@@ -173,16 +172,12 @@ const horizontalGroupingRenderOptions = {
     totalCellCount: 4,
     topVirtualRowHeight: undefined,
     bottomVirtualRowHeight: undefined,
-    cellCountInGroupRow: undefined,
     groupOrientation: 'horizontal',
     isProvideVirtualCellsWidth: true,
-    isVerticalGrouping: false,
     isAllDayPanelVisible: true,
-    isGroupedAllDayPanel: false,
-    isStandaloneAllDayPanel: true,
-    isDateAndTimeView: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
+    groups: [],
 };
 
 const createViewDataProvider = ({
@@ -611,7 +606,7 @@ module('View Data Provider', {
             module('Date views', () => {
                 const renderOptions = {
                     ...verticalGroupingRenderOptions,
-                    isDateAndTimeView: false,
+                    viewType: 'month',
                 };
 
                 test('it should return correct cell start date', function(assert) {
@@ -890,7 +885,7 @@ module('View Data Provider', {
                 module('Vertical Grouping', function() {
                     const renderOptions = {
                         ...verticalGroupingRenderOptions,
-                        isDateAndTimeView: false,
+                        viewType: 'month',
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -949,7 +944,7 @@ module('View Data Provider', {
                 module('Horizontal Grouping', function() {
                     const renderOptions = {
                         ...horizontalGroupingRenderOptions,
-                        isDateAndTimeView: false,
+                        viewType: 'month',
                     };
 
                     test('Should return correct cell position for the allDay cell date', function(assert) {
@@ -1016,14 +1011,12 @@ module('View Data Provider', {
                 totalCellCount: 4,
                 totalRowCount: 2,
                 verticalGroupCount: 1,
-                horizontalGroupCount: 2,
                 today: baseStartDate,
                 groupByDate: false,
-                isHorizontalGrouping: true,
-                isVerticalGrouping: false,
-                groupsList: [{ groupId: 1 }, { groupId: 2 }],
-                cellCountInGroupRow: 2,
-                rowCountInGroup: 2,
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
                 isAllDayPanelVisible: false,
                 isGroupedByDate: false,
                 headerCellTextFormat: 'shorttime',
@@ -1035,13 +1028,12 @@ module('View Data Provider', {
                 columnsInDay: 1,
                 hiddenInterval: 3600000 * 22,
                 hoursInterval: 1,
-                cellCountInDay: 2,
-                startViewDate: new Date(baseStartDate),
+                currentDate: new Date(baseStartDate),
                 rowCountBase: 2,
                 columnCountBase: 2,
-                isDateAndTimeView: true,
                 tableAllDay: false,
                 firstDayOfWeek: 0,
+                intervalCount: 2,
             };
 
             module('groupedDataMap', () => {
@@ -1281,7 +1273,6 @@ module('View Data Provider', {
                 const completeDateHeaderMapRenderOptions = {
                     ...dataGenerationRenderOptions,
                     groupByDate: true,
-                    isHorizontalGrouping: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1324,10 +1315,9 @@ module('View Data Provider', {
                     isGenerateWeekDaysHeaderData: true,
                     getWeekDaysHeaderText: () => 'week header text',
                     daysInView: 4,
-                    cellCountInDay: 2,
                     cellCount: 4,
                     totalCellCount: 8,
-                    cellCountInGroupRow: 4,
+                    intervalCount: 4,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1490,11 +1480,10 @@ module('View Data Provider', {
                     isGenerateWeekDaysHeaderData: true,
                     getWeekDaysHeaderText: () => 'week header text',
                     daysInView: 2,
-                    cellCountInDay: 2,
                     cellCount: 4,
                     totalCellCount: 8,
-                    cellCountInGroupRow: 4,
                     groupByDate: true,
+                    intervalCount: 4,
                 };
                 const viewDataProvider = new ViewDataProvider();
 
@@ -1606,20 +1595,20 @@ module('View Data Provider', {
 
                 const expectedCompleteTimePanelMap = [{
                     startDate: new Date(2021, 0, 10, 5),
-                    groupIndex: 0,
-                    groups: { groupId: 1 },
+                    groupIndex: undefined,
+                    groups: undefined,
                     index: 0,
-                    isFirstGroupCell: true,
+                    isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 0,
                     allDay: false,
                     text: '5:00 AM',
                 }, {
                     startDate: new Date(2021, 0, 10, 6),
-                    groupIndex: 0,
-                    groups: { groupId: 1 },
-                    index: 2,
-                    isFirstGroupCell: true,
+                    groupIndex: undefined,
+                    groups: undefined,
+                    index: 1,
+                    isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 4,
                     allDay: false,
@@ -1643,29 +1632,29 @@ module('View Data Provider', {
                 const expectedCompleteTimePanelMap = [{
                     allDay: true,
                     startDate: new Date(2021, 0, 10),
-                    groupIndex: 0,
-                    groups: { groupId: 1 },
+                    groupIndex: undefined,
+                    groups: undefined,
                     index: 0,
-                    isFirstGroupCell: true,
+                    isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 0,
                     text: '',
                 }, {
                     startDate: new Date(2021, 0, 10, 5),
-                    groupIndex: 0,
-                    groups: { groupId: 1 },
+                    groupIndex: undefined,
+                    groups: undefined,
                     index: 0,
-                    isFirstGroupCell: true,
+                    isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 0,
                     allDay: false,
                     text: '5:00 AM',
                 }, {
                     startDate: new Date(2021, 0, 10, 6),
-                    groupIndex: 0,
-                    groups: { groupId: 1 },
-                    index: 2,
-                    isFirstGroupCell: true,
+                    groupIndex: undefined,
+                    groups: undefined,
+                    index: 1,
+                    isFirstGroupCell: false,
                     isLastGroupCell: false,
                     key: 4,
                     allDay: false,
@@ -1680,8 +1669,11 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', function(assert) {
                 const completeTimePanelMapRenderOptions = {
                     ...dataGenerationRenderOptions,
-                    isVerticalGrouping: true,
-                    groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                    groupOrientation: 'vertical',
+                    groups: [{
+                        name: 'groupId',
+                        items: [{ id: 1 }, { id: 2 }],
+                    }],
                     isAllDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1712,10 +1704,10 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
-                    index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
-                    key: 4,
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 2,
                     allDay: false,
                     text: '',
                 }, {
@@ -1726,7 +1718,7 @@ module('View Data Provider', {
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
-                    key: 8,
+                    key: 4,
                     text: '',
                 }, {
                     startDate: new Date(2021, 0, 10, 5),
@@ -1735,17 +1727,17 @@ module('View Data Provider', {
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
-                    key: 8,
+                    key: 4,
                     allDay: false,
                     text: '5:00 AM',
                 }, {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
-                    index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
-                    key: 12,
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 6,
                     allDay: false,
                     text: '',
                 }];
@@ -1758,8 +1750,11 @@ module('View Data Provider', {
             test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', function(assert) {
                 const completeTimePanelMapRenderOptions = {
                     ...dataGenerationRenderOptions,
-                    isVerticalGrouping: true,
-                    groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                    groupOrientation: 'vertical',
+                    groups: [{
+                        name: 'groupId',
+                        items: [{ id: 1 }, { id: 2 }],
+                    }],
                     isAllDayPanelVisible: false,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1780,10 +1775,10 @@ module('View Data Provider', {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 0,
                     groups: { groupId: 1 },
-                    index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
-                    key: 4,
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 2,
                     allDay: false,
                     text: '',
                 }, {
@@ -1793,17 +1788,17 @@ module('View Data Provider', {
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
-                    key: 8,
+                    key: 4,
                     allDay: false,
                     text: '5:00 AM',
                 }, {
                     startDate: new Date(2021, 0, 10, 6),
                     groupIndex: 1,
                     groups: { groupId: 2 },
-                    index: 2,
-                    isFirstGroupCell: true,
-                    isLastGroupCell: false,
-                    key: 12,
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 6,
                     allDay: false,
                     text: '',
                 }];
@@ -1855,7 +1850,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: undefined,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -1889,7 +1883,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: undefined,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -1904,16 +1897,17 @@ module('View Data Provider', {
                 rowCount: 2,
                 topVirtualRowHeight: 50,
                 bottomVirtualRowHeight: 50,
-                cellCountInGroupRow: 2,
                 groupOrientation: 'vertical',
                 totalRowCount: 4,
                 totalCellCount: 2,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: true,
                 isGenerateTimePanelData: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const virtualHorizontalGroupingRenderOptions = {
                 startCellIndex: 0,
@@ -1922,16 +1916,16 @@ module('View Data Provider', {
                 cellCount: 4,
                 topVirtualRowHeight: 50,
                 bottomVirtualRowHeight: 50,
-                cellCountInGroupRow: 1,
                 groupOrientation: 'horizontal',
                 totalRowCount: 4,
                 totalCellCount: 4,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: false,
-                isStandaloneAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const horizontalDataMap = [[
                 {
@@ -2018,7 +2012,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 2,
                         isGroupedAllDayPanel: true,
                     };
 
@@ -2051,7 +2044,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2097,7 +2089,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2308,7 +2299,6 @@ module('View Data Provider', {
                     bottomVirtualRowHeight: 50,
                     topVirtualRowHeight: 50,
                     isGroupedAllDayPanel: true,
-                    cellCountInGroupRow: 2,
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
@@ -2325,15 +2315,16 @@ module('View Data Provider', {
                 rightVirtualCellWidth: 30,
                 topVirtualRowHeight: 50,
                 bottomVirtualRowHeight: 50,
-                cellCountInGroupRow: 2,
                 groupOrientation: 'vertical',
                 totalRowCount: 2,
                 totalCellCount: 3,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: true,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
 
             const virtualHorizontalGroupingRenderOptions = {
@@ -2345,16 +2336,16 @@ module('View Data Provider', {
                 rightVirtualCellWidth: 30,
                 topVirtualRowHeight: 50,
                 bottomVirtualRowHeight: 50,
-                cellCountInGroupRow: 1,
                 groupOrientation: 'horizontal',
                 totalRowCount: 2,
                 totalCellCount: 3,
                 isProvideVirtualCellsWidth: true,
-                isVerticalGrouping: false,
                 isAllDayPanelVisible: true,
-                isGroupedAllDayPanel: false,
-                isStandaloneAllDayPanel: true,
                 viewType: 'day',
+                groups: [{
+                    name: 'groupId',
+                    items: [{ id: 1 }, { id: 2 }],
+                }],
             };
             const horizontalDataMap = [[
                 {
@@ -2477,7 +2468,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: 20,
                         rightVirtualCellWidth: 30,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 2,
                         isGroupedAllDayPanel: true,
                     };
 
@@ -2510,7 +2500,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: 20,
                         rightVirtualCellWidth: 30,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2546,7 +2535,6 @@ module('View Data Provider', {
                         leftVirtualCellWidth: undefined,
                         rightVirtualCellWidth: undefined,
                         topVirtualRowHeight: 50,
-                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
                     };
 
@@ -2773,12 +2761,16 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 200,
                         rightVirtualCellWidth: 800,
-                        cellCountInGroupRow: 12,
                         totalCellCount: 12,
-                        horizontalGroupCount: 1,
-                        cellCountInDay: 4,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }],
+                        }],
                         groupByDate: false,
                         cellWidth: 100,
+                        startDayHour: 0,
+                        endDayHour: 4,
+                        hoursInterval: 1,
                     },
                     completeViewDataMap,
                     completeDateHeaderMap: timelineCompleteDateHeaderMap,
@@ -2803,7 +2795,7 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('dateHeaderMap should be generated correctly in timelines when several week-day cells фку visible', function(assert) {
+            test('dateHeaderMap should be generated correctly in timelines when several week-day cells are visible', function(assert) {
                 const completeViewDataMap = [timelineCompleteDateHeaderMap[1], timelineCompleteDateHeaderMap[1]];
 
                 const viewDataProvider = createViewDataProvider({
@@ -2816,12 +2808,16 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 200,
                         rightVirtualCellWidth: 600,
-                        cellCountInGroupRow: 12,
                         totalCellCount: 12,
-                        horizontalGroupCount: 1,
-                        cellCountInDay: 4,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }],
+                        }],
                         groupByDate: false,
                         cellWidth: 100,
+                        startDayHour: 0,
+                        endDayHour: 4,
+                        hoursInterval: 1,
                     },
                     completeViewDataMap,
                     completeDateHeaderMap: timelineCompleteDateHeaderMap,
@@ -2865,12 +2861,16 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 500,
                         rightVirtualCellWidth: 900,
-                        cellCountInGroupRow: 12,
                         totalCellCount: 24,
-                        horizontalGroupCount: 2,
-                        cellCountInDay: 4,
+                        groups: [{
+                            name: 'groupId',
+                            items: [{ id: 1 }, { id: 2 }],
+                        }],
                         groupByDate: true,
                         cellWidth: 100,
+                        startDayHour: 0,
+                        endDayHour: 4,
+                        hoursInterval: 1,
                     },
                     completeViewDataMap,
                     completeDateHeaderMap: timelineCompleteDateHeaderMap,

@@ -27,7 +27,7 @@ const MD_TABLE_WITH_HEADER_MARKUP = `| Header1  | Header2 |
 | ---------| --------|
 |Data1    | Data2   |`;
 
-const EXPECTED_TABLE_MARKUP = '<table><tbody><tr><td>Header1</td><td>Header2</td></tr><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
+const EXPECTED_TABLE_MARKUP = '<table><thead><tr><th>Header1</th><th>Header2</th></tr></thead><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
 
 function getSelector(className) {
     return `.${className}`;

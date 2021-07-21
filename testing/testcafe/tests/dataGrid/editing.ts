@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
-import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import { changeTheme } from '../../helpers/changeTheme';
 
 fixture.disablePageReloads`Editing`
@@ -1671,71 +1671,10 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     },
     columns: ['LastName'],
   });
-}).after(() => changeTheme('generic.light'));
-
-test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const detailGrid = new DataGrid('#detailContainer');
-
-  // act
-  await t
-    .click(dataGrid.getDataRow(0).getCommandCell(0).element)
-    .click(detailGrid.getHeaderPanel().getAddRowButton())
-    .click(detailGrid.getHeaderPanel().getSaveButton())
-    .click(detailGrid.getDataCell(0, 0).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-
-  // act
-  await t
-    .click(detailGrid.getDataCell(0, 1).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-
-  // act
-  await t
-    .click(detailGrid.getDataCell(0, 0).element);
-
-  // assert
-  await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [{ id: 1, field: 'field' }],
-  keyExpr: 'id',
-  loadingTimeout: null,
-  masterDetail: {
-    enabled: true,
-    template(): any {
-      return ($('<div id="detailContainer">') as any).dxDataGrid({
-        dataSource: [],
-        keyExpr: 'id',
-        focusedRowEnabled: true,
-        columns: [
-          {
-            dataField: 'id',
-            validationRules: [
-              { type: 'required' },
-            ],
-          },
-          {
-            dataField: 'field',
-            validationRules: [
-              { type: 'required' },
-            ],
-          }],
-        editing: {
-          mode: 'batch',
-          allowAdding: true,
-          allowUpdating: true,
-        },
-      });
-    },
-  },
-}));
+}).after(async () => {
+  await disposeWidgets();
+  await changeTheme('generic.light');
+});
 
 test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
   const dataGrid = new DataGrid('#container');

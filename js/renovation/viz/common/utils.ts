@@ -31,7 +31,7 @@ export function getFormatValue(value: number | Date | string, specialFormat: str
       : { type: 'percent', precision: (format as FormatObject)?.percentPrecision };
   }
 
-  return formatHelper.format(value, option);
+  return formatHelper.format(value, option) as string;
 }
 
 export function isUpdatedFlatObject<T>(newState: T, oldState: T): boolean {

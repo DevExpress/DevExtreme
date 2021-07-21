@@ -20,14 +20,14 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
         const renderingStrategy = this.getRenderingStrategy();
 
         if(renderingStrategy.hasAllDayAppointments() && allDay) {
-            return (renderingStrategy.getDefaultAllDayCellHeight() - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
+            return (renderingStrategy.allDayHeight - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
         } else {
-            return this.getRenderingStrategy().getDefaultCellHeight() - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
+            return this.getRenderingStrategy().cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
         }
     }
 
     getCollectorLeftOffset() {
-        return (this.getRenderingStrategy().getDefaultCellWidth() - COLLECTOR_ADAPTIVE_SIZE) / 2;
+        return (this.getRenderingStrategy().cellWidth - COLLECTOR_ADAPTIVE_SIZE) / 2;
     }
 
     getAppointmentDefaultOffset() {

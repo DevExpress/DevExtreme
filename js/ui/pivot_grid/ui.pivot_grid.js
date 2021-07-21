@@ -613,6 +613,7 @@ const PivotGrid = Widget.inherit({
             height: fieldChooserOptions.height,
             showCloseButton: true,
             resizeEnabled: true,
+            copyRootClassesToWrapper: true,
             minWidth: fieldChooserOptions.minWidth,
             minHeight: fieldChooserOptions.minHeight,
             toolbarItems: toolbarItems,
@@ -1082,7 +1083,6 @@ const PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             $(TR)
-                .toggleClass('dx-ie', coreBrowserUtils.msie === true)
                 .append(rowHeaderContainer)
                 .append(columnsAreaElement)
                 .appendTo(tableElement);

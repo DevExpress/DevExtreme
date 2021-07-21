@@ -1009,15 +1009,15 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
     showColumnHeaders?: boolean;
     /**
      * @docid
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @default true
      * @public
      */
     showColumnLines?: boolean;
     /**
      * @docid
-     * @default true [for](iOS)
-     * @default true [for](Material)
+     * @default true &for(iOS)
+     * @default true &for(Material)
      * @default false
      * @public
      */
@@ -1267,7 +1267,7 @@ export interface HeaderFilter {
     allowSearch?: boolean,
     /**
      * @docid GridBaseOptions.headerFilter.height
-     * @default 315 [for](Material)
+     * @default 315 &for(Material)
      * @default 325
      */
     height?: number,
@@ -1608,7 +1608,7 @@ export interface EditingBase {
     texts?: EditingTextsBase;
     /**
      * @docid GridBaseOptions.editing.useIcons
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @default false
      * @public
      */
@@ -1788,7 +1788,7 @@ export interface ScrollingBase {
     scrollByThumb?: boolean;
     /**
      * @docid GridBaseOptions.scrolling.showScrollbar
-     * @default 'onHover' [for](desktop)
+     * @default 'onHover' &for(desktop)
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @public
@@ -3827,7 +3827,7 @@ export interface Grouping {
   contextMenuEnabled?: boolean,
   /**
    * @docid dxDataGridOptions.grouping.expandMode
-   * @default 'rowClick' [for](mobile_devices)
+   * @default 'rowClick' &for(mobile_devices)
    * @type Enums.GridGroupingExpandMode
    * @default "buttonClick"
    */
@@ -4129,15 +4129,15 @@ type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | '
 
 /**
  * @docid
- * @type object
+ * @inherits dxToolbarItem
  * @namespace DevExpress.ui
  */
 export interface dxDataGridToolbarItem extends dxToolbarItem {
   /**
    * @docid
-   * @type Enums.GridToolbarItemName|string
+   * @type Enums.DataGridToolbarItem|string
    * @public
-  */
+   */
   name?: dxDataGridDefaultToolbarItemName | string
 }
 
@@ -4149,7 +4149,7 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
 export interface dxDataGridToolbar {
   /**
    * @docid
-   * @type Array<dxDataGridToolbarItem,Enums.GridToolbarItemName>
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;

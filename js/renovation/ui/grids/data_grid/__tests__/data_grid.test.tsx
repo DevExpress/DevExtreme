@@ -605,8 +605,8 @@ describe('DataGrid', () => {
     });
 
     describe('headerFilter.height', () => {
-      it('should be undefined by default', () => {
-        expect(getDefaultOptions().headerFilter?.height).toBe(undefined);
+      it('should be 325 by default', () => {
+        expect(getDefaultOptions().headerFilter?.height).toBe(325);
       });
 
       it('should be 315 if material', () => {

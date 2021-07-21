@@ -39,14 +39,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
-    _getRowCount() {
-        return 1;
-    }
-
-    _getCellCount() {
-        return this._getCellCountInDay() * this.option('intervalCount');
-    }
-
     getGroupTableWidth() {
         return this._$sidebarTable ? this._$sidebarTable.outerWidth() : 0;
     }
@@ -212,7 +204,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._startViewDate));
+        return dateUtils.trimTime(new Date(this.getStartViewDate()));
     }
 
     _getIntervalBetween(currentDate, allDay) {
@@ -332,8 +324,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
             daysInView,
-            cellCountInDay: this._getCellCountInDay(),
             getDateForHeaderText,
+            columnsInDay: this._getCellCountInDay(),
         };
     }
 
@@ -382,7 +374,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        this._startViewDate = this._calculateStartViewDate();
         this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
@@ -454,7 +445,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._startViewDate);
+            const firstViewDate = new Date(this.getStartViewDate());
             let currentDate = new Date(firstViewDate);
 
             const $cells = [];

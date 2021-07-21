@@ -330,6 +330,7 @@ class Menu extends MenuBase {
         const position = rtl ? 'right' : 'left';
 
         return {
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: () => {
                 return getElementMaxHeightByWindow(this.$element());
             },
