@@ -1,6 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 
-function createRowInfo({ dataProvider, rowIndex, prevRowInfo }) {
+function createRowInfo({ dataProvider, rowIndex, rowStyles, prevRowInfo }) {
     const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
     let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
     if(rowType === 'groupFooter' && prevRowInfo?.rowType === 'groupFooter') {
@@ -17,7 +17,7 @@ function createRowInfo({ dataProvider, rowIndex, prevRowInfo }) {
         rowIndex
     };
 
-    _fillRowCellsInfo({ rowInfo, dataProvider, columns });
+    _fillRowCellsInfo({ rowInfo, rowStyles, dataProvider, columns });
 
     return rowInfo;
 }
@@ -29,10 +29,11 @@ function createPdfCell(cellInfo) {
         colSpan: cellInfo.colSpan,
         drawLeftBorder: cellInfo.drawLeftBorder,
         drawRightBorder: cellInfo.drawRightBorder,
+        backgroundColor: cellInfo.backgroundColor,
     };
 }
 
-function _createCellInfo({ rowInfo, dataProvider, cellIndex }) {
+function _createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }) {
     const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
     const cellInfo = {
         value: cellData.value,
@@ -46,6 +47,9 @@ function _createCellInfo({ rowInfo, dataProvider, cellIndex }) {
         }
         if(cellMerging && cellMerging.colspan > 0) {
             cellInfo.colSpan = cellMerging.colspan;
+        }
+        if(isDefined(rowStyles.headerStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowStyles.headerStyles.backgroundColor;
         }
     } else if(rowInfo.rowType === 'group') {
         cellInfo.drawLeftBorder = false;
@@ -62,13 +66,20 @@ function _createCellInfo({ rowInfo, dataProvider, cellIndex }) {
                 cellInfo.colSpan = rowInfo.cellsInfo.length;
             }
         }
+        if(isDefined(rowStyles.groupStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowStyles.groupStyles.backgroundColor;
+        }
+    } else if(rowInfo.rowType === 'groupFooter' || rowInfo.rowType === 'totalFooter') {
+        if(isDefined(rowStyles.totalStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowStyles.totalStyles.backgroundColor;
+        }
     }
     return cellInfo;
 }
 
-function _fillRowCellsInfo({ rowInfo, dataProvider, columns }) {
+function _fillRowCellsInfo({ rowInfo, rowStyles, dataProvider, columns }) {
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-        rowInfo.cellsInfo.push(_createCellInfo({ rowInfo, dataProvider, cellIndex }));
+        rowInfo.cellsInfo.push(_createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }));
     }
 
     if(rowInfo.rowType === 'group') {

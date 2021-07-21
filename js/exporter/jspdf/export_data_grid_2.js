@@ -25,13 +25,15 @@ function exportDataGrid(doc, dataGrid, options) {
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
 
+            const { headerStyles, groupStyles, totalStyles } = options;
+            const rowStyles = { headerStyles, groupStyles, totalStyles };
             const dataRowsCount = dataProvider.getRowsCount();
             let currentRowInfo;
             let prevRowInfo;
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 prevRowInfo = currentRowInfo;
-                currentRowInfo = createRowInfo({ dataProvider, rowIndex, prevRowInfo });
+                currentRowInfo = createRowInfo({ dataProvider, rowIndex, rowStyles, prevRowInfo });
 
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
