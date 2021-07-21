@@ -596,7 +596,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.updateSizes();
   }
 
-  scrollByLocation({ top = 0, left = 0 }: Partial<ScrollOffset>): void {
+  scrollByLocation(location: Partial<ScrollOffset>): void {
+    let { top = 0, left = 0 } = location;
+
+    // destructuring assignment with default values not working
+    if (!isDefined(top)) {
+      top = 0;
+    }
+    if (!isDefined(left)) {
+      left = 0;
+    }
+
     if (top === 0 && left === 0) {
       return;
     }
