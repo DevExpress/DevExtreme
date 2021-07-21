@@ -402,7 +402,7 @@ QUnit.module('Events', {
             }
         });
 
-        $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(1)).trigger('dxclick');
+        scheduler.appointments.click(1);
     });
 
     QUnit.test('Args of onAppointmentClick/Rendered should contain data about particular grouped appt', function(assert) {

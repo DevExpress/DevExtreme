@@ -254,10 +254,10 @@ class Appointment extends ClickElementWrapper {
         const clock = sinon.useFakeTimers();
 
         Date.now = () => NaN;
-        this.getElement().trigger('click');
+        this.getElement().trigger('dxclick');
         Date.now = () => 0;
 
-        clock.tick(400);
+        clock.tick(300);
         clock.restore();
     }
 

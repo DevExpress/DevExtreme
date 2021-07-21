@@ -785,7 +785,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
             }
         });
 
-        scheduler.appointmentList[0].click();
+        scheduler.appointments.click(0);
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.expect(2);

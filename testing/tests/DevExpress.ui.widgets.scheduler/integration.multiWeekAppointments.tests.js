@@ -369,6 +369,7 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
 });
 
 QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view, rtl mode', function(assert) {
+    const clock = sinon.useFakeTimers();
     const data = [{
         text: 'Task',
         roomId: [1, 2],
@@ -407,27 +408,32 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
         }
     ];
 
-    this.createInstance({
-        rtlEnabled: true,
-        views: ['timelineDay'],
-        currentView: 'timelineDay',
-        dataSource: data,
-        firstDayOfWeek: 1,
-        currentDate: new Date(2015, 2, 4),
-        groups: ['roomId', 'ownerId'],
-        resources: resources
-    });
+    try {
+        this.createInstance({
+            rtlEnabled: true,
+            views: ['timelineDay'],
+            currentView: 'timelineDay',
+            dataSource: data,
+            firstDayOfWeek: 1,
+            currentDate: new Date(2015, 2, 4),
+            groups: ['roomId', 'ownerId'],
+            resources: resources
+        });
 
-    mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
+        mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
-    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-    const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
-    const expectedLeft = $dateTable.outerWidth() - $appointments.eq(0).outerWidth() - 400;
+        const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+        const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
+        const expectedLeft = $dateTable.outerWidth() - $appointments.eq(0).outerWidth() - 400;
 
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    } finally {
+        clock.restore();
+    }
+
 });
 
 QUnit.test('Multi-week appointments should have correct resizable handles', function(assert) {
