@@ -158,24 +158,25 @@ export class SchedulerHeader extends Widget {
         return item;
     }
 
+    _callEvent(event, arg) {
+        if(this.eventMap.has(event)) {
+            const events = this.eventMap.get(event);
+            events.forEach(event => event(arg));
+        }
+    }
+
     _updateCurrentView(view) {
         const onCurrentViewChange = this.option('onCurrentViewChange');
         onCurrentViewChange(view.name);
 
-        if(this.eventMap.has('currentView')) {
-            const events = this.eventMap.get('currentView');
-            events.forEach(event => event(view));
-        }
+        this._callEvent('currentView', view);
     }
 
     _updateCurrentDate(date) {
         const onCurrentDateChange = this.option('onCurrentDateChange');
         onCurrentDateChange(date);
 
-        if(this.eventMap.has('currentDate')) {
-            const events = this.eventMap.get('currentDate');
-            events.forEach(event => event(date));
-        }
+        this._callEvent('currentDate', date);
     }
 
     _renderCalendar() {
