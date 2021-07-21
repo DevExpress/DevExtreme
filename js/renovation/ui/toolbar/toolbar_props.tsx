@@ -1,10 +1,31 @@
 /* eslint-disable max-classes-per-file */
 
 import {
-  ComponentBindings, OneWay, Nested, Event,
+  ComponentBindings, OneWay, Nested,
 } from '@devextreme-generator/declarations';
 
 import { BaseWidgetProps } from '../common/base_props';
+import { ToolbarButtonProps } from './toolbar_button_props';
+
+// eslint-disable-next-line
+// @ts-ignore
+// eslint-disable-next-line
+import { ItemClickEvent, SelectionChangedEvent } from '../../../ui/button_group';
+
+// eslint-disable-next-line
+// @ts-ignore
+// eslint-disable-next-line
+import { ButtonClickEvent } from '../../../ui/drop_down_button';
+
+// eslint-disable-next-line
+// @ts-ignore
+// eslint-disable-next-line
+import type { ToolbarButtonGroupProps, ToolbarButtonGroupItemPropsType } from './toolbar_button_group_props';
+
+// eslint-disable-next-line
+// @ts-ignore
+// eslint-disable-next-line
+import type { ToolbarDropDownButtonProps, ToolbarDropDownButtonItemPropsType } from './toolbar_dropdown_button';
 
 @ComponentBindings()
 export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
@@ -131,145 +152,6 @@ export class CollectionWidgetItem {
   // ) => string | UserDefinedElement);
 }
 
-@ComponentBindings()
-export class ToolbarItem extends CollectionWidgetItem {
-  // js\ui\toolbar.d.ts - export interface dxToolbarItem extends CollectionWidgetItem {
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ cssClass: 'my_class' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item cssClass={'my_class'}>your markup</Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @OneWay()
-  cssClass?: string;
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ text: 'text2', locateInMenu: 'always' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item locateInMenu={'always'}>your markup</Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @OneWay()
-  locateInMenu?: 'always' | 'auto' | 'never';
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item location={'before'}>your markup</Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @OneWay()
-  location?: 'after' | 'before' | 'center';
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component (doesn't look as 'native'):
-  // <Toolbar items={[{ widget: 'dxButton' }]} />
-  // TODO:
-  // - Error if used in TestComponent in playground\react with dxAutocomplete | dxDateBox |
-  //   dxMenu | dxSelectBox | dxTabs | dxButtonGroup | dxDropDownButton:
-  //   TypeError: (0 , _renderer.default)(...)[component] is not a function
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @OneWay()
-  widget?: 'dxButton' | 'dxCheckBox' | 'dxTextBox';
-
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
-  //
-  // TODO: any
-  // TODO: ToolbarTextBoxProps | ToolbarCheckBoxProps - errors in Angular
-  // see https://github.com/DevExpress/devextreme-renovation/issues/724
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @Nested()
-  options?: ToolbarButtonProps;
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item><Button text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @OneWay()
-  showText?: 'always' | 'inMenu';
-
-  /*
-  TODO:
-  menuItemTemplate?: template | (() => string | UserDefinedElement);
-  */
-}
-
-// TODO: it is not a 'native' way
-@ComponentBindings()
-export class ToolbarButtonProps {
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
-  //
-  @OneWay()
-  text?: string;
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[{ widget: 'dxButton', options: { type: 'danger' } }]} />
-  //
-  @OneWay()
-  type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
-
-  //
-  // Use cases:
-  //
-  // - in a RenoV component:
-  // <Toolbar items={[
-  //   { widget: 'dxButton', options: { text: 'my button', onClick: () => console.log('hi') } }
-  // ]} />
-  //
-  // TODO: EventCallback<ButtonClick>
-  // Looks like js\renovation\ui\button.tsx:
-  // onClick?: (e: { event: Event; validationGroup?: string }) => void;
-  //
-  @Event() onClick?: (() => void);
-
-  // TODO: other props
-}
-
 // TODO: commented to avoid issues in Vue application
 // https://github.com/DevExpress/devextreme-renovation/issues/724
 // // TODO: it is not a 'native' way
@@ -334,3 +216,115 @@ export class ToolbarButtonProps {
 
 //   // TODO: other props
 // }
+
+export type ToolbarWidgetType = 'dxButton' | 'dxCheckBox' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+
+export type ToolbarItemOptionType = ToolbarButtonProps
+| ToolbarButtonGroupProps | ToolbarDropDownButtonProps;
+
+export type ToolbarShowTextType = 'always' | 'inMenu';
+
+export type ToolbarLocateInMenuType = 'always' | 'auto' | 'never';
+
+export type ToolbarLocationType = 'after' | 'before' | 'center';
+
+@ComponentBindings()
+export class ToolbarItem extends CollectionWidgetItem {
+  // js\ui\toolbar.d.ts - export interface dxToolbarItem extends CollectionWidgetItem {
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ cssClass: 'my_class' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item cssClass={'my_class'}>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @OneWay()
+  cssClass?: string;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ text: 'text2', locateInMenu: 'always' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item locateInMenu={'always'}>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @OneWay()
+  locateInMenu?: ToolbarLocateInMenuType;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ text: 'text4', location: 'before' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item location={'before'}>your markup</Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @OneWay()
+  location?: ToolbarLocationType;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component (doesn't look as 'native'):
+  // <Toolbar items={[{ widget: 'dxButton' as ToolbarWidgetType }]} />
+  // TODO:
+  // - Error if used in TestComponent in playground\react with dxAutocomplete | dxDateBox |
+  //   dxMenu | dxSelectBox | dxTabs | dxButtonGroup | dxDropDownButton:
+  //   TypeError: (0 , _renderer.default)(...)[component] is not a function
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @OneWay()
+  widget?: ToolbarWidgetType;
+
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
+  //
+  // TODO: any
+  // TODO: ToolbarTextBoxProps | ToolbarCheckBoxProps - errors in Angular
+  // see https://github.com/DevExpress/devextreme-renovation/issues/724
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item><Button text="My Button" /></Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @Nested()
+  options?: ToolbarItemOptionType;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ text: 'text4', showText: 'inMenu' as ToolbarShowTextType }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item><Button text={itemInMenu ? "My Button" : ""} /></Item> </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @OneWay()
+  showText?: ToolbarShowTextType;
+
+  /*
+  TODO:
+  menuItemTemplate?: template | (() => string | UserDefinedElement);
+  */
+}
