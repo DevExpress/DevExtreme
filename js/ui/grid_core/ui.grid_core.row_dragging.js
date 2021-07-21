@@ -41,12 +41,6 @@ const RowDraggingExtender = {
         columnsController.columnOption('type:drag', 'visible', isHandleColumnVisible);
     },
 
-    _togglePointerEventsStyle: function(toggle) {
-        // T929503
-        const $el = this._sortableFixed?.$element();
-        $el?.css('pointerEvents', toggle ? 'auto' : '');
-    },
-
     _renderContent: function() {
         const rowDragging = this.option('rowDragging');
         const allowReordering = this._allowReordering();
@@ -56,6 +50,10 @@ const RowDraggingExtender = {
         const sortableFixedName = '_sortableFixed';
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
+        const togglePointerEventsStyle = (toggle) => {
+            // T929503
+            this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
+        };
 
         if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
@@ -77,15 +75,18 @@ const RowDraggingExtender = {
                     rowDragging.onDragStart?.(e);
                 },
                 onDragEnter: () => {
-                    this._togglePointerEventsStyle(true);
+                    togglePointerEventsStyle(true);
                 },
                 onDragLeave: () => {
-                    this._togglePointerEventsStyle(false);
+                    togglePointerEventsStyle(false);
                 },
                 onDragEnd: (e) => {
-                    this._togglePointerEventsStyle(false);
-                    e.toComponent.getView('rowsView')._togglePointerEventsStyle(false);
+                    togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
+                },
+                onAdd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onAdd?.(e);
                 },
                 dropFeedbackMode: rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
