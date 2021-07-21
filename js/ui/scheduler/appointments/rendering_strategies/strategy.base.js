@@ -27,7 +27,10 @@ class BaseRenderingStrategy {
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
+    get resizableStep() { return this.options.getResizableStep(); }
     get isAdaptive() { return this.options.isAdaptive; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
+    get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
@@ -79,7 +82,7 @@ class BaseRenderingStrategy {
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
 
-            if(this._isRtl()) {
+            if(this.rtlEnabled) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
 
@@ -93,7 +96,7 @@ class BaseRenderingStrategy {
     }
 
     _getDeltaWidth(args, initialSize) {
-        const intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize();
+        const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
         const initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);
@@ -159,7 +162,7 @@ class BaseRenderingStrategy {
                     }, position[j]);
 
 
-                    if(this._isRtl()) {
+                    if(this.rtlEnabled) {
                         position[j].left = currentMaxAllowedPosition;
                     }
 
@@ -195,10 +198,6 @@ class BaseRenderingStrategy {
         return this.instance.fire('createAppointmentSettings', appointment);
     }
 
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
-    }
-
     _getAppointmentParts() {
         return [];
     }
@@ -210,7 +209,7 @@ class BaseRenderingStrategy {
     }
 
     _reduceMultiWeekAppointment(sourceAppointmentWidth, bound) {
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             sourceAppointmentWidth = Math.floor(bound.left - bound.right);
         } else {
             sourceAppointmentWidth = bound.right - Math.floor(bound.left);
@@ -229,7 +228,7 @@ class BaseRenderingStrategy {
     isAppointmentGreaterThan(etalon, comparisonParameters) {
         let result = comparisonParameters.left + comparisonParameters.width - etalon;
 
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
@@ -240,12 +239,10 @@ class BaseRenderingStrategy {
         return false;
     }
 
-    cropAppointmentWidth(width, cellWidth) {
-        if(this.instance.fire('isGroupedByDate')) {
-            width = cellWidth;
-        }
-
-        return width;
+    cropAppointmentWidth(width, cellWidth) { // TODO get rid of this
+        return this.isGroupedByDate
+            ? cellWidth
+            : width;
     }
 
     _getSortedPositions(positionList) {
@@ -636,10 +633,6 @@ class BaseRenderingStrategy {
 
     _needVerifyItemSize() {
         return false;
-    }
-
-    needSeparateAppointment(allDay) {
-        return this.instance.fire('isGroupedByDate') && allDay;
     }
 
     _getMaxAppointmentCountPerCell() {

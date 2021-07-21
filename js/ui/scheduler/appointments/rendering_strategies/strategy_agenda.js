@@ -115,10 +115,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         return false;
     }
 
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
-    }
-
     _getAppointmentParts() {
     }
 

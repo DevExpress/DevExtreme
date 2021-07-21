@@ -35,7 +35,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
         const tailChunkWidth = withoutFirstChunkWidth % weekWidth || weekWidth;
         const rtlPosition = leftPosition + (weekWidth - tailChunkWidth);
-        const tailChunkLeftPosition = this._isRtl() ? rtlPosition : leftPosition;
+        const tailChunkLeftPosition = this.rtlEnabled ? rtlPosition : leftPosition;
 
         return [tailChunkWidth, tailChunkLeftPosition];
     }
@@ -72,7 +72,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     }
 
     _calculateMultiWeekAppointmentLeftOffset(max, width) {
-        return this._isRtl() ? max : max - width;
+        return this.rtlEnabled ? max : max - width;
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
