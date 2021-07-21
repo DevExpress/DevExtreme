@@ -1007,7 +1007,7 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
     }
 
     test('Appointments in DST should not have offset when ' +
-    'recurring appointment timezone not equal to scheduler timezone', function(assert) {
+        'recurring appointment timezone not equal to scheduler timezone', function(assert) {
         const scheduler = createWrapper({
             timeZone: 'America/New_York',
             dataSource: [
