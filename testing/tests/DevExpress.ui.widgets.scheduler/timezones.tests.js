@@ -1041,7 +1041,7 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
         assert.equal(appointments.getDateText(6), '2:00 PM - 2:30 PM', 'should be without offset');
     });
 
-    test('Appointments in end of DST should have offset correct offset', function(assert) {
+    test('Appointments in end of DST should have correct offset', function(assert) {
         const scheduler = createWrapper({
             timeZone: 'America/Phoenix',
             dataSource: [
