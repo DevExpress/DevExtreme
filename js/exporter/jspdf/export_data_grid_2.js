@@ -4,31 +4,12 @@ import { PdfGrid } from './pdf_grid';
 import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
 
 function _getFullOptions(options) {
-    const fullOptions = extend({
-        headerStyles: {},
-        groupStyles: {},
-        totalStyles: {}
-    }, options);
+    const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
         throw 'options.topLeft is required';
     }
     if(!isDefined(fullOptions.indent)) {
         fullOptions.indent = 10;
-    }
-
-    let assignDefaultStyles = true;
-    //#DEBUG
-    assignDefaultStyles = fullOptions._assignDefaultStyles === true;
-    //#ENDDEBUG
-
-    if(assignDefaultStyles && !isDefined(fullOptions.headerStyles.backgroundColor)) {
-        fullOptions.headerStyles.backgroundColor = '#808080';
-    }
-    if(assignDefaultStyles && !isDefined(fullOptions.groupStyles.backgroundColor)) {
-        fullOptions.groupStyles.backgroundColor = '#d3d3d3';
-    }
-    if(assignDefaultStyles && !isDefined(fullOptions.totalStyles.backgroundColor)) {
-        fullOptions.totalStyles.backgroundColor = '#ffffe0';
     }
 
     return fullOptions;

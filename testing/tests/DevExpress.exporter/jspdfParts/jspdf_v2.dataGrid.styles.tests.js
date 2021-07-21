@@ -1,16 +1,15 @@
-import { extend } from 'core/utils/extend';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 
 const JSPdfStylesTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
 
-        const getOptions = (options) => {
-            return extend({
-                _assignDefaultStyles: true
-            }, options);
-        };
-
         const onRowExporting = (e) => { e.rowHeight = 16; };
+
+        const rowTypeStyles = {
+            headerStyles: { backgroundColor: '#808080' },
+            groupStyles: { backgroundColor: '#d3d3d3' },
+            totalStyles: { backgroundColor: '#ffffe0' }
+        };
 
         QUnit.module('Styles', moduleConfig, () => {
             QUnit.test('Simple - [{f1, f2]', function(assert) {
@@ -36,7 +35,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,39,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,80,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -74,7 +73,7 @@ const JSPdfStylesTests = {
                     'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'rect,100,79,80,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -115,7 +114,7 @@ const JSPdfStylesTests = {
                     'text,f2_4,100,103,{baseline:middle}', 'setLineWidth,1', 'rect,100,95,80,16'
                 ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -154,7 +153,7 @@ const JSPdfStylesTests = {
                     'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
                     'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -197,7 +196,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,180,63,80,16,F',
                     'text,Max: f4,180,71,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -240,7 +239,7 @@ const JSPdfStylesTests = {
                     'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
                     'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -287,7 +286,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,260,95,100,16,F',
                     'text,Max: f4,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -323,7 +322,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,90,47,90,16,F',
                     'setLineWidth,1', 'rect,90,47,90,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -362,7 +361,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F',
                     'setLineWidth,1', 'rect,90,63,90,16' ];
 
-                exportDataGrid(doc, dataGrid, getOptions({ topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting })).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting, ...rowTypeStyles }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
