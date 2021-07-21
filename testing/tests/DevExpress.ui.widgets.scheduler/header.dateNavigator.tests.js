@@ -52,7 +52,7 @@ test('should has correct caption(with agendaDuration)', function(assert) {
     assert.equal(scheduler.header.navigator.getText(), '7-10 May 2021');
 });
 
-module('Option Changing', {}, () => {
+module('Option Changing', () => {
     test('should change caption text after changing "currentView"', function(assert) {
         const scheduler = createWrapper({
             views: ['day', 'week', 'month', 'agenda'],
@@ -148,7 +148,7 @@ module('Option Changing', {}, () => {
     });
 });
 
-module('Interface Interaction', {}, () => {
+module('Interface Interaction', () => {
     test('should disabled previous button depending on "min"', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2021, 6, 5),

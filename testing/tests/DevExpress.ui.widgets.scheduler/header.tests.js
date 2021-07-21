@@ -68,7 +68,7 @@ module('Meterial theme', {
     });
 });
 
-module('Toolbar config', {}, () => {
+module('Toolbar config', () => {
     test('should rerender after items configuration changes', function(assert) {
         const scheduler = createWrapper({
             currentView: 'month',

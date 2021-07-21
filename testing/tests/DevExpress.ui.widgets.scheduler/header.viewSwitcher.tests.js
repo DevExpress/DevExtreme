@@ -27,7 +27,7 @@ if(devices.current().deviceType === 'desktop') {
         );
     });
 
-    module('Option Changing', {}, () => {
+    module('Option Changing', () => {
         test('should pass the "views" option', function(assert) {
             const scheduler = createWrapper({
                 views: ['day', 'week', 'month'],
@@ -148,7 +148,7 @@ if(devices.current().deviceType === 'desktop') {
         });
     });
 
-    module('Selected view', {}, () => {
+    module('Selected view', () => {
         test('should be no buttons selected if the "currentView" is not set', function(assert) {
             const scheduler = createWrapper({
                 views: ['month'],
