@@ -1367,9 +1367,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const dataController = this._dataController;
 
         if(this._isVirtualRowRender()) {
-            const groupFooterCount = dataController.groupFooterRowCount?.() ?? 0;
-            const maxRowIndex = this._dataController.totalItemsCount() + groupFooterCount - 1;
-            return rowIndex >= maxRowIndex;
+            return rowIndex >= dataController.getMaxRowIndex();
         }
         return rowIndex === dataController.items().length - 1;
     },
@@ -2170,6 +2168,27 @@ export const keyboardNavigationModule = {
                             editorFactory.refocus();
                         }
                     }
+                },
+                getMaxRowIndex: function() {
+                    let itemsCount = 0;
+                    let virtualItemsCount = null;
+                    let result = 0;
+
+                    if(this._rowsScrollController) {
+                        itemsCount = this.items().length;
+                        virtualItemsCount = this._rowsScrollController.virtualItemsCount();
+
+                    } else {
+                        itemsCount = this.items(true).length;
+                        virtualItemsCount = this.virtualItemsCount();
+                    }
+
+                    result = itemsCount - 1;
+                    if(virtualItemsCount) {
+                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                    }
+
+                    return result;
                 }
             },
             adaptiveColumns: {

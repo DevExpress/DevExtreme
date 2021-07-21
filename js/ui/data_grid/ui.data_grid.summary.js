@@ -446,16 +446,6 @@ gridCore.registerModule('summary', {
                         return result;
                     },
 
-                    groupFooterRowCount: function() {
-                        let result = 0;
-
-                        if(this._isGroupFooterVisible()) {
-                            result = this.items().filter(it => it.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE).length;
-                        }
-
-                        return result;
-                    },
-
                     _processGroupItem: function(groupItem, options) {
                         const that = this;
 
