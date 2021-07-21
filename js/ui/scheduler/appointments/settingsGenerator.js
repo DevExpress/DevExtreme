@@ -163,18 +163,12 @@ export class DateGeneratorBaseStrategy {
 
     _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
         return appointmentList.map(item => {
-            const itemStartDateRangeOffset = this._getCommonOffset(item.starDate);
-            const itemEndDateRangeOffset = this._getCommonOffset(item.endDate);
+            let diffStartDateOffset = this._getCommonOffset(appointment.startDate) - this._getCommonOffset(item.startDate);
+            let diffEndDateOffset = this._getCommonOffset(appointment.endDate) - this._getCommonOffset(item.endDate);
 
-            const startDateRangeOffset = this._getCommonOffset(appointment.startDate);
-            const endDateRangeOffset = this._getCommonOffset(appointment.endDate);
-
-            if(startDateRangeOffset === itemStartDateRangeOffset && endDateRangeOffset === itemEndDateRangeOffset) {
+            if(diffStartDateOffset === 0 && diffEndDateOffset === 0) {
                 return item;
             }
-
-            let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(item.startDate).common;
-            let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(item.endDate).common;
 
             diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
             diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
