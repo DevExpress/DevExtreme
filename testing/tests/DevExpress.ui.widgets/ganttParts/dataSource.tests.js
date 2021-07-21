@@ -82,4 +82,31 @@ QUnit.module('DataSources', moduleConfig, () => {
         this.clock.tick();
         assert.equal(this.instance._treeList.option('expandedRowKeys').length, 2, 'each task is loaded and expanded');
     });
+    test('incorrect tasks data', function(assert) {
+        const failTasks = [
+            { 'id': 1, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 200, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 4, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 }
+        ];
+        this.createInstance({
+            tasks: { dataSource: failTasks },
+            validation: { autoUpdateParentTasks: true }
+        });
+        this.clock.tick();
+        let keys = this.instance.getVisibleTaskKeys();
+        assert.equal(keys.length, 3, 'incorrect keys filtered');
+        assert.equal(keys[0], 1, 'correct key');
+        assert.equal(keys[1], 2, 'correct key');
+        assert.equal(keys[2], 3, 'correct key');
+
+        this.instance.option('validation.autoUpdateParentTasks', false);
+        this.clock.tick();
+        keys = this.instance.getVisibleTaskKeys();
+        assert.equal(keys.length, 3, 'incorrect keys filtered');
+        assert.equal(keys[0], 1, 'correct key');
+        assert.equal(keys[1], 2, 'correct key');
+        assert.equal(keys[2], 3, 'correct key');
+    });
 });
