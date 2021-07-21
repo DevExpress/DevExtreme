@@ -347,8 +347,8 @@ module.exports = {
         },
         {
             'files': [
-                '*.d.ts',
-                '*.d.tsx'
+                'js/**/*.d.ts',
+                'js/**/*.d.tsx'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [
@@ -370,6 +370,15 @@ module.exports = {
                 '@typescript-eslint/no-unsafe-member-access': 'error',
                 '@typescript-eslint/prefer-readonly-parameter-types': 'warn',
                 '@typescript-eslint/explicit-member-accessibility': 'error',
+                /*
+                '@typescript-eslint/member-delimiter-style': 'off',
+                '@typescript-eslint/indent': 'off',
+                '@typescript-eslint/quotes': 'off',
+                'spaced-comment': 'off',
+                'max-len': 'off',
+                '@typescript-eslint/method-signature-style': 'off',
+                '@typescript-eslint/unified-signatures': 'off'
+                */
             }
         },
         {
