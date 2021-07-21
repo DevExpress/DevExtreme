@@ -29,7 +29,6 @@ export const getDateNavigator = (header, item) => {
             onItemClick: (e) => {
                 e.itemData.clickHandler(e);
             },
-            ...item.options,
         },
         ...item,
     };
@@ -119,7 +118,7 @@ const getNextButtonOptions = (header) => {
 };
 
 const isPreviousButtonDisabled = (header) => {
-    let min = header.option('min');
+    let min = new Date(header.option('min'));
 
     if(!min) return false;
 
@@ -133,7 +132,7 @@ const isPreviousButtonDisabled = (header) => {
 };
 
 const isNextButtonDisabled = (header) => {
-    let max = header.option('max');
+    let max = new Date(header.option('max'));
 
     if(!max) return false;
 

@@ -41,7 +41,6 @@ export const getViewSwitcher = (header, item) => {
                     viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
                 });
             },
-            ...item.options,
         },
         ...item,
     };
@@ -76,7 +75,6 @@ export const getDropDownViewSwitcher = (header, item) => {
                     viewSwitcher.option('selectedItemKey', getViewName(view));
                 });
             },
-            ...item.options,
         },
         ...item,
     };
