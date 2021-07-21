@@ -1005,6 +1005,76 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
             assert.expect(7);
         });
     }
+
+    test('Appointments in DST should have offset when ' +
+     'recurring appointment timezone not equal to scheduler timezone', function(assert) {
+        const scheduler = createWrapper({
+            timeZone: 'America/Phoenix',
+            dataSource: [
+                {
+                    text: 'Recurrence',
+                    startDate: new Date('2021-03-13T19:00:00.000Z'),
+                    endDate: new Date('2021-03-13T19:30:00.000Z'),
+                    recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+                    startDateTimeZone: 'America/New_York',
+                    endDateTimeZone: 'America/New_York'
+                }
+            ],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 2, 13),
+            startDayHour: 9,
+            firstDayOfWeek: 1,
+            height: 600
+        });
+
+        let appointments = scheduler.appointments;
+
+        assert.equal(appointments.getDateText(0), '12:00 PM - 12:30 PM', 'should be without offset');
+        assert.equal(appointments.getDateText(1), '11:00 AM - 11:30 AM', 'should be with offset');
+
+        scheduler.option('currentDate', new Date(2021, 10, 1));
+
+        appointments = scheduler.appointments;
+
+        assert.equal(appointments.getDateText(5), '11:00 AM - 11:30 AM', 'should be with offset');
+        assert.equal(appointments.getDateText(6), '12:00 PM - 12:30 PM', 'should be without offset');
+    });
+
+    test('Appointments in DST should not have offset when ' +
+    'recurring appointment timezone not equal to scheduler timezone', function(assert) {
+        const scheduler = createWrapper({
+            timeZone: 'America/New_York',
+            dataSource: [
+                {
+                    text: 'Recurrence',
+                    startDate: new Date('2021-03-13T19:00:00.000Z'),
+                    endDate: new Date('2021-03-13T19:30:00.000Z'),
+                    recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+                    startDateTimeZone: 'America/New_York',
+                    endDateTimeZone: 'America/New_York'
+                }
+            ],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 2, 13),
+            startDayHour: 9,
+            firstDayOfWeek: 1,
+            height: 600
+        });
+
+        let appointments = scheduler.appointments;
+
+        assert.equal(appointments.getDateText(0), '2:00 PM - 2:30 PM', 'should be without offset');
+        assert.equal(appointments.getDateText(1), '2:00 PM - 2:30 PM', 'should be wwithoutith offset');
+
+        scheduler.option('currentDate', new Date(2021, 10, 1));
+
+        appointments = scheduler.appointments;
+
+        assert.equal(appointments.getDateText(5), '2:00 PM - 2:30 PM', 'should be without offset');
+        assert.equal(appointments.getDateText(6), '2:00 PM - 2:30 PM', 'should be without offset');
+    });
 });
 
 module('Scheduler grid', moduleConfig, () => {
