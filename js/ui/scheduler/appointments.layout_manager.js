@@ -70,8 +70,10 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher.leftVirtualCellsCount;
-        const virtualRowCount = virtualScrollingDispatcher.topVirtualRowsCount;
+        const {
+            cellCountInsideLeftVirtualCell,
+            cellCountInsideTopVirtualRow
+        } = virtualScrollingDispatcher;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -81,15 +83,15 @@ class AppointmentLayoutManager {
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
+                settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });
 
             return {
                 itemData: data,
                 settings: appointmentSettings,
                 needRepaint: true,
-                needRemove: false,
-                virtualCellCount,
-                virtualRowCount
+                needRemove: false
             };
         });
     }
@@ -111,17 +113,23 @@ class AppointmentLayoutManager {
         }
 
         const createSettingsToCompare = (settings, index) => {
-            const virtualCellCount = settings.virtualCellCount || 0;
-            const virtualRowCount = settings.virtualRowCount || 0;
-            const columnIndex = settings[index].columnIndex + virtualCellCount;
-            const rowIndex = settings[index].rowIndex + virtualRowCount;
+            const currentSetting = settings[index];
+            const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
+            const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
+            const columnIndex = currentSetting.columnIndex + leftVirtualCellCount;
+            const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
+            const hMax = currentSetting.reduced ? currentSetting.hMax : -1;
+            const vMax = currentSetting.reduced ? currentSetting.vMax : -1;
 
             return {
-                ...settings[index],
+                ...currentSetting,
                 columnIndex,
-                rowIndex: rowIndex,
-                virtualCellCount: -1,
-                virtualRowCount: -1
+                rowIndex,
+                topVirtualCellCount: -1,
+                leftVirtualCellCount: -1,
+                hMax,
+                vMax,
+                info: {},
             };
         };
 
