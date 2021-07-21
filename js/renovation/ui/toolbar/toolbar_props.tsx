@@ -1,75 +1,16 @@
 /* eslint-disable max-classes-per-file */
 
 import {
-  ComponentBindings, OneWay, Nested,
+  ComponentBindings, OneWay, Nested, Event,
 } from '@devextreme-generator/declarations';
 
 import { BaseWidgetProps } from '../common/base_props';
-import { ToolbarButtonProps } from './toolbar_button_props';
 
-// eslint-disable-next-line
-// @ts-ignore
-// eslint-disable-next-line
+// eslint-disable-next-line import/named
 import { ItemClickEvent, SelectionChangedEvent } from '../../../ui/button_group';
 
-// eslint-disable-next-line
-// @ts-ignore
-// eslint-disable-next-line
+// eslint-disable-next-line import/named
 import { ButtonClickEvent } from '../../../ui/drop_down_button';
-
-// eslint-disable-next-line
-// @ts-ignore
-// eslint-disable-next-line
-import type { ToolbarButtonGroupProps, ToolbarButtonGroupItemPropsType } from './toolbar_button_group_props';
-
-// eslint-disable-next-line
-// @ts-ignore
-// eslint-disable-next-line
-import type { ToolbarDropDownButtonProps, ToolbarDropDownButtonItemPropsType } from './toolbar_dropdown_button';
-
-@ComponentBindings()
-export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
-  //
-  // Use cases:
-  //
-  // - in a RenoV component (doesn't look as 'native'):
-  // <Toolbar items={["text1"]}></Toolbar>
-  // <Toolbar items={[{ text: 'item2' }]} />
-  //
-  // - react (for demo purposes only, will be available in future releases):
-  // <Toolbar> <Item text={"text2"}/> </Toolbar>
-  // <Toolbar>
-  //   { myObjects.foreach(obj => { return (<Item text={ obj.text }/>); }) }
-  // </Toolbar>
-  //
-  // - TODO: prepare jquery, angular, vue code samples
-  //
-  @Nested() items?: (string | ToolbarItem)[]; // TODO: any
-
-  // TODO: write to us if you need this property
-  // dataSource?: string | Array<string | dxToolbarItem | any> |
-  // Store | DataSource | DataSourceOptions;
-  // @OneWay() dataSource?:
-  // | string - TODO: ds = 'a' - no DOM
-  // | string[] - TODO: ds = ['a', 'b'] - no DOM
-  // | ToolbarItem[] - TODO: ds = [{ widget: 'dxButton', options: { text: '1'} }] - no DOM
-  // | any[]
-  // | Store - TODO: const ds = new DataSource(new ArrayStore({ data: ['a', 'b'] })); - no DOM
-  // | DataSource
-  // | DataSourceOptions;
-
-  /*
-    TODO
-
-    itemTemplate?: template;
-
-    menuItemTemplate?: template |
-      ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
-
-    CollectionWidgetOptions<dxToolbar> members
-
-  */
-}
 
 @ComponentBindings()
 export class CollectionWidgetItem {
@@ -219,14 +160,263 @@ export class CollectionWidgetItem {
 
 export type ToolbarWidgetType = 'dxButton' | 'dxCheckBox' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
-export type ToolbarItemOptionType = ToolbarButtonProps
-| ToolbarButtonGroupProps | ToolbarDropDownButtonProps;
-
 export type ToolbarShowTextType = 'always' | 'inMenu';
 
 export type ToolbarLocateInMenuType = 'always' | 'auto' | 'never';
 
 export type ToolbarLocationType = 'after' | 'before' | 'center';
+
+// TODO: it is not a 'native' way
+@ComponentBindings()
+export class ToolbarButtonGroupItemProps extends CollectionWidgetItem {
+  @OneWay()
+  hint?: string;
+
+  @OneWay()
+  icon?: string;
+
+  @OneWay()
+  type?: ToolbarButtonType;
+
+  // TODO: other props
+}
+
+// eslint-disable-next-line
+export type ToolbarButtonGroupItemPropsType = ToolbarButtonGroupItemProps;
+
+export type ToolbarButtonGroupSelectionMode = 'multiple' | 'single';
+
+/*
+*   const toolbarItems = [
+    {
+      widget: 'dxDropDownButton' as ToolbarWidgetType,
+      locateInMenu: 'always' as ToolbarLocateInMenuType,
+      options: {
+        onItemClick: () => { alert(2) },
+        items: [null, "#980000", "#ff0000", "#ff9900", "#ffff00", "#00ff00",
+          "#00ffff", "#4a86e8", "#0000ff", "#9900ff", "#ff00ff", "#ff3466"],
+        icon: "square",
+        stylingMode: "text" as ToolbarButtonStylingMode,
+        dropDownOptions: { width: "auto" },
+      }
+    },
+  ];
+* <Toolbar items={toolbarItems}></Toolbar>
+*/
+@ComponentBindings()
+export class ToolbarButtonGroupProps {
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
+  //
+  @OneWay()
+  items?: (ToolbarButtonGroupItemPropsType)[];
+
+  @OneWay()
+  keyExpr?: string;
+
+  @OneWay()
+  onItemClick?: ((e: ItemClickEvent) => void);
+
+  @OneWay()
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+
+  @OneWay()
+  // eslint-disable-next-line
+  selectedItemKeys?: (any)[];
+
+  @OneWay()
+  // eslint-disable-next-line
+  selectedItems?: (any)[];
+
+  @OneWay()
+  selectionMode?: ToolbarButtonGroupSelectionMode;
+
+  @OneWay()
+  stylingMode?: ToolbarButtonStylingMode;
+
+  // TODO: other props
+}
+
+export type ToolbarButtonStylingMode = 'text' | 'outlined' | 'contained';
+export type ToolbarButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+/*
+*   const toolbarItems = [
+    { widget: 'dxButton' as ToolbarWidgetType, locateInMenu: 'always' as ToolbarLocateInMenuType,
+      options: {
+        type: 'back' as ToolbarButtonType,
+        onClick: () => { alert(1) }
+      }
+    },
+  ];
+* <Toolbar items={toolbarItems}></Toolbar>
+*/
+@ComponentBindings()
+export class ToolbarButtonProps {
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { text: 'my button' } }]} />
+  //
+  @OneWay()
+  text?: string;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[{ widget: 'dxButton', options: { type: 'danger' } }]} />
+  //
+  @OneWay()
+  type?: ToolbarButtonType;
+
+  //
+  // Use cases:
+  //
+  // - in a RenoV component:
+  // <Toolbar items={[
+  //   { widget: 'dxButton', options: { text: 'my button', onClick: () => console.log('hi') } }
+  // ]} />
+  //
+  // TODO: EventCallback<ButtonClick>
+  // Looks like js\renovation\ui\button.tsx:
+  // onClick?: (e: { event: Event; validationGroup?: string }) => void;
+  //
+  @Event() onClick?: (() => void);
+
+  @OneWay()
+  stylingMode?: ToolbarButtonStylingMode;
+
+  // TODO: other props
+}
+
+// TODO: it is not a 'native' way
+@ComponentBindings()
+export class ToolbarDropDownButtonItemProps extends CollectionWidgetItem {
+  @OneWay()
+  badge?: string;
+
+  @OneWay()
+  icon?: string;
+
+  @OneWay()
+  key?: string;
+
+  @OneWay()
+  showChevron?: boolean;
+
+  @Event()
+  onClick?: (() => void);
+
+  // TODO: other props
+}
+
+// eslint-disable-next-line
+export type ToolbarDropDownButtonItemPropsType = ToolbarDropDownButtonItemProps;
+
+/*
+*   const toolbarItems = [
+  { widget: 'dxButtonGroup' as ToolbarWidgetType, locateInMenu: 'always' as ToolbarLocateInMenuType,
+      options: {
+        onItemClick: (e) => {alert(e)},
+        items: [
+          {
+            icon: "alignleft",
+            alignment: "left",
+            hint: "Align left"
+          },
+          {
+            icon: "aligncenter",
+            alignment: "center",
+            hint: "Center"
+          },
+          {
+            icon: "alignright",
+            alignment: "right",
+            hint: "Align right"
+          },
+          {
+            icon: "alignjustify",
+            alignment: "justify",
+            hint: "Justify"
+          }
+        ],
+        keyExpr: "alignment",
+        stylingMode: "text" as ToolbarButtonStylingMode,
+        selectedItemKeys: ["left"]
+      }
+    }
+  ];
+* <Toolbar items={toolbarItems}></Toolbar>
+*/
+@ComponentBindings()
+export class ToolbarDropDownButtonProps {
+  @OneWay()
+  dataSource?: (string | ToolbarDropDownButtonItemPropsType)[];
+
+  @OneWay()
+  items?: (string | ToolbarDropDownButtonItemPropsType)[];
+
+  @OneWay()
+  displayExpr?: string;
+
+  @OneWay()
+  // eslint-disable-next-line
+  dropDownOptions?: any;
+
+  @OneWay()
+  icon?: string;
+
+  @OneWay()
+  keyExpr?: string;
+
+  @OneWay()
+  noDataText?: string;
+
+  @OneWay()
+  onButtonClick?: ((e: ButtonClickEvent) => void) | string;
+
+  @OneWay()
+  onItemClick?: ((e: ItemClickEvent) => void) | string;
+
+  @OneWay()
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string;
+
+  @OneWay()
+  opened?: boolean;
+
+  @OneWay()
+  // eslint-disable-next-line
+  selectedItem?: string | number | any;
+
+  @OneWay()
+  selectedItemKey?: string | number;
+
+  @OneWay()
+  showArrowIcon?: boolean;
+
+  @OneWay()
+  splitButton?: boolean;
+
+  @OneWay()
+  stylingMode?: ToolbarButtonStylingMode;
+
+  @OneWay()
+  text?: string;
+
+  @OneWay()
+  useSelectMode?: boolean;
+
+  @OneWay()
+  wrapItemText?: boolean;
+}
+
+export type ToolbarItemOptionType = ToolbarButtonProps
+| ToolbarButtonGroupProps | ToolbarDropDownButtonProps;
 
 @ComponentBindings()
 export class ToolbarItem extends CollectionWidgetItem {
@@ -326,5 +516,52 @@ export class ToolbarItem extends CollectionWidgetItem {
   /*
   TODO:
   menuItemTemplate?: template | (() => string | UserDefinedElement);
+  */
+}
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type ToolbarItemType = ToolbarItem;
+
+@ComponentBindings()
+export class ToolbarProps extends BaseWidgetProps { // js\ui\toolbar.d.ts
+  //
+  // Use cases:
+  //
+  // - in a RenoV component (doesn't look as 'native'):
+  // <Toolbar items={["text1"]}></Toolbar>
+  // <Toolbar items={[{ text: 'item2' }]} />
+  //
+  // - react (for demo purposes only, will be available in future releases):
+  // <Toolbar> <Item text={"text2"}/> </Toolbar>
+  // <Toolbar>
+  //   { myObjects.foreach(obj => { return (<Item text={ obj.text }/>); }) }
+  // </Toolbar>
+  //
+  // - TODO: prepare jquery, angular, vue code samples
+  //
+  @Nested() items?: (string | ToolbarItemType)[]; // TODO: any
+
+  // TODO: write to us if you need this property
+  // dataSource?: string | Array<string | dxToolbarItem | any> |
+  // Store | DataSource | DataSourceOptions;
+  // @OneWay() dataSource?:
+  // | string - TODO: ds = 'a' - no DOM
+  // | string[] - TODO: ds = ['a', 'b'] - no DOM
+  // | ToolbarItemType[] - TODO: ds = [{ widget: 'dxButton', options: { text: '1'} }] - no DOM
+  // | any[]
+  // | Store - TODO: const ds = new DataSource(new ArrayStore({ data: ['a', 'b'] })); - no DOM
+  // | DataSource
+  // | DataSourceOptions;
+
+  /*
+    TODO
+
+    itemTemplate?: template;
+
+    menuItemTemplate?: template |
+      ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+
+    CollectionWidgetOptions<dxToolbar> members
+
   */
 }
