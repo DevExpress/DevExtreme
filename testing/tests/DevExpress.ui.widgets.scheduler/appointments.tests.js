@@ -576,9 +576,12 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
         const strategy = new HorizontalMonthAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            option: commonUtils.noop,
-            fire: commonUtils.noop
+            instance: {
+                notifyObserver: commonUtils.noop,
+                option: commonUtils.noop,
+                fire: commonUtils.noop,
+            },
+            getResizableStep: () => 0
         });
         const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
@@ -587,15 +590,17 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
         const strategy = new VerticalAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            invoke: commonUtils.noop,
-            fire: commonUtils.noop,
-            appointmentTakesAllDay: commonUtils.noop,
-            getAppointmentDurationInMinutes: function() {
-                return 30;
-            }
+            instance: {
+                notifyObserver: commonUtils.noop,
+                invoke: commonUtils.noop,
+                fire: commonUtils.noop,
+                appointmentTakesAllDay: commonUtils.noop,
+                getAppointmentDurationInMinutes: function() {
+                    return 30;
+                }
+            },
+            getCellHeight: () => 50
         });
-        strategy._defaultHeight = 50;
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');

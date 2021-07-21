@@ -567,9 +567,11 @@ const DropDownEditor = TextBox.inherit({
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
+            _ignoreFunctionValueDeprecation: true,
             width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
+            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             closeOnTargetScroll: true,
             closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {

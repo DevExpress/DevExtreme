@@ -5,6 +5,8 @@ import Callbacks from '../../core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
+import VizWidget from '../../viz/core/base_widget';
+import ComponentWrapper from '../../renovation/component_wrapper/common/component';
 import Draggable from '../../ui/draggable';
 import { KoTemplate } from './template';
 import Editor from '../../ui/editor/editor';
@@ -208,7 +210,8 @@ if(ko) {
                 createComponent();
 
                 return {
-                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(Draggable)
+                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(VizWidget) || componentClass.subclassOf(Draggable) ||
+                    componentClass.subclassOf(ComponentWrapper)
                 };
             }
         };

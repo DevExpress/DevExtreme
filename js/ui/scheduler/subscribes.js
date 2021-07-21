@@ -56,7 +56,7 @@ const subscribes = {
         return this._getAppointmentSettingsGenerator(appointment).create();
     },
 
-    isGroupedByDate: function() {
+    isGroupedByDate: function() { // TODO replace with ModelProvider
         return this.getWorkSpace().isGroupedByDate();
     },
 
@@ -238,17 +238,6 @@ const subscribes = {
 
     getCellHeight: function() {
         return this.getWorkSpace().getCellHeight();
-    },
-
-    getResizableStep: function() {
-        const workSpace = this.getWorkSpace();
-        const cellWidth = workSpace.getCellWidth();
-
-        if(workSpace.isGroupedByDate()) {
-            return workSpace._getGroupCount() * cellWidth;
-        }
-
-        return cellWidth;
     },
 
     getRenderingStrategy: function() {

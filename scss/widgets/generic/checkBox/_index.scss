@@ -69,17 +69,6 @@ $generic-checkbox-disable-opacity: 0.4;
   }
 }
 
-.dx-checkbox-text {
-  margin-left: -$generic-checkbox-size;
-  padding-left: $generic-checkbox-size + 5px;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-right: -$generic-checkbox-size;
-    padding-right: $generic-checkbox-size + 5px;
-  }
-}
-
 .dx-state-disabled {
   &.dx-checkbox,
   .dx-checkbox {

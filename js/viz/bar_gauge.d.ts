@@ -13,7 +13,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -92,7 +91,7 @@ export type ExportedEvent = EventInfo<dxBarGauge>;
 export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxBarGauge>;
+export type FileSavingEvent = FileSavingEventInfo<dxBarGauge>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
