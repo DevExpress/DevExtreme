@@ -86,10 +86,10 @@ export class DateGeneratorBaseStrategy {
                 const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
                 const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
 
-                if(startDateOffsetDiff !== 0) {
+                if(sourceOffsets.startDate.appointment !== sourceOffsets.startDate.common) {
                     a.startDate = new Date(a.startDate.getTime() + startDateOffsetDiff * toMs('hour'));
                 }
-                if(endDateOffsetDiff !== 0) {
+                if(sourceOffsets.endDate.appointment !== sourceOffsets.endDate.common) {
                     a.endDate = new Date(a.endDate.getTime() + endDateOffsetDiff * toMs('hour'));
                 }
             });
@@ -157,43 +157,45 @@ export class DateGeneratorBaseStrategy {
         return offset;
     }
 
+    _getCommonOffset(date) {
+        return this.timeZoneCalculator.getOffsets(date).common;
+    }
+
     _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
-        const startDateRange = appointment.startDate;
-        const endDateRange = appointmentList[appointmentList.length - 1].endDate;
+        return appointmentList.map(item => {
+            const itemStartDateRangeOffset = this._getCommonOffset(item.starDate);
+            const itemEndDateRangeOffset = this._getCommonOffset(item.endDate);
 
-        const startDateRangeOffset = this.timeZoneCalculator.getOffsets(startDateRange).common;
-        const endDateRangeOffset = this.timeZoneCalculator.getOffsets(endDateRange).common;
+            const startDateRangeOffset = this._getCommonOffset(appointment.startDate);
+            const endDateRangeOffset = this._getCommonOffset(appointment.endDate);
 
-        const isChangeOffsetInRange = startDateRangeOffset !== endDateRangeOffset;
+            if(startDateRangeOffset === itemStartDateRangeOffset && endDateRangeOffset === itemEndDateRangeOffset) {
+                return item;
+            }
 
-        if(isChangeOffsetInRange) {
-            return appointmentList.map(item => {
-                let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(item.startDate).common;
-                let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(item.endDate).common;
+            let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(item.startDate).common;
+            let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(item.endDate).common;
 
-                diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
-                diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
+            diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
+            diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
 
-                const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
-                let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
+            const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
+            let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
 
-                const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
-                const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
+            const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
+            const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
 
-                if(appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
-                    newEndDate = new Date(newStartDate.getTime() + appointment.duration);
-                }
+            if(appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
+                newEndDate = new Date(newStartDate.getTime() + appointment.duration);
+            }
 
-                return {
-                    ...item,
-                    startDate: newStartDate,
-                    endDate: newEndDate,
-                    exceptionDate: new Date(newStartDate)
-                };
-            });
-        }
-
-        return appointmentList;
+            return {
+                ...item,
+                startDate: newStartDate,
+                endDate: newEndDate,
+                exceptionDate: new Date(newStartDate)
+            };
+        });
     }
 
     _needSeparateLongParts() {
