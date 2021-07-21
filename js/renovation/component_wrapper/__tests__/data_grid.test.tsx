@@ -309,7 +309,7 @@ describe('DataGrid Wrapper', () => {
       component.viewRef.prevProps = prevProps;
       component._optionChanging('pager.pageSize', 5, 10);
       // emulate base component mutable option change
-      component.__options.pager.pageSize = 10;
+      component.__options.pager.pageSizeChange(10);
       // value in prev props shouldn't change for future getUpdatedOptions
       expect(prevProps.pager).not.toBe(component.viewRef.prevProps.pager);
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
