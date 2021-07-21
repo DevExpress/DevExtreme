@@ -170,7 +170,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const width = appointmentGeometry.width;
         const result = [];
         let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const cellsDiff = this.instance.fire('isGroupedByDate')
+        const cellsDiff = this.isGroupedByDate
             ? this.instance.fire('getGroupCount')
             : 1;
         const offset = this.cellWidth * cellsDiff;

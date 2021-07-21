@@ -1466,6 +1466,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
                 this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
@@ -1861,6 +1862,7 @@ class Scheduler extends Widget {
                 onHidden: (e) => {
                     e.component.$element().remove();
                 },
+                copyRootClassesToWrapper: true
             },
         });
 

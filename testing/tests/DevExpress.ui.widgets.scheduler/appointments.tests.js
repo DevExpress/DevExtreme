@@ -579,8 +579,9 @@ QUnit.module('Appointments', moduleOptions, () => {
             instance: {
                 notifyObserver: commonUtils.noop,
                 option: commonUtils.noop,
-                fire: commonUtils.noop
-            }
+                fire: commonUtils.noop,
+            },
+            getResizableStep: () => 0
         });
         const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 

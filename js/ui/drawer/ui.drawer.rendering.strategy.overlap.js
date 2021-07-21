@@ -35,7 +35,8 @@ class OverlapStrategy extends DrawerStrategy {
                 this._processOverlayZIndex(args.component.content());
             },
             visible: true,
-            propagateOutsideClick: true
+            propagateOutsideClick: true,
+            copyRootClassesToWrapper: true
         });
     }
 
