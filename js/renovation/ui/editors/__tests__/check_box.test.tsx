@@ -266,19 +266,21 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it("should set default font size if icon element's 'offsetHeight'/'offsetWidth' fields are not defined", () => {
-          const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
-          checkBox.iconRef = React.createRef() as any;
-          checkBox.iconRef.current = {
-            offsetHeight: undefined,
-            offsetWidth: undefined,
-            style: {},
-          } as any;
-          checkBox.updateIconFontSize();
+        each(['standart', 'compact', undefined])
+          .it("should set default font size for '%s' theme if icon element's 'offsetHeight'/'offsetWidth' fields are not defined", (theme) => {
+            (current as Mock).mockImplementation(() => theme);
+            const checkBox = new CheckBox({});
+            checkBox.iconRef = React.createRef() as any;
+            checkBox.iconRef.current = {
+              offsetHeight: undefined,
+              offsetWidth: undefined,
+              style: {},
+            } as any;
+            checkBox.updateIconFontSize();
 
-          const icon = checkBox.iconRef.current;
-          expect(icon?.style.fontSize).toEqual('16px');
-        });
+            const icon = checkBox.iconRef.current;
+            expect(icon?.style.fontSize).toEqual(theme === 'compact' ? '12px' : '16px');
+          });
       });
 
       describe('updateValidationMessageVisibility', () => {

@@ -161,7 +161,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const { iconWidth, iconHeight } = this.props;
 
     if (iconElement !== null && iconElement !== undefined) {
-      const isCompactTheme = current()?.includes('compact');
+      const isCompactTheme = current() ? current().includes('compact') : false;
       const defaultFontSize = isCompactTheme ? 12 : 16;
       const isMaterialTheme = isMaterial(current());
       let defaultIconSize = isMaterialTheme ? 18 : 22;
