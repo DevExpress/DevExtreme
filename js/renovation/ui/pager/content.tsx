@@ -5,6 +5,7 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
+  Event,
   ForwardRef,
   Provider,
   Effect,
@@ -103,7 +104,11 @@ export const viewFunction = ({
 export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
 
+  @OneWay() pageSize!: number;
+
   @OneWay() isLargeDisplayMode = true;
+
+  @Event() pageSizeChange!: EventCallback<number>;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 

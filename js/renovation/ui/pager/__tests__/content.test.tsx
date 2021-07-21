@@ -341,7 +341,7 @@ describe('PagerContent', () => {
         pageSize: 0,
       } as PagerContentProps);
       expect(component.pageIndexSelectorVisible).toBe(false);
-      component.props.pageSizeChange = 10;
+      component.props.pageSize = 10;
       expect(component.pageIndexSelectorVisible).toBe(true);
     });
 
