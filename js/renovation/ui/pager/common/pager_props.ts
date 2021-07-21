@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, Event,
+  ComponentBindings, OneWay, TwoWay, Event,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
 
@@ -31,11 +31,11 @@ export class PagerProps {
 
   @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
 
-  @OneWay() pageIndex = 1;
+  @TwoWay() pageIndex = 1;
 
   @Event() pageIndexChange?: EventCallback<number>;
 
-  @OneWay() pageSize = 5;
+  @TwoWay() pageSize = 5;
 
   @Event() pageSizeChange?: EventCallback<number>;
 
