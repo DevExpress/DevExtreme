@@ -349,7 +349,7 @@ class NavigatorWrapper extends ElementWrapper {
     }
 
     get popover() {
-        return new NavigatorPopover(CLASSES.navigatorPopover, false, 1);
+        return new NavigatorPopover(CLASSES.navigatorPopover);
     }
 }
 
