@@ -3,12 +3,18 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 const JSPdfStylesTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
 
-        const onRowExporting = (e) => { e.rowHeight = 16; };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+        };
 
-        const rowTypeStyles = {
+        const rowOptions = {
             headerStyles: { backgroundColor: '#808080' },
             groupStyles: { backgroundColor: '#d3d3d3' },
-            totalStyles: { backgroundColor: '#ffffe0' }
+            totalStyles: { backgroundColor: '#ffffe0' },
+            rowHeight: 16
         };
 
         QUnit.module('Styles', moduleConfig, () => {
@@ -28,14 +34,14 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
+                    'text,F1,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F2,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
-                    'text,f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,90,16',
-                    'text,f1_2,100,39,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,80,16'
+                    'text,F2,100,23,{baseline:middle}',
+                    'text,f1_1,10,39,{baseline:middle}',
+                    'text,f1_2,100,39,{baseline:middle}'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -60,20 +66,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
+                    'text,F2,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
+                    'text,F3,100,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1_1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,80,16',
-                    'text,f1_3,100,55,{baseline:middle}', 'setLineWidth,1', 'rect,100,47,80,16',
+                    'text,F1: f1_1,10,39,{baseline:middle}',
+                    'text,f1_2,20,55,{baseline:middle}',
+                    'text,f1_3,100,55,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,63,170,16,F',
-                    'text,F1: f2_1,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,170,16',
-                    'text,f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,80,16',
-                    'text,f2_3,100,87,{baseline:middle}', 'setLineWidth,1', 'rect,100,79,80,16'
+                    'text,F1: f2_1,10,71,{baseline:middle}',
+                    'text,f2_2,20,87,{baseline:middle}',
+                    'text,f2_3,100,87,{baseline:middle}'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -99,22 +105,22 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
+                    'text,F3,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F4,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,80,16',
+                    'text,F4,100,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F1: f1,10,39,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,20,47,160,16,F',
-                    'text,F2: f1_2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'text,f1_3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,70,16',
-                    'text,f1_4,100,71,{baseline:middle}', 'setLineWidth,1', 'rect,100,63,80,16',
+                    'text,F2: f1_2,20,55,{baseline:middle}',
+                    'text,f1_3,30,71,{baseline:middle}',
+                    'text,f1_4,100,71,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,20,79,160,16,F',
-                    'text,F2: f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,160,16',
-                    'text,f2_3,30,103,{baseline:middle}', 'setLineWidth,1', 'rect,30,95,70,16',
-                    'text,f2_4,100,103,{baseline:middle}', 'setLineWidth,1', 'rect,100,95,80,16'
+                    'text,F2: f2_2,20,87,{baseline:middle}',
+                    'text,f2_3,30,103,{baseline:middle}',
+                    'text,f2_4,100,103,{baseline:middle}'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -140,20 +146,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F2,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F3,90,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F4,180,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,180,31', 'line,10,31,10,47', 'line,10,47,180,47',
+                    'text,F1: f1,10,39,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,180,31,80,16,F',
-                    'text,Max: f4,180,39,{baseline:middle}', 'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
+                    'text,Max: f4,180,39,{baseline:middle}',
+                    'text,f2,20,55,{baseline:middle}',
+                    'text,f3,90,55,{baseline:middle}',
+                    'text,f4,180,55,{baseline:middle}' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -179,24 +185,22 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F2,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F3,90,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F4,180,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
+                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,f2,20,55,{baseline:middle}',
+                    'text,f3,90,55,{baseline:middle}',
+                    'text,f4,180,55,{baseline:middle}',
                     'setFillColor,#ffffe0', 'rect,20,63,70,16,F',
-                    'setLineWidth,1', 'rect,20,63,70,16',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F',
-                    'setLineWidth,1', 'rect,90,63,90,16',
                     'setFillColor,#ffffe0', 'rect,180,63,80,16,F',
-                    'text,Max: f4,180,71,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
+                    'text,Max: f4,180,71,{baseline:middle}' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -225,21 +229,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F3,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F4,260,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,260,31', 'line,10,31,10,47', 'line,10,47,260,47',
+                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,260,31,100,16,F',
-                    'text,Max: f4,260,39,{baseline:middle}', 'setLineWidth,1', 'line,260,31,360,31', 'line,360,31,360,47', 'line,260,47,360,47',
+                    'text,Max: f4,260,39,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,20,47,240,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'line,20,47,260,47', 'line,20,47,20,63', 'line,20,63,260,63',
+                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,260,47,100,16,F',
-                    'text,Max: f4,260,55,{baseline:middle}', 'setLineWidth,1', 'line,260,47,360,47', 'line,360,47,360,63', 'line,260,63,360,63',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16' ];
+                    'text,Max: f4,260,55,{baseline:middle}',
+                    'text,f3,30,71,{baseline:middle}',
+                    'text,f4,260,71,{baseline:middle}' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -268,25 +272,23 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F3,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F4,260,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,350,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,20,47,340,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
+                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
+                    'text,f3,30,71,{baseline:middle}',
+                    'text,f4,260,71,{baseline:middle}',
                     'setFillColor,#ffffe0', 'rect,30,79,230,16,F',
-                    'setLineWidth,1', 'rect,30,79,230,16',
                     'setFillColor,#ffffe0', 'rect,260,79,100,16,F',
-                    'text,Max: f4,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f4,260,87,{baseline:middle}',
                     'setFillColor,#ffffe0', 'rect,20,95,240,16,F',
-                    'setLineWidth,1', 'rect,20,95,240,16',
                     'setFillColor,#ffffe0', 'rect,260,95,100,16,F',
-                    'text,Max: f4,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16' ];
+                    'text,Max: f4,260,103,{baseline:middle}' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -312,17 +314,16 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F1,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F2,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,80,16',
-                    'text,f2,90,39,{baseline:middle}', 'setLineWidth,1', 'rect,90,31,90,16',
+                    'text,F2,90,23,{baseline:middle}',
+                    'text,f1,10,39,{baseline:middle}',
+                    'text,f2,90,39,{baseline:middle}',
                     'setFillColor,#ffffe0', 'rect,10,47,80,16,F',
-                    'text,Max: f1,10,55,{baseline:middle}', 'setLineWidth,1', 'rect,10,47,80,16',
-                    'setFillColor,#ffffe0', 'rect,90,47,90,16,F',
-                    'setLineWidth,1', 'rect,90,47,90,16' ];
+                    'text,Max: f1,10,55,{baseline:middle}',
+                    'setFillColor,#ffffe0', 'rect,90,47,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -349,19 +350,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F2,10,23,{baseline:middle}',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F3,90,23,{baseline:middle}',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,f2,20,55,{baseline:middle}',
+                    'text,f3,90,55,{baseline:middle}',
                     'setFillColor,#ffffe0', 'rect,10,63,80,16,F',
-                    'text,Max: f2,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,80,16',
-                    'setFillColor,#ffffe0', 'rect,90,63,90,16,F',
-                    'setLineWidth,1', 'rect,90,63,90,16' ];
+                    'text,Max: f2,10,71,{baseline:middle}',
+                    'setFillColor,#ffffe0', 'rect,90,63,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting, ...rowTypeStyles }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
