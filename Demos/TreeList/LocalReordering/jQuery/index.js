@@ -20,24 +20,26 @@ $(function() {
                 }
             },
             onReorder: function(e) {
-                var visibleRows = e.component.getVisibleRows(),
-                    sourceData = e.itemData,
-                    targetData = visibleRows[e.toIndex].node.data;
+                var visibleRows = e.component.getVisibleRows();
 
                 if (e.dropInsideItem) {
-                    e.itemData.Head_ID = targetData.ID;
+                    e.itemData.Head_ID = visibleRows[e.toIndex].key;
                 } else {
-                    var sourceIndex = employees.indexOf(sourceData),
-                        targetIndex = employees.indexOf(targetData);
+                    var sourceData = e.itemData,
+                        toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex,
+                        targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
 
-                    if (sourceData.Head_ID !== targetData.Head_ID) {
-                        sourceData.Head_ID = targetData.Head_ID;
-                        if (e.toIndex > e.fromIndex) {
-                            targetIndex++;
-                        }
+                    if (targetData && e.component.isRowExpanded(targetData.ID)) {
+                        sourceData.Head_ID = targetData.ID;
+                        targetData = null;
+                    } else {
+                        sourceData.Head_ID = targetData ? targetData.Head_ID : e.component.option('rootValue');
                     }
 
+                    var sourceIndex = employees.indexOf(sourceData);
                     employees.splice(sourceIndex, 1);
+
+                    var targetIndex = employees.indexOf(targetData) + 1;
                     employees.splice(targetIndex, 0, sourceData);
                 }
 

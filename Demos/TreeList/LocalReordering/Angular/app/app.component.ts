@@ -44,25 +44,28 @@ export class AppComponent {
     }
 
     onReorder(e) {
-        let visibleRows =  e.component.getVisibleRows(),
-            sourceData = e.itemData,
-            targetData = visibleRows[e.toIndex].node.data;
+        const visibleRows = e.component.getVisibleRows();
 
         if (e.dropInsideItem) {
-            e.itemData.Head_ID = targetData.ID;
+            e.itemData.Head_ID = visibleRows[e.toIndex].key;
+
             e.component.refresh();
         } else {
-            let sourceIndex = this.employees.indexOf(sourceData),
-                targetIndex = this.employees.indexOf(targetData);
+            const sourceData = e.itemData;
+            const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
+            let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
 
-            if (sourceData.Head_ID !== targetData.Head_ID) {
-                sourceData.Head_ID = targetData.Head_ID;
-                if (e.toIndex > e.fromIndex) {
-                    targetIndex++;
-                }
+            if (targetData && e.component.isRowExpanded(targetData.ID)) {
+                sourceData.Head_ID = targetData.ID;
+                targetData = null;
+            } else {
+                sourceData.Head_ID = targetData ? targetData.Head_ID : -1;
             }
 
+            const sourceIndex = this.employees.indexOf(sourceData);
             this.employees.splice(sourceIndex, 1);
+
+            const targetIndex = this.employees.indexOf(targetData) + 1;
             this.employees.splice(targetIndex, 0, sourceData);
         }
     }

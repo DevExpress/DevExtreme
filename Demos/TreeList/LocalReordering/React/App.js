@@ -96,24 +96,31 @@ class App extends React.Component {
   }
 
   onReorder(e) {
-    let visibleRows = e.component.getVisibleRows(),
-      sourceData = e.itemData,
-      targetData = visibleRows[e.toIndex].node.data,
-      employees = this.state.employees,
-      sourceIndex = employees.indexOf(sourceData),
-      targetIndex = employees.indexOf(targetData);
+    const visibleRows = e.component.getVisibleRows();
+    let sourceData = e.itemData;
+    let employees = this.state.employees;
+    const sourceIndex = employees.indexOf(sourceData);
 
     if (e.dropInsideItem) {
-      sourceData = { ...sourceData, Head_ID: targetData.ID };
+      sourceData = { ...sourceData, Head_ID: visibleRows[e.toIndex].key };
       employees = [...employees.slice(0, sourceIndex), sourceData, ...employees.slice(sourceIndex + 1)];
     } else {
-      if (sourceData.Head_ID !== targetData.Head_ID) {
-        sourceData = { ...sourceData, Head_ID: targetData.Head_ID };
-        if (e.toIndex > e.fromIndex) {
-          targetIndex++;
+      const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
+      let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
+
+      if (targetData && e.component.isRowExpanded(targetData.ID)) {
+        sourceData = { ...sourceData, Head_ID: targetData.ID };
+        targetData = null;
+      } else {
+        const headId = targetData ? targetData.Head_ID : -1;
+        if(sourceData.Head_ID !== headId) {
+          sourceData = { ...sourceData, Head_ID: headId };
         }
       }
+
       employees = [...employees.slice(0, sourceIndex), ...employees.slice(sourceIndex + 1)];
+
+      const targetIndex = employees.indexOf(targetData) + 1;
       employees = [...employees.slice(0, targetIndex), sourceData, ...employees.slice(targetIndex)];
     }
 
