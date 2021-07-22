@@ -1,14 +1,27 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Toolbar, viewFunction as ToolbarView } from '../toolbar';
-import { ToolbarProps } from '../toolbar_props';
+import {
+  ToolbarItem, ToolbarButtonProps, ToolbarButtonGroupProps,
+  ToolbarDropDownButtonProps, ToolbarProps,
+} from '../toolbar_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyToolbar from '../../../../ui/toolbar';
 
 describe('Toolbar', () => {
   describe('View', () => {
     it('default render', () => {
+      const buttonItem = new ToolbarItem();
+      buttonItem.options = new ToolbarButtonProps();
+
+      const buttonGroupItem = new ToolbarItem();
+      buttonGroupItem.options = new ToolbarButtonGroupProps();
+
+      const dropDownButtonItem = new ToolbarItem();
+      dropDownButtonItem.options = new ToolbarDropDownButtonProps();
+
       const componentProps = new ToolbarProps();
+      componentProps.items = [buttonItem, buttonGroupItem, dropDownButtonItem];
       const props = {
         props: componentProps,
         restAttributes: { 'rest-attributes': 'true' },
