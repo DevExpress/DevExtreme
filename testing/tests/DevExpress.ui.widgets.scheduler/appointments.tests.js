@@ -79,9 +79,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getEndViewDate: () => {
         return new Date(2150, 1, 1);
     },
-    getAppointmentDurationInMs: function(options) {
-        return options.endDate.getTime() - options.startDate.getTime();
-    },
     getAppointmentGeometry: (settings) => {
         return {
             width: settings.width || 0,
