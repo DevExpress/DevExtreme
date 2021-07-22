@@ -27,7 +27,9 @@ describe('Toolbar', () => {
       textBoxItem.options = new ToolbarTextBoxProps();
 
       const componentProps = new ToolbarProps();
-      componentProps.items = [buttonItem, buttonGroupItem, dropDownButtonItem];
+      componentProps.items = [buttonItem, buttonGroupItem,
+        dropDownButtonItem, checkBoxItem, textBoxItem];
+
       const props = {
         props: componentProps,
         restAttributes: { 'rest-attributes': 'true' },
