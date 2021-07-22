@@ -569,7 +569,8 @@ $arrow-down: "\f016";
         height: 100%;
       }
 
-      .dx-toolbar-item-content {
+      .dx-toolbar-item-content,
+      .dx-toolbar-menu-container {
         padding: $scheduler-toolbat-item-offset;
       }
 
