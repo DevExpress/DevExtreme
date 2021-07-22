@@ -1,20 +1,20 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     AsyncRule,
-    ValidationRule
+    ValidationRule,
 } from './validation_rules';
 
 /** @public */
@@ -27,14 +27,14 @@ export type InitializedEvent = InitializedEventInfo<dxValidator>;
 export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
 /** @public */
-export type ValidatedEvent = {
+export interface ValidatedEvent {
     name?: string;
     isValid?: boolean;
     value?: any;
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
-    status?: 'valid' | 'invalid' | 'pending'
+    status?: 'valid' | 'invalid' | 'pending';
 }
 
 /**

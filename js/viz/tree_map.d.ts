@@ -1,19 +1,19 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -23,7 +23,7 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import BaseWidget, {
@@ -35,7 +35,7 @@ import BaseWidget, {
     VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 export interface InteractionInfo {
@@ -45,7 +45,7 @@ export interface InteractionInfo {
 /** @public */
 export type ClickEvent = NativeEventInfo<dxTreeMap> & {
   readonly node: dxTreeMapNode
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxTreeMap>;
@@ -56,7 +56,7 @@ export type DrawnEvent = EventInfo<dxTreeMap>;
 /** @public */
 export type DrillEvent = EventInfo<dxTreeMap> & {
   readonly node: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type ExportedEvent = EventInfo<dxTreeMap>;
@@ -79,12 +79,12 @@ export type InitializedEvent = InitializedEventInfo<dxTreeMap>;
 /** @public */
 export type NodesInitializedEvent = EventInfo<dxTreeMap> & {
     readonly root: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type NodesRenderingEvent = EventInfo<dxTreeMap> & {
     readonly node: dxTreeMapNode;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTreeMap> & ChangedOptionInfo;
@@ -96,6 +96,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeMap> & InteractionInfo;
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid
@@ -531,6 +532,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     valueField?: string;
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
@@ -564,6 +566,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
      * @docid
@@ -611,6 +614,7 @@ export default class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
  * @publicName Node
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxTreeMapNode {
     /**
      * @docid

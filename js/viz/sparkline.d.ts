@@ -2,11 +2,11 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -14,11 +14,11 @@ import Store from '../data/abstract_store';
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */
@@ -55,6 +55,7 @@ export type TooltipShownEvent = EventInfo<dxSparkline>;
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
      * @docid
@@ -199,6 +200,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxSparkline extends BaseSparkline<dxSparklineOptions> {
     getDataSource(): DataSource;
 }

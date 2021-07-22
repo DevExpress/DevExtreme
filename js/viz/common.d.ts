@@ -1,9 +1,9 @@
 import {
-    dxChartSeriesTypesCommonSeries
+    dxChartSeriesTypesCommonSeries,
 } from './chart';
 
 import {
-    Font
+    Font,
 } from './core/base_widget';
 
 export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';

@@ -1,5 +1,5 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 export interface ODataRequestOptions {

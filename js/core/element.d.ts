@@ -1,8 +1,11 @@
-import { dxElementWrapper } from '../core/renderer';
+import { dxElementWrapper } from "./renderer";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Condition {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface ElementWrapper<T extends Element> { }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface ElementsArrayWrapper<T extends Element> { }
 /**
  * @docid
@@ -18,6 +21,7 @@ export type UserDefinedElement<T extends Element = Element> = {} extends Conditi
 
 export type UserDefinedElementsArray = {} extends Condition ? Array<Element> : ElementsArrayWrapper<Element>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface InternalElementWrapper<T extends Element> { }
 export type InternalElement<T extends Element> = {} extends Condition ? dxElementWrapper : InternalElementWrapper<T>;
 

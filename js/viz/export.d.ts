@@ -1,7 +1,5 @@
 import DOMComponent from '../core/dom_component';
 
-
-
 /**
  * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)

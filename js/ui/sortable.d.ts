@@ -2,11 +2,11 @@ import DOMComponent from '../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -15,12 +15,12 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxDraggable, {
     DraggableBase,
-    DraggableBaseOptions
+    DraggableBaseOptions,
 } from './draggable';
 
 /** @public */
@@ -54,7 +54,7 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem?: boolean;
-}
+};
 
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
@@ -67,7 +67,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-}
+};
 
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
@@ -80,7 +80,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly fromData?: any;
     readonly toData?: any;
     readonly dropInsideItem: boolean;
-}
+};
 
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
@@ -88,7 +88,7 @@ export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly fromData?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxSortable>;
@@ -106,7 +106,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable> & {
     readonly toComponent: dxSortable | dxDraggable;
     readonly fromData?: any;
     readonly toData?: any;
-}
+};
 
 /** @public */
 export type ReorderEvent = NativeEventInfo<dxSortable> & {
@@ -120,7 +120,7 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
     readonly toData?: any;
     readonly dropInsideItem: boolean;
     promise?: PromiseLike<void>;
-}
+};
 
 /** @public */
 export interface DragTemplateData {

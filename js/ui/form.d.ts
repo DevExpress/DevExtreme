@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 import Editor from './editor/editor';
 
 import {
-    dxTabPanelOptions
+    dxTabPanelOptions,
 } from './tab_panel';
 
 import {
@@ -36,15 +36,15 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
 import {
-    dxValidationGroupResult
+    dxValidationGroupResult,
 } from './validation_group';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -56,13 +56,13 @@ export type DisposingEvent = EventInfo<dxForm>;
 /** @public */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
-}
+};
 
 /** @public */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
     readonly value?: any;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
@@ -71,13 +71,13 @@ export type InitializedEvent = InitializedEventInfo<dxForm>;
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
-export type GroupItemTemplateData = {
+export interface GroupItemTemplateData {
     readonly component: dxForm;
     readonly formData?: any;
 }
 
 /** @public */
-export type SimpleItemTemplateData = {
+export interface SimpleItemTemplateData {
     readonly component: dxForm;
     readonly dataField?: string;
     readonly editorOptions?: any;

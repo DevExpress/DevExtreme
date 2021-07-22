@@ -1,9 +1,9 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -14,16 +14,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 /** @public */
@@ -53,22 +53,22 @@ export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 /** @public */
 export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShowingEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShownEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead

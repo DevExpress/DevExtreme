@@ -1,21 +1,21 @@
 import {
   UserDefinedElement,
   DxElement,
-  UserDefinedElementsArray
+  UserDefinedElementsArray,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Store from '../data/abstract_store';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import {
@@ -24,30 +24,30 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ExcelDataGridCell
+    ExcelDataGridCell,
 } from '../excel_exporter';
 
 import {
-    ExcelFont
+    ExcelFont,
 } from '../exporter/excel/excel.doc_comments';
 
 import dxDraggable from './draggable';
 
 import {
-    dxFilterBuilderOptions
+    dxFilterBuilderOptions,
 } from './filter_builder';
 
 import {
     dxFormOptions,
-    dxFormSimpleItem
+    dxFormSimpleItem,
 } from './form';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
 
 import dxScrollable from './scroll_view/ui.scrollable';
@@ -55,7 +55,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import dxSortable from './sortable';
 
 import {
-    dxToolbarOptions, dxToolbarItem
+    dxToolbarOptions, dxToolbarItem,
 } from './toolbar';
 
 import {
@@ -67,15 +67,15 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
-import Widget, {    
-    WidgetOptions
+import Widget, {
+    WidgetOptions,
 } from './widget/ui.widget';
 
-import { 
-  Format
+import {
+  Format,
 } from '../localization';
 
 export interface AdaptiveDetailRowPreparingInfo {
@@ -2788,7 +2788,7 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowType: string;
   readonly cellElement: DxElement;
   readonly row: RowObject;
-}
+};
 
 /** @public */
 export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
@@ -2803,7 +2803,7 @@ export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowType: string;
   readonly cellElement: DxElement;
   readonly row: RowObject;
-}
+};
 
 /** @public */
 export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
@@ -2819,7 +2819,7 @@ export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowType: string;
   readonly cellElement: DxElement;
   readonly row: RowObject;
-}
+};
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxDataGrid> & {
@@ -2839,7 +2839,7 @@ export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly cellElement: DxElement;
   readonly watch?: Function;
   readonly oldValue?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDataGrid>;
@@ -2853,7 +2853,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   readonly column?: Column;
   readonly rowIndex: number;
   readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type DataErrorOccurredEvent = EventInfo<dxDataGrid> & DataErrorOccurredInfo;
@@ -2872,7 +2872,7 @@ export type EditingStartEvent = Cancelable & EventInfo<dxDataGrid> & {
   readonly data: any;
   readonly key: any;
   readonly column?: any;
-}
+};
 
 /** @public */
 export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
@@ -2887,7 +2887,7 @@ export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly readOnly: boolean;
   readonly dataField?: string;
   readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
@@ -2905,15 +2905,15 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   editorOptions: any;
   readonly dataField?: string;
   readonly row?: RowObject;
-}
+};
 
 /** @public */
-export type ExportedEvent  = EventInfo<dxDataGrid>;
+export type ExportedEvent = EventInfo<dxDataGrid>;
 
 /** @public */
 export type ExportingEvent = Cancelable & EventInfo<dxDataGrid> & {
   fileName?: string;
-}
+};
 
 /** @public */
 export type FileSavingEvent = Cancelable & {
@@ -2922,7 +2922,7 @@ export type FileSavingEvent = Cancelable & {
   fileName?: string;
   format?: string;
   readonly data: Blob;
-}
+};
 
 /** @public */
 export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
@@ -2931,7 +2931,7 @@ export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly row?: RowObject;
   readonly column?: Column;
-}
+};
 
 /** @public */
 export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
@@ -2943,14 +2943,14 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> 
   readonly rows: Array<RowObject>;
   readonly columns: Array<Column>;
   isHighlighted: boolean;
-}
+};
 
 /** @public */
 export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowElement: DxElement;
   readonly rowIndex: number;
   readonly row?: RowObject;
-}
+};
 
 /** @public */
 export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
@@ -2958,7 +2958,7 @@ export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> &
   readonly prevRowIndex: number;
   newRowIndex: number;
   readonly rows: Array<RowObject>;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
@@ -2986,7 +2986,7 @@ export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly groupIndex?: number;
   readonly rowElement: DxElement;
   readonly handled: boolean;
-}
+};
 
 /** @public */
 export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
@@ -3007,7 +3007,7 @@ export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly isNewRow?: boolean;
   readonly groupIndex?: number;
   readonly rowElement: DxElement;
-}
+};
 
 /** @public */
 export type RowExpandedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
@@ -3034,7 +3034,7 @@ export type RowPreparedEvent = EventInfo<dxDataGrid> & {
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
   readonly rowElement: DxElement;
-}
+};
 
 /** @public */
 export type RowRemovedEvent = EventInfo<dxDataGrid> & RowRemovedInfo;
@@ -3063,7 +3063,6 @@ export type SelectionChangedEvent = EventInfo<dxDataGrid> & SelectionChangedInfo
 /** @public */
 export type ToolbarPreparingEvent = EventInfo<dxDataGrid> & ToolbarPreparingInfo;
 
-
 /** @public */
 export type RowDraggingAddEvent = RowDraggingEventInfo<dxDataGrid> & DragDropInfo;
 
@@ -3089,10 +3088,10 @@ export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReo
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
   row?: RowObject;
   column?: Column;
-}
+};
 
 /** @public */
-export type ColumnButtonTemplateData = {
+export interface ColumnButtonTemplateData {
   readonly component: dxDataGrid;
   readonly data?: any;
   readonly key?: any;
@@ -3104,7 +3103,7 @@ export type ColumnButtonTemplateData = {
 }
 
 /** @public */
-export type ColumnCellTemplateData = {
+export interface ColumnCellTemplateData {
   readonly data?: any;
   readonly component: dxDataGrid;
   readonly value?: any;
@@ -3120,7 +3119,7 @@ export type ColumnCellTemplateData = {
 }
 
 /** @public */
-export type ColumnEditCellTemplateData = {
+export interface ColumnEditCellTemplateData {
   readonly setValue?: any;
   readonly data?: any;
   readonly component: dxDataGrid;
@@ -3136,7 +3135,7 @@ export type ColumnEditCellTemplateData = {
 }
 
 /** @public */
-export type ColumnGroupCellTemplateData = {
+export interface ColumnGroupCellTemplateData {
   readonly data?: any;
   readonly component: dxDataGrid;
   readonly value?: any;
@@ -3152,14 +3151,14 @@ export type ColumnGroupCellTemplateData = {
 }
 
 /** @public */
-export type ColumnHeaderCellTemplateData = {
+export interface ColumnHeaderCellTemplateData {
   readonly component: dxDataGrid;
   readonly columnIndex: number;
   readonly column: Column;
 }
 
 /** @public */
-export type MasterDetailTemplateData = {
+export interface MasterDetailTemplateData {
   readonly key: any;
   readonly data: any;
   readonly watch?: Function;
@@ -3169,7 +3168,7 @@ export type MasterDetailTemplateData = {
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
 /** @public */
-export type RowTemplateData = {
+export interface RowTemplateData {
   readonly key: any;
   readonly data: any;
   readonly component: dxDataGrid;
@@ -4423,7 +4422,6 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: any): boolean;
     isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
     navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;

@@ -2,11 +2,13 @@ import { DxPromise } from '../../core/utils/deferred';
 import Store, { StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
-import { ODataRequestOptions } from './context'
+import { ODataRequestOptions } from './context';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
+        // eslint-disable-next-line spellcheck/spell-checker
         onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        // eslint-disable-next-line spellcheck/spell-checker
         onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
@@ -118,7 +120,7 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return object
      * @public
      */
-    createQuery(loadOptions?: {expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any}): Query;
+    createQuery(loadOptions?: { expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any }): Query;
 
     /**
      * @docid

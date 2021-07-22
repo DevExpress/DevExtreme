@@ -45,7 +45,7 @@ export type AnimationState = string | number | {
  * @type object
  * @public
  */
-export type AnimationConfig = {
+export interface AnimationConfig {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
@@ -114,7 +114,7 @@ export type AnimationConfig = {
 
 /**
  * @public
- * @deprecated Use the AnimationConfig type instead 
+ * @deprecated Use the AnimationConfig type instead
  */
 export type animationConfig = AnimationConfig;
 
@@ -156,5 +156,5 @@ declare const fx: {
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;
-}
+};
 export default fx;

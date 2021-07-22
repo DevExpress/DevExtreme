@@ -1,30 +1,26 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-  Device
-} from '../../core/devices';
-
-import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
-import { 
-  Format
+import {
+  Format,
 } from '../../localization';
 
 import {
-    DashStyleType
+    DashStyleType,
 } from '../common';
 
 import {
-    Rule
+    Rule,
 } from '../../core/options/utils';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';

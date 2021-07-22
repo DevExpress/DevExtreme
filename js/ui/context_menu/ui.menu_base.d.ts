@@ -1,19 +1,19 @@
 import {
-    AnimationConfig
+    AnimationConfig,
 } from '../../animation/fx';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import HierarchicalCollectionWidget, {
-    HierarchicalCollectionWidgetOptions
+    HierarchicalCollectionWidgetOptions,
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from '../menu';
 
 /** @namespace DevExpress.ui */

@@ -2,13 +2,13 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
@@ -18,7 +18,7 @@ import {
     BaseGaugeScale,
     BaseGaugeScaleLabel,
     GaugeIndicator,
-    TooltipInfo
+    TooltipInfo,
 } from './gauges/base_gauge';
 
 /** @public */

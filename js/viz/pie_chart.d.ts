@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -12,20 +12,20 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 import {
     basePointObject,
-    baseSeriesObject
+    baseSeriesObject,
 } from './chart';
 
 import {
-    PaletteType
+    PaletteType,
 } from './palette';
 
 import {
@@ -34,13 +34,13 @@ import {
     BaseChartLegend,
     BaseChartOptions,
     PointInteractionInfo,
-    TooltipInfo
+    TooltipInfo,
 } from './chart_components/base_chart';
 
 import {
     BaseLegendItem,
     DashStyleType,
-    HatchingDirectionType
+    HatchingDirectionType,
 } from './common';
 
 import {
@@ -50,12 +50,11 @@ import {
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
 export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
-
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPieChart>;
@@ -85,7 +84,7 @@ export type InitializedEvent = InitializedEventInfo<dxPieChart>;
 export type LegendClickEvent = NativeEventInfo<dxPieChart> & {
   readonly target: string | number;
   readonly points: Array<piePointObject>;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;

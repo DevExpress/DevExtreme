@@ -2,15 +2,15 @@ import {
     DxEvent,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import PivotGridDataSource, {
-    PivotGridDataSourceField
+    PivotGridDataSourceField,
 } from './pivot_grid/data_source';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -22,7 +22,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly field?: PivotGridDataSourceField;
     readonly event?: DxEvent;
     items?: Array<any>;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPivotGridFieldChooser>;

@@ -1,23 +1,23 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    StoreOptions,
 } from '../../data/abstract_store';
 
 import DataSource from '../../data/data_source';
 
 import {
-    dxPivotGridSummaryCell
+    dxPivotGridSummaryCell,
 } from '../pivot_grid';
 
-import { 
-    Format
+import {
+    Format,
   } from '../../localization';
 
 import XmlaStore, {
-    XmlaStoreOptions
+    XmlaStoreOptions,
 } from './xmla_store';
 
 /** @namespace DevExpress.data */
@@ -525,7 +525,7 @@ export default class PivotGridDataSource {
      * @return this
      * @public
      */
-    on(events: {[key in EventName]?: Function}): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName reload()

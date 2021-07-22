@@ -1,13 +1,13 @@
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import dxButton, {
-    dxButtonOptions
+    dxButtonOptions,
 } from '../button';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from '../editor/editor';
 
 /** @namespace DevExpress.ui */

@@ -1,5 +1,5 @@
 import {
-  DxElement
+  DxElement,
 } from './element';
 
 /** @namespace DevExpress */
@@ -97,7 +97,7 @@ export class Component<TProperties> {
    * @return this
    * @public
    */
-  on(events: {[key: string]: Function}): this;
+  on(events: { [key: string]: Function }): this;
   /**
    * @docid
    * @publicName option()

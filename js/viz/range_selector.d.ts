@@ -1,10 +1,10 @@
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -14,22 +14,22 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
-import { 
-  Format
+import {
+  Format,
 } from '../localization';
 
 import {
-    dxChartCommonSeriesSettings
+    dxChartCommonSeriesSettings,
 } from './chart';
 
 import {
     ChartSeries,
     ScaleBreak,
     VizRange,
-    VizTimeInterval
+    VizTimeInterval,
 } from './common';
 
 import BaseWidget, {
@@ -38,7 +38,7 @@ import BaseWidget, {
     Font,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 /** @public */
@@ -69,12 +69,13 @@ export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
   readonly value: Array<number | string | Date>,
   readonly previousValue: Array<number | string | Date>,
-}
+};
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
@@ -767,6 +768,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**

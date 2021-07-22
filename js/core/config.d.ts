@@ -1,5 +1,5 @@
 import {
-    PositionConfig
+    PositionConfig,
 } from '../animation/position';
 
 /**
@@ -22,7 +22,7 @@ declare function config(): globalConfig;
  * @export default
  * @public
  */
-declare function config(config: globalConfig): void;
+declare function config(config_: globalConfig): void;
 
 /**
  * @docid
@@ -140,6 +140,5 @@ export interface globalConfig {
      */
     useLegacyVisibleIndex?: boolean;
 }
-
 
 export default config;

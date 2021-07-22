@@ -1,19 +1,19 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -23,18 +23,18 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 import {
     BaseLegend,
     BaseLegendItem,
     DashStyleType,
-    HatchingDirectionType
+    HatchingDirectionType,
 } from './common';
 
 import BaseWidget, {
@@ -45,7 +45,7 @@ import BaseWidget, {
     VizTextOverflowType,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 /**

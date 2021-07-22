@@ -1,20 +1,20 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../events/index';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 export interface ComponentDisabledDate<T> {
@@ -30,7 +30,7 @@ export type ContentReadyEvent = EventInfo<dxCalendar>;
 export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
-export type CellTemplateData = {
+export interface CellTemplateData {
     readonly date: Date,
     readonly view: string,
     readonly text?: string

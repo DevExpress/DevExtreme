@@ -1,5 +1,5 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
@@ -7,18 +7,18 @@ import {
     NativeEventInfo,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import PivotGridDataSource, {
     PivotGridDataSourceField,
-    PivotGridDataSourceOptions
+    PivotGridDataSourceOptions,
 } from './pivot_grid/data_source';
 
 import dxPopup from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -31,7 +31,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
     readonly columnFields?: Array<PivotGridDataSourceField>;
     readonly rowFields?: Array<PivotGridDataSourceField>;
     readonly dataFields?: Array<PivotGridDataSourceField>;
-}
+};
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
@@ -40,7 +40,7 @@ export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
     readonly cell?: dxPivotGridPivotGridCell;
     readonly rowIndex?: number;
     readonly columnIndex?: number
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGrid>;
@@ -57,7 +57,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly columnFields?: Array<PivotGridDataSourceField>;
     readonly field?: PivotGridDataSourceField;
     items?: Array<any>;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPivotGrid>;
@@ -68,7 +68,7 @@ export type ExportedEvent = EventInfo<dxPivotGrid>;
 /** @public */
 export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
     fileName?: string;
-}
+};
 
 /** @public */
 export type FileSavingEvent = Cancelable & {
@@ -77,7 +77,7 @@ export type FileSavingEvent = Cancelable & {
     readonly data?: Blob;
     readonly format?: string;
     fileName?: string;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;

@@ -1,15 +1,15 @@
 import {
-    Device
+    Device,
 } from '../devices';
 
 export type RecursivePartial<T> = {
     [P in keyof T]?: RecursivePartial<T[P]>;
 };
 
-export type Rule<T> = {
+export interface Rule<T> {
     device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
-};
+}
 
 export function convertRulesToOptions<T>(rules: Rule<T>[]): T;
 
