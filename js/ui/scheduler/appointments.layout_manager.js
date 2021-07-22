@@ -58,6 +58,13 @@ class AppointmentLayoutManager {
     }
 
     _createAppointmentsMapCore(list, positionMap) {
+        const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
+        const {
+            cellCountInsideLeftVirtualCell,
+            cellCountInsideTopVirtualRow
+        } = virtualScrollingDispatcher;
+
+
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
                 delete data.settings;
@@ -66,6 +73,8 @@ class AppointmentLayoutManager {
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
+                settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });
 
             return {
@@ -91,20 +100,34 @@ class AppointmentLayoutManager {
             return true;
         }
 
-        for(let i = 0; i < settings.length; i++) {
-            const newSettings = {
-                ...settings[i]
-            };
+        const createSettingsToCompare = (settings, index) => {
+            const currentSetting = settings[index];
+            const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
+            const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
+            const columnIndex = currentSetting.columnIndex + leftVirtualCellCount;
+            const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
+            const hMax = currentSetting.reduced ? currentSetting.hMax : -1;
+            const vMax = currentSetting.reduced ? currentSetting.vMax : -1;
 
-            const oldSettings = {
-                ...sourceSetting[i],
-                // exclude properties for comparison in commonUtils.equalByValue
-                sortedIndex: newSettings.sortedIndex,
-                cellIndex: newSettings.cellIndex,
-                rowIndex: newSettings.rowIndex,
-                hMax: newSettings.hMax,
-                vMax: newSettings.vMax
+            return {
+                ...currentSetting,
+                columnIndex,
+                rowIndex,
+                topVirtualCellCount: -1,
+                leftVirtualCellCount: -1,
+                hMax,
+                vMax,
+                info: {},
             };
+        };
+
+        for(let i = 0; i < settings.length; i++) {
+            const newSettings = createSettingsToCompare(settings, i);
+            const oldSettings = createSettingsToCompare(sourceSetting, i);
+
+            if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
+                oldSettings.sortedIndex = newSettings.sortedIndex;
+            }
 
             if(!equalByValue(newSettings, oldSettings)) {
                 return true;
