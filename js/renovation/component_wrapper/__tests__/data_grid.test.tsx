@@ -315,6 +315,22 @@ describe('DataGrid Wrapper', () => {
       expect(component.viewRef.prevProps.pager.pageSize).toBe(5);
     });
 
+    it('option changed with complex object value', () => {
+      const component: any = createDataGrid();
+      const options = { dataSource: { store: { data: [1] } } };
+      component.__options = options;
+      component.viewRef.prevProps = options;
+      component._optionChanging('dataSource', options.dataSource, { dataSource: { store: { data: [1, 2] } } });
+      // emulate base component mutable option change
+      component.__options.dataSource.store.data = [1, 2];
+      // value in prev props shouldn't change for future getUpdatedOptions
+      const { prevProps } = component.viewRef;
+      expect(options.dataSource).not.toBe(prevProps.dataSource);
+      expect(options.dataSource.store).not.toBe(prevProps.dataSource.store);
+      expect(options.dataSource.store.data).not.toBe(prevProps.dataSource.store.data);
+      expect(prevProps.dataSource.store.data).toEqual([1]);
+    });
+
     it('editing complex option changed', () => {
       const component: any = createDataGrid();
       const prevProps = { editing: { editRowKey: null } };
