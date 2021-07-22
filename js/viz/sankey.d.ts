@@ -1,19 +1,19 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,7 +22,7 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import BaseWidget, {
@@ -31,7 +31,7 @@ import BaseWidget, {
     Font,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import { HatchingDirectionType } from './common';
@@ -60,19 +60,19 @@ export type InitializedEvent = InitializedEventInfo<dxSankey>;
 /** @public */
 export type LinkClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
-}
+};
 /** @public */
 export type LinkHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
-}
+};
 /** @public */
 export type NodeClickEvent = NativeEventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
-}
+};
 /** @public */
 export type NodeHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
@@ -81,6 +81,7 @@ export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
@@ -526,6 +527,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     weightField?: string;
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
@@ -589,6 +591,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
      * @docid
@@ -619,6 +622,7 @@ export default class dxSankey extends BaseWidget<dxSankeyOptions> {
  * @type object
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSankeyConnectionInfoObject {
     /**
      * @docid
@@ -642,6 +646,7 @@ export interface dxSankeyConnectionInfoObject {
  * @publicName Link
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSankeyLink {
     /**
      * @docid
@@ -681,6 +686,7 @@ export interface dxSankeyLink {
  * @publicName Node
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSankeyNode {
     /**
      * @docid

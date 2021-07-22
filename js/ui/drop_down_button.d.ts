@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -26,21 +26,21 @@ import {
 } from '../events/index';
 
 import {
-    dxListItem
+    dxListItem,
 } from './list';
 
 import {
-    Properties as PopupProperties
+    Properties as PopupProperties,
 } from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton> & {
     readonly selectedItem?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDropDownButton>;
@@ -64,7 +64,7 @@ export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo
 export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
     readonly item: any;
     readonly previousItem: any;
-}
+};
 
 /**
  * @deprecated use Properties instead

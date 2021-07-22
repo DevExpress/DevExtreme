@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -20,12 +20,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -55,7 +55,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
 /** @public */
 export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
 
-/** 
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */

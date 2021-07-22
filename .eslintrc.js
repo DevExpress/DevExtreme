@@ -356,11 +356,10 @@ module.exports = {
             ],
             'rules': {
                 '@typescript-eslint/no-non-null-assertion': 'error',
-                '@typescript-eslint/no-magic-numbers': 'error',
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 'no-return-await': 'off',
                 '@typescript-eslint/no-extraneous-class': 'error',
-                '@typescript-eslint/no-explicit-any': 'error',
+                /* '@typescript-eslint/no-explicit-any': 'error', */
                 '@typescript-eslint/no-unsafe-assignment': 'error',
                 '@typescript-eslint/restrict-template-expressions': 'error',
                 '@typescript-eslint/no-unsafe-call': 'error',
@@ -368,17 +367,38 @@ module.exports = {
                 '@typescript-eslint/strict-boolean-expressions': 'error',
                 '@typescript-eslint/unbound-method': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'error',
-                '@typescript-eslint/prefer-readonly-parameter-types': 'warn',
-                '@typescript-eslint/explicit-member-accessibility': 'error',
-                /*
+                /* '@typescript-eslint/prefer-readonly-parameter-types': 'warn', */
+                /* '@typescript-eslint/explicit-member-accessibility': 'error', */
+
                 '@typescript-eslint/member-delimiter-style': 'off',
                 '@typescript-eslint/indent': 'off',
                 '@typescript-eslint/quotes': 'off',
                 'spaced-comment': 'off',
                 'max-len': 'off',
                 '@typescript-eslint/method-signature-style': 'off',
-                '@typescript-eslint/unified-signatures': 'off'
-                */
+                '@typescript-eslint/unified-signatures': 'off',
+                '@typescript-eslint/naming-convention': [
+                    'error',
+                    {
+                        'selector': 'interface',
+                        'format': ['PascalCase', 'camelCase'],
+                    },
+                    {
+                        'selector': 'class',
+                        'format': ['PascalCase', 'camelCase'],
+                    }
+                ],
+                '@typescript-eslint/array-type': 'off',
+                'no-irregular-whitespace': 'off',
+                'import/named': 'off',
+                '@typescript-eslint/no-type-alias': 'off',
+                '@typescript-eslint/member-ordering': 'off',
+                '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+                '@typescript-eslint/no-explicit-any': 'off',
+                '@typescript-eslint/explicit-member-accessibility': 'off',
+                '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* csn write DxPromise<void>, not just DxPromise (where void is default option)*/
+                '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */
+                '@typescript-eslint/ban-types': 'off' /* +: will ban Function, object -: it look like in few place we need to pass constructors, not type */
             }
         },
         {

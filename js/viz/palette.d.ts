@@ -1,4 +1,3 @@
-
 export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
 export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
 /**

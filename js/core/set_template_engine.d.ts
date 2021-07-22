@@ -22,5 +22,4 @@ declare function setTemplateEngine(templateEngineName: string): void;
  */
 declare function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
 
-
 export default setTemplateEngine;

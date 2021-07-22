@@ -1,12 +1,11 @@
 import {
     Component,
-    ComponentOptions
+    ComponentOptions,
 } from './component';
-
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from './element';
 
 import { TemplateManager } from './template_manager';
@@ -20,13 +19,13 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @default {}
      * @public
      */
-    bindingOptions?: {[key:string]: any};
+    bindingOptions?: { [key: string]: any };
     /**
      * @docid
      * @default {}
      * @public
      */
-    elementAttr?: {[key:string]: any};
+    elementAttr?: { [key: string]: any };
     /**
      * @docid
      * @default undefined
@@ -74,7 +73,22 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
  * @hidden
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
+    // eslint-disable-next-line no-underscore-dangle
+    _templateManager: TemplateManager;
+
     constructor(element: UserDefinedElement, options?: TProperties);
+
+    /**
+     * @docid
+     * @static
+     * @section uiWidgets
+     * @publicName getInstance(element)
+     * @param1 element:Element|JQuery
+     * @return DOMComponent
+     * @public
+     */
+    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
+
     /**
      * @docid
      * @static
@@ -86,6 +100,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @public
      */
     static defaultOptions<TProperties = Properties>(rule: Partial<Rule<TProperties>>): void;
+
     /**
      * @docid
      * @publicName dispose()
@@ -99,26 +114,19 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @public
      */
     element(): DxElement;
-    /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName getInstance(element)
-     * @param1 element:Element|JQuery
-     * @return DOMComponent
-     * @public
-     */
-    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     $element(): UserDefinedElement;
+     // eslint-disable-next-line no-underscore-dangle
     _getTemplate(template: unknown): FunctionTemplate;
+     // eslint-disable-next-line no-underscore-dangle
     _invalidate(): void;
+     // eslint-disable-next-line no-underscore-dangle
     _refresh(): void;
-    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown);
-    _templateManager: TemplateManager;
+     // eslint-disable-next-line no-underscore-dangle
+    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
 }
 
-export type ComponentClass<TProperties> = {
+export interface ComponentClass<TProperties> {
     new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
     getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
 }

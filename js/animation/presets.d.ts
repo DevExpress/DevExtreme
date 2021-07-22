@@ -1,9 +1,9 @@
 import {
-    Device
+    Device,
 } from '../core/devices';
 
 import {
-    AnimationConfig
+    AnimationConfig,
 } from './fx';
 
 /**

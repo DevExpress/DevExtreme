@@ -74,7 +74,7 @@ export function locale(): string;
  * @namespace DevExpress.localization
  * @public
  */
-export function locale(locale: string): void;
+export function locale(locale_: string): void;
 
 /**
  * @docid localization.parseDate

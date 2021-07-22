@@ -1,8 +1,10 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EventExtension { }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EventType { }
 /**
  * @docid
@@ -64,16 +66,19 @@ export class EventObject {
      * @public
      */
     currentTarget: Element;
+
     /**
      * @docid
      * @public
      */
     data: any;
+
     /**
      * @docid
      * @public
      */
     delegateTarget: Element;
+
     /**
      * @docid
      * @public

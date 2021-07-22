@@ -1,27 +1,27 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton> & {
     validationGroup?: any;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButton>;
@@ -36,7 +36,7 @@ export type InitializedEvent = InitializedEventInfo<dxButton>;
 export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */
-export type TemplateData = {
+export interface TemplateData {
     readonly text?: string;
     readonly icon?: string;
 }

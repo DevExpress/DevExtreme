@@ -1,24 +1,24 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
-export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+export interface DataExpressionMixinOptions {
     /**
      * @docid
      * @default null

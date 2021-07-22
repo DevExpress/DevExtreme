@@ -2,15 +2,15 @@ import './scheduler/utils';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -21,11 +21,11 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    Cancelable
+    Cancelable,
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
@@ -36,7 +36,7 @@ import dxPopup from './popup';
 import dxSortable from './sortable';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 interface AppointmentDraggingEvent {
@@ -56,77 +56,77 @@ interface TargetedAppointmentInfo {
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: dxSchedulerAppointment;
   readonly error?: Error;
-}
+};
 
 /** @public */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: dxSchedulerAppointment;
   cancel: boolean | PromiseLike<boolean>;
-}
+};
 
 /** @public */
 export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
-}
+};
 
 /** @public */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo &{
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
-}
+};
 
 /** @public */
 export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
-}
+};
 
 /** @public */
 export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: dxSchedulerAppointment;
   readonly error?: Error;
-}
+};
 
 /** @public */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: dxSchedulerAppointment;
   cancel: boolean | PromiseLike<boolean>;
-}
+};
 
 /** @public */
 export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
   readonly appointmentData?: dxSchedulerAppointment;
   readonly form: dxForm;
   readonly popup: dxPopup;
-}
+};
 
 /** @public */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
-}
+};
 
 /** @public */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
   readonly appointmentData: dxSchedulerAppointment;
   readonly error?: Error;
-}
+};
 
 /** @public */
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
   readonly oldData: any;
   readonly newData: any;
   cancel?: boolean | PromiseLike<boolean>;
-}
+};
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
   readonly cellElement: DxElement;
-}
+};
 
 /** @public */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
   readonly cellData: any;
   readonly cellElement: DxElement;
-}
+};
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxScheduler>;
@@ -145,21 +145,21 @@ export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
-}
+};
 
 /** @public */
 export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
-}
+};
 
 /** @public */
 export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
-}
+};
 
 /** @public */
 export type AppointmentDraggingStartEvent = Cancelable & AppointmentDraggingEvent;
@@ -168,7 +168,7 @@ export type AppointmentDraggingStartEvent = Cancelable & AppointmentDraggingEven
 export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
-}
+};
 
 /** @public */
 export type AppointmentTemplateData = TargetedAppointmentInfo;
@@ -177,13 +177,13 @@ export type AppointmentTemplateData = TargetedAppointmentInfo;
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
 
 /** @public */
-export type AppointmentCollectorTemplateData = {
+export interface AppointmentCollectorTemplateData {
   readonly appointmentCount: number;
   readonly isCompact: boolean;
 }
 
 /** @public */
-export type DateNavigatorTextInfo = {
+export interface DateNavigatorTextInfo {
   readonly startDate: Date;
   readonly endDate: Date;
   readonly text: string;

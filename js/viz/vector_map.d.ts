@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    PaletteType
+    PaletteType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -21,16 +21,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
 } from './common';
 
 import BaseWidget, {
@@ -41,11 +41,11 @@ import BaseWidget, {
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
-    VectorMapProjectionConfig
+    VectorMapProjectionConfig,
 } from './vector_map/projection';
 
 export interface TooltipInfo {
@@ -55,12 +55,12 @@ export interface TooltipInfo {
 /** @public */
 export type CenterChangedEvent = EventInfo<dxVectorMap> & {
     readonly center: Array<number>;
-}
+};
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxVectorMap>;
@@ -89,7 +89,7 @@ export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
     readonly target: MapLayerElement;
-}
+};
 
 /** @public */
 export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
@@ -100,7 +100,7 @@ export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 /** @public */
 export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
     readonly zoomFactor: number;
-}
+};
 
 /**
  * @docid
@@ -240,6 +240,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
@@ -659,6 +660,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
  * @type object
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * @docid
@@ -674,6 +676,7 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
  * @type object
  * @namespace DevExpress.viz
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid
@@ -711,6 +714,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 }
 
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
@@ -798,6 +802,7 @@ export interface dxVectorMapLegends extends BaseLegend {
     };
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
@@ -831,6 +836,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid

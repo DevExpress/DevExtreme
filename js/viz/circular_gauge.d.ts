@@ -1,13 +1,13 @@
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
@@ -17,7 +17,7 @@ import {
     BaseGaugeScale,
     BaseGaugeScaleLabel,
     GaugeIndicator,
-    TooltipInfo
+    TooltipInfo,
 } from './gauges/base_gauge';
 
 /** @public */
@@ -54,6 +54,7 @@ export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
+ // eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid
@@ -97,6 +98,7 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     valueIndicator?: GaugeIndicator;
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.orientation
@@ -113,6 +115,7 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     width?: number;
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxCircularGaugeOptions.scale.label
@@ -129,6 +132,7 @@ export interface dxCircularGaugeScale extends BaseGaugeScale {
     orientation?: 'center' | 'inside' | 'outside';
 }
 /** @namespace DevExpress.viz */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
@@ -152,6 +156,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @namespace DevExpress.viz
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> { }
 
 /** @public */

@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -12,27 +12,26 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import FileSystemItem from '../file_management/file_system_item';
 
 import {
-    dxContextMenuItem
+    dxContextMenuItem,
 } from './context_menu';
 
 import {
-    dxToolbarItem
+    dxToolbarItem,
 } from './toolbar';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
-
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
@@ -44,39 +43,38 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemIndex: number;
     readonly fileSystemItem?: FileSystemItem;
     readonly viewArea: 'navPane' | 'itemView';
-}
+};
 
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
     readonly targetElement?: DxElement;
     readonly viewArea: 'navPane' | 'itemView';
-}
+};
 
 /** @public */
 export type CurrentDirectoryChangedEvent = EventInfo<dxFileManager> & {
     readonly directory: FileSystemItem;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxFileManager>;
 
 /** @public */
-export type ErrorOccurredEvent =  EventInfo<dxFileManager> & {
+export type ErrorOccurredEvent = EventInfo<dxFileManager> & {
     readonly errorCode?: number;
     errorText?: string;
     readonly fileSystemItem?: FileSystemItem;
-}
+};
 
 /** @public */
-export type FocusedItemChangedEvent =  EventInfo<dxFileManager> & {
+export type FocusedItemChangedEvent = EventInfo<dxFileManager> & {
     readonly item?: FileSystemItem;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxFileManager>;
-
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
@@ -84,22 +82,22 @@ export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
 /** @public */
 export type SelectedFileOpenedEvent = EventInfo<dxFileManager> & {
     readonly file: FileSystemItem;
-}
+};
 
 /** @public */
-export type SelectionChangedEvent =  EventInfo<dxFileManager> & {
+export type SelectionChangedEvent = EventInfo<dxFileManager> & {
     readonly currentSelectedItemKeys: Array<string>;
     readonly currentDeselectedItemKeys: Array<string>;
     readonly selectedItems: Array<FileSystemItem>;
     readonly selectedItemKeys: Array<string>;
-}
+};
 
 /** @public */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -545,7 +543,6 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      */
     menuItemTemplate?: template | (() => string | UserDefinedElement);
 }
-
 
 /**
  * @docid

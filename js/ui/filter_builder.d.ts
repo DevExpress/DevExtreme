@@ -1,31 +1,31 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Store from '../data/abstract_store';
 
 import {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
-import { 
-    Format
+import {
+    Format,
 } from '../localization';
 
 /** @public */
@@ -47,7 +47,7 @@ export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
     readonly readOnly: boolean;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-}
+};
 
 /** @public */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
@@ -63,7 +63,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
     readonly readOnly: boolean;
     readonly disabled: boolean;
     readonly rtlEnabled: boolean;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
@@ -75,17 +75,17 @@ export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
     readonly value?: any;
     readonly previousValue?: any;
-}
+};
 
 /** @public */
-export type CustomOperationEditorTemplate = {
+export interface CustomOperationEditorTemplate {
     readonly value?: string | number | Date;
     readonly field: dxFilterBuilderField;
     readonly setValue: Function;
 }
 
 /** @public */
-export type FieldEditorTemplate = {
+export interface FieldEditorTemplate {
     readonly value?: string | number | Date;
     readonly filterOperation?: string;
     readonly field: dxFilterBuilderField;

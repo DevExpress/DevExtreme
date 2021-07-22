@@ -1,6 +1,6 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
@@ -8,15 +8,15 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
-import { 
-    Format
+import {
+    Format,
   } from '../localization';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -26,7 +26,7 @@ import {
     BaseChartTooltip,
     BaseChartAnnotationConfig,
     PointInteractionInfo,
-    TooltipInfo
+    TooltipInfo,
 } from './chart_components/base_chart';
 
 import {
@@ -36,7 +36,7 @@ import {
     ChartSeriesType,
     DashStyleType,
     HatchingDirectionType,
-    VizTimeInterval
+    VizTimeInterval,
 } from './common';
 
 import {
@@ -57,7 +57,7 @@ interface SeriesInteractionInfo {
 /** @public */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart> & {
     readonly argument: Date | number | string;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxChart>;
@@ -84,9 +84,9 @@ export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /** @public */
-export type LegendClickEvent  = NativeEventInfo<dxChart> & {
+export type LegendClickEvent = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
@@ -103,7 +103,7 @@ export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionIn
 /** @public */
 export type SeriesClickEvent = NativeEventInfo<dxChart> & {
     readonly target: chartSeriesObject;
-}
+};
 
 /** @public */
 export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
@@ -127,14 +127,14 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly actionType: 'zoom' | 'pan';
     readonly zoomFactor: number;
     readonly shift: number;
-}
+};
 
 /** @public */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType?: 'zoom' | 'pan';
-}
+};
 
 /**
  * @docid
@@ -2122,26 +2122,31 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.fullstackedarea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedbar
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedline
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedspline
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedsplinearea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.line
@@ -2152,11 +2157,13 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.rangearea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     rangearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.rangebar
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     rangebar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.scatter
@@ -2172,41 +2179,49 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.splinearea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     splinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedarea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedbar
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedline
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedspline
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedsplinearea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.steparea
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     steparea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stepline
      * @public
      */
+    // eslint-disable-next-line spellcheck/spell-checker
     stepline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stock

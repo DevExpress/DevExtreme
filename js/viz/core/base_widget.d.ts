@@ -1,27 +1,27 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     Cancelable,
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
-import { 
-  Format
+import {
+  Format,
 } from '../../localization';
 
 import {
-    DashStyleType
+    DashStyleType,
 } from '../common';
 
 import {
-    Rule
+    Rule,
 } from '../../core/options/utils';
 
 export type WordWrapType = 'normal' | 'breakWord' | 'none';
@@ -42,7 +42,7 @@ export type FileSavingEventInfo<T> = Cancelable & {
   readonly fileName: string;
   readonly format: string;
   readonly data: Blob;
-}
+};
 
 /** @namespace DevExpress.viz */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {

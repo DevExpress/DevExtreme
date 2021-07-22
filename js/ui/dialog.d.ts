@@ -1,9 +1,9 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 /**
@@ -63,5 +63,3 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @public
  */
 export function custom(options: CustomDialogOptions): any;
-
-

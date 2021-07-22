@@ -1,16 +1,16 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
   EventInfo,
   NativeEventInfo,
   InitializedEventInfo,
-  ChangedOptionInfo
+  ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -26,12 +26,12 @@ export type InitializedEvent = InitializedEventInfo<dxMap>;
 export type MarkerAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalMarker: any;
-}
+};
 
 /** @public */
 export type MarkerRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
@@ -39,18 +39,18 @@ export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
 /** @public */
 export type ReadyEvent = EventInfo<dxMap> & {
   originalMap: any;
-}
+};
 
 /** @public */
 export type RouteAddedEvent = EventInfo<dxMap> & {
   readonly options: any;
   originalRoute: any;
-}
+};
 
 /** @public */
 export type RouteRemovedEvent = EventInfo<dxMap> & {
   readonly options?: any;
-}
+};
 
 /**
  * @public

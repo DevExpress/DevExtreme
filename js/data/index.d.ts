@@ -2,13 +2,13 @@
  * @docid
  * @public
  */
-export type SearchOperation = '='|'<>'|'>'|'>='|'<'|'<='|'startswith'|'endswith'|'contains'|'notcontains';
+export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith' | 'endswith' | 'contains' | 'notcontains';
 
 type KeySelector<T> = string | ((source: T) => string);
 
-type BaseGroupDescriptor<T> = {
-	selector: KeySelector<T>;	
-};
+interface BaseGroupDescriptor<T> {
+    selector: KeySelector<T>;
+}
 
 /**
  * @docid
@@ -38,14 +38,14 @@ export type SelectDescriptor<T> = KeySelector<T>;
  */
  export type FilterDescriptor = any;
 
- /** 
+ /**
  * @docid
  * @public
  * @type object
  */
 export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
-}
+};
 
 /**
  * @docid
