@@ -399,16 +399,24 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   background-color: $scheduler-header-bg;
   height: $material-scheduler-header-height;
 
-  .dx-button {
-    @include dx-button-flat-color-styling(
-      $button-default-bg,
-      $button-default-text-hover-bg,
-      $button-default-text-focused-bg,
-      $button-default-text-active-bg
-    );
+  .dx-scheduler-navigator {
+    .dx-button {
+      @include dx-button-flat-color-styling(
+        $button-default-bg,
+        $button-default-text-hover-bg,
+        $button-default-text-focused-bg,
+        $button-default-text-active-bg
+      );
+    }
   }
 
   .dx-scheduler-view-switcher {
+    .dx-button {
+      .dx-button-text {
+        text-transform: none;
+      }
+    }
+
     .dx-icon::before {
       content: baseScheduler.$arrow-down;
     }
