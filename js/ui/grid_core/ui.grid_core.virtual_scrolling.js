@@ -1233,10 +1233,19 @@ export const virtualScrollingModule = {
                     bottomItemIndex: function() {
                         const viewportParams = this._loadViewportParams;
                         return viewportParams && viewportParams.skip + viewportParams.take;
+                    },
+                    virtualItemsCount: function() {
+                        const rowsScrollController = this._rowsScrollController;
+
+                        if(rowsScrollController) {
+                            return rowsScrollController.virtualItemsCount.apply(rowsScrollController, arguments);
+                        }
+
+                        const dataSource = this._dataSource;
+                        return dataSource.virtualItemsCount.apply(dataSource, arguments);
                     }
                 };
 
-                gridCoreUtils.proxyMethod(members, 'virtualItemsCount');
                 gridCoreUtils.proxyMethod(members, 'getVirtualContentSize');
                 gridCoreUtils.proxyMethod(members, 'setViewportItemIndex');
 

@@ -2178,20 +2178,9 @@ export const keyboardNavigationModule = {
                     }
                 },
                 getMaxRowIndex: function() {
-                    let itemsCount = 0;
-                    let virtualItemsCount = null;
-                    let result = 0;
+                    let result = this.items().length - 1;
+                    const virtualItemsCount = this.virtualItemsCount();
 
-                    if(this._rowsScrollController) {
-                        itemsCount = this.items().length;
-                        virtualItemsCount = this._rowsScrollController.virtualItemsCount();
-
-                    } else {
-                        itemsCount = this.items(true).length;
-                        virtualItemsCount = this.virtualItemsCount();
-                    }
-
-                    result = itemsCount - 1;
                     if(virtualItemsCount) {
                         result += (virtualItemsCount.begin + virtualItemsCount.end);
                     }
