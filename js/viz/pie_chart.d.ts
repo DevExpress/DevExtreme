@@ -1,33 +1,33 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     Format,
 } from '../localization';
 
-import {
+import type {
     basePointObject,
     baseSeriesObject,
 } from './chart';
 
-import {
+import type {
     PaletteType,
 } from './palette';
 
-import {
+import type {
     BaseChart,
     BaseChartAdaptiveLayout,
     BaseChartLegend,
@@ -36,13 +36,13 @@ import {
     TooltipInfo,
 } from './chart_components/base_chart';
 
-import {
+import type {
     BaseLegendItem,
     DashStyleType,
     HatchingDirectionType,
 } from './common';
 
-import {
+import type {
     Font,
     WordWrapType,
     VizTextOverflowType,

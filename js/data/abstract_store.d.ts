@@ -1,4 +1,4 @@
-import { DxPromise } from '../core/utils/deferred';
+import type { DxPromise } from '../core/utils/deferred';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */

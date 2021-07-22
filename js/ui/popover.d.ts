@@ -1,20 +1,20 @@
-import {
+import type {
     AnimationConfig,
 } from '../animation/fx';
 
-import {
+import type {
     PositionConfig,
 } from '../animation/position';
 
-import {
+import type {
     UserDefinedElement,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -22,7 +22,8 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxPopup, {
+import dxPopup from './popup';
+import type {
     dxPopupAnimation,
     dxPopupOptions,
     TitleRenderedInfo,

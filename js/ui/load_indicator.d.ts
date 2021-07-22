@@ -1,10 +1,11 @@
-import {
+import type {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

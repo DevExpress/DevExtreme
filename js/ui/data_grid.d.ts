@@ -1,24 +1,25 @@
-import {
+import type {
   UserDefinedElement,
   DxElement,
   UserDefinedElementsArray,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
 import Store from '../data/abstract_store';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
-import {
+import type {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -27,26 +28,26 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     ExcelDataGridCell,
 } from '../excel_exporter';
 
-import {
+import type {
     ExcelFont,
 } from '../exporter/excel/excel.doc_comments';
 
 import dxDraggable from './draggable';
 
-import {
+import type {
     dxFilterBuilderOptions,
 } from './filter_builder';
 
-import {
+import type {
     dxFormOptions,
     dxFormSimpleItem,
 } from './form';
 
-import {
+import type {
     Properties as PopupProperties,
 } from './popup';
 
@@ -54,11 +55,11 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import dxSortable from './sortable';
 
-import {
+import type {
     dxToolbarOptions, dxToolbarItem,
 } from './toolbar';
 
-import {
+import type {
     AsyncRule,
     CompareRule,
     CustomRule,
@@ -70,11 +71,12 @@ import {
     StringLengthRule,
 } from './validation_rules';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 
-import {
+import type {
   Format,
 } from '../localization';
 

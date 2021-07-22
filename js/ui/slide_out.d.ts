@@ -1,23 +1,24 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -25,7 +26,8 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import CollectionWidget, {
+import CollectionWidget from './collection/ui.collection_widget.base';
+import type {
     CollectionWidgetItem,
     CollectionWidgetOptions,
     SelectionChangedInfo,

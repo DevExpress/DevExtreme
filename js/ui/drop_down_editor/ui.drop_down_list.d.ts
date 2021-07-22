@@ -1,29 +1,30 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import {
+import type {
     template,
 } from '../../core/templates/template';
 
 import DataSource from '../../data/data_source';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
 } from '../../events/index';
 
-import {
+import type {
     ValueChangedInfo,
 } from '../editor/editor';
 
-import {
+import type {
     DataExpressionMixinOptions,
 } from '../editor/ui.data_expression';
 
-import dxDropDownEditor, {
+import dxDropDownEditor from './ui.drop_down_editor';
+import type {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 

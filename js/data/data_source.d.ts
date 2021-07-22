@@ -1,9 +1,10 @@
 import {
  FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
 } from './index';
-import { DxPromise } from '../core/utils/deferred';
-import Store, { StoreOptions } from './abstract_store';
-import { CustomStoreOptions } from './custom_store';
+import type { DxPromise } from '../core/utils/deferred';
+import Store from './abstract_store';
+import type { StoreOptions } from './abstract_store';
+import type { CustomStoreOptions } from './custom_store';
 
 /** @namespace DevExpress.data */
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {

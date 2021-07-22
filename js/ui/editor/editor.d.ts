@@ -1,8 +1,9 @@
-import {
+import type {
     NativeEventInfo,
 } from '../../events/index';
 
-import Widget, {
+import Widget from '../widget/ui.widget';
+import type {
     WidgetOptions,
 } from '../widget/ui.widget';
 

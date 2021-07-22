@@ -1,4 +1,4 @@
-import {
+import type {
     PositionConfig,
 } from '../animation/position';
 

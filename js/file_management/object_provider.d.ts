@@ -1,4 +1,5 @@
-import FileSystemProviderBase, {
+import FileSystemProviderBase from './provider_base';
+import type {
     FileSystemProviderBaseOptions,
 } from './provider_base';
 

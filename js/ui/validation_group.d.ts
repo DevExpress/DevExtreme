@@ -1,18 +1,19 @@
-import DOMComponent, {
+import DOMComponent from '../core/dom_component';
+import type {
     DOMComponentOptions,
 } from '../core/dom_component';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     AsyncRule,
     CompareRule,
     CustomRule,

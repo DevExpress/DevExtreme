@@ -1,33 +1,34 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxButton, {
+import dxButton from './button';
+import type {
     dxButtonOptions,
 } from './button';
 
 import Editor from './editor/editor';
 
-import {
+import type {
     dxTabPanelOptions,
 } from './tab_panel';
 
-import {
+import type {
     AsyncRule,
     CompareRule,
     CustomRule,
@@ -39,11 +40,12 @@ import {
     StringLengthRule,
 } from './validation_rules';
 
-import {
+import type {
     dxValidationGroupResult,
 } from './validation_group';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

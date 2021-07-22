@@ -1,20 +1,21 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Editor, {
+import Editor from './editor/editor';
+import type {
     EditorOptions,
 } from './editor/editor';
 
-import UploadInfo from '../file_management/upload_info';
+import type UploadInfo from '../file_management/upload_info';
 
 /** @public */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {

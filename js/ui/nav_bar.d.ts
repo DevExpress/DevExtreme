@@ -1,4 +1,4 @@
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -6,11 +6,12 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import {
+import type {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import dxTabs, {
+import dxTabs from './tabs';
+import type {
     dxTabsItem,
     dxTabsOptions,
 } from './tabs';

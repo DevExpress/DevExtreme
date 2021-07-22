@@ -1,4 +1,5 @@
-import CollectionWidget, {
+import CollectionWidget from '../collection/ui.collection_widget.base';
+import type {
     CollectionWidgetOptions,
 } from '../collection/ui.collection_widget.base';
 

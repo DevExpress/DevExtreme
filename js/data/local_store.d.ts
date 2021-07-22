@@ -1,4 +1,5 @@
-import ArrayStore, {
+import ArrayStore from './array_store';
+import type {
     ArrayStoreOptions,
 } from './array_store';
 

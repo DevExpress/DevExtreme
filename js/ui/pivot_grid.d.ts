@@ -1,8 +1,8 @@
-import {
+import type {
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     Cancelable,
     NativeEventInfo,
     EventInfo,
@@ -10,14 +10,16 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import PivotGridDataSource, {
+import PivotGridDataSource from './pivot_grid/data_source';
+import type {
     PivotGridDataSourceField,
     PivotGridDataSourceOptions,
 } from './pivot_grid/data_source';
 
 import dxPopup from './popup';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

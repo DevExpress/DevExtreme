@@ -1,37 +1,39 @@
-import {
+import type {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
   Format,
 } from '../localization';
 
-import {
+import type {
     dxChartCommonSeriesSettings,
 } from './chart';
 
-import {
+import type {
     ChartSeries,
     ScaleBreak,
     VizRange,
     VizTimeInterval,
 } from './common';
 
-import BaseWidget, {
+import BaseWidget from './core/base_widget';
+import type {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,

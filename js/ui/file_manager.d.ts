@@ -1,13 +1,13 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -17,19 +17,20 @@ import {
 
 import FileSystemItem from '../file_management/file_system_item';
 
-import {
+import type {
     dxContextMenuItem,
 } from './context_menu';
 
-import {
+import type {
     dxToolbarItem,
 } from './toolbar';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 

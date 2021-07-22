@@ -1,4 +1,4 @@
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -6,20 +6,21 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import dxDropDownList, {
+import dxDropDownList from './drop_down_editor/ui.drop_down_list';
+import type {
     dxDropDownListOptions,
     SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
-import {
+import type {
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import {
+import type {
     ValueChangedInfo,
 } from './editor/editor';
 
-import {
+import type {
     Properties as PopupProperties,
 } from './popup';
 

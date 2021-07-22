@@ -1,13 +1,13 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -16,19 +16,20 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import {
+import type {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import {
+import type {
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import {
+import type {
     ValueChangedInfo,
 } from './editor/editor';
 
-import dxSelectBox, {
+import dxSelectBox from './select_box';
+import type {
     dxSelectBoxOptions,
     CustomItemCreatingInfo,
 } from './select_box';

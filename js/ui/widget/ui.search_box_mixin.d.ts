@@ -1,4 +1,4 @@
-import {
+import type {
     Properties as TextBoxProperties,
 } from '../text_box';
 

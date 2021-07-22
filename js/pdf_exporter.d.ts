@@ -1,5 +1,6 @@
-import { DxPromise } from './core/utils/deferred';
-import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import type { DxPromise } from './core/utils/deferred';
+import dxDataGrid from './ui/data_grid';
+import type { dxDataGridColumn } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**

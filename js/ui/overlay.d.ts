@@ -1,27 +1,28 @@
-import {
+import type {
     AnimationConfig,
 } from '../animation/fx';
 
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     DxEvent,
     Cancelable,
     EventInfo,
 } from '../events/index';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

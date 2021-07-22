@@ -1,8 +1,8 @@
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     dxButtonOptions,
 } from './button';
 

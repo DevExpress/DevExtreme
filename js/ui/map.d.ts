@@ -1,15 +1,16 @@
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
   EventInfo,
   NativeEventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
 } from '../events/index';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

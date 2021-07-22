@@ -1,21 +1,21 @@
-import {
+import type {
     AnimationConfig,
 } from '../animation/fx';
 
-import {
+import type {
     PositionConfig,
 } from '../animation/position';
 
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     DxEvent,
     EventInfo,
     NativeEventInfo,
@@ -24,27 +24,28 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import {
+import type {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import {
+import type {
     ValueChangedInfo,
 } from './editor/editor';
 
-import dxDropDownList, {
+import dxDropDownList from './drop_down_editor/ui.drop_down_list';
+import type {
     dxDropDownListOptions,
 } from './drop_down_editor/ui.drop_down_list';
 
-import {
+import type {
     ScrollInfo,
 } from './list';
 
-import {
+import type {
     Properties as PopoverProperties,
 } from './popover';
 
-import {
+import type {
     TitleRenderedInfo,
 } from './popup';
 
