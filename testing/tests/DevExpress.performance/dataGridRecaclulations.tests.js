@@ -64,7 +64,7 @@ QUnit.performanceTest('render with virtual scrolling', function(assert) {
         scrolling: { mode: 'virtual' }
     });
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 10 : 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 9 : 13);
 });
 
 QUnit.performanceTest('updateDimensions', function(assert) {
