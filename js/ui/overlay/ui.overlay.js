@@ -474,9 +474,6 @@ const Overlay = Widget.inherit({
         this._normalizePosition();
 
         const animation = that._getAnimationConfig() || {};
-        const showAnimation = this._normalizeAnimation(animation.show, 'to');
-        const startShowAnimation = (showAnimation && showAnimation.start) || noop;
-        const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -490,6 +487,9 @@ const Overlay = Widget.inherit({
                     deferred.resolve();
                     return;
                 }
+                const showAnimation = this._normalizeAnimation(animation.show, 'to');
+                const startShowAnimation = (showAnimation && showAnimation.start) || noop;
+                const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
                 this._animate(showAnimation, function() {
                     if(that.option('focusStateEnabled')) {
