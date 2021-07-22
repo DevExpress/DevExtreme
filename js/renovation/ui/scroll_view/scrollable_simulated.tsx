@@ -600,8 +600,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     let { top = 0, left = 0 } = location;
 
     // destructuring assignment with default values not working
-    // TODO: add link to card from trello board of generator's
-    // team and delete next two conditions after fix
+    // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
     /* istanbul ignore next */
     if (!isDefined(top)) {
       top = 0;
