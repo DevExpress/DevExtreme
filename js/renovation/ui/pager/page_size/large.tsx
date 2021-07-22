@@ -24,10 +24,12 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
 @ComponentBindings()
 export class PageSizeLargeProps {
   @OneWay() pageSizes!: FullPageSize[];
+
+  @OneWay() pageSize?: number;
 }
 type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes'>() {
+export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType>() {
   get pageSizesText(): {
     className: string;
     click: () => void;
@@ -48,6 +50,6 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
   }
 
   private onPageSizeChange(processedPageSize: number) {
-    return () => { this.props.pageSizeChange!(processedPageSize); };
+    return () => { this.props.pageSizeChange?.(processedPageSize); };
   }
 }

@@ -80,7 +80,12 @@ describe('Pager', () => {
     });
 
     it('pagerProps', () => {
-      const component = new PagerComponent({ pageIndex: 0, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageIndex: 0,
+        gridCompatibility: false,
+        pageIndexChange: jest.fn(),
+        pageSizeChange: jest.fn(),
+      });
 
       const { pageIndexChange, pageSizeChange, ...restProps } = component.pagerProps;
       expect(restProps).toMatchObject({

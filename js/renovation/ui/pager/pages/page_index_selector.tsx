@@ -74,7 +74,7 @@ function getIncrement(direction: Direction): number {
 export class PageIndexSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 
-  @OneWay() pageIndex = 1;
+  @OneWay() pageIndex!: number;
 
   @Event() pageIndexChange!: EventCallback<number>;
 }

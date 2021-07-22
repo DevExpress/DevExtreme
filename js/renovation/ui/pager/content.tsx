@@ -108,6 +108,8 @@ export class PagerContentProps extends PagerProps {
 
   @OneWay() isLargeDisplayMode = true;
 
+  @Event() pageIndexChange!: EventCallback<number>;
+
   @Event() pageSizeChange!: EventCallback<number>;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
@@ -120,7 +122,7 @@ export class PagerContentProps extends PagerProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContent extends JSXComponent<PagerContentProps>() {
+export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
