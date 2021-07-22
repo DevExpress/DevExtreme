@@ -619,25 +619,32 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.prepareDirections(true);
     this.onStart();
 
-    const { isVertical, isHorizontal } = this.direction;
     this.eventHandler(
       (scrollbar): void => scrollbar.scrollByHandler({
-        x: isHorizontal ? this.computeNewLeft(left) : left,
-        y: isVertical ? this.computeNewTop(top) : top,
+        x: this.calcScrollByDeltaX(left),
+        y: this.calcScrollByDeltaY(top),
       }) as undefined,
     );
   }
 
-  computeNewTop(top: number): number {
-    const scrollbar = this.vScrollbarRef.current!;
+  calcScrollByDeltaY(top: number): number {
+    if (this.direction.isVertical) {
+      const scrollbar = this.vScrollbarRef.current!;
 
-    return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
+      return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
+    }
+
+    return top;
   }
 
-  computeNewLeft(left: number): number {
-    const scrollbar = this.hScrollbarRef.current!;
+  calcScrollByDeltaX(left: number): number {
+    if (this.direction.isHorizontal) {
+      const scrollbar = this.hScrollbarRef.current!;
 
-    return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
+      return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
+    }
+
+    return left;
   }
 
   updateHandler(): void {
