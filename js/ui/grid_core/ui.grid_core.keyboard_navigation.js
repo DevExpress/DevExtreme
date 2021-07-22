@@ -1094,7 +1094,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 eventsEngine.trigger($focusElement, 'focus');
             }
             if(disableFocus) {
-                $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+                $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
             } else {
                 this._editorFactory.focus($focusElement);
             }
