@@ -1,21 +1,21 @@
-import {
+import type {
     AnimationConfig,
 } from '../animation/fx';
 
-import {
+import type {
     PositionConfig,
 } from '../animation/position';
 
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -24,12 +24,12 @@ import {
 } from '../events/index';
 
 import * as dxOverlay from './overlay';
-import {
+import type {
     dxOverlayAnimation,
     dxOverlayOptions,
 } from './overlay';
 
-import {
+import type {
     ResizeInfo,
 } from './resizable';
 

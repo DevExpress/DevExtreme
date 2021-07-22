@@ -1,4 +1,4 @@
-import { dxElementWrapper } from "./renderer";
+import type { dxElementWrapper } from "./renderer";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Condition {}

@@ -1,9 +1,9 @@
-import {
+import type {
     UserDefinedElement,
 } from '../core/element';
 
 import * as dxOverlay from './overlay';
-import {
+import type {
     dxOverlayOptions,
 } from './overlay';
 

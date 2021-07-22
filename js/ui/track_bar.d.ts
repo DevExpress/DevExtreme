@@ -1,4 +1,5 @@
-import Editor, {
+import Editor from './editor/editor';
+import type {
     EditorOptions,
 } from './editor/editor';
 

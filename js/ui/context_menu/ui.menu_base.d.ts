@@ -1,18 +1,20 @@
-import {
+import type {
     AnimationConfig,
 } from '../../animation/fx';
 
-import DataSource, {
+import DataSource from '../../data/data_source';
+import type {
     DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
-import HierarchicalCollectionWidget, {
+import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
+import type {
     HierarchicalCollectionWidgetOptions,
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
 
-import {
+import type {
     dxMenuBaseItem,
 } from '../menu';
 

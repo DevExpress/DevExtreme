@@ -1,18 +1,18 @@
-import {
+import type {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
 
-import {
-    BaseGauge,
+import { BaseGauge } from './gauges/base_gauge';
+import type {
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,

@@ -1,30 +1,31 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import {
+import type {
     template,
 } from '../../core/templates/template';
 
-import dxTextBox, {
+import dxTextBox from '../text_box';
+import type {
     dxTextBoxOptions,
 
 } from '../text_box';
 
-import {
+import type {
     dxTextEditorButton,
 } from '../text_box/ui.text_editor.base';
 
-import {
+import type {
     Properties as PopoverProperties,
 } from '../popover';
 
-import {
+import type {
     Properties as PopupProperties,
 } from '../popup';
 
-import {
+import type {
     EventInfo,
 } from '../../events/index';
 

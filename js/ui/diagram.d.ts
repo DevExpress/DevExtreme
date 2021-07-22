@@ -1,24 +1,26 @@
-import {
+import type {
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
   EventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
 } from '../events/index';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

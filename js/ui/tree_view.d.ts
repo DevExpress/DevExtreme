@@ -1,33 +1,35 @@
-import {
+import type {
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
-import HierarchicalCollectionWidget, {
+import HierarchicalCollectionWidget from './hierarchical_collection/ui.hierarchical_collection_widget';
+import type {
     HierarchicalCollectionWidgetOptions,
 } from './hierarchical_collection/ui.hierarchical_collection_widget';
 
-import {
+import type {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 

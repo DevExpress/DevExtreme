@@ -1,1 +1,1 @@
-export { dxScrollableOptions as Options } from './ui.scrollable';
+export type { dxScrollableOptions as Options } from './ui.scrollable';

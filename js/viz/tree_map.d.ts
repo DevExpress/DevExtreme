@@ -1,24 +1,25 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import {
+import type {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
 
-import {
+import type {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -26,7 +27,8 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
-import BaseWidget, {
+import BaseWidget from './core/base_widget';
+import type {
     BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,

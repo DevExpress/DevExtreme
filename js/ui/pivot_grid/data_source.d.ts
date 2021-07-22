@@ -1,22 +1,24 @@
-import {
+import type {
     DxPromise,
 } from '../../core/utils/deferred';
 
-import Store, {
+import Store from '../../data/abstract_store';
+import type {
     StoreOptions,
 } from '../../data/abstract_store';
 
 import DataSource from '../../data/data_source';
 
-import {
+import type {
     dxPivotGridSummaryCell,
 } from '../pivot_grid';
 
-import {
+import type {
     Format,
   } from '../../localization';
 
-import XmlaStore, {
+import XmlaStore from './xmla_store';
+import type {
     XmlaStoreOptions,
 } from './xmla_store';
 

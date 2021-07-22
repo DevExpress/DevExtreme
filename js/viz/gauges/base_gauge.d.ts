@@ -1,26 +1,27 @@
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import {
+import type {
     PaletteType,
     PaletteExtensionModeType,
 } from '../palette';
 
-import {
+import type {
     template,
 } from '../../core/templates/template';
 
-import {
+import type {
     EventInfo,
 } from '../../events/index';
 
-import {
+import type {
     Format,
 } from '../../localization';
 
-import BaseWidget, {
+import BaseWidget from '../core/base_widget';
+import type {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,

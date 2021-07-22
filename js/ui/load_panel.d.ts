@@ -1,24 +1,24 @@
-import {
+import type {
     UserDefinedElement,
 } from '../core/element';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import {
+import type {
     AnimationConfig,
 } from '../animation/fx';
 
-import {
+import type {
     PositionConfig,
 } from '../animation/position';
 
 import * as dxOverlay from './overlay';
-import {
+import type {
     dxOverlayAnimation,
     dxOverlayOptions,
 } from './overlay';

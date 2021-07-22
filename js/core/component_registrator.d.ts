@@ -1,5 +1,5 @@
 import DOMComponent from './dom_component';
-import { UserDefinedElement } from './element';
+import type { UserDefinedElement } from './element';
 
 interface ComponentFactory<TComponent> {
     new(): TComponent;

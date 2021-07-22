@@ -1,18 +1,19 @@
 import DataSource from '../data/data_source';
 
-import {
+import type {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Editor, {
+import Editor from './editor/editor';
+import type {
     ValueChangedInfo,
     EditorOptions,
 } from './editor/editor';
 
-import {
+import type {
     DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 

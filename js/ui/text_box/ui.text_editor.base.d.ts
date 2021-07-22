@@ -1,12 +1,14 @@
-import {
+import type {
     NativeEventInfo,
 } from '../../events/index';
 
-import dxButton, {
+import dxButton from '../button';
+import type {
     dxButtonOptions,
 } from '../button';
 
-import Editor, {
+import Editor from '../editor/editor';
+import type {
     EditorOptions,
 } from '../editor/editor';
 

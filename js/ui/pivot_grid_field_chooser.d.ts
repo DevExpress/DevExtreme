@@ -1,15 +1,17 @@
-import {
+import type {
     DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import PivotGridDataSource, {
+import PivotGridDataSource from './pivot_grid/data_source';
+import type {
     PivotGridDataSourceField,
 } from './pivot_grid/data_source';
 
-import Widget, {
+import Widget from './widget/ui.widget';
+import type {
     WidgetOptions,
 } from './widget/ui.widget';
 

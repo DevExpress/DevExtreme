@@ -1,12 +1,12 @@
-import {
+import type {
     UserDefinedElementsArray,
 } from '../core/element';
 
-import {
+import type {
     DxPromise,
 } from '../core/utils/deferred';
 
-import {
+import type {
     AnimationConfig,
 } from './fx';
 

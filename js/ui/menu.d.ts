@@ -1,14 +1,15 @@
-import {
+import type {
     DxElement,
 } from '../core/element';
 
-import DataSource, {
+import DataSource from '../data/data_source';
+import type {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import {
+import type {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -17,12 +18,13 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import {
+import type {
     CollectionWidgetItem,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import dxMenuBase, {
+import dxMenuBase from './context_menu/ui.menu_base';
+import type {
     dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 

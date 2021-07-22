@@ -1,16 +1,18 @@
 import {
     Component,
+} from './component';
+import type {
     ComponentOptions,
 } from './component';
 
-import {
+import type {
     UserDefinedElement,
     DxElement,
 } from './element';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
-import { Rule } from './options/utils';
+import type { Rule } from './options/utils';
 
 /** @namespace DevExpress */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
