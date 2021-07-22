@@ -1242,7 +1242,7 @@ export const virtualScrollingModule = {
                         }
 
                         const dataSource = this._dataSource;
-                        return dataSource.virtualItemsCount.apply(dataSource, arguments);
+                        return dataSource?.virtualItemsCount.apply(dataSource, arguments);
                     }
                 };
 
