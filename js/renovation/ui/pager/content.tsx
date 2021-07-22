@@ -5,7 +5,6 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-  Event,
   ForwardRef,
   Provider,
   Effect,
@@ -106,8 +105,6 @@ export class PagerContentProps extends PagerProps {
 
   @OneWay() pageSize!: number;
 
-  @Event() pageSizeChange!: EventCallback<number>;
-
   @OneWay() isLargeDisplayMode = true;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
@@ -120,7 +117,7 @@ export class PagerContentProps extends PagerProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContent extends JSXComponent<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>() {
+export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
