@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Toolbar, viewFunction as ToolbarView } from '../toolbar';
 import {
   ToolbarItem, ToolbarButtonProps, ToolbarButtonGroupProps,
-  ToolbarDropDownButtonProps, ToolbarProps,
+  ToolbarDropDownButtonProps, ToolbarProps, ToolbarTextBoxProps, ToolbarCheckBoxProps,
 } from '../toolbar_props';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyToolbar from '../../../../ui/toolbar';
@@ -19,6 +19,12 @@ describe('Toolbar', () => {
 
       const dropDownButtonItem = new ToolbarItem();
       dropDownButtonItem.options = new ToolbarDropDownButtonProps();
+
+      const checkBoxItem = new ToolbarItem();
+      checkBoxItem.options = new ToolbarCheckBoxProps();
+
+      const textBoxItem = new ToolbarItem();
+      textBoxItem.options = new ToolbarTextBoxProps();
 
       const componentProps = new ToolbarProps();
       componentProps.items = [buttonItem, buttonGroupItem, dropDownButtonItem];
