@@ -19,7 +19,11 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
 
-        let appointmentDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
+        let appointmentDuration = this.instance.fire('getAppointmentDurationInMs', {
+            startDate,
+            endDate: normalizedEndDate,
+            allDay,
+        });
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, normalizedEndDate);
 
