@@ -323,7 +323,7 @@ class NavigatorPopover extends ElementWrapper {
     }
 
     get hasScroll() {
-        return this.getElement().find('.dx-scrollable').length > 0;
+        return $('.dx-scrollable').find('.dx-scheduler-navigator-calendar').length > 0;
     }
 }
 
