@@ -49,7 +49,7 @@ export const viewFunction = ({
 type PagerSmallProps = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<PagerSmallProps, 'pageIndexChange'>() {
+export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   @Ref() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
