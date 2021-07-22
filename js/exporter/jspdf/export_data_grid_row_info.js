@@ -1,6 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 
-function createRowInfo({ dataProvider, rowIndex, rowStyles, prevRowInfo }) {
+function createRowInfo({ dataProvider, rowIndex, rowOptions, prevRowInfo }) {
     const rowType = dataProvider.getCellData(rowIndex, 0, true).cellSourceData.rowType;
     let indentLevel = rowType !== 'header' ? dataProvider.getGroupLevel(rowIndex) : 0;
     if(rowType === 'groupFooter' && prevRowInfo?.rowType === 'groupFooter') {
@@ -11,13 +11,14 @@ function createRowInfo({ dataProvider, rowIndex, rowStyles, prevRowInfo }) {
 
     const rowInfo = {
         rowType: rowType,
+        rowHeight: rowOptions.rowHeight,
         indentLevel: indentLevel,
         startNewTableWithIndent,
         cellsInfo: [],
         rowIndex
     };
 
-    _fillRowCellsInfo({ rowInfo, rowStyles, dataProvider, columns });
+    _fillRowCellsInfo({ rowInfo, rowOptions, dataProvider, columns });
 
     return rowInfo;
 }
@@ -33,7 +34,7 @@ function createPdfCell(cellInfo) {
     };
 }
 
-function _createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }) {
+function _createCellInfo({ rowInfo, rowOptions, dataProvider, cellIndex }) {
     const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
     const cellInfo = {
         value: cellData.value,
@@ -48,8 +49,8 @@ function _createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }) {
         if(cellMerging && cellMerging.colspan > 0) {
             cellInfo.colSpan = cellMerging.colspan;
         }
-        if(isDefined(rowStyles.headerStyles?.backgroundColor)) {
-            cellInfo.backgroundColor = rowStyles.headerStyles.backgroundColor;
+        if(isDefined(rowOptions.headerStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowOptions.headerStyles.backgroundColor;
         }
     } else if(rowInfo.rowType === 'group') {
         cellInfo.drawLeftBorder = false;
@@ -66,20 +67,20 @@ function _createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }) {
                 cellInfo.colSpan = rowInfo.cellsInfo.length;
             }
         }
-        if(isDefined(rowStyles.groupStyles?.backgroundColor)) {
-            cellInfo.backgroundColor = rowStyles.groupStyles.backgroundColor;
+        if(isDefined(rowOptions.groupStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowOptions.groupStyles.backgroundColor;
         }
     } else if(rowInfo.rowType === 'groupFooter' || rowInfo.rowType === 'totalFooter') {
-        if(isDefined(rowStyles.totalStyles?.backgroundColor)) {
-            cellInfo.backgroundColor = rowStyles.totalStyles.backgroundColor;
+        if(isDefined(rowOptions.totalStyles?.backgroundColor)) {
+            cellInfo.backgroundColor = rowOptions.totalStyles.backgroundColor;
         }
     }
     return cellInfo;
 }
 
-function _fillRowCellsInfo({ rowInfo, rowStyles, dataProvider, columns }) {
+function _fillRowCellsInfo({ rowInfo, rowOptions, dataProvider, columns }) {
     for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-        rowInfo.cellsInfo.push(_createCellInfo({ rowInfo, rowStyles, dataProvider, cellIndex }));
+        rowInfo.cellsInfo.push(_createCellInfo({ rowInfo, rowOptions, dataProvider, cellIndex }));
     }
 
     if(rowInfo.rowType === 'group') {
