@@ -17,17 +17,22 @@ const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
 class BaseRenderingStrategy {
-    constructor(instance) {
-        this.instance = instance;
-        this.key = this.instance.key;
+    constructor(options) {
+        this.options = options;
         this._initPositioningStrategy();
     }
 
-    get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
+    get key() { return this.options.key; }
+    get instance() { return this.options.instance; } // TODO get rid of this
+    get cellWidth() { return this.options.getCellWidth(); }
+    get cellHeight() { return this.options.getCellHeight(); }
+    get allDayHeight() { return this.options.getAllDayHeight(); }
+    get resizableStep() { return this.options.getResizableStep(); }
+    get isAdaptive() { return this.options.isAdaptive; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
+    get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
 
-    _isAdaptive() {
-        return this.instance.fire('isAdaptive');
-    }
+    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
@@ -35,7 +40,9 @@ class BaseRenderingStrategy {
     }
 
     _initPositioningStrategy() {
-        this._positioningStrategy = this._isAdaptive() ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
+        this._positioningStrategy = this.isAdaptive
+            ? new AdaptivePositioningStrategy(this)
+            : new BasePositioningStrategy(this);
     }
 
     getPositioningStrategy() {
@@ -71,15 +78,11 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.instance.fire('getCellWidth');
-        this._defaultHeight = this.instance.fire('getCellHeight');
-        this._allDayHeight = this.instance._allDayCellHeight;
-
         const map = [];
         for(let i = 0; i < length; i++) {
             let coordinates = this._getItemPosition(items[i]);
 
-            if(this._isRtl()) {
+            if(this.rtlEnabled) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
 
@@ -93,7 +96,7 @@ class BaseRenderingStrategy {
     }
 
     _getDeltaWidth(args, initialSize) {
-        const intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize();
+        const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
         const initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);
@@ -112,7 +115,7 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _getItemPosition(appointment) {
@@ -159,7 +162,7 @@ class BaseRenderingStrategy {
                     }, position[j]);
 
 
-                    if(this._isRtl()) {
+                    if(this.rtlEnabled) {
                         position[j].left = currentMaxAllowedPosition;
                     }
 
@@ -195,22 +198,18 @@ class BaseRenderingStrategy {
         return this.instance.fire('createAppointmentSettings', appointment);
     }
 
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
-    }
-
     _getAppointmentParts() {
         return [];
     }
 
     _getCompactAppointmentParts(appointmentWidth) {
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
 
         return Math.round(appointmentWidth / cellWidth);
     }
 
     _reduceMultiWeekAppointment(sourceAppointmentWidth, bound) {
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             sourceAppointmentWidth = Math.floor(bound.left - bound.right);
         } else {
             sourceAppointmentWidth = bound.right - Math.floor(bound.left);
@@ -229,23 +228,21 @@ class BaseRenderingStrategy {
     isAppointmentGreaterThan(etalon, comparisonParameters) {
         let result = comparisonParameters.left + comparisonParameters.width - etalon;
 
-        if(this._isRtl()) {
+        if(this.rtlEnabled) {
             result = etalon + comparisonParameters.width - comparisonParameters.left;
         }
 
-        return result > this.getDefaultCellWidth() / 2;
+        return result > this.cellWidth / 2;
     }
 
     isAllDay() {
         return false;
     }
 
-    cropAppointmentWidth(width, cellWidth) {
-        if(this.instance.fire('isGroupedByDate')) {
-            width = cellWidth;
-        }
-
-        return width;
+    cropAppointmentWidth(width, cellWidth) { // TODO get rid of this
+        return this.isGroupedByDate
+            ? cellWidth
+            : width;
     }
 
     _getSortedPositions(positionList) {
@@ -557,18 +554,6 @@ class BaseRenderingStrategy {
         return DROP_DOWN_BUTTON_ADAPTIVE_SIZE;
     }
 
-    getDefaultCellWidth() {
-        return this._defaultWidth;
-    }
-
-    getDefaultCellHeight() {
-        return this._defaultHeight;
-    }
-
-    getDefaultAllDayCellHeight() {
-        return this._allDayHeight;
-    }
-
     getCollectorTopOffset(allDay) {
         return this.getPositioningStrategy().getCollectorTopOffset(allDay);
     }
@@ -589,7 +574,7 @@ class BaseRenderingStrategy {
         const left = coordinates.left;
 
         if(coordinates.isCompact) {
-            this._isAdaptive() && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
+            this.isAdaptive && this._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
@@ -650,10 +635,6 @@ class BaseRenderingStrategy {
         return false;
     }
 
-    needSeparateAppointment(allDay) {
-        return this.instance.fire('isGroupedByDate') && allDay;
-    }
-
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
             const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
@@ -699,8 +680,10 @@ class BaseRenderingStrategy {
         return this._getAppointmentDefaultHeight();
     }
 
-    _getAppointmentHeightByTheme() {
-        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    _getAppointmentHeightByTheme() { // TODO get rid of depending from themes
+        return this._isCompactTheme()
+            ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT
+            : APPOINTMENT_DEFAULT_HEIGHT;
     }
 
     _getAppointmentDefaultWidth() {

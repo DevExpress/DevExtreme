@@ -16,6 +16,7 @@ import {
 import '../../../events/click';
 import '../../../events/hover';
 
+import { isFunction } from '../../../core/utils/type';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
@@ -29,20 +30,22 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
+import errors from '../../../core/errors';
 
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
 const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
 
-const getAria = (args: Record<string, unknown>):
-{ [name: string]: string } => Object.keys(args).reduce((r, key) => {
-  if (args[key]) {
-    return {
-      ...r,
-      [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
-    };
-  }
-  return r;
-}, {});
+const getAria = (args: Record<string, unknown>): Record<string, string> => Object
+  .keys(args)
+  .reduce((r, key) => {
+    if (args[key]) {
+      return {
+        ...r,
+        [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
+      };
+    }
+    return r;
+  }, {});
 
 export const viewFunction = (viewModel: Widget): JSX.Element => {
   const widget = (
@@ -320,6 +323,17 @@ export class Widget extends JSXComponent(WidgetProps) {
     return undefined;
   }
 
+  @Effect()
+  checkDeprecation(): void {
+    const { width, height } = this.props;
+    if (isFunction(width)) {
+      errors.log('W0017', 'width');
+    }
+    if (isFunction(height)) {
+      errors.log('W0017', 'height');
+    }
+  }
+
   get attributes(): Record<string, string> {
     const {
       aria,
@@ -338,9 +352,8 @@ export class Widget extends JSXComponent(WidgetProps) {
   get styles(): Record<string, string | number> {
     const { width, height } = this.props;
     const style = this.restAttributes.style as Record<string, string | number> || {};
-
-    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
-    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
+    const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
+    const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
 
     return {
       ...style,

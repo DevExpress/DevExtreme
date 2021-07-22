@@ -11,7 +11,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     calculateAppointmentWidth(appointment, position) {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const { normalizedEndDate } = position.info.appointment;
-        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const duration = Math.ceil(this._getDurationInDays(startDate, normalizedEndDate));
 
         let width = this.cropAppointmentWidth(duration * cellWidth, cellWidth);

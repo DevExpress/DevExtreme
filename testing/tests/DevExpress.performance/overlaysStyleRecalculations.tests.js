@@ -45,7 +45,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 11);
+        assert.measureStyleRecalculation(measureFunction, 10);
     });
 
     QUnit.performanceTest(`showing dxOverlay with shading=${shading} should be with minimum count of relayouts`, function(assert) {
@@ -59,7 +59,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             overlay.show();
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 8);
     });
 
 

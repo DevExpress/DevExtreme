@@ -41,6 +41,7 @@ import SelectBox from 'ui/select_box';
 import { MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
+import { noop } from 'core/utils/common';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -75,6 +76,8 @@ QUnit.module('Editor Factory', {
         // assert
         assert.ok(textBox, 'dxTextBox created');
         assert.equal(textBox.option('value'), 'A', 'text editor value');
+        assert.ok(textBox._supportedKeys().enter, 'enter handler is defined'); // T1013643
+        assert.notEqual(textBox._supportedKeys().enter, noop, 'enter handler is not noop'); // T1013643
 
         // act
         textBox.option('value', 'B');
