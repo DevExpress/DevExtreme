@@ -39,10 +39,8 @@ const intersection = function(a, b) {
     return result;
 };
 
-const uniqueValues = function(data) {
-    return data.filter(function(item, position) {
-        return data.indexOf(item) === position;
-    });
+export const uniqueValues = function(data) {
+    return [...new Set(data)];
 };
 
 const removeDuplicates = function(from, what) {
@@ -50,18 +48,16 @@ const removeDuplicates = function(from, what) {
         return [];
     }
 
+    const result = from.slice();
+
     if(!Array.isArray(what) || what.length === 0) {
-        return from.slice();
+        return result;
     }
 
-    const result = [];
+    each(what, function(_, value) {
+        const index = inArray(value, result);
 
-    each(from, function(_, value) {
-        const index = inArray(value, what);
-
-        if(index === -1) {
-            result.push(value);
-        }
+        result.splice(index, 1);
     });
 
     return result;
