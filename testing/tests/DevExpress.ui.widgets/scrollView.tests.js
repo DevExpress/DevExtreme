@@ -537,7 +537,7 @@ QUnit.module('dynamic', moduleConfig, () => {
 
         const location = getScrollOffset($scrollView);
 
-        assert.equal(location.top, -10, 'content position was not changed');
+        assert.equal(location.top, isRenovation ? -90 : -10, 'content position was not changed');
     });
 
     QUnit.test('scroll content stays in bounds when onPullDown turned off', function(assert) {
@@ -565,7 +565,10 @@ QUnit.module('dynamic', moduleConfig, () => {
 
         const location = getScrollOffset($scrollView);
 
-        assert.equal(location.top, $container.height() - $content.height(), 'content position was not changed');
+        const maxScrollTopOffset = $content.height() - $container.height();
+        const topPocketSize = 80;
+
+        assert.equal(location.top, isRenovation ? -maxScrollTopOffset - topPocketSize : -maxScrollTopOffset, 'content position was not changed');
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {

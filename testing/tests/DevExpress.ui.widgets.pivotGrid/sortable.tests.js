@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
+import devices from 'core/devices';
 
 const HORIZONTAL_WIDTH_LARGE = 1500;
 const HORIZONTAL_WIDTH_SMALL = 900;
@@ -1845,8 +1846,6 @@ QUnit.module('Horizontal direction. RTL', {
         assert.roughEqual(parseInt(indicator.css('left')), $sortable.find('.test-item').eq(0).offset().left + $sortable.find('.test-item').eq(0).outerWidth(true), 1);
         assert.ok(indicator.hasClass('dx-position-indicator-last'));
     });
-
-
 });
 
 QUnit.module('Scroll group content', {
@@ -1880,7 +1879,6 @@ QUnit.module('Scroll group content', {
             .height(150)
             .dxScrollable({
                 onScroll: this.onScroll,
-                disabled: true,
                 useNative: false
             });
 
@@ -1892,215 +1890,216 @@ QUnit.module('Scroll group content', {
         this.clock.restore();
     }
 }, () => {
+    const isDesktopDevice = devices.real().deviceType === 'desktop';
 
-    QUnit.test('No scroll group content', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-item').eq(0).offset();
+    if(isDesktopDevice) {
+        QUnit.test('No scroll group content', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-item').eq(0).offset();
 
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left + $item.width() / 2 + 10, offset.top);
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left + $item.width() / 2 + 10, offset.top);
 
-        this.clock.tick();
+            this.clock.tick();
 
-        assert.ok(!this.onScroll.called);
-    });
+            assert.ok(!this.onScroll.called);
+        });
 
-    QUnit.test('Scroll down group content', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Scroll down group content', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 30)
-            .move(offset.left, offset.top + $('.test-container').height());
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 30)
+                .move(offset.left, offset.top + $('.test-container').height());
 
-        assert.strictEqual(this.onScroll.callCount, 1);
-        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortableOld('instance').__SCROLL_STEP);
-    });
+            assert.strictEqual(this.onScroll.callCount, 1);
+            assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortableOld('instance').__SCROLL_STEP);
+        });
 
-    QUnit.test('Scroll down group content second time after clock tick if pointer at the bottom', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Scroll down group content second time after clock tick if pointer at the bottom', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 30)
-            .move(offset.left, offset.top + $('.test-container').height());
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 30)
+                .move(offset.left, offset.top + $('.test-container').height());
 
-        this.onScroll.reset();
+            this.onScroll.reset();
 
-        this.clock.tick(10);
+            this.clock.tick(10);
 
-        assert.strictEqual(this.onScroll.callCount, 1);
-        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortableOld('instance').__SCROLL_STEP);
-    });
+            assert.strictEqual(this.onScroll.callCount, 1);
+            assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortableOld('instance').__SCROLL_STEP);
+        });
 
-    QUnit.test('Scroll down group content while pointer at the bottom', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Scroll down group content while pointer at the bottom', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 30)
-            .move(offset.left, offset.top + $('.test-container').height());
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 30)
+                .move(offset.left, offset.top + $('.test-container').height());
 
-        this.clock.tick(100);
+            this.clock.tick(100);
 
-        assert.strictEqual(this.onScroll.callCount, 11);
-        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortableOld('instance').__SCROLL_STEP);
-    });
+            assert.strictEqual(this.onScroll.callCount, 11);
+            assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortableOld('instance').__SCROLL_STEP);
+        });
 
-    QUnit.test('Scroll up group content', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Scroll up group content', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top + 8);
+            $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top + 8);
 
-        assert.strictEqual(this.onScroll.callCount, 1);
-        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortableOld('instance').__SCROLL_STEP);
-    });
+            assert.strictEqual(this.onScroll.callCount, 1);
+            assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortableOld('instance').__SCROLL_STEP);
+        });
 
-    QUnit.test('Scroll up group content to begin when pointer above area', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Scroll up group content to begin when pointer above area', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
-        // act
-        pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top - 10);
+            $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
+            // act
+            pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top - 10);
 
-        this.clock.tick(1000);
+            this.clock.tick(1000);
 
-        assert.strictEqual(this.onScroll.callCount, 25);
-        assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 0);
-    });
+            assert.strictEqual(this.onScroll.callCount, 25);
+            assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 0);
+        });
 
-    QUnit.test('Stop scrolling affer return pointer in the middle of group', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Stop scrolling affer return pointer in the middle of group', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
+            $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
 
-        const pointer = pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top - 10);
-        this.clock.tick(20);
-        this.onScroll.reset();
+            const pointer = pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top - 10);
+            this.clock.tick(20);
+            this.onScroll.reset();
 
-        // act
-        pointer.move(offset.left, offset.top + 40);
-        this.clock.tick(100);
+            // act
+            pointer.move(offset.left, offset.top + 40);
+            this.clock.tick(100);
 
-        assert.strictEqual(this.onScroll.callCount, 0);
-    });
+            assert.strictEqual(this.onScroll.callCount, 0);
+        });
 
-    QUnit.test('Stop scrolling affer drag end', function(assert) {
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Stop scrolling affer drag end', function(assert) {
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
-        const pointer = pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top - 10);
-        this.clock.tick(20);
+            $sortable.find('.test-container').dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
+            const pointer = pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top - 10);
+            this.clock.tick(20);
 
-        this.onScroll.reset();
-        // act
-        pointer.up();
-        this.clock.tick(100);
+            this.onScroll.reset();
+            // act
+            pointer.up();
+            this.clock.tick(100);
 
-        assert.strictEqual(this.onScroll.callCount, 0);
-        assert.strictEqual($sortable.find('.test-container').dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
-    });
+            assert.strictEqual(this.onScroll.callCount, 0);
+            assert.strictEqual($sortable.find('.test-container').dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
+        });
 
-    QUnit.test('Stop scrolling affer drag to another group', function(assert) {
-        $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Stop scrolling affer drag to another group', function(assert) {
+            $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
-        // act
-        const pointer = pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top + 5);
-        this.clock.tick(20);
+            $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
+            // act
+            const pointer = pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top + 5);
+            this.clock.tick(20);
 
-        this.onScroll.reset();
+            this.onScroll.reset();
 
-        // act
-        const secondGroupOffset = $('#second-group').offset();
-        pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
-        this.clock.tick(100);
+            // act
+            const secondGroupOffset = $('#second-group').offset();
+            pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
+            this.clock.tick(100);
 
-        assert.strictEqual(this.onScroll.callCount, 0);
-        assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
-    });
+            assert.strictEqual(this.onScroll.callCount, 0);
+            assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
+        });
 
-    QUnit.test('Stop scrolling affer drag from emty space(no group) to another group', function(assert) {
-        $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
-        const $sortable = this.createSortable();
-        const $item = $sortable.find('.test-item').eq(3);
-        const offset = $sortable.find('.test-container').eq(0).offset();
+        QUnit.test('Stop scrolling affer drag from emty space(no group) to another group', function(assert) {
+            $('#sortable').append('<div id="second-group" class="test-container"><div class="test-item">1</div><div class="test-item">2</div></div>');
+            const $sortable = this.createSortable();
+            const $item = $sortable.find('.test-item').eq(3);
+            const offset = $sortable.find('.test-container').eq(0).offset();
 
-        $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
-        this.onScroll.reset();
-        // act
-        const pointer = pointerMock($item)
-            .start()
-            .down()
-            .move(offset.left, offset.top + 1)
-            .move(offset.left, offset.top - 10);
-        this.clock.tick(20);
+            $sortable.find('.test-container').eq(0).dxScrollable('scrollTo', 50);
+            this.onScroll.reset();
+            // act
+            const pointer = pointerMock($item)
+                .start()
+                .down()
+                .move(offset.left, offset.top + 1)
+                .move(offset.left, offset.top - 10);
+            this.clock.tick(20);
 
-        this.onScroll.reset();
+            this.onScroll.reset();
 
-        // act
-        const secondGroupOffset = $('#second-group').offset();
-        pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
-        this.clock.tick(100);
+            // act
+            const secondGroupOffset = $('#second-group').offset();
+            pointer.move(secondGroupOffset.left + 10, secondGroupOffset.top + 15);
+            this.clock.tick(100);
 
-        assert.strictEqual(this.onScroll.callCount, 0);
-        assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
-    });
-
-
+            assert.strictEqual(this.onScroll.callCount, 0);
+            assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
+        });
+    }
 });
 
