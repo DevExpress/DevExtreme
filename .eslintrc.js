@@ -357,7 +357,7 @@ module.exports = {
             'rules': {
                 '@typescript-eslint/no-non-null-assertion': 'error',
                 '@typescript-eslint/explicit-function-return-type': 'error',
-                'no-return-await': 'off',
+                'no-return-await': 'error',
                 '@typescript-eslint/no-extraneous-class': 'error',
                 '@typescript-eslint/no-unsafe-assignment': 'error',
                 '@typescript-eslint/restrict-template-expressions': 'error',
@@ -366,15 +366,15 @@ module.exports = {
                 '@typescript-eslint/strict-boolean-expressions': 'error',
                 '@typescript-eslint/unbound-method': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'error',
-                '@typescript-eslint/prefer-readonly-parameter-types': 'warn',
-                '@typescript-eslint/explicit-member-accessibility': 'warn',
+                '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+                '@typescript-eslint/explicit-member-accessibility': 'off',
 
                 '@typescript-eslint/member-delimiter-style': 'off',
                 '@typescript-eslint/indent': 'off',
-                '@typescript-eslint/quotes': 'off',
+                '@typescript-eslint/quotes': ['error', 'single'],
                 'spaced-comment': 'off',
                 'max-len': 'off',
-                '@typescript-eslint/method-signature-style': 'off',
+                '@typescript-eslint/method-signature-style': ['error', 'method'],
                 '@typescript-eslint/unified-signatures': 'off',
                 '@typescript-eslint/naming-convention': [
                     'error',
@@ -388,7 +388,7 @@ module.exports = {
                     }
                 ],
                 '@typescript-eslint/array-type': 'off',
-                'no-irregular-whitespace': 'off',
+                'no-irregular-whitespace': 'error',
                 'import/named': 'error',
                 '@typescript-eslint/no-type-alias': 'off',
                 '@typescript-eslint/member-ordering': 'off',

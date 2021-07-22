@@ -211,9 +211,9 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxPieChart
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxPieChart
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:String|Number
      * @type_function_param1_field6 points:Array<piePointObject>

@@ -130,7 +130,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
 
 export interface ComponentClass<TProperties> {
     new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
-    getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
+    getInstance(widgetRef: HTMLDivElement): DOMComponent<TProperties>;
 }
 
 interface DOMComponentInstance extends DOMComponent<Properties> { }

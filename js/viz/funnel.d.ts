@@ -440,9 +440,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
@@ -453,9 +453,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -467,9 +467,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
@@ -481,9 +481,9 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxFunnel
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxFunnel
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
      * @action
