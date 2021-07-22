@@ -25,7 +25,7 @@ QUnit.performanceTest('render without data', function(assert) {
     const measureFunction = createDataGridMeasureFunction({
     });
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 7 : 11);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 6 : 11);
 });
 
 QUnit.performanceTest('render with data', function(assert) {
@@ -42,7 +42,7 @@ QUnit.performanceTest('render with columnAutoWidth', function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 11 : 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 10 : 13);
 });
 
 QUnit.performanceTest('render with columnFixing', function(assert) {
@@ -54,7 +54,7 @@ QUnit.performanceTest('render with columnFixing', function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : 14);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 11 : 14);
 });
 
 QUnit.performanceTest('render with virtual scrolling', function(assert) {
@@ -99,7 +99,7 @@ QUnit.performanceTest('updateDimensions with columnFixing', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('updateDimensions');
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 7 : 3);
+    assert.measureStyleRecalculation(measureFunction, 3);
 });
 
 QUnit.performanceTest('updateDimensions with virtual scrolling', function(assert) {

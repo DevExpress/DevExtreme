@@ -179,43 +179,6 @@ QUnit.test('Group table cells should have correct height', function(assert) {
     assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, function(assert) {
-        this.instance.option({
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
-
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
-        const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-    });
-
-    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, function(assert) {
-        this.instance.option({
-            rtlEnabled: true,
-            width: 100,
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
-
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
-
-        const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-    });
-});
-
 QUnit.test('the "getCoordinatesByDate" method should return right coordinates for grouped timeline', function(assert) {
     const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
         'currentDate': new Date(2015, 9, 28),
@@ -316,10 +279,52 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
     }
 });
 
+
 QUnit.module('Timeline Day', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
+});
+
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 10, 15),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
+
+        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
+        const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+    });
+
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            rtlEnabled: true,
+            width: 100,
+            currentDate: new Date(2015, 10, 15),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
+
+        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
+
+        const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+    });
 });
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
@@ -518,6 +523,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 
         QUnit.module(moduleDescription, {
             beforeEach: function() {
+                this.clock = sinon.useFakeTimers();
                 this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
                     currentDate: new Date(2015, 9, 16),
                     focusStateEnabled: true,
@@ -530,6 +536,9 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                     renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                 }).dxSchedulerTimelineMonth('instance');
+            },
+            afterEach: function() {
+                this.clock.restore();
             }
         }, () => {
             QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
@@ -964,6 +973,7 @@ QUnit.module('Renovated Render', {
         QUnit.dump.maxDepth = 10;
     },
     beforeEach() {
+        this.clock = sinon.useFakeTimers();
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
                 renovateRender: true,
@@ -973,6 +983,9 @@ QUnit.module('Renovated Render', {
                 ...options,
             })[workSpace]('instance');
         };
+    },
+    afterEach() {
+        this.clock.restore();
     },
     after() {
         QUnit.dump.maxDepth = this.qUnitMaxDepth;

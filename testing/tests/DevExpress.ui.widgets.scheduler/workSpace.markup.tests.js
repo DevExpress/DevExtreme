@@ -96,7 +96,11 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
 }].forEach(({ viewName, view, baseColSpan }) => {
     const moduleConfig = {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
             this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     };
 
