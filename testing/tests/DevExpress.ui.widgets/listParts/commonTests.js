@@ -5,6 +5,7 @@ import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { removeDuplicates } from 'core/utils/array';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
@@ -3420,6 +3421,42 @@ QUnit.module('regressions', moduleSetup, () => {
         item.trigger('dxclick');
 
         assert.equal(count, 1);
+    });
+
+    QUnit.test('List should not call hightweight array operation for the sync dataSource (T1011717)', function(assert) {
+        const data1 = [];
+        const removeDuplicatesSpy = sinon.spy(removeDuplicates);
+
+        for(let i = 0; i < 50; i++) {
+            data1.push({
+                id: i,
+                text: 'Item ' + i
+            });
+        }
+
+        this.element.dxList({
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: 'id',
+                    data: data1
+                }),
+                paginate: true,
+                pageSize: 10
+            }),
+            height: 400,
+            showSelectionControls: true,
+            selectionMode: 'all',
+            selectAllMode: 'allPages'
+        }).dxList('instance');
+
+        const $selectAllCheckBox = this.element.find('.dx-list-select-all');
+        const $lastItem = this.element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
+
+        $selectAllCheckBox.trigger('dxpointerdown');
+        $lastItem.trigger('dxpointerdown');
+        $lastItem.trigger('dxpointerdown');
+
+        assert.equal(removeDuplicatesSpy.callCount, 2);
     });
 });
 
