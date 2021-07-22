@@ -5,6 +5,7 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
+  Event,
   ForwardRef,
   Provider,
   Effect,
@@ -104,6 +105,8 @@ export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() pageSize!: number;
+
+  @Event() pageSizeChange!: EventCallback<number>;
 
   @OneWay() isLargeDisplayMode = true;
 
