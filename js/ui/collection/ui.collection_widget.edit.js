@@ -727,7 +727,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             this._selection.setSelection([key]);
         } else {
             const selectedItemKeys = this.option('selectedItemKeys') || [];
-            this._selection.setSelection([...selectedItemKeys, key]);
+            this._selection.setSelection([...selectedItemKeys, key], [key]);
         }
     },
 

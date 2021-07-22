@@ -77,7 +77,6 @@ export default SelectionStrategy.inherit({
     },
 
     _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll) {
-        // console.log('_loadSelectedItemsCore ' + new Date().getTime());
         let deferred = new Deferred();
         const key = this.options.key();
 
@@ -112,7 +111,6 @@ export default SelectionStrategy.inherit({
             deferred = this._loadFilteredData(combinedFilter, localFilter, null, isSelectAll);
         }
 
-        // console.log('_loadSelectedItemsCore end (should be sync for array store) ' + new Date().getTime());
         return deferred;
     },
 
@@ -153,18 +151,24 @@ export default SelectionStrategy.inherit({
         return this._lastLoadDeferred?.state() === 'pending';
     },
 
-    _concatRequestsItems: function(keys, isDeselect, oldRequestItems) {
+    _concatRequestsItems: function(keys, isDeselect, oldRequestItems, updatedKeys) {
+        let selectedItems;
         const deselectedItems = isDeselect ? keys : [];
 
+        if(updatedKeys) {
+            selectedItems = updatedKeys;
+        } else {
+            selectedItems = removeDuplicates(keys, this.options.selectedItemKeys);
+        }
+
         return {
-            addedItems: oldRequestItems.added.concat(removeDuplicates(keys, this.options.selectedItemKeys)),
+            addedItems: oldRequestItems.added.concat(selectedItems),
             removedItems: oldRequestItems.removed.concat(deselectedItems),
             keys: keys
         };
     },
 
-    _collectLastRequestData: function(keys, isDeselect, isSelectAll) {
-        // console.log('_collectLastRequestData ' + new Date().getTime());
+    _collectLastRequestData: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const isDeselectAll = isDeselect && isSelectAll;
         const oldRequestItems = {
             added: [],
@@ -188,10 +192,11 @@ export default SelectionStrategy.inherit({
                 } else {
                     lastRequestData = {};
                 }
+
+                lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
+            } else {
+                lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, updatedKeys);
             }
-            // console.log('_concatRequestsItems start ' + new Date().getTime());
-            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
-            // console.log('_concatRequestsItems end ' + new Date().getTime());
         }
 
         return lastRequestData;
@@ -201,17 +206,20 @@ export default SelectionStrategy.inherit({
         let currentKeys = keys;
         if(this._isMultiSelectEnabled() && !isDeselect && !isSelectAll) {
             currentKeys = removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
-            currentKeys = uniqueValues(currentKeys);
+
+            if(this._requestInProgress()) {
+                currentKeys = uniqueValues(currentKeys);
+            }
         }
 
         return currentKeys;
     },
 
-    _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
+    _loadSelectedItems: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = new Deferred();
 
-        this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll);
+        this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys);
 
         when(that._lastLoadDeferred).always(function() {
             const currentKeys = that._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
@@ -223,13 +231,12 @@ export default SelectionStrategy.inherit({
 
         that._lastLoadDeferred = deferred;
 
-        // console.log('_loadSelectedItems return deferred ' + new Date().getTime());
         return deferred;
     },
 
-    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
+    selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
-        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll);
+        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys);
 
         deferred.done(function(items) {
             if(preserve) {
@@ -384,7 +391,7 @@ export default SelectionStrategy.inherit({
     _isItemSelectionInProgress: function(key, checkPending) {
         const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
         if(shouldCheckPending) {
-            return this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
+            return this._lastRequestData.addedItems?.indexOf(key) !== -1;
         } else {
             return false;
         }
