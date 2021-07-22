@@ -306,12 +306,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
         const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
-        const fullDuration = this.instance.fire('getAppointmentDurationInMs', {
-            startDate,
-            endDate: normalizedEndDate,
-            allDay,
-        });
-        const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, normalizedEndDate) / toMs('minute');
+        const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
+        const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');
 
         const height = durationInMinutes * this._getMinuteHeight();
 

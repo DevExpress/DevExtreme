@@ -4,6 +4,7 @@ import { extend } from '../../../../core/utils/extend';
 import dateUtils from '../../../../core/utils/date';
 import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
+import { getModelProvider } from '../../instanceFactory';
 
 import timeZoneUtils from '../../utils.timeZone';
 
@@ -23,14 +24,18 @@ class BaseRenderingStrategy {
     }
 
     get key() { return this.options.key; }
+    get modelProvider() { return getModelProvider(this.key); }
     get instance() { return this.options.instance; } // TODO get rid of this
+    get isAdaptive() { return this.modelProvider.adaptivityEnabled; }
+    get rtlEnabled() { return this.modelProvider.rtlEnabled; }
+    get startDayHour() { return this.modelProvider.startDayHour; }
+    get endDayHour() { return this.modelProvider.endDayHour; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
     get resizableStep() { return this.options.getResizableStep(); }
-    get isAdaptive() { return this.options.isAdaptive; }
-    get rtlEnabled() { return this.options.rtlEnabled; }
     get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
+    get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
 
@@ -693,6 +698,53 @@ class BaseRenderingStrategy {
     _needHorizontalGroupBounds() {
         return false;
     }
+
+    getAppointmentDurationInMs(startDate, endDate, allDay) {
+        const appointmentDuration = endDate.getTime() - startDate.getTime();
+        const dayDuration = toMs('day');
+        const visibleDayDuration = this.visibleDayDuration;
+        let result = 0;
+
+        if(allDay) {
+            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
+
+            result = ceilQuantityOfDays * visibleDayDuration;
+        } else {
+            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
+            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
+            let tailDuration;
+
+            if(isDifferentDates) {
+                const startDateEndHour = new Date(new Date(startDate).setHours(this.endDayHour, 0, 0));
+                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
+
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
+
+                const startDayTime = this.startDayHour * toMs('hour');
+                const endPartDuration = endDate - dateUtils.trimTime(endDate);
+
+                if(endPartDuration < startDayTime) {
+                    if(floorQuantityOfDays) {
+                        tailDuration -= hiddenDayDuration;
+                    }
+
+                    tailDuration += startDayTime - endPartDuration;
+                }
+            } else {
+                tailDuration = appointmentDuration % dayDuration;
+            }
+
+            if(tailDuration > visibleDayDuration) {
+                tailDuration = visibleDayDuration;
+            }
+
+            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
+        }
+
+        return result;
+    }
+
+
 }
 
 export default BaseRenderingStrategy;

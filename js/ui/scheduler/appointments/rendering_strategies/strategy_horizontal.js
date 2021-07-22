@@ -19,16 +19,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
 
-        let appointmentDuration = this.instance.fire('getAppointmentDurationInMs', {
-            startDate,
-            endDate: normalizedEndDate,
-            allDay,
-        });
+        let duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
-        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, normalizedEndDate);
+        duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
         const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
-        const durationInCells = appointmentDuration / cellDuration;
+        const durationInCells = duration / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
