@@ -452,10 +452,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect() scrollEffect(): EffectReturn {
-    return subscribeToScrollEvent(this.containerElement,
-      () => {
-        this.handleScroll();
-      });
+    return subscribeToScrollEvent(this.containerElement, () => { this.handleScroll(); });
   }
 
   @Effect()
@@ -487,9 +484,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollStart.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleStart(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleStart(event); }, { namespace });
 
     return (): void => dxScrollStart.off(this.wrapperRef.current, { namespace });
   }
@@ -511,9 +506,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollEnd.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleEnd(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleEnd(event); }, { namespace });
 
     return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
   }
@@ -522,10 +515,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   stopEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollStop.on(this.wrapperRef.current,
-      () => {
-        this.handleStop();
-      }, { namespace });
+    dxScrollStop.on(this.wrapperRef.current, () => { this.handleStop(); }, { namespace });
 
     return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
   }
@@ -565,9 +555,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollCancel.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleCancel(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleCancel(event); }, { namespace });
 
     return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
