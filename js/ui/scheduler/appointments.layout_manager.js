@@ -37,7 +37,17 @@ class AppointmentLayoutManager {
 
     initRenderingStrategy(renderingStrategy) {
         const Strategy = RENDERING_STRATEGIES[renderingStrategy];
-        this._renderingStrategyInstance = new Strategy(this.instance);
+        this._renderingStrategyInstance = new Strategy({
+            key: this.instance.key,
+            instance: this.instance,
+            isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
+            getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
+            getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
+            getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
+            getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0,
+            getVisibleDayDuration: () => this.instance._workSpace ? this.instance._workSpace.getVisibleDayDuration() : 0,
+        });
         this.renderingStrategy = renderingStrategy;
     }
 
@@ -59,8 +69,10 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const virtualCellCount = virtualScrollingDispatcher.leftVirtualCellsCount;
-        const virtualRowCount = virtualScrollingDispatcher.topVirtualRowsCount;
+        const {
+            cellCountInsideLeftVirtualCell,
+            cellCountInsideTopVirtualRow
+        } = virtualScrollingDispatcher;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -70,15 +82,15 @@ class AppointmentLayoutManager {
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
+                settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });
 
             return {
                 itemData: data,
                 settings: appointmentSettings,
                 needRepaint: true,
-                needRemove: false,
-                virtualCellCount,
-                virtualRowCount
+                needRemove: false
             };
         });
     }
@@ -100,17 +112,23 @@ class AppointmentLayoutManager {
         }
 
         const createSettingsToCompare = (settings, index) => {
-            const virtualCellCount = settings.virtualCellCount || 0;
-            const virtualRowCount = settings.virtualRowCount || 0;
-            const columnIndex = settings[index].columnIndex + virtualCellCount;
-            const rowIndex = settings[index].rowIndex + virtualRowCount;
+            const currentSetting = settings[index];
+            const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
+            const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
+            const columnIndex = currentSetting.columnIndex + leftVirtualCellCount;
+            const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
+            const hMax = currentSetting.reduced ? currentSetting.hMax : undefined;
+            const vMax = currentSetting.reduced ? currentSetting.vMax : undefined;
 
             return {
-                ...settings[index],
+                ...currentSetting,
                 columnIndex,
-                rowIndex: rowIndex,
-                virtualCellCount: -1,
-                virtualRowCount: -1
+                rowIndex,
+                topVirtualCellCount: undefined,
+                leftVirtualCellCount: undefined,
+                hMax,
+                vMax,
+                info: {},
             };
         };
 

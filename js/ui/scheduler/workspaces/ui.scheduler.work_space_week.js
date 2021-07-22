@@ -11,14 +11,6 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
         return WEEK_CLASS;
     }
 
-    _getRowCount() {
-        return this._getCellCountInDay();
-    }
-
-    _getCellCount() {
-        return 7 * this.option('intervalCount');
-    }
-
     _calculateViewStartDate() {
         return calculateViewStartDate(this.option('startDate'), this._firstDayOfWeek());
     }

@@ -471,8 +471,8 @@ class Scheduler extends Widget {
         const workspace = this.getWorkSpace();
 
         return new AppointmentSettingsGenerator({
-            rawAppointment,
             key: this.key,
+            rawAppointment,
             timeZoneCalculator: getTimeZoneCalculator(this.key),
             resourceManager: getResourceManager(this.key),
             appointmentTakesAllDay: this.appointmentTakesAllDay(rawAppointment),
@@ -480,15 +480,17 @@ class Scheduler extends Widget {
             firstDayOfWeek: this.getFirstDayOfWeek(),
             viewStartDayHour: this._getCurrentViewOption('startDayHour'),
             viewEndDayHour: this._getCurrentViewOption('endDayHour'),
-            layoutManager: this.getLayoutManager(),
             isVirtualScrolling: this.isVirtualScrolling(),
+            viewType: workspace.type,
+            endViewDate: workspace.getEndViewDate(),
             positionHelper: workspace.positionHelper,
-            groupedStrategy: workspace._groupedStrategy,
+            isGroupedByDate: workspace.isGroupedByDate(),
             cellDuration: workspace.getCellDuration(),
             viewDataProvider: workspace.viewDataProvider,
             supportAllDayRow: workspace.supportAllDayRow(),
             dateRange: workspace.getDateRange(),
             intervalDuration: workspace.getIntervalDuration(),
+            isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
             isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
             getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
@@ -515,6 +517,11 @@ class Scheduler extends Widget {
         this._postponeDataSourceLoading(whenLoaded);
 
         return resolveCallbacks.promise();
+    }
+
+    reinitRenderingStrategy() {
+        const strategy = this._getAppointmentsRenderingStrategy();
+        this.getLayoutManager().initRenderingStrategy(strategy);
     }
 
     _optionChanged(args) {
@@ -573,7 +580,7 @@ class Scheduler extends Widget {
 
                 this._validateDayHours();
 
-                this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
+                this.reinitRenderingStrategy();
 
                 this._validateCellDuration();
 
@@ -925,7 +932,7 @@ class Scheduler extends Widget {
             this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             this._workSpace._dimensionChanged();
 
-            const appointments = this._layoutManager.createAppointmentsMap(filteredItems);
+            const appointments = this.getLayoutManager().createAppointmentsMap(filteredItems);
 
             this._appointments.option('items', appointments);
         }
@@ -1122,9 +1129,10 @@ class Scheduler extends Widget {
 
     _getAppointmentsToRepaint() {
         const { filteredItems } = getAppointmentDataProvider(this.key);
+        const layoutManager = this.getLayoutManager();
 
-        const appointments = this._layoutManager.createAppointmentsMap(filteredItems);
-        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
+        const appointments = layoutManager.createAppointmentsMap(filteredItems);
+        return layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option('items'));
     }
 
     _initExpressions(fields) {
@@ -1458,6 +1466,7 @@ class Scheduler extends Widget {
             rtlEnabled: this.option('rtlEnabled'),
             currentView: this.option('currentView'),
             groups: this._getCurrentViewOption('groups'),
+            getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
                 const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
                 this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
@@ -1853,6 +1862,7 @@ class Scheduler extends Widget {
                 onHidden: (e) => {
                     e.component.$element().remove();
                 },
+                copyRootClassesToWrapper: true
             },
         });
 
@@ -2087,7 +2097,7 @@ class Scheduler extends Widget {
     }
 
     getRenderingStrategyInstance() {
-        return this._layoutManager.getRenderingStrategyInstance();
+        return this.getLayoutManager().getRenderingStrategyInstance();
     }
 
     getActions() {

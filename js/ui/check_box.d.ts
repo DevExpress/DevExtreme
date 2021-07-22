@@ -50,6 +50,18 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    iconHeight?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+     iconWidth?: number | string;
+    /**
+     * @docid
      * @hidden false
      * @public
      */

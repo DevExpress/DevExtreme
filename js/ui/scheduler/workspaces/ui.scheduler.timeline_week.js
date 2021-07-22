@@ -12,10 +12,6 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
         return TIMELINE_CLASS;
     }
 
-    _getCellCount() {
-        return super._getCellCount() * this._getWeekDuration();
-    }
-
     _getHeaderPanelCellWidth($headerRow) {
         return getBoundingRect($headerRow.children().first().get(0)).width;
     }

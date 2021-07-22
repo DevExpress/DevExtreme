@@ -169,7 +169,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
   }
 }
