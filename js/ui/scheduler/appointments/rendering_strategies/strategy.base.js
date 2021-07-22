@@ -505,14 +505,6 @@ class BaseRenderingStrategy {
         return duration + diff * toMs('minute');
     }
 
-    _getAppointmentDurationInMs(startDate, endDate, allDay) {
-        return this.instance.fire('getAppointmentDurationInMs', {
-            startDate: startDate,
-            endDate: endDate,
-            allDay: allDay,
-        });
-    }
-
     _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
