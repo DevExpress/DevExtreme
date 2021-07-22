@@ -33,6 +33,7 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const NavBar = require('ui/nav_bar');
+const Overlay = require('ui/overlay/ui.overlay');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
@@ -560,6 +561,40 @@ testComponentDefaults(Popup,
             show: { type: 'fade', duration: 400, from: 0, to: 1 },
             hide: { type: 'fade', duration: 400, from: 1, to: 0 }
         }
+    }
+);
+
+testComponentDefaults(Overlay,
+    {},
+    {
+        _observeContentResize: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'ios',
+            version: '13.3'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
+    }
+);
+
+testComponentDefaults(Overlay,
+    {},
+    {
+        _observeContentResize: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'android',
+            version: '4.4.4'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
     }
 );
 

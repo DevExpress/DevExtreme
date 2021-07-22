@@ -452,10 +452,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect() scrollEffect(): EffectReturn {
-    return subscribeToScrollEvent(this.containerElement,
-      () => {
-        this.handleScroll();
-      });
+    return subscribeToScrollEvent(this.containerElement, () => { this.handleScroll(); });
   }
 
   @Effect()
@@ -487,9 +484,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollStart.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleStart(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleStart(event); }, { namespace });
 
     return (): void => dxScrollStart.off(this.wrapperRef.current, { namespace });
   }
@@ -511,9 +506,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollEnd.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleEnd(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleEnd(event); }, { namespace });
 
     return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
   }
@@ -522,10 +515,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   stopEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollStop.on(this.wrapperRef.current,
-      () => {
-        this.handleStop();
-      }, { namespace });
+    dxScrollStop.on(this.wrapperRef.current, () => { this.handleStop(); }, { namespace });
 
     return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
   }
@@ -565,9 +555,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollCancel.on(this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleCancel(event);
-      }, { namespace });
+      (event: DxMouseEvent) => { this.handleCancel(event); }, { namespace });
 
     return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
@@ -600,8 +588,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     let { top = 0, left = 0 } = location;
 
     // destructuring assignment with default values not working
-    // TODO: add link to card from trello board of generator's
-    // team and delete next two conditions after fix
+    // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
     /* istanbul ignore next */
     if (!isDefined(top)) {
       top = 0;
@@ -620,25 +607,32 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.prepareDirections(true);
     this.onStart();
 
-    const { isVertical, isHorizontal } = this.direction;
     this.eventHandler(
       (scrollbar): void => scrollbar.scrollByHandler({
-        x: isHorizontal ? this.computeNewLeft(left) : left,
-        y: isVertical ? this.computeNewTop(top) : top,
+        x: this.calcScrollByDeltaX(left),
+        y: this.calcScrollByDeltaY(top),
       }) as undefined,
     );
   }
 
-  computeNewTop(top: number): number {
-    const scrollbar = this.vScrollbarRef.current!;
+  calcScrollByDeltaY(top: number): number {
+    if (this.direction.isVertical) {
+      const scrollbar = this.vScrollbarRef.current!;
 
-    return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
+      return scrollbar.getLocationWithinRange(top + this.vScrollLocation) - this.vScrollLocation;
+    }
+
+    return top;
   }
 
-  computeNewLeft(left: number): number {
-    const scrollbar = this.hScrollbarRef.current!;
+  calcScrollByDeltaX(left: number): number {
+    if (this.direction.isHorizontal) {
+      const scrollbar = this.hScrollbarRef.current!;
 
-    return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
+      return scrollbar.getLocationWithinRange(left + this.hScrollLocation) - this.hScrollLocation;
+    }
+
+    return left;
   }
 
   updateHandler(): void {

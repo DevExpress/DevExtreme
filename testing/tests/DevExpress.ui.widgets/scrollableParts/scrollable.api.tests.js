@@ -369,7 +369,7 @@ QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', funct
 QUnit.test('showScrollbar: never -> onScroll, useNative: true, useSimulatedScrollbar: true, should add dx-scrollable-scrollbars-hidden class', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
-        showScrollbar: isRenovation ? 'never' : false,
+        showScrollbar: 'never',
         useSimulatedScrollbar: true,
     });
 
