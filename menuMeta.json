@@ -980,7 +980,6 @@
           {
             "Title": "Simple Array",
             "Name": "SimpleArray",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Local_Array/",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Scripts/data/sales.js"
@@ -990,7 +989,6 @@
           {
             "Title": "OLAP Data Source",
             "Name": "OLAPDataSource",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/OLAP_Cube/",
             "Widget": "PivotGrid",
             "DemoType": "Web"
           },
