@@ -70,16 +70,20 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerWidth;
     }
 
+    get cellCountInsideTopVirtualRow() { return this.verticalScrollingState?.virtualItemCountBefore || 0; }
+    get cellCountInsideLeftVirtualCell() { return this.horizontalScrollingState?.virtualItemCountBefore || 0; }
+    get cellCountInsideRightVirtualCell() { return this.horizontalScrollingState?.virtualItemCountAfter || 0; }
+
     get topVirtualRowsCount() {
-        return this.verticalScrollingState?.virtualItemCountBefore > 0
+        return this.cellCountInsideTopVirtualRow > 0
             ? 1
             : 0;
     }
 
     get leftVirtualCellsCount() {
         const virtualItemsCount = !this.isRTL
-            ? this.horizontalScrollingState?.virtualItemCountBefore
-            : this.horizontalScrollingState?.virtualItemCountAfter;
+            ? this.cellCountInsideLeftVirtualCell
+            : this.cellCountInsideRightVirtualCell;
 
         return virtualItemsCount > 0
             ? 1
