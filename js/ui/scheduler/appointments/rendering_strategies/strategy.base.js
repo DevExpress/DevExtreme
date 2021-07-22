@@ -30,6 +30,7 @@ class BaseRenderingStrategy {
     get rtlEnabled() { return this.modelProvider.rtlEnabled; }
     get startDayHour() { return this.modelProvider.startDayHour; }
     get endDayHour() { return this.modelProvider.endDayHour; }
+    get maxAppointmentsPerCell() { return this.modelProvider.maxAppointmentsPerCell; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
@@ -589,7 +590,7 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.maxAppointmentsPerCell;
         const offsets = this._getOffsets();
         const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
@@ -634,7 +635,7 @@ class BaseRenderingStrategy {
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+            const overlappingMode = this.maxAppointmentsPerCell;
             let appointmentCountPerCell;
 
             if(isNumeric(overlappingMode)) {

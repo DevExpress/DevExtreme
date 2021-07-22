@@ -367,10 +367,6 @@ const subscribes = {
         return this.getEndViewDate();
     },
 
-    getMaxAppointmentsPerCell: function() {
-        return this.getMaxAppointmentsPerCell();
-    },
-
     forceMaxAppointmentPerCell: function() {
         return this.forceMaxAppointmentPerCell();
     },
