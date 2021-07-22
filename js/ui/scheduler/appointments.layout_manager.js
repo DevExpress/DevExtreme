@@ -59,11 +59,8 @@ class AppointmentLayoutManager {
 
     _createAppointmentsMapCore(list, positionMap) {
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const {
-            cellCountInsideLeftVirtualCell,
-            cellCountInsideTopVirtualRow
-        } = virtualScrollingDispatcher;
-
+        const cellCountInsideTopVirtualRow = virtualScrollingDispatcher?.cellCountInsideTopVirtualRow || 0;
+        const cellCountInsideLeftVirtualCell = virtualScrollingDispatcher?.cellCountInsideLeftVirtualCell || 0;
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
