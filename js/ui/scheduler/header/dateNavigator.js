@@ -118,9 +118,11 @@ const getNextButtonOptions = (header) => {
 };
 
 const isPreviousButtonDisabled = (header) => {
-    let min = new Date(header.option('min'));
+    let min = header.option('min');
 
     if(!min) return false;
+
+    min = new Date(min);
 
     const date = header.date;
     const caption = header._getCaption(date);
@@ -132,9 +134,11 @@ const isPreviousButtonDisabled = (header) => {
 };
 
 const isNextButtonDisabled = (header) => {
-    let max = new Date(header.option('max'));
+    let max = header.option('max');
 
     if(!max) return false;
+
+    max = new Date(max);
 
     const date = header.date;
     const caption = header._getCaption(date);
