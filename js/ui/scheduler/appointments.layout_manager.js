@@ -101,14 +101,14 @@ class AppointmentLayoutManager {
             const currentSetting = settings[index];
             const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
             const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
-            const columnIndex = currentSetting.columnIndex + leftVirtualCellCount;
+            const cellIndex = currentSetting.cellIndex + leftVirtualCellCount;
             const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
             const hMax = currentSetting.reduced ? currentSetting.hMax : -1;
             const vMax = currentSetting.reduced ? currentSetting.vMax : -1;
 
             return {
                 ...currentSetting,
-                columnIndex,
+                cellIndex,
                 rowIndex,
                 topVirtualCellCount: -1,
                 leftVirtualCellCount: -1,
