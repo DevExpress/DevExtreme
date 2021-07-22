@@ -327,9 +327,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
      * @notUsedInTheme
@@ -341,9 +341,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -354,9 +354,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -367,9 +367,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -380,9 +380,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action
@@ -393,9 +393,9 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeMap
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
+     * @type_function_param1_field1 component:dxTreeMap
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
      * @action

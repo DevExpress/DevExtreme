@@ -1,8 +1,8 @@
 interface EventsEngineType {
-    on: (element: any, eventName: any, handler: any, options?: any) => void;
-    off: (element: any, eventName: any, handler: any) => void;
-    set: (eventEngine: any) => void;
-    triggerHandler: (element: any, opts: Record<string, unknown>) => void;
+    on(element: any, eventName: any, handler: any, options?: any): void;
+    off(element: any, eventName: any, handler: any): void;
+    set(eventEngine: any): void;
+    triggerHandler(element: any, opts: Record<string, unknown>): void;
 }
 
 declare const eventsEngine: EventsEngineType;

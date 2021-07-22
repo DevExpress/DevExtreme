@@ -1,4 +1,4 @@
-import type { DxElement } from "../element";
+import type { DxElement } from '../element';
 
 export class FunctionTemplate {
   render(template: {

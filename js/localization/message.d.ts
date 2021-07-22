@@ -1,6 +1,6 @@
 interface messageLocalizationType {
-    getFormatter: (name: string) => () => string
-    format: (name: string) => string
+    getFormatter(name: string): () => string
+    format(name: string): string
 }
 declare const messageLocalization: messageLocalizationType;
 export default messageLocalization;
