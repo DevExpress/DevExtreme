@@ -347,15 +347,20 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderTemplate: function($container, item) {
-        switch(item.itemType) {
-            case 'empty':
-                this._renderEmptyItem($container);
-                break;
-            case 'button':
-                this._renderButtonItem(item, $container);
-                break;
-            default:
-                this._renderFieldItem(item, $container);
+        if(item.itemType === 'empty') {
+            this._renderEmptyItem($container);
+        } else if(item.itemType === 'button') {
+            const $button = this._renderButtonItem($container, item);
+
+            this._itemsRunTimeInfo.add({
+                item,
+                widgetInstance: $button.dxButton('instance'),
+                guid: item.guid,
+                $itemContainer: $container
+            });
+
+        } else {
+            this._renderFieldItem(item, $container);
         }
     },
 
@@ -556,47 +561,42 @@ const LayoutManager = Widget.inherit({
             .html('&nbsp;');
     },
 
-    _getButtonHorizontalAlignment: function(item) {
-        if(isDefined(item.horizontalAlignment)) {
-            return item.horizontalAlignment;
+    _renderButtonItem: function($container, item) {
+        function _convertAlignmentToJustifyContent(verticalAlignment) {
+            switch(verticalAlignment) {
+                case 'center':
+                    return 'center';
+                case 'bottom':
+                    return 'flex-end';
+                default:
+                    return 'flex-start';
+            }
         }
 
-        return 'right';
-    },
-
-    _getButtonVerticalAlignment: function(item) {
-        switch(item.verticalAlignment) {
-            case 'center':
-                return 'center';
-            case 'bottom':
-                return 'flex-end';
-            default:
-                return 'flex-start';
+        function _convertAlignmentToTextAlign(horizontalAlignment) {
+            return isDefined(horizontalAlignment) ? horizontalAlignment : 'right';
         }
-    },
 
-    _renderButtonItem: function(item, $container) {
+        const justifyContent = _convertAlignmentToJustifyContent(item.verticalAlignment);
+        const textAlign = _convertAlignmentToTextAlign(item.horizontalAlignment);
+
+        // TODO: the current element should be adjusted instead of $container.parent()
+        $container.parent().css('justifyContent', justifyContent);
+
+        $container
+            .addClass(FIELD_BUTTON_ITEM_CLASS)
+            .css('textAlign', textAlign)
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(this.option('cssItemClass'))
+            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
+
         const $button = renderButton(
             extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
             ($target, componentName, componentOptions) => this._createComponent($target, componentName, componentOptions)
         );
+        $container.append($button);
 
-        $container
-            .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css('textAlign', this._getButtonHorizontalAlignment(item))
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(this.option('cssItemClass'))
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '')
-            .append($button);
-
-        $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
-
-        this._itemsRunTimeInfo.add({
-            item,
-            widgetInstance: $button.dxButton('instance'),
-            guid: item.guid,
-            $itemContainer: $container
-        });
+        return $button;
     },
 
     _addItemClasses: function($item, column) {
