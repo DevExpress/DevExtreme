@@ -42,11 +42,10 @@ export class ModelProvider {
         this.currentView = null;
 
         each(views, (_, view) => {
-            const viewName = isObject(view)
-                ? (view.name || view.type)
-                : view;
-
-            if(currentView === viewName) {
+            const names = isObject(view)
+                ? [view.name, view.type]
+                : [view];
+            if(names.includes(currentView)) {
                 this.currentView = view;
                 return false;
             }
