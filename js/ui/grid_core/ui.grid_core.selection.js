@@ -621,9 +621,7 @@ export const selectionModule = {
 
                         $editor.dxCheckBox('instance').option({
                             visible: isVisible,
-                            value: selectAllValue,
-                            iconHeight: 16,
-                            iconWidth: 16
+                            value: selectAllValue
                         });
                     }
                 },
