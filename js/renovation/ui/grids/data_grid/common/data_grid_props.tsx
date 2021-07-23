@@ -805,10 +805,10 @@ export class DataGridRowDragging {
   autoScroll?: boolean;
 
   @OneWay()
-  boundary?: string | UserDefinedElement;
+  boundary?: string | HTMLElement;
 
   @OneWay()
-  container?: string | UserDefinedElement;
+  container?: string | HTMLElement;
 
   @OneWay()
   cursorOffset?: string | { x?: number; y?: number };
@@ -1395,7 +1395,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     savingTimeout: 2000,
   };
 
-  @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
+  @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any) | null = null;
 
   @OneWay() customizeColumns?: (columns: Column[]) => any;
 
