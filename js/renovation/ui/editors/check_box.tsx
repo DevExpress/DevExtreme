@@ -159,10 +159,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   updateIconFontSize(): EffectReturn {
     const iconElement = this.iconRef?.current;
     const { iconWidth, iconHeight } = this.props;
-    const width = typeof iconWidth === 'number' ? iconWidth : iconElement?.offsetWidth;
-    const height = typeof iconHeight === 'number' ? iconHeight : iconElement?.offsetHeight;
 
-    if (iconElement !== null && iconElement !== undefined && width && height) {
+    if (iconElement) {
       const isCompactTheme = current()?.includes('compact');
       const defaultFontSize = isCompactTheme ? 12 : 16;
       const isMaterialTheme = isMaterial(current());
@@ -170,9 +168,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       if (isCompactTheme) {
         defaultIconSize = 16;
       }
-
-      const iconSize = Math.min(width, height);
       const iconFontSizeRatio = defaultFontSize / defaultIconSize;
+
+      const width = typeof iconWidth === 'number'
+        ? iconWidth
+        : parseInt(window.getComputedStyle(iconElement).width, 10);
+      const height = typeof iconHeight === 'number'
+        ? iconHeight
+        : parseInt(window.getComputedStyle(iconElement).height, 10);
+      const iconSize = Math.min(width, height);
       const calculatedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
 
       iconElement.style.fontSize = calculatedFontSize;
