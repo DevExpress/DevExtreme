@@ -1,4 +1,4 @@
-import type {
+import {
     DxElement,
 } from '../core/element';
 

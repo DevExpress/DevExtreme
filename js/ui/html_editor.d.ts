@@ -1,33 +1,31 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Editor from './editor/editor';
-import type {
+import Editor, {
     ValueChangedInfo,
     EditorOptions,
 } from './editor/editor';
 
-import type {
+import {
     dxToolbarItem,
 } from './toolbar';
 

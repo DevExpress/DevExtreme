@@ -1,9 +1,8 @@
-import type { DxPromise } from '../../core/utils/deferred';
-import Store from '../abstract_store';
-import type { StoreOptions } from '../abstract_store';
-import type { LoadOptions } from '../index';
-import type { Query } from '../query';
-import type { ODataRequestOptions } from './context';
+import { DxPromise } from '../../core/utils/deferred';
+import Store, { StoreOptions } from '../abstract_store';
+import { LoadOptions } from '../index';
+import { Query } from '../query';
+import { ODataRequestOptions } from './context';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(

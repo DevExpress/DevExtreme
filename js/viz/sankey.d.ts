@@ -1,33 +1,31 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import BaseWidget from './core/base_widget';
-import type {
+import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
@@ -36,7 +34,7 @@ import type {
     IncidentInfo,
 } from './core/base_widget';
 
-import type { HatchingDirectionType } from './common';
+import { HatchingDirectionType } from './common';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSankey>;

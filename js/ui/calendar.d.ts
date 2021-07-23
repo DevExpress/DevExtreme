@@ -1,19 +1,18 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
 } from '../events/index';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import Editor from './editor/editor';
-import type {
+import Editor, {
     ValueChangedInfo,
     EditorOptions,
 } from './editor/editor';

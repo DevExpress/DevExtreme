@@ -1,12 +1,12 @@
-import type {
+import {
     AnimationConfig,
 } from '../animation/fx';
 
-import type {
+import {
     PositionConfig,
 } from '../animation/position';
 
-import type {
+import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -14,8 +14,7 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import * as dxOverlay from './overlay';
-import type {
+import dxOverlay, {
     dxOverlayAnimation,
     dxOverlayOptions,
 } from './overlay';

@@ -1,16 +1,15 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import dxTrackBar from './track_bar';
-import type {
+import dxTrackBar, {
     dxTrackBarOptions,
 } from './track_bar';
 

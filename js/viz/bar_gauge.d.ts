@@ -1,34 +1,33 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     Format,
 } from '../localization';
 
-import type {
+import {
     BaseLegend,
     BaseLegendItem,
 } from './common';
 
-import BaseWidget from './core/base_widget';
-import type {
+import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,

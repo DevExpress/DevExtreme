@@ -1,15 +1,14 @@
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import type {
+import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxScrollable from './scroll_view/ui.scrollable';
-import type {
+import dxScrollable, {
     dxScrollableOptions,
     ScrollEventInfo,
 } from './scroll_view/ui.scrollable';

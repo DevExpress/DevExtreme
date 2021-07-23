@@ -1,34 +1,33 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import type {
+import {
     PaletteType,
     PaletteExtensionModeType,
 } from '../palette';
 
-import type {
+import {
     template,
 } from '../../core/templates/template';
 
-import DataSource from '../../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
 } from '../../events/index';
 
-import type {
+import {
     Format,
   } from '../../localization';
 
-import type {
+import {
     basePointObject,
     baseSeriesObject,
     chartSeriesObject,
@@ -37,13 +36,12 @@ import type {
     dxChartSeriesTypesCommonSeriesPoint,
 } from '../chart';
 
-import type {
+import {
     BaseLegend,
     BaseLegendItem,
 } from '../common';
 
-import BaseWidget from '../core/base_widget';
-import type {
+import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
     BaseWidgetAnnotationConfig,

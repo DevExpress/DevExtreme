@@ -1,8 +1,7 @@
-import Store from './abstract_store';
-import type {
+import Store, {
     StoreOptions,
 } from './abstract_store';
-import type { Query } from './query';
+import { Query } from './query';
 
 /** @namespace DevExpress.data */
 export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {

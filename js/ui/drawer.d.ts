@@ -1,25 +1,24 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     DxEvent,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 

@@ -1,10 +1,9 @@
-import type { Format } from '../../localization';
-import DOMComponent from '../../core/dom_component';
-import type {
+import { Format } from '../../localization';
+import DOMComponent, {
     DOMComponentOptions,
 } from '../../core/dom_component';
 
-import type {
+import {
     EventInfo,
 } from '../../events/index';
 

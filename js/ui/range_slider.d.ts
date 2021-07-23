@@ -1,15 +1,15 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import type {
+import {
     dxSliderBaseOptions,
 } from './slider';
 

@@ -1,6 +1,6 @@
-import type { DxElement } from '../core/element';
-import type { DxPromise } from '../core/utils/deferred';
-import type { PositionConfig } from './position';
+import { DxElement } from '../core/element';
+import { DxPromise } from '../core/utils/deferred';
+import { PositionConfig } from './position';
 
 /**
  * @docid

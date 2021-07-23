@@ -1,9 +1,9 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -12,35 +12,33 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     dxTreeListColumn,
 } from './tree_list';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-import type {
+import {
     dxToolbarItem,
 } from './toolbar';
 
-import type {
+import {
     dxContextMenuItem,
 } from './context_menu';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 

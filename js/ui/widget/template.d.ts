@@ -1,4 +1,4 @@
-import type {
+import {
     template,
 } from '../../core/templates/template';
 

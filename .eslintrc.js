@@ -348,7 +348,7 @@ module.exports = {
         {
             'files': [
                 'js/**/*.d.ts',
-                'js/**/*.d.tsx'
+                'js/**/*.tsx'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [
@@ -359,6 +359,7 @@ module.exports = {
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 'no-return-await': 'error',
                 '@typescript-eslint/no-extraneous-class': 'error',
+                /* '@typescript-eslint/no-explicit-any': 'error', */
                 '@typescript-eslint/no-unsafe-assignment': 'error',
                 '@typescript-eslint/restrict-template-expressions': 'error',
                 '@typescript-eslint/no-unsafe-call': 'error',
@@ -366,9 +367,6 @@ module.exports = {
                 '@typescript-eslint/strict-boolean-expressions': 'error',
                 '@typescript-eslint/unbound-method': 'error',
                 '@typescript-eslint/no-unsafe-member-access': 'error',
-                '@typescript-eslint/prefer-readonly-parameter-types': 'off',
-                '@typescript-eslint/explicit-member-accessibility': 'off',
-
                 '@typescript-eslint/member-delimiter-style': 'off',
                 '@typescript-eslint/indent': 'off',
                 '@typescript-eslint/quotes': ['error', 'single'],
@@ -389,12 +387,15 @@ module.exports = {
                 ],
                 '@typescript-eslint/array-type': 'off',
                 'no-irregular-whitespace': 'error',
-                'import/named': 'error',
+                'import/named': 'off', /* if turned on require 'import type { Sometype }' and that crashes gulpfile build */
+                'import/default': 'off',
                 '@typescript-eslint/no-type-alias': 'off',
                 '@typescript-eslint/member-ordering': 'off',
+                '@typescript-eslint/prefer-readonly-parameter-types': 'off',
                 '@typescript-eslint/no-explicit-any': 'off',
-                '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* can write DxPromise<void>, not just DxPromise (where void is default option)*/
-                '@typescript-eslint/no-magic-numbers': 'off', /* should i use enums or types ? */
+                '@typescript-eslint/explicit-member-accessibility': 'off',
+                '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* csn write DxPromise<void>, not just DxPromise (where void is default option)*/
+                '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */
                 '@typescript-eslint/ban-types': 'off' /* +: will ban Function, object -: it look like in few place we need to pass constructors, not type */
             }
         },

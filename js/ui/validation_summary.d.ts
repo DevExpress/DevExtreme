@@ -1,4 +1,4 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -6,8 +6,7 @@ import type {
     ItemInfo,
 } from '../events/index';
 
-import CollectionWidget from './collection/ui.collection_widget.base';
-import type {
+import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 

@@ -1,18 +1,17 @@
-import DOMComponent from '../core/dom_component';
-import type {
+import DOMComponent, {
     DOMComponentOptions,
 } from '../core/dom_component';
 
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     Cancelable,
     EventInfo,
     NativeEventInfo,

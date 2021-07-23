@@ -1,27 +1,26 @@
-import DOMComponent from '../../core/dom_component';
-import type {
+import DOMComponent, {
     DOMComponentOptions,
 } from '../../core/dom_component';
 
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import type {
+import {
     Cancelable,
     EventInfo,
 } from '../../events/index';
 
-import type {
+import {
   Format,
 } from '../../localization';
 
-import type {
+import {
     DashStyleType,
 } from '../common';
 
-import type {
+import {
     Rule,
 } from '../../core/options/utils';
 

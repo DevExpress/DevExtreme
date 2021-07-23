@@ -1,18 +1,17 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import type {
+import {
     template,
 } from '../../core/templates/template';
 
-import type {
+import {
     EventInfo,
 } from '../../events/index';
 
-import BaseWidget from '../core/base_widget';
-import type {
+import BaseWidget, {
     BaseWidgetExport,
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,

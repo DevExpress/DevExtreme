@@ -1,8 +1,8 @@
-import type {
+import {
     Device,
 } from '../core/devices';
 
-import type {
+import {
     AnimationConfig,
 } from './fx';
 

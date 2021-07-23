@@ -1,19 +1,18 @@
-import type {
+import {
     AnimationConfig,
 } from '../animation/fx';
 
-import type {
+import {
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 

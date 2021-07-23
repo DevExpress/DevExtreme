@@ -1,24 +1,23 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     DxEvent,
     EventInfo,
     NativeEventInfo,
@@ -26,16 +25,15 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     dxListItem,
 } from './list';
 
-import type {
+import {
     Properties as PopupProperties,
 } from './popup';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 

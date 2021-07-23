@@ -1,17 +1,16 @@
-import type {
+import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
 
-import BaseSparkline from './sparklines/base_sparkline';
-import type {
+import BaseSparkline, {
     BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 

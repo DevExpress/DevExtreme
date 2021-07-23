@@ -1,9 +1,9 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -11,16 +11,16 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     Format,
   } from '../localization';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import { BaseChart } from './chart_components/base_chart';
-import type {
+import {
+    BaseChart,
     BaseChartLegend,
     BaseChartOptions,
     BaseChartTooltip,
@@ -29,7 +29,7 @@ import type {
     TooltipInfo,
 } from './chart_components/base_chart';
 
-import type {
+import {
     ChartSeries,
     ScaleBreak,
     VizRange,
@@ -39,7 +39,7 @@ import type {
     VizTimeInterval,
 } from './common';
 
-import type {
+import {
     Font,
     WordWrapType,
     VizTextOverflowType,

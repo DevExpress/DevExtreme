@@ -1,30 +1,29 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import dxDropDownEditor from './drop_down_editor/ui.drop_down_editor';
-import type {
+import dxDropDownEditor, {
     dxDropDownEditorOptions,
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import type {
+import {
     Properties as PopupProperties,
 } from './popup';
 

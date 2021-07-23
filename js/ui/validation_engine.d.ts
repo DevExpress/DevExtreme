@@ -1,4 +1,4 @@
-import type {
+import {
     dxValidationGroupResult,
 } from './validation_group';
 

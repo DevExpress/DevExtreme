@@ -1,41 +1,39 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxDropDownEditor from './drop_down_editor/ui.drop_down_editor';
-import type {
+import dxDropDownEditor, {
     dxDropDownEditorOptions,
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import type {
+import {
     DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
-import type {
+import {
     Properties as PopupProperties,
 } from './popup';
 

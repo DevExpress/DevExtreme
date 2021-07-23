@@ -1,7 +1,7 @@
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 

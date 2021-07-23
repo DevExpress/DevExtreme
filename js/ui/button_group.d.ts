@@ -1,13 +1,13 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -15,13 +15,12 @@ import type {
     ItemInfo,
 } from '../events/index';
 
-import type {
+import {
     CollectionWidgetItem,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 

@@ -1,9 +1,8 @@
-import DOMComponent from '../core/dom_component';
-import type {
+import DOMComponent, {
     DOMComponentOptions,
 } from '../core/dom_component';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,

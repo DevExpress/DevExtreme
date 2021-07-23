@@ -1,41 +1,39 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     PaletteType,
 } from './palette';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     Format,
 } from '../localization';
 
-import type {
+import {
     BaseLegend,
     BaseLegendItem,
 } from './common';
 
-import BaseWidget from './core/base_widget';
-import type {
+import BaseWidget, {
     BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,
@@ -46,7 +44,7 @@ import type {
     IncidentInfo,
 } from './core/base_widget';
 
-import type {
+import {
     VectorMapProjectionConfig,
 } from './vector_map/projection';
 

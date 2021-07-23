@@ -1,20 +1,19 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -24,8 +23,7 @@ import type {
     ItemInfo,
 } from '../events/index';
 
-import CollectionWidget from './collection/ui.collection_widget.base';
-import type {
+import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';

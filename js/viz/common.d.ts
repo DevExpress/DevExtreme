@@ -1,8 +1,8 @@
-import type {
+import {
     dxChartSeriesTypesCommonSeries,
 } from './chart';
 
-import type {
+import {
     Font,
 } from './core/base_widget';
 

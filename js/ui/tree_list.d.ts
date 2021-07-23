@@ -1,20 +1,20 @@
-import type {
+import {
     UserDefinedElement,
     DxElement,
     UserDefinedElementsArray,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
 
-import type {
+import {
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -22,7 +22,7 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     GridBase,
     ColumnBase,
     ColumnButtonBase,
@@ -55,7 +55,7 @@ import type {
     RowDraggingTemplateDataModel,
 } from './data_grid';
 
-import type { dxToolbarItem } from './toolbar';
+import { dxToolbarItem } from './toolbar';
 
 import dxScrollable from './scroll_view/ui.scrollable';
 

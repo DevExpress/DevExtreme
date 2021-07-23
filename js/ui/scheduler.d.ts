@@ -1,22 +1,21 @@
 import './scheduler/utils';
 
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     DxEvent,
     EventInfo,
     NativeEventInfo,
@@ -25,7 +24,7 @@ import type {
     Cancelable,
 } from '../events/index';
 
-import type {
+import {
     CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
@@ -36,8 +35,7 @@ import dxPopup from './popup';
 
 import dxSortable from './sortable';
 
-import Widget from './widget/ui.widget';
-import type {
+import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 

@@ -1,30 +1,29 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import type {
+import {
     ComponentDisabledDate,
     dxCalendarOptions,
 } from './calendar';
 
-import dxDropDownEditor from './drop_down_editor/ui.drop_down_editor';
-import type {
+import dxDropDownEditor, {
     dxDropDownEditorOptions,
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import type {
+import {
     Format,
 } from '../localization';
 
-import type {
+import {
     Properties as PopupProperties,
 } from './popup';
 

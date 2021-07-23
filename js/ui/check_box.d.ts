@@ -1,12 +1,11 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import Editor from './editor/editor';
-import type {
+import Editor, {
     EditorOptions,
     ValueChangedInfo,
 } from './editor/editor';

@@ -1,12 +1,11 @@
-import type {
+import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxPopover from './popover';
-import type {
+import dxPopover, {
     dxPopoverOptions,
 } from './popover';
 

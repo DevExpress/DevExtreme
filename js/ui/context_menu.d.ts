@@ -1,23 +1,22 @@
-import type {
+import {
     PositionConfig,
 } from '../animation/position';
 
-import type {
+import {
     UserDefinedElement,
 } from '../core/element';
 
-import type {
+import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource from '../data/data_source';
-import type {
+import DataSource, {
     DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
 
-import type {
+import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -27,16 +26,15 @@ import type {
     ItemInfo,
 } from '../events/index';
 
-import dxMenuBase from './context_menu/ui.menu_base';
-import type {
+import dxMenuBase, {
     dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
-import type {
+import {
     dxMenuBaseItem,
 } from './menu';
 
-import type {
+import {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 

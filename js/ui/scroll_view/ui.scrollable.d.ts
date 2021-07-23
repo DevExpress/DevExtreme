@@ -1,18 +1,17 @@
-import DOMComponent from '../../core/dom_component';
-import type {
+import DOMComponent, {
     DOMComponentOptions,
 } from '../../core/dom_component';
 
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../../core/element';
 
-import type {
+import {
     DxPromise,
 } from '../../core/utils/deferred';
 
-import type {
+import {
     NativeEventInfo,
 } from '../../events/index';
 

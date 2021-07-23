@@ -1,15 +1,15 @@
 import DOMComponent from '../core/dom_component';
 
-import type {
+import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
 
-import type {
+import {
     template,
 } from '../core/templates/template';
 
-import type {
+import {
     DxEvent,
     Cancelable,
     EventInfo,
@@ -18,8 +18,7 @@ import type {
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxDraggable from './draggable';
-import type {
+import dxDraggable, {
     DraggableBase,
     DraggableBaseOptions,
 } from './draggable';

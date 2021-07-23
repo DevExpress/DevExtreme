@@ -1,21 +1,20 @@
-import type {
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
 
-import dxTextEditor from './text_box/ui.text_editor.base';
-import type {
+import dxTextEditor, {
     dxTextEditorButton,
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
-import type {
+import {
     ValueChangedInfo,
 } from './editor/editor';
 
-import type {
+import {
     Format,
   } from '../localization';
 
