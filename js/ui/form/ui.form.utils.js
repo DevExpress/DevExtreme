@@ -10,7 +10,8 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS
+    FIELD_ITEM_HELP_TEXT_CLASS,
+    FIELD_ITEM_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -117,4 +118,17 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
     return $('<span>')
         .addClass(isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
+}
+
+export function renderButton(buttonOptions, createComponentCallback) {
+    const $button = $('<div>');
+    createComponentCallback($button, 'dxButton', buttonOptions);
+    return $button;
+}
+
+export function addItemClasses($item, column, cssItemClass) {
+    $item
+        .addClass(FIELD_ITEM_CLASS)
+        .addClass(cssItemClass)
+        .addClass(isDefined(column) ? 'dx-col-' + column : '');
 }

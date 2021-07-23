@@ -23,7 +23,6 @@ import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
 import { isMaterial } from '../themes';
 import {
-    FIELD_ITEM_CLASS,
     FLEX_LAYOUT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
     FIELD_ITEM_OPTIONAL_CLASS,
@@ -45,7 +44,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText } from './ui.form.utils';
+import { renderLabel, renderHelpText, renderButton, addItemClasses } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -576,35 +575,25 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderButtonItem: function(item, $container) {
-        const $button = $('<div>').appendTo($container);
-        const defaultOptions = {
-            validationGroup: this.option('validationGroup')
-        };
+        const $button = renderButton(
+            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
+            ($target, componentName, componentOptions) => this._createComponent($target, componentName, componentOptions)
+        );
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css('textAlign', this._getButtonHorizontalAlignment(item));
+            .css('textAlign', this._getButtonHorizontalAlignment(item))
+            .append($button);
 
         $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
 
-        const instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
-
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance,
+            widgetInstance: $button.dxButton('instance'),
             guid: item.guid,
             $itemContainer: $container
         });
-        this._addItemClasses($container, item.col);
-
-        return $button;
-    },
-
-    _addItemClasses: function($item, column) {
-        $item
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(this.option('cssItemClass'))
-            .addClass(isDefined(column) ? 'dx-col-' + column : '');
+        addItemClasses($container, item.col, this.option('cssItemClass'));
     },
 
     _renderFieldItem: function(item, $container) {
@@ -617,7 +606,7 @@ const LayoutManager = Widget.inherit({
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         let $label;
 
-        this._addItemClasses($container, item.col);
+        addItemClasses($container, item.col, this.option('cssItemClass'));
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {
