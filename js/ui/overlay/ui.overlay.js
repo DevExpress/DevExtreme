@@ -253,6 +253,7 @@ const Overlay = Widget.inherit({
         this._initActions();
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
+        this._normalizePosition();
 
         this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $('<div>').addClass(OVERLAY_CONTENT_CLASS);
@@ -269,6 +270,7 @@ const Overlay = Widget.inherit({
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
+        this._scrollHandler = (e => { this._targetParentsScrollHandler(e); });
     },
 
     _initOptions: function(options) {
@@ -412,15 +414,17 @@ const Overlay = Widget.inherit({
 
     _normalizePosition: function() {
         const position = this.option('position');
-        const defaultPositions = {
+        const defaultPositionOptions = {
             of: this.option('target'),
             boundaryOffset: DEFAULT_BOUNDARY_OFFSET
         };
         if(isFunction(position)) {
-            this._position = extend(true, {}, defaultPositions, position());
+            this._position = extend(true, {}, defaultPositionOptions, position());
         } else {
             if(isDefined(position)) {
-                this._position = extend(true, {}, defaultPositions, this._getPositionOptions(POSITION_ALIASES));
+                this._position = extend(true, {}, defaultPositionOptions, this._getPositionOptions(POSITION_ALIASES));
+            } else {
+                this._position = defaultPositionOptions;
             }
         }
     },
@@ -470,8 +474,6 @@ const Overlay = Widget.inherit({
         }
         this._currentVisible = true;
         this._isShown = false;
-
-        this._normalizePosition();
 
         const animation = that._getAnimationConfig() || {};
 
@@ -773,27 +775,18 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleParentsScrollSubscription: function(subscribe) {
-        if(!this._position) {
-            return;
-        }
-
-        const target = this._position.of || $();
-        const closeOnScroll = this.option('closeOnTargetScroll');
-        let $parents = getElement(target).parents();
+    _toggleParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
 
-        if(devices.real().deviceType === 'desktop') {
-            $parents = $parents.add(window);
-        }
+        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._scrollHandler);
 
-        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || (e => { this._targetParentsScrollHandler(e); });
-
-        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
-
-        if(subscribe && closeOnScroll) {
-            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
+        const closeOnScroll = this.option('closeOnTargetScroll');
+        if(needSubscribe && closeOnScroll) {
+            let $parents = getElement(this._position.of).parents();
+            if(devices.real().deviceType === 'desktop') {
+                $parents = $parents.add(window);
+            }
+            eventsEngine.on($parents, scrollEvent, this._scrollHandler);
             this._$prevTargetParents = $parents;
         }
     },
@@ -1051,7 +1044,7 @@ const Overlay = Widget.inherit({
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
         const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
-        const boundaryOffset = this._position?.boundaryOffset || DEFAULT_BOUNDARY_OFFSET;
+        const boundaryOffset = this._position.boundaryOffset;
 
         return {
             top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
@@ -1187,7 +1180,7 @@ const Overlay = Widget.inherit({
         const container = this.option('container');
         let positionOf = null;
 
-        if(!container && position) {
+        if(!container) {
             positionOf = isEvent(position.of) ? window : (position.of || window);
         }
 
@@ -1217,7 +1210,7 @@ const Overlay = Widget.inherit({
             });
         } else {
             const position = this._position;
-            this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
+            this._renderOverlayBoundaryOffset(position);
 
             resetPosition(this._$content);
 
@@ -1305,7 +1298,7 @@ const Overlay = Widget.inherit({
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
 
-        this._actions = null;
+        this._actions = this._scrollHandler = this._$prevTargetParents = null;
 
         this.callBase();
 
