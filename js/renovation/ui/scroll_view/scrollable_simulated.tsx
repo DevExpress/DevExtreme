@@ -673,8 +673,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getInitEventData(): {
-    getDirection: (event: DxMouseEvent) => string | undefined;
-    validate: (event: DxMouseEvent) => boolean;
+    getDirection(event: DxMouseEvent): string | undefined;
+    validate(event: DxMouseEvent): boolean;
     isNative: boolean;
     scrollTarget: HTMLDivElement | null;
   } {

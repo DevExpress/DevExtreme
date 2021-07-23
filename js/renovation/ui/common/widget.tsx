@@ -217,12 +217,14 @@ export class Widget extends JSXComponent(WidgetProps) {
 
     if (isFocusable) {
       focus.on(this.widgetRef.current,
+        // eslint-disable-next-line @typescript-eslint/method-signature-style
         (e: Event & { isDefaultPrevented: () => boolean }) => {
           if (!e.isDefaultPrevented()) {
             this.focused = true;
             onFocusIn?.(e);
           }
         },
+        // eslint-disable-next-line @typescript-eslint/method-signature-style
         (e: Event & { isDefaultPrevented: () => boolean }) => {
           if (!e.isDefaultPrevented()) {
             this.focused = false;

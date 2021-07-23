@@ -252,6 +252,7 @@ describe('CheckBox', () => {
             expect(icon?.style.fontSize).toEqual(expectedValue);
           });
 
+        // eslint-disable-next-line @typescript-eslint/quotes
         it("should correctly change icon font size if 'offsetHeight'/'offsetWidth' options are defined in pixels string", () => {
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
@@ -266,7 +267,7 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it("should set default font size if icon element's 'offsetHeight'/'offsetWidth' fields are not defined", () => {
+        it('should set default font size if icon element\'s \'offsetHeight\'/\'offsetWidth\' fields are not defined', () => {
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {

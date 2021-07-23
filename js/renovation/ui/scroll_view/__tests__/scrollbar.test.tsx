@@ -99,7 +99,8 @@ describe('Scrollbar', () => {
 
                       expect(viewModel.isVisible).toEqual(expectedScrollbarVisibility);
 
-                      let expectedScrollVisibility: boolean | undefined = undefined;
+                      // eslint-disable-next-line @typescript-eslint/init-declarations
+                      let expectedScrollVisibility: boolean | undefined;
 
                       if (!expectedScrollbarVisibility) {
                         expectedScrollVisibility = false;
@@ -1076,7 +1077,7 @@ describe('Scrollbar', () => {
           viewModel.initHandler(event, crossThumbScrolling);
 
           const isScrollbarClicked = targetClass !== 'dx-scrollable-scroll' && scrollByThumb;
-
+          // eslint-disable-next-line no-undef-init
           let expectedShowOnScrollByWheel: boolean | undefined = undefined;
           let expectedThumbScrolling = false;
           let expectedCrossThumbScrolling = crossThumbScrolling;

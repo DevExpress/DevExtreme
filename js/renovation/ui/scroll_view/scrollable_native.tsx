@@ -692,8 +692,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   getInitEventData(): {
-    getDirection: () => string | undefined;
-    validate: (event: DxMouseEvent) => boolean;
+    getDirection(): string | undefined;
+    validate(event: DxMouseEvent): boolean;
     isNative: boolean;
     scrollTarget: HTMLDivElement | null;
   } {
@@ -787,7 +787,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   get topPocketHeight(): number {
-    return this.topPocketRef?.current?.clientHeight ?? 0;
+    return this.topPocketRef.current?.clientHeight ?? 0;
   }
 
   pullDownRefreshing(): void {

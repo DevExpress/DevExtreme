@@ -18,7 +18,8 @@ import {
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
-export interface DataExpressionMixinOptions {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid
      * @default null

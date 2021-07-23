@@ -30,7 +30,7 @@ type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & 
 export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes'>() {
   get pageSizesText(): {
     className: string;
-    click: () => void;
+    click(): void;
     label: string;
     text: string;
   }[] {

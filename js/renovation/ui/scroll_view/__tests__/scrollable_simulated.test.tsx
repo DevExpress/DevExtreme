@@ -1173,6 +1173,7 @@ describe('Simulated > Behavior', () => {
 
           let expectedContainerScrollTop = 10;
           let expectedContainerScrollLeft = 20;
+          // eslint-disable-next-line no-undef-init
           let expectedSavedScrollOffset: any = undefined;
 
           if (visible) {
