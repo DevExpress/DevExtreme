@@ -460,6 +460,9 @@ export class DataGridEditingTexts {
   saveAllChanges?: string;
 
   @OneWay()
+  saveRowChanges?: string;
+
+  @OneWay()
   undeleteRow?: string;
 
   @OneWay()
@@ -503,7 +506,19 @@ export class DataGridEditing {
   startEditAction?: 'click' | 'dblClick' = 'click';
 
   @Nested()
-  texts?: DataGridEditingTexts;
+  texts?: DataGridEditingTexts = {
+    editRow: messageLocalization.format('dxDataGrid-editingEditRow'),
+    saveAllChanges: messageLocalization.format('dxDataGrid-editingSaveAllChanges'),
+    saveRowChanges: messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
+    cancelAllChanges: messageLocalization.format('dxDataGrid-editingCancelAllChanges'),
+    cancelRowChanges: messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
+    addRow: messageLocalization.format('dxDataGrid-editingAddRow'),
+    deleteRow: messageLocalization.format('dxDataGrid-editingDeleteRow'),
+    undeleteRow: messageLocalization.format('dxDataGrid-editingUndeleteRow'),
+    confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+    confirmDeleteTitle: '',
+    validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges'),
+  };
 
   @OneWay()
   useIcons? = false;
@@ -572,6 +587,12 @@ export class DataGridScrolling {
 
   @OneWay()
   columnRenderingThreshold?: number;
+
+  @OneWay()
+  newMode?: boolean;
+
+  @OneWay()
+  minGap?: number;
 }
 
 @ComponentBindings()
@@ -1177,6 +1198,19 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     editRowKey: null,
     editColumnName: null,
     changes: [],
+    texts: {
+      editRow: messageLocalization.format('dxDataGrid-editingEditRow'),
+      saveAllChanges: messageLocalization.format('dxDataGrid-editingSaveAllChanges'),
+      saveRowChanges: messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
+      cancelAllChanges: messageLocalization.format('dxDataGrid-editingCancelAllChanges'),
+      cancelRowChanges: messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
+      addRow: messageLocalization.format('dxDataGrid-editingAddRow'),
+      deleteRow: messageLocalization.format('dxDataGrid-editingDeleteRow'),
+      undeleteRow: messageLocalization.format('dxDataGrid-editingUndeleteRow'),
+      confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+      confirmDeleteTitle: '',
+      validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges'),
+    },
   };
 
   @OneWay() export?: DataGridExport = {
@@ -1233,6 +1267,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
+    newMode: false,
+    minGap: 1,
   };
 
   @Nested() selection?: DataGridSelection = {
@@ -1253,15 +1289,15 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     skipEmptyValues: true,
     recalculateWhileEditing: false,
     texts: {
-      sum: messageLocalization.getFormatter('dxDataGrid-summarySum')(),
-      sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn')(),
-      min: messageLocalization.getFormatter('dxDataGrid-summaryMin')(),
-      minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn')(),
-      max: messageLocalization.getFormatter('dxDataGrid-summaryMax')(),
-      maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn')(),
-      avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg')(),
-      avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn')(),
-      count: messageLocalization.getFormatter('dxDataGrid-summaryCount')(),
+      sum: messageLocalization.format('dxDataGrid-summarySum'),
+      sumOtherColumn: messageLocalization.format('dxDataGrid-summarySumOtherColumn'),
+      min: messageLocalization.format('dxDataGrid-summaryMin'),
+      minOtherColumn: messageLocalization.format('dxDataGrid-summaryMinOtherColumn'),
+      max: messageLocalization.format('dxDataGrid-summaryMax'),
+      maxOtherColumn: messageLocalization.format('dxDataGrid-summaryMaxOtherColumn'),
+      avg: messageLocalization.format('dxDataGrid-summaryAvg'),
+      avgOtherColumn: messageLocalization.format('dxDataGrid-summaryAvgOtherColumn'),
+      count: messageLocalization.format('dxDataGrid-summaryCount'),
     },
   };
 
@@ -1597,4 +1633,11 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Event() onSaving?: (e: SavingEvent) => void;
 
   @Event() onSaved?: (e: SavedEvent) => void;
+
+  // private
+  @OneWay() adaptColumnWidthByRatio?: boolean = true;
+
+  @OneWay() regenerateColumnsByVisibleItems?: boolean = false;
+
+  @OneWay() useLegacyKeyboardNavigation?: boolean = false;
 }
