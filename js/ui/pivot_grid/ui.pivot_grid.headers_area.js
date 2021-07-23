@@ -105,7 +105,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
             this._groupElement.dxScrollable({
                 useNative: false,
                 useSimulatedScrollbar: false,
-                showScrollbar: false,
+                showScrollbar: 'never',
                 bounceEnabled: false,
                 direction: 'horizontal',
                 updateManually: true
@@ -206,7 +206,7 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
             this._groupElement.dxScrollable({
                 useNative: false,
                 useSimulatedScrollbar: false,
-                showScrollbar: false,
+                showScrollbar: 'never',
                 bounceEnabled: false,
                 direction: 'vertical',
                 updateManually: true

@@ -79,9 +79,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     getEndViewDate: () => {
         return new Date(2150, 1, 1);
     },
-    getAppointmentDurationInMs: function(options) {
-        return options.endDate.getTime() - options.startDate.getTime();
-    },
     getAppointmentGeometry: (settings) => {
         return {
             width: settings.width || 0,
@@ -575,12 +572,22 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
+        const key = createFactoryInstances({
+            model: {
+                adaptivityEnabled: false
+            },
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => dataAccessors
+        });
+
         const strategy = new HorizontalMonthAppointmentsStrategy({
+            key,
             instance: {
                 notifyObserver: commonUtils.noop,
                 option: commonUtils.noop,
-                fire: commonUtils.noop
-            }
+                fire: commonUtils.noop,
+            },
+            getResizableStep: () => 0
         });
         const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
@@ -588,7 +595,16 @@ QUnit.module('Appointments', moduleOptions, () => {
     });
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
+        const key = createFactoryInstances({
+            model: {
+                adaptivityEnabled: false
+            },
+            getIsVirtualScrolling: () => false,
+            getDataAccessors: () => dataAccessors
+        });
+
         const strategy = new VerticalAppointmentsStrategy({
+            key,
             instance: {
                 notifyObserver: commonUtils.noop,
                 invoke: commonUtils.noop,

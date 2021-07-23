@@ -44,6 +44,7 @@
 .dx-checkbox-text {
   display: inline-block;
   vertical-align: middle;
+  text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
@@ -55,6 +56,7 @@
   .dx-rtl & {
     margin: 0;
     padding: 0 5px 0 0;
+    text-align: right;
   }
 }
 

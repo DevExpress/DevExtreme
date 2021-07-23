@@ -548,6 +548,7 @@ class SchedulerAppointments extends CollectionWidget {
                 {
                     ...config,
                     key: this.option('key'),
+                    getResizableStep: this.option('getResizableStep')
                 }
             );
         }

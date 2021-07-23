@@ -79,7 +79,7 @@ export type ExportedEvent = EventInfo<dxPolarChart>;
 export type ExportingEvent = EventInfo<dxPolarChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxPolarChart>;
+export type FileSavingEvent = FileSavingEventInfo<dxPolarChart>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;

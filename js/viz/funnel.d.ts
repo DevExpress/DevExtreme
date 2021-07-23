@@ -19,7 +19,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -79,7 +78,7 @@ export type ExportedEvent = EventInfo<dxFunnel>;
 export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxFunnel>;
+export type FileSavingEvent = FileSavingEventInfo<dxFunnel>;
 
 /** @public */
 export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
