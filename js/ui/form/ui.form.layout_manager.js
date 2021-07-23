@@ -23,6 +23,7 @@ import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
 import { isMaterial } from '../themes';
 import {
+    FIELD_ITEM_CLASS,
     FLEX_LAYOUT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
     FIELD_ITEM_OPTIONAL_CLASS,
@@ -44,7 +45,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, renderButton, addItemClasses } from './ui.form.utils';
+import { renderLabel, renderHelpText, renderButton } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -583,6 +584,9 @@ const LayoutManager = Widget.inherit({
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
             .css('textAlign', this._getButtonHorizontalAlignment(item))
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(this.option('cssItemClass'))
+            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '')
             .append($button);
 
         $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
@@ -593,7 +597,13 @@ const LayoutManager = Widget.inherit({
             guid: item.guid,
             $itemContainer: $container
         });
-        addItemClasses($container, item.col, this.option('cssItemClass'));
+    },
+
+    _addItemClasses: function($item, column) {
+        $item
+            .addClass(FIELD_ITEM_CLASS)
+            .addClass(this.option('cssItemClass'))
+            .addClass(isDefined(column) ? 'dx-col-' + column : '');
     },
 
     _renderFieldItem: function(item, $container) {
@@ -606,7 +616,7 @@ const LayoutManager = Widget.inherit({
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         let $label;
 
-        addItemClasses($container, item.col, this.option('cssItemClass'));
+        this._addItemClasses($container, item.col, this.option('cssItemClass'));
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {

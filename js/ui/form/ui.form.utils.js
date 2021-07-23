@@ -10,8 +10,7 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
-    FIELD_ITEM_CLASS
+    FIELD_ITEM_HELP_TEXT_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -124,11 +123,4 @@ export function renderButton(buttonOptions, createComponentCallback) {
     const $button = $('<div>');
     createComponentCallback($button, 'dxButton', buttonOptions);
     return $button;
-}
-
-export function addItemClasses($item, column, cssItemClass) {
-    $item
-        .addClass(FIELD_ITEM_CLASS)
-        .addClass(cssItemClass)
-        .addClass(isDefined(column) ? 'dx-col-' + column : '');
 }
