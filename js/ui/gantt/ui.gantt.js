@@ -203,15 +203,52 @@ class Gantt extends Widget {
     }
     _dataSourceChanged(dataSourceName, data) {
         const getters = GanttHelper.compileGettersByOption(this.option(dataSourceName));
-        const mappedData = data.map(GanttHelper.prepareMapHandler(getters));
+        const validatedData = this._validateSourceData(dataSourceName, data);
+        const mappedData = validatedData.map(GanttHelper.prepareMapHandler(getters));
 
         this[`_${dataSourceName}`] = mappedData;
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
-            this._tasksRaw = data;
-            const expandedRowKeys = data.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
+            this._tasksRaw = validatedData;
+            const expandedRowKeys = validatedData.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
             this._ganttTreeList?.setOption('expandedRowKeys', expandedRowKeys);
-            this._ganttTreeList?.setOption('dataSource', data);
+            this._ganttTreeList?.setOption('dataSource', validatedData);
+        }
+    }
+    _validateSourceData(dataSourceName, data) {
+        return data && dataSourceName === GANTT_TASKS ? this._validateTaskData(data) : data;
+    }
+    _validateTaskData(data) {
+        const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const parentIdGetter = compileGetter(this.option(`${GANTT_TASKS}.parentIdExpr`));
+        const rootValue = this.option('rootValue') ?? 'dx_dxt_gantt_default_root_value';
+
+        const validationTree = { };
+        for(let i = 0; i < data.length; i++) {
+            const item = data[i];
+            if(item) {
+                const key = keyGetter(item);
+                const isRootTask = key === rootValue;
+                const treeItem = validationTree[key] ??= { key: key, children: [ ] };
+                if(!isRootTask) {
+                    const parentId = parentIdGetter(item) ?? rootValue;
+                    const parentTreeItem = validationTree[parentId] ??= { key: parentId, children: [ ] };
+                    parentTreeItem.children.push(treeItem);
+                    treeItem.parent = parentTreeItem;
+                }
+            }
+        }
+        const validKeys = [ rootValue ];
+        this._appendChildKeys(validationTree[rootValue], validKeys);
+
+        return data.filter(item => validKeys.indexOf(keyGetter(item)) > -1);
+    }
+    _appendChildKeys(treeItem, keys) {
+        const children = treeItem?.children;
+        for(let i = 0; i < children?.length; i++) {
+            const child = children[i];
+            keys.push(child.key);
+            this._appendChildKeys(child, keys);
         }
     }
 

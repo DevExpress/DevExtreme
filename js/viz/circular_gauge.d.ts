@@ -3,7 +3,6 @@ import {
 } from '../core/element';
 
 import {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo
@@ -38,7 +37,7 @@ export type ExportedEvent = EventInfo<dxCircularGauge>;
 export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxCircularGauge>;
+export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;

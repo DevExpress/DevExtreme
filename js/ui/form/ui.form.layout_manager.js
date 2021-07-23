@@ -26,20 +26,13 @@ import {
     FIELD_ITEM_CLASS,
     FLEX_LAYOUT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_LABEL_CONTENT_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
@@ -52,6 +45,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
+import { renderLabel, renderHelpText } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -679,7 +673,20 @@ const LayoutManager = Widget.inherit({
             }
         }
 
-        that._renderHelpText(item, $editor, helpID);
+        const helpText = item.helpText;
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+
+        if(helpText && isSimpleItem) {
+            const $editorParent = $editor.parent();
+
+            // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()
+            $editorParent.append(
+                $('<div>')
+                    .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
+                    .append($editor)
+                    .append(renderHelpText(helpText, helpID))
+            );
+        }
 
         that._attachClickHandler($label, $editor, item.editorType);
     },
@@ -740,64 +747,20 @@ const LayoutManager = Widget.inherit({
         return labelOptions;
     },
 
-    _renderLabel: function(options) {
-        const { text, id, location, alignment, isRequired, labelID = null } = options;
-
-        if(isDefined(text) && text.length > 0) {
-            const labelClasses = FIELD_ITEM_LABEL_CLASS + ' ' + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
-            const $label = $('<label>')
-                .addClass(labelClasses)
-                .attr('for', id)
-                .attr('id', labelID);
-
-            const $labelContent = $('<span>')
-                .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-                .appendTo($label);
-
-            $('<span>')
-                .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
-                .text(text)
-                .appendTo($labelContent);
-
-            if(alignment) {
-                $label.css('textAlign', alignment);
-            }
-
-            $labelContent.append(this._renderLabelMark(isRequired));
-
-            return $label;
-        }
+    _renderLabel: function(labelOptions) {
+        return renderLabel(this._getRenderLabelOptions(labelOptions));
     },
 
-    _renderLabelMark: function(isRequired) {
-        let $mark;
-        const requiredMarksConfig = this._getRequiredMarksConfig();
-        const isRequiredMark = requiredMarksConfig.showRequiredMark && isRequired;
-        const isOptionalMark = requiredMarksConfig.showOptionalMark && !isRequired;
-
-        if(isRequiredMark || isOptionalMark) {
-            const markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
-            const markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
-
-            $mark = $('<span>')
-                .addClass(markClass)
-                .text(String.fromCharCode(160) + markText);
-        }
-
-        return $mark;
-    },
-
-    _getRequiredMarksConfig: function() {
-        if(!this._cashedRequiredConfig) {
-            this._cashedRequiredConfig = {
-                showRequiredMark: this.option('showRequiredMark'),
-                showOptionalMark: this.option('showOptionalMark'),
+    _getRenderLabelOptions: function(labelOptions = {}) {
+        return {
+            ...labelOptions,
+            markOptions: {
+                isRequiredMark: this.option('showRequiredMark') && labelOptions.isRequired,
                 requiredMark: this.option('requiredMark'),
+                isOptionalMark: this.option('showOptionalMark') && !labelOptions.isRequired,
                 optionalMark: this.option('optionalMark')
-            };
-        }
-
-        return this._cashedRequiredConfig;
+            }
+        };
     },
 
     _renderEditor: function(options) {
@@ -1052,23 +1015,6 @@ const LayoutManager = Widget.inherit({
             $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
             $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-        }
-    },
-
-    _renderHelpText: function(fieldItem, $editor, helpID) {
-        const helpText = fieldItem.helpText;
-        const isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
-
-        if(helpText && isSimpleItem) {
-            const $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
-
-            $editor.wrap($editorWrapper);
-
-            $('<div>')
-                .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-                .attr('id', helpID)
-                .text(helpText)
-                .appendTo($editor.parent());
         }
     },
 

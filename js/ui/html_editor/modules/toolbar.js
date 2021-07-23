@@ -338,7 +338,8 @@ if(Quill) {
         _prepareInsertTableHandler() {
             return () => {
                 const formats = this.quill.getFormat();
-                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table');
+                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table') ||
+                    Object.prototype.hasOwnProperty.call(formats, 'tableHeaderCell');
                 const formData = { rows: 1, columns: 1 };
 
                 if(isTableFocused) {
@@ -717,7 +718,8 @@ if(Quill) {
             }
 
             const selection = this.quill.getSelection();
-            const isTableOperationsEnabled = selection && Boolean(this.quill.getFormat(selection)?.table);
+            const { table: tableCell, tableHeaderCell } = selection && this.quill.getFormat(selection) || {};
+            const isTableOperationsEnabled = Boolean(tableCell) || Boolean(tableHeaderCell);
             TABLE_OPERATIONS.forEach((operationName) => {
                 const isInsertTable = operationName === 'insertTable';
                 const widget = this._toolbarWidgets.getByName(operationName);

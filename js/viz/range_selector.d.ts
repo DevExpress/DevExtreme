@@ -14,7 +14,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -58,7 +57,7 @@ export type ExportedEvent = EventInfo<dxRangeSelector>;
 export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxRangeSelector>;
+export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
