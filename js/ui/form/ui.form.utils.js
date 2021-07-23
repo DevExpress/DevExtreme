@@ -121,7 +121,7 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
 
-function renderButton({ buttonOptions, createComponentCallback }) {
+export function renderButton({ buttonOptions, createComponentCallback }) {
     const $button = $('<div>');
     createComponentCallback($button, 'dxButton', buttonOptions);
     return $button;
@@ -142,7 +142,7 @@ export function convertAlignmentToTextAlign(horizontalAlignment) {
     return isDefined(horizontalAlignment) ? horizontalAlignment : 'right';
 }
 
-export function renderButtonItem({ $container, createComponentCallback, buttonOptions, justifyContent, textAlign, cssItemClass, targetColIndex }) {
+export function adjustContainerAsButtonItem({ $container, justifyContent, textAlign, cssItemClass, targetColIndex }) {
     // TODO: try to create $container in this function and return it
     $container
         .addClass(FIELD_BUTTON_ITEM_CLASS)
@@ -153,10 +153,4 @@ export function renderButtonItem({ $container, createComponentCallback, buttonOp
 
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', justifyContent);
-
-    const $button = renderButton({ buttonOptions, createComponentCallback });
-    $container.append($button);
-
-    // TODO: try to return the root created $element
-    return $button;
 }

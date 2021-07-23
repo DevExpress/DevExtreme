@@ -44,7 +44,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, renderButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
+import { renderLabel, renderHelpText, renderButton, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -349,23 +349,24 @@ const LayoutManager = Widget.inherit({
         if(item.itemType === 'empty') {
             this._renderEmptyItem($container);
         } else if(item.itemType === 'button') {
+            adjustContainerAsButtonItem({
+                $container,
+                justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
+                textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+                cssItemClass: this.option('cssItemClass'),
+                targetColIndex: item.col
+            });
 
-            // TODO: try to remove both '$button' and '_itemsRunTimeInfo'
-            const $button = renderButtonItem(
-                {
-                    $container,
-                    createComponentCallback: this._createComponent.bind(this),
-                    buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
-                    justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
-                    textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
-                    cssItemClass: this.option('cssItemClass'),
-                    targetColIndex: item.col
-                }
-            );
+            const $button = renderButton({
+                buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
+                createComponentCallback: this._createComponent.bind(this)
+            });
+            $container.append($button);
 
+            // TODO: try to remove '_itemsRunTimeInfo'
             this._itemsRunTimeInfo.add({
                 item,
-                widgetInstance: $button.dxButton('instance'),
+                widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
                 guid: item.guid,
                 $itemContainer: $container
             });
