@@ -55,6 +55,7 @@ export const viewFunction = ({
   onHoverStart,
   onHoverEnd,
   onDimensionChanged,
+  onVisibilityChange,
   props: {
     accessKey,
     activeStateEnabled,
@@ -91,6 +92,7 @@ export const viewFunction = ({
     onHoverStart={onHoverStart}
     onHoverEnd={onHoverEnd}
     onDimensionChanged={onDimensionChanged}
+    onVisibilityChange={onVisibilityChange}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
@@ -640,5 +642,11 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   onDimensionChanged(): void {
     this.instance?.updateDimensions(true);
+  }
+
+  onVisibilityChange(visible: boolean): void {
+    if (visible) {
+      this.instance?.updateDimensions();
+    }
   }
 }

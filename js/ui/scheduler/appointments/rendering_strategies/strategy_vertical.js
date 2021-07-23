@@ -41,7 +41,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         if(coordinates.allDay) {
             geometry = this._getAllDayAppointmentGeometry(coordinates);
         } else {
-            geometry = this._isAdaptive() && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
+            geometry = this.isAdaptive && coordinates.isCompact ? this._getAdaptiveGeometry(coordinates) : this._getVerticalAppointmentGeometry(coordinates);
         }
 
         return super.getAppointmentGeometry(geometry);
@@ -170,7 +170,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const width = appointmentGeometry.width;
         const result = [];
         let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const cellsDiff = this.instance.fire('isGroupedByDate')
+        const cellsDiff = this.isGroupedByDate
             ? this.instance.fire('getGroupCount')
             : 1;
         const offset = this.cellWidth * cellsDiff;
@@ -306,8 +306,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
         const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
-        const fullDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
-        const durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, normalizedEndDate) / toMs('minute');
+        const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
+        const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');
 
         const height = durationInMinutes * this._getMinuteHeight();
 

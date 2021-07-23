@@ -126,7 +126,8 @@ export class AppointmentPopup {
             ...POPUP_CONFIG,
             onHiding: () => this.scheduler.focus(),
             contentTemplate: () => this._createPopupContent(),
-            onShowing: e => this._onShowing(e)
+            onShowing: e => this._onShowing(e),
+            copyRootClassesToWrapper: true
         };
     }
 
@@ -404,7 +405,8 @@ export class AppointmentPopup {
             container,
             position: {
                 of: container
-            }
+            },
+            copyRootClassesToWrapper: true
         });
     }
 

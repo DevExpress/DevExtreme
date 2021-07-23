@@ -663,10 +663,12 @@ module('Subscribes', {
     test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
         this.createInstance();
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 2, 20),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 2, 20)
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -678,10 +680,12 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 4, 20),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 4, 20)
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -693,10 +697,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 3, 0),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 3, 0)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -708,10 +713,11 @@ module('Subscribes', {
             endDayHour: 22
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 4, 25, 21),
-            endDate: new Date(2015, 4, 26, 3),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 4, 25, 21),
+            new Date(2015, 4, 26, 3)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -723,10 +729,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 10),
-            endDate: new Date(2015, 2, 4, 17),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 10),
+            new Date(2015, 2, 4, 17)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -738,10 +745,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -753,11 +761,13 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -770,11 +780,13 @@ module('Subscribes', {
             cellDuration: 61
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -1457,7 +1469,7 @@ module('Grouping By Date', {
         const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellWidth = $cell.get(0).getBoundingClientRect().width;
 
-        assert.roughEqual(this.instance.fire('getResizableStep'), cellWidth * 3, 3, 'Step is OK');
+        assert.roughEqual(this.instance.getWorkSpace().positionHelper.getResizableStep(), cellWidth * 3, 3, 'Step is OK');
     });
 
     test('Appointment is rendered in allDay panel if endDate is out of view, groupByDate = true (T742932)', function(assert) {

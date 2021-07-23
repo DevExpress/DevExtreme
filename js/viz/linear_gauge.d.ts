@@ -1,5 +1,4 @@
 import type {
-    Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
@@ -34,7 +33,7 @@ export type ExportedEvent = EventInfo<dxLinearGauge>;
 export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxLinearGauge>;
+export type FileSavingEvent = FileSavingEventInfo<dxLinearGauge>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;

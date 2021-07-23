@@ -1329,6 +1329,33 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getController('data').items().length, 2, 'data is updated');
     });
 
+    QUnit.test('dataSource object change', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1 }]
+                }
+            }
+        });
+
+        // act
+        dataGrid.option('dataSource', {
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [{ id: 1 }, { id: 2 }]
+            }
+        });
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 2);
+    });
+
     // T260011
     QUnit.test('dataSource change to null', function(assert) {
         // arrange

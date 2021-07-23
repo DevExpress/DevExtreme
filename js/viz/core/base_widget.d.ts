@@ -9,6 +9,7 @@ import type {
 } from '../../core/element';
 
 import type {
+    Cancelable,
     EventInfo,
 } from '../../events/index';
 
@@ -36,13 +37,13 @@ export interface IncidentInfo {
   readonly target: any;
 }
 
-export interface FileSavingEventInfo<T> {
+export type FileSavingEventInfo<T> = Cancelable & {
   readonly component: T;
   readonly element: DxElement;
   readonly fileName: string;
   readonly format: string;
   readonly data: Blob;
-}
+};
 
 /** @namespace DevExpress.viz */
 export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {

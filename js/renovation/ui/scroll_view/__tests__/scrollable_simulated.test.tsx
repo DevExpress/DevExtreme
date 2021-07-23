@@ -19,7 +19,7 @@ import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
-import getElementComputedStyle from '../../../utils/get_computed_style';
+import { getElementComputedStyle } from '../utils/get_element_computed_style';
 import {
   ScrollableSimulated as Scrollable,
 } from '../scrollable_simulated';
@@ -42,6 +42,14 @@ jest.mock('../../../../core/devices', () => {
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
   return actualDevices;
 });
+
+jest.mock('../utils/get_element_computed_style', () => ({
+  ...jest.requireActual('../utils/get_element_computed_style'),
+  getElementComputedStyle: jest.fn(() => ({
+    paddingBottom: '8px',
+  })),
+}));
+
 jest.mock('../../../utils/get_computed_style');
 
 describe('Simulated > View', () => {

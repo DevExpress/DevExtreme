@@ -85,6 +85,74 @@ describe('Cli arguments normalizer', () => {
       outColorScheme: 'custom-scheme',
       themeName: 'generic',
     });
+
+    config = { command: 'build-theme', inputFile: 'vars.scss', bootstrapVersion: 3 };
+    normalizeConfig(config);
+
+    expect(config).toEqual({
+      base: false,
+      bootstrapVersion: 4,
+      colorScheme: 'light',
+      command: 'build-theme',
+      data: {},
+      fileFormat: 'css',
+      isBootstrap: true,
+      makeSwatch: false,
+      out: 'dx.generic.custom-scheme.css',
+      outColorScheme: 'custom-scheme',
+      themeName: 'generic',
+    });
+
+    config = { command: 'build-theme', inputFile: 'vars.scss', bootstrapVersion: 4 };
+    normalizeConfig(config);
+
+    expect(config).toEqual({
+      base: false,
+      bootstrapVersion: 4,
+      colorScheme: 'light',
+      command: 'build-theme',
+      data: {},
+      fileFormat: 'css',
+      isBootstrap: true,
+      makeSwatch: false,
+      out: 'dx.generic.custom-scheme.css',
+      outColorScheme: 'custom-scheme',
+      themeName: 'generic',
+    });
+
+    config = { command: 'build-theme', inputFile: 'vars.scss', bootstrapVersion: 5 };
+    normalizeConfig(config);
+
+    expect(config).toEqual({
+      base: false,
+      bootstrapVersion: 5,
+      colorScheme: 'light',
+      command: 'build-theme',
+      data: {},
+      fileFormat: 'css',
+      isBootstrap: true,
+      makeSwatch: false,
+      out: 'dx.generic.custom-scheme.css',
+      outColorScheme: 'custom-scheme',
+      themeName: 'generic',
+    });
+
+    config = { command: 'build-theme', inputFile: 'vars.less', bootstrapVersion: 5 };
+    normalizeConfig(config);
+
+    expect(config).toEqual({
+      base: false,
+      bootstrapVersion: 3,
+      colorScheme: 'light',
+      command: 'build-theme',
+      data: {},
+      fileFormat: 'css',
+      isBootstrap: true,
+      makeSwatch: false,
+      out: 'dx.generic.custom-scheme.css',
+      outColorScheme: 'custom-scheme',
+      themeName: 'generic',
+    });
   });
 
   test('export-theme-vars bootstrap configuration', () => {

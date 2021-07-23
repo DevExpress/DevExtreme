@@ -1,6 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { ResourceManager } from './resources/resourceManager';
 import { AppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { ModelProvider } from './modelProvider';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import timeZoneUtils from './utils.timeZone';
 
@@ -8,7 +9,8 @@ const Names = {
     timeZoneCalculator: 'timeZoneCalculator',
     resourceManager: 'resourceManager',
     appointmentDataProvider: 'appointmentDataProvider',
-    model: 'model'
+    model: 'model',
+    modelProvider: 'modelProvider'
 };
 
 const factoryInstances = { };
@@ -20,6 +22,7 @@ export const createFactoryInstances = (options) => {
         : ++tailIndex;
 
     createModel(key, options.model);
+    createModelProvider(key, options.model);
     const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
     const resourceManager = createResourceManager(key, options.resources);
     createAppointmentDataProvider(key, {
@@ -95,6 +98,15 @@ const createModel = (key, options) => {
     );
 };
 
+const createModelProvider = (key, options) => {
+    return createInstance(
+        Names.modelProvider,
+        key,
+        () => new ModelProvider(options)
+    );
+};
+
+
 export const disposeFactoryInstances = (key) => {
     Object.getOwnPropertyNames(Names).forEach((name) => {
         removeInstance(name, key);
@@ -105,3 +117,4 @@ export const getResourceManager = (key) => getInstance(Names.resourceManager, ke
 export const getAppointmentDataProvider = (key = 0) => getInstance(Names.appointmentDataProvider, key);
 export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
 export const getModel = (key) => getInstance(Names.model, key);
+export const getModelProvider = (key) => getInstance(Names.modelProvider, key);
