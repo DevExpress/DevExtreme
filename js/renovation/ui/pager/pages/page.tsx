@@ -24,6 +24,10 @@ export const viewFunction = ({
 export class PageProps {
   @OneWay() index = 0;
 
+  @OneWay() pageSize!: number;
+
+  @Event() pageSizeChange!: EventCallback<number>;
+
   /* istanbul ignore next: EventCallback cannot be tested */
   @Event() onClick?: EventCallback;
 

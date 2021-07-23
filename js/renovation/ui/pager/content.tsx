@@ -9,6 +9,7 @@ import {
   Provider,
   Effect,
   RefObject,
+  Event,
 } from '@devextreme-generator/declarations';
 
 import { InfoText } from './info';
@@ -114,6 +115,10 @@ export class PagerContentProps extends PagerProps {
   @ForwardRef() pagesRef?: RefObject<HTMLElement>;
 
   @ForwardRef() infoTextRef?: RefObject<HTMLDivElement>;
+
+  @Event() pageSizeChange!: EventCallback<number>;
+
+  @Event() pageIndexChange!: EventCallback<number>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })

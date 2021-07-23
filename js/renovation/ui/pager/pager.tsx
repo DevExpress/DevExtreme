@@ -1,5 +1,8 @@
 import {
-  Component, JSXComponent,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
 } from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
@@ -20,12 +23,18 @@ export const viewFunction = ({
   />
 );
 
+@ComponentBindings()
+export class PageSizeSmallProps {
+  @OneWay() pageIndex!: number;
+}
+
 @Component({
   defaultOptionRules: null,
   jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
-export class Pager extends JSXComponent<PagerProps>() {
+
+export class Pager extends JSXComponent<PagerProps, 'pageIndex'>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndex = newPageIndex + 1;
@@ -55,7 +64,7 @@ export class Pager extends JSXComponent<PagerProps>() {
     return this.props.className;
   }
 
-  get pagerProps(): PagerProps {
+  get pagerProps(): PagerProps & { 'pageIndex'; 'pageIndexChange'; 'pageSizeChange' } {
     return {
       ...this.props,
       className: this.className,

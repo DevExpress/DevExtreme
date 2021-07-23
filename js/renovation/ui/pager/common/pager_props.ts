@@ -33,11 +33,7 @@ export class PagerProps {
 
   @TwoWay() pageIndex = 1;
 
-  @Event() pageIndexChange!: EventCallback<number>;
-
   @TwoWay() pageSize = 5;
-
-  @Event() pageSizeChange!: EventCallback<number>;
 
   @OneWay() showPageSizes = true;
 

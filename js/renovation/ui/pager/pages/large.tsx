@@ -4,7 +4,10 @@ import {
   Fragment,
   Consumer,
   Mutable,
+  ComponentBindings,
+  OneWay, Event,
 } from '@devextreme-generator/declarations';
+import { EventCallback } from '../../common/event_callback';
 import { Page, PageProps } from './page';
 import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
@@ -90,7 +93,14 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' > & { 'pageIndexChange'; 'pageIndex' };
+
+@ComponentBindings()
+export class PageSizeSmallProps {
+  @OneWay() pageIndex!: number;
+
+  @Event() pageIndexChange!: EventCallback<number>;
+}
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
@@ -125,7 +135,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
     if (pageIndex === slidingWindowIndexes[0]) {
       startIndex = pageIndex - 1;
     } else if (pageIndex === slidingWindowIndexes[slidingWindowIndexes.length - 1]) {
-      startIndex = pageIndex + 2 - PAGES_LIMITER;
+      startIndex = +pageIndex + 2 - PAGES_LIMITER;
     } else if (pageIndex < PAGES_LIMITER) {
       startIndex = 1;
     } else if (pageIndex >= pageCount - PAGES_LIMITER) {

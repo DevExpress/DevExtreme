@@ -80,7 +80,7 @@ export class PageIndexSelectorProps {
 }
 
 type PageIndexSelectorPropsType = Pick<PagerProps,
-'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |
+'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pagesCountText' |
 'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
