@@ -1532,7 +1532,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean = false;
 
-  @OneWay() loadingTimeout?: number = 30;
+  @OneWay() loadingTimeout?: number = 0;
 
   @OneWay() commonColumnSettings?: DataGridCommonColumnSettings = {
     allowExporting: true,
