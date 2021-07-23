@@ -143,9 +143,7 @@ export function convertAlignmentToTextAlign(horizontalAlignment) {
 }
 
 export function renderButtonItem({ $container, createComponentCallback, buttonOptions, justifyContent, textAlign, cssItemClass, targetColIndex }) {
-    // TODO: the current element should be adjusted instead of $container.parent()
-    $container.parent().css('justifyContent', justifyContent);
-
+    // TODO: try to create $container in this function and return it
     $container
         .addClass(FIELD_BUTTON_ITEM_CLASS)
         .css('textAlign', textAlign)
@@ -153,9 +151,12 @@ export function renderButtonItem({ $container, createComponentCallback, buttonOp
         .addClass(cssItemClass)
         .addClass(isDefined(targetColIndex) ? 'dx-col-' + targetColIndex : '');
 
+    // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
+    $container.parent().css('justifyContent', justifyContent);
+
     const $button = renderButton({ buttonOptions, createComponentCallback });
     $container.append($button);
 
-    // TODO: should return root $el
+    // TODO: try to return the root created $element
     return $button;
 }

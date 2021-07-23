@@ -350,6 +350,7 @@ const LayoutManager = Widget.inherit({
             this._renderEmptyItem($container);
         } else if(item.itemType === 'button') {
 
+            // TODO: try to remove both '$button' and '_itemsRunTimeInfo'
             const $button = renderButtonItem(
                 {
                     $container,
