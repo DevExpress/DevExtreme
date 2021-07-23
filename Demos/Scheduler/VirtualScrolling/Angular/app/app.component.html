@@ -2,34 +2,31 @@
     [height]="600"
     [currentDate]="currentDate"
     [dataSource]="appointments"
-    [views]="[
-        {
-            type: 'timelineWorkWeek',
-            name: 'Timeline',
-            groupOrientation: 'vertical'
-        },
-        {
-            type: 'workWeek',
-            groupOrientation: 'vertical'
-        },
-        {
-            type: 'month',
-            groupOrientation: 'horizontal'
-        }
-    ]"
     currentView="Timeline"
     [startDayHour]="8"
     [endDayHour]="20"
     [cellDuration]="60"
     [showAllDayPanel]="false"
-    [scrolling]="{
-        mode: 'virtual'
-    }"
-    [groups]="['humanId']"
-    [resources]="[{
-        fieldExpr: 'humanId',
-        dataSource: resources,
-        label: 'Employee'
-    }]"
->
+    [groups]="['humanId']">
+    <dxi-view
+        type="timelineWorkWeek"
+        name="Timeline"
+        groupOrientation="vertical"
+    ></dxi-view>
+    <dxi-view
+        type="workWeek"
+        groupOrientation="vertical"
+    ></dxi-view>
+    <dxi-view
+        type="month"
+        groupOrientation="horizontal"
+    ></dxi-view>
+    <dxi-resource
+        fieldExpr="humanId"
+        [dataSource]="resources"
+        label="Employee">
+    </dxi-resource>
+    <dxo-scrolling
+        mode="virtual">
+    </dxo-scrolling>
 </dx-scheduler>

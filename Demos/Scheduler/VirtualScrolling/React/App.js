@@ -1,35 +1,12 @@
 import React from 'react';
 
-import Scheduler from 'devextreme-react/scheduler';
+import Scheduler, { Resource, View, Scrolling } from 'devextreme-react/scheduler';
 import {
   resources,
   generateAppointments
 } from './data.js';
 
 const currentDate = new Date(2021, 1, 2);
-const views = [
-  {
-    type: 'timelineWorkWeek',
-    name: 'Timeline',
-    groupOrientation: 'vertical'
-  },
-  {
-    type: 'workWeek',
-    groupOrientation: 'vertical'
-  },
-  {
-    type: 'month',
-    groupOrientation: 'horizontal'
-  }
-];
-
-const scrolling = { mode: 'virtual' };
-
-const resourcesData = [{
-  fieldExpr: 'humanId',
-  dataSource: resources,
-  label: 'Employee'
-}];
 
 const groups = ['humanId'];
 
@@ -45,17 +22,35 @@ function App() {
     <Scheduler
       dataSource={appointments}
       height={600}
-      views={views}
-      defaultCurrentView="Timeline"
+      defaultCurrentView='Timeline'
       defaultCurrentDate={currentDate}
       startDayHour={startDayHour}
       endDayHour={endDayHour}
       cellDuration={60}
       showAllDayPanel={false}
-      scrolling={scrolling}
-      groups={groups}
-      resources={resourcesData}
-    />
+      groups={groups}>
+      <View
+        type='timelineWorkWeek'
+        name='Timeline'
+        groupOrientation='vertical'
+      />
+      <View
+        type='workWeek'
+        groupOrientation='vertical'
+      />
+      <View
+        type='month'
+        groupOrientation='horizontal'
+      />
+      <Resource
+        fieldExpr='humanId'
+        dataSource={resources}
+        label='Employee'
+      />
+      <Scrolling
+        mode='virtual'
+      />
+    </Scheduler>
   );
 }
 
