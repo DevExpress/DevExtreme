@@ -825,7 +825,7 @@ class Scheduler extends Widget {
                 'max': this._dateOption('max'),
                 'currentDate': this._dateOption('currentDate'),
                 'firstDayOfWeek': this.getFirstDayOfWeek(),
-                'currentView': this._currentView,
+                'currentView': this.modelProvider.currentView,
             }
         );
     }
