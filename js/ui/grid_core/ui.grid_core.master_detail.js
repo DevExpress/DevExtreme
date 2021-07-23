@@ -238,9 +238,14 @@ export default {
                         if(masterDataGrid.getView('rowsView').isFixedColumns()) {
                             return this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
                         } else {
+                            if(masterDataGrid.option('scrolling.useNative') === true) {
+                                return masterDataGrid.updateDimensions();
+                            }
+
                             const scrollable = masterDataGrid.getScrollable();
+
                             // T607490
-                            return scrollable && scrollable.update();
+                            return scrollable?.update();
                         }
                     }
                 },
