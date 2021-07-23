@@ -10,7 +10,9 @@ import {
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS
+    FIELD_ITEM_HELP_TEXT_CLASS,
+    FIELD_BUTTON_ITEM_CLASS,
+    FIELD_ITEM_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -119,8 +121,40 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
 
-export function renderButton(buttonOptions, createComponentCallback) {
+function renderButton(buttonOptions, createComponentCallback) {
     const $button = $('<div>');
     createComponentCallback($button, 'dxButton', buttonOptions);
+    return $button;
+}
+
+export function convertAlignmentToJustifyContent(verticalAlignment) {
+    switch(verticalAlignment) {
+        case 'center':
+            return 'center';
+        case 'bottom':
+            return 'flex-end';
+        default:
+            return 'flex-start';
+    }
+}
+
+export function convertAlignmentToTextAlign(horizontalAlignment) {
+    return isDefined(horizontalAlignment) ? horizontalAlignment : 'right';
+}
+
+export function renderButtonItem($container, { createComponentCallback, buttonOptions, justifyContent, textAlign, cssItemClass, dxColClass }) {
+    // TODO: the current element should be adjusted instead of $container.parent()
+    $container.parent().css('justifyContent', justifyContent);
+
+    $container
+        .addClass(FIELD_BUTTON_ITEM_CLASS)
+        .css('textAlign', textAlign)
+        .addClass(FIELD_ITEM_CLASS)
+        .addClass(cssItemClass)
+        .addClass(dxColClass);
+
+    const $button = renderButton(buttonOptions, createComponentCallback);
+    $container.append($button);
+
     return $button;
 }

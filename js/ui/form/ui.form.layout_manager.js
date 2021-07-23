@@ -36,7 +36,6 @@ import {
     FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
-    FIELD_BUTTON_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
@@ -45,7 +44,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, renderButton } from './ui.form.utils';
+import { renderLabel, renderHelpText, renderButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -350,7 +349,20 @@ const LayoutManager = Widget.inherit({
         if(item.itemType === 'empty') {
             this._renderEmptyItem($container);
         } else if(item.itemType === 'button') {
-            const $button = this._renderButtonItem($container, item);
+            const createComponentCallback =
+                ($target, componentName, componentOptions) => this._createComponent($target, componentName, componentOptions);
+
+            const $button = renderButtonItem(
+                $container,
+                {
+                    createComponentCallback,
+                    buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
+                    justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
+                    textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+                    cssItemClass: this.option('cssItemClass'),
+                    dxColClass: isDefined(item.col) ? 'dx-col-' + item.col : ''
+                }
+            );
 
             this._itemsRunTimeInfo.add({
                 item,
@@ -559,44 +571,6 @@ const LayoutManager = Widget.inherit({
         return $container
             .addClass(FIELD_EMPTY_ITEM_CLASS)
             .html('&nbsp;');
-    },
-
-    _renderButtonItem: function($container, item) {
-        function _convertAlignmentToJustifyContent(verticalAlignment) {
-            switch(verticalAlignment) {
-                case 'center':
-                    return 'center';
-                case 'bottom':
-                    return 'flex-end';
-                default:
-                    return 'flex-start';
-            }
-        }
-
-        function _convertAlignmentToTextAlign(horizontalAlignment) {
-            return isDefined(horizontalAlignment) ? horizontalAlignment : 'right';
-        }
-
-        const justifyContent = _convertAlignmentToJustifyContent(item.verticalAlignment);
-        const textAlign = _convertAlignmentToTextAlign(item.horizontalAlignment);
-
-        // TODO: the current element should be adjusted instead of $container.parent()
-        $container.parent().css('justifyContent', justifyContent);
-
-        $container
-            .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css('textAlign', textAlign)
-            .addClass(FIELD_ITEM_CLASS)
-            .addClass(this.option('cssItemClass'))
-            .addClass(isDefined(item.col) ? 'dx-col-' + item.col : '');
-
-        const $button = renderButton(
-            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
-            ($target, componentName, componentOptions) => this._createComponent($target, componentName, componentOptions)
-        );
-        $container.append($button);
-
-        return $button;
     },
 
     _addItemClasses: function($item, column) {
