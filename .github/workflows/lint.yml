@@ -42,6 +42,9 @@ jobs:
     - name: Lint TS
       run: npm run lint-ts
 
+    - name: Lint .d.ts
+      run: npm run lint-dts
+
   JS:
     runs-on: ubuntu-latest
     timeout-minutes: 60
