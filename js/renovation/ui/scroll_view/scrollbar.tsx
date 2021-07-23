@@ -306,6 +306,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && this.isReachBottom
       && !this.pendingReachBottom
       && !this.onReachBottomWasFiredOnce
+      && this.props.containerSize
+      && this.props.contentSize
     ) {
       this.onReachBottomWasFiredOnce = true;
 
@@ -359,10 +361,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   updateMaxOffset(): void {
     if (this.props.forceGeneratePockets) {
       if (this.isPullDown) {
-        this.maxOffset = this.props.topPocketSize; // tested
-        this.setPocketState(TopPocketState.STATE_READY); // TODO: test
+        this.maxOffset = this.props.topPocketSize;
+        this.setPocketState(TopPocketState.STATE_READY);
       } else {
-        this.maxOffset = 0; // tested
+        this.maxOffset = 0;
         this.setPocketState(TopPocketState.STATE_RELEASED);
       }
     }

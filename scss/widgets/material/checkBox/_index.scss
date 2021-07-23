@@ -106,17 +106,6 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   }
 }
 
-.dx-checkbox-text {
-  margin-left: -$material-checkbox-size;
-  padding-left: $material-checkbox-size + 5px;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-right: -$material-checkbox-size;
-    padding-right: $material-checkbox-size + 5px;
-  }
-}
-
 .dx-invalid {
   .dx-checkbox-icon {
     border: 2px solid $checkbox-invalid-focused-border-color;

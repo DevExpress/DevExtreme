@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { DataSource } from 'data/data_source/data_source';
@@ -153,23 +152,6 @@ QUnit.module('Scheduler with config', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('Scheduler should have specific viewName setting of the view', function(assert) {
-        const scheduler = createWrapper({
-            views: [{
-                type: 'day',
-                name: 'Test Day'
-            }, 'week'],
-            cellDuration: 40,
-            currentView: 'day',
-            useDropDownViewSwitcher: false
-        });
-
-        const $header = $(scheduler.instance.getHeader().$element());
-
-        assert.equal($header.find('.dx-tab').eq(0).text(), 'Test Day');
-        assert.equal($header.find('.dx-tab').eq(1).text(), 'Week');
-    });
-
     QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', function(assert) {
         const scheduler = createWrapper();
 

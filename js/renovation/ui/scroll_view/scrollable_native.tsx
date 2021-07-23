@@ -937,7 +937,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   get useSimulatedScrollbar(): boolean {
     if (!isDefined(this.props.useSimulatedScrollbar)) {
-      return nativeScrolling && this.platform === 'android' && !browser.mozilla;
+      return nativeScrolling as boolean && this.platform === 'android' && !browser.mozilla;
     }
 
     return this.props.useSimulatedScrollbar;

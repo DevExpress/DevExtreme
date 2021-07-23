@@ -4,7 +4,6 @@ import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import { calculateCellIndex, getViewStartByOptions } from './utils/month';
-import { calculateStartViewDate } from './utils/timeline_month';
 import { formatWeekdayAndDay } from './utils/base';
 import { VIEWS } from '../constants';
 
@@ -14,10 +13,6 @@ const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get type() { return VIEWS.TIMELINE_MONTH; }
-
-    get isDateAndTimeView() {
-        return false;
-    }
 
     get viewDirection() { return 'horizontal'; }
 
@@ -51,31 +46,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
     isIndicatorVisible() {
         return true;
-    }
-
-    _getCellCount() {
-        const currentDate = this.option('currentDate');
-        let cellCount = 0;
-        if(this._isWorkSpaceWithCount()) {
-            const intervalCount = this.option('intervalCount');
-
-            for(let i = 1; i <= intervalCount; i++) {
-                cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
-            }
-        } else {
-            cellCount = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-        }
-
-        return cellCount;
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this.option('intervalCount'),
-        );
     }
 
     _getFormat() {
@@ -119,6 +89,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return {
             ...options,
             getDateForHeaderText: (_, date) => date,
+            columnsInDay: 1,
+            calculateCellIndex,
         };
     }
 }

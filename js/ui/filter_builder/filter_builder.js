@@ -782,6 +782,7 @@ const FilterBuilder = Widget.inherit({
                 // T852701
                 this.repaint();
             },
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
             },

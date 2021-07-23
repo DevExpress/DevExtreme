@@ -491,7 +491,7 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 
     $scrollable.dxScrollable({
         useNative: true,
-        showScrollbar: false,
+        showScrollbar: 'never',
         useSimulatedScrollbar: true
     });
 

@@ -26,6 +26,7 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
+require('./build/gulp/qunit-in-docker');
 
 if(!env.TEST_CI && !env.DOCKER_CI) {
     require('./build/gulp/create_timezones_data');
@@ -74,7 +75,9 @@ function createDefaultBatch(dev) {
     tasks.push(dev ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev) {
         tasks.push('npm');
-        tasks.push('themebuilder-npm');
+        if(!env.SKIP_THEMEBUILDER) {
+            tasks.push('themebuilder-npm');
+        }
         tasks.push('check-license-notices');
     }
     return gulp.series(tasks);

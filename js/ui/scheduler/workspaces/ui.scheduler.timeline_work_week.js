@@ -5,7 +5,6 @@ import {
     getWeekendsCount,
     isDataOnWeekend,
     getFirstDayOfWeek,
-    calculateStartViewDate,
 } from './utils/work_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -20,7 +19,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
         super(...args);
 
         this._getWeekendsCount = getWeekendsCount;
-        this._isSkippedData = isDataOnWeekend;
     }
 
     _getElementClass() {
@@ -35,7 +33,9 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
         return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
-    _isSkippedData() { return isDataOnWeekend; }
+    _isSkippedData(date) {
+        return isDataOnWeekend(date);
+    }
 
     _incrementDate(date) {
         const day = date.getDay();
@@ -43,16 +43,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
             date.setDate(date.getDate() + 2);
         }
         super._incrementDate(date);
-    }
-
-    _calculateStartViewDate() {
-        return calculateStartViewDate(
-            this.option('currentDate'),
-            this.option('startDayHour'),
-            this.option('startDate'),
-            this._getIntervalDuration(),
-            this.option('firstDayOfWeek'),
-        );
     }
 }
 

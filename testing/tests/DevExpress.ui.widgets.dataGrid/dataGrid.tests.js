@@ -1329,6 +1329,33 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getController('data').items().length, 2, 'data is updated');
     });
 
+    QUnit.test('dataSource object change', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1 }]
+                }
+            }
+        });
+
+        // act
+        dataGrid.option('dataSource', {
+            store: {
+                type: 'array',
+                key: 'id',
+                data: [{ id: 1 }, { id: 2 }]
+            }
+        });
+
+        // assert
+        const rows = dataGrid.getVisibleRows();
+        assert.equal(rows.length, 2);
+    });
+
     // T260011
     QUnit.test('dataSource change to null', function(assert) {
         // arrange
@@ -1634,7 +1661,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('columnChooser', { mode: 'select' });
         assert.equal(headerPanel._getToolbarOptions.callCount, 3, 'Toolbar items are updated after columnChooser options change');
 
-        dataGrid.option('export', { allowExportSelectedData: false });
+        dataGrid.option('export', { allowExportSelectedData: true });
         assert.equal(headerPanel._getToolbarOptions.callCount, 4, 'Toolbar items are updated after export options change');
 
         dataGrid.option('groupPanel', { emptyPanelText: 'test' });
@@ -1728,12 +1755,13 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('paging change', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: null,
             dataSource: {
                 store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
                 pageSize: 3
             }
         });
+
+        this.clock.tick();
 
         const changedSpy = sinon.spy();
         const loadingSpy = sinon.spy();
@@ -1746,6 +1774,8 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             pageIndex: 1,
             pageSize: 2
         });
+
+        this.clock.tick();
 
         // assert
         assert.strictEqual(changedSpy.callCount, 1, 'changed is called');

@@ -426,6 +426,33 @@ describe('DataGrid', () => {
 
         expect(component.onDimensionChanged.bind(component)).not.toThrow();
       });
+
+      it('The updateDimensions should be raised on visibilityChanged event with visible true', () => {
+        const component = new DataGrid({});
+
+        component.setupInstance();
+
+        component.onVisibilityChange(true);
+
+        expect(component.getComponentInstance().updateDimensions).toBeCalledTimes(1);
+        expect(component.getComponentInstance().updateDimensions).toBeCalledWith();
+      });
+
+      it('The updateDimensions should not be raised on visibilityChanged event with visible false', () => {
+        const component = new DataGrid({});
+
+        component.setupInstance();
+
+        component.onVisibilityChange(false);
+
+        expect(component.getComponentInstance().updateDimensions).toBeCalledTimes(0);
+      });
+
+      it('The visibilityChanged event without instance', () => {
+        const component = new DataGrid({});
+
+        expect(component.onVisibilityChange.bind(component, true)).not.toThrow();
+      });
     });
   });
 
@@ -605,8 +632,8 @@ describe('DataGrid', () => {
     });
 
     describe('headerFilter.height', () => {
-      it('should be undefined by default', () => {
-        expect(getDefaultOptions().headerFilter?.height).toBe(undefined);
+      it('should be 325 by default', () => {
+        expect(getDefaultOptions().headerFilter?.height).toBe(325);
       });
 
       it('should be 315 if material', () => {

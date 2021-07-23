@@ -11,7 +11,7 @@ import {
   ScrollDirection,
 } from './scroll_direction';
 
-export function restoreLocation(
+export function convertToLocation(
   location: number | Partial<{ x: number; y: number; top: number; left: number }>,
   direction?: ScrollableDirection,
 ): Partial<ScrollOffset> {
@@ -26,7 +26,7 @@ export function restoreLocation(
 
   const { isVertical, isHorizontal } = new ScrollDirection(direction);
   return {
-    left: isHorizontal ? -location : undefined,
-    top: isVertical ? -location : undefined,
+    left: isHorizontal && isDefined(location) ? -location : undefined,
+    top: isVertical && isDefined(location) ? -location : undefined,
   };
 }

@@ -14,6 +14,7 @@ const errors = require('ui/widget/ui.errors');
 const config = require('core/config');
 
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.module('Integration: Base', {
     beforeEach: function() {
@@ -105,17 +106,6 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
     assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.3, 'Row heights are equal');
 });
 
-QUnit.test('Header should be initialized with correct \'width\' option', function(assert) {
-    this.createInstance({
-        views: ['day', 'week'],
-        currentView: 'week',
-        width: 700
-    });
-    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-
-    assert.equal(header.option('width'), 700, 'Header has a right width');
-});
-
 QUnit.test('Header should be updated with correct \'width\' option', function(assert) {
     this.createInstance({
         views: ['day', 'week'],
@@ -175,24 +165,8 @@ QUnit.test('Scheduler should handle events from units', function(assert) {
         assert.ok(spy.calledOn(this.instance), 'testFunction has a right context');
     };
 
-    checkSchedulerUnit.call(this, '.dx-scheduler-header', 'dxSchedulerHeader');
     checkSchedulerUnit.call(this, '.dx-scheduler-work-space', 'dxSchedulerWorkSpaceDay');
     checkSchedulerUnit.call(this, '.dx-scheduler-scrollable-appointments', 'dxSchedulerAppointments');
-});
-
-QUnit.test('Scheduler should throw an error if event is not added to subscribes', function(assert) {
-    this.createInstance();
-    const unit = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-
-    assert.throws(
-        function() {
-            unit.notifyObserver('someFn', { a: 1 });
-        },
-        function(e) {
-            return /E1031/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
 });
 
 QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
@@ -225,15 +199,12 @@ QUnit.test('The \'min\' option should be converted to Date obj before send to wo
         min: date.getTime()
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    this.compareDates(workSpace.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 
     date = new Date(1425243600000);
     this.instance.option('min', date.getTime());
-    this.compareDates(workSpace.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
@@ -243,15 +214,12 @@ QUnit.test('The \'max\' option should be converted to Date obj before send to wo
         max: date.getTime()
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    this.compareDates(workSpace.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 
     date = new Date(1425243600000);
     this.instance.option('max', date.getTime());
-    this.compareDates(workSpace.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
@@ -318,15 +286,12 @@ QUnit.test('max option should be parsed with ISO8601 dates before sending to wor
         max: '20170209'
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    assert.deepEqual(workSpace.option('max'), new Date(2017, 1, 9), 'max is OK');
     assert.deepEqual(header.option('max'), new Date(2017, 1, 9), 'max is OK');
 
     this.instance.option('max', '20170210');
 
-    assert.deepEqual(workSpace.option('max'), new Date(2017, 1, 10), 'max is OK after option change');
     assert.deepEqual(header.option('max'), new Date(2017, 1, 10), 'max is OK  after option change');
 });
 
@@ -338,14 +303,11 @@ QUnit.test('min option should be parsed with ISO8601 dates before sending to wor
         min: '20170207'
     });
 
-    const workSpace = this.instance.getWorkSpace();
     const header = this.instance.getHeader();
 
-    assert.deepEqual(workSpace.option('min'), new Date(2017, 1, 7), 'min is OK');
     assert.deepEqual(header.option('min'), new Date(2017, 1, 7), 'min is OK');
 
     this.instance.option('min', '20170206');
 
-    assert.deepEqual(workSpace.option('min'), new Date(2017, 1, 6), 'min is OK after option change');
     assert.deepEqual(header.option('min'), new Date(2017, 1, 6), 'min is OK  after option change');
 });

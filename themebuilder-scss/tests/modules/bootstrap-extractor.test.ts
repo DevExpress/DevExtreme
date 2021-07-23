@@ -5,10 +5,12 @@ describe('BootstrapExtractor', () => {
   test('constructor set the right compiler and processor', () => {
     const lessExtractor = new BootstrapExtractor('', 3);
     const sassExtractor = new BootstrapExtractor('', 4);
+    const sassExtractorFor5 = new BootstrapExtractor('', 5);
     const defaultExtractor = new BootstrapExtractor('', 10);
 
     expect(lessExtractor.compiler).toBe(BootstrapExtractor.lessRender);
     expect(sassExtractor.compiler).toBe(BootstrapExtractor.sassRender);
+    expect(sassExtractorFor5.compiler).toBe(BootstrapExtractor.sassRender);
     expect(defaultExtractor.compiler).toBe(BootstrapExtractor.sassRender);
 
     expect(lessExtractor.sourceProcessor).toBe(lessExtractor.lessProcessor);
@@ -38,13 +40,33 @@ describe('BootstrapExtractor', () => {
     .rejects
     .toBe('Unrecognised input. Possibly missing something'));
 
-  test('sassProcessor', async () => {
+  test('sassProcessor (bootstrap4)', async () => {
     const testSassString = 'test string';
     const setterServiceCode = 'setter';
     const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testSassString, 4);
-    const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
+    const functionsPath = require.resolve('bootstrap4/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap4/scss/_variables.scss');
+    const functions = readFileSync(functionsPath);
+    const variables = readFileSync(variablesPath);
+    extractor.getSetterServiceCode = (): string => setterServiceCode;
+    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
+
+    expect(await extractor.sassProcessor())
+      .toBe(functions.toString()
+      + testSassString
+      + variables.toString()
+      + setterServiceCode
+      + collectorServiceCode);
+  });
+
+  test('sassProcessor (bootstrap5)', async () => {
+    const testSassString = 'test string';
+    const setterServiceCode = 'setter';
+    const collectorServiceCode = 'collector';
+    const extractor = new BootstrapExtractor(testSassString, 5);
+    const functionsPath = require.resolve('bootstrap5/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap5/scss/_variables.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
     extractor.getSetterServiceCode = (): string => setterServiceCode;
@@ -128,7 +150,7 @@ describe('BootstrapExtractor', () => {
     ]);
   });
 
-  test('extract varuable with rem (bootstrap 4) (T951945)', async () => {
+  test('extract variable with rem (bootstrap 4) (T951945)', async () => {
     const input = `
     $var1: -.25rem;
     $var2: 0.34rem !default;
