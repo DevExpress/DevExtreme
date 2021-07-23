@@ -2122,31 +2122,26 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.fullstackedarea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedbar
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedline
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedspline
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedsplinearea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     fullstackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.line
@@ -2157,13 +2152,11 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.rangearea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     rangearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.rangebar
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     rangebar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.scatter
@@ -2179,49 +2172,41 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.splinearea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     splinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedarea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedbar
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedline
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedspline
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedsplinearea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.steparea
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     steparea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stepline
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stepline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stock

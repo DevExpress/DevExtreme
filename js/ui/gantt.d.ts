@@ -138,7 +138,6 @@ export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
 };
 
 /** @public */
-// eslint-disable-next-line spellcheck/spell-checker
 export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
     readonly values: any;
     readonly key: any;
@@ -673,7 +672,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @action
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
     /**
      * @docid
@@ -1036,7 +1034,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 taskKey:object
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     unassignResourceFromTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid

@@ -1034,7 +1034,6 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
      * @docid dxPolarChartOptions.commonSeriesSettings.stackedbar
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedbar?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.type
@@ -1458,7 +1457,6 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     areapolarseries?: dxPolarChartSeriesTypesAreapolarseries;
     /**
      * @docid
@@ -1467,7 +1465,6 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     barpolarseries?: dxPolarChartSeriesTypesBarpolarseries;
     /**
      * @docid
@@ -1476,7 +1473,6 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     linepolarseries?: dxPolarChartSeriesTypesLinepolarseries;
     /**
      * @docid
@@ -1484,7 +1480,6 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     scatterpolarseries?: any;
     /**
      * @docid
@@ -1493,7 +1488,6 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
 }
 /** @namespace DevExpress.viz */
@@ -2197,7 +2191,6 @@ export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeri
      * @type object
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     point?: dxPolarChartSeriesTypesAreapolarseriesPoint;
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.selectionMode
@@ -2274,7 +2267,6 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarCha
      * @type object
      * @public
      */
-    // eslint-disable-next-line spellcheck/spell-checker
     label?: dxPolarChartSeriesTypesStackedbarpolarseriesLabel;
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode
@@ -2286,7 +2278,6 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarCha
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.label.position

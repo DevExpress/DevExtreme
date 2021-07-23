@@ -7,10 +7,8 @@ import type { ODataRequestOptions } from './context';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
-        // eslint-disable-next-line spellcheck/spell-checker
-        onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        // eslint-disable-next-line spellcheck/spell-checker
-        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
