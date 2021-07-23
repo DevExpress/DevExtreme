@@ -349,18 +349,16 @@ const LayoutManager = Widget.inherit({
         if(item.itemType === 'empty') {
             this._renderEmptyItem($container);
         } else if(item.itemType === 'button') {
-            const createComponentCallback =
-                ($target, componentName, componentOptions) => this._createComponent($target, componentName, componentOptions);
 
             const $button = renderButtonItem(
-                $container,
                 {
-                    createComponentCallback,
+                    $container,
+                    createComponentCallback: this._createComponent.bind(this),
                     buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
                     justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
                     textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
                     cssItemClass: this.option('cssItemClass'),
-                    dxColClass: isDefined(item.col) ? 'dx-col-' + item.col : ''
+                    targetColIndex: item.col
                 }
             );
 
