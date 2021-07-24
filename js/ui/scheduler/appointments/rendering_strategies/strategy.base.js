@@ -4,7 +4,6 @@ import { extend } from '../../../../core/utils/extend';
 import dateUtils from '../../../../core/utils/date';
 import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
-import { getModelProvider } from '../../instanceFactory';
 
 import timeZoneUtils from '../../utils.timeZone';
 
@@ -23,13 +22,11 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get key() { return this.options.key; }
-    get modelProvider() { return getModelProvider(this.key); }
     get instance() { return this.options.instance; } // TODO get rid of this
-    get isAdaptive() { return this.modelProvider.adaptivityEnabled; }
-    get rtlEnabled() { return this.modelProvider.rtlEnabled; }
-    get startDayHour() { return this.modelProvider.startDayHour; }
-    get endDayHour() { return this.modelProvider.endDayHour; }
+    get isAdaptive() { return this.options.adaptivityEnabled; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
+    get startDayHour() { return this.options.startDayHour; }
+    get endDayHour() { return this.options.endDayHour; }
     get maxAppointmentsPerCell() { return this.modelProvider.maxAppointmentsPerCell; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
