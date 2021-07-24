@@ -597,7 +597,7 @@ const LayoutManager = Widget.inherit({
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         let $label;
 
-        this._addItemClasses($container, item.col, this.option('cssItemClass'));
+        this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
         if(labelOptions.visible && labelOptions.text) {
