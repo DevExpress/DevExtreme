@@ -346,33 +346,15 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderTemplate: function($container, item) {
-        if(item.itemType === 'empty') {
-            this._renderEmptyItem($container);
-        } else if(item.itemType === 'button') {
-            adjustContainerAsButtonItem({
-                $container,
-                justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
-                textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
-                cssItemClass: this.option('cssItemClass'),
-                targetColIndex: item.col
-            });
-
-            const $button = renderButton({
-                buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
-                createComponentCallback: this._createComponent.bind(this)
-            });
-            $container.append($button);
-
-            // TODO: try to remove '_itemsRunTimeInfo'
-            this._itemsRunTimeInfo.add({
-                item,
-                widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
-                guid: item.guid,
-                $itemContainer: $container
-            });
-
-        } else {
-            this._renderFieldItem(item, $container);
+        switch(item.itemType) {
+            case 'empty':
+                this._renderEmptyItem($container);
+                break;
+            case 'button':
+                this._renderButtonItem(item, $container);
+                break;
+            default:
+                this._renderFieldItem(item, $container);
         }
     },
 
@@ -571,6 +553,31 @@ const LayoutManager = Widget.inherit({
         return $container
             .addClass(FIELD_EMPTY_ITEM_CLASS)
             .html('&nbsp;');
+    },
+
+    _renderButtonItem: function(item, $container) {
+        // TODO: try to create $container in this function and return it
+        adjustContainerAsButtonItem({
+            $container,
+            justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
+            textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+            cssItemClass: this.option('cssItemClass'),
+            targetColIndex: item.col
+        });
+
+        const $button = renderButton({
+            buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
+            createComponentCallback: this._createComponent.bind(this)
+        });
+        $container.append($button);
+
+        // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
+            guid: item.guid,
+            $itemContainer: $container
+        });
     },
 
     _addItemClasses: function($item, column) {
