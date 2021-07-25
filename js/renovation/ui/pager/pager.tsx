@@ -34,7 +34,7 @@ export class PageSizeSmallProps {
   view: viewFunction,
 })
 
-export class Pager extends JSXComponent<PagerProps, 'pageIndex'>() {
+export class Pager extends JSXComponent<PagerProps>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndex = newPageIndex + 1;

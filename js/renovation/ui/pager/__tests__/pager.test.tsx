@@ -85,7 +85,7 @@ describe('Pager', () => {
         gridCompatibility: false,
         pageIndexChange: jest.fn(),
         pageSizeChange: jest.fn(),
-      });
+      } as any);
 
       const { pageIndexChange, pageSizeChange, ...restProps } = component.pagerProps;
       expect(restProps).toMatchObject({
