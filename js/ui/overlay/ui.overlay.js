@@ -392,19 +392,12 @@ const Overlay = Widget.inherit({
     },
 
     _updateResizeCallbackSkipCondition() {
-        if(this._doesShowAnimationChangeDimensions()) {
-            this._shouldSkipResizeCallback = (entries) => {
-                if(this._showAnimationProcessing) {
-                    return true;
-                }
+        const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
-                return this._isContentDimensionChanged(entries);
-            };
-        } else {
-            this._shouldSkipResizeCallback = (entries) => {
-                return this._isContentDimensionChanged(entries);
-            };
-        }
+        this._shouldSkipResizeCallback = (entries) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._isContentDimensionChanged(entries);
+        };
     },
 
     _doesShowAnimationChangeDimensions: function() {
