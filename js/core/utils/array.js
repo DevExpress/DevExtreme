@@ -2,6 +2,9 @@ const isDefined = require('./type').isDefined;
 const each = require('./iterator').each;
 const objectUtils = require('./object');
 const config = require('../config');
+const browser = require('./browser');
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
@@ -40,6 +43,12 @@ const intersection = function(a, b) {
 };
 
 export const uniqueValues = function(data) {
+    if(isIE11) {
+        return data.filter(function(item, position) {
+            return data.indexOf(item) === position;
+        });
+    }
+
     return [...new Set(data)];
 };
 
