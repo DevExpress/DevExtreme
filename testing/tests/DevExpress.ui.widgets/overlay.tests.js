@@ -4191,6 +4191,11 @@ QUnit.module('resizeObserver integration', {
             visible: true
         }).dxOverlay('instance');
 
+        if(!overlay.option('_observeContentResize')) {
+            assert.ok(true, 'resize observer is disabled on this env');
+            return;
+        }
+
         const overlayContentElement = overlay.$content().get(0);
         const contentRect = overlayContentElement.getBoundingClientRect();
         const getCenter = (rect, dimension) => {
@@ -4284,8 +4289,8 @@ QUnit.module('resizeObserver integration', {
                 assert.ok(shownStub.calledOnce, 'shown is called only once');
                 assert.ok(showingStub.calledOnce, 'showing is called only once');
                 resizingHandled();
-            }, 250, this.timeToWaitResize);
+            }, this.timeToWaitResize);
             showingHandled();
-        }, 250, this.timeToWaitResize);
+        }, this.timeToWaitResize);
     });
 });
