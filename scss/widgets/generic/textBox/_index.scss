@@ -44,6 +44,34 @@
         padding-right: 0;
       }
     }
+
+    .dx-texteditor-label {
+      left: $generic-texteditor-icon-container-size;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: 0;
+        right: $generic-texteditor-icon-container-size;
+      }
+    }
+  }
+
+  &.dx-editor-outlined {
+    .dx-texteditor-label::before {
+      min-width: $generic-texteditor-icon-container-size;
+    }
+  }
+
+  &.dx-editor-filled {
+    .dx-texteditor-label {
+      left: $generic-texteditor-icon-container-size;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        left: 0;
+        right: $generic-texteditor-icon-container-size;
+      }
+    }
   }
 }
 

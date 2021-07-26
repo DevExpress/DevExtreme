@@ -132,6 +132,10 @@ $generic-texteditor-label-transition:
   &.dx-state-hover {
     border-color: $texteditor-hover-border-color;
 
+    .dx-texteditor-label {
+      color: $texteditor-hover-border-color;
+    }
+
     &.dx-editor-filled {
       border-color: transparent;
       background-color: color.change($texteditor-hover-border-color, $alpha: 0.1);
@@ -142,7 +146,6 @@ $generic-texteditor-label-transition:
   &.dx-state-focused.dx-state-hover {
     .dx-texteditor-label {
       color: $base-accent;
-      font-size: $generic-texteditor-label-size;
     }
 
     &.dx-invalid {
@@ -162,6 +165,13 @@ $generic-texteditor-label-transition:
 
     &.dx-editor-filled {
       background-color: transparent;
+    }
+
+    &.dx-editor-outlined {
+      &.dx-texteditor-with-floating-label,
+      &.dx-texteditor-with-label {
+        border-top-color: transparent;
+      }
     }
   }
 
@@ -199,11 +209,21 @@ $generic-texteditor-label-transition:
 
 .dx-texteditor-label {
   position: absolute;
-  left: 0;
   font-size: $generic-texteditor-label-size;
   color: $texteditor-label-color;
-  max-height: 1px;
   white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    max-width: 100%;
+    display: block;
+  }
 
   .dx-invalid & {
     color: $base-invalid-color;
@@ -340,7 +360,6 @@ $generic-texteditor-label-transition:
     border: $border-width $borderStyle $borderColor;
 
     .dx-texteditor-label {
-      width: 0;
       top: 50%;
       height: $generic-base-font-size;
       margin-top: math.div(-$generic-base-font-size, 2);
@@ -379,21 +398,23 @@ $generic-texteditor-label-transition:
     }
   }
 
-  &.dx-texteditor-with-custom-buttons {
-    .dx-texteditor-label {
-      &::after,
-      &::before {
-        border-radius: 0;
-      }
+  .dx-texteditor-buttons-container {
+    + .dx-texteditor-input-container {
+      .dx-texteditor-label {
+        &::after,
+        &::before {
+          border-radius: 0;
+        }
 
-      &::before {
-        padding-left: 1px;
-        margin-left: -1px;
-      }
+        &::before {
+          padding-left: 1px;
+          margin-left: -1px;
+        }
 
-      &::after {
-        padding-right: 1px;
-        margin-right: -1px;
+        &::after {
+          padding-right: 1px;
+          margin-right: -1px;
+        }
       }
     }
   }
@@ -493,6 +514,7 @@ $generic-texteditor-label-transition:
       border-right: 1px solid $texteditor-invalid-faded-border-color;
       border-left: 1px solid $texteditor-invalid-faded-border-color;
       border-bottom: 1px solid $texteditor-invalid-faded-border-color;
+      border-top: 1px solid transparent;
 
       .dx-texteditor-label {
         &::before,
@@ -580,9 +602,9 @@ $generic-texteditor-label-transition:
 }
 
 .dx-editor-underlined {
-  $input-vertical-diff: 4px;
-  $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff + 2px;
-  $label-transform: translate(0, -2px);
+  $input-vertical-diff: 2px;
+  $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff * 2;
+  $label-transform: translate(0, 0);
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
@@ -600,9 +622,12 @@ $generic-texteditor-label-transition:
       padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-label {
-        left: $generic-base-inline-borderedwidget-horizontal-padding;
+    &.dx-textarea {
+      .dx-texteditor-input {
+        margin-top: $input-top-padding;
+        margin-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
+        padding-top: 0;
+        padding-bottom: 0;
       }
     }
   }
@@ -622,7 +647,7 @@ $generic-texteditor-label-transition:
         font-size: $generic-base-font-size;
         top: 50%;
         height: $generic-base-font-size;
-        margin-top: math.div(-$generic-base-font-size, 2);
+        margin-top: math.div(-$generic-base-font-size, 2) + math.div($input-vertical-diff, 2);
         line-height: $generic-base-font-size;
       }
 
@@ -653,11 +678,11 @@ $generic-texteditor-label-transition:
       }
 
       .dx-placeholder {
-        top: $input-top-padding;
+        top: $input-vertical-diff;
         display: block;
 
         &::before {
-          padding-top: 0;
+          padding-top: $generic-base-inline-borderedwidget-top-padding;
         }
       }
     }
@@ -674,12 +699,21 @@ $generic-texteditor-label-transition:
         }
       }
 
+      .dx-texteditor-label {
+        left: $generic-base-inline-borderedwidget-horizontal-padding;
+      }
+
       .dx-placeholder {
         left: $generic-base-inline-borderedwidget-horizontal-padding;
       }
 
       @at-root #{selector-append(".dx-rtl", &)} {
         .dx-placeholder {
+          left: 0;
+          right: $generic-base-inline-borderedwidget-horizontal-padding;
+        }
+
+        .dx-texteditor-label {
           left: 0;
           right: $generic-base-inline-borderedwidget-horizontal-padding;
         }
