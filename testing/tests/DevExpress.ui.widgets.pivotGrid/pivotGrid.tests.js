@@ -6176,7 +6176,6 @@ QUnit.module('Vertical headers', {
         area.setRowsHeight([100, 120, 300]);
         area.groupHeight(300);
 
-        area.updateScroll(true);
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
