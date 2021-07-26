@@ -11,6 +11,7 @@ import { ItemClickEvent, SelectionChangedEvent } from '../../../ui/button_group'
 
 // eslint-disable-next-line import/named
 import { ButtonClickEvent } from '../../../ui/drop_down_button';
+import { EventCallback } from '../common/event_callback';
 
 @ComponentBindings()
 export class CollectionWidgetItem {
@@ -93,70 +94,50 @@ export class CollectionWidgetItem {
   // ) => string | UserDefinedElement);
 }
 
-// TODO: commented to avoid issues in Vue application
-// https://github.com/DevExpress/devextreme-renovation/issues/724
-// // TODO: it is not a 'native' way
-// @ComponentBindings()
-// export class ToolbarTextBoxProps {
-//   //
-//   // Use cases:
-//   //
-//   // - in a RenoV component:
-//   // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
-//   //
-//   @OneWay() value: string | null = '';
+/*
+  const toolbarItems = [
+    { widget: 'dxTextBox' as ToolbarWidgetType, locateInMenu: 'never' as ToolbarLocateInMenuType,
+      options: {
+        value: '123',
+        onValueChanged: (e) => { alert(e); }
+      }
+    },
+  ];
+  <Toolbar items={toolbarItems}></Toolbar>
+*/
+// TODO: it is not a 'native' way
+@ComponentBindings()
+export class ToolbarTextBoxProps {
+  @OneWay() value: (string | null) = '';
 
-//   //
-//   // Use cases:
-//   //
-//   // - in a RenoV component:
-//   // <Toolbar
-//   //   items={[
-//   //     { widget: 'dxTextBox', options: {
-//   //        value: 'box1', onValueChanged: () => console.log('hi') }}
-//   //   ]}
-//   // />
-//   //
-//   // TODO:  EventCallback<TextBoxValueChanged>
-//   //
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   @Event() onValueChanged?: EventCallback<any>;
+  // TODO:  EventCallback<TextBoxValueChanged>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Event() onValueChanged?: EventCallback<any>;
 
-//   // TODO: other props
-// }
+  // TODO: other props
+}
 
-// TODO: commented to avoid issues in Vue application
-// https://github.com/DevExpress/devextreme-renovation/issues/724
-// // TODO: it is not a 'native' way
-// // TODO: not used, https://github.com/DevExpress/devextreme-renovation/issues/724
-// @ComponentBindings()
-// export class ToolbarCheckBoxProps {
-//   //
-//   // Use cases:
-//   //
-//   // - in a RenoV component:
-//   // <Toolbar items={[{ widget: 'dxTextBox', options: { value: 'my text' } }]} />
-//   //
-//   @OneWay() value: boolean | null = false;
+/*
+  const toolbarItems = [
+      { widget: 'dxCheckBox' as ToolbarWidgetType, locateInMenu: 'never' as ToolbarLocateInMenuType,
+        options: {
+          value: true,
+          //onValueChanged: (e) => { alert(e); }
+        }
+      },
+  ];
+  <Toolbar items={toolbarItems}></Toolbar>
+*/
+// TODO: it is not a 'native' way
+@ComponentBindings()
+export class ToolbarCheckBoxProps {
+  @OneWay() value: (boolean | null) = false;
 
-//   //
-//   // Use cases:
-//   //
-//   // - in a RenoV component:
-//   // <Toolbar
-//   //   items={[
-//   //     { widget: 'dxTextBox', options: {
-//   //       value: 'box1', onValueChanged: () => console.log('hi') }}
-//   //   ]}
-//   // />
-//   //
-//   // TODO:  EventCallback
-//   //
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   @Event() onValueChanged?: EventCallback<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Event() onValueChanged?: EventCallback<any>;
 
-//   // TODO: other props
-// }
+  // TODO: other props
+}
 
 export type ToolbarWidgetType = 'dxButton' | 'dxCheckBox' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
@@ -415,9 +396,6 @@ export class ToolbarDropDownButtonProps {
   wrapItemText?: boolean;
 }
 
-export type ToolbarItemOptionType = ToolbarButtonProps
-| ToolbarButtonGroupProps | ToolbarDropDownButtonProps;
-
 @ComponentBindings()
 export class ToolbarItem extends CollectionWidgetItem {
   // js\ui\toolbar.d.ts - export interface dxToolbarItem extends CollectionWidgetItem {
@@ -497,7 +475,9 @@ export class ToolbarItem extends CollectionWidgetItem {
   // - TODO: prepare jquery, angular, vue code samples
   //
   @OneWay()
-  options?: ToolbarItemOptionType;
+  options?: (ToolbarButtonProps
+  | ToolbarButtonGroupProps | ToolbarDropDownButtonProps
+  | ToolbarTextBoxProps | ToolbarCheckBoxProps);
 
   //
   // Use cases:
