@@ -411,6 +411,12 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       .dx-icon {
         color: $base-accent;
       }
+
+      &.dx-item-selected,
+      &.dx-state-focused,
+      &.dx-state-hover {
+        background-color: $material-scheduler-toolbar-active-color;
+      }
     }
 
     .dx-scheduler-navigator {
@@ -418,27 +424,19 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         .dx-button {
           &.dx-item-selected {
             background-color: $button-normal-bg;
-            color: $base-accent;
+            color: $material-scheduler-toolbar-color;
 
             .dx-icon {
-              color: $base-accent;
+              color: $material-scheduler-toolbar-color;
             }
 
             &.dx-state-focused {
-              background-color: color.change($base-accent, $alpha: 0.08);
-
-              &.dx-state-hover {
-                background-color: color.change($base-accent, $alpha: 0.08);
-              }
+              background-color: $material-scheduler-toolbar-active-color;
             }
-          }
 
-          &.dx-state-focused {
-            background-color: color.change($base-accent, $alpha: 0.08);
-          }
-
-          &.dx-state-hover {
-            background-color: color.change($base-accent, $alpha: 0.08);
+            &.dx-state-hover {
+              background-color: $material-scheduler-toolbar-active-color;
+            }
           }
         }
       }
