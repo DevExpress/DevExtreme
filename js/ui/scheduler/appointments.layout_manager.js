@@ -58,6 +58,10 @@ class AppointmentLayoutManager {
     }
 
     _createAppointmentsMapCore(list, positionMap) {
+        const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
+        const cellCountInsideTopVirtualRow = virtualScrollingDispatcher?.cellCountInsideTopVirtualRow || 0;
+        const cellCountInsideLeftVirtualCell = virtualScrollingDispatcher?.cellCountInsideLeftVirtualCell || 0;
+
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
                 delete data.settings;
@@ -66,6 +70,8 @@ class AppointmentLayoutManager {
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
+                settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });
 
             return {
@@ -91,20 +97,34 @@ class AppointmentLayoutManager {
             return true;
         }
 
-        for(let i = 0; i < settings.length; i++) {
-            const newSettings = {
-                ...settings[i]
-            };
+        const createSettingsToCompare = (settings, index) => {
+            const currentSetting = settings[index];
+            const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
+            const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
+            const cellIndex = currentSetting.cellIndex + leftVirtualCellCount;
+            const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
+            const hMax = currentSetting.reduced ? currentSetting.hMax : undefined;
+            const vMax = currentSetting.reduced ? currentSetting.vMax : undefined;
 
-            const oldSettings = {
-                ...sourceSetting[i],
-                // exclude properties for comparison in commonUtils.equalByValue
-                sortedIndex: newSettings.sortedIndex,
-                cellIndex: newSettings.cellIndex,
-                rowIndex: newSettings.rowIndex,
-                hMax: newSettings.hMax,
-                vMax: newSettings.vMax
+            return {
+                ...currentSetting,
+                cellIndex,
+                rowIndex,
+                topVirtualCellCount: undefined,
+                leftVirtualCellCount: undefined,
+                hMax,
+                vMax,
+                info: {},
             };
+        };
+
+        for(let i = 0; i < settings.length; i++) {
+            const newSettings = createSettingsToCompare(settings, i);
+            const oldSettings = createSettingsToCompare(sourceSetting, i);
+
+            if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
+                oldSettings.sortedIndex = newSettings.sortedIndex;
+            }
 
             if(!equalByValue(newSettings, oldSettings)) {
                 return true;

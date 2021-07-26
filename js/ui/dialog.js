@@ -26,10 +26,6 @@ const DEFAULT_BUTTON = {
     onClick: function() { return true; }
 };
 
-/**
- * @name ui.dialog
- */
-
 const DX_DIALOG_CLASSNAME = 'dx-dialog';
 const DX_DIALOG_WRAPPER_CLASSNAME = `${DX_DIALOG_CLASSNAME}-wrapper`;
 const DX_DIALOG_ROOT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-root`;

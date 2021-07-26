@@ -1364,10 +1364,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return this._isCellValid($cell);
     },
     _isLastRow: function(rowIndex) {
+        const dataController = this._dataController;
+
         if(this._isVirtualRowRender()) {
-            return rowIndex >= this._dataController.totalItemsCount() - 1;
+            return rowIndex >= dataController.getMaxRowIndex();
         }
-        return rowIndex === this._dataController.items().length - 1;
+        return rowIndex === dataController.items().length - 1;
     },
     _isFirstValidCell: function(cellPosition) {
         let isFirstValidCell = false;
@@ -2174,6 +2176,16 @@ export const keyboardNavigationModule = {
                             editorFactory.refocus();
                         }
                     }
+                },
+                getMaxRowIndex: function() {
+                    let result = this.items().length - 1;
+                    const virtualItemsCount = this.virtualItemsCount();
+
+                    if(virtualItemsCount) {
+                        result += (virtualItemsCount.begin + virtualItemsCount.end);
+                    }
+
+                    return result;
                 }
             },
             adaptiveColumns: {

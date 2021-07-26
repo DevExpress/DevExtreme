@@ -12,6 +12,7 @@ import {
 } from '../../core/element';
 
 import {
+    Cancelable,
     EventInfo
 } from '../../events/index';
 
@@ -35,7 +36,7 @@ export interface IncidentInfo {
   readonly target: any;
 }
 
-export interface FileSavingEventInfo<T> {
+export type FileSavingEventInfo<T> = Cancelable & {
   readonly component: T;
   readonly element: DxElement;
   readonly fileName: string;

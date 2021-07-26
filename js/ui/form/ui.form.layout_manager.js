@@ -28,7 +28,6 @@ import {
     LAYOUT_MANAGER_ONE_COLUMN,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
@@ -46,7 +45,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel } from './ui.form.utils';
+import { renderLabel, renderHelpText } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -674,7 +673,20 @@ const LayoutManager = Widget.inherit({
             }
         }
 
-        that._renderHelpText(item, $editor, helpID);
+        const helpText = item.helpText;
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+
+        if(helpText && isSimpleItem) {
+            const $editorParent = $editor.parent();
+
+            // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()
+            $editorParent.append(
+                $('<div>')
+                    .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
+                    .append($editor)
+                    .append(renderHelpText(helpText, helpID))
+            );
+        }
 
         that._attachClickHandler($label, $editor, item.editorType);
     },
@@ -1003,23 +1015,6 @@ const LayoutManager = Widget.inherit({
             $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
             $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-        }
-    },
-
-    _renderHelpText: function(fieldItem, $editor, helpID) {
-        const helpText = fieldItem.helpText;
-        const isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
-
-        if(helpText && isSimpleItem) {
-            const $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
-
-            $editor.wrap($editorWrapper);
-
-            $('<div>')
-                .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-                .attr('id', helpID)
-                .text(helpText)
-                .appendTo($editor.parent());
         }
     },
 

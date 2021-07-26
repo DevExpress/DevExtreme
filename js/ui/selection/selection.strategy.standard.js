@@ -252,7 +252,7 @@ export default SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
-        if(isDefined(itemData) && itemData.disabled) {
+        if(isDefined(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
             if(this.options.disabledItemKeys.indexOf(key) === -1) {
                 this.options.disabledItemKeys.push(key);
             }
