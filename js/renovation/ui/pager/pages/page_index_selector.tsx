@@ -85,13 +85,11 @@ type PageIndexSelectorPropsType = Pick<PagerProps,
 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
-| 'pageIndex'
 | 'pagesCountText'
 | 'showNavigationButtons'
 | 'totalCount'>
-& Pick<InternalPagerProps,
-'pageIndex'
-| 'pageIndexChange'> & PageIndexSelectorProps;
+& Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange'>
+& PageIndexSelectorProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {

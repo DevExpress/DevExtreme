@@ -23,7 +23,7 @@ export const viewFunction = ({
 );
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageIndexChange' | 'pageIndex'> & PagerProps;
+type PagerPropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageIndexChange' | 'pageIndex'> & PagerProps;
 
 @Component({
   defaultOptionRules: null,
@@ -31,7 +31,7 @@ type PagesLargePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageInde
   view: viewFunction,
 })
 
-export class Pager extends JSXComponent<PagesLargePropsType>() {
+export class Pager extends JSXComponent<PagerPropsType>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndexChange(newPageIndex + 1);
@@ -61,7 +61,7 @@ export class Pager extends JSXComponent<PagesLargePropsType>() {
     return this.props.className;
   }
 
-  get pagerProps(): PagesLargePropsType {
+  get pagerProps(): PagerPropsType {
     return {
       ...this.props,
       className: this.className,
