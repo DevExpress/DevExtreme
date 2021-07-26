@@ -182,7 +182,7 @@ module.exports = SelectionStrategy.inherit({
         let lastRequestData = multiSelectEnabled ? this._lastRequestData : {};
 
         if(multiSelectEnabled) {
-            if(this._requestInProgress()) {
+            if(this._shouldMergeWithLastRequest) {
                 if(isDeselectAll) {
                     this._lastLoadDeferred.reject();
                     lastRequestData = {};
@@ -193,14 +193,10 @@ module.exports = SelectionStrategy.inherit({
                     if(!isDeselect) {
                         this._lastLoadDeferred.reject();
                     }
-                } else {
-                    lastRequestData = {};
                 }
-
-                lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems);
-            } else {
-                lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, updatedKeys);
             }
+
+            lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
         }
 
         return lastRequestData;
@@ -208,12 +204,9 @@ module.exports = SelectionStrategy.inherit({
 
     _updateKeysByLastRequestData: function(keys, isDeselect, isSelectAll) {
         let currentKeys = keys;
-        if(this._isMultiSelectEnabled() && !isDeselect && !isSelectAll) {
+        if(this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
             currentKeys = arrayUtils.removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
-
-            if(this._requestInProgress()) {
-                currentKeys = arrayUtils.uniqueValues(currentKeys);
-            }
+            currentKeys = arrayUtils.uniqueValues(currentKeys);
         }
 
         return currentKeys;
@@ -222,11 +215,14 @@ module.exports = SelectionStrategy.inherit({
     _loadSelectedItems: function(keys, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = new Deferred();
+        this._shouldMergeWithLastRequest = this._requestInProgress();
 
         this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys);
 
         when(that._lastLoadDeferred).always(function() {
             const currentKeys = that._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
+
+            that._shouldMergeWithLastRequest = false;
 
             that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll)
                 .done(deferred.resolve)
@@ -237,6 +233,12 @@ module.exports = SelectionStrategy.inherit({
 
         return deferred;
     },
+
+    ///#DEBUG
+    getInternalFunctions: function() {
+        return { removeDuplicates: arrayUtils.removeDuplicates, uniqueValues: arrayUtils.uniqueValues };
+    },
+    ///#ENDDEBUG
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
