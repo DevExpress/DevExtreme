@@ -1,5 +1,7 @@
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   interface JQuery<TElement = HTMLElement> {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface JQuery<TElement = HTMLElement> {
     dxAccordion(): JQuery;
     dxAccordion(options: 'instance'): DevExpress.ui.dxAccordion;
@@ -505,14 +507,16 @@ declare global {
     dxVectorMap(options: string): any;
     dxVectorMap(options: string, ...params: any[]): any;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   interface JQueryEventObject {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   interface JQueryPromise<T> {}
 }
 declare module DevExpress {
   /**
    * [descr:AnimationConfig]
    */
-  export type AnimationConfig = {
+  export interface AnimationConfig {
     /**
      * [descr:AnimationConfig.complete]
      */
@@ -567,7 +571,7 @@ declare module DevExpress {
       | 'slide'
       | 'slideIn'
       | 'slideOut';
-  };
+  }
   /**
    * [descr:animationPresets]
    */
@@ -700,7 +704,7 @@ declare module DevExpress {
   /**
    * [descr:config(config)]
    */
-  export function config(config: globalConfig): void;
+  export function config(config_: globalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -804,16 +808,28 @@ declare module DevExpress {
   export class DOMComponent<
     TProperties = DevExpress.DOMComponent.Properties
   > extends Component<TProperties> {
+    // eslint-disable-next-line no-underscore-dangle
+    _templateManager: DevExpress.core.TemplateManager;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
     );
+
+    /**
+     * [descr:DOMComponent.getInstance(element)]
+     */
+    static getInstance(
+      element: DevExpress.core.UserDefinedElement
+    ): DOMComponent<DevExpress.DOMComponent.Properties>;
+
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
       rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
+
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -822,23 +838,20 @@ declare module DevExpress {
      * [descr:DOMComponent.element()]
      */
     element(): DevExpress.core.DxElement;
-    /**
-     * [descr:DOMComponent.getInstance(element)]
-     */
-    static getInstance(
-      element: DevExpress.core.UserDefinedElement
-    ): DOMComponent<DevExpress.DOMComponent.Properties>;
 
     $element(): DevExpress.core.UserDefinedElement;
+    // eslint-disable-next-line no-underscore-dangle
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
+    // eslint-disable-next-line no-underscore-dangle
     _invalidate(): void;
+    // eslint-disable-next-line no-underscore-dangle
     _refresh(): void;
+    // eslint-disable-next-line no-underscore-dangle
     _notifyOptionChanged(
       fullName: string,
       value: unknown,
       previousValue: unknown
-    );
-    _templateManager: DevExpress.core.TemplateManager;
+    ): void;
   }
   module DOMComponent {
     /**
@@ -1324,9 +1337,9 @@ declare module DevExpress {
     stop(): void;
   }
   /**
-   * [descr:validationEngine]
-   */
-  export class validationEngine {
+                                                                        * [descr:validationEngine]
+                                                                        */
+                                                                       export class validationEngine {
     /**
      * [descr:validationEngine.getGroupConfig()]
      */
@@ -1444,10 +1457,11 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  type ComponentFactory<TComponent> = {
+  interface ComponentFactory<TComponent> {
     new (): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
-  };
+  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1488,6 +1502,7 @@ declare module DevExpress.core {
      */
     name?: string;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1496,6 +1511,7 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface ElementsArrayWrapper<T extends Element> extends JQuery<T> {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1518,6 +1534,7 @@ declare module DevExpress.core {
       transclude?: boolean;
     }): DxElement;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1535,14 +1552,15 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type Rule<T> = {
+  export interface Rule<T> {
     device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
-  };
+  }
   /**
    * [descr:template]
    */
   export type template = string | Function | UserDefinedElement;
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1571,10 +1589,10 @@ declare module DevExpress.core {
 }
 declare module DevExpress.core.utils {
   /**
-   * [descr:DxPromise]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DxPromise<T = void> = {} extends PromiseType<T>
+                                                                         * [descr:DxPromise]
+                                                                         * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                         */
+                                                                        export type DxPromise<T = void> = {} extends PromiseType<T>
     ? Promise<T>
     : PromiseType<T>;
 }
@@ -1621,9 +1639,9 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  type BaseGroupDescriptor<T> = {
+  interface BaseGroupDescriptor<T> {
     selector: KeySelector<T>;
-  };
+  }
   /**
    * [descr:CustomStore]
    */
@@ -2251,14 +2269,14 @@ declare module DevExpress.data {
      */
     interface PromiseExtension<T> {
       then<TResult1 = T, TResult2 = never>(
-        onfulfilled?:
+        onFulfilled?:
           | ((
               value: T,
               extraParameters?: T
             ) => TResult1 | PromiseLike<TResult1>)
           | undefined
           | null,
-        onrejected?:
+        onRejected?:
           | ((reason: any) => TResult2 | PromiseLike<TResult2>)
           | undefined
           | null
@@ -3003,9 +3021,9 @@ declare module DevExpress.data {
         summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
       });
   /**
-   * [descr:XmlaStore]
-   */
-  export class XmlaStore {
+                                                                        * [descr:XmlaStore]
+                                                                        */
+                                                                       export class XmlaStore {
     constructor(options?: XmlaStoreOptions);
   }
   /**
@@ -3049,9 +3067,9 @@ declare module DevExpress.data.utils {
 }
 declare module DevExpress.data.utils.odata {
   /**
-   * [descr:Utils.keyConverters]
-   */
-  export var keyConverters: any;
+                                                                                                                      * [descr:Utils.keyConverters]
+                                                                                                                      */
+                                                                                                                     export var keyConverters: any;
 }
 declare module DevExpress.events {
   export interface Cancelable {
@@ -3087,14 +3105,17 @@ declare module DevExpress.events {
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
+
     /**
      * [descr:EventObject.data]
      */
     data: any;
+
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
     /**
      * [descr:EventObject.target]
      */
@@ -3129,6 +3150,7 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -3769,9 +3791,9 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+                                                                   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                   */
+                                                                  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
@@ -3914,7 +3936,7 @@ declare module DevExpress.localization {
   /**
    * [descr:localization.locale(locale)]
    */
-  export function locale(locale: string): void;
+  export function locale(locale_: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */
@@ -4305,9 +4327,9 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.data.DataSource;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+                                                                   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                   */
+                                                                  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
@@ -4345,10 +4367,10 @@ declare module DevExpress.ui {
     valueExpr?: string | ((item: any) => string | number | boolean);
   }
   /**
-   * [descr:DraggableBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DraggableBase {}
+                                                                       * [descr:DraggableBase]
+                                                                       * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                       */
+                                                                      export interface DraggableBase {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4825,10 +4847,10 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxButton> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxButtonOptions;
-    export type TemplateData = {
+    export interface TemplateData {
       readonly text?: string;
       readonly icon?: string;
-    };
+    }
   }
   /**
    * [descr:dxButtonGroup]
@@ -4985,11 +5007,11 @@ declare module DevExpress.ui {
    */
   export class dxCalendar extends Editor<dxCalendarOptions> {}
   module dxCalendar {
-    export type CellTemplateData = {
+    export interface CellTemplateData {
       readonly date: Date;
       readonly view: string;
       readonly text?: string;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -5481,7 +5503,6 @@ declare module DevExpress.ui {
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: any): boolean;
     isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
     navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
@@ -5990,7 +6011,7 @@ declare module DevExpress.ui {
         row?: RowObject;
         column?: Column;
       };
-    export type ColumnButtonTemplateData = {
+    export interface ColumnButtonTemplateData {
       readonly component: dxDataGrid;
       readonly data?: any;
       readonly key?: any;
@@ -5999,8 +6020,8 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly rowType: string;
       readonly row: RowObject;
-    };
-    export type ColumnCellTemplateData = {
+    }
+    export interface ColumnCellTemplateData {
       readonly data?: any;
       readonly component: dxDataGrid;
       readonly value?: any;
@@ -6013,7 +6034,7 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6064,7 +6085,7 @@ declare module DevExpress.ui {
       target?: string;
       groupInterval?: string | number;
     }
-    export type ColumnEditCellTemplateData = {
+    export interface ColumnEditCellTemplateData {
       readonly setValue?: any;
       readonly data?: any;
       readonly component: dxDataGrid;
@@ -6077,7 +6098,7 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6112,7 +6133,7 @@ declare module DevExpress.ui {
        */
       unfix?: string;
     }
-    export type ColumnGroupCellTemplateData = {
+    export interface ColumnGroupCellTemplateData {
       readonly data?: any;
       readonly component: dxDataGrid;
       readonly value?: any;
@@ -6125,12 +6146,12 @@ declare module DevExpress.ui {
       readonly summaryItems: Array<any>;
       readonly groupContinuesMessage?: string;
       readonly groupContinuedMessage?: string;
-    };
-    export type ColumnHeaderCellTemplateData = {
+    }
+    export interface ColumnHeaderCellTemplateData {
       readonly component: dxDataGrid;
       readonly columnIndex: number;
       readonly column: Column;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6970,11 +6991,11 @@ declare module DevExpress.ui {
             detailInfo: MasterDetailTemplateData
           ) => any);
     }
-    export type MasterDetailTemplateData = {
+    export interface MasterDetailTemplateData {
       readonly key: any;
       readonly data: any;
       readonly watch?: Function;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7340,7 +7361,7 @@ declare module DevExpress.ui {
       readonly key: any;
       cancel: boolean | PromiseLike<void>;
     }
-    export type RowTemplateData = {
+    export interface RowTemplateData {
       readonly key: any;
       readonly data: any;
       readonly component: dxDataGrid;
@@ -7351,7 +7372,7 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly groupIndex?: number;
       readonly isExpanded?: boolean;
-    };
+    }
     export type RowUpdatedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowUpdatedInfo;
     /**
@@ -8243,17 +8264,17 @@ declare module DevExpress.ui {
   }
   module dxDiagram {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDiagram>;
-    export type CustomCommandEvent = {
+    export interface CustomCommandEvent {
       readonly component: dxDiagram;
       readonly element: DevExpress.core.DxElement;
       readonly name: string;
-    };
-    export type CustomShapeTemplateData = {
+    }
+    export interface CustomShapeTemplateData {
       readonly item: dxDiagramShape;
-    };
-    export type CustomShapeToolboxTemplateData = {
+    }
+    export interface CustomShapeToolboxTemplateData {
       readonly item: dxDiagramShape;
-    };
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxDiagram>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDiagram>;
@@ -10050,10 +10071,10 @@ declare module DevExpress.ui {
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromData?: any;
       };
-    export type DragTemplateData = {
+    export interface DragTemplateData {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
-    };
+    }
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDraggable>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxDraggable> &
@@ -10189,10 +10210,10 @@ declare module DevExpress.ui {
   module dxDropDownBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxDropDownBox>;
-    export type ContentTemplateData = {
+    export interface ContentTemplateData {
       component: dxDropDownBox;
       readonly value?: any;
-    };
+    }
     export type CopyEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type CutEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDropDownBox>;
@@ -11451,11 +11472,11 @@ declare module DevExpress.ui {
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
-    export type CustomOperationEditorTemplate = {
+    export interface CustomOperationEditorTemplate {
       readonly value?: string | number | Date;
       readonly field: dxFilterBuilderField;
       readonly setValue: Function;
-    };
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxFilterBuilder>;
     export type EditorPreparedEvent =
       DevExpress.events.EventInfo<dxFilterBuilder> & {
@@ -11486,12 +11507,12 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
-    export type FieldEditorTemplate = {
+    export interface FieldEditorTemplate {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
       readonly field: dxFilterBuilderField;
       readonly setValue: Function;
-    };
+    }
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFilterBuilder>;
     export type OptionChangedEvent =
@@ -11842,22 +11863,22 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly value?: any;
     };
-    export type GroupItemTemplateData = {
+    export interface GroupItemTemplateData {
       readonly component: dxForm;
       readonly formData?: any;
-    };
+    }
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxForm>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxForm> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxFormOptions;
-    export type SimpleItemTemplateData = {
+    export interface SimpleItemTemplateData {
       readonly component: dxForm;
       readonly dataField?: string;
       readonly editorOptions?: any;
       readonly editorType?: string;
       readonly name?: string;
-    };
+    }
   }
   /**
    * [descr:dxFormButtonItem]
@@ -12549,11 +12570,11 @@ declare module DevExpress.ui {
       readonly data?: any;
       readonly items?: Array<any>;
     };
-    export type CustomCommandEvent = {
+    export interface CustomCommandEvent {
       readonly component?: dxGantt;
       readonly element?: DevExpress.core.DxElement;
       readonly name: string;
-    };
+    }
     export type DependencyDeletedEvent =
       DevExpress.events.EventInfo<dxGantt> & {
         readonly values: any;
@@ -12578,9 +12599,9 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxGantt>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxGantt> &
       DevExpress.events.ChangedOptionInfo;
-    export type ProgressTooltipTemplateData = {
+    export interface ProgressTooltipTemplateData {
       readonly progress: number;
-    };
+    }
     export type Properties = dxGanttOptions;
     export type ResourceAssignedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly values: any;
@@ -12629,7 +12650,7 @@ declare module DevExpress.ui {
       readonly key?: any;
       readonly data?: any;
     };
-    export type TaskContentTemplateData = {
+    export interface TaskContentTemplateData {
       readonly cellSize: any;
       readonly isMilestone: boolean;
       readonly taskData: any;
@@ -12637,7 +12658,7 @@ declare module DevExpress.ui {
       readonly taskPosition: any;
       readonly taskResources: Array<any>;
       readonly taskSize: any;
-    };
+    }
     export type TaskDblClickEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxGantt> & {
         readonly key?: any;
@@ -12683,10 +12704,10 @@ declare module DevExpress.ui {
         readonly values: any;
         readonly key: any;
       };
-    export type TimeTooltipTemplateData = {
+    export interface TimeTooltipTemplateData {
       readonly start: Date;
       readonly end: Date;
-    };
+    }
   }
   /**
    * [descr:dxGanttContextMenu]
@@ -13763,9 +13784,9 @@ declare module DevExpress.ui {
     escapeChar?: string | Array<string>;
   }
   /**
-   * [descr:dxItem]
-   */
-  export var dxItem: any;
+                                                                                                                      * [descr:dxItem]
+                                                                                                                      */
+                                                                                                                     export var dxItem: any;
   /**
    * [descr:dxList]
    */
@@ -16901,10 +16922,10 @@ declare module DevExpress.ui {
       TargetedAppointmentInfo & {
         readonly appointmentElement: DevExpress.core.DxElement;
       };
-    export type AppointmentCollectorTemplateData = {
+    export interface AppointmentCollectorTemplateData {
       readonly appointmentCount: number;
       readonly isCompact: boolean;
-    };
+    }
     export type AppointmentContextMenuEvent =
       DevExpress.events.NativeEventInfo<dxScheduler> &
         TargetedAppointmentInfo & {
@@ -16993,11 +17014,11 @@ declare module DevExpress.ui {
         readonly cellElement: DevExpress.core.DxElement;
       };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxScheduler>;
-    export type DateNavigatorTextInfo = {
+    export interface DateNavigatorTextInfo {
       readonly startDate: Date;
       readonly endDate: Date;
       readonly text: string;
-    };
+    }
     export type DisposingEvent = DevExpress.events.EventInfo<dxScheduler>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxScheduler>;
@@ -19829,7 +19850,7 @@ declare module DevExpress.ui {
         row?: RowObject;
         column?: Column;
       };
-    export type ColumnButtonTemplateData = {
+    export interface ColumnButtonTemplateData {
       readonly component: dxTreeList;
       readonly data: any;
       readonly key: any;
@@ -19838,8 +19859,8 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly rowType: string;
       readonly row: RowObject;
-    };
-    export type ColumnCellTemplateData = {
+    }
+    export interface ColumnCellTemplateData {
       readonly data: any;
       readonly component: dxTreeList;
       readonly value?: any;
@@ -19852,8 +19873,8 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    };
-    export type ColumnEditCellTemplateData = {
+    }
+    export interface ColumnEditCellTemplateData {
       readonly setValue?: any;
       readonly data: any;
       readonly component: dxTreeList;
@@ -19866,15 +19887,15 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    };
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type ColumnHeaderCellTemplateData = {
+    export interface ColumnHeaderCellTemplateData {
       readonly component: dxTreeList;
       readonly columnIndex: number;
       readonly column: Column;
-    };
+    }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeList>;
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxTreeList> & {
@@ -20981,7 +21002,7 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxValidator> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxValidatorOptions;
-    export type ValidatedEvent = {
+    export interface ValidatedEvent {
       name?: string;
       isValid?: boolean;
       value?: any;
@@ -20989,7 +21010,7 @@ declare module DevExpress.ui {
       brokenRule?: ValidationRule;
       brokenRules?: ValidationRule;
       status?: 'valid' | 'invalid' | 'pending';
-    };
+    }
   }
   /**
    * @deprecated use Properties instead
@@ -22012,10 +22033,10 @@ declare module DevExpress.ui {
     type: 'required';
   }
   /**
-   * [descr:SearchBoxMixin]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export class SearchBoxMixin {
+                                                                        * [descr:SearchBoxMixin]
+                                                                        * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                        */
+                                                                       export class SearchBoxMixin {
     constructor(options?: SearchBoxMixinOptions);
   }
   /**
@@ -22083,9 +22104,9 @@ declare module DevExpress.ui {
    */
   export type Template = DevExpress.core.template;
   /**
-   * [descr:ui.themes]
-   */
-  export class themes {
+                                                                        * [descr:ui.themes]
+                                                                        */
+                                                                       export class themes {
     /**
      * [descr:ui.themes.current()]
      */
@@ -22145,11 +22166,11 @@ declare module DevExpress.ui {
   }
   module Widget {
     /**
-     * [descr:format]
-     * @deprecated [depNote:format]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type format = Format;
+                                                                          * [descr:format]
+                                                                          * @deprecated [depNote:format]
+                                                                          * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                          */
+                                                                         export type format = Format;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28125,9 +28146,9 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
-   * [descr:dxCircularGauge]
-   */
-  export class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> {}
+                                                                      * [descr:dxCircularGauge]
+                                                                      */
+                                                                     export class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> {}
   module dxCircularGauge {
     export type DisposingEvent = DevExpress.events.EventInfo<dxCircularGauge>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxCircularGauge>;
@@ -28153,10 +28174,10 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxCircularGaugeOptions
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxCircularGaugeOptions
     extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * [descr:dxCircularGaugeOptions.geometry]
@@ -28189,9 +28210,9 @@ declare module DevExpress.viz {
     valueIndicator?: GaugeIndicator;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxCircularGaugeRangeContainer
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxCircularGaugeRangeContainer
     extends BaseGaugeRangeContainer {
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
@@ -28203,9 +28224,9 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxCircularGaugeScale extends BaseGaugeScale {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
      * [descr:dxCircularGaugeOptions.scale.label]
      */
@@ -28216,9 +28237,9 @@ declare module DevExpress.viz {
     orientation?: 'center' | 'inside' | 'outside';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
      */
@@ -29371,9 +29392,9 @@ declare module DevExpress.viz {
     valueField?: string;
   }
   /**
-   * [descr:dxPolarChart]
-   */
-  export class dxPolarChart extends BaseChart<dxPolarChartOptions> {
+                                                                      * [descr:dxPolarChart]
+                                                                      */
+                                                                     export class dxPolarChart extends BaseChart<dxPolarChartOptions> {
     /**
      * [descr:dxPolarChart.getValueAxis()]
      */
@@ -29461,9 +29482,9 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout.height]
      */
@@ -29474,10 +29495,10 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * [descr:dxPolarChartAnnotationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartAnnotationConfig
+                                                                      * [descr:dxPolarChartAnnotationConfig]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartAnnotationConfig
     extends dxPolarChartCommonAnnotationConfig {
     /**
      * [descr:dxPolarChartAnnotationConfig.name]
@@ -29485,9 +29506,9 @@ declare module DevExpress.viz {
     name?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxis
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxis
     extends dxPolarChartCommonAxisSettings {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.argumentType]
@@ -29567,9 +29588,9 @@ declare module DevExpress.viz {
     type?: 'continuous' | 'discrete' | 'logarithmic';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisConstantLines
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisConstantLines
     extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries]
@@ -29589,9 +29610,9 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisConstantLinesLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisConstantLinesLabel
     extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.constantLines.label.text]
@@ -29599,9 +29620,9 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisLabel
     extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.label.customizeHint]
@@ -29623,9 +29644,9 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisMinorTick
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisMinorTick
     extends dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.minorTick.shift]
@@ -29633,9 +29654,9 @@ declare module DevExpress.viz {
     shift?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisStrips
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisStrips
     extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.strips.color]
@@ -29655,9 +29676,9 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisStripsLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisStripsLabel
     extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.strips.label.text]
@@ -29665,9 +29686,9 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartArgumentAxisTick
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartArgumentAxisTick
     extends dxPolarChartCommonAxisSettingsTick {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.tick.shift]
@@ -29675,10 +29696,10 @@ declare module DevExpress.viz {
     shift?: number;
   }
   /**
-   * [descr:dxPolarChartCommonAnnotationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAnnotationConfig
+                                                                      * [descr:dxPolarChartCommonAnnotationConfig]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAnnotationConfig
     extends BaseChartAnnotationConfig {
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.angle]
@@ -29712,9 +29733,9 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettings {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettings {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.allowDecimals]
      */
@@ -29811,9 +29832,9 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.color]
      */
@@ -29832,9 +29853,9 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font]
      */
@@ -29845,9 +29866,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsLabel {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsLabel {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.font]
      */
@@ -29866,9 +29887,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsMinorTick {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.color]
      */
@@ -29891,27 +29912,27 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsStripStyle {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label]
      */
     label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label.font]
      */
     font?: Font;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonAxisSettingsTick {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonAxisSettingsTick {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.tick.color]
      */
@@ -29934,9 +29955,9 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartCommonSeriesSettings
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartCommonSeriesSettings
     extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartOptions.commonSeriesSettings.area]
@@ -29989,10 +30010,10 @@ declare module DevExpress.viz {
     hoverMode?: 'excludePoints' | 'includePoints' | 'none';
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]
      */
@@ -30148,10 +30169,10 @@ declare module DevExpress.viz {
     valueAxis?: dxPolarChartValueAxis;
   }
   /**
-   * [descr:dxPolarChartSeriesTypes]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypes {
+                                                                      * [descr:dxPolarChartSeriesTypes]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartSeriesTypes {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries]
      */
@@ -30178,9 +30199,9 @@ declare module DevExpress.viz {
     stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesAreapolarseries
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesAreapolarseries
     extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.areapolarseries.hoverMode]
@@ -30196,9 +30217,9 @@ declare module DevExpress.viz {
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesAreapolarseriesPoint
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesAreapolarseriesPoint
     extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * [descr:dxPolarChartSeriesTypes.areapolarseries.point.visible]
@@ -30206,9 +30227,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesBarpolarseries
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesBarpolarseries
     extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.barpolarseries.hoverMode]
@@ -30224,9 +30245,9 @@ declare module DevExpress.viz {
       | 'none';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField]
      */
@@ -30502,9 +30523,9 @@ declare module DevExpress.viz {
     width?: number;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
      */
@@ -30581,9 +30602,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border]
      */
@@ -30710,9 +30731,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesLinepolarseries
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesLinepolarseries
     extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.linepolarseries.hoverMode]
@@ -30724,9 +30745,9 @@ declare module DevExpress.viz {
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartSeriesTypesStackedbarpolarseries
+                                                                                                * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                                                */
+                                                                                               export interface dxPolarChartSeriesTypesStackedbarpolarseries
     extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode]
@@ -30756,18 +30777,18 @@ declare module DevExpress.viz {
     position?: 'inside' | 'outside';
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartTooltip extends BaseChartTooltip {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartTooltip extends BaseChartTooltip {
     /**
      * [descr:dxPolarChartOptions.tooltip.shared]
      */
     shared?: boolean;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxis
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxis
     extends dxPolarChartCommonAxisSettings {
     /**
      * [descr:dxPolarChartOptions.valueAxis.axisDivisionFactor]
@@ -30859,9 +30880,9 @@ declare module DevExpress.viz {
     wholeRange?: VizRange | Array<number | string | Date>;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisConstantLines
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisConstantLines
     extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * [descr:dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries]
@@ -30881,9 +30902,9 @@ declare module DevExpress.viz {
     value?: number | Date | string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisConstantLinesLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisConstantLinesLabel
     extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * [descr:dxPolarChartOptions.valueAxis.constantLines.label.text]
@@ -30891,9 +30912,9 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisLabel
     extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * [descr:dxPolarChartOptions.valueAxis.label.customizeHint]
@@ -30915,9 +30936,9 @@ declare module DevExpress.viz {
     format?: DevExpress.ui.Format;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisStrips
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisStrips
     extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * [descr:dxPolarChartOptions.valueAxis.strips.color]
@@ -30937,9 +30958,9 @@ declare module DevExpress.viz {
     startValue?: number | Date | string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisStripsLabel
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisStripsLabel
     extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * [descr:dxPolarChartOptions.valueAxis.strips.label.text]
@@ -30947,9 +30968,9 @@ declare module DevExpress.viz {
     text?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxPolarChartValueAxisTick
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxPolarChartValueAxisTick
     extends dxPolarChartCommonAxisSettingsTick {
     /**
      * [descr:dxPolarChartOptions.valueAxis.tick.visible]
@@ -30957,9 +30978,9 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * [descr:dxRangeSelector]
-   */
-  export class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
+                                                                      * [descr:dxRangeSelector]
+                                                                      */
+                                                                     export class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DevExpress.data.DataSource;
     /**
      * [descr:dxRangeSelector.getValue()]
@@ -30999,10 +31020,10 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxRangeSelectorOptions
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxRangeSelectorOptions
     extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * [descr:dxRangeSelectorOptions.background]
@@ -31539,9 +31560,9 @@ declare module DevExpress.viz {
     value?: Array<number | string | Date> | VizRange;
   }
   /**
-   * [descr:dxSankey]
-   */
-  export class dxSankey extends BaseWidget<dxSankeyOptions> {
+                                                                      * [descr:dxSankey]
+                                                                      */
+                                                                     export class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
      * [descr:dxSankey.getAllLinks()]
      */
@@ -31585,10 +31606,10 @@ declare module DevExpress.viz {
     export type Properties = dxSankeyOptions;
   }
   /**
-   * [descr:dxSankeyConnectionInfoObject]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSankeyConnectionInfoObject {
+                                                                      * [descr:dxSankeyConnectionInfoObject]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSankeyConnectionInfoObject {
     /**
      * [descr:dxSankeyConnectionInfoObject.source]
      */
@@ -31603,10 +31624,10 @@ declare module DevExpress.viz {
     weight?: number;
   }
   /**
-   * [descr:dxSankeyLink]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSankeyLink {
+                                                                      * [descr:dxSankeyLink]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSankeyLink {
     /**
      * [descr:dxSankeyLink.connection]
      */
@@ -31629,10 +31650,10 @@ declare module DevExpress.viz {
     showTooltip(): void;
   }
   /**
-   * [descr:dxSankeyNode]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSankeyNode {
+                                                                      * [descr:dxSankeyNode]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSankeyNode {
     /**
      * [descr:dxSankeyNode.hideTooltip()]
      */
@@ -31668,10 +31689,10 @@ declare module DevExpress.viz {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * [descr:dxSankeyOptions.adaptiveLayout]
      */
@@ -32009,9 +32030,9 @@ declare module DevExpress.viz {
     weightField?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSankeyTooltip extends BaseWidgetTooltip {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
      */
@@ -32053,9 +32074,9 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * [descr:dxSparkline]
-   */
-  export class dxSparkline extends BaseSparkline<dxSparklineOptions> {
+                                                                      * [descr:dxSparkline]
+                                                                      */
+                                                                     export class dxSparkline extends BaseSparkline<dxSparklineOptions> {
     getDataSource(): DevExpress.data.DataSource;
   }
   module dxSparkline {
@@ -32078,10 +32099,10 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxSparkline>;
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxSparklineOptions
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxSparklineOptions
     extends BaseSparklineOptions<dxSparkline> {
     /**
      * [descr:dxSparklineOptions.argumentField]
@@ -32186,9 +32207,9 @@ declare module DevExpress.viz {
     winlossThreshold?: number;
   }
   /**
-   * [descr:dxTreeMap]
-   */
-  export class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
+                                                                      * [descr:dxTreeMap]
+                                                                      */
+                                                                     export class dxTreeMap extends BaseWidget<dxTreeMapOptions> {
     /**
      * [descr:dxTreeMap.clearSelection()]
      */
@@ -32255,10 +32276,10 @@ declare module DevExpress.viz {
       InteractionInfo;
   }
   /**
-   * [descr:dxTreeMapNode]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxTreeMapNode {
+                                                                      * [descr:dxTreeMapNode]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxTreeMapNode {
     /**
      * [descr:dxTreeMapNode.customize(options)]
      */
@@ -32341,10 +32362,10 @@ declare module DevExpress.viz {
     value(): number;
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * [descr:dxTreeMapOptions.childrenField]
      */
@@ -32665,9 +32686,9 @@ declare module DevExpress.viz {
     valueField?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxTreeMapTooltip extends BaseWidgetTooltip {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * [descr:dxTreeMapOptions.tooltip.contentTemplate]
      */
@@ -32687,9 +32708,9 @@ declare module DevExpress.viz {
     }) => any;
   }
   /**
-   * [descr:dxVectorMap]
-   */
-  export class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
+                                                                      * [descr:dxVectorMap]
+                                                                      */
+                                                                     export class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * [descr:dxVectorMap.center()]
      */
@@ -32787,10 +32808,10 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * [descr:dxVectorMapAnnotationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxVectorMapAnnotationConfig
+                                                                      * [descr:dxVectorMapAnnotationConfig]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxVectorMapAnnotationConfig
     extends dxVectorMapCommonAnnotationConfig {
     /**
      * [descr:dxVectorMapAnnotationConfig.name]
@@ -32798,10 +32819,10 @@ declare module DevExpress.viz {
     name?: string;
   }
   /**
-   * [descr:dxVectorMapCommonAnnotationConfig]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxVectorMapCommonAnnotationConfig
+                                                                      * [descr:dxVectorMapCommonAnnotationConfig]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxVectorMapCommonAnnotationConfig
     extends BaseWidgetAnnotationConfig {
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.coordinates]
@@ -32831,9 +32852,9 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxVectorMapLegends extends BaseLegend {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxVectorMapLegends extends BaseLegend {
     /**
      * [descr:dxVectorMapOptions.legends.customizeHint]
      */
@@ -32900,11 +32921,10 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
+                                                                      * @deprecated use Properties instead
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * [descr:dxVectorMapOptions.background]
      */
@@ -33229,9 +33249,9 @@ declare module DevExpress.viz {
     ) => dxVectorMapAnnotationConfig;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxVectorMapTooltip extends BaseWidgetTooltip {
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * [descr:dxVectorMapOptions.tooltip.contentTemplate]
      */
@@ -33556,15 +33576,15 @@ declare module DevExpress.viz {
     type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
   }
   /**
-   * [descr:polarChartSeriesObject]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface polarChartSeriesObject extends baseSeriesObject {}
+                                                                      * [descr:polarChartSeriesObject]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface polarChartSeriesObject extends baseSeriesObject {}
   /**
-   * [descr:polarPointObject]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface polarPointObject extends basePointObject {}
+                                                                      * [descr:polarPointObject]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export interface polarPointObject extends basePointObject {}
   /**
    * [descr:viz.refreshPaths()]
    */
@@ -33714,10 +33734,10 @@ declare module DevExpress.viz {
 }
 declare module DevExpress.viz.map {
   /**
-   * [descr:viz.map.projection(data)]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const projection: {
+                                                                      * [descr:viz.map.projection(data)]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export const projection: {
     /**
      * [descr:viz.map.projection.add(name, projection)]
      */
