@@ -47,8 +47,15 @@ $colorbox-input-left-padding: 40px;
     }
   }
 
-  .dx-texteditor-label {
-    left: $colorbox-input-left-padding;
+  &.dx-editor-underlined,
+  &.dx-editor-filled {
+    .dx-texteditor-label {
+      left: $colorbox-input-left-padding;
+
+      span {
+        max-width: calc(100% - 25px);
+      }
+    }
   }
 }
 
