@@ -7,6 +7,7 @@ $generic-scheduler-workspace-date-table-cell-height: null !default;
 $generic-scheduler-timeline-date-table-cell-height: null !default;
 $generic-scheduler-header-panel-top-gap: null !default;
 $generic-scheduler-header-height: null !default;
+$generic-scheduler-toolbar-item-offset: null !default;
 $generic-scheduler-navigator-height: null !default;
 $generic-scheduler-navigation-buttons-padding: null !default;
 $generic-scheduler-appointment-month-text-size: null !default;
@@ -34,6 +35,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-header-panel-top-gap: 10px !default;
 
   $generic-scheduler-header-height: 56px !default;
+  $generic-scheduler-toolbar-item-offset: 9px !default;
   $generic-scheduler-navigator-height: 36px !default;
   $generic-scheduler-navigation-buttons-padding: 6px !default;
 
@@ -62,6 +64,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-header-panel-top-gap: 5px !default;
 
   $generic-scheduler-header-height: 39px !default;
+  $generic-scheduler-toolbar-item-offset: 4.5px !default;
   $generic-scheduler-navigator-height: 25px !default;
   $generic-scheduler-navigation-buttons-padding: 4px !default;
 
