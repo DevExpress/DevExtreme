@@ -27,6 +27,7 @@ import dxDropDownEditor, {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;
 }
@@ -50,6 +51,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -143,6 +145,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItem?: any;
     /**
      * @docid
@@ -155,6 +158,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     /**
      * @docid

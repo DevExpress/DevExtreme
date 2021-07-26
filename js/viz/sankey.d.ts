@@ -115,6 +115,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @extends CommonVizDataSource
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
@@ -499,6 +500,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sortData?: any;
     /**
      * @docid
@@ -537,6 +539,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
@@ -549,6 +552,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
     /**
      * @docid dxSankeyOptions.tooltip.enabled
@@ -711,11 +715,13 @@ export interface dxSankeyNode {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     linksIn?: Array<any>;
     /**
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     linksOut?: Array<any>;
     /**
      * @docid

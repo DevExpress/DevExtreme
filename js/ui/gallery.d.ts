@@ -71,6 +71,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -95,6 +96,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
      * @fires dxGalleryOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxGalleryItem | any>;
     /**
      * @docid

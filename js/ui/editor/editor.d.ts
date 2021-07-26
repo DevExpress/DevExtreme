@@ -7,7 +7,9 @@ import Widget, {
 } from '../widget/ui.widget';
 
 export interface ValueChangedInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly previousValue?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
 }
 
@@ -45,12 +47,14 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validationError?: any;
     /**
      * @docid
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validationErrors?: Array<any>;
     /**
      * @docid
@@ -72,6 +76,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @fires EditorOptions.onValueChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     /**
      * @docid

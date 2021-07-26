@@ -154,6 +154,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tag?: any;
     /**
      * @docid
@@ -180,6 +181,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @inherits dxPolarChartOptions.commonAnnotationSettings
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     annotations?: Array<dxPolarChartAnnotationConfig | any>;
     /**
      * @docid
@@ -236,6 +238,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @notUsedInTheme
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
     /**
      * @docid
@@ -288,6 +291,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @action
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DxElement, model?: any, event?: DxEvent, argument?: Date | number | string }) => void) | string;
     /**
      * @docid
@@ -415,6 +419,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
        * @type_function_param1 seriesName:any
        * @type_function_return PolarChartSeries
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customizeSeries?: ((seriesName: any) => PolarChartSeries),
       /**
        * @docid
@@ -995,26 +1000,31 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
      * @docid dxPolarChartOptions.commonSeriesSettings.area
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     area?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.bar
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bar?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.line
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     line?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.scatter
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scatter?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.stackedbar
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedbar?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.type
@@ -1035,6 +1045,7 @@ export interface dxPolarChartLegend extends BaseChartLegend {
      * @type_function_return string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeHint?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
     /**
      * @docid dxPolarChartOptions.legend.customizeText
@@ -1046,6 +1057,7 @@ export interface dxPolarChartLegend extends BaseChartLegend {
      * @notUsedInTheme
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
     /**
      * @docid dxPolarChartOptions.legend.hoverMode
@@ -1386,6 +1398,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @notUsedInTheme
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
     /**
      * @docid
@@ -1395,6 +1408,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
@@ -1404,6 +1418,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
@@ -1449,6 +1464,7 @@ export interface dxPolarChartSeriesTypes {
      * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scatterpolarseries?: any;
     /**
      * @docid
@@ -1914,6 +1930,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @notUsedInTheme
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font

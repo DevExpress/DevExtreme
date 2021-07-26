@@ -6,11 +6,13 @@ import Store, { StoreOptions } from './abstract_store';
 import { CustomStoreOptions } from './custom_store';
 
 /** @namespace DevExpress.data */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
     /**
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customQueryParams?: any;
     /**
      * @docid
@@ -112,6 +114,7 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     searchValue?: any;
     /**
      * @docid
@@ -138,8 +141,10 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class DataSource<TKey = any, TValue = any> {
     constructor(data: Array<TValue>);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, any, TValue, any>);
     constructor(store: Store<TKey, TValue>);
     constructor(url: string);
@@ -211,6 +216,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items(): Array<any>;
     /**
      * @docid
@@ -225,6 +231,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     load(): DxPromise<any>;
     /**
      * @docid
@@ -315,6 +322,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     reload(): DxPromise<any>;
     /**
      * @docid
@@ -364,6 +372,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     searchValue(): any;
     /**
      * @docid
@@ -371,6 +380,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @param1 value:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     searchValue(value: any): void;
     /**
      * @docid

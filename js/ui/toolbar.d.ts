@@ -60,12 +60,14 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxToolbarOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxToolbarItem | any>;
     /**
      * @docid
@@ -76,6 +78,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -133,6 +136,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options?: any;
     /**
      * @docid

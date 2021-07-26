@@ -3,10 +3,15 @@
  */
 export interface ValidationCallbackData {
     value?: string | number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rule: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validator: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     column?: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formItem?: any
 }
 
@@ -53,6 +58,7 @@ export interface AsyncRule {
      * @type_function_param1_field6 formItem:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validationCallback?: ((options: ValidationCallbackData) => PromiseLike<any>);
 }
 
@@ -68,6 +74,7 @@ export interface CompareRule {
      * @type_function_return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     comparisonTarget?: (() => any);
     /**
      * @docid

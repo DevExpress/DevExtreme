@@ -13,6 +13,7 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: Array<any>;
     /**
      * @docid

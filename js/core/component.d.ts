@@ -33,6 +33,7 @@ export interface ComponentOptions<TComponent> {
    * @action
    * @public
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
 }
 /**

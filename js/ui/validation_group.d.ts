@@ -96,6 +96,7 @@ export interface dxValidationGroupResult {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validators?: Array<any>;
 }
 

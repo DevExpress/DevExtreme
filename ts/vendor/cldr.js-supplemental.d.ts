@@ -19,7 +19,9 @@ declare namespace cldr {
     interface SupplementalStatic {
         timeData: TimeDataStatic;
         weekData: WeekDataStatic;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (path: string): any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (paths: string[]): any;
     }
 

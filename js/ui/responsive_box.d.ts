@@ -78,6 +78,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -91,6 +92,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @fires dxResponsiveBoxOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxResponsiveBoxItem | any>;
     /**
      * @docid

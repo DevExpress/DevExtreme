@@ -160,6 +160,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -185,6 +186,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid

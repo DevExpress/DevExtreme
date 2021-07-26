@@ -34,6 +34,7 @@ import {
 
 export interface CustomItemCreatingInfo {
     readonly text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customItem?: string | any | PromiseLike<any>;
 }
 
@@ -121,6 +122,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid

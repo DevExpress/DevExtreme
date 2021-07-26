@@ -151,6 +151,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @extends CommonVizDataSource
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
@@ -606,6 +607,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
 }
 /**
@@ -654,6 +656,7 @@ export interface dxFunnelItem {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid

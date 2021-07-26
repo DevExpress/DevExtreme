@@ -40,12 +40,14 @@ import {
 } from './widget/ui.search_box_mixin';
 
 interface ListItemInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number; };
 }
 
 export interface ScrollInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly scrollOffset?: any;
     readonly reachedLeft: boolean;
     readonly reachedRight: boolean;
@@ -61,6 +63,7 @@ export type DisposingEvent = EventInfo<dxList>;
 
 /** @public */
 export type GroupRenderedEvent = EventInfo<dxList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly groupData?: any;
     readonly groupElement?: DxElement;
     readonly groupIndex?: number;
@@ -155,6 +158,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxListItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -163,6 +167,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_return string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
@@ -179,6 +184,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -217,6 +223,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @fires dxListOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxListItem | any>;
     /**
      * @docid
@@ -230,6 +237,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param2 itemData:object
        * @type_function_return void
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       action?: ((itemElement: DxElement, itemData: any) => any),
       /**
        * @docid
@@ -567,6 +575,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deleteItem(itemIndex: number | any): DxPromise<void>;
     /**
      * @docid
@@ -591,6 +600,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isItemSelected(itemIndex: number | any): boolean;
     /**
      * @docid
@@ -615,6 +625,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     reorderItem(itemIndex: number | any, toItemIndex: number | any): DxPromise<void>;
     /**
      * @docid
@@ -650,6 +661,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @param1 itemIndex:Number|Object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollToItem(itemIndex: number | any): void;
     /**
      * @docid
@@ -677,6 +689,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @param1 itemIndex:Number|Object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectItem(itemIndex: number | any): void;
     /**
      * @docid
@@ -697,6 +710,7 @@ export default class dxList extends CollectionWidget<dxListOptions> {
      * @param1 itemIndex:Number|Object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     unselectItem(itemIndex: number | any): void;
     /**
      * @docid

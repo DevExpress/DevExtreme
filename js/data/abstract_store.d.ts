@@ -2,6 +2,7 @@ import { DxPromise } from '../core/utils/deferred';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface StoreOptions<TKey = any, TValue = any> {
     /**
      * @docid
@@ -103,6 +104,7 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
  * @export default
  * @namespace DevExpress.data
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class Store<TKey = any, TValue = any> {
     constructor(options?: StoreOptions<TKey, TValue>)
     /**

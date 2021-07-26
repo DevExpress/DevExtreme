@@ -65,6 +65,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -78,6 +79,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @fires dxBoxOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxBoxItem | any>;
 }
 /**

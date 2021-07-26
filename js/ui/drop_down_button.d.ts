@@ -39,6 +39,7 @@ import Widget, {
 
 /** @public */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly selectedItem?: any;
 };
 
@@ -53,6 +54,7 @@ export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
 };
@@ -62,7 +64,9 @@ export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo
 
 /** @public */
 export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly item: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly previousItem: any;
 };
 
@@ -76,6 +80,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -90,6 +95,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_return string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayExpr?: string | ((itemData: any) => string);
     /**
      * @docid
@@ -99,6 +105,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -134,12 +141,14 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<dxDropDownButtonItem | any>;
     /**
      * @docid
@@ -205,6 +214,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @readonly
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItem?: string | number | any;
     /**
      * @docid
@@ -314,6 +324,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @type_function_param1_field4 event:event
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
 }
 

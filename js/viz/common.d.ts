@@ -347,6 +347,7 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tag?: any;
     /**
      * @docid

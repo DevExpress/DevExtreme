@@ -62,4 +62,5 @@ export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
  * @export custom
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function custom(options: CustomDialogOptions): any;

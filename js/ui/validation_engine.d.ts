@@ -20,6 +20,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static getGroupConfig(): any;
     /**
      * @docid
@@ -30,6 +31,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static getGroupConfig(group: string | any): any;
     /**
      * @docid
@@ -38,6 +40,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static registerModelForValidation(model: any): void;
     /**
      * @docid
@@ -55,6 +58,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static resetGroup(group: string | any): void;
     /**
      * @docid
@@ -63,6 +67,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static unregisterModelForValidation(model: any): void;
     /**
      * @docid
@@ -82,6 +87,7 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static validateGroup(group: string | any): dxValidationGroupResult;
     /**
      * @docid
@@ -91,5 +97,6 @@ export default class validationEngine {
      * @static
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static validateModel(model: any): any;
 }

@@ -61,6 +61,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -79,6 +80,7 @@ export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<
      * @fires dxMultiViewOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxMultiViewItem | any>;
     /**
      * @docid

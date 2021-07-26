@@ -71,12 +71,14 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxActionSheetOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid
@@ -183,6 +185,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @type_function_param1_field4 event:event
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
     /**
      * @docid

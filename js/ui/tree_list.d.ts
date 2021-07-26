@@ -62,9 +62,13 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import Widget from './widget/ui.widget';
 
 interface CellInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
@@ -95,6 +99,7 @@ export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
     readonly watch?: Function;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly oldValue?: any;
 };
 
@@ -103,6 +108,7 @@ export type ContentReadyEvent = EventInfo<dxTreeList>;
 
 /** @public */
 export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<any>;
     readonly target: string;
     readonly targetElement: DxElement;
@@ -126,15 +132,20 @@ export type EditCancelingEvent = Cancelable & EventInfo<dxTreeList> & DataChange
 
 /** @public */
 export type EditingStartEvent = Cancelable & EventInfo<dxTreeList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly column: any;
 };
 
 /** @public */
 export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly parentType: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly setValue?: any;
     readonly updateValueTimeout?: number;
     readonly width?: number;
@@ -149,7 +160,9 @@ export type EditorPreparedEvent = EventInfo<dxTreeList> & {
 /** @public */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly parentType: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly setValue?: any;
     updateValueTimeout?: number;
     readonly width?: number;
@@ -158,6 +171,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     readonly editorElement: DxElement;
     readonly readOnly: boolean;
     editorName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editorOptions: any;
     readonly dataField?: string;
     readonly row?: RowObject;
@@ -218,9 +232,13 @@ export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
 
 /** @public */
 export type RowClickEvent = NativeEventInfo<dxTreeList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly columns: Array<any>;
     readonly rowIndex: number;
     readonly rowType: string;
@@ -241,8 +259,11 @@ export type RowCollapsingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo
 
 /** @public */
 export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
     readonly columns: Array<Column>;
     readonly rowIndex: number;
@@ -267,8 +288,11 @@ export type RowInsertingEvent = EventInfo<dxTreeList> & RowInsertingInfo;
 
 /** @public */
 export type RowPreparedEvent = EventInfo<dxTreeList> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
     readonly columns: Array<Column>;
     readonly rowIndex: number;
@@ -338,7 +362,9 @@ export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
 /** @public */
 export interface ColumnButtonTemplateData {
     readonly component: dxTreeList;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
     readonly columnIndex: number;
     readonly column: Column;
@@ -349,10 +375,14 @@ export interface ColumnButtonTemplateData {
 
 /** @public */
 export interface ColumnCellTemplateData {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
     readonly component: dxTreeList;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly oldValue?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
@@ -365,10 +395,14 @@ export interface ColumnCellTemplateData {
 
 /** @public */
 export interface ColumnEditCellTemplateData {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly setValue?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
     readonly component: dxTreeList;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
@@ -437,6 +471,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @fires dxTreeListOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandedRowKeys?: Array<any>;
     /**
      * @docid
@@ -828,6 +863,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @default 0
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rootValue?: any;
     /**
      * @docid
@@ -974,6 +1010,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @param1 columnOptions:object|string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addColumn(columnOptions: any | string): void;
     /**
      * @docid
@@ -989,6 +1026,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addRow(parentId: any): DxPromise<void>;
     /**
      * @docid
@@ -997,6 +1035,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -1005,6 +1044,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -1028,6 +1068,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return dxTreeListNode
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getNodeByKey(key: any | string | number): Node;
     /**
      * @docid
@@ -1042,6 +1083,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowKeys(): Array<any>;
     /**
      * @docid
@@ -1050,6 +1092,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowKeys(mode: string): Array<any>;
     /**
      * @docid
@@ -1057,6 +1100,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowsData(): Array<any>;
     /**
      * @docid
@@ -1065,6 +1109,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowsData(mode: string): Array<any>;
     /**
      * @docid
@@ -1095,6 +1140,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowExpanded(key: any): boolean;
     /**
      * @docid
@@ -1110,6 +1156,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     loadDescendants(keys: Array<any>): DxPromise<void>;
     /**
      * @docid
@@ -1119,14 +1166,20 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     loadDescendants(keys: Array<any>, childrenOnly: boolean): DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string, value: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
     clearFilter(): void;
     clearFilter(filterName: string): void;
@@ -1135,39 +1188,56 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     closeEditCell(): void;
     collapseAdaptiveDetailRow(): void;
     columnCount(): number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string, optionValue: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
     deselectAll(): DxPromise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandAdaptiveDetailRow(key: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(filterExpr: any): void;
     focus(): void;
     focus(element: UserDefinedElement): void;
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isAdaptiveDetailRowExpanded(key: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowFocused(key: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowSelected(key: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keyOf(obj: any): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
@@ -1180,10 +1250,14 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
     selectAll(): DxPromise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
@@ -1257,6 +1331,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.columns
@@ -1283,6 +1358,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
@@ -1293,6 +1369,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field3 column:dxTreeListColumn
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxTreeListColumn.type
@@ -1397,6 +1474,7 @@ export interface Node {
      * @docid dxTreeListNode.data
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid dxTreeListNode.hasChildren
@@ -1407,6 +1485,7 @@ export interface Node {
      * @docid dxTreeListNode.key
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     key: any;
     /**
      * @docid dxTreeListNode.level
@@ -1462,6 +1541,7 @@ export interface RowObject {
      * @docid dxTreeListRowObject.key
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
     /**
      * @docid dxTreeListRowObject.level
@@ -1488,6 +1568,7 @@ export interface RowObject {
      * @docid dxTreeListRowObject.values
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
 }
 

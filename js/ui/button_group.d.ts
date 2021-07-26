@@ -55,6 +55,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @type_function_return string|Element|jQuery
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     buttonTemplate?: template | ((buttonData: any, buttonContent: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -113,12 +114,14 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItemKeys?: Array<any>;
     /**
      * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItems?: Array<any>;
     /**
      * @docid

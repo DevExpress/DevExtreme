@@ -19,12 +19,14 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @default {}
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bindingOptions?: { [key: string]: any };
     /**
      * @docid
      * @default {}
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     elementAttr?: { [key: string]: any };
     /**
      * @docid
@@ -40,6 +42,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
     /**
      * @docid
@@ -48,6 +51,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
     /**
      * @docid

@@ -85,6 +85,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
@@ -94,6 +95,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((pointsInfo: any) => any);
     /**
      * @docid BaseSparklineOptions.tooltip.enabled

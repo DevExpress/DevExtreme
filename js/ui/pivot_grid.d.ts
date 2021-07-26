@@ -56,6 +56,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly rowFields?: Array<PivotGridDataSourceField>;
     readonly columnFields?: Array<PivotGridDataSourceField>;
     readonly field?: PivotGridDataSourceField;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<any>;
 };
 
@@ -126,6 +127,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions;
     /**
      * @docid
@@ -578,11 +580,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        * @type_function_return Promise<Object>
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customLoad?: (() => PromiseLike<any>),
       /**
        * @docid
        * @type_function_param1 state:object
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customSave?: ((state: any) => any),
       /**
        * @docid
@@ -698,6 +702,7 @@ export default class dxPivotGrid extends Widget<dxPivotGridOptions> {
      * @return function | null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bindChart(chart: string | DxElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
      * @docid
@@ -789,6 +794,7 @@ export interface dxPivotGridPivotGridCell {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
 }
 
@@ -903,6 +909,7 @@ export interface dxPivotGridSummaryCell {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value(): any;
     /**
      * @docid
@@ -911,6 +918,7 @@ export interface dxPivotGridSummaryCell {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value(field: PivotGridDataSourceField | string): any;
     /**
      * @docid
@@ -920,6 +928,7 @@ export interface dxPivotGridSummaryCell {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value(field: PivotGridDataSourceField | string, postProcessed: boolean): any;
     /**
      * @docid
@@ -928,6 +937,7 @@ export interface dxPivotGridSummaryCell {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value(postProcessed: boolean): any;
 }
 

@@ -75,6 +75,7 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
 }
 
 export interface TooltipInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     target?: any;
 }
 
@@ -118,6 +119,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      * @inherits BaseGaugeOptions.animation
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     animation?: any;
     /**
      * @docid
@@ -376,6 +378,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     /**
      * @docid dxBarGaugeOptions.tooltip.interactive

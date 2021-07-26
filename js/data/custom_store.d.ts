@@ -2,6 +2,7 @@ import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { StoreOptions } from './abstract_store';
 
 /** @namespace DevExpress.data */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
@@ -61,6 +62,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     update?: ((key: TKey, values: TValue) => PromiseLike<any>);
     /**
      * @docid
@@ -76,6 +78,7 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class CustomStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
     constructor(options?: CustomStoreOptions<TKey, TValue>)
     /**

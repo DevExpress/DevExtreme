@@ -244,6 +244,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
          * @type_function_param1 seriesName:any
          * @type_function_return ChartSeries
          */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         customizeSeries?: ((seriesName: any) => ChartSeries),
         /**
          * @docid
@@ -305,6 +306,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @extends CommonVizDataSource
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid

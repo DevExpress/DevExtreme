@@ -64,6 +64,7 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid
@@ -112,28 +113,36 @@ export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
 };
 
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
 };
 
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemData?: any;
     readonly itemElement?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
 };
 
@@ -145,6 +154,7 @@ export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
 /** @public */
 export interface DragTemplateData {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
 }

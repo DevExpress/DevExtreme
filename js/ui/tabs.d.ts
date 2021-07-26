@@ -55,6 +55,7 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -73,6 +74,7 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @fires dxTabsOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxTabsItem | any>;
     /**
      * @docid
@@ -97,6 +99,7 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItems?: Array<string | number | any>;
     /**
      * @docid

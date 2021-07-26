@@ -42,14 +42,17 @@ export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 };
 
 /** @public */
 export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -58,14 +61,17 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
 
 /** @public */
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemIndex?: number | any;
     readonly node?: dxTreeViewNode;
 };
 
 /** @public */
 export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -74,6 +80,7 @@ export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
 
 /** @public */
 export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -82,6 +89,7 @@ export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
 
 /** @public */
 export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -92,6 +100,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
 export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
     readonly node?: dxTreeViewNode;
     readonly itemElement?: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemIndex?: number;
 };
@@ -124,6 +133,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_return Promise<any>|Array<Object>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createChildren?: ((parentNode: dxTreeViewNode) => PromiseLike<any> | Array<any>);
     /**
      * @docid
@@ -321,6 +331,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default 0
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rootValue?: any;
     /**
      * @docid
@@ -390,6 +401,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     collapseItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -406,6 +418,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     collapseItem(key: any): DxPromise<void>;
     /**
      * @docid
@@ -420,6 +433,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -436,6 +450,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandItem(key: any): DxPromise<void>;
     /**
      * @docid
@@ -457,6 +472,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Array<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedNodeKeys(): Array<any>;
     /**
      * @docid
@@ -471,6 +487,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectItem(itemData: any): boolean;
     /**
      * @docid
@@ -487,6 +504,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectItem(key: any): boolean;
     /**
      * @docid
@@ -501,6 +519,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     unselectItem(itemData: any): boolean;
     /**
      * @docid
@@ -517,6 +536,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     unselectItem(key: any): boolean;
     /**
      * @docid
@@ -532,6 +552,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollToItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -548,6 +569,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollToItem(key: any): DxPromise<void>;
 }
 
@@ -625,11 +647,13 @@ export interface dxTreeViewNode {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemData?: any;
     /**
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     key?: any;
     /**
      * @docid

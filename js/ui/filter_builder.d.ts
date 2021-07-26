@@ -36,7 +36,9 @@ export type DisposingEvent = EventInfo<dxFilterBuilder>;
 
 /** @public */
 export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly setValue: any;
     readonly editorElement: DxElement;
     readonly editorName: string;
@@ -51,10 +53,13 @@ export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
 
 /** @public */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly setValue: any;
     readonly editorElement?: DxElement;
     editorName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editorOptions?: any;
     readonly dataField?: string;
     readonly filterOperation?: string;
@@ -73,7 +78,9 @@ export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly previousValue?: any;
 };
 
@@ -291,6 +298,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @fires dxFilterBuilderOptions.onValueChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: string | Array<any> | Function;
 }
 /**
@@ -308,6 +316,7 @@ export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
      * @return Filter expression
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getFilterExpression(): string | Array<any> | Function;
 }
 
@@ -324,6 +333,7 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_return Filter expression
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
     /**
      * @docid
@@ -392,6 +402,7 @@ export interface dxFilterBuilderField {
      * @type_function_return Filter expression
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
     /**
      * @docid
@@ -425,6 +436,7 @@ export interface dxFilterBuilderField {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editorOptions?: any;
     /**
      * @docid
@@ -472,6 +484,7 @@ export interface dxFilterBuilderField {
        * @docid
        * @default undefined
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSourceOptions,
       /**
        * @docid
@@ -479,6 +492,7 @@ export interface dxFilterBuilderField {
        * @type_function_param1 data:object
        * @type_function_return string
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       displayExpr?: string | ((data: any) => string),
       /**
        * @docid
@@ -486,6 +500,7 @@ export interface dxFilterBuilderField {
        * @type_function_param1 data:object
        * @type_function_return string|number|boolean
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       valueExpr?: string | ((data: any) => string | number | boolean)
     };
     /**

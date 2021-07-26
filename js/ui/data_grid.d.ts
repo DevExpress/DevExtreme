@@ -79,6 +79,7 @@ import {
 } from '../localization';
 
 export interface AdaptiveDetailRowPreparingInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly formOptions: any;
 }
 
@@ -91,6 +92,7 @@ export interface DataChangeInfo {
 }
 
 export interface NewRowInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   promise?: PromiseLike<void>;
 }
@@ -100,41 +102,54 @@ export interface KeyDownInfo {
 }
 
 export interface RowKeyInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
 }
 
 export interface RowInsertedInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
   readonly error: Error;
 }
 
 export interface RowInsertingInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   cancel: boolean | PromiseLike<void>;
 }
 
 export interface RowRemovedInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
   readonly error: Error;
 }
 
 export interface RowRemovingInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
   cancel: boolean | PromiseLike<void>;
 }
 
 export interface RowUpdatedInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
   readonly error: Error;
 }
 
 export interface RowUpdatingInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly oldData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   newData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
   cancel: boolean | PromiseLike<void>;
 }
@@ -142,8 +157,11 @@ export interface RowUpdatingInfo {
 export interface RowValidatingInfo {
   readonly brokenRules: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
   isValid: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly newData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly oldData: any;
   errorText: string;
   promise?: PromiseLike<void>;
@@ -156,9 +174,13 @@ export interface SavingInfo {
 }
 
 export interface SelectionChangedInfo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly currentSelectedRowKeys: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly currentDeselectedRowKeys: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly selectedRowKeys: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly selectedRowsData: Array<any>;
 }
 
@@ -169,22 +191,27 @@ export interface ToolbarPreparingInfo {
 export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: DxEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
   readonly toIndex: number;
   readonly fromComponent: dxSortable | dxDraggable;
   readonly toComponent: dxSortable | dxDraggable;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly fromData?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly toData?: any;
 }
 
 export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
   readonly event: DxEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly fromData?: any;
 }
 
@@ -198,12 +225,14 @@ export interface DragReorderInfo {
 }
 
 export interface RowDraggingTemplateDataModel {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly itemData: any;
   readonly itemElement: DxElement;
 }
 
 export interface FilterPanelCustomizeTextArg<T> {
   readonly component: T,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly filterValue: any,
   readonly text: string
 }
@@ -282,6 +311,7 @@ export interface RowDragging<T extends GridBase> {
      * @docid GridBaseOptions.rowDragging.data
      * @default undefined
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any,
     /**
      * @docid GridBaseOptions.rowDragging.dragDirection
@@ -539,6 +569,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @default null
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -597,6 +628,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @fires GridBase.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filterValue?: string | Array<any> | Function;
     /**
      * @docid
@@ -624,6 +656,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     focusedRowKey?: any;
     /**
      * @docid
@@ -988,6 +1021,7 @@ export interface GridBaseOptions<TComponent extends GridBase> extends WidgetOpti
      * @fires GridBaseOptions.onSelectionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedRowKeys?: Array<any>;
     /**
      * @docid
@@ -1499,11 +1533,13 @@ export interface StateStoring {
      * @docid GridBaseOptions.stateStoring.customLoad
      * @type_function_return Promise<Object>
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customLoad?: (() => PromiseLike<any>),
     /**
      * @docid GridBaseOptions.stateStoring.customSave
      * @type_function_param1 gridState:object
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customSave?: ((gridState: any) => any),
     /**
      * @docid GridBaseOptions.stateStoring.enabled
@@ -1561,6 +1597,7 @@ export interface EditingBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editRowKey?: any;
     /**
      * @docid GridBaseOptions.editing.form
@@ -1623,6 +1660,7 @@ export interface DataChange {
     /**
      * @docid
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     key: any;
     /**
      * @docid
@@ -1848,6 +1886,7 @@ export interface GridBase {
      * @return Promise<Object>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     byKey(key: any | string | number): DxPromise<any>;
     /**
      * @docid
@@ -1863,6 +1902,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string): any;
     /**
      * @docid
@@ -1872,6 +1912,7 @@ export interface GridBase {
      * @param3 value:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
      * @docid
@@ -1881,6 +1922,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
      * @docid
@@ -1890,6 +1932,7 @@ export interface GridBase {
      * @param3 value:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
     /**
      * @docid
@@ -1942,6 +1985,7 @@ export interface GridBase {
      * @return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string): any;
     /**
      * @docid
@@ -1951,6 +1995,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string): any;
     /**
      * @docid
@@ -1960,6 +2005,7 @@ export interface GridBase {
      * @param3 optionValue:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
      * @docid
@@ -1968,6 +2014,7 @@ export interface GridBase {
      * @param2 options:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, options: any): void;
     /**
      * @docid
@@ -1997,6 +2044,7 @@ export interface GridBase {
      * @return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deselectRows(keys: Array<any>): DxPromise<any>;
     /**
      * @docid
@@ -2033,6 +2081,7 @@ export interface GridBase {
      * @param1 key:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandAdaptiveDetailRow(key: any): void;
     /**
      * @docid
@@ -2040,6 +2089,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(): any;
     /**
      * @docid
@@ -2047,6 +2097,7 @@ export interface GridBase {
      * @param1 filterExpr:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(filterExpr: any): void;
     focus(): void;
     /**
@@ -2080,6 +2131,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(): any;
     /**
      * @docid
@@ -2088,6 +2140,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     /**
@@ -2097,6 +2150,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getKeyByRowIndex(rowIndex: number): any;
     /**
      * @docid
@@ -2113,6 +2167,7 @@ export interface GridBase {
      * @return numeric
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getRowIndexByKey(key: any | string | number): number;
     /**
      * @docid
@@ -2149,6 +2204,7 @@ export interface GridBase {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isAdaptiveDetailRowExpanded(key: any): boolean;
     /**
      * @docid
@@ -2157,6 +2213,7 @@ export interface GridBase {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowFocused(key: any): boolean;
     /**
      * @docid
@@ -2165,6 +2222,7 @@ export interface GridBase {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowSelected(key: any): boolean;
     /**
      * @docid
@@ -2173,6 +2231,7 @@ export interface GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keyOf(obj: any): any;
     /**
      * @docid
@@ -2181,6 +2240,7 @@ export interface GridBase {
      * @public
      * @return Promise<void>
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     navigateToRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -2269,6 +2329,7 @@ export interface GridBase {
      * @return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
     /**
      * @docid
@@ -2277,6 +2338,7 @@ export interface GridBase {
      * @return Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     /**
      * @docid
@@ -2290,6 +2352,7 @@ export interface GridBase {
      * @return object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(): any;
     /**
      * @docid
@@ -2297,6 +2360,7 @@ export interface GridBase {
      * @param1 state:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(state: any): void;
     /**
      * @docid
@@ -2399,6 +2463,7 @@ export interface ColumnBase {
      * @type_function_return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateCellValue?: ((rowData: any) => any);
     /**
      * @docid GridBaseColumn.calculateDisplayValue
@@ -2406,6 +2471,7 @@ export interface ColumnBase {
      * @type_function_return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateDisplayValue?: string | ((rowData: any) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
@@ -2415,6 +2481,7 @@ export interface ColumnBase {
      * @type_function_return Filter expression
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
     /**
      * @docid GridBaseColumn.calculateSortValue
@@ -2422,6 +2489,7 @@ export interface ColumnBase {
      * @type_function_return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateSortValue?: string | ((rowData: any) => any);
     /**
      * @docid GridBaseColumn.caption
@@ -2463,6 +2531,7 @@ export interface ColumnBase {
      * @docid GridBaseColumn.editorOptions
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editorOptions?: any;
     /**
      * @docid GridBaseColumn.encodeHtml
@@ -2496,6 +2565,7 @@ export interface ColumnBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filterValue?: any;
     /**
      * @docid GridBaseColumn.filterValues
@@ -2503,6 +2573,7 @@ export interface ColumnBase {
      * @fires GridBaseOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filterValues?: Array<any>;
     /**
      * @docid GridBaseColumn.fixed
@@ -2594,6 +2665,7 @@ export interface ColumnBase {
      * @type_function_return void|Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setCellValue?: ((newData: any, value: any, currentRowData: any) => void | PromiseLike<void>);
     /**
      * @docid GridBaseColumn.showEditorAlways
@@ -2631,6 +2703,7 @@ export interface ColumnBase {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sortingMethod?: ((value1: any, value2: any) => number);
     /**
      * @docid GridBaseColumn.trueText
@@ -2678,6 +2751,7 @@ export interface ColumnHeaderFilter {
    * @type_function_param1_field2 dataSource:DataSourceOptions
    * @default undefined
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource?: Array<any> | Store | ((options: { component?: any, dataSource?: DataSourceOptions }) => any) | DataSourceOptions,
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
@@ -2717,6 +2791,7 @@ export interface ColumnLookup {
    * @type_function_return Array<any>|DataSourceOptions|Store
    * @default undefined
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any, key?: any }) => Array<any> | DataSourceOptions | Store),
   /**
    * @docid GridBaseColumn.lookup.displayExpr
@@ -2724,6 +2799,7 @@ export interface ColumnLookup {
    * @type_function_param1 data:object
    * @type_function_return string
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayExpr?: string | ((data: any) => string),
   /**
    * @docid GridBaseColumn.lookup.valueExpr
@@ -2736,6 +2812,7 @@ export interface ColumnLookup {
    * @type_function_return any
    * @public
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   calculateCellValue?: ((rowData: any) => any);
 }
 
@@ -2777,12 +2854,17 @@ export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDe
 
 /** @public */
 export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly column: any;
   readonly rowIndex: number;
   readonly rowType: string;
@@ -2792,9 +2874,13 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
 
 /** @public */
 export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
@@ -2808,10 +2894,14 @@ export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
 /** @public */
 export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly eventType: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
   readonly text: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly columnIndex: number;
   readonly rowIndex: number;
@@ -2823,9 +2913,13 @@ export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
@@ -2838,6 +2932,7 @@ export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly isNewRow?: boolean;
   readonly cellElement: DxElement;
   readonly watch?: Function;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly oldValue?: any;
 };
 
@@ -2846,6 +2941,7 @@ export type ContentReadyEvent = EventInfo<dxDataGrid>;
 
 /** @public */
 export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items?: Array<any>;
   readonly target: string;
   readonly targetElement: DxElement;
@@ -2869,15 +2965,20 @@ export type EditCancelingEvent = Cancelable & EventInfo<dxDataGrid> & DataChange
 
 /** @public */
 export type EditingStartEvent = Cancelable & EventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly column?: any;
 };
 
 /** @public */
 export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly setValue?: any;
   readonly updateValueTimeout?: number;
   readonly width?: number;
@@ -2892,7 +2993,9 @@ export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
 /** @public */
 export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly parentType: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly setValue?: any;
   readonly updateValueTimeout?: number;
   readonly width?: number;
@@ -2902,6 +3005,7 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   readonly editorElement: DxElement;
   readonly readOnly: boolean;
   editorName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editorOptions: any;
   readonly dataField?: string;
   readonly row?: RowObject;
@@ -2974,9 +3078,13 @@ export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
 export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly values: Array<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly columns: Array<any>;
   readonly rowIndex: number;
   readonly rowType: string;
@@ -2996,8 +3104,11 @@ export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo
 
 /** @public */
 export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly values: Array<any>;
   readonly columns: Array<Column>;
   readonly rowIndex: number;
@@ -3023,8 +3134,11 @@ export type RowInsertingEvent = EventInfo<dxDataGrid> & RowInsertingInfo;
 
 /** @public */
 export type RowPreparedEvent = EventInfo<dxDataGrid> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly values: Array<any>;
   readonly columns: Array<Column>;
   readonly rowIndex: number;
@@ -3093,7 +3207,9 @@ export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
 /** @public */
 export interface ColumnButtonTemplateData {
   readonly component: dxDataGrid;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key?: any;
   readonly columnIndex: number;
   readonly column: Column;
@@ -3104,10 +3220,14 @@ export interface ColumnButtonTemplateData {
 
 /** @public */
 export interface ColumnCellTemplateData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data?: any;
   readonly component: dxDataGrid;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly oldValue?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
@@ -3120,10 +3240,14 @@ export interface ColumnCellTemplateData {
 
 /** @public */
 export interface ColumnEditCellTemplateData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly setValue?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data?: any;
   readonly component: dxDataGrid;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly text: string;
   readonly columnIndex: number;
@@ -3136,15 +3260,19 @@ export interface ColumnEditCellTemplateData {
 
 /** @public */
 export interface ColumnGroupCellTemplateData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data?: any;
   readonly component: dxDataGrid;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
   readonly text: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly displayValue?: any;
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
   readonly row: RowObject;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -3159,7 +3287,9 @@ export interface ColumnHeaderCellTemplateData {
 
 /** @public */
 export interface MasterDetailTemplateData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
   readonly watch?: Function;
 }
@@ -3169,9 +3299,12 @@ export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
 /** @public */
 export interface RowTemplateData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly key: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
   readonly component: dxDataGrid;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly values: Array<any>;
   readonly rowIndex: number;
   readonly columns: Array<Column>;
@@ -3650,6 +3783,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param2_field10 isExpanded:boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
@@ -3670,6 +3804,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @fires dxDataGridOptions.onOptionChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectionFilter?: string | Array<any> | Function;
     /**
      * @docid
@@ -3885,6 +4020,7 @@ export interface MasterDetail {
    * @type_function_param2_field2 data:object
    * @type_function_param2_field3 watch:function
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData) => any)
 }
 
@@ -3912,7 +4048,9 @@ export interface CustomSummaryInfo {
   readonly component: dxDataGrid;
   readonly name?: string;
   readonly summaryProcess: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   totalValue?: any;
   readonly groupIndex?: number;
 }
@@ -4192,6 +4330,7 @@ export interface Editing extends EditingBase {
      * @docid dxDataGridOptions.editing.texts
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     texts?: any;
 }
 
@@ -4256,6 +4395,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @param1 columnOptions:object|string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addColumn(columnOptions: any | string): void;
     /**
      * @docid
@@ -4284,6 +4424,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -4299,6 +4440,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return Promise<void>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -4314,6 +4456,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return Array<any> | Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowKeys(): Array<any> & DxPromise<any>;
     /**
      * @docid
@@ -4321,6 +4464,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return Array<any> | Promise<any>
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedRowsData(): Array<any> & DxPromise<any>;
     /**
      * @docid
@@ -4329,6 +4473,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getTotalSummaryValue(summaryItemName: string): any;
     /**
      * @docid
@@ -4359,6 +4504,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowExpanded(key: any): boolean;
     /**
      * @docid
@@ -4367,7 +4513,9 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return boolean
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowSelected(data: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowSelected(key: any): boolean;
     /**
      * @docid
@@ -4378,11 +4526,16 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, dataField: string, value: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
     clearFilter(): void;
     clearFilter(filterName: string): void;
@@ -4391,38 +4544,54 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     closeEditCell(): void;
     collapseAdaptiveDetailRow(): void;
     columnCount(): number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, optionName: string, optionValue: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): DxPromise<void>;
+    deselectAll(): DxPromise<void>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deselectRows(keys: Array<any>): DxPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandAdaptiveDetailRow(key: any): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(filterExpr: any): void;
     focus(): void;
     focus(element: UserDefinedElement): void;
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isAdaptiveDetailRowExpanded(key: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     isRowFocused(key: any): boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keyOf(obj: any): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
@@ -4435,10 +4604,14 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
     saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
     selectAll(): DxPromise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(): any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
@@ -4487,6 +4660,7 @@ export interface Column extends ColumnBase {
      * @type_function_return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateGroupValue?: string | ((rowData: any) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
@@ -4506,6 +4680,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.columns
@@ -4532,6 +4707,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
@@ -4551,6 +4727,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field12 groupContinuedMessage:string
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnGroupCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupIndex
@@ -4568,6 +4745,7 @@ export interface Column extends ColumnBase {
      * @type_function_param2_field3 column:dxDataGridColumn
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.showWhenGrouped
@@ -4671,6 +4849,7 @@ export interface RowObject {
      * @docid dxDataGridRowObject.data
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data: any;
     /**
      * @docid dxDataGridRowObject.groupIndex
@@ -4701,6 +4880,7 @@ export interface RowObject {
      * @docid dxDataGridRowObject.key
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
     /**
      * @docid dxDataGridRowObject.rowIndex
@@ -4716,6 +4896,7 @@ export interface RowObject {
      * @docid dxDataGridRowObject.values
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
 }
 

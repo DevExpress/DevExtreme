@@ -22,6 +22,7 @@ export interface InitializedEventInfo<T> {
 export interface EventInfo<T> {
     readonly component: T;
     readonly element: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly model?: any;
 }
 
@@ -29,6 +30,7 @@ export interface EventInfo<T> {
 export interface NativeEventInfo<T> {
     readonly component: T;
     readonly element: DxElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly model?: any;
     readonly event?: DxEvent;
 }
@@ -37,11 +39,14 @@ export interface NativeEventInfo<T> {
 export interface ChangedOptionInfo {
     readonly name: string;
     readonly fullName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly previousValue?: any;
 }
 
 export interface ItemInfo {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
@@ -71,6 +76,7 @@ export class EventObject {
      * @docid
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
 
     /**
@@ -141,6 +147,7 @@ export type event = DxEvent;
  * @return boolean
  * @hidden
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
 /**
@@ -218,6 +225,7 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @export on
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
 
 /**
@@ -246,6 +254,7 @@ export function on(element: Element | Array<Element>, eventName: string, handler
  * @export on
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
 
 /**
@@ -274,6 +283,7 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @export one
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
 
 /**
@@ -302,6 +312,7 @@ export function one(element: Element | Array<Element>, eventName: string, handle
  * @export one
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
 
 /**
@@ -341,6 +352,7 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @export trigger
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
 
 /**
@@ -366,4 +378,5 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @export triggerHandler
  * @hidden
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

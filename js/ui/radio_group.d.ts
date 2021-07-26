@@ -73,6 +73,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      * @ref
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
 }
 /**

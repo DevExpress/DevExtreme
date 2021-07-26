@@ -61,6 +61,7 @@ export type EditorEnterKeyEvent = EventInfo<dxForm> & {
 /** @public */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
     readonly dataField?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
 };
 
@@ -73,6 +74,7 @@ export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 /** @public */
 export interface GroupItemTemplateData {
     readonly component: dxForm;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly formData?: any;
 }
 
@@ -80,6 +82,7 @@ export interface GroupItemTemplateData {
 export interface SimpleItemTemplateData {
     readonly component: dxForm;
     readonly dataField?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly editorOptions?: any;
     readonly editorType?: string;
     readonly name?: string;
@@ -116,6 +119,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     colCountByScreen?: any;
     /**
      * @docid
@@ -129,6 +133,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @fires dxFormOptions.onFieldDataChanged
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formData?: any;
     /**
      * @docid
@@ -275,6 +280,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @return any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemOption(id: string): any;
     /**
      * @docid
@@ -284,6 +290,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param3 value:any
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemOption(id: string, option: string, value: any): void;
     /**
      * @docid
@@ -292,6 +299,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param2 options:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemOption(id: string, options: any): void;
     /**
      * @docid
@@ -305,6 +313,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param1 data:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     updateData(data: any): void;
     /**
      * @docid
@@ -313,6 +322,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param2 value:object
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     updateData(dataField: string, value: any): void;
     /**
      * @docid
@@ -477,6 +487,7 @@ export interface dxFormGroupItem {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     colCountByScreen?: any;
     /**
      * @docid
@@ -564,6 +575,7 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     editorOptions?: any;
     /**
      * @docid
@@ -729,6 +741,7 @@ export interface dxFormTabbedItem {
        * @inherits ColCountResponsible
        * @default undefined
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       colCountByScreen?: any,
       /**
        * @docid
@@ -752,6 +765,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
@@ -760,6 +774,7 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
       /**
        * @docid
