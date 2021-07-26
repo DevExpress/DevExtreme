@@ -100,11 +100,11 @@ export const viewFunction = ({
 );
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerContentPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'> & PagerContentProps;
+type PagerContentPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'> & PagerContentProps & PagerProps;
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PagerContentProps extends PagerProps {
+export class PagerContentProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;
