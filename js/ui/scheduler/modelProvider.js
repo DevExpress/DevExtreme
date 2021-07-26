@@ -23,7 +23,9 @@ export class ModelProvider {
     get endDayHour() { return this.model['endDayHour']; }
     get adaptivityEnabled() { return this.model['adaptivityEnabled']; }
     get rtlEnabled() { return this.model['rtlEnabled']; }
-    get maxAppointmentsPerCell() { return this.getCurrentViewOption('maxAppointmentsPerCell'); }
+    get maxAppointmentsPerCell() {
+        return this.getCurrentViewOption('maxAppointmentsPerCell');
+    }
     get currentViewOptions() { return this.currentView; }
     get currentViewType() {
         return isObject(this.currentView)

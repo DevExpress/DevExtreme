@@ -23,11 +23,12 @@ class BaseRenderingStrategy {
     }
 
     get instance() { return this.options.instance; } // TODO get rid of this
+    get key() { return this.options.key; }
     get isAdaptive() { return this.options.adaptivityEnabled; }
     get rtlEnabled() { return this.options.rtlEnabled; }
     get startDayHour() { return this.options.startDayHour; }
     get endDayHour() { return this.options.endDayHour; }
-    get maxAppointmentsPerCell() { return this.modelProvider.maxAppointmentsPerCell; }
+    get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }

@@ -41,10 +41,12 @@ class AppointmentLayoutManager {
         const modelProvider = getModelProvider(this.instance.key);
         this._renderingStrategyInstance = new Strategy({
             instance: this.instance,
-            adaptivityEnabled: () => modelProvider.adaptivityEnabled,
-            rtlEnabled: () => modelProvider.rtlEnabled,
-            startDayHour: () => modelProvider.startDayHour,
-            endDayHour: () => modelProvider.endDayHour,
+            key: this.instance.key,
+            adaptivityEnabled: modelProvider.adaptivityEnabled,
+            rtlEnabled: modelProvider.rtlEnabled,
+            startDayHour: modelProvider.startDayHour,
+            endDayHour: modelProvider.endDayHour,
+            maxAppointmentsPerCell: modelProvider.maxAppointmentsPerCell,
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
             getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
             getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
