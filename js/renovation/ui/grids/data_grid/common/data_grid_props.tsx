@@ -1395,7 +1395,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     savingTimeout: 2000,
   };
 
-  @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any) | null = null;
+  @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
 
   @OneWay() customizeColumns?: (columns: Column[]) => any;
 
