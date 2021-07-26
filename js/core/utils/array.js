@@ -2,6 +2,9 @@ import { isDefined } from './type';
 import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
+import browser from './browser';
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 export const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
@@ -40,6 +43,12 @@ export const intersection = function(a, b) {
 };
 
 export const uniqueValues = function(data) {
+    if(isIE11) {
+        return data.filter(function(item, position) {
+            return data.indexOf(item) === position;
+        });
+    }
+
     return [...new Set(data)];
 };
 
