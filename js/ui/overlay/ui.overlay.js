@@ -379,7 +379,7 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _isContentDimensionChanged: function(entries) {
+    _areContentDimensionsRendered: function(entries) {
         const contentBox = entries[0].contentBoxSize?.[0];
         if(contentBox) {
             return contentBox.inlineSize === this._renderedDimensions?.width
@@ -396,7 +396,7 @@ const Overlay = Widget.inherit({
 
         this._shouldSkipResizeCallback = (entries) => {
             return doesShowAnimationChangeDimensions && this._showAnimationProcessing
-                || this._isContentDimensionChanged(entries);
+                || this._areContentDimensionsRendered(entries);
         };
     },
 
