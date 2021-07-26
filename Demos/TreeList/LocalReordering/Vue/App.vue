@@ -98,6 +98,7 @@ export default {
 
         e.component.refresh();
       } else {
+        const employees = this.employees.slice();
         const sourceData = e.itemData;
         const toIndex = e.fromIndex > e.toIndex ? e.toIndex - 1 : e.toIndex;
         let targetData = toIndex >= 0 ? visibleRows[toIndex].node.data : null;
@@ -110,10 +111,12 @@ export default {
         }
 
         const sourceIndex = this.employees.indexOf(sourceData);
-        this.employees.splice(sourceIndex, 1);
+        employees.splice(sourceIndex, 1);
 
         const targetIndex = this.employees.indexOf(targetData) + 1;
-        this.employees.splice(targetIndex, 0, sourceData);
+        employees.splice(targetIndex, 0, sourceData);
+
+        this.employees = employees;
       }
     }
   },
