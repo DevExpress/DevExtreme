@@ -1115,7 +1115,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
-    QUnit.test('searchPanel.disableParsingInSearch option', function(assert) {
+    QUnit.test('searchPanel.strictParsing option', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -1146,7 +1146,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(visibleRows.length, 6, 'all row are visible');
 
         // act
-        dataGrid.option('searchPanel.disableParsingInSearch', true);
+        dataGrid.option('searchPanel.strictParsing', true);
         this.clock.tick();
 
         // assert

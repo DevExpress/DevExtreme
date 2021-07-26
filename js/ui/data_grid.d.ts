@@ -1464,10 +1464,10 @@ export interface SearchPanel {
      */
     width?: number
     /**
-     * @docid GridBaseOptions.searchPanel.disableParsingInSearch
+     * @docid GridBaseOptions.searchPanel.strictParsing
      * @default false
      */
-    disableParsingInSearch?: boolean
+    strictParsing?: boolean
 }
 
 export interface Sorting {

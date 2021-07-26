@@ -959,7 +959,7 @@ export class DataGridSearchPanel {
   width?: number;
 
   @OneWay()
-  disableParsingInSearch?: boolean;
+  strictParsing?: boolean;
 }
 
 @ComponentBindings()
@@ -1418,7 +1418,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     highlightCaseSensitive: false,
     text: '',
     searchVisibleColumnsOnly: false,
-    disableParsingInSearch: false,
+    strictParsing: false,
   };
 
   @Nested() sorting?: DataGridSorting = {
