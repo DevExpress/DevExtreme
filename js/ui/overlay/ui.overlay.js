@@ -409,19 +409,11 @@ const Overlay = Widget.inherit({
 
     _doesShowAnimationChangeDimensions: function() {
         const animation = this.option('animation');
-        let result = false;
-        ['to', 'from'].forEach(prop => {
-            const config = animation?.show?.[prop];
-            if(isObject(config)) {
-                const keys = Object.keys(config);
-                if(keys.includes('width') || keys.includes('height')) {
-                    result = true;
-                    return;
-                }
-            }
-        });
 
-        return result;
+        return ['to', 'from'].some(prop => {
+            const config = animation?.show?.[prop];
+            return isObject(config) && ('width' in config || 'height' in config);
+        });
     },
 
     _observeContentResize: function(shouldObserve) {
