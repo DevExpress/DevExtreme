@@ -290,7 +290,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param3 value:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     itemOption(id: string, option: string, value: any): void;
     /**
      * @docid
@@ -299,7 +299,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param2 options:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     itemOption(id: string, options: any): void;
     /**
      * @docid
@@ -313,7 +313,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param1 data:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     updateData(data: any): void;
     /**
      * @docid
@@ -322,7 +322,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @param2 value:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     updateData(dataField: string, value: any): void;
     /**
      * @docid

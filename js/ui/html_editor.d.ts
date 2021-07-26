@@ -194,7 +194,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param2 formatValue:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
@@ -205,7 +205,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param4 formatValue:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
@@ -215,7 +215,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param3 formats:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     formatLine(index: number, length: number, formats: any): void;
     /**
      * @docid
@@ -226,7 +226,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param4 formatValue:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
@@ -236,7 +236,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param3 formats:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     formatText(index: number, length: number, formats: any): void;
     /**
      * @docid
@@ -324,7 +324,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param3 config:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertEmbed(index: number, type: string, config: any): void;
     /**
      * @docid
@@ -335,7 +335,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param4 formatValue:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertText(index: number, text: string, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
      * @docid
@@ -345,7 +345,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param3 formats:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertText(index: number, text: string, formats: any): void;
     /**
      * @docid
@@ -359,7 +359,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @param1 modules:Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     register(modules: any): void;
     /**
      * @docid

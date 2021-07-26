@@ -380,7 +380,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @param1 value:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     searchValue(value: any): void;
     /**
      * @docid

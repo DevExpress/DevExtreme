@@ -359,7 +359,6 @@ module.exports = {
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 'no-return-await': 'error',
                 '@typescript-eslint/no-extraneous-class': 'error',
-                /* '@typescript-eslint/no-explicit-any': 'error', */
                 '@typescript-eslint/no-unsafe-assignment': 'warn',
                 '@typescript-eslint/restrict-template-expressions': 'warn',
                 '@typescript-eslint/no-unsafe-call': 'warn',
@@ -393,6 +392,7 @@ module.exports = {
                 '@typescript-eslint/member-ordering': 'off',
                 '@typescript-eslint/prefer-readonly-parameter-types': 'off',
                 '@typescript-eslint/no-explicit-any': 'error',
+                '@typescript-eslint/explicit-module-boundary-types': 'error',
                 '@typescript-eslint/explicit-member-accessibility': 'off',
                 '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* can write DxPromise<void>, not just DxPromise (where void is default option)*/
                 '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */

@@ -6,7 +6,7 @@
  * @public
  */
 export default class EndpointSelector {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     constructor(options: any);
     /**
      * @docid

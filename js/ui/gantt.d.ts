@@ -941,7 +941,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
@@ -1001,7 +1001,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getTaskData(key: any): any;
     /**
      * @docid
@@ -1010,7 +1010,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getDependencyData(key: any): any;
     /**
      * @docid
@@ -1019,7 +1019,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getResourceData(key: any): any;
     /**
      * @docid
@@ -1028,7 +1028,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getResourceAssignmentData(key: any): any;
     /**
      * @docid
@@ -1036,7 +1036,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param1 data:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertTask(data: any): void;
     /**
      * @docid
@@ -1044,7 +1044,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param1 key:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     deleteTask(key: any): void;
     /**
      * @docid
@@ -1053,7 +1053,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 data:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     updateTask(key: any, data: any): void;
     /**
      * @docid
@@ -1061,7 +1061,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param1 data:object
      * @public
      */
-     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertDependency(data: any): void;
     /**
      * @docid
@@ -1069,7 +1069,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param1 key:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     deleteDependency(key: any): void;
     /**
      * @docid
@@ -1078,7 +1078,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 taskKeys?:Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     insertResource(data: any, taskKeys?: Array<any>): void;
     /**
      * @docid
@@ -1086,7 +1086,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param1 key:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     deleteResource(key: any): void;
     /**
      * @docid
@@ -1095,7 +1095,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 taskKey:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     assignResourceToTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid
@@ -1104,7 +1104,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @param2 taskKey:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     unassignResourceFromTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid
@@ -1113,7 +1113,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getTaskResources(key: any): Array<any>;
     /**
      * @docid
@@ -1167,7 +1167,7 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     exportToPdf(options: any): DxPromise<any>;
     /**
      * @docid

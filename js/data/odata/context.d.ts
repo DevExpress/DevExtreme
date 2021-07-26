@@ -103,7 +103,7 @@ export default class ODataContext {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     get(operationName: string, params: any): DxPromise<any>;
     /**
      * @docid
@@ -114,7 +114,7 @@ export default class ODataContext {
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
      * @docid

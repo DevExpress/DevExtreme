@@ -440,7 +440,7 @@ export default class PivotGridDataSource {
      * @param2 options:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     field(id: number | string, options: any): void;
     /**
      * @docid
@@ -470,7 +470,7 @@ export default class PivotGridDataSource {
      * @param1 filterExpr:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     filter(filterExpr: any): void;
     /**
      * @docid
@@ -560,7 +560,7 @@ export default class PivotGridDataSource {
      * @param1 state:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     state(state: any): void;
 }
 
