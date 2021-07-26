@@ -41,7 +41,7 @@
           },
           {
             "Title": "OData Service",
-            "Name": "ODataService",
+            "Name": "OdataService",
             "Widget": "DataGrid",
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding#odata",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/401022/devextreme-based-controls/concepts/bind-controls-to-data/odata",
@@ -1171,7 +1171,7 @@
           },
           {
             "Title": "Header and Footer",
-            "Name": "ExcelJSHeaderAndFooter",
+            "Name": "ExcelJsHeaderAndFooter",
             "Widget": "PivotGrid",
             "Modules": "exceljs&file-saver",
             "Credits": "www.wikipedia.org",
@@ -5194,7 +5194,7 @@
           },
           {
             "Title": "Web API Service",
-            "Name": "WebApi",
+            "Name": "WebAPI",
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
             "Equivalents": "webapi",
