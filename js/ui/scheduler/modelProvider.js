@@ -3,6 +3,36 @@ import { getResourceManager } from './instanceFactory';
 import { each } from '../../core/utils/iterator';
 import { isObject } from '../../core/utils/type';
 
+const ViewRenderingStrategies = {
+    day: {
+        renderingStrategy: 'vertical'
+    },
+    week: {
+        renderingStrategy: 'vertical'
+    },
+    workWeek: {
+        renderingStrategy: 'vertical'
+    },
+    month: {
+        renderingStrategy: 'horizontalMonth'
+    },
+    timelineDay: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineWeek: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineWorkWeek: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineMonth: {
+        renderingStrategy: 'horizontalMonthLine'
+    },
+    agenda: {
+        renderingStrategy: 'agenda'
+    }
+};
+
 const VIEW_TYPES = [
     'day', 'week', 'workWeek',
     'month', 'timelineDay', 'timelineWeek',
@@ -78,5 +108,10 @@ export class ModelProvider {
         }
 
         return this.model[optionName];
+    }
+
+    getViewRenderingStrategy() {
+        const { renderingStrategy } = ViewRenderingStrategies[this.currentViewType];
+        return renderingStrategy;
     }
 }

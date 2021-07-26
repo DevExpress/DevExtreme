@@ -36,9 +36,10 @@ class AppointmentLayoutManager {
         }
     }
 
-    initRenderingStrategy(renderingStrategy) {
-        const Strategy = RENDERING_STRATEGIES[renderingStrategy];
+    initRenderingStrategy() {
         const modelProvider = getModelProvider(this.instance.key);
+        const viewRenderingStrategy = modelProvider.getViewRenderingStrategy();
+        const Strategy = RENDERING_STRATEGIES[viewRenderingStrategy];
         this._renderingStrategyInstance = new Strategy({
             instance: this.instance,
             key: this.instance.key,
@@ -55,7 +56,6 @@ class AppointmentLayoutManager {
             getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0,
             getVisibleDayDuration: () => this.instance._workSpace ? this.instance._workSpace.getVisibleDayDuration() : 0,
         });
-        this.renderingStrategy = renderingStrategy;
     }
 
     createAppointmentsMap(items) {
@@ -69,6 +69,7 @@ class AppointmentLayoutManager {
             ? items.slice()
             : [];
 
+        this.initRenderingStrategy();
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(appointments);
 
         return this._createAppointmentsMapCore(appointments, this._positionMap);
@@ -80,6 +81,7 @@ class AppointmentLayoutManager {
             cellCountInsideLeftVirtualCell,
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
+        const viewRenderingStrategy = getModelProvider(this.instance.key).getViewRenderingStrategy();
 
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
@@ -88,7 +90,7 @@ class AppointmentLayoutManager {
 
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
-                settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.direction = viewRenderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
                 settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
                 settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });

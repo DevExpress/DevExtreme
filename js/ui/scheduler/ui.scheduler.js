@@ -535,11 +535,6 @@ class Scheduler extends Widget {
         return resolveCallbacks.promise();
     }
 
-    reinitRenderingStrategy() {
-        const strategy = this._getAppointmentsRenderingStrategy();
-        this.getLayoutManager().initRenderingStrategy(strategy);
-    }
-
     _optionChanged(args) {
         let value = args.value;
         const name = args.name;
@@ -596,8 +591,6 @@ class Scheduler extends Widget {
                 this.modelProvider.updateCurrentView();
 
                 this._validateDayHours();
-
-                this.reinitRenderingStrategy();
 
                 this._validateCellDuration();
 
