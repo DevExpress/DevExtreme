@@ -3421,46 +3421,6 @@ QUnit.module('regressions', moduleSetup, () => {
 
         assert.equal(count, 1);
     });
-
-    QUnit.test('List should not call hightweight array operation for the sync dataSource (T1011717)', function(assert) {
-        const data1 = [];
-
-        for(let i = 0; i < 50; i++) {
-            data1.push({
-                id: i,
-                text: 'Item ' + i
-            });
-        }
-
-        const listInstance = this.element.dxList({
-            dataSource: new DataSource({
-                store: new ArrayStore({
-                    key: 'id',
-                    data: data1
-                }),
-                paginate: true,
-                pageSize: 10
-            }),
-            height: 400,
-            showSelectionControls: true,
-            selectionMode: 'all',
-            selectAllMode: 'allPages'
-        }).dxList('instance');
-
-        const internalFunctions = listInstance._selection._selectionStrategy.getInternalFunctions();
-        const removeDuplicatesSpy = sinon.stub(internalFunctions, 'removeDuplicates');
-        const uniqueValuesSpy = sinon.stub(internalFunctions, 'uniqueValues');
-
-        const $selectAllCheckBox = this.element.find('.dx-list-select-all');
-        const $lastItem = this.element.find(toSelector(LIST_ITEM_CLASS)).eq(2);
-
-        $selectAllCheckBox.trigger('dxpointerdown');
-        $lastItem.trigger('dxpointerdown');
-        $lastItem.trigger('dxpointerdown');
-
-        assert.equal(removeDuplicatesSpy.callCount, 2);
-        assert.equal(uniqueValuesSpy.callCount, 2);
-    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
