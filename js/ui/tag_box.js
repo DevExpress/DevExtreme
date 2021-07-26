@@ -234,6 +234,10 @@ const TagBox = SelectBox.inherit({
 
         const scrollPosition = this._getScrollPosition(direction);
         this._$tagsContainer.scrollLeft(scrollPosition);
+
+        if(this._$label) {
+            this._$label.css((this.option('rtlEnabled') ? 'right' : 'left'), scrollPosition);
+        }
     },
 
     _getScrollPosition: function(direction) {

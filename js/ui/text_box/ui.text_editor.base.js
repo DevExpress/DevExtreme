@@ -470,20 +470,16 @@ const TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_LABEL_CLASS)
             .html('<span>' + labelText + '</span>');
 
+        const $container = container || this.$element();
+        const $textEditorInputContainer = $container.find('.' + TEXTEDITOR_INPUT_CONTAINER_CLASS);
 
-        if(this._$beforeButtonsContainer) {
-            const $container = container || this.$element();
-            const $textEditorInputContainer = $container.find('.' + TEXTEDITOR_INPUT_CONTAINER_CLASS);
-
+        this.NAME === 'dxLookup' ?
+            $label.appendTo(container) :
             $label.appendTo($textEditorInputContainer);
 
-            if(this.option('stylingMode') === 'outlined') {
-                this.$element().addClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
-            }
-        } else if(this.NAME === 'dxLookup') {
-            $label.appendTo(container);
-        } else {
-            $label.appendTo(this._$textEditorContainer);
+
+        if((this._$beforeButtonsContainer || this._$afterButtonsContainer) && this.option('stylingMode') === 'outlined') {
+            this.$element().addClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
         }
     },
 
