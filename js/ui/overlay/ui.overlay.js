@@ -382,13 +382,13 @@ const Overlay = Widget.inherit({
     _areContentDimensionsRendered: function(entries) {
         const contentBox = entries[0].contentBoxSize?.[0];
         if(contentBox) {
-            return contentBox.inlineSize === this._renderedDimensions?.width
-                    && contentBox.blockSize === this._renderedDimensions?.height;
+            return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
+                    && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
         }
 
         const contentRect = entries[0].contentRect;
-        return contentRect.width === this._renderedDimensions?.width
-                && contentRect.height === this._renderedDimensions?.height;
+        return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
+                && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
     _updateResizeCallbackSkipCondition() {
@@ -1221,8 +1221,8 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: this._$content.width(),
-            height: this._$content.height()
+            width: parseInt(this._$content.width(), 10),
+            height: parseInt(this._$content.height(), 10)
         };
     },
 
