@@ -6035,10 +6035,12 @@ QUnit.module('headersArea', {
             height: 300
         });
 
-        area.groupWidth(200);
-        area.setColumnsWidth([100, 120, 300]);
-
         area.processScroll();
+
+        area.setColumnsWidth([100, 120, 300]);
+        area.groupWidth(200);
+
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo(scrollPos);
@@ -6169,10 +6171,13 @@ QUnit.module('Vertical headers', {
             height: 3000
         });
 
-        area.groupHeight(300);
-        area.setRowsHeight([100, 120, 300]);
+        area.processScroll();
 
-        area.processScroll(true);
+        area.setRowsHeight([100, 120, 300]);
+        area.groupHeight(300);
+
+        area.updateScroll(true);
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo(scrollPos);
@@ -7451,13 +7456,16 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.processScroll();
+
         area.groupWidth(200);
         area.groupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.updateScroll(false);
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: scrollPos, y: 0 });
@@ -7520,13 +7528,16 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.processScroll();
+
         area.groupWidth(200);
         area.groupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.updateScroll(false);
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: scrollPos, y: 0 });
@@ -7591,13 +7602,16 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
+        area.processScroll(false);
+
         area.groupWidth(200);
         area.groupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.updateScroll(false);
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });
@@ -7662,13 +7676,16 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
+        area.processScroll();
+
         area.groupWidth(200);
         area.groupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(0, true, true, false);
+        area.updateScroll(false, true, 'vertical');
+        area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });

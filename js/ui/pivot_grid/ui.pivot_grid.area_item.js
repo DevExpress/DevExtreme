@@ -420,10 +420,7 @@ export const AreaItem = Class.inherit({
     },
 
     _setGroupElementDimension(option, value) {
-        // this.groupElement()[0].style[option] = isNumeric(value) ? `${value}px` : value;
-        const scrollable = this._getScrollable();
-
-        scrollable && scrollable.option(option, value);
+        this._getScrollable().option(option, value);
     },
 
     groupElement: function() {
