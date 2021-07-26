@@ -28,7 +28,7 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
 );
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<PageSizeLargeProps, 'pageSizes'> & Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize' >;
+type PageSizeLargePropsType = Pick<PageSizeLargeProps, 'pageSizes'> & Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize' >;
 
 @ComponentBindings()
 export class PageSizeLargeProps {
@@ -36,7 +36,7 @@ export class PageSizeLargeProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PagerSmallPropsType>() {
+export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType>() {
   get pageSizesText(): {
     className: string;
     click: () => void;
