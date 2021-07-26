@@ -105,7 +105,7 @@ describe('Small pager pages', () => {
         pageIndexChange: jest.fn(),
       });
       component.valueChange(1);
-      expect(component.props.pageIndex).toBe(0);
+      expect(component.props.pageIndexChange).toBeCalledWith(0);
     });
 
     it('get value', () => {
@@ -115,7 +115,7 @@ describe('Small pager pages', () => {
         pageIndex: 2,
         pageIndexChange: pageIndexChangeHandler,
       });
-      expect(component.value).toBe(3);
+      expect(component.value).toBe(2);
     });
   });
 });

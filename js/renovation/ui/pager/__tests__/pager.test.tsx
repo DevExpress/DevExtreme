@@ -6,6 +6,7 @@ import { Pager as PagerComponent } from '../pager';
 import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/internal_page_props';
 
 jest.mock('../../editors/drop_down_editors/select_box', () => ({ SelectBox: jest.fn() }));
 
@@ -13,7 +14,8 @@ describe('Pager', () => {
   describe('View', () => {
     it('render pager with defaults', () => {
       const props = new PagerProps();
-      const tree = mount<PagerComponent>(<PagerComponent {...props} />);
+      const internalProps = new InternalPagerProps();
+      const tree = mount<PagerComponent>(<PagerComponent {...props} {...internalProps} />);
       const pager = tree.childAt(0);
       const {
         pagerProps: {
@@ -61,17 +63,25 @@ describe('Pager', () => {
 
   describe('Behaviour', () => {
     it('pageSizeChange', () => {
-      const component = new PagerComponent({ pageSize: 5, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageSize: 5,
+        gridCompatibility: false,
+        pageSizeChange: jest.fn(),
+      });
       expect(component.props.pageSize).toBe(5);
       component.pageSizeChange(10);
-      expect(component.props.pageSize).toBe(10);
+      expect(component.props.pageSizeChange).toBeCalledWith(10);
     });
 
     it('pageIndexChange', () => {
-      const component = new PagerComponent({ pageIndex: 5, gridCompatibility: false });
+      const component = new PagerComponent({
+        pageIndex: 5,
+        gridCompatibility: false,
+        pageIndexChange: jest.fn(),
+      });
       expect(component.props.pageIndex).toBe(5);
       component.pageIndexChange(10);
-      expect(component.props.pageIndex).toBe(10);
+      expect(component.props.pageIndexChange).toBeCalledWith(10);
     });
 
     it('className', () => {
@@ -94,9 +104,9 @@ describe('Pager', () => {
       });
 
       pageIndexChange(1);
-      expect(component.props.pageIndex).toBe(1);
+      expect(component.props.pageIndexChange).toBeCalledWith(1);
       pageSizeChange?.(10);
-      expect(component.props.pageSize).toBe(10);
+      expect(component.props.pageSizeChange).toBeCalledWith(10);
     });
 
     describe('gridCompatibility', () => {
@@ -106,9 +116,12 @@ describe('Pager', () => {
       });
 
       it('pageIndexChange', () => {
-        const component = new PagerComponent({ gridCompatibility: true });
+        const component = new PagerComponent({
+          gridCompatibility: true,
+          pageIndexChange: jest.fn(),
+        });
         component.pageIndexChange(4);
-        expect(component.props.pageIndex).toBe(5);
+        expect(component.props.pageIndexChange).toBeCalledWith(5);
       });
 
       it('className', () => {
