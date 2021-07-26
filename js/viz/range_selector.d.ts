@@ -74,7 +74,6 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
@@ -767,7 +766,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @namespace DevExpress.viz
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**

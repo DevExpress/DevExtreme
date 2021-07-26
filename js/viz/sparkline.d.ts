@@ -54,7 +54,6 @@ export type TooltipShownEvent = EventInfo<dxSparkline>;
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
      * @docid
@@ -199,7 +198,6 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
  * @namespace DevExpress.viz
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxSparkline extends BaseSparkline<dxSparklineOptions> {
     getDataSource(): DataSource;
 }

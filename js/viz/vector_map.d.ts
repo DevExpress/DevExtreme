@@ -240,7 +240,6 @@ export interface VectorMapLegendItem extends BaseLegendItem {
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
@@ -660,7 +659,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
  * @type object
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * @docid
@@ -676,7 +674,6 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
  * @type object
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid
@@ -714,7 +711,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 }
 
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
@@ -802,7 +798,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     };
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
@@ -836,7 +831,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @namespace DevExpress.viz
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
      * @docid

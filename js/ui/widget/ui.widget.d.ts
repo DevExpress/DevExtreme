@@ -113,5 +113,4 @@ export var dxItem: any;
  * @docid
  * @deprecated
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export type format = Format;

@@ -168,7 +168,6 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
@@ -444,7 +443,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     valueAxis?: dxPolarChartValueAxis;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * @docid dxPolarChartOptions.adaptiveLayout.height
@@ -460,7 +458,6 @@ export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.argumentAxis.argumentType
@@ -586,7 +583,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     type?: 'continuous' | 'discrete' | 'logarithmic';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
@@ -614,7 +610,6 @@ export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommo
     value?: number | Date | string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.label.text
@@ -624,7 +619,6 @@ export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChart
     text?: string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
@@ -653,7 +647,6 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
     format?: Format;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTick.shift
@@ -663,7 +656,6 @@ export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxi
     shift?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.color
@@ -691,7 +683,6 @@ export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSe
     startValue?: number | Date | string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.label.text
@@ -701,7 +692,6 @@ export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonA
     text?: string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.argumentAxis.tick.shift
@@ -711,7 +701,6 @@ export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSett
     shift?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.allowDecimals
@@ -846,7 +835,6 @@ export interface dxPolarChartCommonAxisSettings {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.color
@@ -875,7 +863,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
@@ -891,7 +878,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.font
@@ -920,7 +906,6 @@ export interface dxPolarChartCommonAxisSettingsLabel {
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.color
@@ -954,7 +939,6 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label
@@ -964,7 +948,6 @@ export interface dxPolarChartCommonAxisSettingsStripStyle {
     label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
@@ -974,7 +957,6 @@ export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     font?: Font;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.color
@@ -1008,7 +990,6 @@ export interface dxPolarChartCommonAxisSettingsTick {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.area
@@ -1075,7 +1056,6 @@ export interface dxPolarChartLegend extends BaseChartLegend {
     hoverMode?: 'excludePoints' | 'includePoints' | 'none';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartTooltip extends BaseChartTooltip {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
@@ -1085,7 +1065,6 @@ export interface dxPolarChartTooltip extends BaseChartTooltip {
     shared?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.axisDivisionFactor
@@ -1233,7 +1212,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     wholeRange?: VizRange | Array<number | string | Date>;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
@@ -1261,7 +1239,6 @@ export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAx
     value?: number | Date | string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.label.text
@@ -1271,7 +1248,6 @@ export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCom
     text?: string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeHint
@@ -1300,7 +1276,6 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
     format?: Format;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.color
@@ -1328,7 +1303,6 @@ export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSetti
     startValue?: number | Date | string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.label.text
@@ -1338,7 +1312,6 @@ export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxis
     text?: string;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.valueAxis.tick.visible
@@ -1355,7 +1328,6 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @namespace DevExpress.viz
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class dxPolarChart extends BaseChart<dxPolarChartOptions> {
     /**
      * @docid dxPolarChart.getValueAxis
@@ -1378,7 +1350,6 @@ export default class dxPolarChart extends BaseChart<dxPolarChartOptions> {
  * @inherits dxPolarChartCommonAnnotationConfig
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
     /**
      * @docid
@@ -1394,7 +1365,6 @@ export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotati
  * @inherits BaseChartAnnotationConfig
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * @docid
@@ -1442,7 +1412,6 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
  * @type object
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartSeriesTypes {
     /**
      * @docid
@@ -1491,7 +1460,6 @@ export interface dxPolarChartSeriesTypes {
     stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField
@@ -1874,7 +1842,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     width?: number;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
@@ -1990,7 +1957,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border
@@ -2176,7 +2142,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.hoverMode
@@ -2202,7 +2167,6 @@ export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeri
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.point.visible
@@ -2212,7 +2176,6 @@ export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChar
     visible?: boolean;
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.barpolarseries.hoverMode
@@ -2232,7 +2195,6 @@ export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSerie
     selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.linepolarseries.hoverMode
@@ -2252,7 +2214,6 @@ export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeri
     selectionMode?: 'includePoints' | 'excludePoints' | 'none';
 }
 /** @namespace DevExpress.viz */
-// eslint-disable-next-line @typescript-eslint/naming-convention, spellcheck/spell-checker
 export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode
@@ -2295,7 +2256,6 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPol
  * @inherits basePointObject
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface polarPointObject extends basePointObject {
 }
 
@@ -2306,7 +2266,6 @@ export interface polarPointObject extends basePointObject {
  * @inherits baseSeriesObject
  * @namespace DevExpress.viz
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface polarChartSeriesObject extends baseSeriesObject {
 }
 
