@@ -34,9 +34,9 @@ type PagesLargePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageInde
 export class Pager extends JSXComponent<PagesLargePropsType>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
-      this.props.pageIndex = newPageIndex + 1;
+      this.props.pageIndexChange(newPageIndex + 1);
     } else {
-      this.props.pageIndex = newPageIndex;
+      this.props.pageIndexChange(newPageIndex);
     }
   }
 
@@ -48,7 +48,7 @@ export class Pager extends JSXComponent<PagesLargePropsType>() {
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.props.pageSize = newPageSize;
+    this.props.pageSizeChange(newPageSize);
   }
 
   get className(): string | undefined {
