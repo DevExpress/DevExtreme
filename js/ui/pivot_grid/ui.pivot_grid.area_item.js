@@ -3,7 +3,7 @@ import Class from '../../core/class';
 import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isNumeric } from '../../core/utils/type';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -327,6 +327,7 @@ export const AreaItem = Class.inherit({
             totalHeight += values[i];
             that._setRowHeight(i, values[i]);
         }
+
         this._tableHeight = totalHeight;
         this._tableElement[0].style.height = totalHeight + 'px';
     },
@@ -401,29 +402,28 @@ export const AreaItem = Class.inherit({
     },
 
     groupWidth: function(value) {
-        if(value === undefined) {
-            return this._groupElement.width();
-        } else if(value >= 0) {
-            this._groupWidth = value;
-            return (this._groupElement[0].style.width = value + 'px');
-        } else {
-            return (this._groupElement[0].style.width = value);
+        if(!isDefined(value)) {
+            return;
         }
+
+        this._groupWidth = isNumeric(value) ? value : null;
+        this._setGroupElementDimension('width', value);
     },
 
     groupHeight: function(value) {
-        if(value === undefined) {
-            return this._groupElement.height();
+        if(!isDefined(value)) {
+            return;
         }
 
-        this._groupHeight = null;
+        this._groupHeight = isNumeric(value) ? value : null;
+        this._setGroupElementDimension('height', value);
+    },
 
-        if(value >= 0) {
-            this._groupHeight = value;
-            this._groupElement[0].style.height = value + 'px';
-        } else {
-            this._groupElement[0].style.height = value;
-        }
+    _setGroupElementDimension(option, value) {
+        // this.groupElement()[0].style[option] = isNumeric(value) ? `${value}px` : value;
+        const scrollable = this._getScrollable();
+
+        scrollable && scrollable.option(option, value);
     },
 
     groupElement: function() {

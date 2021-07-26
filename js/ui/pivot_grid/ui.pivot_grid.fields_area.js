@@ -3,6 +3,7 @@ import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { AreaItem } from './ui.pivot_grid.area_item';
 import { capitalizeFirstLetter } from './ui.pivot_grid.utils';
+import { isNumeric } from '../../core/utils/type';
 import Popup from '../popup';
 import Button from '../button';
 
@@ -149,6 +150,10 @@ export const FieldsArea = AreaItem.inherit({
         } else {
             head.append(row);
         }
+    },
+
+    _setGroupElementDimension(option, value) {
+        this.groupElement()[0].style[option] = isNumeric(value) ? `${value}px` : value;
     },
 
     reset: function() {

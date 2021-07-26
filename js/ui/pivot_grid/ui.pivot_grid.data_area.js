@@ -45,23 +45,24 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    processScroll: function(useNativeScrolling, rtlEnabled, horizontalScroll, verticalScroll) {
-        let direction = 'both';
-        if(horizontalScroll && !verticalScroll) {
-            direction = 'horizontal';
-        } else if(!horizontalScroll && verticalScroll) {
-            direction = 'vertical';
-        }
-
-        this._groupElement.css('borderTopWidth', 0)
+    processScroll: function() {
+        this.groupElement().css('borderTopWidth', 0)
             .dxScrollable({
-                rtlEnabled,
-                useNative: !!useNativeScrolling,
-                useSimulatedScrollbar: !useNativeScrolling,
-                direction,
+                useNative: false,
+                useSimulatedScrollbar: false,
+                direction: 'vertical',
                 bounceEnabled: false,
                 updateManually: true
             });
+    },
+
+    updateScroll: function(useNativeScrolling, rtlEnabled, direction) {
+        this._getScrollable().option({
+            useNative: !!useNativeScrolling,
+            useSimulatedScrollbar: !useNativeScrolling,
+            rtlEnabled,
+            direction,
+        });
     },
 
     reset: function() {

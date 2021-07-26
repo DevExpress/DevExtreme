@@ -101,16 +101,14 @@ export const HorizontalHeadersArea = AreaItem.inherit({
     },
 
     processScroll: function() {
-        if(!this._getScrollable()) {
-            this._groupElement.dxScrollable({
-                useNative: false,
-                useSimulatedScrollbar: false,
-                showScrollbar: 'never',
-                bounceEnabled: false,
-                direction: 'horizontal',
-                updateManually: true
-            });
-        }
+        this._groupElement.dxScrollable({
+            useNative: false,
+            useSimulatedScrollbar: false,
+            showScrollbar: 'never',
+            bounceEnabled: false,
+            direction: 'horizontal',
+            updateManually: true
+        });
     },
 
     processScrollBarSpacing: function(scrollBarWidth) {
@@ -202,16 +200,14 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     },
 
     processScroll: function() {
-        if(!this._getScrollable()) {
-            this._groupElement.dxScrollable({
-                useNative: false,
-                useSimulatedScrollbar: false,
-                showScrollbar: 'never',
-                bounceEnabled: false,
-                direction: 'vertical',
-                updateManually: true
-            });
-        }
+        this._groupElement.dxScrollable({
+            useNative: false,
+            useSimulatedScrollbar: false,
+            showScrollbar: 'never',
+            bounceEnabled: false,
+            direction: 'vertical',
+            updateManually: true
+        });
     },
 
     processScrollBarSpacing: function(scrollBarWidth) {
