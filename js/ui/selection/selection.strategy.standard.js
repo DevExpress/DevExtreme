@@ -234,12 +234,6 @@ module.exports = SelectionStrategy.inherit({
         return deferred;
     },
 
-    ///#DEBUG
-    getInternalFunctions: function() {
-        return { removeDuplicates: arrayUtils.removeDuplicates, uniqueValues: arrayUtils.uniqueValues };
-    },
-    ///#ENDDEBUG
-
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
         const that = this;
         const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys);
