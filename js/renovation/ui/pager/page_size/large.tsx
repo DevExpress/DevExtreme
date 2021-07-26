@@ -21,6 +21,10 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
     }
   </Fragment>
 );
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagerSmallProps = Pick<PageSizeLargeProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' >;
+
 @ComponentBindings()
 export class PageSizeLargeProps {
   @OneWay() pageSizes!: FullPageSize[];
@@ -31,7 +35,7 @@ export class PageSizeLargeProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PageSizeLargeProps, 'pageSizes' | 'pageSizeChange'>() {
+export class PageSizeLarge extends JSXComponent<PagerSmallProps>() {
   get pageSizesText(): {
     className: string;
     click: () => void;
