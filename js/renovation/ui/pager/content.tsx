@@ -9,7 +9,6 @@ import {
   Provider,
   Effect,
   RefObject,
-  Event,
 } from '@devextreme-generator/declarations';
 
 import { InfoText } from './info';
@@ -19,6 +18,7 @@ import {
   PAGER_PAGES_CLASS, PAGER_PAGE_INDEXES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
 } from './common/consts';
 import { PagerProps, DisplayMode } from './common/pager_props';
+import { InternalPagerProps } from './common/internal_page_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -79,7 +79,7 @@ export const viewFunction = ({
         {pageIndexSelectorVisible && (
           <div
             className={PAGER_PAGE_INDEXES_CLASS}
-            ref={pagesRef as any}
+            ref={pagesRef}
           >
             <PageIndexSelector
               hasKnownLastPage={hasKnownLastPage}
@@ -99,12 +99,13 @@ export const viewFunction = ({
   </Widget>
 );
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagerContentPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'> & PagerContentProps;
+
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class PagerContentProps extends PagerProps {
   @OneWay() infoTextVisible = true;
-
-  @OneWay() pageSize!: number;
 
   @OneWay() isLargeDisplayMode = true;
 
@@ -115,14 +116,10 @@ export class PagerContentProps extends PagerProps {
   @ForwardRef() pagesRef?: RefObject<HTMLElement>;
 
   @ForwardRef() infoTextRef?: RefObject<HTMLDivElement>;
-
-  @Event() pageSizeChange!: EventCallback<number>;
-
-  @Event() pageIndexChange!: EventCallback<number>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContent extends JSXComponent<PagerContentProps>() {
+export class PagerContent extends JSXComponent<PagerContentPropsType>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

@@ -4,12 +4,10 @@ import {
   Fragment,
   Consumer,
   Mutable,
-  ComponentBindings,
-  OneWay, Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../../common/event_callback';
 import { Page, PageProps } from './page';
 import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/internal_page_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
@@ -93,17 +91,10 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' > & PageSizeSmallProps;
-
-@ComponentBindings()
-export class PageSizeSmallProps {
-  @OneWay() pageIndex!: number;
-
-  @Event() pageIndexChange!: EventCallback<number>;
-}
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' > & Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange' >;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesLarge extends JSXComponent<PagesLargePropsType, 'pageIndex' | 'pageIndexChange'>() {
+export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 

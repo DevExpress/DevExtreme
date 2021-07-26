@@ -1,13 +1,19 @@
 import {
-  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref, RefObject, Event,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  InternalState,
+  Effect,
+  Component,
+  Ref,
+  RefObject,
 } from '@devextreme-generator/declarations';
 
 import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
-
-import { EventCallback } from '../../common/event_callback';
+import { InternalPagerProps } from '../common/internal_page_props';
 
 export const viewFunction = ({
   width,
@@ -25,20 +31,19 @@ export const viewFunction = ({
   />
 );
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PageSizeSmallPropsType = Pick<PageSizeSmallProps, 'pageSizes' | 'parentRef'> & Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize' >;
+
 @ComponentBindings()
 export class PageSizeSmallProps {
   @Ref() parentRef!: RefObject<HTMLElement>;
 
   @OneWay() pageSizes!: FullPageSize[];
-
-  @OneWay() pageSize!: number;
-
-  @Event() pageSizeChange!: EventCallback<number>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
-  extends JSXComponent<PageSizeSmallProps, 'parentRef' | 'pageSizes' | 'pageSizeChange'>() {
+  extends JSXComponent<PageSizeSmallPropsType>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {

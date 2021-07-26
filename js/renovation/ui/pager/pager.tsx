@@ -1,8 +1,6 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  OneWay,
 } from '@devextreme-generator/declarations';
 
 import { ResizableContainer } from './resizable_container';
@@ -10,6 +8,7 @@ import { PagerProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
+import { InternalPagerProps } from './common/internal_page_props';
 
 export const viewFunction = ({
   pagerProps,
@@ -23,10 +22,8 @@ export const viewFunction = ({
   />
 );
 
-@ComponentBindings()
-export class PageSizeSmallProps {
-  @OneWay() pageIndex!: number;
-}
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageIndexChange' | 'pageIndex'> & PagerProps;
 
 @Component({
   defaultOptionRules: null,
@@ -34,7 +31,7 @@ export class PageSizeSmallProps {
   view: viewFunction,
 })
 
-export class Pager extends JSXComponent<PagerProps>() {
+export class Pager extends JSXComponent<PagesLargePropsType>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndex = newPageIndex + 1;
@@ -64,7 +61,7 @@ export class Pager extends JSXComponent<PagerProps>() {
     return this.props.className;
   }
 
-  get pagerProps(): PagerProps & { 'pageIndex'; 'pageIndexChange'; 'pageSizeChange' } {
+  get pagerProps(): PagesLargePropsType {
     return {
       ...this.props,
       className: this.className,
