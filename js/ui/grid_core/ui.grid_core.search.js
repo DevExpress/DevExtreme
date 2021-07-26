@@ -17,7 +17,11 @@ function allowSearch(column) {
     return isDefined(column.allowSearch) ? column.allowSearch : column.allowFiltering;
 }
 
-function parseValue(column, text) {
+function parseValue(column, text, disableParsingInSearch) {
+    if(disableParsingInSearch) {
+        return text;
+    }
+
     const lookup = column.lookup;
 
     if(!column.parseValue) {
@@ -42,7 +46,8 @@ export const searchModule = {
                 highlightSearchText: true,
                 highlightCaseSensitive: false,
                 text: '',
-                searchVisibleColumnsOnly: false
+                searchVisibleColumnsOnly: false,
+                disableParsingInSearch: false
             }
         };
     },
@@ -75,7 +80,8 @@ export const searchModule = {
 
                         if(allowSearch(column) && column.calculateFilterExpression) {
                             lookup = column.lookup;
-                            const filterValue = parseValue(column, text);
+                            const disableParsingInSearch = that.option('searchPanel.disableParsingInSearch');
+                            const filterValue = parseValue(column, text, disableParsingInSearch);
                             if(lookup && lookup.items) {
                                 dataQuery(lookup.items).filter(column.createFilterExpression.call({ dataField: lookup.displayExpr, dataType: lookup.dataType, calculateFilterExpression: column.calculateFilterExpression }, filterValue, null, 'search')).enumerate().done(onQueryDone);
                             } else {
@@ -110,6 +116,7 @@ export const searchModule = {
 
                         switch(args.fullName) {
                             case 'searchPanel.text':
+                            case 'searchPanel.disableParsingInSearch':
                             case 'searchPanel':
                                 that._applyFilter();
                                 args.handled = true;
@@ -221,7 +228,8 @@ export const searchModule = {
                 },
 
                 _getFormattedSearchText: function(column, searchText) {
-                    const value = parseValue(column, searchText);
+                    const disableParsingInSearch = this.option('searchPanel.disableParsingInSearch');
+                    const value = parseValue(column, searchText, disableParsingInSearch);
                     const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'search');
                     return gridCoreUtils.formatValue(value, formatOptions);
                 },
