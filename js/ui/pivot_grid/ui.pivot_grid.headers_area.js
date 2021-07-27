@@ -94,8 +94,10 @@ export const HorizontalHeadersArea = AreaItem.inherit({
 
     hasScroll: function() {
         const tableWidth = this._virtualContent ? this._virtualContentWidth : this._tableWidth;
-        if(this._groupWidth && tableWidth) {
-            return (tableWidth - this._groupWidth) >= 1;
+        const groupWidth = this.getGroupWidth();
+
+        if(groupWidth && tableWidth) {
+            return (tableWidth - groupWidth) >= 1;
         }
         return false;
     },
@@ -114,9 +116,10 @@ export const HorizontalHeadersArea = AreaItem.inherit({
     processScrollBarSpacing: function(scrollBarWidth) {
         const that = this;
         const groupAlignment = that.option('rtlEnabled') ? 'right' : 'left';
+        const groupWidth = this.getGroupWidth();
 
-        if(that._groupWidth) {
-            that.groupWidth(that._groupWidth - scrollBarWidth);
+        if(groupWidth) {
+            that.setGroupWidth(groupWidth - scrollBarWidth);
         }
 
         if(that._scrollBarWidth) {
@@ -125,7 +128,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
 
         that._groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
 
-        that._groupElement.css('float', groupAlignment).width(that._groupHeight);
+        that._groupElement.css('float', groupAlignment).width(that.getGroupHeight());
         that._scrollBarWidth = scrollBarWidth;
     },
 
@@ -193,8 +196,10 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
 
     hasScroll: function() {
         const tableHeight = this._virtualContent ? this._virtualContentHeight : this._tableHeight;
-        if(this._groupHeight && tableHeight) {
-            return (tableHeight - this._groupHeight) >= 1;
+        const groupHeight = this.getGroupHeight();
+
+        if(groupHeight && tableHeight) {
+            return (tableHeight - groupHeight) >= 1;
         }
         return false;
     },
@@ -212,8 +217,10 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
 
     processScrollBarSpacing: function(scrollBarWidth) {
         const that = this;
-        if(that._groupHeight) {
-            that.groupHeight(that._groupHeight - scrollBarWidth);
+        const groupHeight = that.getGroupHeight();
+
+        if(groupHeight) {
+            that.setGroupHeight(groupHeight - scrollBarWidth);
         }
 
         if(that._scrollBarWidth) {

@@ -152,8 +152,16 @@ export const FieldsArea = AreaItem.inherit({
         }
     },
 
-    _setGroupElementDimension(option, value) {
-        this.groupElement()[0].style[option] = isNumeric(value) ? `${value}px` : value;
+    setGroupWidth: function(value) {
+        this.groupElement()[0].style.width = isNumeric(value) ? `${value}px` : value;
+    },
+
+    setGroupHeight: function(value) {
+        this.groupElement()[0].style.height = isNumeric(value) ? `${value}px` : value;
+    },
+
+    _getGroupElementSize(dimension) {
+        return this.groupElement()[0].style[dimension];
     },
 
     reset: function() {

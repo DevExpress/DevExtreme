@@ -3866,7 +3866,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid);
         const columnsArea = pivotGrid._columnsArea;
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
 
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -3943,7 +3943,7 @@ QUnit.module('dxPivotGrid', {
         const columnsArea = pivotGrid._columnsArea;
 
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
         assert.ok(pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -4137,7 +4137,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid);
         const columnsArea = pivotGrid._columnsArea;
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
         assert.ok(!pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -5389,8 +5389,8 @@ QUnit.module('Tests with stubs', {
 
         assert.ok(this.dataArea.updateScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
-        assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 71);
-        assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 71);
+        assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
+        assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
         assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
 
     });
@@ -5453,8 +5453,8 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.updateScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
 
-        assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 'auto');
-        assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 'auto');
+        assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
+        assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 'auto');
 
         assert.ok(this.dataController.subscribeToWindowScrollEvents.called);
         assert.strictEqual(this.dataController.subscribeToWindowScrollEvents.lastCall.args[0], this.dataArea.groupElement());
@@ -5795,6 +5795,7 @@ QUnit.module('headersArea', {
             [{ text: '1', rowspan: 2, type: 'D', expanded: false }, { text: '2', colspan: 2, type: 'D', expanded: true }],
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
+        headersArea.processScroll();
         headersArea.processScrollBarSpacing(17);
 
         // assert
@@ -5813,6 +5814,7 @@ QUnit.module('headersArea', {
             [{ text: '1', rowspan: 2, type: 'D', expanded: false }, { text: '2', colspan: 2, type: 'D', expanded: true }],
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
+        headersArea.processScroll();
         headersArea.processScrollBarSpacing(17);
         headersArea.processScrollBarSpacing(0);
 
@@ -5831,6 +5833,7 @@ QUnit.module('headersArea', {
             [{ text: '1', rowspan: 2, type: 'D', expanded: false }, { text: '2', colspan: 2, type: 'D', expanded: true }],
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
+        headersArea.processScroll();
         headersArea.processScrollBarSpacing(17);
 
         // assert
@@ -5848,6 +5851,7 @@ QUnit.module('headersArea', {
             [{ text: '1', rowspan: 2, type: 'D', expanded: false }, { text: '2', colspan: 2, type: 'D', expanded: true }],
             [{ text: '21', type: 'D' }, { text: '22', type: 'D' }]
         ]);
+        headersArea.processScroll();
         headersArea.processScrollBarSpacing(17);
 
         // assert
@@ -6038,7 +6042,7 @@ QUnit.module('headersArea', {
         area.processScroll();
 
         area.setColumnsWidth([100, 120, 300]);
-        area.groupWidth(200);
+        area.setGroupWidth(200);
 
         area._getScrollable().update();
 
@@ -6174,7 +6178,7 @@ QUnit.module('Vertical headers', {
         area.processScroll();
 
         area.setRowsHeight([100, 120, 300]);
-        area.groupHeight(300);
+        area.setGroupHeight(300);
 
         area._getScrollable().update();
 
@@ -6214,7 +6218,7 @@ QUnit.module('Vertical headers', {
         area.processScroll();
 
         area.setRowsHeight([100, 120, 300]);
-        area.groupHeight(300);
+        area.setGroupHeight(300);
 
         area._getScrollable().update();
 
@@ -6238,7 +6242,7 @@ QUnit.module('Vertical headers', {
         area.processScroll();
 
         area.setRowsHeight([100, 120, 300]);
-        area.groupHeight(300);
+        area.setGroupHeight(300);
 
         area._getScrollable().update();
 
@@ -7457,8 +7461,8 @@ QUnit.module('Data area', () => {
 
         area.processScroll();
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7529,8 +7533,8 @@ QUnit.module('Data area', () => {
 
         area.processScroll();
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7603,8 +7607,8 @@ QUnit.module('Data area', () => {
 
         area.processScroll(false);
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7677,8 +7681,8 @@ QUnit.module('Data area', () => {
 
         area.processScroll();
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);

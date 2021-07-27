@@ -401,18 +401,28 @@ export const AreaItem = Class.inherit({
         });
     },
 
-    groupWidth: function(value) {
-        this._groupWidth = isNumeric(value) ? value : null;
-        this._setGroupElementDimension('width', value);
+    setGroupWidth: function(value) {
+        this._getScrollable().option('width', value);
     },
 
-    groupHeight: function(value) {
-        this._groupHeight = isNumeric(value) ? value : null;
-        this._setGroupElementDimension('height', value);
+    setGroupHeight: function(value) {
+        this._getScrollable().option('height', value);
     },
 
-    _setGroupElementDimension(option, value) {
-        this._getScrollable().option(option, value);
+    getGroupHeight: function() {
+        const height = this._getGroupElementSize('height');
+
+        return isNumeric(height) ? height : null;
+    },
+
+    getGroupWidth: function() {
+        const width = this._getGroupElementSize('width');
+
+        return isNumeric(width) ? width : null;
+    },
+
+    _getGroupElementSize(dimension) {
+        return this._getScrollable().option(dimension);
     },
 
     groupElement: function() {
@@ -468,8 +478,8 @@ export const AreaItem = Class.inherit({
         that._fakeTable = null;
 
         that.disableVirtualMode();
-        that.groupWidth('100%');
-        that.groupHeight('auto');
+        that.setGroupWidth('100%');
+        that.setGroupHeight('auto');
 
         that.resetColumnsWidth();
 
@@ -500,7 +510,7 @@ export const AreaItem = Class.inherit({
         const rtlEnabled = that.option('rtlEnabled');
         const offsetStyleName = rtlEnabled ? 'right' : 'left';
         const tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]);
-        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
+        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that.getGroupWidth());
         if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
             that._fakeTable[0].style[offsetStyleName] = offset + 'px';
         }
@@ -509,7 +519,7 @@ export const AreaItem = Class.inherit({
     _moveFakeTableTop: function(scrollPos) {
         const that = this;
         const tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top);
-        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
+        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that.getGroupHeight());
 
         if(parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
             that._fakeTable[0].style.top = offsetTop + 'px';
