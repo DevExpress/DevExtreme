@@ -1,4 +1,4 @@
-import DateNavigator from './navigator';
+import Navigator from './navigator';
 import ViewSwitcher from './viewSwitcher';
 
 const CLASS = {
@@ -8,13 +8,15 @@ const CLASS = {
 export default class SchedulerToolbar {
   element: Selector;
 
-  dateNavigator: DateNavigator;
-
-  viewSwitcher: ViewSwitcher;
-
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.toolbar}`);
-    this.dateNavigator = new DateNavigator(this.element);
-    this.viewSwitcher = new ViewSwitcher(this.element);
+  }
+
+  getNavigator(): Navigator {
+    return new Navigator(this.element);
+  }
+
+  getViewSwitcher(): ViewSwitcher {
+    return new ViewSwitcher(this.element);
   }
 }

@@ -24,8 +24,6 @@ export const CLASS = {
 };
 
 export default class Scheduler extends Widget {
-  toolbar: Toolbar;
-
   workSpace: Selector;
 
   dateTableCells: Selector;
@@ -55,7 +53,6 @@ export default class Scheduler extends Widget {
   constructor(id: string) {
     super(id);
 
-    this.toolbar = new Toolbar(this.element);
     this.workSpace = this.element.find(`.${CLASS.workSpace}`);
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
@@ -127,5 +124,9 @@ export default class Scheduler extends Widget {
 
   getAppointmentCollectorCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
+  }
+
+  getToolbar(): Toolbar {
+    return new Toolbar(this.element);
   }
 }
