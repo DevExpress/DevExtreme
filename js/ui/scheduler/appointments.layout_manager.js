@@ -40,6 +40,7 @@ class AppointmentLayoutManager {
 
     _initRenderingStrategy() {
         const Strategy = RENDERING_STRATEGIES[this.viewRenderingStrategyName];
+        const workspace = this.instance.getWorkSpace();
         this._renderingStrategyInstance = new Strategy({
             instance: this.instance,
             key: this.instance.key,
@@ -48,15 +49,15 @@ class AppointmentLayoutManager {
             startDayHour: this.modelProvider.startDayHour,
             endDayHour: this.modelProvider.endDayHour,
             maxAppointmentsPerCell: this.modelProvider.maxAppointmentsPerCell,
-            agendaDuration: this.modelProvider.agendaDuration,
+            agendaDuration: workspace.option('agendaDuration'),
             currentDate: this.modelProvider.currentDate,
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
-            getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
-            getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
-            getCellHeight: () => this.instance._workSpace ? this.instance._workSpace.getCellHeight() : 0,
-            getAllDayHeight: () => this.instance._workSpace ? this.instance._workSpace.getAllDayHeight() : 0,
-            getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0,
-            getVisibleDayDuration: () => this.instance._workSpace ? this.instance._workSpace.getVisibleDayDuration() : 0,
+            getIsGroupedByDate: () => workspace.isGroupedByDate(),
+            getCellWidth: () => workspace.getCellWidth(),
+            getCellHeight: () => workspace.getCellHeight(),
+            getAllDayHeight: () => workspace.getAllDayHeight(),
+            getResizableStep: () => workspace.positionHelper.getResizableStep(),
+            getVisibleDayDuration: () => workspace.getVisibleDayDuration()
         });
     }
 
@@ -202,6 +203,10 @@ class AppointmentLayoutManager {
     }
 
     getRenderingStrategyInstance() {
+        if(!this._renderingStrategyInstance) {
+            this._initRenderingStrategy();
+        }
+
         return this._renderingStrategyInstance;
     }
 }
