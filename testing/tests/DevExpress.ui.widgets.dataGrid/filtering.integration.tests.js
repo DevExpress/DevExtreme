@@ -1115,7 +1115,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
-    QUnit.test('searchPanel.strictParsing option', function(assert) {
+    QUnit.test('Correct number parsing in search', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
@@ -1141,19 +1141,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        let visibleRows = dataGrid.getVisibleRows();
-
-        assert.equal(visibleRows.length, 6, 'all row are visible');
-
-        // act
-        dataGrid.option('searchPanel.strictParsing', true);
-        this.clock.tick();
-
-        // assert
-        visibleRows = dataGrid.getVisibleRows();
+        const visibleRows = dataGrid.getVisibleRows();
 
         assert.equal(visibleRows.length, 2, 'row are filtered');
-        assert.deepEqual(visibleRows.map(i => i.data.string), ['FIC112', 'FIC115'], 'visible row\'s data');
+        assert.deepEqual(visibleRows.map(i => i.data.string), ['FIC112', 'FIC115'], 'number rows are not shown');
     });
 
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
