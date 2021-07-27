@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
@@ -235,7 +235,8 @@ class DiagramToolbox extends DiagramFloatingPanel {
     }
     _createTooltips(targets) {
         const { Browser } = getDiagram();
-        if(Browser.TouchUI) return;
+        const window = getWindow();
+        if(Browser.TouchUI || window !== undefined && window.navigator && window.navigator['maxTouchPoints'] > 0) return;
 
         const $container = this.$element();
         targets.each((index, element) => {

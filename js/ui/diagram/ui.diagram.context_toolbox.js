@@ -4,6 +4,7 @@ import Widget from '../widget/ui.widget';
 import Popover from '../popover';
 
 import { getDiagram } from './diagram.importer';
+import { getWindow } from '../../core/utils/window';
 
 const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
@@ -49,8 +50,9 @@ class DiagramContextToolbox extends Widget {
             .appendTo(this.$element());
 
         const { Browser } = getDiagram();
+        const window = getWindow();
         let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
-        if(Browser.TouchUI) {
+        if(Browser.TouchUI || window !== undefined && window.navigator && window.navigator['maxTouchPoints'] > 0) {
             popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {

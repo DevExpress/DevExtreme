@@ -3,7 +3,7 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -282,6 +282,7 @@ class DiagramToolbar extends DiagramPanel {
     }
     _onItemContentReady(widget, item, actionHandler) {
         const { Browser } = getDiagram();
+        const window = getWindow();
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
@@ -291,7 +292,7 @@ class DiagramToolbar extends DiagramPanel {
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: '',
                 closeOnOutsideClick: (e) => {
-                    return !Browser.TouchUI && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
+                    return !(Browser.TouchUI || window !== undefined && window.navigator && window.navigator['maxTouchPoints'] > 0) && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
                 },
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
@@ -317,7 +318,7 @@ class DiagramToolbar extends DiagramPanel {
             });
 
             // prevent showing context menu by toggle "close" click
-            if(!Browser.TouchUI) {
+            if(!(Browser.TouchUI || window !== undefined && window.navigator && window.navigator['maxTouchPoints'] > 0)) {
                 widget._contextMenu._dropDownButtonElement = widget.$element(); // i.e. widget.NAME === 'dxButton'
                 if(widget.NAME === 'dxTextBox') {
                     widget._contextMenu._dropDownButtonElement = widget.getButton('dropDown').element();
