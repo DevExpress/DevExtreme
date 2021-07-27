@@ -234,10 +234,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return result;
     }
     _createTooltips(targets) {
-        const { Browser } = getDiagram();
-        const window = getWindow();
-        if(Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0) return;
-
+        if(this._isTouchMode()) return;
         const $container = this.$element();
         targets.each((index, element) => {
             const $target = $(element);
@@ -258,6 +255,14 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 });
             }
         });
+    }
+    _isTouchMode() {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
+        const window = getWindow();
+        return window && window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();

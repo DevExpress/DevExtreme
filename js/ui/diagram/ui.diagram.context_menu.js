@@ -99,8 +99,11 @@ class DiagramContextMenuWrapper extends Widget {
             return this._isTouchMode;
         }
         const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
         const window = getWindow();
-        return Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0;
+        return window && window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _onItemClick(itemData) {
         let processed = false;

@@ -281,9 +281,8 @@ class DiagramToolbar extends DiagramPanel {
         this._addItemHelper(item.command, new DiagramToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
-        const { Browser } = getDiagram();
-        const window = getWindow();
         if((widget.NAME === 'dxButton' || widget.NAME === 'dxTextBox') && item.items) {
+            const isTouchMode = this._isTouchMode();
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
             widget._contextMenu = this._createComponent($menuContainer, ContextMenu, {
@@ -292,7 +291,7 @@ class DiagramToolbar extends DiagramPanel {
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: '',
                 closeOnOutsideClick: (e) => {
-                    return !(Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0) && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
+                    return !isTouchMode && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
                 },
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
@@ -318,13 +317,21 @@ class DiagramToolbar extends DiagramPanel {
             });
 
             // prevent showing context menu by toggle "close" click
-            if(!(Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0)) {
+            if(!isTouchMode) {
                 widget._contextMenu._dropDownButtonElement = widget.$element(); // i.e. widget.NAME === 'dxButton'
                 if(widget.NAME === 'dxTextBox') {
                     widget._contextMenu._dropDownButtonElement = widget.getButton('dropDown').element();
                 }
             }
         }
+    }
+    _isTouchMode() {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
+        const window = getWindow();
+        return window && window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _onContextMenuInitialized(widget, item, rootWidget) {
         this._contextMenuList.push(widget);

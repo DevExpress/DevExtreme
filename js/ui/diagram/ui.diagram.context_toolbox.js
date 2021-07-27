@@ -49,10 +49,8 @@ class DiagramContextToolbox extends Widget {
         const $popoverElement = $('<div>')
             .appendTo(this.$element());
 
-        const { Browser } = getDiagram();
-        const window = getWindow();
         let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
-        if(Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0) {
+        if(this._isTouchMode()) {
             popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
@@ -60,6 +58,14 @@ class DiagramContextToolbox extends Widget {
             container: this.$element(),
             elementAttr: { class: popoverClass }
         });
+    }
+    _isTouchMode() {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
+        const window = getWindow();
+        return window && window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();
