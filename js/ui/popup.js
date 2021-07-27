@@ -490,19 +490,22 @@ const Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function(isDimensionChanged) {
-        if(!isDimensionChanged) {
-            this._resetContentHeight();
-        }
-        this.callBase(...arguments);
+    _renderGeometryImpl: function() {
+        // NOTE: for correct new position calculation
+        this._resetContentHeight();
+        this.callBase();
         this._setContentHeight();
     },
 
     _resetContentHeight: function() {
-        this.$content().css({
-            'height': 'auto',
-            'maxHeight': 'none'
-        });
+        const height = this._getOptionValue('height');
+
+        if(height === 'auto') {
+            this.$content().css({
+                height: 'auto',
+                maxHeight: 'none'
+            });
+        }
     },
 
     _renderDrag: function() {
@@ -632,7 +635,7 @@ const Popup = Overlay.inherit({
                 maxHeight: ''
             });
         } else {
-            this.callBase(...arguments);
+            this.callBase();
         }
         if(hasWindow()) {
             this._renderFullscreenWidthClass();

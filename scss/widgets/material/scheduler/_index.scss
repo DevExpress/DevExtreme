@@ -50,8 +50,6 @@ $material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-wor
 
 $material-scheduler-month-date-text-size: 14px;
 
-$material-scheduler-switcher-label-offset: 10px;
-
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
 $material-scheduler-compact-appointment-button-border-radius: 12px;
@@ -399,113 +397,59 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header {
   background-color: $scheduler-header-bg;
-  border: baseScheduler.$scheduler-base-border;
   height: $material-scheduler-header-height;
-}
 
-.dx-scheduler-navigator {
-  padding: ($material-scheduler-header-height - $material-scheduler-navigator-height) * 0.5;
-
-  .dx-button {
-    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg);
-
-    .dx-button-text {
-      text-transform: none;
-    }
-  }
-}
-
-.dx-scheduler-navigator-caption {
-  border-radius: 0;
-  border-right-width: 0;
-  border-left-width: 0;
-
-  &.dx-state-focused,
-  &.dx-state-hover,
-  &.dx-state-active {
-    border-right-width: 1px;
-    border-left-width: 1px;
-  }
-}
-
-.dx-scheduler-navigator-previous {
-  border-radius: $material-scheduler-navigator-border-radius 0 0 $material-scheduler-navigator-border-radius;
-
-  .dx-rtl & {
-    border-radius: 0 $material-scheduler-navigator-border-radius $material-scheduler-navigator-border-radius 0;
-  }
-}
-
-.dx-scheduler-navigator-next {
-  border-radius: 0 $material-scheduler-navigator-border-radius $material-scheduler-navigator-border-radius 0;
-
-  .dx-rtl & {
-    border-radius: $material-scheduler-navigator-border-radius 0 0 $material-scheduler-navigator-border-radius;
-  }
-}
-
-.dx-scheduler-view-switcher.dx-tabs {
-  background: none;
-  margin-right: 14px;
-
-  .dx-tab {
-    &:not(.dx-state-hover) {
-      background: none;
+  .dx-toolbar {
+    .dx-toolbar-item-content,
+    .dx-toolbar-menu-container {
+      padding: $material-scheduler-toolbar-item-offset;
     }
 
-    &.dx-tab-selected {
-      &::before {
-        bottom: 0;
+    .dx-button {
+      color: $base-accent;
+
+      .dx-icon {
+        color: $base-accent;
       }
 
-      &::after {
-        content: "";
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
+      &.dx-item-selected,
+      &.dx-state-focused,
+      &.dx-state-hover {
+        background-color: $material-scheduler-toolbar-active-color;
+      }
+    }
+
+    .dx-scheduler-navigator {
+      .dx-buttongroup {
+        .dx-button {
+          &.dx-item-selected {
+            background-color: $button-normal-bg;
+            color: $material-scheduler-toolbar-color;
+
+            .dx-icon {
+              color: $material-scheduler-toolbar-color;
+            }
+
+            &.dx-state-focused {
+              background-color: $material-scheduler-toolbar-active-color;
+            }
+
+            &.dx-state-hover {
+              background-color: $material-scheduler-toolbar-active-color;
+            }
+          }
+        }
       }
     }
   }
 
-  .dx-tabs-nav-button {
-    height: $material-scheduler-navigator-height;
-    margin-top: math.div($material-scheduler-header-height - $material-scheduler-navigator-height - 2, 2);
+  .dx-button-text {
+    text-transform: none;
   }
 }
 
-.dx-scheduler-view-switcher.dx-dropdownmenu {
-  &::before {
-    display: none;
-  }
-
-  margin-top: ($material-scheduler-header-height - $material-scheduler-navigator-height) * 0.5 - 1px;
-
-  @include dx-button-flat-color-styling($base-icon-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
-
-  z-index: 1;
-
-  &.dx-button-has-icon:not(.dx-button-has-text) {
-    border-radius: 2px;
-  }
-}
-
-.dx-scheduler-view-switcher-label {
-  margin-top: ($material-scheduler-header-height - $material-scheduler-navigator-height) * 0.5 - 1px;
-  right: $material-scheduler-switcher-label-offset;
-  height: $material-scheduler-navigator-height;
-  line-height: 24px;
-  padding: math.div($material-scheduler-navigator-height - 24px, 2) 14px;
-  padding-right: $material-scheduler-navigator-height + 14;
-  z-index: 0;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: $base-border-radius;
-
-  .dx-rtl & {
-    left: $material-scheduler-switcher-label-offset;
-    right: auto;
-    padding-right: 14px;
-    padding-left: $material-scheduler-navigator-height + 14;
-  }
+.dx-overlay-content {
+  min-width: 120px;
 }
 
 .dx-scheduler-group-flex-container .dx-scheduler-group-header {

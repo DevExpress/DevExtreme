@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { noop } from '../../core/utils/common';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import variableWrapper from '../../core/utils/variable_wrapper';
@@ -256,10 +255,6 @@ const EditorFactoryMixin = (function() {
             }
 
             that._createComponent($editorElement, options.editorName, options.editorOptions);
-
-            if(options.editorName === 'dxTextBox') {
-                $editorElement.dxTextBox('instance').registerKeyHandler('enter', noop);
-            }
 
             if(options.editorName === 'dxDateBox') {
                 const dateBox = $editorElement.dxDateBox('instance');

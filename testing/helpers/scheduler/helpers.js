@@ -7,6 +7,7 @@ import Color from 'color';
 
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import 'ui/drop_down_button';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
@@ -17,17 +18,22 @@ const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 export const CLASSES = {
     root: '.dx-scheduler',
 
+    button: '.dx-button',
+    selected: '.dx-item-selected',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
+    navigatorCalendarButton: '.dx-scheduler-navigator-calendar-button',
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
-    navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
+    viewSwitcher: '.dx-scheduler-view-switcher',
+    viewSwitcherDropDownButton: '.dx-scheduler-view-switcher-dropdown-button',
 
-    calendar: 'dx-scheduler-navigator-calendar',
+    calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
     calendarSelected: '.dx-calendar-selected-date',
 
@@ -101,7 +107,7 @@ export const execAsync = (assert, promise, beforeAssertCallback, assertCallback,
 
         return new Promise((resolve, reject) => {
 
-            const execCallback = func => {
+            const execCallback = (func) => {
                 try {
                     func();
                 } catch(e) {
@@ -139,7 +145,7 @@ export const asyncScrollTest = (assert, promise, assertCallback, scrollable, off
 export const asyncAssert = (assert, assertCallback, timeout) => {
     return asyncWrapper(assert, promise => {
 
-        execAsync(assert, promise, null, assertCallback, timeout);
+        execAsync(assert, promise, null, assertCallback, timeout); // TODO shoud return promise from the execAsync
 
         return promise;
     });
@@ -158,11 +164,23 @@ class ElementWrapper {
         }
         return $(this.selector).eq(this.index);
     }
+
+    getText() {
+        return this.getElement().text();
+    }
+
+    hasClass(className) {
+        return this.getElement().hasClass(className);
+    }
 }
 
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
+    }
+
+    isDisabled() {
+        return this.hasClass('dx-state-disabled');
     }
 }
 
@@ -297,19 +315,15 @@ class Calendar extends ElementWrapper {
 
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
-        return this.content.getElement().is(':visible');
+        return this.getElement().is(':visible');
     }
 
     get calendar() {
         return new Calendar();
     }
 
-    get content() {
-        return new ElementWrapper(CLASSES.navigatorPopoverContent);
-    }
-
     get hasScroll() {
-        return this.content.getElement().find('.dx-scrollable').length > 0;
+        return $('.dx-scrollable').find('.dx-scheduler-navigator-calendar').length > 0;
     }
 }
 
@@ -326,12 +340,50 @@ class NavigatorWrapper extends ElementWrapper {
         return new ClickElementWrapper(CLASSES.navigatorPrevButton);
     }
 
+    get calendarButton() {
+        return new ClickElementWrapper(CLASSES.navigatorCalendarButton);
+    }
+
     get nextButton() {
         return new ClickElementWrapper(CLASSES.navigatorNextButton);
     }
 
     get popover() {
         return new NavigatorPopover(CLASSES.navigatorPopover);
+    }
+}
+
+class ViewSwitcherWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.viewSwitcher);
+    }
+
+    get dropDownButton() {
+        return new ElementWrapper(CLASSES.viewSwitcherDropDownButton);
+    }
+
+    get selectedButton() {
+        return new ClickElementWrapper(CLASSES.selected);
+    }
+
+    click(name) {
+        this.getButton(name).click();
+    }
+
+    getButton(name) {
+        const parent = this.getElement();
+
+        const buttons = parent.find('.dx-button');
+
+        let result;
+        buttons.each((index, button) => {
+            if($(button).text() === name) {
+                result = new ClickElementWrapper(CLASSES.button, parent, index);
+                return false;
+            }
+        });
+
+        return result;
     }
 }
 
@@ -342,6 +394,10 @@ class HeaderWrapper extends ElementWrapper {
 
     get navigator() {
         return new NavigatorWrapper();
+    }
+
+    get viewSwitcher() {
+        return new ViewSwitcherWrapper();
     }
 }
 
@@ -435,11 +491,19 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
             },
 
-            click: (index = 0) => {
-                this.clock = sinon.useFakeTimers();
-                this.appointments.getAppointment(index).trigger('dxclick');
-                this.clock.tick(300);
-                this.clock.restore();
+            click: (index = 0, isAsync = false) => {
+                const click = () => this.appointments.getAppointment(index).trigger('dxclick');
+
+                if(isAsync) {
+                    click();
+                } else {
+                    const clock = sinon.useFakeTimers();
+
+                    click();
+
+                    clock.tick(300);
+                    clock.restore();
+                }
             },
 
             dblclick: (index = 0) => {
