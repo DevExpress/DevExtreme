@@ -171,10 +171,10 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       }
       const iconFontSizeRatio = defaultFontSize / defaultIconSize;
 
-      let getComputedStyle = (): CSSStyleDeclaration | Record<string, never> => {
+      let getComputedStyle = (): CSSStyleDeclaration | Record<string, string> => {
         const computedStyle = getElementComputedStyle(iconElement);
-        getComputedStyle = (): CSSStyleDeclaration | Record<string, never> => computedStyle ?? {};
-        return computedStyle ?? {};
+        getComputedStyle = (): CSSStyleDeclaration | Record<string, string> => computedStyle ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` };
+        return computedStyle ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` };
       };
 
       const width = typeof iconWidth === 'number' ? iconWidth : parseInt(getComputedStyle().width, 10);

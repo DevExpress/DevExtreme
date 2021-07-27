@@ -327,6 +327,20 @@ describe('CheckBox', () => {
           const icon = checkBox.iconRef.current;
           expect(icon?.style.fontSize).toEqual('16px');
         });
+
+        it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
+          (getElementComputedStyle as jest.Mock).mockReturnValue(null);
+
+          const checkBox = new CheckBox({});
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
       });
 
       describe('updateValidationMessageVisibility', () => {
