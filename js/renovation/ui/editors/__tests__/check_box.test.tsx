@@ -316,14 +316,13 @@ describe('CheckBox', () => {
 
         it("should correctly change icon font size if 'iconHeight'/'iconWidth' options are defined in pixels string", () => {
           (getElementComputedStyle as jest.Mock).mockReturnValue({ width: '22px', height: '22px' });
-              
+
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             style: {},
           } as any;
           checkBox.updateIconFontSize();
-          window.getComputedStyle = originalGetComputedStyle;
 
           const icon = checkBox.iconRef.current;
           expect(icon?.style.fontSize).toEqual('16px');
