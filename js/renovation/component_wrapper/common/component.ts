@@ -11,6 +11,7 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
+import { cleanDataRecursive } from '../../../core/element_data';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
@@ -198,6 +199,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _dispose(): void {
+    cleanDataRecursive(this.$element()[0], true);
+
     this._removeWidget();
     super._dispose();
   }

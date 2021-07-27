@@ -16,6 +16,18 @@ import {
 } from '../../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../../core/element';
 import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
+import registerEvent from '../../../../events/core/event_registrator';
+import { one } from '../../../../events';
+
+const fakeEventSingleton = new class {
+  handlerCount = 0;
+
+  add() { this.handlerCount += 1; }
+
+  remove() { this.handlerCount -= 1; }
+}();
+
+registerEvent('dxFakeEvent', fakeEventSingleton);
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
@@ -646,6 +658,19 @@ describe('templates and slots', () => {
 
     const $template = $('#component').find('.dx-template-wrapper');
     expect($template.text()).toBe('template text');
+  });
+
+  it('should unsubscribe from all events before renovated widget will be clear with all nested widget', () => {
+    $('#component').dxTemplatedTestWidget({
+      template(_: never, element: Element) {
+        one(element, 'dxFakeEvent', () => {});
+        $(element).html('<span>Template content</span>');
+      },
+    });
+
+    $('#components').empty();
+
+    expect(fakeEventSingleton.handlerCount).toBe(0);
   });
 
   it('pass anonymous template content as children', () => {
