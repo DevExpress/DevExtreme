@@ -4202,8 +4202,6 @@ QUnit.module('resizeObserver integration', {
     });
 
     QUnit.testInActiveWindow('content resize should trigger overlay geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnRestylingDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
             contentTemplate: () => {
                 return $('<div>')
@@ -4220,6 +4218,8 @@ QUnit.module('resizeObserver integration', {
             return;
         }
 
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnRestylingDone = assert.async();
         const overlayContentElement = overlay.$content().get(0);
         const contentRect = overlayContentElement.getBoundingClientRect();
         const getCenter = (rect, dimension) => {
