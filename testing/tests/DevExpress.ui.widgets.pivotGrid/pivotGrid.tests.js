@@ -3644,7 +3644,6 @@ QUnit.module('dxPivotGrid', {
         };
 
         scrollable.on('scroll', scrollAction);
-
         scrollable.scrollTo(columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10);
     });
 

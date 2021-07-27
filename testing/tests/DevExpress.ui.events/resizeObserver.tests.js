@@ -3,7 +3,7 @@ import ResizeObserver from 'ui/overlay/resize_observer';
 import { getWindow, setWindow } from 'core/utils/window';
 const window = getWindow();
 
-const TIME_TO_WAIT = 25;
+const TIME_TO_WAIT = 50;
 
 QUnit.testStart(function() {
     const markup = '<div id="root" style="width: 200px;"></div>';
