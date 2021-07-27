@@ -28,7 +28,7 @@ export const getViewSwitcher = (header, item) => {
             items: views,
             keyExpr: 'name',
             selectedItemKeys: [selectedView],
-            stylingMode: 'outlined',
+            stylingMode: 'contained',
             onItemClick: (e) => {
                 const view = e.itemData.view;
 
