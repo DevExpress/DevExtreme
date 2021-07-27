@@ -261,8 +261,11 @@ class DiagramToolbox extends DiagramFloatingPanel {
         if(Browser.TouchUI) {
             return true;
         }
+        if(!hasWindow()) {
+            return false;
+        }
         const window = getWindow();
-        return window && window.navigator && window.navigator.maxTouchPoints > 0;
+        return window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();
