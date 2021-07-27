@@ -10,6 +10,7 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from '../commonParts/ob
 import { JSPdfBandsTests } from './jspdf_v2.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v2.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v2.dataGrid.summaries.tests.js';
+import { JSPdfStylesTests } from './jspdf_v2.dataGrid.styles.tests.js';
 
 import 'generic_light.css!';
 
@@ -51,6 +52,12 @@ function createMockPdfDoc() {
     const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
     const result = _jsPDF({ unit: 'pt' });
     result.__log = [];
+
+    result.__setFillColor = result.setFillColor;
+    result.setFillColor = function() {
+        this.__log.push('setFillColor,' + argumentsToString.apply(null, arguments));
+        this.__setFillColor.apply(this, arguments);
+    };
 
     result.__rect = result.rect;
     result.rect = function() {
@@ -1350,3 +1357,4 @@ QUnit.module('Table splitting', moduleConfig, () => {
 JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfStylesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
