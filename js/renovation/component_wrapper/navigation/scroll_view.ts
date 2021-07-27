@@ -5,7 +5,7 @@ import type { ScrollView } from '../../ui/scroll_view/scroll_view';
 
 export class ScrollViewWrapper extends Component {
   update(): unknown {
-    (this.viewRef as ScrollView).updateHandler();
+    (this.viewRef as ScrollView)?.updateHandler();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new (Deferred as any)().resolve();

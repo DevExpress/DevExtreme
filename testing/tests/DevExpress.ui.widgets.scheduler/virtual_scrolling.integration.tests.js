@@ -3005,51 +3005,6 @@ module('Virtual scrolling integration', () => {
             };
         }
     }, function() {
-        test('Appointment should not repaint if grid cells is exists for it', function(assert) {
-            const data = [{
-                startDate: new Date(2020, 8, 7, 2),
-                endDate: new Date(2020, 8, 7, 3),
-                text: 'test'
-            }];
-
-            this.createInstance({
-                height: 600,
-                width: 800,
-                currentDate: new Date(2020, 8, 7),
-                scrolling: {
-                    mode: 'virtual',
-                    orientation: 'both'
-                },
-                currentView: 'week',
-                views: [{
-                    type: 'week',
-                    intervalCount: 10,
-                }],
-                dataSource: data
-            });
-
-            const scrollable = this.instance.getWorkSpaceScrollable();
-
-            return asyncWrapper(
-                assert,
-                promise => asyncScrollTest(
-                    assert,
-                    promise,
-                    () => {
-                        const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
-
-                        assert.deepEqual(appointmentsItems[0].itemData, data[0], 'Item1 is correct');
-                        assert.notOk(appointmentsItems[0].needRepaint, 'Item should not be repainted');
-                        assert.notOk(appointmentsItems[0].needRemove, 'Item0 should not be removed');
-                        assert.equal(this.instance.getWorkSpace().virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'Virtual cells count is correct');
-                    },
-                    scrollable,
-                    { x: 500 }
-                )
-            );
-        });
-
-
         [
             {
                 groupOrientation: 'horizontal',
