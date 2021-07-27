@@ -2557,12 +2557,15 @@ QUnit.module('dxPivotGrid', {
 
         $pivotGridElement.appendTo($parentElement);
 
-        const pivot = createPivotGrid(this.testOptions);
+        const pivotGrid = createPivotGrid(this.testOptions);
 
         const tableElement = $pivotGridElement.find('table').first();
 
+        const dataAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-area-data').width();
+        const rowsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area').width();
+
         assert.strictEqual(tableElement.width(), $pivotGridElement.width()),
-        assert.ok((pivot._dataArea.groupWidth() + pivot._rowsArea.groupWidth()) <= $pivotGridElement.width());
+        assert.ok((dataAreaWidth + rowsAreaWidth) <= $pivotGridElement.width());
     });
 
     QUnit.test('resize when height changed to no scroll', function(assert) {
@@ -2720,22 +2723,22 @@ QUnit.module('dxPivotGrid', {
         assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width when no scrollbar width');
     });
 
-    QUnit.test('Group height should take into account scrollbar width', function(assert) {
+    QUnit.test('Group height should take into account horizontal scrollbar height', function(assert) {
+    // act
         $('#pivotGrid').width(300).height(900);
         this.testOptions.scrolling = {
             useNative: false
         };
         const pivotGrid = createPivotGrid(this.testOptions);
 
-        const dataAreaHeight = pivotGrid._dataArea.groupHeight();
+        const dataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
 
         pivotGrid.option({
             scrolling: {
                 useNative: true
             }
         });
-
-        assert.roughEqual(pivotGrid._dataArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+        assert.roughEqual(pivotGrid.$element().find('.dx-pivotgrid-area-data').height(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
     });
 
     QUnit.test('mergeArraysByMaxValue', function(assert) {
@@ -2804,8 +2807,8 @@ QUnit.module('dxPivotGrid', {
             scrollable.off('scroll', scrollAction);
             done();
         };
-        scrollable.on('scroll', scrollAction);
 
+        scrollable.on('scroll', scrollAction);
         scrollable.scrollTo(columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10);
     });
 
@@ -3485,7 +3488,6 @@ QUnit.module('dxPivotGrid', {
         };
 
         scrollable.on('scroll', scrollAction);
-
         scrollable.scrollTo(columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10);
     });
 
@@ -3709,8 +3711,9 @@ QUnit.module('dxPivotGrid', {
 
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
+        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
 
-        assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, 'stretched');
+        assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
@@ -3784,8 +3787,9 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
+        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
 
-        assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, 'stretched');
+        assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
@@ -3974,8 +3978,9 @@ QUnit.module('dxPivotGrid', {
         assert.ok(!pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
+        const columnsAreaWidth = pivotGrid.$element().find('.dx-pivotgrid-horizontal-headers.dx-pivotgrid-area').width();
 
-        assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, 'stretched');
+        assert.roughEqual(columnsAreaWidth, columnsWidth, 0.2, 'stretched');
 
         const table = pivotGrid.$element().find('table').first();
 
@@ -4700,16 +4705,19 @@ QUnit.module('Field Panel', {
             height: 600
         }));
 
-        const dataAreaHeight = pivotGrid._dataArea.groupHeight();
+        const dataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
 
         pivotGrid.option({
             scrolling: {
                 useNative: true
             }
         });
-        // assert
-        assert.roughEqual(pivotGrid._dataArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
-        assert.roughEqual(pivotGrid._rowsArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+
+        const newDataAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-area-data').height();
+        const newRowsAreaHeight = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area').height();
+
+        assert.roughEqual(newDataAreaHeight, dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+        assert.roughEqual(newRowsAreaHeight, dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
     });
 
     QUnit.test('Data and column headers not visible', function(assert) {
@@ -5188,8 +5196,8 @@ QUnit.module('Tests with stubs', {
 
         assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
-        assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 71);
-        assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 71);
+        assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
+        assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
         assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
 
     });
@@ -5252,8 +5260,8 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
 
-        assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 'auto');
-        assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 'auto');
+        assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
+        assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 'auto');
 
         assert.ok(this.dataController.subscribeToWindowScrollEvents.called);
         assert.strictEqual(this.dataController.subscribeToWindowScrollEvents.lastCall.args[0], this.dataArea.groupElement());
@@ -5783,7 +5791,7 @@ QUnit.module('headersArea', {
             height: 300
         });
 
-        area.groupWidth(200);
+        area.setGroupWidth(200);
         area.setColumnsWidth([100, 120, 300]);
 
         area.processScroll();
@@ -5906,7 +5914,7 @@ QUnit.module('Vertical headers', {
             height: 3000
         });
 
-        area.groupHeight(300);
+        area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
         area.processScroll(true);
@@ -5944,7 +5952,7 @@ QUnit.module('Vertical headers', {
 
         area.render(testElement, this.data);
 
-        area.groupHeight(300);
+        area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
         area.processScroll();
@@ -5968,7 +5976,7 @@ QUnit.module('Vertical headers', {
 
         area.render(testElement, this.data);
 
-        area.groupHeight(300);
+        area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
         area.processScroll();
@@ -7164,8 +7172,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7233,8 +7241,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7304,8 +7312,8 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
@@ -7375,8 +7383,8 @@ QUnit.module('Data area', () => {
             height: 4000000
         });
 
-        area.groupWidth(200);
-        area.groupHeight(200);
+        area.setGroupWidth(200);
+        area.setGroupHeight(200);
 
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
