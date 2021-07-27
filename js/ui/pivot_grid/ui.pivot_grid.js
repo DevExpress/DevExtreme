@@ -1345,11 +1345,11 @@ const PivotGrid = Widget.inherit({
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
                 columnHeaderCell.children().css('maxWidth', groupWidth);
-                that._columnsArea.groupWidth(groupWidth);
+                that._columnsArea.setGroupWidth(groupWidth);
                 that._columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
                 that._columnsArea.setColumnsWidth(resultWidths);
 
-                that._rowsArea.groupHeight(that._hasHeight ? groupHeight : 'auto');
+                that._rowsArea.setGroupHeight(that._hasHeight ? groupHeight : 'auto');
                 that._rowsArea.processScrollBarSpacing(hasColumnsScroll ? scrollBarWidth : 0);
                 // B232690
                 that._rowsArea.setColumnsWidth(rowsAreaColumnWidths);
@@ -1357,8 +1357,8 @@ const PivotGrid = Widget.inherit({
 
                 that._dataArea.setColumnsWidth(resultWidths);
                 that._dataArea.setRowsHeight(resultHeights);
-                that._dataArea.groupWidth(groupWidth);
-                that._dataArea.groupHeight(that._hasHeight ? groupHeight : 'auto');
+                that._dataArea.setGroupWidth(groupWidth);
+                that._dataArea.setGroupHeight(that._hasHeight ? groupHeight : 'auto');
 
                 needSynchronizeFieldPanel && rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
 
@@ -1374,8 +1374,8 @@ const PivotGrid = Widget.inherit({
                         that._dataArea.setColumnsWidth(resultWidths);
                     }
 
-                    that._dataArea.groupWidth(groupWidth - diff);
-                    that._columnsArea.groupWidth(groupWidth - diff);
+                    that._dataArea.setGroupWidth(groupWidth - diff);
+                    that._columnsArea.setGroupWidth(groupWidth - diff);
                 }
 
                 if(that._hasHeight && that._filterFields.isVisible() &&
@@ -1385,8 +1385,8 @@ const PivotGrid = Widget.inherit({
                         hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
                         const groupHeight = calculateGroupHeight(dataAreaHeight - diff, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
 
-                        that._dataArea.groupHeight(groupHeight);
-                        that._rowsArea.groupHeight(groupHeight);
+                        that._dataArea.setGroupHeight(groupHeight);
+                        that._rowsArea.setGroupHeight(groupHeight);
                     }
                 }
 

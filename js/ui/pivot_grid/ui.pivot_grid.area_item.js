@@ -327,6 +327,7 @@ export const AreaItem = Class.inherit({
             totalHeight += values[i];
             that._setRowHeight(i, values[i]);
         }
+
         this._tableHeight = totalHeight;
         this._tableElement[0].style.height = totalHeight + 'px';
     },
@@ -400,22 +401,16 @@ export const AreaItem = Class.inherit({
         });
     },
 
-    groupWidth: function(value) {
-        if(value === undefined) {
-            return this._groupElement.width();
-        } else if(value >= 0) {
+    setGroupWidth: function(value) {
+        if(value >= 0) {
             this._groupWidth = value;
-            return (this._groupElement[0].style.width = value + 'px');
+            this._groupElement[0].style.width = value + 'px';
         } else {
-            return (this._groupElement[0].style.width = value);
+            this._groupElement[0].style.width = value;
         }
     },
 
-    groupHeight: function(value) {
-        if(value === undefined) {
-            return this._groupElement.height();
-        }
-
+    setGroupHeight: function(value) {
         this._groupHeight = null;
 
         if(value >= 0) {
@@ -479,8 +474,8 @@ export const AreaItem = Class.inherit({
         that._fakeTable = null;
 
         that.disableVirtualMode();
-        that.groupWidth('100%');
-        that.groupHeight('auto');
+        that.setGroupWidth('100%');
+        that.setGroupHeight('auto');
 
         that.resetColumnsWidth();
 
