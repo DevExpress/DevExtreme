@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/scheduler" as baseScheduler with (
@@ -396,56 +397,20 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-header {
+  @include header-sizes(
+    $material-scheduler-header-height,
+    $material-scheduler-toolbar-item-offset,
+  );
+  @include header-buttons(
+    $button-normal-bg,
+    $material-scheduler-toolbar-active-color,
+  );
+  @include header-buttons-material(
+    $button-normal-bg,
+    $material-scheduler-toolbar-color,
+  );
+
   background-color: $scheduler-header-bg;
-  height: $material-scheduler-header-height;
-
-  .dx-toolbar {
-    .dx-toolbar-item-content,
-    .dx-toolbar-menu-container {
-      padding: $material-scheduler-toolbar-item-offset;
-    }
-
-    .dx-button {
-      color: $base-accent;
-
-      .dx-icon {
-        color: $base-accent;
-      }
-
-      &.dx-item-selected,
-      &.dx-state-focused,
-      &.dx-state-hover {
-        background-color: $material-scheduler-toolbar-active-color;
-      }
-    }
-
-    .dx-scheduler-navigator {
-      .dx-buttongroup {
-        .dx-button {
-          &.dx-item-selected {
-            background-color: $button-normal-bg;
-            color: $material-scheduler-toolbar-color;
-
-            .dx-icon {
-              color: $material-scheduler-toolbar-color;
-            }
-
-            &.dx-state-focused {
-              background-color: $material-scheduler-toolbar-active-color;
-            }
-
-            &.dx-state-hover {
-              background-color: $material-scheduler-toolbar-active-color;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .dx-button-text {
-    text-transform: none;
-  }
 }
 
 .dx-overlay-content {
