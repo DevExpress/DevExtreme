@@ -91,7 +91,7 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' > & Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange' >;
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount'> & Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
