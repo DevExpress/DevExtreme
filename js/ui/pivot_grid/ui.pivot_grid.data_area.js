@@ -14,7 +14,8 @@ export const DataArea = AreaItem.inherit({
     _createGroupElement: function() {
         return $('<div>')
             .addClass(PIVOTGRID_AREA_CLASS)
-            .addClass(PIVOTGRID_AREA_DATA_CLASS);
+            .addClass(PIVOTGRID_AREA_DATA_CLASS)
+            .css('borderTopWidth', 0);
     },
 
     _applyCustomStyles: function(options) {
@@ -46,14 +47,13 @@ export const DataArea = AreaItem.inherit({
     },
 
     processScroll: function() {
-        this.groupElement().css('borderTopWidth', 0)
-            .dxScrollable({
-                useNative: false,
-                useSimulatedScrollbar: false,
-                direction: 'vertical',
-                bounceEnabled: false,
-                updateManually: true
-            });
+        this.groupElement().dxScrollable({
+            useNative: false,
+            useSimulatedScrollbar: false,
+            direction: 'vertical',
+            bounceEnabled: false,
+            updateManually: true
+        });
     },
 
     updateScroll: function(useNativeScrolling, rtlEnabled, direction) {
