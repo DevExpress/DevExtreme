@@ -565,16 +565,16 @@ const LayoutManager = Widget.inherit({
             targetColIndex: item.col
         });
 
-        const $button = renderButton({
+        const buttonWidget = renderButton({
+            $containerInDOM: $container,
             buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
             createComponentCallback: this._createComponent.bind(this)
         });
-        $container.append($button);
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
+            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });

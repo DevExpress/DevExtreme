@@ -121,10 +121,10 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
 
-export function renderButton({ buttonOptions, createComponentCallback }) {
+export function renderButton({ $containerInDOM, buttonOptions, createComponentCallback }) {
     const $button = $('<div>');
-    createComponentCallback($button, 'dxButton', buttonOptions);
-    return $button;
+    $containerInDOM.append($button);
+    return createComponentCallback($button, 'dxButton', buttonOptions);
 }
 
 export function convertAlignmentToJustifyContent(verticalAlignment) {
