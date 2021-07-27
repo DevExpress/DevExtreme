@@ -1,3 +1,5 @@
+import FocusableElement from '../internal/focusable';
+
 const CLASS = {
   viewSwitcher: 'dx-scheduler-view-switcher',
 
@@ -11,11 +13,7 @@ export default class SchedulerViewSwitcher {
     this.element = toolbar.find(`.${CLASS.viewSwitcher}`);
   }
 
-  getButtons(): Selector {
-    return this.element.find(`.${CLASS.button}`);
-  }
-
-  getButton(text: string): Selector {
-    return this.element.find(`.${CLASS.button}`).withText(text);
+  getButton(text: string): FocusableElement {
+    return new FocusableElement(this.element.find(`.${CLASS.button}`).withText(text));
   }
 }

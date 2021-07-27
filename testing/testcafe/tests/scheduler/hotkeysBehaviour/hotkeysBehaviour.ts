@@ -91,8 +91,6 @@ fixture`Hotkeys for appointments update and navigation`
   }));
 });
 
-const isFocused = (selector: Selector) => selector.hasClass('dx-state-focused');
-
 test('Navigate between toolbar items', async (t) => {
   const scheduler = new Scheduler('#container');
   const { toolbar } = scheduler;
@@ -102,23 +100,23 @@ test('Navigate between toolbar items', async (t) => {
   await t
     .click(toolbar.element)
     .pressKey('tab')
-    .expect(isFocused(prevDuration))
+    .expect(prevDuration.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(caption))
+    .expect(caption.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(nextDuration))
+    .expect(nextDuration.hasFocusedState)
     .ok()
 
     .pressKey('tab')
-    .expect(isFocused(viewSwitcher.getButton('Day')))
+    .expect(viewSwitcher.getButton('Day').hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(viewSwitcher.getButton('Week')))
+    .expect(viewSwitcher.getButton('Week').hasFocusedState)
     .ok();
 }).before(async () => createScheduler({
   views: ['day', 'week'],
@@ -135,27 +133,27 @@ test('Navigate between custom toolbar items', async (t) => {
   await t
     .click(toolbar.element)
     .pressKey('tab')
-    .expect(isFocused(viewSwitcher.getButton('Day')))
+    .expect(viewSwitcher.getButton('Day').hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(viewSwitcher.getButton('Week')))
+    .expect(viewSwitcher.getButton('Week').hasFocusedState)
     .ok()
 
     .pressKey('tab')
-    .expect(isFocused(todayButton))
+    .expect(todayButton.hasClass('dx-state-focused'))
     .ok()
 
     .pressKey('tab')
-    .expect(isFocused(prevDuration))
+    .expect(prevDuration.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(caption))
+    .expect(caption.hasFocusedState)
     .ok()
 
     .pressKey('right')
-    .expect(isFocused(nextDuration))
+    .expect(nextDuration.hasFocusedState)
     .ok();
 }).before(async () => createScheduler({
   views: ['day', 'week'],
