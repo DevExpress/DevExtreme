@@ -536,7 +536,7 @@ class Scheduler extends Widget {
     }
 
     reinitRenderingStrategy() {
-        const strategy = this._getAppointmentsRenderingStrategy();
+        const strategy = this.modelProvider.getViewRenderingStrategyName();
         this.getLayoutManager().initRenderingStrategy(strategy);
     }
 
@@ -866,7 +866,7 @@ class Scheduler extends Widget {
     }
 
     _isAgenda() {
-        return this._getAppointmentsRenderingStrategy() === 'agenda';
+        return this.modelProvider.getViewRenderingStrategyName() === 'agenda';
     }
 
     _allowDragging() {
@@ -1308,7 +1308,10 @@ class Scheduler extends Widget {
 
         this._renderHeader();
 
-        this._layoutManager = new AppointmentLayoutManager(this, this._getAppointmentsRenderingStrategy());
+        this._layoutManager = new AppointmentLayoutManager(
+            this,
+            this.modelProvider.getViewRenderingStrategyName()
+        );
 
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
@@ -1533,10 +1536,6 @@ class Scheduler extends Widget {
 
     _getCurrentViewType() { // TODO get rid of mapping
         return this.modelProvider.currentViewType;
-    }
-
-    _getAppointmentsRenderingStrategy() {
-        return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     }
 
     _renderWorkSpace(groups) {
