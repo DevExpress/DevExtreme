@@ -118,7 +118,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
         const groupAlignment = that.option('rtlEnabled') ? 'right' : 'left';
 
         if(that._groupWidth) {
-            that.groupWidth(that._groupWidth - scrollBarWidth);
+            that.setGroupWidth(that._groupWidth - scrollBarWidth);
         }
 
         if(that._scrollBarWidth) {
@@ -217,7 +217,7 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     processScrollBarSpacing: function(scrollBarWidth) {
         const that = this;
         if(that._groupHeight) {
-            that.groupHeight(that._groupHeight - scrollBarWidth);
+            that.setGroupHeight(that._groupHeight - scrollBarWidth);
         }
 
         if(that._scrollBarWidth) {
