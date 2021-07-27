@@ -79,7 +79,7 @@ export const viewFunction = ({
         {pageIndexSelectorVisible && (
           <div
             className={PAGER_PAGE_INDEXES_CLASS}
-            ref={pagesRef}
+            ref={pagesRef as any}
           >
             <PageIndexSelector
               hasKnownLastPage={hasKnownLastPage}
@@ -100,7 +100,9 @@ export const viewFunction = ({
 );
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerContentPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'> & PagerContentProps & PagerProps;
+type PagerContentPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'>
+& PagerProps
+& Pick<PagerContentProps, 'infoTextVisible' | 'isLargeDisplayMode' | 'rootElementRef' | 'pageSizesRef' | 'pagesRef' | 'infoTextRef'>;
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
