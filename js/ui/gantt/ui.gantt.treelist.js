@@ -44,8 +44,23 @@ export class GanttTreeList {
 
         return this._treeList;
     }
+    onAfterTreeListCreate() {
+        if(this._postponedGanttInitRequired) {
+            this._initGanttOnContentReady({ component: this._treeList });
+            delete this._postponedGanttInitRequired;
+        }
+    }
 
     _onContentReady(e) {
+        const hasTreeList = !!this._treeList;
+        if(hasTreeList) {
+            this._initGanttOnContentReady(e);
+        } else {
+            this._postponedGanttInitRequired = true;
+        }
+    }
+
+    _initGanttOnContentReady(e) {
         if(e.component.getDataSource()) {
             this._gantt._initGanttView();
             this._initScrollSync(e.component);
@@ -136,11 +151,9 @@ export class GanttTreeList {
         }
     }
 
-    updateDataSource(forceUpdate = false) {
+    updateDataSource(data, forceUpdate = false) {
         if(!this._skipUpdateTreeListDataSource()) {
-            const dataSource = this._gantt.option('tasks.dataSource');
-            const storeArray = this._gantt._tasksOption._getStore()._array || (dataSource.items && dataSource.items());
-            this.setOption('dataSource', storeArray ? storeArray : dataSource);
+            this.setOption('dataSource', data);
         } else if(forceUpdate) {
             const data = this._treeList.option('dataSource');
             this._gantt._onParentTasksRecalculated(data);
@@ -195,5 +208,16 @@ export class GanttTreeList {
 
     getOption(optionName) {
         return this._treeList.option(optionName);
+    }
+    onTaskInserted(insertedId, parentId) {
+        if(isDefined(parentId)) {
+            const expandedRowKeys = this.getOption('expandedRowKeys');
+            if(expandedRowKeys.indexOf(parentId) === -1) {
+                expandedRowKeys.push(parentId);
+                this.setOption('expandedRowKeys', expandedRowKeys);
+            }
+        }
+        this.selectRows(GanttHelper.getArrayFromOneElement(insertedId));
+        this.setOption('focusedRowKey', insertedId);
     }
 }

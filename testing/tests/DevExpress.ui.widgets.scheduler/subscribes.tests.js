@@ -223,7 +223,7 @@ module('Subscribes', {
         assert.ok(needRecalculate, 'Resizable area should be recalculated');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
@@ -241,7 +241,7 @@ module('Subscribes', {
         assert.equal(result.length, 7, 'count is OK');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
@@ -887,7 +887,7 @@ module('Subscribes', {
         assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
     });
 
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with scheduler configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with scheduler configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -901,18 +901,18 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
 
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with view configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with view configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -927,13 +927,13 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });
