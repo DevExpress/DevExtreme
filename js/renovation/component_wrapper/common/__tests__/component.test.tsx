@@ -660,7 +660,7 @@ describe('templates and slots', () => {
     expect($template.text()).toBe('template text');
   });
 
-  it('should unsubscribe from all events before renovated widget will be clear with all nested widget', () => {
+  it('should unsubscribe from all events before renovated widget will be clear with all nested widgets', () => {
     $('#component').dxTemplatedTestWidget({
       template(_: never, element: Element) {
         one(element, 'dxFakeEvent', () => {});
