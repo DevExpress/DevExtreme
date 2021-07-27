@@ -100,7 +100,7 @@ class DiagramContextMenuWrapper extends Widget {
         }
         const { Browser } = getDiagram();
         const window = getWindow();
-        return Browser.TouchUI || window !== undefined && window.navigator && window.navigator['maxTouchPoints'] > 0;
+        return Browser.TouchUI || window && window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _onItemClick(itemData) {
         let processed = false;
