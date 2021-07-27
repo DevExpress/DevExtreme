@@ -15,10 +15,12 @@ const RENDERING_STRATEGIES = {
 };
 
 class AppointmentLayoutManager {
-    constructor(instance, renderingStrategy) {
+    constructor(instance) {
         this.instance = instance;
-        renderingStrategy && this.initRenderingStrategy(renderingStrategy);
     }
+
+    get modelProvider() { return getModelProvider(this.instance.key); }
+    get viewRenderingStrategyName() { return this.modelProvider.getViewRenderingStrategyName(); }
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
@@ -36,17 +38,18 @@ class AppointmentLayoutManager {
         }
     }
 
-    initRenderingStrategy(renderingStrategy) {
-        const Strategy = RENDERING_STRATEGIES[renderingStrategy];
-        const modelProvider = getModelProvider(this.instance.key);
+    _initRenderingStrategy() {
+        const Strategy = RENDERING_STRATEGIES[this.viewRenderingStrategyName];
         this._renderingStrategyInstance = new Strategy({
             instance: this.instance,
             key: this.instance.key,
-            adaptivityEnabled: modelProvider.adaptivityEnabled,
-            rtlEnabled: modelProvider.rtlEnabled,
-            startDayHour: modelProvider.startDayHour,
-            endDayHour: modelProvider.endDayHour,
-            maxAppointmentsPerCell: modelProvider.maxAppointmentsPerCell,
+            adaptivityEnabled: this.modelProvider.adaptivityEnabled,
+            rtlEnabled: this.modelProvider.rtlEnabled,
+            startDayHour: this.modelProvider.startDayHour,
+            endDayHour: this.modelProvider.endDayHour,
+            maxAppointmentsPerCell: this.modelProvider.maxAppointmentsPerCell,
+            agendaDuration: this.modelProvider.agendaDuration,
+            currentDate: this.modelProvider.currentDate,
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
             getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
             getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,
@@ -55,7 +58,6 @@ class AppointmentLayoutManager {
             getResizableStep: () => this.instance._workSpace ? this.instance._workSpace.positionHelper.getResizableStep() : 0,
             getVisibleDayDuration: () => this.instance._workSpace ? this.instance._workSpace.getVisibleDayDuration() : 0,
         });
-        this.renderingStrategy = renderingStrategy;
     }
 
     createAppointmentsMap(items) {
@@ -69,7 +71,9 @@ class AppointmentLayoutManager {
             ? items.slice()
             : [];
 
-        this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(appointments);
+        this._initRenderingStrategy();
+
+        this._positionMap = this.getRenderingStrategyInstance().createTaskPositionMap(appointments);
 
         return this._createAppointmentsMapCore(appointments, this._positionMap);
     }
@@ -82,13 +86,13 @@ class AppointmentLayoutManager {
         } = virtualScrollingDispatcher;
 
         return list.map((data, index) => {
-            if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
+            if(!this.getRenderingStrategyInstance().keepAppointmentSettings()) {
                 delete data.settings;
             }
 
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
-                settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.direction = this.viewRenderingStrategyName === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
                 settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
                 settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
             });
@@ -181,7 +185,7 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(currentAppointments, sourceAppointments) {
-        if(sourceAppointments.length === 0 || this.renderingStrategy === 'agenda') {
+        if(sourceAppointments.length === 0 || this.viewRenderingStrategyName === 'agenda') {
             return currentAppointments;
         }
 
