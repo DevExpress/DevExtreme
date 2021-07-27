@@ -4,6 +4,7 @@ import HorizontalAppointmentsStrategy from './appointments/rendering_strategies/
 import HorizontalMonthLineAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './appointments/rendering_strategies/strategy_agenda';
+import { getModelProvider } from './instanceFactory';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -37,9 +38,15 @@ class AppointmentLayoutManager {
 
     initRenderingStrategy(renderingStrategy) {
         const Strategy = RENDERING_STRATEGIES[renderingStrategy];
+        const modelProvider = getModelProvider(this.instance.key);
         this._renderingStrategyInstance = new Strategy({
-            key: this.instance.key,
             instance: this.instance,
+            key: this.instance.key,
+            adaptivityEnabled: modelProvider.adaptivityEnabled,
+            rtlEnabled: modelProvider.rtlEnabled,
+            startDayHour: modelProvider.startDayHour,
+            endDayHour: modelProvider.endDayHour,
+            maxAppointmentsPerCell: modelProvider.maxAppointmentsPerCell,
             isVirtualScrolling: () => this.instance.isVirtualScrolling,
             getIsGroupedByDate: () => this.instance._workSpace ? this.instance._workSpace.isGroupedByDate() : false,
             getCellWidth: () => this.instance._workSpace ? this.instance._workSpace.getCellWidth() : 0,

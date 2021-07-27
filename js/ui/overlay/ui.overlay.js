@@ -15,7 +15,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
+import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -291,6 +291,7 @@ const Overlay = Widget.inherit({
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._initResizeObserver();
+        this._updateResizeCallbackSkipCondition();
     },
 
     _initOptions: function(options) {
@@ -374,11 +375,37 @@ const Overlay = Widget.inherit({
 
         this._resizeObserver = new ResizeObserver({
             callback: () => { this._renderGeometry(); },
-            shouldSkipCallback: (entries) => {
-                const contentRect = entries[0].contentRect;
-                return contentRect.width === this._renderedDimensions?.width
-                    && contentRect.height === this._renderedDimensions?.height;
-            }
+            shouldSkipCallback: (entries) => this._shouldSkipResizeCallback(entries)
+        });
+    },
+
+    _areContentDimensionsRendered: function(entries) {
+        const contentBox = entries[0].contentBoxSize?.[0];
+        if(contentBox) {
+            return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
+                    && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
+        }
+
+        const contentRect = entries[0].contentRect;
+        return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
+                && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
+    },
+
+    _updateResizeCallbackSkipCondition() {
+        const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
+
+        this._shouldSkipResizeCallback = (entries) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._areContentDimensionsRendered(entries);
+        };
+    },
+
+    _doesShowAnimationChangeDimensions: function() {
+        const animation = this.option('animation');
+
+        return ['to', 'from'].some(prop => {
+            const config = animation?.show?.[prop];
+            return isObject(config) && ('width' in config || 'height' in config);
         });
     },
 
@@ -1194,8 +1221,8 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: this._$content.width(),
-            height: this._$content.height()
+            width: parseInt(this._$content.width(), 10),
+            height: parseInt(this._$content.height(), 10)
         };
     },
 
@@ -1509,9 +1536,11 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
-            case 'animation':
             case 'propagateOutsideClick':
             case '_observeContentResize':
+                break;
+            case 'animation':
+                this._updateResizeCallbackSkipCondition();
                 break;
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
