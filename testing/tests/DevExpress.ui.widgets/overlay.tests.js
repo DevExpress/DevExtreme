@@ -3893,7 +3893,7 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 25;
+        this.timeToWaitResize = 50;
         this.positionedHandlerStub = sinon.stub();
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
@@ -4151,7 +4151,7 @@ QUnit.module('prevent safari scrolling on ios devices', {
 QUnit.module('resizeObserver integration', {
     beforeEach: function() {
         fx.off = true;
-        this.timeToWaitResize = 25;
+        this.timeToWaitResize = 50;
     },
     afterEach: function() {
         fx.off = false;
@@ -4190,6 +4190,11 @@ QUnit.module('resizeObserver integration', {
             height: 'auto',
             visible: true
         }).dxOverlay('instance');
+
+        if(!overlay.option('_observeContentResize')) {
+            assert.ok(true, 'resize observer is disabled on this env');
+            return;
+        }
 
         const overlayContentElement = overlay.$content().get(0);
         const contentRect = overlayContentElement.getBoundingClientRect();
@@ -4284,8 +4289,8 @@ QUnit.module('resizeObserver integration', {
                 assert.ok(shownStub.calledOnce, 'shown is called only once');
                 assert.ok(showingStub.calledOnce, 'showing is called only once');
                 resizingHandled();
-            }, 250, this.timeToWaitResize);
+            }, 300);
             showingHandled();
-        }, 250, this.timeToWaitResize);
+        }, 300);
     });
 });

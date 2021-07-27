@@ -635,7 +635,7 @@ const Popup = Overlay.inherit({
                 maxHeight: ''
             });
         } else {
-            this.callBase(...arguments);
+            this.callBase();
         }
         if(hasWindow()) {
             this._renderFullscreenWidthClass();

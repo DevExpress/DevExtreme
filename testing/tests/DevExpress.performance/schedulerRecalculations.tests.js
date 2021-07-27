@@ -15,6 +15,7 @@ const data = [
 ];
 
 require('ui/scheduler');
+require('ui/drop_down_button');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="element"></div>');
@@ -30,7 +31,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 7);
+        assert.measureStyleRecalculation(measureFunction, 11);
     });
 
     QUnit.performanceTest(`dxScheduler should force minimum relayout count on creation if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
@@ -42,7 +43,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler day view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -59,7 +60,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler day view should force minimum relayout count on creation with appointments if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
@@ -76,7 +77,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 13);
     });
 
     QUnit.performanceTest(`dxScheduler week view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -93,7 +94,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler week view should force minimum relayout count on creation with appointments if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
@@ -110,7 +111,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 13);
     });
 
     QUnit.performanceTest(`dxScheduler workWeek view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -127,7 +128,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler workWeek view should force minimum relayout count on creation with appointments if showAllDayPanel = true when renovateRender is ${renovateRender}`, function(assert) {
@@ -144,7 +145,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 13);
     });
 
     QUnit.performanceTest(`dxScheduler month view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -161,7 +162,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 12);
     });
 
     QUnit.performanceTest(`dxScheduler timelineDay view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -177,7 +178,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, (value) => value <= 14);
+        assert.measureStyleRecalculation(measureFunction, (value) => value <= 18);
     });
 
     QUnit.performanceTest(`dxScheduler timelineWeek view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -193,7 +194,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, (value) => value <= 14);
+        assert.measureStyleRecalculation(measureFunction, (value) => value <= 18);
     });
 
     QUnit.performanceTest(`dxScheduler timelineWorkWeek view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -209,7 +210,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, (value) => value <= 15);
+        assert.measureStyleRecalculation(measureFunction, (value) => value <= 19);
     });
 
     QUnit.performanceTest(`dxScheduler timelineMonth view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -225,7 +226,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, (value) => value <= 15);
+        assert.measureStyleRecalculation(measureFunction, (value) => value <= 19);
     });
 
     QUnit.performanceTest(`dxScheduler agenda view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
@@ -241,7 +242,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 13);
     });
 
     QUnit.performanceTest(`dxScheduler should not force relayout on dxshown event when renovateRender is ${renovateRender}`, function(assert) {
@@ -254,6 +255,6 @@ QUnit.testStart(function() {
             resizeCallbacks.fire();
         };
 
-        assert.measureStyleRecalculation(measureFunction, 2);
+        assert.measureStyleRecalculation(measureFunction, 4);
     });
 });
