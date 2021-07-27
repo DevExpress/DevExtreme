@@ -28,7 +28,7 @@ import {
 } from '../events/index';
 
 import {
-    ExcelDataGridCell
+    DataGridCell as ExcelCell
 } from '../excel_exporter';
 
 import {
@@ -3686,7 +3686,7 @@ export interface ExcelCellInfo {
   font?: ExcelFont;
   readonly value?: string | number | Date;
   numberFormat?: string;
-  gridCell?: ExcelDataGridCell;
+  gridCell?: ExcelCell;
 }
 
 export interface Export {

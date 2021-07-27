@@ -2109,11 +2109,11 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.fields()]
      */
-    fields(): Array<PivotGridDataSourceField>;
+    fields(): Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSource.fields(fields)]
      */
-    fields(fields: Array<PivotGridDataSourceField>): void;
+    fields(fields: Array<DevExpress.data.PivotGridDataSource.Field>): void;
     /**
      * [descr:PivotGridDataSource.filter()]
      */
@@ -2128,7 +2128,7 @@ declare module DevExpress.data {
     getAreaFields(
       area: string,
       collectGroups: boolean
-    ): Array<PivotGridDataSourceField>;
+    ): Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSource.getData()]
      */
@@ -2171,9 +2171,10 @@ declare module DevExpress.data {
     state(state: any): void;
   }
   /**
+   * @deprecated Use Field instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PivotGridDataSourceField {
+  interface PivotGridDataSourceField {
     /**
      * [descr:PivotGridDataSourceOptions.fields.allowCrossGroupCalculation]
      */
@@ -2351,11 +2352,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface PivotGridDataSourceOptions {
+  interface PivotGridDataSourceOptions {
     /**
      * [descr:PivotGridDataSourceOptions.fields]
      */
-    fields?: Array<PivotGridDataSourceField>;
+    fields?: Array<DevExpress.data.PivotGridDataSource.Field>;
     /**
      * [descr:PivotGridDataSourceOptions.filter]
      */
@@ -2367,7 +2368,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.onFieldsPrepared]
      */
-    onFieldsPrepared?: (fields: Array<PivotGridDataSourceField>) => void;
+    onFieldsPrepared?: (
+      fields: Array<DevExpress.data.PivotGridDataSource.Field>
+    ) => void;
     /**
      * [descr:PivotGridDataSourceOptions.onLoadError]
      */
@@ -2680,6 +2683,9 @@ declare module DevExpress.data {
     url?: string;
   }
 }
+declare module DevExpress.data.PivotGridDataSource {
+  export type Field = PivotGridDataSourceField;
+}
 declare module DevExpress.data.utils {
   /**
    * [descr:Utils.compileGetter(expr)]
@@ -2970,11 +2976,13 @@ declare module DevExpress.excelExporter {
      */
     to?: CellAddress;
   }
+  export type DataGridCell = ExcelDataGridCell;
   /**
    * [descr:ExcelDataGridCell]
+   * @deprecated [depNote:ExcelDataGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ExcelDataGridCell {
+  interface ExcelDataGridCell {
     /**
      * [descr:ExcelDataGridCell.column]
      */
@@ -3081,16 +3089,16 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelExportPivotGridProps.customizeCell]
      */
     customizeCell?: (options: {
-      pivotCell?: ExcelPivotGridCell;
+      pivotCell?: PivotGridCell;
       excelCell?: any;
     }) => void;
   }
   /**
    * [descr:ExcelPivotGridCell]
+   * @deprecated [depNote:ExcelPivotGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ExcelPivotGridCell
-    extends DevExpress.ui.dxPivotGridPivotGridCell {
+  interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
@@ -3116,6 +3124,7 @@ declare module DevExpress.excelExporter {
   export function exportPivotGrid(
     options: ExcelExportPivotGridProps
   ): DevExpress.core.utils.DxPromise<CellRange>;
+  export type PivotGridCell = ExcelPivotGridCell;
 }
 declare module DevExpress.exporter {
   /**
@@ -6046,7 +6055,7 @@ declare module DevExpress.ui {
       font?: DevExpress.exporter.ExcelFont;
       readonly value?: string | number | Date;
       numberFormat?: string;
-      gridCell?: DevExpress.excelExporter.ExcelDataGridCell;
+      gridCell?: DevExpress.excelExporter.DataGridCell;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -15089,17 +15098,17 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxPivotGrid> & {
         readonly area?: string;
         readonly cellElement?: DevExpress.core.DxElement;
-        readonly cell?: dxPivotGridPivotGridCell;
+        readonly cell?: Cell;
         readonly rowIndex?: number;
         readonly columnIndex?: number;
-        readonly columnFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly rowFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly dataFields?: Array<DevExpress.data.PivotGridDataSourceField>;
+        readonly columnFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly rowFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly dataFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
       };
     export type CellPreparedEvent = DevExpress.events.EventInfo<dxPivotGrid> & {
       readonly area?: string;
       readonly cellElement?: DevExpress.core.DxElement;
-      readonly cell?: dxPivotGridPivotGridCell;
+      readonly cell?: Cell;
       readonly rowIndex?: number;
       readonly columnIndex?: number;
     };
@@ -15107,14 +15116,14 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxPivotGrid> & {
         readonly area?: string;
-        readonly cell?: dxPivotGridPivotGridCell;
+        readonly cell?: Cell;
         readonly cellElement?: DevExpress.core.DxElement;
         readonly columnIndex?: number;
         readonly rowIndex?: number;
-        readonly dataFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly rowFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly columnFields?: Array<DevExpress.data.PivotGridDataSourceField>;
-        readonly field?: DevExpress.data.PivotGridDataSourceField;
+        readonly dataFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly rowFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly columnFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        readonly field?: DevExpress.data.PivotGridDataSource.Field;
         items?: Array<any>;
       };
     export type DisposingEvent = DevExpress.events.EventInfo<dxPivotGrid>;
@@ -15167,7 +15176,7 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxPivotGridFieldChooser> & {
         readonly area?: string;
-        readonly field?: DevExpress.data.PivotGridDataSourceField;
+        readonly field?: DevExpress.data.PivotGridDataSource.Field;
         readonly event?: DevExpress.events.DxEvent;
         items?: Array<any>;
       };
@@ -15701,9 +15710,10 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:dxPivotGridPivotGridCell]
+   * @deprecated [depNote:dxPivotGridPivotGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxPivotGridPivotGridCell {
+  interface dxPivotGridPivotGridCell {
     /**
      * [descr:dxPivotGridPivotGridCell.columnPath]
      */
@@ -15749,7 +15759,7 @@ declare module DevExpress.ui {
    * [descr:dxPivotGridSummaryCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxPivotGridSummaryCell {
+  interface dxPivotGridSummaryCell {
     /**
      * [descr:dxPivotGridSummaryCell.child(direction, fieldValue)]
      */
@@ -15764,7 +15774,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridSummaryCell.field(area)]
      */
-    field(area: string): DevExpress.data.PivotGridDataSourceField;
+    field(area: string): DevExpress.data.PivotGridDataSource.Field;
     /**
      * [descr:dxPivotGridSummaryCell.grandTotal()]
      */
@@ -15777,7 +15787,7 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridSummaryCell.isPostProcessed(field)]
      */
     isPostProcessed(
-      field: DevExpress.data.PivotGridDataSourceField | string
+      field: DevExpress.data.PivotGridDataSource.Field | string
     ): boolean;
     /**
      * [descr:dxPivotGridSummaryCell.next(direction)]
@@ -15803,7 +15813,7 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridSummaryCell.slice(field, value)]
      */
     slice(
-      field: DevExpress.data.PivotGridDataSourceField,
+      field: DevExpress.data.PivotGridDataSource.Field,
       value: number | string
     ): dxPivotGridSummaryCell;
     /**
@@ -15813,12 +15823,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridSummaryCell.value(field)]
      */
-    value(field: DevExpress.data.PivotGridDataSourceField | string): any;
+    value(field: DevExpress.data.PivotGridDataSource.Field | string): any;
     /**
      * [descr:dxPivotGridSummaryCell.value(field, postProcessed)]
      */
     value(
-      field: DevExpress.data.PivotGridDataSourceField | string,
+      field: DevExpress.data.PivotGridDataSource.Field | string,
       postProcessed: boolean
     ): any;
     /**
@@ -22031,6 +22041,9 @@ declare module DevExpress.ui.dxOverlay {
    * [descr:ui.dxOverlay.baseZIndex(zIndex)]
    */
   export function baseZIndex(zIndex: number): void;
+}
+declare module DevExpress.ui.dxPivotGrid {
+  export type Cell = dxPivotGridPivotGridCell;
 }
 declare module DevExpress.utils {
   /**

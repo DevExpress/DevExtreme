@@ -12,7 +12,7 @@ import {
 } from '../events/index';
 
 import PivotGridDataSource, {
-    PivotGridDataSourceField,
+    Field,
     PivotGridDataSourceOptions
 } from './pivot_grid/data_source';
 
@@ -26,19 +26,19 @@ import Widget, {
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: DxElement;
-    readonly cell?: dxPivotGridPivotGridCell;
+    readonly cell?: Cell;
     readonly rowIndex?: number;
     readonly columnIndex?: number;
-    readonly columnFields?: Array<PivotGridDataSourceField>;
-    readonly rowFields?: Array<PivotGridDataSourceField>;
-    readonly dataFields?: Array<PivotGridDataSourceField>;
+    readonly columnFields?: Array<Field>;
+    readonly rowFields?: Array<Field>;
+    readonly dataFields?: Array<Field>;
 }
 
 /** @public */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
     readonly cellElement?: DxElement;
-    readonly cell?: dxPivotGridPivotGridCell;
+    readonly cell?: Cell;
     readonly rowIndex?: number;
     readonly columnIndex?: number
 }
@@ -49,14 +49,14 @@ export type ContentReadyEvent = EventInfo<dxPivotGrid>;
 /** @public */
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
     readonly area?: string;
-    readonly cell?: dxPivotGridPivotGridCell;
+    readonly cell?: Cell;
     readonly cellElement?: DxElement;
     readonly columnIndex?: number;
     readonly rowIndex?: number;
-    readonly dataFields?: Array<PivotGridDataSourceField>;
-    readonly rowFields?: Array<PivotGridDataSourceField>;
-    readonly columnFields?: Array<PivotGridDataSourceField>;
-    readonly field?: PivotGridDataSourceField;
+    readonly dataFields?: Array<Field>;
+    readonly rowFields?: Array<Field>;
+    readonly columnFields?: Array<Field>;
+    readonly field?: Field;
     items?: Array<any>;
 }
 
@@ -731,11 +731,18 @@ export default class dxPivotGrid extends Widget {
 }
 
 /**
+ * @public
+ * @namespace DevExpress.ui.dxPivotGrid
+ */
+export type Cell = dxPivotGridPivotGridCell;
+
+/**
  * @docid
  * @type object
  * @namespace DevExpress.ui
+ * @deprecated Use Cell instead
  */
-export interface dxPivotGridPivotGridCell {
+interface dxPivotGridPivotGridCell {
     /**
      * @docid
      * @public
@@ -792,145 +799,6 @@ export interface dxPivotGridPivotGridCell {
      * @public
      */
     value?: any;
-}
-
-/**
- * @docid
- * @type object
- * @namespace DevExpress.ui
- */
-export interface dxPivotGridSummaryCell {
-    /**
-     * @docid
-     * @publicName child(direction, fieldValue)
-     * @param1 direction:string
-     * @param2 fieldValue:number|string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    child(direction: string, fieldValue: number | string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName children(direction)
-     * @param1 direction:string
-     * @return Array<dxPivotGridSummaryCell>
-     * @public
-     */
-    children(direction: string): Array<dxPivotGridSummaryCell>;
-    /**
-     * @docid
-     * @publicName field(area)
-     * @param1 area:string
-     * @return PivotGridDataSourceOptions.fields
-     * @public
-     */
-    field(area: string): PivotGridDataSourceField;
-    /**
-     * @docid
-     * @publicName grandTotal()
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    grandTotal(): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName grandTotal(direction)
-     * @param1 direction:string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    grandTotal(direction: string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName isPostProcessed(field)
-     * @param1 field:PivotGridDataSourceOptions.fields|string
-     * @return boolean
-     * @public
-     */
-    isPostProcessed(field: PivotGridDataSourceField | string): boolean;
-    /**
-     * @docid
-     * @publicName next(direction)
-     * @param1 direction:string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    next(direction: string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName next(direction, allowCrossGroup)
-     * @param1 direction:string
-     * @param2 allowCrossGroup:bool
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    next(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName parent(direction)
-     * @param1 direction:string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    parent(direction: string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName prev(direction)
-     * @param1 direction:string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    prev(direction: string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName prev(direction, allowCrossGroup)
-     * @param1 direction:string
-     * @param2 allowCrossGroup:bool
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    prev(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName slice(field, value)
-     * @param1 field:PivotGridDataSourceOptions.fields
-     * @param2 value:number|string
-     * @return dxPivotGridSummaryCell
-     * @public
-     */
-    slice(field: PivotGridDataSourceField, value: number | string): dxPivotGridSummaryCell;
-    /**
-     * @docid
-     * @publicName value()
-     * @return any
-     * @public
-     */
-    value(): any;
-    /**
-     * @docid
-     * @publicName value(field)
-     * @param1 field:PivotGridDataSourceOptions.fields|string
-     * @return any
-     * @public
-     */
-    value(field: PivotGridDataSourceField | string): any;
-    /**
-     * @docid
-     * @publicName value(field, postProcessed)
-     * @param1 field:PivotGridDataSourceOptions.fields|string
-     * @param2 postProcessed:boolean
-     * @return any
-     * @public
-     */
-    value(field: PivotGridDataSourceField | string, postProcessed: boolean): any;
-    /**
-     * @docid
-     * @publicName value(postProcessed)
-     * @param1 postProcessed:boolean
-     * @return any
-     * @public
-     */
-    value(postProcessed: boolean): any;
 }
 
 /** @public */
