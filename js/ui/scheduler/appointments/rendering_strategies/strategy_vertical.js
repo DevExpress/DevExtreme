@@ -236,7 +236,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _calculateVerticalGeometryConfig(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.maxAppointmentsPerCell;
         const offsets = this._getOffsets();
         const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
