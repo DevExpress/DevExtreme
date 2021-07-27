@@ -90,3 +90,91 @@ fixture`Hotkeys for appointments update and navigation`
     dataSource,
   }));
 });
+
+const isFocused = (selector: Selector) => selector.hasClass('dx-state-focused');
+
+test('Navigate between toolbar items', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { toolbar } = scheduler;
+  const { viewSwitcher, dateNavigator } = toolbar;
+  const { prevDuration, caption, nextDuration } = dateNavigator;
+
+  await t
+    .click(toolbar.element)
+    .pressKey('tab')
+    .expect(isFocused(prevDuration))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(caption))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(nextDuration))
+    .ok()
+
+    .pressKey('tab')
+    .expect(isFocused(viewSwitcher.getButton('Day')))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(viewSwitcher.getButton('Week')))
+    .ok();
+}).before(async () => createScheduler({
+  views: ['day', 'week'],
+  currentView: 'day',
+}));
+
+test('Navigate between custom toolbar items', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { toolbar } = scheduler;
+  const { viewSwitcher, dateNavigator } = toolbar;
+  const { prevDuration, caption, nextDuration } = dateNavigator;
+  const todayButton = toolbar.element.find('.dx-button').withText('Today');
+
+  await t
+    .click(toolbar.element)
+    .pressKey('tab')
+    .expect(isFocused(viewSwitcher.getButton('Day')))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(viewSwitcher.getButton('Week')))
+    .ok()
+
+    .pressKey('tab')
+    .expect(isFocused(todayButton))
+    .ok()
+
+    .pressKey('tab')
+    .expect(isFocused(prevDuration))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(caption))
+    .ok()
+
+    .pressKey('right')
+    .expect(isFocused(nextDuration))
+    .ok();
+}).before(async () => createScheduler({
+  views: ['day', 'week'],
+  currentView: 'day',
+  toolbar: [
+    {
+      location: 'before',
+      defaultElement: 'viewSwitcher',
+    },
+    {
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        text: 'Today',
+      },
+    },
+    {
+      location: 'after',
+      defaultElement: 'dateNavigator',
+    },
+  ],
+}));

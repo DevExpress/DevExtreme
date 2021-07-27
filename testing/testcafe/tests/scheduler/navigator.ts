@@ -18,7 +18,7 @@ const createScheduler = async (options = {}): Promise<void> => {
 
 test('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getNavigator();
+  const navigator = scheduler.toolbar.dateNavigator;
 
   // Navigation `next` must be enabled at default
 
@@ -37,7 +37,7 @@ test('Navigator can change week when current date interval is more than diff bet
 
 test('Navigator can change week when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getNavigator();
+  const navigator = scheduler.toolbar.dateNavigator;
 
   // Navigation `prev` must be enabled at default
 
@@ -56,7 +56,7 @@ test('Navigator can change week when current date interval is more than diff bet
 
 test('Navigator can change month when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getNavigator();
+  const navigator = scheduler.toolbar.dateNavigator;
 
   // Navigation `next` must be enabled at default
 
@@ -75,7 +75,7 @@ test('Navigator can change month when current date interval is more than diff be
 
 test('Navigator can change month when current date interval is more than diff between current date and `min` (T830754)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const navigator = scheduler.getNavigator();
+  const navigator = scheduler.toolbar.dateNavigator;
 
   // Navigation `prev` must be enabled at default
 

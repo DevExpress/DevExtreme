@@ -4,7 +4,7 @@ import AppointmentTooltip from './appointment/tooltip';
 import AppointmentCollector from './appointment/collector';
 import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
-import Navigator from './navigator';
+import Toolbar from './toolbar';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -24,6 +24,8 @@ export const CLASS = {
 };
 
 export default class Scheduler extends Widget {
+  toolbar: Toolbar;
+
   workSpace: Selector;
 
   dateTableCells: Selector;
@@ -53,6 +55,7 @@ export default class Scheduler extends Widget {
   constructor(id: string) {
     super(id);
 
+    this.toolbar = new Toolbar(this.element);
     this.workSpace = this.element.find(`.${CLASS.workSpace}`);
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
@@ -124,9 +127,5 @@ export default class Scheduler extends Widget {
 
   getAppointmentCollectorCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
-  }
-
-  getNavigator(): Navigator {
-    return new Navigator(this.element);
   }
 }
