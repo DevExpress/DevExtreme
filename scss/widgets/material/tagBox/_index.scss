@@ -23,22 +23,43 @@
 
   &.dx-texteditor-with-floating-label,
   &.dx-texteditor-with-label {
-    &:not(.dx-texteditor-empty) {
-      .dx-tag-container {
-        padding-left: 0;
-      }
-
-      .dx-texteditor-container {
-        padding-left: $material-tagbox-tag-content-padding-left;
-      }
-
-      &.dx-rtl {
+    &.dx-editor-outlined {
+      &:not(.dx-texteditor-empty),
+      &.dx-state-focused,
+      &.dx-state-focused.dx-state-hover {
         .dx-tag-container {
-          padding-right: 0;
+          padding-top: $material-texteditor-font-size;
+          margin-top: math.div(-$material-texteditor-font-size, 2);
+          padding-left: 4px;
+
+          .dx-texteditor-label {
+            top: math.div($material-texteditor-font-size, 2);
+          }
         }
 
-        .dx-texteditor-container {
-          padding-right: $material-tagbox-tag-content-padding-left;
+        &.dx-texteditor-with-custom-buttons {
+          .dx-texteditor-label::before {
+            padding-left: 4px;
+            margin-left: -4px;
+          }
+        }
+
+        &.dx-rtl {
+          .dx-tag-container {
+            padding-right: 4px;
+            padding-left: 0;
+          }
+
+          &.dx-texteditor-with-custom-buttons {
+            .dx-texteditor-label {
+              &::before {
+                padding-right: 4px;
+                padding-left: 1px;
+                margin-right: -4px;
+                margin-left: -1px;
+              }
+            }
+          }
         }
       }
     }
@@ -46,7 +67,7 @@
     &.dx-editor-filled {
       &:not(.dx-texteditor-empty) {
         .dx-tag-container {
-          padding-top: $material-tagbox-tag-margin + $material-texteditor-font-size;
+          padding-top: $material-texteditor-font-size;
         }
       }
     }
@@ -54,8 +75,11 @@
     &.dx-editor-underlined {
       &:not(.dx-texteditor-empty):not(.dx-texteditor-filled) {
         .dx-tag-container {
-          padding-top: $material-tagbox-tag-margin + $material-texteditor-font-size;
-          margin-top: -$material-texteditor-font-size;
+          padding-top: $material-texteditor-font-size;
+        }
+
+        .dx-texteditor-label {
+          top: math.div($material-texteditor-font-size, 2);
         }
       }
     }

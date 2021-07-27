@@ -132,10 +132,6 @@ $generic-texteditor-label-transition:
   &.dx-state-hover {
     border-color: $texteditor-hover-border-color;
 
-    .dx-texteditor-label {
-      color: $texteditor-hover-border-color;
-    }
-
     &.dx-editor-filled {
       border-color: transparent;
       background-color: color.change($texteditor-hover-border-color, $alpha: 0.1);
@@ -251,7 +247,8 @@ $generic-texteditor-label-transition:
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
+    &.dx-lookup .dx-lookup-field,
+    &.dx-textarea .dx-texteditor-container {
       padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
       padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
     }
@@ -266,6 +263,22 @@ $generic-texteditor-label-transition:
 
     .dx-placeholder {
       top: $input-vertical-diff;
+    }
+
+    &.dx-textarea {
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .dx-texteditor-label {
+        top: -($generic-base-inline-borderedwidget-top-padding + $input-vertical-diff);
+      }
+
+      .dx-placeholder {
+        top: 0;
+      }
     }
   }
 
@@ -290,7 +303,7 @@ $generic-texteditor-label-transition:
       &.dx-textarea {
         .dx-texteditor-label {
           font-size: $generic-base-font-size;
-          top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+          top: 0;
           margin-top: 0;
           height: $generic-base-font-size;
           line-height: $generic-base-font-size;
@@ -314,6 +327,12 @@ $generic-texteditor-label-transition:
         margin-top: 0;
         height: $generic-texteditor-label-size;
         line-height: $generic-texteditor-label-size;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: -($generic-base-inline-borderedwidget-top-padding + $input-vertical-diff);
+        }
       }
     }
   }
@@ -617,17 +636,25 @@ $generic-texteditor-label-transition:
     }
 
     .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
+    &.dx-lookup .dx-lookup-field,
+    &.dx-textarea .dx-texteditor-container {
       padding-top: $input-top-padding;
       padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
     }
 
     &.dx-textarea {
+      .dx-placeholder::before,
       .dx-texteditor-input {
-        margin-top: $input-top-padding;
-        margin-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
         padding-top: 0;
         padding-bottom: 0;
+      }
+
+      .dx-texteditor-label {
+        top: -$input-top-padding;
+      }
+
+      .dx-placeholder {
+        top: 0;
       }
     }
   }
@@ -680,9 +707,16 @@ $generic-texteditor-label-transition:
       .dx-placeholder {
         top: $input-vertical-diff;
         display: block;
+      }
 
-        &::before {
-          padding-top: $generic-base-inline-borderedwidget-top-padding;
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: -$input-top-padding;
+        }
+
+        .dx-placeholder {
+          top: 0;
+          display: block;
         }
       }
     }

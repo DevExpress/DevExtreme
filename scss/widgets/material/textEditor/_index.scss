@@ -396,9 +396,26 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
+    &.dx-lookup .dx-lookup-field,
+    &.dx-textarea .dx-texteditor-container {
       padding-top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
       padding-bottom: $material-filled-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+
+    &.dx-textarea {
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .dx-texteditor-label {
+        top: -$material-filled-texteditor-input-top-padding;
+      }
+
+      .dx-placeholder {
+        top: 0;
+      }
     }
 
     .dx-texteditor-label {
@@ -434,7 +451,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
       &.dx-textarea {
         .dx-texteditor-label {
-          top: $material-filled-texteditor-input-top-padding + $input-vertical-diff;
+          top: 0;
           margin-top: 0;
           font-size: $material-texteditor-font-size;
         }
@@ -457,6 +474,12 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         line-height: $material-texteditor-label-font-size;
         top: $label-position-top;
         margin-top: 0;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: -$material-filled-texteditor-input-top-padding;
+        }
       }
     }
   }
@@ -536,21 +559,23 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
   }
 
-  &.dx-texteditor-with-custom-buttons {
-    .dx-texteditor-label {
-      &::after,
-      &::before {
-        border-radius: 0;
-      }
+  .dx-texteditor-buttons-container {
+    + .dx-texteditor-input-container {
+      .dx-texteditor-label {
+        &::after,
+        &::before {
+          border-radius: 0;
+        }
 
-      &::before {
-        padding-left: 1px;
-        margin-left: -1px;
-      }
+        &::before {
+          padding-left: 1px;
+          margin-left: -1px;
+        }
 
-      &::after {
-        padding-right: 1px;
-        margin-right: -1px;
+        &::after {
+          padding-right: 1px;
+          margin-right: -1px;
+        }
       }
     }
   }
@@ -754,9 +779,26 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
 
     .dx-texteditor-input,
-    &.dx-lookup .dx-lookup-field {
+    &.dx-lookup .dx-lookup-field,
+    &.dx-textarea .dx-texteditor-container {
       padding-top: $input-top-padding;
       padding-bottom: $material-standard-texteditor-input-bottom-padding - $input-vertical-diff;
+    }
+
+    &.dx-textarea {
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .dx-texteditor-label {
+        top: -$input-top-padding;
+      }
+
+      .dx-placeholder {
+        top: 0;
+      }
     }
   }
 
@@ -808,6 +850,12 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-placeholder {
         top: $input-vertical-diff;
         display: block;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: -$input-top-padding;
+        }
       }
     }
   }

@@ -450,6 +450,11 @@ const TextEditorBase = Editor.inherit({
 
     _renderLabel: function(container) {
         const TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS = 'dx-texteditor-with-custom-buttons';
+        const $container = container || this.$element();
+
+        if(this._$label && $container.find('.' + TEXTEDITOR_LABEL_CLASS).length === 1) {
+            $('.' + TEXTEDITOR_LABEL_CLASS).first().remove();
+        }
 
         if(this._$label) {
             this._$label.remove();
@@ -470,7 +475,6 @@ const TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_LABEL_CLASS)
             .html('<span>' + labelText + '</span>');
 
-        const $container = container || this.$element();
         const $textEditorInputContainer = $container.find('.' + TEXTEDITOR_INPUT_CONTAINER_CLASS);
 
         this.NAME === 'dxLookup' ?
