@@ -402,19 +402,11 @@ export const AreaItem = Class.inherit({
     },
 
     groupWidth: function(value) {
-        if(!isDefined(value)) {
-            return;
-        }
-
         this._groupWidth = isNumeric(value) ? value : null;
         this._setGroupElementDimension('width', value);
     },
 
     groupHeight: function(value) {
-        if(!isDefined(value)) {
-            return;
-        }
-
         this._groupHeight = isNumeric(value) ? value : null;
         this._setGroupElementDimension('height', value);
     },
