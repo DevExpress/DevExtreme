@@ -14,6 +14,8 @@ export default class SchedulerViewSwitcher {
   }
 
   getButton(text: string): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.button}`).withText(text));
+    return new FocusableElement(
+      this.element.find(`.${CLASS.button}`).withText(text),
+    );
   }
 }

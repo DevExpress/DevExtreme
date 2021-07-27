@@ -2,6 +2,7 @@ import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import FocusableElement from '../../../model/internal/focusable';
 
 fixture`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));
@@ -95,7 +96,10 @@ test('Navigate between toolbar items', async (t) => {
   const scheduler = new Scheduler('#container');
   const { toolbar } = scheduler;
   const { viewSwitcher, dateNavigator } = toolbar;
-  const { prevDuration, caption, nextDuration } = dateNavigator;
+
+  const prevDuration = new FocusableElement(dateNavigator.prevDuration);
+  const caption = new FocusableElement(dateNavigator.caption);
+  const nextDuration = new FocusableElement(dateNavigator.nextDuration);
 
   await t
     .click(toolbar.element)
@@ -127,8 +131,13 @@ test('Navigate between custom toolbar items', async (t) => {
   const scheduler = new Scheduler('#container');
   const { toolbar } = scheduler;
   const { viewSwitcher, dateNavigator } = toolbar;
-  const { prevDuration, caption, nextDuration } = dateNavigator;
-  const todayButton = toolbar.element.find('.dx-button').withText('Today');
+
+  const prevDuration = new FocusableElement(dateNavigator.prevDuration);
+  const caption = new FocusableElement(dateNavigator.caption);
+  const nextDuration = new FocusableElement(dateNavigator.nextDuration);
+  const todayButton = new FocusableElement(
+    toolbar.element.find('.dx-button').withText('Today'),
+  );
 
   await t
     .click(toolbar.element)
@@ -141,7 +150,7 @@ test('Navigate between custom toolbar items', async (t) => {
     .ok()
 
     .pressKey('tab')
-    .expect(todayButton.hasClass('dx-state-focused'))
+    .expect(todayButton.hasFocusedState)
     .ok()
 
     .pressKey('tab')

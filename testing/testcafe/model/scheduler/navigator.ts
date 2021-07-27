@@ -1,4 +1,4 @@
-import FocusableElement from '../internal/focusable';
+import { Selector } from 'testcafe';
 
 const CLASS = {
   navigator: 'dx-scheduler-navigator',
@@ -10,20 +10,16 @@ const CLASS = {
 export default class SchedulerNavigator {
   element: Selector;
 
-  nextDuration: FocusableElement;
+  nextDuration: Selector;
 
-  prevDuration: FocusableElement;
+  prevDuration: Selector;
 
-  caption: FocusableElement;
+  caption: Selector;
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.navigator}`);
-    this.nextDuration = this.getFocusable(CLASS.navigatorButtonNext);
-    this.prevDuration = this.getFocusable(CLASS.navigatorButtonPrev);
-    this.caption = this.getFocusable(CLASS.navigatorButtonCaption);
-  }
-
-  getFocusable(name: string): FocusableElement {
-    return new FocusableElement(this.element.find(`.${name}`));
+    this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
+    this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+    this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
   }
 }
