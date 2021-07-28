@@ -424,7 +424,11 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return !format.parser && this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+        return !format.parser && this._isPercentFormat() ? this._handlePercentValue(parsedValue) : parsedValue;
+    },
+
+    _handlePercentValue: function(rawValue) {
+        return rawValue && rawValue * 100 / 10000;
     },
 
     _getParsedValue: function(text, format) {
