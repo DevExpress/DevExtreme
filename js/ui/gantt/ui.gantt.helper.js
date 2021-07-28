@@ -208,9 +208,9 @@ export const GanttHelper = {
             taskContentTemplate: null,
             rootValue: 0,
             sorting: {
-                ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
-                descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
-                clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
+                ascendingText: messageLocalization.format('dxGantt-sortingAscendingText'),
+                descendingText: messageLocalization.format('dxGantt-sortingDescendingText'),
+                clearText: messageLocalization.format('dxGantt-sortingClearText'),
                 mode: 'none',
                 showSortIndexes: false
             }
