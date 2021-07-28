@@ -44,7 +44,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, renderButton, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
+import { renderLabel, renderHelpText, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -565,16 +565,16 @@ const LayoutManager = Widget.inherit({
             targetColIndex: item.col
         });
 
-        const $button = renderButton({
-            buttonOptions: extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions),
-            createComponentCallback: this._createComponent.bind(this)
-        });
+        const $button = $('<div>');
         $container.append($button);
+        const buttonWidget = this._createComponent(
+            $button, 'dxButton',
+            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions));
 
         // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: $button.dxButton('instance'), // TODO: try to remove 'widgetInstance'
+            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });
