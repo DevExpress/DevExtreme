@@ -535,11 +535,6 @@ class Scheduler extends Widget {
         return resolveCallbacks.promise();
     }
 
-    reinitRenderingStrategy() {
-        const strategy = this.modelProvider.getViewRenderingStrategyName();
-        this.getLayoutManager().initRenderingStrategy(strategy);
-    }
-
     _optionChanged(args) {
         let value = args.value;
         const name = args.name;
@@ -594,10 +589,9 @@ class Scheduler extends Widget {
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
+                this.getLayoutManager()._initRenderingStrategy();
 
                 this._validateDayHours();
-
-                this.reinitRenderingStrategy();
 
                 this._validateCellDuration();
 
@@ -1145,10 +1139,10 @@ class Scheduler extends Widget {
 
         const { filteredItems } = getAppointmentDataProvider(this.key);
 
-        workspace.preRenderAppointments({
-            allDayExpanded: this._isAllDayExpanded(filteredItems),
-            appointments: filteredItems
-        });
+        workspace.option(
+            'allDayExpanded',
+            this._isAllDayExpanded(filteredItems)
+        );
 
         if(filteredItems.length && this._isVisible()) {
             this._appointments.option('items', this._getAppointmentsToRepaint());
@@ -1308,10 +1302,7 @@ class Scheduler extends Widget {
 
         this._renderHeader();
 
-        this._layoutManager = new AppointmentLayoutManager(
-            this,
-            this.modelProvider.getViewRenderingStrategyName()
-        );
+        this._layoutManager = new AppointmentLayoutManager(this);
 
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
