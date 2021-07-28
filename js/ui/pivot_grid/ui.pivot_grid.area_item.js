@@ -3,7 +3,8 @@ import Class from '../../core/class';
 import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { isDefined, isNumeric } from '../../core/utils/type';
+import { isDefined } from '../../core/utils/type';
+import { normalizeStyleProp } from '../../core/utils/style';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -402,11 +403,11 @@ export const AreaItem = Class.inherit({
     },
 
     setGroupWidth: function(value) {
-        this.groupElement()[0].style.width = isNumeric(value) ? `${value}px` : value;
+        this.groupElement()[0].style.width = normalizeStyleProp('width', value);
     },
 
     setGroupHeight: function(value) {
-        this.groupElement()[0].style.height = isNumeric(value) ? `${value}px` : value;
+        this.groupElement()[0].style.height = normalizeStyleProp('height', value);
     },
 
     getGroupHeight: function() {
@@ -420,8 +421,8 @@ export const AreaItem = Class.inherit({
     _getGroupElementSize(dimension) {
         const size = this.groupElement()[0].style[dimension];
 
-        if(size.indexOf('px') >= 0) {
-            return Number(size.replace('px', ''));
+        if(size.indexOf('px') > 0) {
+            return parseFloat(size);
         }
 
         return null;
