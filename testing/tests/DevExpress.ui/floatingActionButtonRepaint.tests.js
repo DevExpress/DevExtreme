@@ -89,7 +89,7 @@ QUnit.module('apply current config options', (hooks) => {
         assert.equal($fabContent.eq(2).offset().top, 104, 'right second action position');
     });
 
-    QUnit.skip('repaint with one action', function(assert) {
+    test('repaint with one action', function(assert) {
         $('#fab-one').dxSpeedDialAction({ icon: 'trash', label: 'Delete' });
         $('#fab-two').dxSpeedDialAction({ visible: false });
 
