@@ -535,11 +535,6 @@ class Scheduler extends Widget {
         return resolveCallbacks.promise();
     }
 
-    reinitRenderingStrategy() {
-        const strategy = this._getAppointmentsRenderingStrategy();
-        this.getLayoutManager().initRenderingStrategy(strategy);
-    }
-
     _optionChanged(args) {
         let value = args.value;
         const name = args.name;
@@ -594,10 +589,9 @@ class Scheduler extends Widget {
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
+                this.getLayoutManager()._initRenderingStrategy();
 
                 this._validateDayHours();
-
-                this.reinitRenderingStrategy();
 
                 this._validateCellDuration();
 
@@ -866,7 +860,7 @@ class Scheduler extends Widget {
     }
 
     _isAgenda() {
-        return this._getAppointmentsRenderingStrategy() === 'agenda';
+        return this.modelProvider.getViewRenderingStrategyName() === 'agenda';
     }
 
     _allowDragging() {
@@ -1145,10 +1139,10 @@ class Scheduler extends Widget {
 
         const { filteredItems } = getAppointmentDataProvider(this.key);
 
-        workspace.preRenderAppointments({
-            allDayExpanded: this._isAllDayExpanded(filteredItems),
-            appointments: filteredItems
-        });
+        workspace.option(
+            'allDayExpanded',
+            this._isAllDayExpanded(filteredItems)
+        );
 
         if(filteredItems.length && this._isVisible()) {
             this._appointments.option('items', this._getAppointmentsToRepaint());
@@ -1308,7 +1302,7 @@ class Scheduler extends Widget {
 
         this._renderHeader();
 
-        this._layoutManager = new AppointmentLayoutManager(this, this._getAppointmentsRenderingStrategy());
+        this._layoutManager = new AppointmentLayoutManager(this);
 
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
@@ -1533,10 +1527,6 @@ class Scheduler extends Widget {
 
     _getCurrentViewType() { // TODO get rid of mapping
         return this.modelProvider.currentViewType;
-    }
-
-    _getAppointmentsRenderingStrategy() {
-        return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     }
 
     _renderWorkSpace(groups) {

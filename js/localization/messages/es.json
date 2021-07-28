@@ -571,6 +571,9 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Orden Ascendente",
+        "dxGantt-sortingDescendingText": "Orden Descendente",
+        "dxGantt-sortingClearText": "Limpiar Ordenamiento"
     }
 }

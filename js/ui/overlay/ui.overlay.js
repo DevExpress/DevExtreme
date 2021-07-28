@@ -374,7 +374,9 @@ const Overlay = Widget.inherit({
         }
 
         this._resizeObserver = new ResizeObserver({
-            callback: () => { this._renderGeometry(); },
+            callback: () => {
+                this._renderGeometry({ shouldOnlyReposition: true });
+            },
             shouldSkipCallback: (entries) => this._shouldSkipResizeCallback(entries)
         });
     },
@@ -1047,6 +1049,7 @@ const Overlay = Widget.inherit({
 
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
+        this._renderGeometry();
 
         this._actions.onResizeEnd(e);
     },
@@ -1146,13 +1149,16 @@ const Overlay = Widget.inherit({
 
     _changePosition: function(offset) {
         const position = locate(this._$content);
-
-        move(this._$content, {
+        const resultPosition = {
             left: position.left + offset.left,
             top: position.top + offset.top
-        });
+        };
+
+        move(this._$content, resultPosition);
 
         this._positionChangeHandled = true;
+
+        return { h: { location: resultPosition.left }, v: { location: resultPosition.top } };
     },
 
     _allowedOffsets: function() {
@@ -1206,7 +1212,12 @@ const Overlay = Widget.inherit({
             const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && _observeContentResize;
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
-            this._renderGeometryImpl();
+            this._stopAnimation();
+            if(options?.shouldOnlyReposition) {
+                this._positionContent();
+            } else {
+                this._renderGeometryImpl();
+            }
 
             if(shouldRepeatAnimation) {
                 this._animateShowing();
@@ -1227,14 +1238,11 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
-        const resultPosition = this._renderPosition();
-
-        this._actions.onPositioned({ position: resultPosition });
+        this._positionContent();
     },
 
     _styleWrapperPosition: function() {
@@ -1340,10 +1348,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderPosition: function() {
+        let resultPosition;
+
         if(this._positionChangeHandled) {
             const allowedOffsets = this._allowedOffsets();
 
-            this._changePosition({
+            resultPosition = this._changePosition({
                 top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
                 left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
             });
@@ -1353,10 +1363,16 @@ const Overlay = Widget.inherit({
             resetPosition(this._$content);
 
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
-            const resultPosition = positionUtils.setup(this._$content, position);
-
-            return resultPosition;
+            resultPosition = positionUtils.setup(this._$content, position);
         }
+
+        return resultPosition;
+    },
+
+    _positionContent: function() {
+        const resultPosition = this._renderPosition();
+
+        this._actions.onPositioned({ position: resultPosition });
     },
 
     _transformStringPosition: function(position, positionAliases) {
