@@ -738,8 +738,6 @@ export default class dxPivotGrid extends Widget {
 export type Cell = dxPivotGridPivotGridCell;
 
 /**
- * @docid
- * @type object
  * @namespace DevExpress.ui
  * @deprecated Use Cell instead
  */

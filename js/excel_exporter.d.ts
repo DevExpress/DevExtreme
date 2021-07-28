@@ -11,7 +11,6 @@ export type DataGridCell = ExcelDataGridCell;
 
 /**
  * @namespace DevExpress.excelExporter
- * @type object
  * @deprecated Use DataGridCell instead
  */
 export interface ExcelDataGridCell {
