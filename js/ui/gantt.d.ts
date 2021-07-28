@@ -364,6 +364,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
+     * @type object
+     * @public
+     */
+     sorting?: Sorting;
+    /**
+     * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxGantt
@@ -1215,6 +1221,40 @@ export interface dxGanttStripLine {
      * @public
      */
     title?: string;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface Sorting {
+    /**
+     * @docid
+     * @default "Sort Ascending"
+     */
+    ascendingText?: string,
+    /**
+     * @docid
+     * @default "Clear Sorting"
+     */
+    clearText?: string,
+    /**
+     * @docid
+     * @default "Sort Descending"
+     */
+    descendingText?: string,
+    /**
+     * @docid
+     * @type Enums.GanttSortingMode|string
+     * @default "none"
+     */
+    mode?: 'multiple' | 'none' | 'single',
+    /**
+     * @docid 
+     * @default false
+     */
+    showSortIndexes?: boolean
 }
 
 /** @public */

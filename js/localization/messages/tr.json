@@ -486,6 +486,9 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Artan Sıralama",
+        "dxGantt-sortingDescendingText": "Azalan Sıralama",
+        "dxGantt-sortingClearText": "Sıralamayı Temizle"
     }
 }

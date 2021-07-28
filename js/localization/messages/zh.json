@@ -527,6 +527,9 @@
     "dxGantt-zoomIn": "TODO",
     "dxGantt-zoomOut": "TODO",
     "dxGantt-fullScreen": "TODO",
-    "dxGantt-quarter": "TODO"
+    "dxGantt-quarter": "TODO",
+    "dxGantt-sortingAscendingText": "升序排序",
+    "dxGantt-sortingDescendingText": "降序排序",
+    "dxGantt-sortingClearText": "清除排序"
 }
 }
