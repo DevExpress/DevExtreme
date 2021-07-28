@@ -458,6 +458,30 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
+    test('resizeEnd should trigger positioned event', function(assert) {
+        const positionedHandlerStub = sinon.stub();
+
+        const instance = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true
+        }).dxOverlay('instance');
+        instance.on('positioned', positionedHandlerStub);
+
+        const $content = $(instance.$content());
+        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(0, 50).dragEnd();
+
+        const contentRect = $content.get(0).getBoundingClientRect();
+        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
+        assert.deepEqual(
+            positionedHandlerStub.getCall(0).args[0].position,
+            { h: { location: contentRect.left }, v: { location: contentRect.top } },
+            'position parameter is correct'
+        );
+    });
+
     test('resize should change overlay width/height options value', function(assert) {
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -4178,8 +4202,6 @@ QUnit.module('resizeObserver integration', {
     });
 
     QUnit.testInActiveWindow('content resize should trigger overlay geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnRestylingDone = assert.async();
         const overlay = $('#overlay').dxOverlay({
             contentTemplate: () => {
                 return $('<div>')
@@ -4196,6 +4218,8 @@ QUnit.module('resizeObserver integration', {
             return;
         }
 
+        const resizeOnOpeningDone = assert.async();
+        const resizeOnRestylingDone = assert.async();
         const overlayContentElement = overlay.$content().get(0);
         const contentRect = overlayContentElement.getBoundingClientRect();
         const getCenter = (rect, dimension) => {
