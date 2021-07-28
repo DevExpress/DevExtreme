@@ -198,7 +198,8 @@
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
   }
 }
@@ -330,4 +331,11 @@
 
 .dx-suggestion-list-wrapper {
   @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
+  }
 }

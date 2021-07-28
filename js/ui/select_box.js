@@ -675,7 +675,11 @@ const SelectBox = DropDownList.inherit({
             .done((function(item) {
                 deferred.resolve(item);
             }).bind(this))
-            .fail((function() {
+            .fail((function(args) {
+                if(args?.shouldSkipCallback) {
+                    return;
+                }
+
                 const selectedItem = that.option('selectedItem');
                 if(that.option('acceptCustomValue') && value === that._valueGetter(selectedItem)) {
                     deferred.resolve(selectedItem);
@@ -772,7 +776,7 @@ const SelectBox = DropDownList.inherit({
         this._wasSearchValue = value;
     },
 
-    _searchHandler: function(e) {
+    _searchHandler: function() {
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
@@ -782,7 +786,7 @@ const SelectBox = DropDownList.inherit({
             this._wasSearch(true);
         }
 
-        this.callBase(e);
+        this.callBase(arguments);
     },
 
     _dataSourceFiltered: function(searchValue) {

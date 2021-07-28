@@ -293,7 +293,7 @@ export default {
                     if(!params.column.showEditorAlways) {
                         this._addInternalData({
                             key: item.key,
-                            oldData: item.data
+                            oldData: item.oldData ?? item.data
                         });
                     }
 

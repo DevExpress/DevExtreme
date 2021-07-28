@@ -1,3 +1,4 @@
+import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 
 // this function is large and will grow
@@ -49,9 +50,13 @@ export function drawPdfTable(doc, table) {
             if(!isDefined(cell._rect)) {
                 throw 'cell._rect is required';
             }
+            if(isDefined(cell.backgroundColor)) {
+                doc.setFillColor(cell.backgroundColor);
+                doc.rect(cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
+            }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
                 const textY = cell._rect.y + (cell._rect.h / 2);
-                doc.text(cell.text, cell._rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
+                doc.text(cell.text, cell._rect.x, textY, extend({ baseline: 'middle' }, cell.textOptions)); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
             }
             drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });

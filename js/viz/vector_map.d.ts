@@ -18,7 +18,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -76,7 +75,7 @@ export type ExportedEvent = EventInfo<dxVectorMap>;
 export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxVectorMap>;
+export type FileSavingEvent = FileSavingEventInfo<dxVectorMap>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;

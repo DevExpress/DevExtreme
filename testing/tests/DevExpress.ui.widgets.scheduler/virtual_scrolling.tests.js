@@ -44,12 +44,27 @@ module('Virtual Scrolling', {
                 _isRTL: () => false,
                 _options: {
                     dataCellTemplate: noop,
+                    scrolling: settings.scrolling,
                     groupByDate: false,
-                    'scrolling.orientation': settings.scrolling.orientation
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
-                option: name => this.workspaceMock._options[name],
+                option: name => {
+                    const options = this.workspaceMock._options;
+                    const parts = name.split('.');
+
+                    let index = 0;
+                    let result = options;
+                    while(index < parts.length) {
+                        result = result[parts[index]];
+                        if(!result) {
+                            break;
+                        }
+                        ++index;
+                    }
+
+                    return result;
+                },
                 _getCellData: noop,
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
@@ -615,6 +630,62 @@ module('Virtual Scrolling', {
                     virtualItemCountBefore: 0,
                     virtualItemSizeAfter: 0,
                     virtualItemSizeBefore: 78400
+                },
+                'Horizontal scrolling state is correct'
+            );
+        });
+
+        test('reinitState if outlineCount is set', function(assert) {
+            this.prepareInstance({
+                scrolling: { outlineCount: 1 }
+            });
+
+            this.verticalVirtualScrolling.position = 200;
+            this.verticalVirtualScrolling.reinitState(300);
+
+            assert.equal(this.verticalVirtualScrolling.itemSize, 300, 'Vertical scrolling item size is correct');
+            assert.equal(this.verticalVirtualScrolling.position, 200, 'Vertical scrolling position is correct');
+            assert.deepEqual(
+                this.verticalVirtualScrolling.state,
+                {
+                    prevPosition: 0,
+                    startIndex: 0,
+                    itemCount: 2,
+                    virtualItemCountBefore: 0,
+                    virtualItemCountAfter: 98,
+                    outlineCountBefore: 0,
+                    outlineCountAfter: 1,
+                    virtualItemSizeBefore: 0,
+                    virtualItemSizeAfter: 29400,
+                    outlineSizeBefore: 0,
+                    outlineSizeAfter: 0
+                },
+                'Vertical scrolling state is correct'
+            );
+
+            this.prepareInstance({
+                scrolling: { outlineCount: 2 }
+            });
+
+            this.horizontalVirtualScrolling.position = 800;
+            this.horizontalVirtualScrolling.reinitState(400);
+
+            assert.equal(this.horizontalVirtualScrolling.itemSize, 400, 'Horizontal scrolling item size is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, 800, 'Horizontal scrolling position is correct');
+            assert.deepEqual(
+                this.horizontalVirtualScrolling.state,
+                {
+                    itemCount: 6,
+                    outlineCountAfter: 2,
+                    outlineCountBefore: 2,
+                    outlineSizeAfter: 0,
+                    outlineSizeBefore: 0,
+                    prevPosition: 800,
+                    startIndex: 0,
+                    virtualItemCountAfter: 194,
+                    virtualItemCountBefore: 0,
+                    virtualItemSizeAfter: 77600,
+                    virtualItemSizeBefore: 0
                 },
                 'Horizontal scrolling state is correct'
             );

@@ -312,8 +312,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = isFunction(formatOption?.formatter);
-        const formatter = isCustomFormatter ? formatOption.formatter : number.format;
+        const customFormatter = formatOption?.formatter || formatOption;
+        const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
         return formatter(value, format);
     },

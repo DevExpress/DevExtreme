@@ -449,6 +449,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 } else if(fullName === EDITING_CHANGES_OPTION_NAME) {
                     this._handleChangesChange(args);
                 } else if(!args.handled) {
+                    this._columnsController.reinit();
                     this.init();
                     this.resetChanges();
                     this._resetEditColumnName();
@@ -1013,7 +1014,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this._pageIndex = dataController.pageIndex();
             this._addInternalData({
                 key: item.key,
-                oldData: item.data
+                oldData: item.oldData ?? item.data
             });
             this._setEditRowKey(item.key);
         },

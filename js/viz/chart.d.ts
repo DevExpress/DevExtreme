@@ -75,7 +75,7 @@ export type ExportedEvent = EventInfo<dxChart>;
 export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxChart>;
+export type FileSavingEvent = FileSavingEventInfo<dxChart>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;

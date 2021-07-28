@@ -13,8 +13,11 @@ export default class BootstrapExtractor {
 
   input: string;
 
+  version: number;
+
   constructor(source: string, version: number) {
     this.input = source;
+    this.version = version;
     if (version === 3) {
       this.compiler = BootstrapExtractor.lessRender;
       this.sourceProcessor = this.lessProcessor;
@@ -22,16 +25,11 @@ export default class BootstrapExtractor {
     } else {
       this.compiler = BootstrapExtractor.sassRender;
       this.sourceProcessor = this.sassProcessor;
-      this.meta = bootstrap4meta;
+      this.meta = bootstrap4meta; // suitable for 4 and 5
     }
   }
 
-  static readSassFile(fileName: string): Promise<string> {
-    const path = require.resolve(`bootstrap/scss/${fileName}`);
-    return fs.readFile(path, 'utf8');
-  }
-
-  static sassRender(input: string): Promise<string> {
+  static async sassRender(input: string): Promise<string> {
     return new Promise((resolve, reject) => {
       sass.render(
         { data: input },
@@ -49,9 +47,24 @@ export default class BootstrapExtractor {
     });
   }
 
+  static convertRemToPx(cssValue: string): string {
+    const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
+    const replaceHandler = (_match: string, value: string, separator: string): string => {
+      const pixelsInRem = 16;
+      const pxValue = Math.round(parseFloat(value) * pixelsInRem);
+      return `${pxValue}px${separator || ''}`;
+    };
+    return cssValue.replace(remValueRegex, replaceHandler);
+  }
+
+  async readSassFile(fileName: string): Promise<string> {
+    const path = require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    return fs.readFile(path, 'utf8');
+  }
+
   async sassProcessor(): Promise<string> {
-    const functions = await BootstrapExtractor.readSassFile('_functions.scss');
-    const variables = await BootstrapExtractor.readSassFile('_variables.scss');
+    const functions = await this.readSassFile('_functions.scss');
+    const variables = await this.readSassFile('_variables.scss');
     return functions
       + this.input
       + variables
@@ -79,16 +92,6 @@ export default class BootstrapExtractor {
       .join('');
 
     return `dx-varibles-collector {${variables}}`;
-  }
-
-  static convertRemToPx(cssValue: string): string {
-    const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
-    const replaceHandler = (match: string, value: string, separator: string): string => {
-      const pixelsInRem = 16;
-      const pxValue = Math.round(parseFloat(value) * pixelsInRem);
-      return `${pxValue}px${separator || ''}`;
-    };
-    return cssValue.replace(remValueRegex, replaceHandler);
   }
 
   async extract(): Promise<ConfigMetaItem[]> {

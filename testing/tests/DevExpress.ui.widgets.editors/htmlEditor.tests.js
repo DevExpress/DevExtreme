@@ -17,6 +17,8 @@ import pasteTests from './htmlEditorParts/paste.tests.js';
 import './htmlEditorParts/events.tests.js';
 import './htmlEditorParts/resizingModule.tests.js';
 import './htmlEditorParts/resizingIntegration.tests.js';
+import './htmlEditorParts/tableResizingModule.tests.js';
+import './htmlEditorParts/tableResizingIntegration.tests.js';
 import './htmlEditorParts/mentionModule.tests.js';
 import mentionIntegrationTests from './htmlEditorParts/mentionIntegration.tests.js';
 import './htmlEditorParts/scrolling.tests.js';
