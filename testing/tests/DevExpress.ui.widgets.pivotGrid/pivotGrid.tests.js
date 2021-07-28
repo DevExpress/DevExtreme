@@ -5150,7 +5150,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        createPivotGrid({
+        const pivotGrid = createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5193,7 +5193,12 @@ QUnit.module('Tests with stubs', {
         });
 
         assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], { direction: 'both', rtlEnabled: false, useNative: false, useSimulatedScrollbar: true });
+        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], {
+            direction: 'both',
+            rtlEnabled: false,
+            useNative: pivotGrid.__scrollBarUseNative,
+            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
+        });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
         assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
@@ -5203,8 +5208,8 @@ QUnit.module('Tests with stubs', {
     QUnit.test('Virtual Scrolling. Widget height is not defined', function(assert) {
         this.dataArea.getColumnsWidth.returns([20, 40, 60, 20]);
         this.dataArea.getRowsHeight.returns([43, 23, 34]);
-        this.verticalArea.getRowsHeight.returns([30, 28]);
         this.dataArea.getScrollableDirection.returns('both');
+        this.verticalArea.getRowsHeight.returns([30, 28]);
 
         this.horizontalArea.groupElement().height(25);
 
@@ -5215,7 +5220,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        createPivotGrid({
+        const pivotGrid = createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5257,7 +5262,12 @@ QUnit.module('Tests with stubs', {
         });
 
         assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], { direction: 'both', rtlEnabled: false, useNative: false, useSimulatedScrollbar: true });
+        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], {
+            direction: 'both',
+            rtlEnabled: false,
+            useNative: pivotGrid.__scrollBarUseNative,
+            useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
+        });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 'auto');
