@@ -1251,7 +1251,7 @@ export interface Sorting {
      */
     mode?: 'multiple' | 'none' | 'single',
     /**
-     * @docid 
+     * @docid
      * @default false
      */
     showSortIndexes?: boolean
