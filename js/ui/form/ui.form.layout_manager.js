@@ -776,7 +776,22 @@ const LayoutManager = Widget.inherit({
             isRequired: options.isRequired
         };
 
-        return this._createEditor(options.$container, renderOptions, editorOptions);
+        if(renderOptions.dataField && !editorOptions.name) {
+            editorOptions.name = renderOptions.dataField;
+        }
+
+        const editorWidget = this._renderEditor2({
+            $container: options.$container,
+            renderOptions,
+            editorOptions,
+            labelLocation: this.option('labelLocation'),
+            componentOwner: this._getComponentOwner()
+        });
+
+        if(editorWidget && renderOptions.dataField) {
+            this._bindDataField(editorWidget, renderOptions, options.$container);
+        }
+        return editorWidget;
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -843,23 +858,30 @@ const LayoutManager = Widget.inherit({
             .on('enterKey', toggleInvalidClass);
     },
 
-    _createEditor: function($container, renderOptions, editorOptions) {
-        const that = this;
-        const template = renderOptions.template;
-        let editorInstance;
-
-        if(renderOptions.dataField && !editorOptions.name) {
-            editorOptions.name = renderOptions.dataField;
+    _renderEditor2: function({ $container, renderOptions, editorOptions, labelLocation, componentOwner }) {
+        function adjustElementByLabelLocation($element, labelLocation) {
+            const oppositeClasses = {
+                right: 'left',
+                left: 'right',
+                top: 'bottom'
+            };
+            $container.
+                addClass(FIELD_ITEM_CONTENT_CLASS).
+                addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation]);
         }
 
-        that._addItemContentClasses($container);
+        const that = this;
+        const template = renderOptions.template;
+        let editorWidget;
+
+        adjustElementByLabelLocation($container, labelLocation);
 
         if(template) {
             const data = {
                 dataField: renderOptions.dataField,
                 editorType: renderOptions.editorType,
                 editorOptions: editorOptions,
-                component: that._getComponentOwner(),
+                component: componentOwner,
                 name: renderOptions.name
             };
 
@@ -868,23 +890,33 @@ const LayoutManager = Widget.inherit({
                 container: getPublicElement($container)
             });
         } else {
+            // function renderEditorWidgetTo($container, renderOptions, editorOptions, createComponentCallback) {
+            //     const $editor = $('<div>').appendTo($container);
+
+            //     try {
+            //         editorWidget = createComponentCallback($editor, renderOptions.editorType, editorOptions);
+            //         editorWidget.setAria('describedby', renderOptions.helpID);
+            //         editorWidget.setAria('labelledby', renderOptions.labelID);
+            //         editorWidget.setAria('required', renderOptions.isRequired);
+            //     } catch(e) {
+            //         errors.log('E1035', e.message);
+            //     }
+            // }
+            // return renderEditorWidgetTo($container, renderOptions, editorOptions, that._createComponent.bind(this));
+
             const $editor = $('<div>').appendTo($container);
 
             try {
-                editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
-                editorInstance.setAria('describedby', renderOptions.helpID);
-                editorInstance.setAria('labelledby', renderOptions.labelID);
-                editorInstance.setAria('required', renderOptions.isRequired);
-
-                if(renderOptions.dataField) {
-                    that._bindDataField(editorInstance, renderOptions, $container);
-                }
+                editorWidget = that._createComponent($editor, renderOptions.editorType, editorOptions);
+                editorWidget.setAria('describedby', renderOptions.helpID);
+                editorWidget.setAria('labelledby', renderOptions.labelID);
+                editorWidget.setAria('required', renderOptions.isRequired);
             } catch(e) {
                 errors.log('E1035', e.message);
             }
         }
 
-        return editorInstance;
+        return editorWidget;
     },
 
     _getComponentOwner: function() {
@@ -934,22 +966,6 @@ const LayoutManager = Widget.inherit({
         }
 
         return this._watch;
-    },
-
-    _addItemContentClasses: function($itemContent) {
-        const locationSpecificClass = this._getItemContentLocationSpecificClass();
-        $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(' '));
-    },
-
-    _getItemContentLocationSpecificClass: function() {
-        const labelLocation = this.option('labelLocation');
-        const oppositeClasses = {
-            right: 'left',
-            left: 'right',
-            top: 'bottom'
-        };
-
-        return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
     },
 
     _createComponent: function($editor, type, editorOptions) {
