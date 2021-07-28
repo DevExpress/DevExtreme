@@ -1205,7 +1205,7 @@ module('Table resizing integration', {
                 assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2.51, 'Column has expected width, index = ' + i);
             });
 
-            assert.roughEqual($table.outerWidth(), tableWidth, 2.01, 'Table width is not changed');
+            assert.roughEqual($table.outerWidth(), tableWidth, 2.51, 'Table width is not changed');
         });
 
         test('Column resizers should be updated after a column insert', function(assert) {
