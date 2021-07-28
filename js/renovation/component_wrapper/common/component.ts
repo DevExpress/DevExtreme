@@ -199,7 +199,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _dispose(): void {
-    cleanDataRecursive(this.$element()[0], true);
+    cleanDataRecursive(this.$element()[0]);
 
     this._removeWidget();
     super._dispose();
