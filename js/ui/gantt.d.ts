@@ -1230,7 +1230,7 @@ export interface Sorting {
     descendingText?: string,
     /**
      * @docid
-     * @type Enums.SortingMode|string
+     * @type Enums.GanttSortingMode|string
      * @default "none"
      */
     mode?: 'multiple' | 'none' | 'single',
