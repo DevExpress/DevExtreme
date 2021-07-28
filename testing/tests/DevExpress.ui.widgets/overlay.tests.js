@@ -4236,7 +4236,7 @@ QUnit.module('resizeObserver integration', {
                 assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
                 assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
                 resizeOnRestylingDone();
-            }, 100);
+            }, this.timeToWaitResize);
             resizeOnOpeningDone();
         }, this.timeToWaitResize);
     });
