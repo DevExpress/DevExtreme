@@ -78,7 +78,6 @@ export type KeyUpEvent = NativeEventInfo<dxTagBox>;
 /** @public */
 export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
     readonly multiTagElement: DxElement;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly selectedItems?: Array<string | number | any>;
     text?: string;
 };
@@ -186,7 +185,6 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @readonly
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItems?: Array<string | number | any>;
     /**
      * @docid
@@ -214,14 +212,12 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default []
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: Array<string | number | any>;
 }
 /**

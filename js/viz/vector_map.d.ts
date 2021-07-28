@@ -162,7 +162,6 @@ export interface MapLayerElement {
      * @param1 settings:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     applySettings(settings: any): void;
     /**
      * @docid
@@ -171,7 +170,6 @@ export interface MapLayerElement {
      * @param1 name:string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     attribute(name: string): any;
     /**
      * @docid
@@ -180,7 +178,6 @@ export interface MapLayerElement {
      * @param2 value:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     attribute(name: string, value: any): void;
     /**
      * @docid
@@ -188,13 +185,11 @@ export interface MapLayerElement {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     coordinates(): any;
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     layer?: any;
     /**
      * @docid
@@ -367,7 +362,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>
        * @extends CommonVizDataSource
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: any | Store | DataSource | DataSourceOptions | string,
       /**
        * @docid
@@ -491,7 +485,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @notUsedInTheme
        */
       type?: 'area' | 'line' | 'marker'
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | Store | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
@@ -606,7 +599,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
     /**
      * @docid
@@ -649,7 +641,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @inherits dxVectorMapOptions.commonAnnotationSettings
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
      * @docid
@@ -659,7 +650,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
 }
 
@@ -699,7 +689,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
     /**
      * @docid
@@ -709,7 +698,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
@@ -719,7 +707,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
@@ -829,7 +816,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((info: MapLayerElement) => any);
     /**
      * @docid dxVectorMapOptions.tooltip.format

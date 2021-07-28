@@ -20,7 +20,6 @@ import Widget, {
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validationGroup?: any;
 };
 

@@ -27,19 +27,15 @@ import dxDraggable, {
 export interface AddEvent {
     readonly component: dxSortable;
     readonly element: DxElement;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly model?: any;
     readonly event: DxEvent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
     readonly dropInsideItem: boolean;
 }
@@ -49,59 +45,48 @@ export type DisposingEvent = EventInfo<dxSortable>;
 
 /** @public */
 export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex?: number;
     readonly toIndex?: number;
     readonly fromComponent?: dxSortable | dxDraggable;
     readonly toComponent?: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
     readonly dropInsideItem?: boolean;
 };
 
 /** @public */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
     readonly dropInsideItem: boolean;
 };
 
 /** @public */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
     readonly dropInsideItem: boolean;
 };
 
 /** @public */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
 };
 
@@ -113,31 +98,25 @@ export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
 export type RemoveEvent = NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
 };
 
 /** @public */
 export type ReorderEvent = NativeEventInfo<dxSortable> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
     readonly toIndex: number;
     readonly fromComponent: dxSortable | dxDraggable;
     readonly toComponent: dxSortable | dxDraggable;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly fromData?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly toData?: any;
     readonly dropInsideItem: boolean;
     promise?: PromiseLike<void>;
@@ -145,7 +124,6 @@ export type ReorderEvent = NativeEventInfo<dxSortable> & {
 
 /** @public */
 export interface DragTemplateData {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;

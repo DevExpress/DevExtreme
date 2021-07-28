@@ -47,7 +47,6 @@ export const projection: {
      * @static
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     add(name: string, projection: VectorMapProjectionConfig | any): void;
 
     /**
@@ -59,9 +58,7 @@ export const projection: {
      * @static
      * @hidden
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (data: VectorMapProjectionConfig): any;
 };

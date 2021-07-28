@@ -16,7 +16,6 @@ export interface Query {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     aggregate(seed: any, step: Function, finalize: Function): DxPromise<any>;
     /**
      * @docid
@@ -25,7 +24,6 @@ export interface Query {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     aggregate(step: Function): DxPromise<any>;
     /**
      * @docid
@@ -41,7 +39,6 @@ export interface Query {
      * @return Promise<number>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     avg(getter: any): DxPromise<number>;
     /**
      * @docid
@@ -56,7 +53,6 @@ export interface Query {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     enumerate(): DxPromise<any>;
     /**
      * @docid
@@ -65,7 +61,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(criteria: Array<any>): Query;
     /**
      * @docid
@@ -82,7 +77,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     groupBy(getter: any): Query;
     /**
      * @docid
@@ -98,7 +92,6 @@ export interface Query {
      * @return Promise<number,Date>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     max(getter: any): DxPromise<number | Date>;
     /**
      * @docid
@@ -114,7 +107,6 @@ export interface Query {
      * @return Promise<number,Date>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     min(getter: any): DxPromise<number | Date>;
     /**
      * @docid
@@ -123,7 +115,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     select(getter: any): Query;
     /**
      * @docid
@@ -141,7 +132,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sortBy(getter: any): Query;
     /**
      * @docid
@@ -151,7 +141,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sortBy(getter: any, desc: boolean): Query;
     /**
      * @docid
@@ -167,7 +156,6 @@ export interface Query {
      * @return Promise<number>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sum(getter: any): DxPromise<number>;
     /**
      * @docid
@@ -176,7 +164,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     thenBy(getter: any): Query;
     /**
      * @docid
@@ -186,7 +173,6 @@ export interface Query {
      * @return Query
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     thenBy(getter: any, desc: boolean): Query;
     /**
      * @docid
@@ -194,7 +180,6 @@ export interface Query {
      * @return Array<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toArray(): Array<any>;
 }
 
@@ -208,7 +193,6 @@ export interface Query {
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare function query(array: Array<any>): Query;
 
 /**
@@ -222,7 +206,6 @@ declare function query(array: Array<any>): Query;
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare function query(url: string, queryOptions: any): Query;
 
 export default query;

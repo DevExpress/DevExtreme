@@ -42,10 +42,8 @@ import Widget, {
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
   readonly event?: DxEvent;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly itemData?: any;
   readonly itemElement?: DxElement;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly fromData?: any;
 }
 
@@ -113,23 +111,19 @@ export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
 
 /** @public */
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly oldData: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly newData: any;
   cancel?: boolean | PromiseLike<boolean>;
 };
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly cellData: any;
   readonly cellElement: DxElement;
 };
 
 /** @public */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly cellData: any;
   readonly cellElement: DxElement;
 };
@@ -150,7 +144,6 @@ export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly toData?: any;
 };
 
@@ -158,7 +151,6 @@ export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
 export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly toData?: any;
 };
 
@@ -166,7 +158,6 @@ export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent 
 export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent & {
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly toData?: any;
 };
 
@@ -236,7 +227,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data?: any,
       /**
        * @docid
@@ -373,7 +363,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @extends DataCellTemplate
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -386,7 +375,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @extends DateCellTemplate
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -727,7 +715,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @extends ResourceCellTemplate
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -749,7 +736,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
@@ -757,7 +743,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_return string
        * @default 'text'
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       displayExpr?: string | ((resource: any) => string),
       /**
        * @docid
@@ -791,7 +776,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default []
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedCellData?: Array<any>;
     /**
      * @docid
@@ -840,7 +824,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @extends TimeCellTemplate
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -894,13 +877,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @extends DataCellTemplate
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
        * @extends DateCellTemplate
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
@@ -948,7 +929,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @extends ResourceCellTemplate
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid
@@ -964,7 +944,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @extends TimeCellTemplate
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement),
       /**
        * @docid

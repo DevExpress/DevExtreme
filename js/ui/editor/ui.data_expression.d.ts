@@ -25,7 +25,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -34,7 +33,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
@@ -45,20 +43,17 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     /**
      * @docid
@@ -67,7 +62,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type_function_return string|number|boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueExpr?: string | ((item: any) => string | number | boolean);
 }
 /**

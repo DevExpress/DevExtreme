@@ -84,7 +84,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -120,7 +119,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
@@ -131,14 +129,12 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxAccordionItem | any>;
     /**
      * @docid

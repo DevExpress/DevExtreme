@@ -54,7 +54,6 @@ export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor> & ValueChangedInfo
 export interface MentionTemplateData {
     readonly marker: string;
     readonly id?: string | number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
 }
 /**
@@ -67,7 +66,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @type_function_param1 config:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeModules?: ((config: any) => void);
     /**
      * @docid
@@ -245,7 +243,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get(componentPath: string): any;
     /**
      * @docid
@@ -255,7 +252,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getBounds(index: number, length: number): any;
     /**
      * @docid
@@ -263,7 +259,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getFormat(): any;
     /**
      * @docid
@@ -273,7 +268,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getFormat(index: number, length: number): any;
     /**
      * @docid
@@ -289,7 +283,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getModule(moduleName: string): any;
     /**
      * @docid
@@ -297,7 +290,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getQuillInstance(): any;
     /**
      * @docid
@@ -306,7 +298,6 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelection(focus?: boolean | undefined): any;
     /**
      * @docid
@@ -450,7 +441,6 @@ export interface dxHtmlEditorMention {
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
@@ -461,7 +451,6 @@ export interface dxHtmlEditorMention {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid

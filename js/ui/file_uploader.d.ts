@@ -75,7 +75,6 @@ export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
 export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly error: any;
     message: string;
 };
@@ -104,7 +103,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     abortUpload?: ((file: File, uploadInfo?: UploadInfo) => PromiseLike<any> | any);
     /**
      * @docid
@@ -159,7 +157,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     inputAttr?: any;
     /**
      * @docid
@@ -383,7 +380,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadChunk?: ((file: File, uploadInfo: UploadInfo) => PromiseLike<any> | any);
     /**
      * @docid
@@ -404,21 +400,18 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadFile?: ((file: File, progressCallback: Function) => PromiseLike<any> | any);
     /**
      * @docid
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadHeaders?: any;
     /**
      * @docid
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadCustomData?: any;
     /**
      * @docid

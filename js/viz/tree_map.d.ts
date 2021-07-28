@@ -152,7 +152,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @extends CommonVizDataSource
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
@@ -301,7 +300,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default 'squarified'
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>, sum?: number, items?: Array<any> }) => any);
     /**
      * @docid
@@ -555,7 +553,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
 }
 /**
@@ -620,13 +617,11 @@ export interface dxTreeMapNode {
      * @param1 options:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customize(options: any): void;
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid

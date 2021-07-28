@@ -40,7 +40,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @default "content"
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     contentTemplate?: template | ((contentElement: DxElement) => any);
     /**
      * @docid
@@ -55,7 +54,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     menuTemplate?: template | ((menuElement: DxElement) => any);
     /**
      * @docid

@@ -76,7 +76,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     elementAttr?: any;
     /**
      * @docid
@@ -165,7 +164,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @fires dxOverlayOptions.onPositioned
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     position?: any;
     /**
      * @docid
@@ -199,7 +197,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     wrapperAttr?: any;
 }
 /** @namespace DevExpress.ui */

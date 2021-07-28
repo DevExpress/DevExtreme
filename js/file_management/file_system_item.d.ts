@@ -66,7 +66,6 @@ export default class FileSystemItem {
      * @docid FileSystemItem.dataItem
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataItem: any;
 
     /**

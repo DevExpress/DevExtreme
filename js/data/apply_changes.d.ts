@@ -12,7 +12,6 @@
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
 
 export default applyChanges;

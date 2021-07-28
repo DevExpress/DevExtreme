@@ -3,20 +3,16 @@ import {
 } from '../../core/utils/deferred';
 
 export interface ODataRequestOptions {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     accepts: any;
     async: boolean;
     contentType: string | boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
     dataType: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headers: any;
     jsonp?: boolean;
     method: string;
     timeout: number;
     url: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     xhrFields: any;
 }
 
@@ -34,7 +30,6 @@ export interface ODataContextOptions {
      * @type_function_param1_field7 headers:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
     /**
      * @docid
@@ -45,7 +40,6 @@ export interface ODataContextOptions {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     entities?: any;
     /**
      * @docid
@@ -55,7 +49,6 @@ export interface ODataContextOptions {
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
@@ -103,7 +96,6 @@ export default class ODataContext {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     get(operationName: string, params: any): DxPromise<any>;
     /**
      * @docid
@@ -114,7 +106,6 @@ export default class ODataContext {
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
      * @docid
@@ -124,7 +115,6 @@ export default class ODataContext {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     objectLink(entityAlias: string, key: any | string | number): any;
 }
 

@@ -129,7 +129,6 @@ export interface PieChartLegendItem extends BaseLegendItem {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     text?: any;
 }
 
@@ -152,7 +151,6 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tag?: any;
 }
 /**
@@ -182,7 +180,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @inheritAll
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     commonSeriesSettings?: any;
     /**
      * @docid
@@ -265,7 +262,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
        * @type_function_param1 seriesName:any
        * @type_function_return PieChartSeries
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customizeSeries?: ((seriesName: any) => PieChartSeries),
       /**
        * @docid
@@ -297,7 +293,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @inherits dxPieChartOptions.commonAnnotationSettings
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     annotations?: Array<dxPieChartAnnotationConfig | any>;
     /**
      * @docid
@@ -312,7 +307,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
 }
 
@@ -365,7 +359,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
     /**
      * @docid
@@ -375,7 +368,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
@@ -385,7 +377,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 /** @namespace DevExpress.viz */
@@ -408,7 +399,6 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
     /**
      * @docid dxPieChartOptions.legend.customizeItems
@@ -427,7 +417,6 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
     /**
      * @docid dxPieChartOptions.legend.hoverMode
@@ -481,14 +470,12 @@ export interface dxPieChartSeriesTypes {
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     DoughnutSeries?: any;
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     PieSeries?: any;
 }
 /** @namespace DevExpress.viz */
@@ -676,7 +663,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @type_function_return string
        * @notUsedInTheme
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customizeText?: ((pointInfo: any) => string),
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.font

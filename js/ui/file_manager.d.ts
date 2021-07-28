@@ -38,7 +38,6 @@ export type ContentReadyEvent = EventInfo<dxFileManager>;
 
 /** @public */
 export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
@@ -95,7 +94,6 @@ export type SelectionChangedEvent = EventInfo<dxFileManager> & {
 
 /** @public */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
@@ -148,7 +146,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fileSystemProvider?: any;
     /**
      * @docid
@@ -415,7 +412,6 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getCurrentDirectory(): any;
     /**
      * @docid
@@ -423,7 +419,6 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectedItems(): Array<any>;
     /**
      * @docid
@@ -431,7 +426,6 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     refresh(): DxPromise<any>;
 }
 

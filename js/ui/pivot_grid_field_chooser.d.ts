@@ -21,7 +21,6 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly area?: string;
     readonly field?: PivotGridDataSourceField;
     readonly event?: DxEvent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<any>;
 };
 
@@ -150,7 +149,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state?: any;
     /**
      * @docid

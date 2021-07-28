@@ -22,7 +22,6 @@ export default interface UploadInfo {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customData: any;
 
     /**

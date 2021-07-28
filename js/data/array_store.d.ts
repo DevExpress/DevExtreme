@@ -4,7 +4,6 @@ import Store, {
 import { Query } from './query';
 
 /** @namespace DevExpress.data */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
@@ -20,7 +19,6 @@ export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOption
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class ArrayStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
     constructor(options?: ArrayStoreOptions<TKey, TValue>)
     /**

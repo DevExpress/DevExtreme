@@ -52,14 +52,12 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | CollectionWidgetItem | any>;
     /**
      * @docid
@@ -159,21 +157,18 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @ref
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItem?: any;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItemKeys?: Array<any>;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedItems?: Array<any>;
 }
 /**
@@ -210,7 +205,6 @@ export interface CollectionWidgetItem {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid

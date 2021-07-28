@@ -36,7 +36,6 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     inputAttr?: any;
     /**
      * @docid
@@ -61,7 +60,6 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default "{}"
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     maskRules?: any;
     /**
      * @docid
@@ -252,7 +250,6 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default ""
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     /**
      * @docid

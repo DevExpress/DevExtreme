@@ -149,7 +149,6 @@ export interface baseLabelObject {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getBoundingRect(): any;
     /**
      * @docid
@@ -209,7 +208,6 @@ export interface basePointObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid basePointObject.fullState
@@ -276,7 +274,6 @@ export interface basePointObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     series?: any;
     /**
      * @docid
@@ -288,7 +285,6 @@ export interface basePointObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tag?: any;
 }
 
@@ -397,7 +393,6 @@ export interface baseSeriesObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     name?: any;
     /**
      * @docid
@@ -422,7 +417,6 @@ export interface baseSeriesObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tag?: any;
     /**
      * @docid
@@ -464,25 +458,21 @@ export interface chartPointAggregationInfoObject {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     aggregationInterval?: any;
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: Array<any>;
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     intervalEnd?: any;
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     intervalStart?: any;
 }
 
@@ -505,7 +495,6 @@ export interface chartPointObject extends basePointObject {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getBoundingRect(): any;
     /**
      * @docid
@@ -598,7 +587,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @inherits dxChartOptions.commonAnnotationSettings
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     annotations?: Array<dxChartAnnotationConfig | any>;
     /**
      * @docid
@@ -866,7 +854,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
     /**
      * @docid
@@ -890,7 +877,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @type_function_return Number
        * @default true
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       sortingMethod?: boolean | ((a: any, b: any) => number)
     };
     /**
@@ -1126,7 +1112,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @type_function_param1 seriesName:any
        * @type_function_return ChartSeries
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customizeSeries?: ((seriesName: any) => ChartSeries),
       /**
        * @docid
@@ -2117,139 +2102,116 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @docid dxChartOptions.commonSeriesSettings.area
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     area?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.bar
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.bubble
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bubble?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.candlestick
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     candlestick?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedarea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fullstackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedbar
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fullstackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fullstackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedspline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fullstackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.fullstackedsplinearea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fullstackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.line
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     line?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.rangearea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rangearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.rangebar
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rangebar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.scatter
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scatter?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.spline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.splinearea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     splinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedarea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedarea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedbar
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedbar?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedspline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedspline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stackedsplinearea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stackedsplinearea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.steparea
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     steparea?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stepline
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stepline?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.stock
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stock?: any;
     /**
      * @docid dxChartOptions.commonSeriesSettings.type
@@ -2270,7 +2232,6 @@ export interface dxChartLegend extends BaseChartLegend {
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeHint?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
     /**
      * @docid dxChartOptions.legend.customizeText
@@ -2282,7 +2243,6 @@ export interface dxChartLegend extends BaseChartLegend {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
     /**
      * @docid dxChartOptions.legend.hoverMode
@@ -2756,7 +2716,6 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
     /**
      * @docid
@@ -2766,7 +2725,6 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid
@@ -2776,7 +2734,6 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
@@ -3010,7 +2967,6 @@ export interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCom
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -3072,7 +3028,6 @@ export interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesComm
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -3125,7 +3080,6 @@ export interface dxChartSeriesTypesBubbleSeriesLabel extends dxChartSeriesTypesC
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -3215,7 +3169,6 @@ export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesT
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -3564,7 +3517,6 @@ export interface dxChartSeriesTypesCommonSeriesAggregation {
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>);
     /**
      * @docid dxChartSeriesTypes.CommonSeries.aggregation.enabled
@@ -3785,7 +3737,6 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.font
@@ -4214,7 +4165,6 @@ export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSer
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4276,7 +4226,6 @@ export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeri
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.FullStackedBarSeries.label.position
@@ -4336,7 +4285,6 @@ export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSer
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4395,7 +4343,6 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxCh
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4457,7 +4404,6 @@ export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartS
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4510,7 +4456,6 @@ export interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCom
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4569,7 +4514,6 @@ export interface dxChartSeriesTypesRangeAreaSeriesLabel extends dxChartSeriesTyp
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4631,7 +4575,6 @@ export interface dxChartSeriesTypesRangeBarSeriesLabel extends dxChartSeriesType
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4668,7 +4611,6 @@ export interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypes
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4727,7 +4669,6 @@ export interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTy
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4789,7 +4730,6 @@ export interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesC
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4848,7 +4788,6 @@ export interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesT
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -4910,7 +4849,6 @@ export interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTy
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.StackedBarSeries.label.position
@@ -4970,7 +4908,6 @@ export interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesT
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -5029,7 +4966,6 @@ export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartS
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -5091,7 +5027,6 @@ export interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSerie
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -5195,7 +5130,6 @@ export interface dxChartSeriesTypesStepAreaSeriesLabel extends dxChartSeriesType
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -5275,7 +5209,6 @@ export interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesType
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 /** @namespace DevExpress.viz */
@@ -5334,7 +5267,6 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeText?: ((pointInfo: any) => string);
 }
 

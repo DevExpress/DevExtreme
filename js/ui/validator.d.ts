@@ -30,7 +30,6 @@ export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 export interface ValidatedEvent {
     name?: string;
     isValid?: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
@@ -186,7 +185,6 @@ export interface dxValidatorResult {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
 }
 

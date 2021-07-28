@@ -65,7 +65,6 @@ export default class FileSystemProviderBase {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     renameItem(item: FileSystemItem, newName: string): DxPromise<any>;
 
     /**
@@ -76,7 +75,6 @@ export default class FileSystemProviderBase {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createDirectory(parentDirectory: FileSystemItem, name: string): DxPromise<any>;
 
     /**
@@ -86,7 +84,6 @@ export default class FileSystemProviderBase {
      * @return Array<Promise<any>>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deleteItems(items: Array<FileSystemItem>): Array<DxPromise<any>>;
 
     /**
@@ -97,7 +94,6 @@ export default class FileSystemProviderBase {
      * @return Array<Promise<any>>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
@@ -108,7 +104,6 @@ export default class FileSystemProviderBase {
      * @return Array<Promise<any>>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
@@ -120,7 +115,6 @@ export default class FileSystemProviderBase {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
@@ -132,7 +126,6 @@ export default class FileSystemProviderBase {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
@@ -150,6 +143,5 @@ export default class FileSystemProviderBase {
      * @return Promise<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getItemsContent(items: Array<FileSystemItem>): DxPromise<any>;
 }

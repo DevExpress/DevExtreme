@@ -16,7 +16,6 @@ import {
 } from '../../events/index';
 
 export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
@@ -145,7 +144,6 @@ export default class dxScrollable<TProperties = Properties> extends DOMComponent
      * @param1 distance:numeric|object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollBy(distance: number | any): void;
     /**
      * @docid
@@ -167,7 +165,6 @@ export default class dxScrollable<TProperties = Properties> extends DOMComponent
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollOffset(): any;
     /**
      * @docid
@@ -175,7 +172,6 @@ export default class dxScrollable<TProperties = Properties> extends DOMComponent
      * @param1 targetLocation:numeric|object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     scrollTo(targetLocation: number | any): void;
     /**
      * @docid

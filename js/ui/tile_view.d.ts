@@ -69,7 +69,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -108,7 +107,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @fires dxTileViewOptions.onOptionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxTileViewItem | any>;
     /**
      * @docid

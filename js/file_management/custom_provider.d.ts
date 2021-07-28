@@ -15,7 +15,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
@@ -25,7 +24,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
@@ -35,7 +33,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createDirectory?: ((parentDirectory: FileSystemItem, name: string) => PromiseLike<any> | any);
 
     /**
@@ -44,7 +41,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deleteItem?: ((item: FileSystemItem) => PromiseLike<any> | any);
 
     /**
@@ -60,7 +56,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<Array<object>>|Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getItems?: ((parentDirectory: FileSystemItem) => PromiseLike<Array<any>> | Array<any>);
 
     /**
@@ -69,7 +64,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<object>|object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getItemsContent?: ((items: Array<FileSystemItem>) => PromiseLike<any> | any);
 
     /**
@@ -85,7 +79,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
@@ -95,7 +88,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     renameItem?: ((item: FileSystemItem, newName: string) => PromiseLike<any> | any);
 
     /**
@@ -106,7 +98,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_return Promise<any>|any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 }
 

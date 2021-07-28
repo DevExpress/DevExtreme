@@ -51,7 +51,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @action
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid
@@ -59,7 +58,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @action
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
     /**
      * @docid

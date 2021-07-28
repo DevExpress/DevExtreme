@@ -88,14 +88,12 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxSlideOutItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @fires dxSlideOutOptions.onOptionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxSlideOutItem | any>;
     /**
      * @docid
@@ -106,7 +104,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | UserDefinedElement);
     /**
      * @docid
@@ -123,7 +120,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid

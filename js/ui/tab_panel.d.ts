@@ -59,21 +59,18 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 
 /** @public */
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
 };
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
 };
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly itemData?: any;
     readonly itemElement?: DxElement;
 };
@@ -95,7 +92,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -112,14 +108,12 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<string | dxTabPanelItem | any>;
     /**
      * @docid

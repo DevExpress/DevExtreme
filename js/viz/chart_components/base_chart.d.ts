@@ -53,7 +53,6 @@ export interface PointInteractionInfo {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface TooltipInfo {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
@@ -98,7 +97,6 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_return dxChartSeriesTypes.CommonSeries.label
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeLabel?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesLabel);
     /**
      * @docid
@@ -106,14 +104,12 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_return dxChartSeriesTypes.CommonSeries.point
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
     /**
      * @docid BaseChartOptions.dataSource
      * @extends CommonVizDataSource
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid
@@ -224,7 +220,6 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @hideDefaults true
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     series?: any | Array<any>;
     /**
      * @docid
@@ -289,7 +284,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
@@ -299,7 +293,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeTooltip?: ((pointInfo: any) => any);
     /**
      * @docid BaseChartOptions.tooltip.shared

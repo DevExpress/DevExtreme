@@ -18,7 +18,6 @@ export interface ExcelDataGridCell {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid
@@ -37,7 +36,6 @@ export interface ExcelDataGridCell {
       /**
        * @docid
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       value?: any
     }>;
     /**
@@ -54,7 +52,6 @@ export interface ExcelDataGridCell {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value?: any;
 }
 
@@ -179,7 +176,6 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => void);
 }
 
@@ -214,7 +210,6 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => void);
 }
 

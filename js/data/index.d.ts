@@ -36,7 +36,6 @@ export type SelectDescriptor<T> = KeySelector<T>;
  * @docid
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
  export type FilterDescriptor = any;
 
  /**
@@ -53,13 +52,11 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
  * @namespace DevExpress.data
  * @type object
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
  export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customQueryParams?: any;
     /**
      * @docid
@@ -88,7 +85,6 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     parentIds?: Array<any>;
     /**
      * @docid
@@ -115,7 +111,6 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     searchValue?: any;
     /**
      * @docid
@@ -149,6 +144,5 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     userData?: any;
 }

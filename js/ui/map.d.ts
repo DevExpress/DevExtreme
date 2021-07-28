@@ -24,15 +24,12 @@ export type InitializedEvent = InitializedEventInfo<dxMap>;
 
 /** @public */
 export type MarkerAddedEvent = EventInfo<dxMap> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly options: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   originalMarker: any;
 };
 
 /** @public */
 export type MarkerRemovedEvent = EventInfo<dxMap> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly options?: any;
 };
 
@@ -41,21 +38,17 @@ export type OptionChangedEvent = EventInfo<dxMap> & ChangedOptionInfo;
 
 /** @public */
 export type ReadyEvent = EventInfo<dxMap> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   originalMap: any;
 };
 
 /** @public */
 export type RouteAddedEvent = EventInfo<dxMap> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly options: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   originalRoute: any;
 };
 
 /** @public */
 export type RouteRemovedEvent = EventInfo<dxMap> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly options?: any;
 };
 
@@ -118,7 +111,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @inherits MapLocation
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     center?: any | string | Array<number>;
     /**
      * @docid
@@ -183,7 +175,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @extends MapLocationType
        * @inherits MapLocation
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       location?: any | string | Array<number>,
       /**
        * @docid
@@ -304,7 +295,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @inherits MapLocation
        * @type Array<object>
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       locations?: Array<any>,
       /**
        * @docid
@@ -361,7 +351,6 @@ export default class dxMap extends Widget<dxMapOptions> {
      * @return Promise<Object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addMarker(markerOptions: any | Array<any>): DxPromise<any>;
     /**
      * @docid
@@ -370,7 +359,6 @@ export default class dxMap extends Widget<dxMapOptions> {
      * @return Promise<Object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addRoute(options: any | Array<any>): DxPromise<any>;
     /**
      * @docid
@@ -379,7 +367,6 @@ export default class dxMap extends Widget<dxMapOptions> {
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     removeMarker(marker: any | number | Array<any>): DxPromise<void>;
     /**
      * @docid
@@ -388,7 +375,6 @@ export default class dxMap extends Widget<dxMapOptions> {
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     removeRoute(route: any | number | Array<any>): DxPromise<void>;
 }
 

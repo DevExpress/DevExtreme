@@ -12,7 +12,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_param1_field3 formData:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => void);
     /**
      * @docid
@@ -20,7 +19,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_param1_field1 formData:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     beforeSubmit?: ((options: { formData?: any }) => void);
     /**
      * @docid
@@ -37,7 +35,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     requestHeaders?: any;
 }
 /**

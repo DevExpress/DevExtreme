@@ -34,7 +34,6 @@ export interface PivotGridDataSourceOptions {
      * @type Filter expression
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter?: string | Array<any> | Function;
     /**
      * @docid
@@ -55,7 +54,6 @@ export interface PivotGridDataSourceOptions {
      * @action
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onLoadError?: ((error: any) => void);
     /**
      * @docid
@@ -154,7 +152,6 @@ export interface PivotGridDataSourceField {
      * @type_function_param1_field3 totalValue:any
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
@@ -216,7 +213,6 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filterValues?: Array<any>;
     /**
      * @docid PivotGridDataSourceOptions.fields.format
@@ -330,7 +326,6 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryDisplayMode
@@ -422,7 +417,6 @@ export default class PivotGridDataSource {
      * @param2 path:Array<Object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expandHeaderItem(area: string, path: Array<any>): void;
     /**
      * @docid
@@ -431,7 +425,6 @@ export default class PivotGridDataSource {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     field(id: number | string): any;
     /**
      * @docid
@@ -462,7 +455,6 @@ export default class PivotGridDataSource {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter(): any;
     /**
      * @docid
@@ -487,7 +479,6 @@ export default class PivotGridDataSource {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getData(): any;
     /**
      * @docid
@@ -502,7 +493,6 @@ export default class PivotGridDataSource {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     load(): DxPromise<any>;
     /**
      * @docid
@@ -544,7 +534,6 @@ export default class PivotGridDataSource {
      * @return Promise<any>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     reload(): DxPromise<any>;
     /**
      * @docid
@@ -552,7 +541,6 @@ export default class PivotGridDataSource {
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     state(): any;
     /**
      * @docid

@@ -61,7 +61,6 @@ export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
 
 /** @public */
 export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly changes: any[];
     allowed?: boolean
 };
@@ -166,7 +165,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_return void
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customShapeTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
     /**
      * @docid
@@ -176,7 +174,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_return void
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     customShapeToolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
     /**
      * @docid
@@ -301,7 +298,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2_field1 item:dxDiagramShape
        * @type_function_return void
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
       /**
        * @docid
@@ -346,7 +342,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2_field1 item:dxDiagramShape
        * @type_function_return void
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
       /**
        * @docid
@@ -473,111 +468,95 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customDataExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "from"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fromExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fromLineEndExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fromPointIndexExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       keyExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       lineTypeExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       lockedExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       pointsExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       styleExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       textExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       textStyleExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "to"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       toExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       toLineEndExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       toPointIndexExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       zIndexExpr?: string | ((data: any) => any)
     };
     /**
@@ -650,125 +629,107 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default "children"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       containerChildrenExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       containerKeyExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       customDataExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       heightExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       imageUrlExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       itemsExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       keyExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       leftExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       lockedExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       parentKeyExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       styleExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "text"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       textExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       textStyleExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       topExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "type"
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       typeExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       widthExpr?: string | ((data: any) => any),
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       zIndexExpr?: string | ((data: any) => any)
     };
     /**
@@ -1203,7 +1164,6 @@ export interface dxDiagramConnector extends dxDiagramItem {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fromKey?: any;
     /**
      * @docid
@@ -1239,7 +1199,6 @@ export interface dxDiagramConnector extends dxDiagramItem {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toKey?: any;
     /**
      * @docid
@@ -1262,7 +1221,6 @@ export interface dxDiagramItem {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataItem?: any;
     /**
      * @docid

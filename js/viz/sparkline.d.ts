@@ -78,7 +78,6 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @extends CommonVizDataSource
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
     /**
      * @docid

@@ -253,7 +253,6 @@ export interface dxPopupToolbarItem {
      * @docid dxPopupOptions.toolbarItems.options
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options?: any;
     /**
      * @docid dxPopupOptions.toolbarItems.template

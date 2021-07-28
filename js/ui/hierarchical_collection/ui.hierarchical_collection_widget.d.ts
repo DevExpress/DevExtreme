@@ -17,7 +17,6 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid

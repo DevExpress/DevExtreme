@@ -33,7 +33,6 @@ export interface ExportInfo {
 }
 
 export interface IncidentInfo {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly target: any;
 }
 
@@ -750,7 +749,6 @@ export interface BaseWidgetAnnotationConfig {
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     /**
      * @docid

@@ -29,7 +29,6 @@ export interface dxElementWrapper {
 
   css(propertyName: string, value: string | number): this;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data(key: string, value: any): this;
 
   detach(): this;

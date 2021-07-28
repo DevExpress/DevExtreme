@@ -7,13 +7,11 @@ import { ODataRequestOptions } from './context';
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
         onFulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
     ): Promise<TResult1 | TResult2>;
 }
 
 /** @namespace DevExpress.data */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
     /**
      * @docid
@@ -27,7 +25,6 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field7 headers:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
     /**
      * @docid
@@ -42,14 +39,12 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @default {}
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fieldTypes?: any;
     /**
      * @docid
@@ -68,7 +63,6 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
@@ -103,7 +97,6 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
     constructor(options?: ODataStoreOptions<TKey, TValue>)
     byKey(key: TKey): DxPromise<TValue>;
@@ -125,7 +118,6 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createQuery(loadOptions?: { expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any }): Query;
 
     /**

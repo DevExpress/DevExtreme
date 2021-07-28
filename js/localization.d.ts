@@ -50,7 +50,6 @@ export function formatNumber(value: number, format: Format): string;
  * @namespace DevExpress.localization
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loadMessages(messages: any): void;
 
 /**
@@ -138,7 +137,6 @@ export interface FormatObject {
     */
    type?: PredefinedFormat | string
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ExternalFormat = any;
 
 /**

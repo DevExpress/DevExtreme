@@ -50,12 +50,9 @@ export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
     readonly element?: DxElement;
     readonly event?: DxEvent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly targetKey?: any;
     readonly targetType?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly items?: Array<any>
 };
 
@@ -68,31 +65,24 @@ export interface CustomCommandEvent {
 
 /** @public */
 export type DependencyDeletedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type DependencyInsertedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
 };
 
@@ -107,107 +97,82 @@ export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 
 /** @public */
 export type ResourceAssignedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
 };
 
 /** @public */
 export type ResourceDeletedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type ResourceInsertedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
 };
 
 /** @public */
 export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly selectedRowKey?: any;
 };
 
 /** @public */
 export type TaskClickEvent = NativeEventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data?: any;
 };
 
 /** @public */
 export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly data?: any;
 };
 
 /** @public */
 export type TaskDeletedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
     readonly readOnlyFields?: Array<string>;
     readonly hiddenFields?: Array<string>;
@@ -215,66 +180,48 @@ export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
 
 /** @public */
 export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: Array<any>;
 };
 
 /** @public */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
 };
 
 /** @public */
 export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly newValues: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type TaskUpdatedEvent = EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any;
 };
 
 /** @public */
 export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly newValues: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly values: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly key: any
 };
 
 /** @public */
 export interface TaskContentTemplateData {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly cellSize: any;
     readonly isMilestone: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly taskData: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly taskHTML: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly taskPosition: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly taskResources: Array<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly taskSize: any;
 }
 
@@ -316,7 +263,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
@@ -777,7 +723,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
@@ -810,7 +755,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
@@ -835,7 +779,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     selectedRowKey?: any;
     /**
      * @docid
@@ -884,7 +827,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
       /**
        * @docid
@@ -982,7 +924,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default 0
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rootValue?: any;
 }
 /**
@@ -1121,7 +1062,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVisibleTaskKeys(): Array<any>;
     /**
      * @docid
@@ -1129,7 +1069,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVisibleDependencyKeys(): Array<any>;
     /**
      * @docid
@@ -1137,7 +1076,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVisibleResourceKeys(): Array<any>;
     /**
      * @docid
@@ -1145,7 +1083,6 @@ export default class dxGantt extends Widget<dxGanttOptions> {
      * @return Array<object>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVisibleResourceAssignmentKeys(): Array<any>;
     /**
      * @docid

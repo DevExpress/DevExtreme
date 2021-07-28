@@ -114,7 +114,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @default 'panel'
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     template?: template | ((Element: DxElement) => any);
 }
 /**

@@ -91,7 +91,6 @@ export type ValueChangedEvent = NativeEventInfo<dxDropDownBox> & ValueChangedInf
 /** @public */
 export interface ContentTemplateData {
     component: dxDropDownBox;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly value?: any;
 }
 
@@ -125,7 +124,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @default null
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
@@ -133,7 +131,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_return string
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayValueFormatter?: ((value: string | Array<any>) => string);
     /**
      * @docid
@@ -143,13 +140,11 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_return string|Element|jQuery
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     items?: Array<any>;
     /**
      * @docid
