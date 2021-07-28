@@ -15,7 +15,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
+import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent, isObject } from '../../core/utils/type';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -291,6 +291,7 @@ const Overlay = Widget.inherit({
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._scrollHandler = (e => { this._targetParentsScrollHandler(e); });
         this._initResizeObserver();
+        this._updateResizeCallbackSkipCondition();
     },
 
     _initOptions: function(options) {
@@ -343,12 +344,40 @@ const Overlay = Widget.inherit({
         }
 
         this._resizeObserver = new ResizeObserver({
-            callback: () => { this._renderGeometry(); },
-            shouldSkipCallback: (entries) => {
-                const contentRect = entries[0].contentRect;
-                return contentRect.width === this._renderedDimensions?.width
-                    && contentRect.height === this._renderedDimensions?.height;
-            }
+            callback: () => {
+                this._renderGeometry({ shouldOnlyReposition: true });
+            },
+            shouldSkipCallback: (entries) => this._shouldSkipResizeCallback(entries)
+        });
+    },
+
+    _areContentDimensionsRendered: function(entries) {
+        const contentBox = entries[0].contentBoxSize?.[0];
+        if(contentBox) {
+            return parseInt(contentBox.inlineSize, 10) === this._renderedDimensions?.width
+                    && parseInt(contentBox.blockSize, 10) === this._renderedDimensions?.height;
+        }
+
+        const contentRect = entries[0].contentRect;
+        return parseInt(contentRect.width, 10) === this._renderedDimensions?.width
+                && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
+    },
+
+    _updateResizeCallbackSkipCondition() {
+        const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
+
+        this._shouldSkipResizeCallback = (entries) => {
+            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                || this._areContentDimensionsRendered(entries);
+        };
+    },
+
+    _doesShowAnimationChangeDimensions: function() {
+        const animation = this.option('animation');
+
+        return ['to', 'from'].some(prop => {
+            const config = animation?.show?.[prop];
+            return isObject(config) && ('width' in config || 'height' in config);
         });
     },
 
@@ -1012,6 +1041,7 @@ const Overlay = Widget.inherit({
 
         width && this._setOptionWithoutOptionChange('width', width);
         height && this._setOptionWithoutOptionChange('height', height);
+        this._renderGeometry();
 
         this._actions.onResizeEnd(e);
     },
@@ -1111,13 +1141,16 @@ const Overlay = Widget.inherit({
 
     _changePosition: function(offset) {
         const position = locate(this._$content);
-
-        move(this._$content, {
+        const resultPosition = {
             left: position.left + offset.left,
             top: position.top + offset.top
-        });
+        };
+
+        move(this._$content, resultPosition);
 
         this._positionChangeHandled = true;
+
+        return { h: { location: resultPosition.left }, v: { location: resultPosition.top } };
     },
 
     _allowedOffsets: function() {
@@ -1171,7 +1204,12 @@ const Overlay = Widget.inherit({
             const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && _observeContentResize;
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
-            this._renderGeometryImpl();
+            this._stopAnimation();
+            if(options?.shouldOnlyReposition) {
+                this._positionContent();
+            } else {
+                this._renderGeometryImpl();
+            }
 
             if(shouldRepeatAnimation) {
                 this._animateShowing();
@@ -1186,20 +1224,17 @@ const Overlay = Widget.inherit({
         }
 
         this._renderedDimensions = {
-            width: this._$content.width(),
-            height: this._$content.height()
+            width: parseInt(this._$content.width(), 10),
+            height: parseInt(this._$content.height(), 10)
         };
     },
 
     _renderGeometryImpl: function() {
-        this._stopAnimation();
         this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
-        const resultPosition = this._renderPosition();
-
-        this._actions.onPositioned({ position: resultPosition });
+        this._positionContent();
     },
 
     _styleWrapperPosition: function() {
@@ -1305,10 +1340,12 @@ const Overlay = Widget.inherit({
     },
 
     _renderPosition: function() {
+        let resultPosition;
+
         if(this._positionChangeHandled) {
             const allowedOffsets = this._allowedOffsets();
 
-            this._changePosition({
+            resultPosition = this._changePosition({
                 top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
                 left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
             });
@@ -1318,8 +1355,15 @@ const Overlay = Widget.inherit({
 
             resetPosition(this._$content);
 
-            return positionUtils.setup(this._$content, position);
+            resultPosition = positionUtils.setup(this._$content, position);
         }
+        return resultPosition;
+    },
+
+    _positionContent: function() {
+        const resultPosition = this._renderPosition();
+
+        this._actions.onPositioned({ position: resultPosition });
     },
 
     _getPositionOptions: function(positionAliases) {
@@ -1496,9 +1540,11 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
-            case 'animation':
             case 'propagateOutsideClick':
             case '_observeContentResize':
+                break;
+            case 'animation':
+                this._updateResizeCallbackSkipCondition();
                 break;
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;

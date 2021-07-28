@@ -635,7 +635,7 @@ const Popup = Overlay.inherit({
                 maxHeight: ''
             });
         } else {
-            this.callBase(...arguments);
+            this.callBase();
         }
         if(hasWindow()) {
             this._renderFullscreenWidthClass();
@@ -656,6 +656,8 @@ const Popup = Overlay.inherit({
                 top: 0,
                 left: 0
             });
+
+            return { h: { location: 0 }, v: { location: 0 } };
         } else {
             (this.option('forceApplyBindings') || noop)();
 

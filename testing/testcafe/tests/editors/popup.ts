@@ -106,3 +106,28 @@ test('There should not be any errors when position.of is html (T946851)', async 
   await t
     .expect(true).ok();
 });
+
+fixture`Popup width/height animation`
+  .page(url(__dirname, './pages/popupSizesAnimation.html'))
+  .beforeEach(async (t) => { await t.wait(10000); });
+
+test('Popup dimensions should be correct after width or height animation', async (t) => {
+  const popup = new Popup('#popup');
+  const { content } = popup;
+
+  const contentRect: { width: number; height: number } = {
+    width: 0, height: 0,
+  };
+
+  await asyncForEach(['width', 'height'], async (prop) => {
+    contentRect[prop] = await content.getBoundingClientRectProperty(prop);
+  });
+
+  await t
+    .expect(contentRect.width)
+    .eql(300);
+
+  await t
+    .expect(contentRect.height)
+    .eql(300);
+});

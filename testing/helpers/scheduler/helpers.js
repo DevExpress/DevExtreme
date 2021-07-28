@@ -107,7 +107,7 @@ export const execAsync = (assert, promise, beforeAssertCallback, assertCallback,
 
         return new Promise((resolve, reject) => {
 
-            const execCallback = func => {
+            const execCallback = (func) => {
                 try {
                     func();
                 } catch(e) {
@@ -145,7 +145,7 @@ export const asyncScrollTest = (assert, promise, assertCallback, scrollable, off
 export const asyncAssert = (assert, assertCallback, timeout) => {
     return asyncWrapper(assert, promise => {
 
-        execAsync(assert, promise, null, assertCallback, timeout);
+        execAsync(assert, promise, null, assertCallback, timeout); // TODO shoud return promise from the execAsync
 
         return promise;
     });
@@ -491,11 +491,19 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
             },
 
-            click: (index = 0) => {
-                this.clock = sinon.useFakeTimers();
-                this.appointments.getAppointment(index).trigger('dxclick');
-                this.clock.tick(300);
-                this.clock.restore();
+            click: (index = 0, isAsync = false) => {
+                const click = () => this.appointments.getAppointment(index).trigger('dxclick');
+
+                if(isAsync) {
+                    click();
+                } else {
+                    const clock = sinon.useFakeTimers();
+
+                    click();
+
+                    clock.tick(300);
+                    clock.restore();
+                }
             },
 
             dblclick: (index = 0) => {

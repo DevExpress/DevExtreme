@@ -1184,6 +1184,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttSortingMode
+ * @enum {'multiple'|'none'|'single'}
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
  */

@@ -239,10 +239,6 @@ const subscribes = {
         return this.getWorkSpace().getCellHeight();
     },
 
-    getRenderingStrategy: function() {
-        return this._getAppointmentsRenderingStrategy();
-    },
-
     getMaxAppointmentCountPerCellByType: function(isAllDay) {
         return this.getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
     },
@@ -365,10 +361,6 @@ const subscribes = {
 
     getEndViewDate: function() {
         return this.getEndViewDate();
-    },
-
-    getMaxAppointmentsPerCell: function() {
-        return this.getMaxAppointmentsPerCell();
     },
 
     forceMaxAppointmentPerCell: function() {

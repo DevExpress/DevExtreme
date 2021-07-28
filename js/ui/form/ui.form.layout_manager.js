@@ -36,7 +36,6 @@ import {
     FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
-    FIELD_BUTTON_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
@@ -45,7 +44,7 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText } from './ui.form.utils';
+import { renderLabel, renderHelpText, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -556,48 +555,29 @@ const LayoutManager = Widget.inherit({
             .html('&nbsp;');
     },
 
-    _getButtonHorizontalAlignment: function(item) {
-        if(isDefined(item.horizontalAlignment)) {
-            return item.horizontalAlignment;
-        }
-
-        return 'right';
-    },
-
-    _getButtonVerticalAlignment: function(item) {
-        switch(item.verticalAlignment) {
-            case 'center':
-                return 'center';
-            case 'bottom':
-                return 'flex-end';
-            default:
-                return 'flex-start';
-        }
-    },
-
     _renderButtonItem: function(item, $container) {
-        const $button = $('<div>').appendTo($container);
-        const defaultOptions = {
-            validationGroup: this.option('validationGroup')
-        };
+        // TODO: try to create $container in this function and return it
+        adjustContainerAsButtonItem({
+            $container,
+            justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
+            textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+            cssItemClass: this.option('cssItemClass'),
+            targetColIndex: item.col
+        });
 
-        $container
-            .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css('textAlign', this._getButtonHorizontalAlignment(item));
+        const $button = $('<div>');
+        $container.append($button);
+        const buttonWidget = this._createComponent(
+            $button, 'dxButton',
+            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions));
 
-        $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
-
-        const instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
-
+        // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance,
+            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });
-        this._addItemClasses($container, item.col);
-
-        return $button;
     },
 
     _addItemClasses: function($item, column) {
