@@ -21,6 +21,7 @@ export interface InitializedEventInfo<T> {
 /** @public */
 export interface EventInfo<T> {
     readonly component: T;
+    readonly element: DxElement;
     readonly model?: any;
 }
 

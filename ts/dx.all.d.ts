@@ -3090,6 +3090,7 @@ declare module DevExpress.events {
   export type event = DxEvent;
   export interface EventInfo<T> {
     readonly component: T;
+    readonly element: DevExpress.core.DxElement;
     readonly model?: any;
   }
   /**
