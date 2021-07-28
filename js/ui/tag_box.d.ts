@@ -94,7 +94,6 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
 };
 
 /** @public */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
 
 /** @public */
