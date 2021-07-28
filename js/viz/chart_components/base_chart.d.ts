@@ -335,7 +335,6 @@ export class BaseChart<TProperties> extends BaseWidget<TProperties> {
      * @return chartSeriesObject
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     getSeriesByName(seriesName: any): chartSeriesObject;
     /**
      * @docid
@@ -364,7 +363,6 @@ export class BaseChart<TProperties> extends BaseWidget<TProperties> {
      * @param1 renderOptions:object
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     render(renderOptions: any): void;
 }
 

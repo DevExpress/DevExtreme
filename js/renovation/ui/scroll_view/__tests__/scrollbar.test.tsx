@@ -99,8 +99,8 @@ describe('Scrollbar', () => {
 
                       expect(viewModel.isVisible).toEqual(expectedScrollbarVisibility);
 
-                      // eslint-disable-next-line @typescript-eslint/init-declarations
-                      let expectedScrollVisibility: boolean | undefined;
+                      // eslint-disable-next-line no-undef-init
+                      let expectedScrollVisibility: boolean | undefined = undefined;
 
                       if (!expectedScrollbarVisibility) {
                         expectedScrollVisibility = false;

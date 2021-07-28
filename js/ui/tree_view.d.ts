@@ -390,7 +390,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     collapseItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -407,7 +406,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     collapseItem(key: any): DxPromise<void>;
     /**
      * @docid
@@ -422,7 +420,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     expandItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -439,7 +436,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     expandItem(key: any): DxPromise<void>;
     /**
      * @docid
@@ -475,7 +471,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     selectItem(itemData: any): boolean;
     /**
      * @docid
@@ -492,7 +487,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     selectItem(key: any): boolean;
     /**
      * @docid
@@ -507,7 +501,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     unselectItem(itemData: any): boolean;
     /**
      * @docid
@@ -524,7 +517,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     unselectItem(key: any): boolean;
     /**
      * @docid
@@ -540,7 +532,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     scrollToItem(itemData: any): DxPromise<void>;
     /**
      * @docid
@@ -557,7 +548,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     scrollToItem(key: any): DxPromise<void>;
 }
 

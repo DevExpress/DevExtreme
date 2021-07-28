@@ -989,7 +989,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     addRow(parentId: any): DxPromise<void>;
     /**
      * @docid
@@ -998,7 +997,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     collapseRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -1007,7 +1005,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     expandRow(key: any): DxPromise<void>;
     /**
      * @docid
@@ -1098,7 +1095,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return boolean
      * @public
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     isRowExpanded(key: any): boolean;
     /**
      * @docid
@@ -1129,10 +1125,8 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     byKey(key: any | string | number): DxPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     cellValue(rowIndex: number, dataField: string, value: any): void;
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
     clearFilter(): void;
     clearFilter(filterName: string): void;
@@ -1143,9 +1137,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     columnCount(): number;
     columnOption(id: number | string): any;
     columnOption(id: number | string, optionName: string): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     columnOption(id: number | string, optionName: string, optionValue: any): void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
@@ -1155,11 +1147,8 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     expandAdaptiveDetailRow(key: any): void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     filter(): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     filter(filterExpr: any): void;
     focus(): void;
     focus(element: UserDefinedElement): void;
@@ -1175,15 +1164,10 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     isAdaptiveDetailRowExpanded(key: any): boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     isRowFocused(key: any): boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     isRowSelected(key: any): boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     keyOf(obj: any): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     navigateToRow(key: any): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
@@ -1200,7 +1184,6 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
     showColumnChooser(): void;
     state(): any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;

@@ -13,11 +13,8 @@ declare namespace cldr {
     }
 
     interface CldrFactory {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         on(event: string, listener: (path: string, value: any) => void): void;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         once(event: string, listener: (path: string, value: any) => void): void;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         off(event: string, listener: (path: string, value: any) => void): void;
     }
 }
