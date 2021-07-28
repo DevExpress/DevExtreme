@@ -784,7 +784,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const rows = dataGrid.getRowElement(0);
 
-        assert.equal(Math.floor($(rows[0]).find('td').eq(0).width()), Math.floor($(rows[1]).find('td').eq(0).width()), 'widths are equal');
+        assert.roughEqual(Math.floor($(rows[0]).find('td').eq(0).width()), Math.floor($(rows[1]).find('td').eq(0).width()), 1.01, 'widths are equal');
         assert.notOk($('.dx-command-edit').eq(1).hasClass('dx-hidden-cell'), 'cell does not have class dx-hidden-cell');
     });
 
