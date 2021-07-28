@@ -5559,7 +5559,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         helper.extendExpectedCells(expectedCells, topLeft);
         exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
             helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 4, column: 4 }, topLeft);
-            helper.checkColumnWidths(helper.toExcelWidths(helper.getAllRealColumnWidths(pivotGrid)), topLeft.column);
+            helper.checkColumnWidths(helper.toExcelWidths([70, 71, ...helper.getColumnsAreaColumnWidths(pivotGrid)]), topLeft.column);
             helper.checkCellStyle(expectedCells);
             helper.checkValues(expectedCells);
             helper.checkMergeCells(expectedCells, topLeft);
