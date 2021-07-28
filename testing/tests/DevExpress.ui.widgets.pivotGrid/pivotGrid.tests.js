@@ -2724,7 +2724,6 @@ QUnit.module('dxPivotGrid', {
     });
 
     QUnit.test('Group height should take into account horizontal scrollbar height', function(assert) {
-    // act
         $('#pivotGrid').width(300).height(900);
         this.testOptions.scrolling = {
             useNative: false
@@ -2857,7 +2856,7 @@ QUnit.module('dxPivotGrid', {
         assertFunction = function() {
             assert.deepEqual(setViewportPosition.lastCall.args, [10, 0]);
         };
-        // act1
+
         scrollable.scrollTo({ left: 10 });
 
         assertFunction = function() {
@@ -2866,7 +2865,7 @@ QUnit.module('dxPivotGrid', {
             scrollable.off('scroll', scrollFunction);
             done();
         };
-        // act2
+
         scrollable.scrollTo({ left: 10, top: 1 });
     });
 
@@ -3448,8 +3447,6 @@ QUnit.module('dxPivotGrid', {
         const updateWindowScrollPosition = sinon.spy(pivotGrid._dataController, 'updateWindowScrollPosition');
 
         scrollable.on('scroll', assertFunction);
-
-        // act2
         scrollable.scrollTo({ left: 10, top: 1 });
 
         function assertFunction() {
@@ -3707,7 +3704,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid);
         const columnsArea = pivotGrid._columnsArea;
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
 
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -3783,7 +3780,7 @@ QUnit.module('dxPivotGrid', {
         const columnsArea = pivotGrid._columnsArea;
 
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
         assert.ok(pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -3974,7 +3971,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid);
         const columnsArea = pivotGrid._columnsArea;
         assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
-        assert.ok(columnsArea._groupWidth);
+        assert.ok(columnsArea.getGroupWidth());
         assert.ok(!pivotGrid._rowsArea.hasScroll());
 
         const columnsWidth = sumArray(columnsArea.getColumnsWidth());
@@ -5141,6 +5138,7 @@ QUnit.module('Tests with stubs', {
     QUnit.test('Virtual Scrolling', function(assert) {
         this.dataArea.getColumnsWidth.returns([20, 40, 60, 20]);
         this.dataArea.getRowsHeight.returns([43, 23, 34]);
+        this.dataArea.getScrollableDirection.returns('both');
         this.verticalArea.getRowsHeight.returns([30, 28]);
 
         this.horizontalArea.groupElement().height(25);
@@ -5152,7 +5150,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             height: 300,
             scrolling: {
@@ -5194,8 +5192,8 @@ QUnit.module('Tests with stubs', {
             virtualRowHeight: 50
         });
 
-        assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
+        assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
+        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], { direction: 'both', rtlEnabled: false, useNative: false, useSimulatedScrollbar: true });
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 71);
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 71);
         assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
@@ -5206,6 +5204,7 @@ QUnit.module('Tests with stubs', {
         this.dataArea.getColumnsWidth.returns([20, 40, 60, 20]);
         this.dataArea.getRowsHeight.returns([43, 23, 34]);
         this.verticalArea.getRowsHeight.returns([30, 28]);
+        this.dataArea.getScrollableDirection.returns('both');
 
         this.horizontalArea.groupElement().height(25);
 
@@ -5216,7 +5215,7 @@ QUnit.module('Tests with stubs', {
             contentTop: 15
         }).reset();
 
-        const pivotGrid = createPivotGrid({
+        createPivotGrid({
             dataSource: this.testOptions.dataSource,
             scrolling: {
                 mode: 'virtual'
@@ -5257,8 +5256,8 @@ QUnit.module('Tests with stubs', {
             virtualRowHeight: 50
         });
 
-        assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
+        assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
+        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], { direction: 'both', rtlEnabled: false, useNative: false, useSimulatedScrollbar: true });
 
         assert.strictEqual(this.dataArea.setGroupHeight.lastCall.args[0], 'auto');
         assert.strictEqual(this.verticalArea.setGroupHeight.lastCall.args[0], 'auto');
@@ -5794,7 +5793,7 @@ QUnit.module('headersArea', {
         area.setGroupWidth(200);
         area.setColumnsWidth([100, 120, 300]);
 
-        area.processScroll();
+        area.renderScrollable();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo(scrollPos);
@@ -5917,7 +5916,7 @@ QUnit.module('Vertical headers', {
         area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(true);
+        area.renderScrollable(true);
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo(scrollPos);
@@ -5955,7 +5954,7 @@ QUnit.module('Vertical headers', {
         area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll();
+        area.renderScrollable();
 
 
         area.on('scroll', scrollHandler);
@@ -5979,7 +5978,7 @@ QUnit.module('Vertical headers', {
         area.setGroupHeight(300);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll();
+        area.renderScrollable();
 
         area.on('scroll', scrollHandler);
         area.off('scroll', scrollHandler);
@@ -7103,7 +7102,7 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
-        area.processScroll();
+        area.renderScrollable({});
 
         const virtualContent = area.tableElement().prev();
 
@@ -7133,7 +7132,7 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
-        area.processScroll();
+        area.renderScrollable({});
 
         area.reset();
 
@@ -7178,7 +7177,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.renderScrollable(false);
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: scrollPos, y: 0 });
@@ -7247,7 +7246,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.renderScrollable(false);
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: scrollPos, y: 0 });
@@ -7318,7 +7317,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(false);
+        area.renderScrollable(false);
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });
@@ -7389,7 +7388,7 @@ QUnit.module('Data area', () => {
         area.setColumnsWidth([100, 120, 300]);
         area.setRowsHeight([100, 120, 300]);
 
-        area.processScroll(0, true, true, false);
+        area.renderScrollable(0, true, true, false);
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
             area.scrollTo({ x: 0, y: scrollPos });

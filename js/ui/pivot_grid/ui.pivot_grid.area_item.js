@@ -3,7 +3,7 @@ import Class from '../../core/class';
 import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isNumeric } from '../../core/utils/type';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -59,6 +59,14 @@ export { getRealElementWidth };
 ///#ENDDEBUG
 
 export const AreaItem = Class.inherit({
+    ctor: function(component) {
+        this.component = component;
+    },
+
+    option: function() {
+        return this.component.option.apply(this.component, arguments);
+    },
+
     _getRowElement: function(index) {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -289,14 +297,6 @@ export const AreaItem = Class.inherit({
         }
     },
 
-    ctor: function(component) {
-        this.component = component;
-    },
-
-    option: function() {
-        return this.component.option.apply(this.component, arguments);
-    },
-
     getRowsLength: function() {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -402,23 +402,29 @@ export const AreaItem = Class.inherit({
     },
 
     setGroupWidth: function(value) {
-        if(value >= 0) {
-            this._groupWidth = value;
-            this._groupElement[0].style.width = value + 'px';
-        } else {
-            this._groupElement[0].style.width = value;
-        }
+        this.groupElement()[0].style.width = isNumeric(value) ? `${value}px` : value;
     },
 
     setGroupHeight: function(value) {
-        this._groupHeight = null;
+        this.groupElement()[0].style.height = isNumeric(value) ? `${value}px` : value;
+    },
 
-        if(value >= 0) {
-            this._groupHeight = value;
-            this._groupElement[0].style.height = value + 'px';
-        } else {
-            this._groupElement[0].style.height = value;
+    getGroupHeight: function() {
+        return this._getGroupElementSize('height');
+    },
+
+    getGroupWidth: function() {
+        return this._getGroupElementSize('width');
+    },
+
+    _getGroupElementSize(dimension) {
+        const size = this.groupElement()[0].style[dimension];
+
+        if(size.indexOf('px') >= 0) {
+            return Number(size.replace('px', ''));
         }
+
+        return null;
     },
 
     groupElement: function() {
@@ -506,7 +512,7 @@ export const AreaItem = Class.inherit({
         const rtlEnabled = that.option('rtlEnabled');
         const offsetStyleName = rtlEnabled ? 'right' : 'left';
         const tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]);
-        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
+        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that.getGroupWidth());
         if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
             that._fakeTable[0].style[offsetStyleName] = offset + 'px';
         }
@@ -515,7 +521,7 @@ export const AreaItem = Class.inherit({
     _moveFakeTableTop: function(scrollPos) {
         const that = this;
         const tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top);
-        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
+        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that.getGroupHeight());
 
         if(parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
             that._fakeTable[0].style.top = offsetTop + 'px';
