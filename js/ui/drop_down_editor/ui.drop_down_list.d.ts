@@ -27,7 +27,6 @@ import dxDropDownEditor, {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;
 }

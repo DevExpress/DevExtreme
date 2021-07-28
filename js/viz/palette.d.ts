@@ -48,7 +48,6 @@ export function generateColors(palette: PaletteType | Array<string>, count: numb
  * @export getPalette
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getPalette(paletteName: string): any;
 
 /**
@@ -61,5 +60,4 @@ export function getPalette(paletteName: string): any;
  * @export registerPalette
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function registerPalette(paletteName: string, palette: any): void;

@@ -22,7 +22,6 @@ declare function notify(message: string, type?: string, displayTime?: number): v
  * @export default
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare function notify(options: any, type?: string, displayTime?: number): void;
 
 export default notify;

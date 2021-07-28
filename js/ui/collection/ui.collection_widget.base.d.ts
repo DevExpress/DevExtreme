@@ -23,7 +23,6 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface SelectionChangedInfo<T = any> {
     readonly addedItems: Array<T>;
     readonly removedItems: Array<T>;

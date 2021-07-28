@@ -42,7 +42,6 @@ export function currentTheme(theme: string): void;
  * @export getTheme
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getTheme(theme: string): any;
 
 /**
@@ -65,5 +64,4 @@ export function refreshTheme(): void;
  * @export registerTheme
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function registerTheme(customTheme: any, baseTheme: string): void;
