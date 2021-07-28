@@ -2,6 +2,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
 import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
+import { calculateRowHeight } from './pdf_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -55,7 +56,11 @@ function exportDataGrid(doc, dataGrid, options) {
                     pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
-                let rowHeight = currentRowInfo.rowHeight; // TODO: Default Value
+                let rowHeight = isDefined(currentRowInfo.rowHeight)
+                    ? currentRowInfo.rowHeight
+                    : calculateRowHeight(doc, currentRowInfo.cellsInfo, options.columnWidths);
+
+
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);
