@@ -49,7 +49,7 @@ QUnit.module('Resize observer', () => {
             setTimeout(() => {
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.shouldSkipCallback.called);
+                    assert.strictEqual(this.shouldSkipCallback.callCount, 2, 'shouldSkipCallback was called before each callback');
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
@@ -67,7 +67,7 @@ QUnit.module('Resize observer', () => {
             setTimeout(() => {
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.callback.notCalled);
+                    assert.strictEqual(this.callback.callCount, 0, 'callback was not called');
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
@@ -112,7 +112,7 @@ QUnit.module('Resize observer', () => {
                 this.observer.unobserve(this.$element.get(0));
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.callback.calledOnce, 'called only on "observe" method invoke');
+                    assert.strictEqual(this.callback.callCount, 1, 'called only on "observe" method invoke');
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
@@ -129,7 +129,7 @@ QUnit.module('Resize observer', () => {
             setTimeout(() => {
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.callback.calledOnce, 'called only on "observe" method invoke');
+                    assert.strictEqual(this.callback.callCount, 1, 'called only on "observe" method invoke');
                     resizeHandled();
                 }, TIME_TO_WAIT);
                 observeHandled();
