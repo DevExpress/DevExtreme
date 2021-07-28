@@ -156,7 +156,7 @@ interface dxPivotGridSummaryCell {
 }
 
 /** @namespace DevExpress.data */
-interface PivotGridDataSourceOptions {
+export interface PivotGridDataSourceOptions {
     /**
      * @docid
      * @type Array<Object>
@@ -244,7 +244,7 @@ export type Field = PivotGridDataSourceField;
  * @namespace DevExpress.data
  * @deprecated Use Field instead
  */
-interface PivotGridDataSourceField {
+export interface PivotGridDataSourceField {
     /**
      * @docid PivotGridDataSourceOptions.fields.allowCrossGroupCalculation
      * @default false

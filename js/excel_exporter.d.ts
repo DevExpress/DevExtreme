@@ -10,12 +10,11 @@ import { ExportLoadPanel } from './exporter/export_load_panel';
 export type DataGridCell = ExcelDataGridCell;
 
 /**
- * @docid
  * @namespace DevExpress.excelExporter
  * @type object
  * @deprecated Use DataGridCell instead
  */
-interface ExcelDataGridCell {
+export interface ExcelDataGridCell {
     /**
      * @docid
      * @public
@@ -70,12 +69,10 @@ interface ExcelDataGridCell {
 export type PivotGridCell = ExcelPivotGridCell;
 
 /**
- * @docid
  * @namespace DevExpress.excelExporter
- * @inherits dxPivotGridPivotGridCell
  * @deprecated Use PivotGridCell instead
  */
-interface ExcelPivotGridCell extends Cell {
+export interface ExcelPivotGridCell extends Cell {
     /**
      * @docid
      * @public

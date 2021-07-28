@@ -13,7 +13,8 @@ import {
 
 import PivotGridDataSource, {
     Field,
-    PivotGridDataSourceOptions
+    PivotGridDataSourceOptions,
+    dxPivotGridSummaryCell as SummaryCell
 } from './pivot_grid/data_source';
 
 import dxPopup from './popup';
@@ -742,7 +743,7 @@ export type Cell = dxPivotGridPivotGridCell;
  * @namespace DevExpress.ui
  * @deprecated Use Cell instead
  */
-interface dxPivotGridPivotGridCell {
+export interface dxPivotGridPivotGridCell {
     /**
      * @docid
      * @public
@@ -800,6 +801,8 @@ interface dxPivotGridPivotGridCell {
      */
     value?: any;
 }
+
+export type dxPivotGridSummaryCell = SummaryCell;
 
 /** @public */
 export type Properties = dxPivotGridOptions;

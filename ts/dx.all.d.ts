@@ -2174,7 +2174,7 @@ declare module DevExpress.data {
    * @deprecated Use Field instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface PivotGridDataSourceField {
+  export interface PivotGridDataSourceField {
     /**
      * [descr:PivotGridDataSourceOptions.fields.allowCrossGroupCalculation]
      */
@@ -2352,7 +2352,7 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface PivotGridDataSourceOptions {
+  export interface PivotGridDataSourceOptions {
     /**
      * [descr:PivotGridDataSourceOptions.fields]
      */
@@ -2978,11 +2978,10 @@ declare module DevExpress.excelExporter {
   }
   export type DataGridCell = ExcelDataGridCell;
   /**
-   * [descr:ExcelDataGridCell]
-   * @deprecated [depNote:ExcelDataGridCell]
+   * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface ExcelDataGridCell {
+  export interface ExcelDataGridCell {
     /**
      * [descr:ExcelDataGridCell.column]
      */
@@ -3098,7 +3097,8 @@ declare module DevExpress.excelExporter {
    * @deprecated [depNote:ExcelPivotGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
+  export interface ExcelPivotGridCell
+    extends DevExpress.ui.dxPivotGridPivotGridCell {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
@@ -15713,7 +15713,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPivotGridPivotGridCell]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface dxPivotGridPivotGridCell {
+  export interface dxPivotGridPivotGridCell {
     /**
      * [descr:dxPivotGridPivotGridCell.columnPath]
      */
