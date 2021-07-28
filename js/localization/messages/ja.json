@@ -581,6 +581,9 @@
         "dxGantt-zoomIn": "拡大",
         "dxGantt-zoomOut": "縮小",
         "dxGantt-fullScreen": "全画面表示",
-        "dxGantt-quarter": "Q{0}"
+        "dxGantt-quarter": "Q{0}",
+        "dxGantt-sortingAscendingText": "昇順に並べ替え",
+        "dxGantt-sortingDescendingText": "降順に並べ替え",
+        "dxGantt-sortingClearText": "並べ替えをクリア"
     }
 }

@@ -271,11 +271,6 @@ class Gantt extends Widget {
                         this._ganttTreeList.onTaskInserted(insertedId, record.parentId);
                     }
                 });
-                if(isTaskInsert) {
-                    setTimeout(() => {
-                        this._sizeHelper.updateGanttRowHeights();
-                    }, 300);
-                }
                 this._actionsManager.raiseInsertedAction(optionName, data, insertedId);
             });
         }
@@ -311,9 +306,27 @@ class Gantt extends Widget {
         this._actionsManager.raiseUpdatedAction(GANTT_TASKS, mappedData, data.id);
     }
     _onParentTasksRecalculated(data) {
-        const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
-        const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
-        this._ganttTreeList?.setOption('dataSource', treeDataSource);
+        if(!this.isSorting) {
+            const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
+            const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
+            this._ganttTreeList?.setOption('dataSource', treeDataSource);
+        }
+        this.isSorting = false;
+    }
+
+    _sort() {
+        const columns = this._treeList.getVisibleColumns();
+        const sortColumn = columns.filter(c => c.sortIndex === 0)[0];
+        const isClearSorting = (this.sortColumn && !sortColumn);
+
+        if(sortColumn || isClearSorting) {
+            const sortedItems = this._ganttTreeList.getSortedItems();
+            const sortOptions = { sortedItems: sortedItems, sortColumn: sortColumn };
+            this.isSorting = !isClearSorting;
+            this._setGanttViewOption('sorting', isClearSorting ? undefined : sortOptions);
+        }
+
+        this.sortColumn = sortColumn;
     }
 
     _getToolbarItems() {

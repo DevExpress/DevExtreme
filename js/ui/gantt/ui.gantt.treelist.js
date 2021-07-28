@@ -26,7 +26,7 @@ export class GanttTreeList {
             width: this._gantt.option('taskListWidth'),
             selection: { mode: GanttHelper.getSelectionMode(this._gantt.option('allowSelection')) },
             selectedRowKeys: GanttHelper.getArrayFromOneElement(this._gantt.option('selectedRowKey')),
-            sorting: { mode: 'none' },
+            sorting: this._gantt.option('sorting'),
             scrolling: { showScrollbar: 'onHover', mode: 'virtual' },
             allowColumnResizing: true,
             autoExpandAll: true,
@@ -65,6 +65,8 @@ export class GanttTreeList {
             this._gantt._initGanttView();
             this._initScrollSync(e.component);
         }
+        this._gantt._sort();
+        this._gantt._sizeHelper.updateGanttRowHeights();
     }
 
     _onSelectionChanged(e) {
@@ -89,6 +91,9 @@ export class GanttTreeList {
     }
 
     _onContextMenuPreparing(e) {
+        if(e.target === 'header') {
+            return;
+        }
         if(e.row?.rowType === 'data') {
             this.setOption('selectedRowKeys', [e.row.data[this._gantt.option('tasks.keyExpr')]]);
         }
@@ -200,6 +205,18 @@ export class GanttTreeList {
             }
         }
         return columns;
+    }
+
+    getSortedItems() {
+        const rootNode = this._treeList.getRootNode();
+        if(!rootNode) { return undefined; }
+        const resultArray = GanttHelper.convertTreeToList(rootNode);
+
+        const getters = GanttHelper.compileGettersByOption(this._gantt.option(GANTT_TASKS));
+        const validatedData = this._gantt._validateSourceData(GANTT_TASKS, resultArray);
+        const mappedData = validatedData.map(GanttHelper.prepareMapHandler(getters));
+
+        return mappedData;
     }
 
     setOption(optionName, value) {
