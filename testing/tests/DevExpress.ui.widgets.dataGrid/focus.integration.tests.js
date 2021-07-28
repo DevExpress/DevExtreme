@@ -3557,7 +3557,8 @@ QUnit.module('View\'s focus', {
         this.clock.tick();
 
         // assert
-        assert.strictEqual($checkbox.parent('td').css('background-color'), 'rgb(92, 149, 197)', 'cell is focused');
+        assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
+        assert.ok(!$checkbox.parent('td').hasClass('dx-focused'), 'cell is not focused');
     });
 
 
