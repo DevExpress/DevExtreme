@@ -579,6 +579,9 @@
         "dxGantt-zoomIn": "Увеличить масштаб",
         "dxGantt-zoomOut": "Уменьшить масштаб",
         "dxGantt-fullScreen": "Полноэкранный режим",
-        "dxGantt-quarter": "{0}-й кв."
+        "dxGantt-quarter": "{0}-й кв.",
+        "dxGantt-sortingAscendingText": "Сортировать по возрастанию",
+        "dxGantt-sortingDescendingText": "Сортировать по убыванию",
+        "dxGantt-sortingClearText": "Сбросить сортировку"
     }
 }
