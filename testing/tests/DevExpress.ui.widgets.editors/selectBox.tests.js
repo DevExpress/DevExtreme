@@ -3447,6 +3447,8 @@ QUnit.module('search should be canceled only after popup hide animation completi
 
 QUnit.module('search substitution', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
         this.testItem = 'abc';
 
         this.$selectBox = $('#selectBox').dxSelectBox({
@@ -3474,6 +3476,9 @@ QUnit.module('search substitution', {
             this._init();
         };
         this._init();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 }, () => {
     // T434197
@@ -3684,7 +3689,7 @@ QUnit.module('search substitution', {
             assert.ok(true, 'the test is not actual for non-desktop devices');
             return;
         }
-
+        const clock = sinon.useFakeTimers();
         const dataSource = [
             { id: 1, text: 'test1' },
             { id: 2, text: 'test2' },
@@ -3705,7 +3710,6 @@ QUnit.module('search substitution', {
 
         const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
 
-        const clock = sinon.useFakeTimers();
         try {
             listItem.trigger('dxpointerdown');
             clock.tick();
@@ -3809,24 +3813,29 @@ QUnit.module('Scrolling', {
             .css('left', 0)
             .css('top', 0);
 
-        const instance = $('.selectBoxScrolling').dxSelectBox({
-            dataSource: dataSource,
-            deferRendering: false,
-            value: 1,
-            width: 200
-        }).dxSelectBox('instance');
+        try {
+            const instance = $('.selectBoxScrolling').dxSelectBox({
+                dataSource: dataSource,
+                deferRendering: false,
+                value: 1,
+                width: 200
+            }).dxSelectBox('instance');
 
-        instance.option('opened', true);
+            instance.option('opened', true);
 
-        const listInstance = $('.dx-list').dxList('instance');
-        const scrollingDistance = 1000;
+            const listInstance = $('.dx-list').dxList('instance');
+            const scrollingDistance = 1000;
 
-        listInstance.scrollTo(scrollingDistance);
+            listInstance.scrollTo(scrollingDistance);
 
-        setTimeout(() => {
-            assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
-        }, 0);
-        this.clock.tick(0);
+            setTimeout(() => {
+                assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
+            }, 0);
+            this.clock.tick(0);
+        } finally {
+            $('#qunit-fixture')
+                .css({ left: '', top: '' });
+        }
     });
 });
 

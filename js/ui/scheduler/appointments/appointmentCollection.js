@@ -60,6 +60,12 @@ class SchedulerAppointments extends CollectionWidget {
         }
     }
 
+    _dispose() {
+        clearTimeout(this._appointmentClickTimeout);
+
+        super._dispose();
+    }
+
     _supportedKeys() {
         const parent = super._supportedKeys();
 
@@ -548,6 +554,7 @@ class SchedulerAppointments extends CollectionWidget {
                 {
                     ...config,
                     key: this.option('key'),
+                    getResizableStep: this.option('getResizableStep')
                 }
             );
         }

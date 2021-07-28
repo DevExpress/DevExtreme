@@ -108,15 +108,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     _getAppointmentMaxWidth() {
-        return this.getDefaultCellWidth();
+        return this.cellWidth;
     }
 
     _needVerifyItemSize() {
         return false;
-    }
-
-    _isRtl() {
-        return this.instance.option('rtlEnabled');
     }
 
     _getAppointmentParts() {
@@ -156,10 +152,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     getDropDownAppointmentWidth() {
-    }
-
-    getDefaultCellWidth() {
-        return this._defaultWidth;
     }
 
     getCollectorLeftOffset() {

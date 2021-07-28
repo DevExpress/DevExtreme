@@ -82,10 +82,10 @@ describe('CheckBox', () => {
     });
 
     it('should always render icon', () => {
-      const button = shallow(viewFunction({
+      const checkBox = shallow(viewFunction({
         props: {},
       } as CheckBox));
-      expect(button.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
+      expect(checkBox.find('.dx-checkbox-container .dx-checkbox-icon').exists()).toBe(true);
     });
 
     it('should pass all necessary properties to the Widget', () => {
@@ -198,6 +198,140 @@ describe('CheckBox', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
+
+      describe('updateIconFontSize', () => {
+        it('should set icon font size on init', () => {
+          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+          checkBox.iconRef = { current: { style: {} } } as any;
+          const icon = checkBox.iconRef.current;
+
+          checkBox.updateIconFontSize();
+
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        it('should change icon font size after runtime decreasing "iconWidth" option', () => {
+          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+          checkBox.iconRef = { current: { style: {} } } as any;
+          const icon = checkBox.iconRef.current;
+
+          checkBox.updateIconFontSize();
+          checkBox.props.iconWidth = 16;
+
+          checkBox.updateIconFontSize();
+
+          expect(icon?.style.fontSize).toEqual('12px');
+        });
+
+        it('should not change icon font size after runtime increasing "iconHeight" option', () => {
+          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+          checkBox.iconRef = { current: { style: {} } } as any;
+          const icon = checkBox.iconRef.current;
+
+          checkBox.updateIconFontSize();
+
+          checkBox.props.iconHeight = 44;
+
+          checkBox.updateIconFontSize();
+
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        it('should set default generic theme font-size if theme is not defined (e.g. in SSR)', () => {
+          (current as Mock).mockImplementation(() => undefined);
+          const checkBox = new CheckBox({
+            iconHeight: 22,
+            iconWidth: 22,
+          });
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          const icon = checkBox.iconRef.current;
+
+          checkBox.updateIconFontSize();
+
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        each(['material', 'generic', 'material-compact', 'generic-compact'])
+          .it('should set fontSize properly for "%s" theme when iconSize is defined', (theme) => {
+            (current as Mock).mockImplementation(() => theme);
+            let iconSize = theme === 'material' ? 18 : 22;
+            if (theme.includes('compact')) {
+              iconSize = 16;
+            }
+
+            const checkBox = new CheckBox({
+              iconHeight: iconSize,
+              iconWidth: iconSize,
+            });
+            checkBox.iconRef = React.createRef() as any;
+            checkBox.iconRef.current = {
+              style: {},
+            } as any;
+            const icon = checkBox.iconRef.current;
+
+            checkBox.updateIconFontSize();
+
+            const iconFontSizeRatio = theme.includes('compact') ? 12 / iconSize : 16 / iconSize;
+            const expectedValue = `${Math.ceil(iconFontSizeRatio * iconSize)}px`;
+
+            expect(icon?.style.fontSize).toEqual(expectedValue);
+          });
+
+        each(['material-compact', 'generic-compact', 'material', 'generic'])
+          .it('should set fontSize properly for "%s" theme when iconSize is undefined', (theme) => {
+            (current as Mock).mockImplementation(() => theme);
+            let iconSize = theme === 'material' ? 18 : 22;
+            if (theme.includes('compact')) {
+              iconSize = 16;
+            }
+            const originalGetComputedStyle = window.getComputedStyle;
+            Object.defineProperty(window, 'getComputedStyle', {
+              value: () => ({
+                width: iconSize,
+                height: iconSize,
+              }),
+            });
+            const checkBox = new CheckBox({});
+            checkBox.iconRef = React.createRef() as any;
+            checkBox.iconRef.current = {
+              offsetHeight: iconSize,
+              offsetWidth: iconSize,
+              style: {},
+            } as any;
+            const icon = checkBox.iconRef.current;
+
+            checkBox.updateIconFontSize();
+            window.getComputedStyle = originalGetComputedStyle;
+
+            const iconFontSizeRatio = theme.includes('compact') ? 12 / iconSize : 16 / iconSize;
+            const expectedValue = `${Math.ceil(iconFontSizeRatio * iconSize)}px`;
+
+            expect(icon?.style.fontSize).toEqual(expectedValue);
+          });
+
+        it("should correctly change icon font size if 'iconHeight'/'iconWidth' options are defined in pixels string", () => {
+          const originalGetComputedStyle = window.getComputedStyle;
+          Object.defineProperty(window, 'getComputedStyle', {
+            value: () => ({
+              width: '22px',
+              height: '22px',
+            }),
+          });
+          const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
+          window.getComputedStyle = originalGetComputedStyle;
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+      });
 
       describe('updateValidationMessageVisibility', () => {
         it('should set showValidationMessage to true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
@@ -366,6 +500,30 @@ describe('CheckBox', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
+      describe('icon styles', () => {
+        it('should have "width","height" styles', () => {
+          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+
+          checkBox.updateIconFontSize();
+
+          expect(checkBox.iconStyles).toMatchObject({ width: '22px', height: '22px' });
+        });
+
+        each([22, '22px'])
+          .it('should convert "%s" in "22px"', (value) => {
+            expect(new CheckBox({
+              iconHeight: value, iconWidth: value,
+            }).iconStyles).toMatchObject({ width: '22px', height: '22px' });
+          });
+
+        each(['50%', '1em', 'auto'])
+          .it('should apply "%s" as it is', (value) => {
+            expect(new CheckBox({
+              iconHeight: value, iconWidth: value, width: 44, height: 44,
+            }).iconStyles).toMatchObject({ width: value, height: value });
+          });
+      });
+
       describe('aria', () => {
         it('should have role = "checkbox"', () => {
           expect(new CheckBox({}).aria).toMatchObject({ role: 'checkbox' });

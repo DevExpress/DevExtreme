@@ -1,2 +1,1 @@
-import * as Export from './core/export';
-export default Export;
+export * from './core/export';

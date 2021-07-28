@@ -1,6 +1,7 @@
 import { isDefined } from '../../core/utils/type';
 import { ResourceManager } from './resources/resourceManager';
 import { AppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
+import { ModelProvider } from './modelProvider';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import timeZoneUtils from './utils.timeZone';
 
@@ -8,18 +9,23 @@ const Names = {
     timeZoneCalculator: 'timeZoneCalculator',
     resourceManager: 'resourceManager',
     appointmentDataProvider: 'appointmentDataProvider',
-    model: 'model'
+    model: 'model',
+    modelProvider: 'modelProvider'
 };
 
 const factoryInstances = { };
 
 let tailIndex = -1;
-export const createFactoryInstances = (options) => {
-    const key = isDefined(options.key)
-        ? options.key
+export const generateKey = (key) => {
+    return isDefined(key)
+        ? key
         : ++tailIndex;
+};
 
-    createModel(key, options.model);
+export const createFactoryInstances = (options) => {
+    const key = generateKey(options.key);
+
+    createModelProvider(key, options.model);
     const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
     const resourceManager = createResourceManager(key, options.resources);
     createAppointmentDataProvider(key, {
@@ -87,13 +93,19 @@ const createTimeZoneCalculator = (key, currentTimeZone) => {
     });
 };
 
-const createModel = (key, options) => {
+export const createModelProvider = (key, model) => {
     return createInstance(
-        Names.model,
+        Names.modelProvider,
         key,
-        () => options
+        () => {
+            const modelProvider = getInstance(Names.modelProvider, key);
+            return isDefined(modelProvider)
+                ? modelProvider
+                : new ModelProvider(model);
+        }
     );
 };
+
 
 export const disposeFactoryInstances = (key) => {
     Object.getOwnPropertyNames(Names).forEach((name) => {
@@ -104,4 +116,4 @@ export const disposeFactoryInstances = (key) => {
 export const getResourceManager = (key) => getInstance(Names.resourceManager, key);
 export const getAppointmentDataProvider = (key = 0) => getInstance(Names.appointmentDataProvider, key);
 export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
-export const getModel = (key) => getInstance(Names.model, key);
+export const getModelProvider = (key) => getInstance(Names.modelProvider, key);

@@ -7,7 +7,7 @@ import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'integration/knockout';
 
 QUnit.testStart(function() {
