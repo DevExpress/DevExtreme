@@ -443,7 +443,7 @@ const Popover = Popup.inherit({
     },
 
     _isPopoverInside: function() {
-        const position = this._getPositionOptions(POSITION_ALIASES);
+        const position = this._getPositionValue(POSITION_ALIASES);
 
         const my = positionUtils.setup.normalizeAlign(position.my);
         const at = positionUtils.setup.normalizeAlign(position.at);
@@ -475,7 +475,7 @@ const Popover = Popup.inherit({
     _normalizePosition: function() {
         const defaultOptions = { of: this.option('target'), boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
 
-        const position = extend(true, {}, defaultOptions, this._getPositionOptions(POSITION_ALIASES));
+        const position = extend(true, {}, defaultOptions, this._getPositionValue(POSITION_ALIASES));
 
         if(!this._isInitialOptionValue('position') && this._isInitialOptionValue('position.collision')) {
             position.collision = 'flip';

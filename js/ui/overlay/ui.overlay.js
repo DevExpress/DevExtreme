@@ -289,12 +289,16 @@ const Overlay = Widget.inherit({
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
-        this._scrollHandler = (e => { this._targetParentsScrollHandler(e); });
+        this._parentsScrollSubscriptionInfo = {
+            handler: (e => { this._targetParentsScrollHandler(e); })
+        };
+
         this._initResizeObserver();
         this._updateResizeCallbackSkipCondition();
     },
 
     _initOptions: function(options) {
+        this._setAnimationTarget(options.target);
         const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
 
@@ -303,6 +307,34 @@ const Overlay = Widget.inherit({
 
     _initInnerOverlayClass: function() {
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
+    },
+
+    _setAnimationTarget: function(target) {
+        if(!isDefined(target)) {
+            return;
+        }
+
+        const options = this.option();
+        [
+            'animation.show.from.position.of',
+            'animation.show.to.position.of',
+            'animation.hide.from.position.of',
+            'animation.hide.to.position.of'
+        ].forEach(path => {
+            const pathParts = path.split('.');
+
+            let option = options;
+            while(option) {
+                if(pathParts.length === 1) {
+                    if(isPlainObject(option)) {
+                        option[pathParts.shift()] = target;
+                    }
+                    break;
+                } else {
+                    option = option[pathParts.shift()];
+                }
+            }
+        });
     },
 
     _initContainer: function(container) {
@@ -500,46 +532,20 @@ const Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        const position = this.option('position');
         const defaultPositionOptions = {
             of: this.option('target'),
             boundaryOffset: DEFAULT_BOUNDARY_OFFSET
         };
-        if(isFunction(position)) {
-            this._position = extend(true, {}, defaultPositionOptions, position());
+
+        if(isDefined(this.option('position'))) {
+            this._position = extend(true, {}, defaultPositionOptions, this._getPositionValue(POSITION_ALIASES));
         } else {
-            if(isDefined(position)) {
-                this._position = extend(true, {}, defaultPositionOptions, this._getPositionOptions(POSITION_ALIASES));
-            } else {
-                this._position = defaultPositionOptions;
-            }
+            this._position = defaultPositionOptions;
         }
     },
 
     _getAnimationConfig: function() {
-        let animation = this.option('animation');
-        if(isFunction(animation)) animation = animation.call(this);
-        const target = this.option('target');
-
-        if(isDefined(target)) {
-            ['show.from.position.of', 'show.to.position.of', 'hide.from.position.of', 'hide.to.position.of' ].forEach(path => {
-                const pathParts = path.split('.');
-
-                let option = animation;
-                while(option) {
-                    if(pathParts.length === 1) {
-                        if(isPlainObject(option)) {
-                            option[pathParts.shift()] = target;
-                        }
-                        break;
-                    } else {
-                        option = option[pathParts.shift()];
-                    }
-                }
-            });
-        }
-
-        return animation;
+        return this._getOptionValue('animation', this);
     },
 
     _animateShowing: function() {
@@ -592,8 +598,6 @@ const Overlay = Widget.inherit({
         }
         this._currentVisible = true;
         this._isShown = false;
-
-        this._normalizePosition();
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -881,8 +885,9 @@ const Overlay = Widget.inherit({
 
     _toggleParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
+        const parentsScrollSubscriptionInfo = this._parentsScrollSubscriptionInfo;
 
-        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._scrollHandler);
+        eventsEngine.off(parentsScrollSubscriptionInfo.prevTargets, scrollEvent, parentsScrollSubscriptionInfo.handler);
 
         const closeOnScroll = this.option('closeOnTargetScroll');
         if(needSubscribe && closeOnScroll) {
@@ -890,8 +895,8 @@ const Overlay = Widget.inherit({
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
-            eventsEngine.on($parents, scrollEvent, this._scrollHandler);
-            this._$prevTargetParents = $parents;
+            eventsEngine.on($parents, scrollEvent, parentsScrollSubscriptionInfo.handler);
+            parentsScrollSubscriptionInfo.prevTargets = $parents;
         }
     },
 
@@ -1230,7 +1235,6 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
-        this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
@@ -1366,8 +1370,8 @@ const Overlay = Widget.inherit({
         this._actions.onPositioned({ position: resultPosition });
     },
 
-    _getPositionOptions: function(positionAliases) {
-        let position = this.option('position');
+    _getPositionValue: function(positionAliases) {
+        let position = this._getOptionValue('position', this);
         if(isString(position)) {
             position = extend({}, positionAliases[position]);
         }
@@ -1502,6 +1506,7 @@ const Overlay = Widget.inherit({
                 break;
             case 'position':
                 this._positionChangeHandled = false;
+                this._normalizePosition();
                 this._renderGeometry();
                 this._toggleSafariScrolling();
                 break;
@@ -1515,6 +1520,8 @@ const Overlay = Widget.inherit({
                 });
                 break;
             case 'target':
+                this._setAnimationTarget(value);
+                this._normalizePosition();
                 this._invalidate();
                 break;
             case 'container':

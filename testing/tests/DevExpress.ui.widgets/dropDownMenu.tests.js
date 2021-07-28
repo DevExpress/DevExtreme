@@ -483,16 +483,12 @@ QUnit.module('position', {
 
         positionConfig = instance._popup.option('position');
 
-        assert.equal(positionConfig.at, instance.option('popupPosition').at);
-        assert.equal(positionConfig.my, instance.option('popupPosition').my);
-        assert.equal(positionConfig.collision, instance.option('popupPosition').collision);
+        assert.deepEqual(positionConfig, instance.option('popupPosition'));
 
         instance.option('rtlEnabled', true);
         positionConfig = instance._popup.option('position');
 
-        assert.equal(positionConfig.at, instance.option('popupPosition').at);
-        assert.equal(positionConfig.my, instance.option('popupPosition').my);
-        assert.equal(positionConfig.collision, instance.option('popupPosition').collision);
+        assert.deepEqual(positionConfig, instance.option('popupPosition'));
     });
 });
 

@@ -300,7 +300,6 @@ const Toast = Overlay.inherit({
                 this._toggleCloseEvents('Click');
                 break;
             case 'displayTime':
-            case 'position':
                 break;
             default:
                 this.callBase(args);
