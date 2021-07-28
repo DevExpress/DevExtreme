@@ -2,8 +2,8 @@ This demo shows how to disable specific days, dates, and times when a user canno
 
 To implement this functionality in your application, follow the steps below:
 
-1. **Implement date/time validation functions**         
-These functions should check whether a date or time is available. This demo includes the following date/time validation functions:
+1. **Implement custom date/time validation functions**         
+These functions should check whether a date or time is available. This demo includes the date/time validation functions listed below. In your application, they can be different.
 
     - `isValidAppointment`          
     Prepares data and begins validation.
