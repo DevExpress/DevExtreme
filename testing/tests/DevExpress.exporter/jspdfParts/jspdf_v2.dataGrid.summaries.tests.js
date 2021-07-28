@@ -25,13 +25,13 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -61,13 +61,13 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1 (Max: f1, Max of F2 is f2),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1 (Max: f1, Max of F2 is f2),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -97,17 +97,17 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}',
                     'setLineWidth,1', 'line,10,31,160,31', 'line,10,31,10,47', 'line,10,47,160,47',
-                    'text,Max: f3,160,39,{baseline:middle}',
+                    'text,Max: f3,160,40.2,{baseline:middle}',
                     'setLineWidth,1', 'line,160,31,250,31', 'line,160,47,250,47',
                     'setLineWidth,1', 'line,250,31,330,31', 'line,330,31,330,47', 'line,250,47,330,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
-                    'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
+                    'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -138,14 +138,14 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,160,31', 'line,10,31,10,47', 'line,10,47,160,47',
-                    'text,Max: f3,160,39,{baseline:middle}', 'setLineWidth,1', 'line,160,31,250,31', 'line,160,47,250,47',
-                    'text,Max: f4,250,39,{baseline:middle}', 'setLineWidth,1', 'line,250,31,330,31', 'line,330,31,330,47', 'line,250,47,330,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16', 'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,160,31', 'line,10,31,10,47', 'line,10,47,160,47',
+                    'text,Max: f3,160,40.2,{baseline:middle}', 'setLineWidth,1', 'line,160,31,250,31', 'line,160,47,250,47',
+                    'text,Max: f4,250,40.2,{baseline:middle}', 'setLineWidth,1', 'line,250,31,330,31', 'line,330,31,330,47', 'line,250,47,330,47',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16', 'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -175,13 +175,13 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,250,31', 'line,10,31,10,47', 'line,10,47,250,47',
-                    'text,Max: f4,250,39,{baseline:middle}', 'setLineWidth,1', 'line,250,31,330,31', 'line,330,31,330,47', 'line,250,47,330,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16', 'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,250,31', 'line,10,31,10,47', 'line,10,47,250,47',
+                    'text,Max: f4,250,40.2,{baseline:middle}', 'setLineWidth,1', 'line,250,31,330,31', 'line,330,31,330,47', 'line,250,47,330,47',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16', 'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -208,13 +208,13 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1 (Max of F2 is f2),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1 (Max of F2 is f2),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -241,15 +241,15 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,90,31', 'line,10,31,10,47', 'line,10,47,90,47',
-                    'text,Max: f3,90,39,{baseline:middle}', 'setLineWidth,1', 'line,90,31,180,31', 'line,90,47,180,47',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,90,31', 'line,10,31,10,47', 'line,10,47,90,47',
+                    'text,Max: f3,90,40.2,{baseline:middle}', 'setLineWidth,1', 'line,90,31,180,31', 'line,90,47,180,47',
                     'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -279,15 +279,15 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,90,31', 'line,10,31,10,47', 'line,10,47,90,47',
-                    'text,Max: f3,90,39,{baseline:middle}', 'setLineWidth,1', 'line,90,31,180,31', 'line,90,47,180,47',
-                    'text,Max: f4,180,39,{baseline:middle}', 'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,90,31', 'line,10,31,10,47', 'line,10,47,90,47',
+                    'text,Max: f3,90,40.2,{baseline:middle}', 'setLineWidth,1', 'line,90,31,180,31', 'line,90,47,180,47',
+                    'text,Max: f4,180,40.2,{baseline:middle}', 'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -314,14 +314,14 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,180,31', 'line,10,31,10,47', 'line,10,47,180,47',
-                    'text,Max: f4,180,39,{baseline:middle}', 'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,180,31', 'line,10,31,10,47', 'line,10,47,180,47',
+                    'text,Max: f4,180,40.2,{baseline:middle}', 'setLineWidth,1', 'line,180,31,260,31', 'line,260,31,260,47', 'line,180,47,260,47',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -351,14 +351,14 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'line,10,31,260,31', 'line,10,31,10,47', 'line,10,47,260,47',
-                    'text,Max: f4,260,39,{baseline:middle}', 'setLineWidth,1', 'line,260,31,360,31', 'line,360,31,360,47', 'line,260,47,360,47',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'line,20,47,260,47', 'line,20,47,20,63', 'line,20,63,260,63',
-                    'text,Max: f4,260,55,{baseline:middle}', 'setLineWidth,1', 'line,260,47,360,47', 'line,360,47,360,63', 'line,260,63,360,63',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16'];
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F4,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,260,31', 'line,10,31,10,47', 'line,10,47,260,47',
+                    'text,Max: f4,260,40.2,{baseline:middle}', 'setLineWidth,1', 'line,260,31,360,31', 'line,360,31,360,47', 'line,260,47,360,47',
+                    'text,F2: f2 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'line,20,47,260,47', 'line,20,47,20,63', 'line,20,63,260,63',
+                    'text,Max: f4,260,56.2,{baseline:middle}', 'setLineWidth,1', 'line,260,47,360,47', 'line,360,47,360,63', 'line,260,63,360,63',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
+                    'text,f4,260,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -391,14 +391,14 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
-                    'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
-                    'setLineWidth,1', 'rect,20,63,140,16', 'text,Max: f3,160,71,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
+                    'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
+                    'setLineWidth,1', 'rect,20,63,140,16', 'text,Max: f3,160,72.2,{baseline:middle}',
                     'setLineWidth,1', 'rect,160,63,90,16',
                     'setLineWidth,1', 'rect,250,63,80,16'];
 
@@ -431,16 +431,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
-                    'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
+                    'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
                     'setLineWidth,1', 'rect,20,63,140,16',
-                    'text,Max: f3,160,71,{baseline:middle}', 'setLineWidth,1', 'rect,160,63,90,16',
-                    'text,Max: f4,250,71,{baseline:middle}', 'setLineWidth,1', 'rect,250,63,80,16'];
+                    'text,Max: f3,160,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,63,90,16',
+                    'text,Max: f4,250,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,63,80,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -470,16 +470,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
-                    'text,F3,160,23,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
-                    'text,F4,250,23,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
-                    'text,f3,160,55,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
-                    'text,f4,250,55,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,150,16',
+                    'text,F3,160,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,15,90,16',
+                    'text,F4,250,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,15,80,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,320,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,140,16',
+                    'text,f3,160,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,47,90,16',
+                    'text,f4,250,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,47,80,16',
                     'setLineWidth,1', 'rect,20,63,140,16',
                     'setLineWidth,1', 'rect,160,63,90,16',
-                    'text,Max: f4,250,71,{baseline:middle}', 'setLineWidth,1', 'rect,250,63,80,16' ];
+                    'text,Max: f4,250,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,250,63,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 150, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -506,15 +506,15 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
                     'setLineWidth,1', 'rect,20,63,70,16',
-                    'text,Max: f3,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,Max: f3,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
                     'setLineWidth,1', 'rect,180,63,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
@@ -545,16 +545,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
                     'setLineWidth,1', 'rect,20,63,70,16',
-                    'text,Max: f3,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f4,180,71,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
+                    'text,Max: f3,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,Max: f4,180,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -581,16 +581,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F4,180,23,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,f4,180,55,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F4,180,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,15,80,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,250,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,f4,180,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,47,80,16',
                     'setLineWidth,1', 'rect,20,63,70,16',
                     'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f4,180,71,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
+                    'text,Max: f4,180,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,180,63,80,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -620,16 +620,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F4,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
+                    'text,f4,260,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
                     'setLineWidth,1', 'rect,30,79,230,16',
-                    'text,Max: f4,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f4,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
                     'setLineWidth,1', 'rect,20,95,240,16',
-                    'text,Max: f4,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16'];
+                    'text,Max: f4,260,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -660,16 +660,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
-                    'text,Max: f3,30,87,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,230,16',
-                    'text,Max: f4,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
-                    'text,Max: f3,20,103,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,240,16',
-                    'text,Max: f4,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16'];
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F4,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
+                    'text,f4,260,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
+                    'text,Max: f3,30,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,230,16',
+                    'text,Max: f4,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f3,20,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,240,16',
+                    'text,Max: f4,260,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -700,21 +700,21 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F4,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2_1 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
-                    'text,f4,260,71,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
-                    'text,Max: f3,30,87,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,230,16',
-                    'text,Max: f4,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
-                    'text,F2: f2_2 (Max of F1 is f1),20,103,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,340,16',
-                    'text,f3,30,119,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
-                    'text,f4,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
-                    'text,Max: f3,30,135,{baseline:middle}', 'setLineWidth,1', 'rect,30,127,230,16',
-                    'text,Max: f4,260,135,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16',
-                    'text,Max: f3,20,151,{baseline:middle}', 'setLineWidth,1', 'rect,20,143,240,16',
-                    'text,Max: f4,260,151,{baseline:middle}', 'setLineWidth,1', 'rect,260,143,100,16' ];
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F4,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2_1 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,230,16',
+                    'text,f4,260,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,63,100,16',
+                    'text,Max: f3,30,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,230,16',
+                    'text,Max: f4,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,F2: f2_2 (Max of F1 is f1),20,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,340,16',
+                    'text,f3,30,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
+                    'text,f4,260,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
+                    'text,Max: f3,30,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,127,230,16',
+                    'text,Max: f4,260,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16',
+                    'text,Max: f3,20,152.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,143,240,16',
+                    'text,Max: f4,260,152.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,143,100,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -745,19 +745,19 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F4,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F5,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,F3: f3 (Max of F1 is f1),30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
-                    'text,f4,40,87,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
-                    'text,f5,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,F4,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F5,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,F3: f3 (Max of F1 is f1),30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
+                    'text,f4,40,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
+                    'text,f5,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
                     'setLineWidth,1', 'rect,40,95,220,16',
-                    'text,Max: f5,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
+                    'text,Max: f5,260,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
                     'setLineWidth,1', 'rect,30,111,230,16',
-                    'text,Max: f5,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
+                    'text,Max: f5,260,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
                     'setLineWidth,1', 'rect,20,127,240,16',
-                    'text,Max: f5,260,135,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
+                    'text,Max: f5,260,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -789,19 +789,19 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F4,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F5,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,F3: f3 (Max of F1 is f1),30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
-                    'text,f4,40,87,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
-                    'text,f5,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
-                    'text,Max: f4,40,103,{baseline:middle}', 'setLineWidth,1', 'rect,40,95,220,16',
-                    'text,Max: f5,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
-                    'text,Max: f4,30,119,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
-                    'text,Max: f5,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
-                    'text,Max: f4,20,135,{baseline:middle}', 'setLineWidth,1', 'rect,20,127,240,16',
-                    'text,Max: f5,260,135,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
+                    'text,F4,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F5,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,F3: f3 (Max of F1 is f1),30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
+                    'text,f4,40,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
+                    'text,f5,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f4,40,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,95,220,16',
+                    'text,Max: f5,260,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
+                    'text,Max: f4,30,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
+                    'text,Max: f5,260,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
+                    'text,Max: f4,20,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,127,240,16',
+                    'text,Max: f5,260,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,127,100,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -833,27 +833,27 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F4,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
-                    'text,F5,260,23,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
-                    'text,F2: f2_1 (Max of F1 is f1),20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
-                    'text,F3: f3 (Max of F1 is f1),30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
-                    'text,f4,40,87,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
-                    'text,f5,260,87,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
-                    'text,Max: f4,40,103,{baseline:middle}', 'setLineWidth,1', 'rect,40,95,220,16',
-                    'text,Max: f5,260,103,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
-                    'text,Max: f4,30,119,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
-                    'text,Max: f5,260,119,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
-                    'text,F2: f2_2 (Max of F1 is f1),20,135,{baseline:middle}', 'setLineWidth,1', 'rect,20,127,340,16',
-                    'text,F3: f3 (Max of F1 is f1),30,151,{baseline:middle}', 'setLineWidth,1', 'rect,30,143,330,16',
-                    'text,f4,40,167,{baseline:middle}', 'setLineWidth,1', 'rect,40,159,220,16',
-                    'text,f5,260,167,{baseline:middle}', 'setLineWidth,1', 'rect,260,159,100,16',
-                    'text,Max: f4,40,183,{baseline:middle}', 'setLineWidth,1', 'rect,40,175,220,16',
-                    'text,Max: f5,260,183,{baseline:middle}', 'setLineWidth,1', 'rect,260,175,100,16',
-                    'text,Max: f4,30,199,{baseline:middle}', 'setLineWidth,1', 'rect,30,191,230,16',
-                    'text,Max: f5,260,199,{baseline:middle}', 'setLineWidth,1', 'rect,260,191,100,16',
-                    'text,Max: f4,20,215,{baseline:middle}', 'setLineWidth,1', 'rect,20,207,240,16',
-                    'text,Max: f5,260,215,{baseline:middle}', 'setLineWidth,1', 'rect,260,207,100,16' ];
+                    'text,F4,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,250,16',
+                    'text,F5,260,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,15,100,16',
+                    'text,F1: f1 (Max: f1),10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,350,16',
+                    'text,F2: f2_1 (Max of F1 is f1),20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,340,16',
+                    'text,F3: f3 (Max of F1 is f1),30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,330,16',
+                    'text,f4,40,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,79,220,16',
+                    'text,f5,260,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,79,100,16',
+                    'text,Max: f4,40,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,95,220,16',
+                    'text,Max: f5,260,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,95,100,16',
+                    'text,Max: f4,30,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,230,16',
+                    'text,Max: f5,260,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,111,100,16',
+                    'text,F2: f2_2 (Max of F1 is f1),20,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,127,340,16',
+                    'text,F3: f3 (Max of F1 is f1),30,152.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,143,330,16',
+                    'text,f4,40,168.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,159,220,16',
+                    'text,f5,260,168.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,159,100,16',
+                    'text,Max: f4,40,184.2,{baseline:middle}', 'setLineWidth,1', 'rect,40,175,220,16',
+                    'text,Max: f5,260,184.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,175,100,16',
+                    'text,Max: f4,30,200.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,191,230,16',
+                    'text,Max: f5,260,200.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,191,100,16',
+                    'text,Max: f4,20,216.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,207,240,16',
+                    'text,Max: f5,260,216.2,{baseline:middle}', 'setLineWidth,1', 'rect,260,207,100,16' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onRowExporting }).then(() => {
                     // doc.save();
@@ -882,11 +882,11 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F2,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,80,16',
-                    'text,f2,90,39,{baseline:middle}', 'setLineWidth,1', 'rect,90,31,90,16',
-                    'text,Max: f1,10,55,{baseline:middle}', 'setLineWidth,1', 'rect,10,47,80,16',
+                    'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F2,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,80,16',
+                    'text,f2,90,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,31,90,16',
+                    'text,Max: f1,10,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,47,80,16',
                     'setLineWidth,1', 'rect,90,47,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -915,12 +915,12 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,Max: f2,10,71,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,80,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,Max: f2,10,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,63,80,16',
                     'setLineWidth,1', 'rect,90,63,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -952,14 +952,14 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F3,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
-                    'text,f3,90,55,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
-                    'text,Max: f2,20,71,{baseline:middle}', 'setLineWidth,1', 'rect,20,63,70,16',
+                    'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F3,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,70,16',
+                    'text,f3,90,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,47,90,16',
+                    'text,Max: f2,20,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,63,70,16',
                     'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f2,10,87,{baseline:middle}', 'setLineWidth,1', 'rect,10,79,80,16',
+                    'text,Max: f2,10,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,79,80,16',
                     'setLineWidth,1', 'rect,90,79,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -989,13 +989,13 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F4,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,F2: f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
-                    'text,f4,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f3,10,87,{baseline:middle}', 'setLineWidth,1', 'rect,10,79,80,16',
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F2: f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
+                    'text,f4,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,Max: f3,10,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,79,80,16',
                     'setLineWidth,1', 'rect,90,79,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -1028,17 +1028,17 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F4,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,F2: f2,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
-                    'text,f4,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f3,30,87,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,60,16',
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F2: f2,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
+                    'text,f4,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,Max: f3,30,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,60,16',
                     'setLineWidth,1', 'rect,90,79,90,16',
-                    'text,Max: f3,20,103,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,70,16',
+                    'text,Max: f3,20,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,70,16',
                     'setLineWidth,1', 'rect,90,95,90,16',
-                    'text,Max: f3,10,119,{baseline:middle}', 'setLineWidth,1', 'rect,10,111,80,16',
+                    'text,Max: f3,10,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,111,80,16',
                     'setLineWidth,1', 'rect,90,111,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -1071,16 +1071,16 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F4,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,F2: f2_1,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
-                    'text,f4,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,F2: f2_2,20,87,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,160,16',
-                    'text,f3,30,103,{baseline:middle}', 'setLineWidth,1', 'rect,30,95,60,16',
-                    'text,f4,90,103,{baseline:middle}', 'setLineWidth,1', 'rect,90,95,90,16',
-                    'text,Max: f3,10,119,{baseline:middle}', 'setLineWidth,1', 'rect,10,111,80,16',
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F2: f2_1,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
+                    'text,f4,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,F2: f2_2,20,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,79,160,16',
+                    'text,f3,30,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,95,60,16',
+                    'text,f4,90,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,95,90,16',
+                    'text,Max: f3,10,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,111,80,16',
                     'setLineWidth,1', 'rect,90,111,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {
@@ -1116,22 +1116,22 @@ const JSPdfSummariesTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
-                    'text,F4,90,23,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
-                    'text,F1: f1,10,39,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
-                    'text,F2: f2_1,20,55,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
-                    'text,f3,30,71,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
-                    'text,f4,90,71,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
-                    'text,Max: f3,30,87,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,60,16',
+                    'text,F3,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,80,16',
+                    'text,F4,90,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,15,90,16',
+                    'text,F1: f1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,170,16',
+                    'text,F2: f2_1,20,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,47,160,16',
+                    'text,f3,30,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,63,60,16',
+                    'text,f4,90,72.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,63,90,16',
+                    'text,Max: f3,30,88.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,79,60,16',
                     'setLineWidth,1', 'rect,90,79,90,16',
-                    'text,F2: f2_2,20,103,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,160,16',
-                    'text,f3,30,119,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,60,16',
-                    'text,f4,90,119,{baseline:middle}', 'setLineWidth,1', 'rect,90,111,90,16',
-                    'text,Max: f3,30,135,{baseline:middle}', 'setLineWidth,1', 'rect,30,127,60,16',
+                    'text,F2: f2_2,20,104.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,95,160,16',
+                    'text,f3,30,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,111,60,16',
+                    'text,f4,90,120.2,{baseline:middle}', 'setLineWidth,1', 'rect,90,111,90,16',
+                    'text,Max: f3,30,136.2,{baseline:middle}', 'setLineWidth,1', 'rect,30,127,60,16',
                     'setLineWidth,1', 'rect,90,127,90,16',
-                    'text,Max: f3,20,151,{baseline:middle}', 'setLineWidth,1', 'rect,20,143,70,16',
+                    'text,Max: f3,20,152.2,{baseline:middle}', 'setLineWidth,1', 'rect,20,143,70,16',
                     'setLineWidth,1', 'rect,90,143,90,16',
-                    'text,Max: f3,10,167,{baseline:middle}', 'setLineWidth,1', 'rect,10,159,80,16',
+                    'text,Max: f3,10,168.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,159,80,16',
                     'setLineWidth,1', 'rect,90,159,90,16'];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onRowExporting }).then(() => {

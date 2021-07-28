@@ -1,9 +1,11 @@
-function getFontSize(doc) {
-    return doc.getFontSize();
+function getLineHeight(doc) {
+    return doc.getFontSize() * doc.getLineHeightFactor();
 }
 
 function splitTextToArray(doc, text, rectWidth) {
-    return doc.splitTextToSize(text, rectWidth);
+    return doc
+        .splitTextToSize(text, rectWidth)
+        .filter(f => f !== '');
 }
 
 function calculateRowHeight(doc, cells, columnWidths) {
@@ -30,4 +32,4 @@ function calculateRowHeight(doc, cells, columnWidths) {
     return rowHeight;
 }
 
-export { calculateRowHeight, splitTextToArray, getFontSize };
+export { calculateRowHeight, splitTextToArray, getLineHeight };

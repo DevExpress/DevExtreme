@@ -141,7 +141,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
+            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -170,7 +170,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}'
+            'text,f1,10,24.2,{baseline:middle}'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onCellExporting, onRowExporting, drawTableBorder: false }).then(() => {
@@ -197,8 +197,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
-            'text,v1,10,47,{baseline:middle}', 'setLineWidth,1', 'rect,10,35,100,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
+            'text,v1,10,44.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,35,100,24',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -227,9 +227,9 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -252,8 +252,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,f2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
+            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,f2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -279,10 +279,10 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
-            'text,v1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2,50,41,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
+            'text,v1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2,50,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -310,12 +310,12 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,50,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting }).then(() => {
             // doc.save();
@@ -343,12 +343,12 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,0,16',
-            'text,F2,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,0,20',
-            'text,v2_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,0,24',
-            'text,v2_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,0,16',
+            'text,F2,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,0,20',
+            'text,v2_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,0,24',
+            'text,v2_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 0, 100 ], onRowExporting }).then(() => {
             // doc.save();
@@ -382,15 +382,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
-            'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
-            'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,100,31,100,51', 'line,50,51,100,51',
-            'text,v3_1,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
-            'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
+            'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
+            'text,v2_1,50,40.2,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,100,31,100,51', 'line,50,51,100,51',
+            'text,v3_1,100,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
+            'text,v3_2,100,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -424,15 +424,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
-            'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,50,51,100,51',
-            'text,v3_1,100,41,{baseline:middle}', 'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
-            'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
+            'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,50,40.2,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,50,51,100,51',
+            'text,v3_1,100,40.2,{baseline:middle}', 'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
+            'text,v3_2,100,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -465,15 +465,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
-            'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'line,50,31,50,51', 'line,100,31,100,51', 'line,50,51,100,51',
-            'text,v3_1,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
-            'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
+            'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,50,40.2,{baseline:middle}', 'setLineWidth,1', 'line,50,31,50,51', 'line,100,31,100,51', 'line,50,51,100,51',
+            'text,v3_1,100,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
+            'text,v3_2,100,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -506,15 +506,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
-            'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,100,31,100,51',
-            'text,v3_1,100,41,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
-            'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,50,16',
+            'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,50,40.2,{baseline:middle}', 'setLineWidth,1', 'line,50,31,100,31', 'line,50,31,50,51', 'line,100,31,100,51',
+            'text,v3_1,100,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,31,60,20',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
+            'text,v3_2,100,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -550,15 +550,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
-            'text,F3,100,23,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}', 'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
-            'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
-            'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
-            'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,F2,50,24.2,{baseline:middle}', 'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
+            'text,F3,100,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,15,60,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'line,10,31,50,31', 'line,10,31,10,51', 'line,10,51,50,51',
+            'text,v2_1,50,40.2,{baseline:middle}',
+            'text,v3_1,100,40.2,{baseline:middle}', 'setLineWidth,1', 'line,100,31,160,31', 'line,160,31,160,51', 'line,100,51,160,51',
+            'text,v1_2,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
+            'text,v2_2,50,60.2,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
+            'text,v3_2,100,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -592,15 +592,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle}',
+            'text,F2,50,24.2,{baseline:middle}',
+            'text,F3,100,24.2,{baseline:middle}',
+            'text,v1_1,10,40.2,{baseline:middle}',
+            'text,v2_1,50,40.2,{baseline:middle}',
+            'text,v3_1,100,40.2,{baseline:middle}',
+            'text,v1_2,10,60.2,{baseline:middle}',
+            'text,v2_2,50,60.2,{baseline:middle}',
+            'text,v3_2,100,60.2,{baseline:middle}',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting }).then(() => {
             // doc.save();
@@ -636,10 +636,10 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
-            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
-            'text,v2_1,60,27,{baseline:middle}', 'setLineWidth,1', 'rect,60,15,40,24',
-            'text,v3_1,60,54,{baseline:middle}', 'setLineWidth,1', 'rect,60,39,40,30',
+            'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,v1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,60,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,60,15,40,24',
+            'text,v3_1,60,48.2,{baseline:middle}', 'setLineWidth,1', 'rect,60,39,40,30',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
             // doc.save();
@@ -677,11 +677,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle}',
+            'text,v1_1,10,40.2,{baseline:middle}',
             'setLineWidth,1', 'rect,10,15,40,36',
-            'text,v2_1,60,27,{baseline:middle}',
-            'text,v3_1,60,54,{baseline:middle}',
+            'text,v2_1,60,24.2,{baseline:middle}',
+            'text,v3_1,60,48.2,{baseline:middle}',
             'setLineWidth,1', 'rect,60,15,40,54'
         ];
 
@@ -716,11 +716,11 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,808,{baseline:middle}', 'setLineWidth,1', 'rect,10,800,40,16',
-            'text,v1_1,10,826,{baseline:middle}', 'setLineWidth,1', 'rect,10,816,40,20',
+            'text,F1,10,809.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,800,40,16',
+            'text,v1_1,10,825.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,816,40,20',
             'addPage,',
-            'text,v2_1,10,22,{baseline:middle}', 'setLineWidth,1', 'rect,10,10,40,24',
-            'text,v3_1,10,49,{baseline:middle}', 'setLineWidth,1', 'rect,10,34,40,30',
+            'text,v2_1,10,19.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,10,40,24',
+            'text,v3_1,10,43.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,34,40,30',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 800 }, columnWidths: [ 40 ], onRowExporting }).then(() => {
             // doc.save();
@@ -759,12 +759,12 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,808,{baseline:middle}',
-            'text,v1_1,10,826,{baseline:middle}',
+            'text,F1,10,809.2,{baseline:middle}',
+            'text,v1_1,10,825.2,{baseline:middle}',
             'setLineWidth,1', 'rect,10,800,40,36',
             'addPage,',
-            'text,v2_1,10,22,{baseline:middle}',
-            'text,v3_1,10,49,{baseline:middle}',
+            'text,v2_1,10,19.2,{baseline:middle}',
+            'text,v3_1,10,43.2,{baseline:middle}',
             'setLineWidth,1', 'rect,10,10,40,54'
         ];
 
@@ -800,9 +800,9 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle}',
             'addPage,',
-            'text,F2,15,28,{baseline:middle}',
+            'text,F2,15,29.2,{baseline:middle}',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
@@ -847,17 +847,17 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}',
-            'text,v1_1,10,46,{baseline:middle}',
-            'text,v1_2,10,68,{baseline:middle}',
+            'text,F1,10,29.2,{baseline:middle}',
+            'text,v1_1,10,45.2,{baseline:middle}',
+            'text,v1_2,10,65.2,{baseline:middle}',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}',
-            'text,v2_1,11,47,{baseline:middle}',
-            'text,v2_2,11,69,{baseline:middle}',
+            'text,F2,11,30.2,{baseline:middle}',
+            'text,v2_1,11,46.2,{baseline:middle}',
+            'text,v2_2,11,66.2,{baseline:middle}',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}',
-            'text,v3_1,12,48,{baseline:middle}',
-            'text,v3_2,12,70,{baseline:middle}',
+            'text,F3,12,31.2,{baseline:middle}',
+            'text,v3_1,12,47.2,{baseline:middle}',
+            'text,v3_2,12,67.2,{baseline:middle}',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
@@ -895,17 +895,17 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,v1_2,10,65.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
-            'text,v2_2,11,69,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
+            'text,v2_2,11,66.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
-            'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24'
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,v3_2,12,67.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
@@ -949,19 +949,19 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}',
-            'text,v1_1,10,46,{baseline:middle}',
-            'text,v1_2,10,68,{baseline:middle}',
+            'text,F1,10,29.2,{baseline:middle}',
+            'text,v1_1,10,45.2,{baseline:middle}',
+            'text,v1_2,10,65.2,{baseline:middle}',
             'setLineWidth,1', 'rect,10,20,40,60',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}',
-            'text,v2_1,11,47,{baseline:middle}',
-            'text,v2_2,11,69,{baseline:middle}',
+            'text,F2,11,30.2,{baseline:middle}',
+            'text,v2_1,11,46.2,{baseline:middle}',
+            'text,v2_2,11,66.2,{baseline:middle}',
             'setLineWidth,1', 'rect,11,21,50,60',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}',
-            'text,v3_1,12,48,{baseline:middle}',
-            'text,v3_2,12,70,{baseline:middle}',
+            'text,F3,12,31.2,{baseline:middle}',
+            'text,v3_1,12,47.2,{baseline:middle}',
+            'text,v3_2,12,67.2,{baseline:middle}',
             'setLineWidth,1', 'rect,12,22,60,60'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
@@ -1000,19 +1000,19 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,v1_2,10,65.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
             'setLineWidth,1', 'rect,10,20,40,60',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
-            'text,v2_2,11,69,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
+            'text,v2_2,11,66.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
             'setLineWidth,1', 'rect,11,21,50,60',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
-            'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,v3_2,12,67.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
             'setLineWidth,1', 'rect,12,22,60,60'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onRowExporting, splitToTablesByColumns, drawTableBorder: true }).then(() => {
@@ -1056,17 +1056,17 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,v1_2,10,65.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'line,11,21,61,21', 'line,11,21,11,37', 'line,61,21,61,37',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'line,11,37,11,57', 'line,61,37,61,57', 'line,11,57,61,57',
-            'text,v2_2,11,69,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'line,11,21,61,21', 'line,11,21,11,37', 'line,61,21,61,37',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'line,11,37,11,57', 'line,61,37,61,57', 'line,11,57,61,57',
+            'text,v2_2,11,66.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
-            'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,v3_2,12,67.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
@@ -1109,17 +1109,17 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,v1_2,10,65.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'line,11,37,61,37', 'line,61,37,61,57', 'line,11,57,61,57',
-            'text,v2_2,11,69,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'line,11,37,61,37', 'line,61,37,61,57', 'line,11,57,61,57',
+            'text,v2_2,11,66.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
-            'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,v3_2,12,67.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
             // doc.save();
@@ -1172,28 +1172,28 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
             'setLineWidth,1', 'rect,10,20,40,36',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,37,50,20',
             'setLineWidth,1', 'rect,11,21,50,36',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'setLineWidth,1', 'rect,12,22,60,36',
             'addPage,',
-            'text,v1_2,10,68,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
-            'text,v1_3,10,95,{baseline:middle}', 'setLineWidth,1', 'rect,10,80,40,30',
+            'text,v1_2,10,65.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,56,40,24',
+            'text,v1_3,10,89.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,80,40,30',
             'setLineWidth,1', 'rect,10,56,40,54',
             'addPage,',
-            'text,v2_2,11,69,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
-            'text,v2_3,11,96,{baseline:middle}', 'setLineWidth,1', 'rect,11,81,50,30',
+            'text,v2_2,11,66.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,57,50,24',
+            'text,v2_3,11,90.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,81,50,30',
             'setLineWidth,1', 'rect,11,57,50,54',
             'addPage,',
-            'text,v3_2,12,70,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
-            'text,v3_3,12,97,{baseline:middle}', 'setLineWidth,1', 'rect,12,82,60,30',
+            'text,v3_2,12,67.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,58,60,24',
+            'text,v3_3,12,91.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,82,60,30',
             'setLineWidth,1', 'rect,12,58,60,54',
         ];
 
@@ -1252,23 +1252,23 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'line,11,21,61,21', 'line,11,21,11,37', 'line,61,21,61,37',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'line,11,37,11,57', 'line,61,37,61,57', 'line,11,57,61,57',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'line,11,21,61,21', 'line,11,21,11,37', 'line,61,21,61,37',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'line,11,37,11,57', 'line,61,37,61,57', 'line,11,57,61,57',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'addPage,',
-            'text,v1_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
-            'text,v1_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
+            'text,v1_2,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
+            'text,v1_3,12,55.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
             'addPage,',
-            'text,v2_2,13,35,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
-            'text,v2_3,13,62,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
+            'text,v2_2,13,32.2,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
+            'text,v2_3,13,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
             'addPage,',
-            'text,v3_2,14,36,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
-            'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
+            'text,v3_2,14,33.2,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
+            'text,v3_3,14,57.2,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
@@ -1326,23 +1326,23 @@ QUnit.module('Table splitting', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,28,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
-            'text,v1_1,10,46,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
+            'text,F1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,20,40,16',
+            'text,v1_1,10,45.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,36,40,20',
             'addPage,',
-            'text,F2,11,29,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
-            'text,v2_1,11,47,{baseline:middle}', 'setLineWidth,1', 'line,11,37,61,37', 'line,61,37,61,57', 'line,11,57,61,57',
+            'text,F2,11,30.2,{baseline:middle}', 'setLineWidth,1', 'rect,11,21,50,16',
+            'text,v2_1,11,46.2,{baseline:middle}', 'setLineWidth,1', 'line,11,37,61,37', 'line,61,37,61,57', 'line,11,57,61,57',
             'addPage,',
-            'text,F3,12,30,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
-            'text,v3_1,12,48,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
+            'text,F3,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,60,16',
+            'text,v3_1,12,47.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,38,60,20',
             'addPage,',
-            'text,v1_2,12,34,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
-            'text,v1_3,12,61,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
+            'text,v1_2,12,31.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,22,40,24',
+            'text,v1_3,12,55.2,{baseline:middle}', 'setLineWidth,1', 'rect,12,46,40,30',
             'addPage,',
-            'text,v2_2,13,35,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
-            'text,v2_3,13,62,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
+            'text,v2_2,13,32.2,{baseline:middle}', 'setLineWidth,1', 'rect,13,23,50,24',
+            'text,v2_3,13,56.2,{baseline:middle}', 'setLineWidth,1', 'rect,13,47,50,30',
             'addPage,',
-            'text,v3_2,14,36,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
-            'text,v3_3,14,63,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30',
+            'text,v3_2,14,33.2,{baseline:middle}', 'setLineWidth,1', 'rect,14,24,60,24',
+            'text,v3_3,14,57.2,{baseline:middle}', 'setLineWidth,1', 'rect,14,48,60,30'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 20 }, columnWidths: [ 40, 50, 60 ], onCellExporting, onRowExporting, splitToTablesByColumns, drawTableBorder: false }).then(() => {
