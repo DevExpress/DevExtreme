@@ -42,7 +42,7 @@ export const searchModule = {
                 highlightSearchText: true,
                 highlightCaseSensitive: false,
                 text: '',
-                searchVisibleColumnsOnly: false,
+                searchVisibleColumnsOnly: false
             }
         };
     },
