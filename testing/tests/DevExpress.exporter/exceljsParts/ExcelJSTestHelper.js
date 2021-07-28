@@ -184,15 +184,6 @@ class ExcelJSPivotGridTestHelper extends ExcelJSTestHelper {
     }
 
     getAllRealColumnWidths(component) {
-        // const rowsAreaRows = component.$element().find('.dx-pivotgrid-vertical-headers tr');
-        // let rowsAreaColumns = rowsAreaRows.last().find('td');
-
-        // for(let i = 1; i <= rowsAreaRows.length; i++) {
-        //     if(rowsAreaRows.eq(i).find('td').length > rowsAreaColumns.length) {
-        //         rowsAreaColumns = rowsAreaRows.eq(i).find('td');
-        //     }
-        // }
-
         return [...this.getRowsAreaColumnWidths(component), ...this.getColumnsAreaColumnWidths(component)];
     }
 
