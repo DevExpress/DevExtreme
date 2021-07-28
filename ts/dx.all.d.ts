@@ -7120,9 +7120,6 @@ declare module DevExpress.ui {
        */
       type?: 'custom' | 'localStorage' | 'sessionStorage';
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
     export interface Summary {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
@@ -11528,7 +11525,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * [descr:dxFormButtonItem]
+   * @deprecated Use ButtonItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormButtonItem {
@@ -11570,7 +11567,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormEmptyItem]
+   * @deprecated Use EmptyItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormEmptyItem {
@@ -11600,7 +11597,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormGroupItem]
+   * @deprecated Use GroupItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormGroupItem {
@@ -11635,13 +11632,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.items]
      */
-    items?: Array<
-      | dxFormSimpleItem
-      | dxFormGroupItem
-      | dxFormTabbedItem
-      | dxFormEmptyItem
-      | dxFormButtonItem
-    >;
+    items?: Array<DevExpress.ui.dxForm.Item>;
     /**
      * [descr:dxFormGroupItem.name]
      */
@@ -11688,14 +11679,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.customizeItem]
      */
-    customizeItem?: (
-      item:
-        | dxFormSimpleItem
-        | dxFormGroupItem
-        | dxFormTabbedItem
-        | dxFormEmptyItem
-        | dxFormButtonItem
-    ) => void;
+    customizeItem?: (item: DevExpress.ui.dxForm.Item) => void;
     /**
      * [descr:dxFormOptions.formData]
      */
@@ -11703,13 +11687,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.items]
      */
-    items?: Array<
-      | dxFormSimpleItem
-      | dxFormGroupItem
-      | dxFormTabbedItem
-      | dxFormEmptyItem
-      | dxFormButtonItem
-    >;
+    items?: Array<DevExpress.ui.dxForm.Item>;
     /**
      * [descr:dxFormOptions.labelLocation]
      */
@@ -11774,7 +11752,7 @@ declare module DevExpress.ui {
     validationGroup?: string;
   }
   /**
-   * [descr:dxFormSimpleItem]
+   * @deprecated Use SimpleItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormSimpleItem {
@@ -11889,7 +11867,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * [descr:dxFormTabbedItem]
+   * @deprecated Use TabbedItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormTabbedItem {
@@ -11944,13 +11922,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormTabbedItem.tabs.items]
        */
-      items?: Array<
-        | dxFormSimpleItem
-        | dxFormGroupItem
-        | dxFormTabbedItem
-        | dxFormEmptyItem
-        | dxFormButtonItem
-      >;
+      items?: Array<DevExpress.ui.dxForm.Item>;
       /**
        * [descr:dxFormTabbedItem.tabs.tabTemplate]
        */
@@ -18359,7 +18331,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * [descr:dxTabPanelItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabPanelItem extends dxMultiViewItem {
@@ -18396,7 +18368,7 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxTabPanelItem | any>
+      | Array<string | DevExpress.ui.dxTabPanel.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
@@ -18417,7 +18389,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.items]
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<string | DevExpress.ui.dxTabPanel.Item | any>;
     /**
      * [descr:dxTabPanelOptions.onTitleClick]
      */
@@ -19169,7 +19141,7 @@ declare module DevExpress.ui {
     export type Properties = dxToolbarOptions;
   }
   /**
-   * [descr:dxToolbarItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxToolbarItem extends CollectionWidgetItem {
@@ -19224,14 +19196,14 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | dxToolbarItem | any>
+      | Array<string | DevExpress.ui.dxToolbar.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
       | DevExpress.data.DataSourceOptions;
     /**
      * [descr:dxToolbarOptions.items]
      */
-    items?: Array<string | dxToolbarItem | any>;
+    items?: Array<string | DevExpress.ui.dxToolbar.Item | any>;
     /**
      * [descr:dxToolbarOptions.menuItemTemplate]
      */
@@ -20201,7 +20173,7 @@ declare module DevExpress.ui {
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxTreeList.RowObject instead
    */
   export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
@@ -22036,6 +22008,19 @@ declare module DevExpress.ui.dialog {
    */
   export function custom(options: CustomDialogOptions): any;
 }
+declare module DevExpress.ui.dxForm {
+  export type ButtonItem = dxFormButtonItem;
+  export type EmptyItem = dxFormEmptyItem;
+  export type GroupItem = dxFormGroupItem;
+  export type Item =
+    | SimpleItem
+    | GroupItem
+    | TabbedItem
+    | EmptyItem
+    | ButtonItem;
+  export type SimpleItem = dxFormSimpleItem;
+  export type TabbedItem = dxFormTabbedItem;
+}
 declare module DevExpress.ui.dxOverlay {
   /**
    * [descr:ui.dxOverlay.baseZIndex(zIndex)]
@@ -22044,6 +22029,12 @@ declare module DevExpress.ui.dxOverlay {
 }
 declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;
+}
+declare module DevExpress.ui.dxTabPanel {
+  export type Item = dxTabPanelItem;
+}
+declare module DevExpress.ui.dxToolbar {
+  export type Item = dxToolbarItem;
 }
 declare module DevExpress.utils {
   /**

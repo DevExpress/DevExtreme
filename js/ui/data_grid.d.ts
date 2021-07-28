@@ -3900,6 +3900,7 @@ export interface CustomSummaryInfo {
   readonly groupIndex?: number;
 }
 
+/** @public */
 export interface Summary {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
