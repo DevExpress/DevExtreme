@@ -117,6 +117,7 @@ class FileManagerFilesTreeView extends Widget {
 
     _onFilesTreeViewItemContextMenu({ itemElement, event }) {
         event.preventDefault();
+        event.stopPropagation();
         const itemData = $(itemElement).data('item');
         this._contextMenu.showAt([ itemData ], itemElement, event);
     }
