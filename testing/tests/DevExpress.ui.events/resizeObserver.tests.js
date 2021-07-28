@@ -35,6 +35,7 @@ QUnit.module('Resize observer', () => {
         },
         afterEach: function() {
             this.observer.disconnect();
+            this.$element.width(200);
         }
     }, () => {
         QUnit.testInActiveWindow('should call passed "shouldSkipCallback" function before each callback', function(assert) {
@@ -82,7 +83,7 @@ QUnit.module('Resize observer', () => {
         },
         afterEach: function() {
             this.observer.disconnect();
-            this.callback.reset();
+            this.$element.width(200);
         }
     }, () => {
         QUnit.testInActiveWindow('callback should be raised after observable element resize', function(assert) {
