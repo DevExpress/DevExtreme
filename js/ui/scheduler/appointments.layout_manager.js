@@ -4,7 +4,12 @@ import HorizontalAppointmentsStrategy from './appointments/rendering_strategies/
 import HorizontalMonthLineAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './appointments/rendering_strategies/strategy_agenda';
-import { getModelProvider } from './instanceFactory';
+import {
+    getModelProvider,
+    getTimeZoneCalculator,
+    getResourceManager,
+    getAppointmentDataProvider
+} from './instanceFactory';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -41,9 +46,10 @@ class AppointmentLayoutManager {
     _initRenderingStrategy() {
         const Strategy = RENDERING_STRATEGIES[this.viewRenderingStrategyName];
         const workspace = this.instance.getWorkSpace();
+        const key = this.instance.key;
         this._renderingStrategyInstance = new Strategy({
             instance: this.instance,
-            key: this.instance.key,
+            key,
             adaptivityEnabled: this.modelProvider.adaptivityEnabled,
             rtlEnabled: this.modelProvider.rtlEnabled,
             startDayHour: this.modelProvider.startDayHour,
@@ -57,7 +63,29 @@ class AppointmentLayoutManager {
             getCellHeight: () => workspace.getCellHeight(),
             getAllDayHeight: () => workspace.getAllDayHeight(),
             getResizableStep: () => workspace.positionHelper.getResizableStep(),
-            getVisibleDayDuration: () => workspace.getVisibleDayDuration()
+            getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
+            // appointment settings
+            timeZoneCalculator: getTimeZoneCalculator(key),
+            resourceManager: getResourceManager(key),
+            appointmentDataProvider: getAppointmentDataProvider(key),
+            timeZone: this.modelProvider.timeZone,
+            firstDayOfWeek: this.instance.getFirstDayOfWeek(),
+            viewStartDayHour: this.modelProvider.getCurrentViewOption('startDayHour'),
+            viewEndDayHour: this.modelProvider.getCurrentViewOption('endDayHour'),
+            viewType: workspace.type,
+            endViewDate: workspace.getEndViewDate(),
+            positionHelper: workspace.positionHelper,
+            isGroupedByDate: workspace.isGroupedByDate(),
+            cellDuration: workspace.getCellDuration(),
+            viewDataProvider: workspace.viewDataProvider,
+            supportAllDayRow: workspace.supportAllDayRow(),
+            dateRange: workspace.getDateRange(),
+            intervalDuration: workspace.getIntervalDuration(),
+            isVerticalOrientation: workspace.isVerticalOrientation(),
+            allDayIntervalDuration: workspace.getIntervalDuration(true),
+            isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
+            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
+            DOMMetaData: workspace.getDOMElementsMetaData(),
         });
     }
 

@@ -111,7 +111,9 @@ module('Subscribes', {
                 }
             });
 
-            const { dateSettingsStrategy } = this.instance._getAppointmentSettingsGenerator();
+            const layoutManager = this.instance.getLayoutManager();
+            const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+            const { dateSettingsStrategy } = appointmentRenderingStrategy.getAppointmentSettingsGenerator();
 
             assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
         });
