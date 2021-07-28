@@ -5,6 +5,7 @@ import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
 import devices from '../../../../core/devices';
 import { convertRulesToOptions } from '../../../../core/options/utils';
+import getElementComputedStyle from '../../../utils/get_computed_style';
 import { current } from '../../../../ui/themes';
 import {
   clear as clearEventHandlers,
@@ -16,6 +17,8 @@ import { Widget } from '../../common/widget';
 import { ValidationMessage } from '../../overlays/validation_message';
 
 interface Mock extends jest.Mock {}
+
+jest.mock('../../../utils/get_computed_style');
 
 jest.mock('../../overlays/validation_message', () => ({ ValidationMessage: () => null }));
 
@@ -283,17 +286,17 @@ describe('CheckBox', () => {
         each(['material-compact', 'generic-compact', 'material', 'generic'])
           .it('should set fontSize properly for "%s" theme when iconSize is undefined', (theme) => {
             (current as Mock).mockImplementation(() => theme);
+
             let iconSize = theme === 'material' ? 18 : 22;
             if (theme.includes('compact')) {
               iconSize = 16;
             }
-            const originalGetComputedStyle = window.getComputedStyle;
-            Object.defineProperty(window, 'getComputedStyle', {
-              value: () => ({
-                width: iconSize,
-                height: iconSize,
-              }),
+
+            (getElementComputedStyle as jest.Mock).mockReturnValue({
+              width: iconSize,
+              height: iconSize,
             });
+
             const checkBox = new CheckBox({});
             checkBox.iconRef = React.createRef() as any;
             checkBox.iconRef.current = {
@@ -304,7 +307,6 @@ describe('CheckBox', () => {
             const icon = checkBox.iconRef.current;
 
             checkBox.updateIconFontSize();
-            window.getComputedStyle = originalGetComputedStyle;
 
             const iconFontSizeRatio = theme.includes('compact') ? 12 / iconSize : 16 / iconSize;
             const expectedValue = `${Math.ceil(iconFontSizeRatio * iconSize)}px`;
@@ -313,20 +315,28 @@ describe('CheckBox', () => {
           });
 
         it("should correctly change icon font size if 'iconHeight'/'iconWidth' options are defined in pixels string", () => {
-          const originalGetComputedStyle = window.getComputedStyle;
-          Object.defineProperty(window, 'getComputedStyle', {
-            value: () => ({
-              width: '22px',
-              height: '22px',
-            }),
-          });
+          (getElementComputedStyle as jest.Mock).mockReturnValue({ width: '22px', height: '22px' });
+
           const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             style: {},
           } as any;
           checkBox.updateIconFontSize();
-          window.getComputedStyle = originalGetComputedStyle;
+
+          const icon = checkBox.iconRef.current;
+          expect(icon?.style.fontSize).toEqual('16px');
+        });
+
+        it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
+          (getElementComputedStyle as jest.Mock).mockReturnValue(null);
+
+          const checkBox = new CheckBox({});
+          checkBox.iconRef = React.createRef() as any;
+          checkBox.iconRef.current = {
+            style: {},
+          } as any;
+          checkBox.updateIconFontSize();
 
           const icon = checkBox.iconRef.current;
           expect(icon?.style.fontSize).toEqual('16px');
