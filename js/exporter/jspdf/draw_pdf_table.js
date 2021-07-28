@@ -58,9 +58,6 @@ export function drawPdfTable(doc, table) {
                 const textArray = splitTextToArray(doc, cell.text, cell._rect.w);
                 const textY = cell._rect.y + getLineHeight(doc) / 2;
                 doc.text(textArray, cell._rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
-
-                // const textY = cell._rect.y + (cell._rect.h / 2);
-                // doc.text(cell.text, cell._rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
             }
             drawBorder(cell._rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });
