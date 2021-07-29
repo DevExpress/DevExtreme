@@ -3502,6 +3502,7 @@ QUnit.module('View\'s focus', {
         // assert
         assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
         assert.ok(!$checkbox.parent('td').hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($checkbox.parent('td').hasClass('dx-cell-focus-disabled'), 'cell focus is disabled');
     });
 
 
