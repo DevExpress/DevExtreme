@@ -1,6 +1,7 @@
 $(function() {
     var editorInstance = $(".html-editor").dxHtmlEditor({
         height: 300,
+        value: markup,
         toolbar: {
             items: [
                 "undo", "redo", "separator",
@@ -31,4 +32,6 @@ $(function() {
             $(".value-content").text(editorInstance.option("value"));
         }
     });
+
+    $(".value-content").text(markup);
 });

@@ -1,7 +1,7 @@
 <dx-html-editor
     [height]="300"
     [(valueType)]="editorValueType"
-    (valueChange)="valueChange($event)">
+    [(value)]="valueContent">
     <dxo-toolbar>
             <dxi-item name="undo"></dxi-item>
             <dxi-item name="redo"></dxi-item>
@@ -22,13 +22,6 @@
             <dxi-item name="color"></dxi-item>
             <dxi-item name="background"></dxi-item>
     </dxo-toolbar>
-
-    <h2>
-        <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
-        Formatted Text Editor (HTML Editor)
-    </h2>
-    <br>
-    <p>DevExtreme JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p>
 </dx-html-editor>
 
 <div class="options">

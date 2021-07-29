@@ -8,6 +8,8 @@ import {
 
 import "devextreme/ui/html_editor/converters/markdown";
 
+import { Service } from './app.service';
+
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
 }
@@ -15,19 +17,20 @@ if(!/localhost/.test(document.location.host)) {
 @Component({
     selector: 'demo-app',
     templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+    styleUrls: ['app/app.component.css'],
+    providers: [Service]
 })
 
 export class AppComponent {
     valueContent: string;
     editorValueType: string;
 
-    onValueTypeChanged({ addedItems }) {
-        this.editorValueType = addedItems[0].text.toLowerCase();
+    constructor(service: Service) {
+        this.valueContent = service.getMarkup();
     }
 
-    valueChange(value) {
-        this.valueContent = value;
+    onValueTypeChanged({ addedItems }) {
+        this.editorValueType = addedItems[0].text.toLowerCase();
     }
 }
 

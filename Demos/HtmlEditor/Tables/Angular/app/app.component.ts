@@ -3,16 +3,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxHtmlEditorModule } from 'devextreme-angular';
 
+import { Service } from './app.service';
+
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
 }
 
 @Component({
     selector: 'demo-app',
-    templateUrl: 'app/app.component.html'
+    templateUrl: 'app/app.component.html',
+    providers: [Service]
 })
 
-export class AppComponent { }
+export class AppComponent { 
+    valueContent: string;
+
+    constructor(service: Service) {
+        this.valueContent = service.getMarkup();
+    }
+}
 
 @NgModule({
     imports: [

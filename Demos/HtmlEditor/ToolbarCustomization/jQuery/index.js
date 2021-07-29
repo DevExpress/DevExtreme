@@ -1,6 +1,7 @@
 $(function() {
     var popupInstance;
     var editorInstance = $(".html-editor").dxHtmlEditor({
+        value: markup,
         toolbar: {
             items: [
                 "undo", "redo", "separator",

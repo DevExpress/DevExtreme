@@ -8,6 +8,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             "toolbar.multiline": "multilineToolbar"
         },
         height: 725,
+        value: markup,
         toolbar: {
             items: [
                 "undo", "redo", "separator",

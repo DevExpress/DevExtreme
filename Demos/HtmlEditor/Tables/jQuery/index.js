@@ -1,5 +1,6 @@
 $(function() {
     $("#html-editor").dxHtmlEditor({
+        value: markup,
         height: 350,
         toolbar: {
             items: [

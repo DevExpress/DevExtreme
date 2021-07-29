@@ -1,6 +1,7 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
+    $scope.editorValue = markup;
     $scope.htmlEditorOptions = {
         height: 300,
         toolbar: {
