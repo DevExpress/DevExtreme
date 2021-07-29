@@ -58,6 +58,8 @@ class AppointmentLayoutManager {
             agendaDuration: workspace.option('agendaDuration'),
             currentDate: this.modelProvider.currentDate,
             isVirtualScrolling: this.instance.isVirtualScrolling(),
+            dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
+            startViewDate: workspace.getStartViewDate(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
             getCellWidth: () => workspace.getCellWidth(),
             getCellHeight: () => workspace.getCellHeight(),
