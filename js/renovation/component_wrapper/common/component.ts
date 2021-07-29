@@ -188,6 +188,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const { parentNode } = containerNode;
 
     if (parentNode) {
+      cleanDataRecursive(containerNode);
       parentNode.$V = containerNode.$V;
       render(null, parentNode);
       parentNode.appendChild(containerNode);
@@ -199,8 +200,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 
   _dispose(): void {
-    cleanDataRecursive(this.$element()[0]);
-
     this._removeWidget();
     super._dispose();
   }
