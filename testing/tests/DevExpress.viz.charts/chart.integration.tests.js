@@ -1959,6 +1959,40 @@ QUnit.test('Chart can hide series on done event', function(assert) {
     assert.strictEqual(drawn.callCount, 2);
 });
 
+// T1009261
+QUnit.test('Chart with large scale break', function(assert) {
+    const container = $('#chartContainer');
+
+    createChartInstance({
+        size: {
+            width: 500
+        },
+        dataSource: [
+            { x: '2016-03-27T21:00:00.000Z', y1: 1600 },
+            { x: '2016-07-30T21:00:00.000Z', y1: 430 }
+        ],
+        legend: {
+            visible: false
+        },
+        series: [{
+            type: 'bar',
+            argumentField: 'x',
+            valueField: 'y1'
+        }],
+        argumentAxis: {
+            type: 'continuous',
+            argumentType: 'datetime',
+            breaks: [{
+                startValue: new Date(2016, 2, 31, 21),
+                endValue: new Date(2016, 6, 21, 21)
+            }]
+        }
+    }, container);
+
+    assert.strictEqual(container.find('.dxc-arg-breaks path').length, 3);
+
+});
+
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

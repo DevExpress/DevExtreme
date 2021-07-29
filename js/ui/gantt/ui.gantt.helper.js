@@ -78,32 +78,14 @@ export const GanttHelper = {
         return allowSelection ? 'single' : 'none';
     },
 
-    convertTreeToList(root) {
-        const stack = [];
-        const array = [];
-        const hashMap = {};
-        stack.push(root);
-
-        while(stack.length !== 0) {
-            const node = stack.pop();
-            if(!node.children || node.children.length === 0) {
-                GanttHelper.visitNode(node, hashMap, array);
-            } else {
-                array.push(node.data);
-                const childrenCount = node.children.length - 1;
-                for(let i = childrenCount; i >= 0; i--) {
-                    stack.push(node.children[i]);
-                }
-            }
-        }
-        array.shift();
-        return array;
-    },
-
-    visitNode(node, hashMap, array) {
-        if(!hashMap[node.key]) {
-            hashMap[node.key] = true;
+    convertTreeToList(node, array) {
+        if(node.data) {
             array.push(node.data);
+        }
+
+        for(let i = 0; i < node.children?.length; i++) {
+            const child = node.children[i];
+            GanttHelper.convertTreeToList(child, array);
         }
     },
 
