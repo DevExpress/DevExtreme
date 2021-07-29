@@ -22,7 +22,8 @@ class SpeedDialItem extends Overlay {
             useInkRipple: false,
             callOverlayRenderShading: false,
             width: 'auto',
-            zIndex: 1500
+            zIndex: 1500,
+            _observeContentResize: false
         });
     }
 
