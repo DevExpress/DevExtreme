@@ -162,7 +162,7 @@ export function convertToTemplateOptions(renderOptions, editorOptions, component
     };
 }
 
-export function adjustWidgetContainer({ $container, labelLocation }) {
+export function adjustEditorContainer({ $container, labelLocation }) {
     const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
     $container.
         addClass(FIELD_ITEM_CONTENT_CLASS).
@@ -176,11 +176,11 @@ export function renderTemplateTo({ $container, template, templateOptions }) {
     });
 }
 
-export function renderComponentTo({ $container, createComponentCallback, editorType, editorOptions, helpID, labelID, isRequired }) {
+export function renderComponentTo({ $container, createComponentCallback, componentType, componentOptions, helpID, labelID, isRequired }) {
     const $div = $('<div>').appendTo($container);
 
     try {
-        const result = createComponentCallback($div, editorType, editorOptions);
+        const result = createComponentCallback($div, componentType, componentOptions);
         result.setAria('describedby', helpID);
         result.setAria('labelledby', labelID);
         result.setAria('required', isRequired);

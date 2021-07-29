@@ -49,7 +49,7 @@ import {
     convertAlignmentToTextAlign,
     renderComponentTo,
     renderTemplateTo,
-    adjustWidgetContainer,
+    adjustEditorContainer,
     convertToTemplateOptions } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
@@ -787,7 +787,7 @@ const LayoutManager = Widget.inherit({
             editorOptions.name = renderOptions.dataField;
         }
 
-        adjustWidgetContainer({
+        adjustEditorContainer({
             $container: options.$container,
             labelLocation: this.option('labelLocation'),
         });
@@ -802,8 +802,8 @@ const LayoutManager = Widget.inherit({
             editorWidget = renderComponentTo({
                 $container: options.$container,
                 createComponentCallback: this._createComponent.bind(this),
-                editorType: renderOptions.editorType,
-                editorOptions,
+                componentType: renderOptions.editorType,
+                componentOptions: editorOptions,
                 helpID: renderOptions.helpID,
                 labelID: renderOptions.labelID,
                 isRequired: renderOptions.isRequired
