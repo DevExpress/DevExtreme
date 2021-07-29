@@ -595,7 +595,7 @@ initEvent(normalizeEventArguments(function(src, config) {
         that.currentTarget = undefined;
         that.timeStamp = src.timeStamp || Date.now();
     } else {
-        Object.assign(that, src);
+        extend(that, src);
     }
 
     addProperty('which', calculateWhich, that);

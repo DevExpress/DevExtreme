@@ -97,9 +97,11 @@ QUnit.module('event utils', () => {
                 $.each(allProps, function() {
                     assert.ok(this in e || this in e.originalEvent, 'event has \'' + this + '\' property');
                 });
-                $.each(eventOwnProps, function() {
-                    assert.ok(Object.keys(e).indexOf(this) > -1, 'property \'' + this + '\' is own property');
-                });
+                if(!navigator.pointerEnabled && !navigator.msPointerEnabled) {
+                    $.each(eventOwnProps, function() {
+                        assert.ok(Object.keys(e).indexOf(this) > -1, 'property \'' + this + '\' is own property');
+                    });
+                }
             });
         });
     }
