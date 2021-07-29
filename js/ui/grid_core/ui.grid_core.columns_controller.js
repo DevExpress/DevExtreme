@@ -977,23 +977,13 @@ export const columnsControllerModule = {
             };
 
             const strictParseNumber = function(text, format) {
-                const cleanedText = text
-                    .replaceAll(numberLocalization.getThousandsSeparator(), '')
-                    .replace(/^\+/, '');
-
-                const parsedValue = numberLocalization.parse(cleanedText, format);
+                const parsedValue = numberLocalization.parse(text, format);
 
                 if(isNumeric(parsedValue)) {
                     const formattedValue = numberLocalization.format(parsedValue, format);
                     const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue);
 
-                    const success =
-                        formattedValue === text ||
-                        formattedValue === cleanedText ||
-                        formattedValueWithDefaultFormat === text ||
-                        formattedValueWithDefaultFormat === cleanedText;
-
-                    if(success) {
+                    if(formattedValue === text || formattedValueWithDefaultFormat === text) {
                         return parsedValue;
                     }
                 }

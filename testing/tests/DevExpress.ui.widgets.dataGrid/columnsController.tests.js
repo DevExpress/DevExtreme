@@ -6533,14 +6533,7 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
             assert.strictEqual(column.parseValue('1.2'), 1.2);
             assert.strictEqual(column.parseValue('12'), 12);
             assert.strictEqual(column.parseValue('-12'), -12);
-            assert.strictEqual(column.parseValue('+12'), 12);
         });
-
-        // act
-        this.columnOption(0, 'format', '#.#');
-
-        // assert
-        assert.strictEqual(column.parseValue('12,000'), 12000);
     });
 
     // T111930
@@ -6561,7 +6554,6 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
         assert.equal(column.parseValue('12'), 12, '12');
         assert.equal(column.parseValue('$12'), 12, '$12');
         assert.equal(column.parseValue('$12,000'), 12000, '$12,000');
-        assert.equal(column.parseValue('12,000'), 12000, '12,000');
         assert.equal(column.parseValue('12000'), 12000, '12000');
         assert.equal(column.parseValue(12), 12, '12 (number)');
     });
