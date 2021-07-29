@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
 import browser from '../../core/utils/browser';
 import devices from '../../core/devices';
-import { fitIntoRange, inRange, adjust as adjustNumber } from '../../core/utils/math';
+import { fitIntoRange, inRange } from '../../core/utils/math';
 
 import number from '../../localization/number';
 import {
@@ -14,7 +14,7 @@ import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
 import { addNamespace, getChar, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
-import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex, adjustPercentValue } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -424,11 +424,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return !format.parser && this._isPercentFormat() ? this._handlePercentValue(parsedValue, maxPrecision) : parsedValue;
-    },
-
-    _handlePercentValue: function(rawValue, precision) {
-        return rawValue && adjustNumber(rawValue / 100, precision);
+        return !format.parser && this._isPercentFormat() ? adjustPercentValue(parsedValue, maxPrecision) : parsedValue;
     },
 
     _getParsedValue: function(text, format) {
