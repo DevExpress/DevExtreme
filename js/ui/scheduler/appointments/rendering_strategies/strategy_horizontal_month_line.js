@@ -8,6 +8,8 @@ const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
+    get viewDataProvider() { return this.options.viewDataProvider; }
+
     calculateAppointmentWidth(appointment, position) {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const { normalizedEndDate } = position.info.appointment;
@@ -16,9 +18,13 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
         let width = this.cropAppointmentWidth(duration * cellWidth, cellWidth);
 
-        if(this.instance.isVirtualScrolling()) {
-            const workSpace = this.instance.getWorkSpace();
-            const skippedDays = workSpace.viewDataProvider.getSkippedDaysCount(position.groupIndex, startDate, normalizedEndDate, duration);
+        if(this.isVirtualScrolling) {
+            const skippedDays = this.viewDataProvider.getSkippedDaysCount(
+                position.groupIndex,
+                startDate,
+                normalizedEndDate,
+                duration
+            );
 
             width -= skippedDays * cellWidth;
         }
