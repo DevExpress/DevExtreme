@@ -4,6 +4,7 @@ import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
+import { getPublicElement } from '../../core/element';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import { format } from '../../core/utils/string';
@@ -46,9 +47,10 @@ import {
     adjustContainerAsButtonItem,
     convertAlignmentToJustifyContent,
     convertAlignmentToTextAlign,
-    renderEditorOrTemplateTo,
-    convertToTemplateOptions,
-    convertToWidgetOptions } from './ui.form.utils';
+    renderComponentTo,
+    renderTemplateTo,
+    adjustWidgetContainer,
+    convertToTemplateOptions } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -753,6 +755,7 @@ const LayoutManager = Widget.inherit({
             ? { value: dataValue }
             : {};
         const isDeepExtend = true;
+        let editorWidget;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
@@ -784,18 +787,29 @@ const LayoutManager = Widget.inherit({
             editorOptions.name = renderOptions.dataField;
         }
 
-        const templateOptions = convertToTemplateOptions(renderOptions, editorOptions, this._getComponentOwner());
-
-        const widgetOptions = convertToWidgetOptions(renderOptions, editorOptions);
-
-        const editorWidget = renderEditorOrTemplateTo({
+        adjustWidgetContainer({
             $container: options.$container,
             labelLocation: this.option('labelLocation'),
-            createComponentCallback: this._createComponent.bind(this),
-            templateOptions,
-            widgetOptions
         });
 
+        if(renderOptions.template) {
+            renderTemplateTo({
+                $container: getPublicElement(options.$container),
+                template: renderOptions.template,
+                templateOptions: convertToTemplateOptions(renderOptions, editorOptions, this._getComponentOwner())
+            });
+        } else {
+            editorWidget = renderComponentTo({
+                $container: options.$container,
+                createComponentCallback: this._createComponent.bind(this),
+                editorType: renderOptions.editorType,
+                editorOptions,
+                helpID: renderOptions.helpID,
+                labelID: renderOptions.labelID,
+                isRequired: renderOptions.isRequired
+            });
+
+        }
         if(editorWidget && renderOptions.dataField) {
             this._bindDataField(editorWidget, renderOptions, options.$container);
         }
