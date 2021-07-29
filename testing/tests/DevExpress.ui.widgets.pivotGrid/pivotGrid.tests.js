@@ -7120,7 +7120,8 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
-        area.renderScrollable({});
+        area.renderScrollable();
+        area.updateScrollableOptions({ useNative: false });
 
         const virtualContent = area.tableElement().prev();
 
