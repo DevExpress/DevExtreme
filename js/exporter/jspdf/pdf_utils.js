@@ -1,5 +1,6 @@
 function getLineHeight(doc) {
-    return doc.getFontSize() * doc.getLineHeightFactor();
+    const textHeight = doc.getTextDimensions('any text').h;
+    return textHeight * doc.getLineHeightFactor();
 }
 
 
