@@ -7151,7 +7151,7 @@ QUnit.module('Data area', () => {
             width: 500,
             height: 250
         });
-        area.renderScrollable({});
+        area.renderScrollable();
 
         area.reset();
 
@@ -7190,7 +7190,7 @@ QUnit.module('Data area', () => {
             height: 4000
         });
 
-        area.renderScrollable(false);
+        area.renderScrollable();
 
         area.setGroupWidth(200);
         area.setGroupHeight(200);
