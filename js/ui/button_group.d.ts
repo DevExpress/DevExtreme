@@ -148,10 +148,14 @@ export default class dxButtonGroup extends Widget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxButtonGroup
+ */
+export type Item = dxButtonGroupItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**

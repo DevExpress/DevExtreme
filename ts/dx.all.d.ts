@@ -4525,7 +4525,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * [descr:dxButtonGroupItem]
+   * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxButtonGroupItem extends CollectionWidgetItem {
@@ -22005,6 +22005,9 @@ declare module DevExpress.ui.dialog {
    * [descr:ui.dialog.custom(options)]
    */
   export function custom(options: CustomDialogOptions): any;
+}
+declare module DevExpress.ui.dxButtonGroup {
+  export type Item = dxButtonGroupItem;
 }
 declare module DevExpress.ui.dxForm {
   export type ButtonItem = dxFormButtonItem;
