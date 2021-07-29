@@ -164,16 +164,6 @@ export const FieldsArea = AreaItem.inherit({
         setHeight(this.groupElement(), value);
     },
 
-    _getGroupElementSize(dimension) {
-        const size = this.groupElement()[0].style[dimension];
-
-        if(size.indexOf('px') > 0) {
-            return parseFloat(size);
-        }
-
-        return null;
-    },
-
     reset: function() {
         this.callBase();
         this.groupElement().css('marginTop', 0);
