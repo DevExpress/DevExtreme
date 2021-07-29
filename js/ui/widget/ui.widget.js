@@ -108,6 +108,9 @@ const Widget = DOMComponent.inherit({
         });
     },
 
+    _resizeObserverCallback: noop,
+    _shouldSkipResizeObserverCallback: noop,
+
     _innerWidgetOptionChanged: function(innerWidget, args) {
         const options = Widget.getOptionsFromContainer(args);
         innerWidget && innerWidget.option(options);
