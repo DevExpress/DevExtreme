@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
 import browser from '../../core/utils/browser';
 import devices from '../../core/devices';
-import { fitIntoRange, inRange } from '../../core/utils/math';
+import { fitIntoRange, inRange, adjust as adjustNumber } from '../../core/utils/math';
 
 import number from '../../localization/number';
 import {
@@ -424,11 +424,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return !format.parser && this._isPercentFormat() ? this._handlePercentValue(parsedValue) : parsedValue;
-    },
-
-    _handlePercentValue: function(rawValue) {
-        return rawValue && rawValue * 100 / 10000;
+        return !format.parser && this._isPercentFormat() ? adjustNumber(parsedValue / 100, maxPrecision) : parsedValue;
     },
 
     _getParsedValue: function(text, format) {
