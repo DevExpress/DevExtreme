@@ -46,7 +46,9 @@ import {
     adjustContainerAsButtonItem,
     convertAlignmentToJustifyContent,
     convertAlignmentToTextAlign,
-    renderEditorContentTo } from './ui.form.utils';
+    renderEditorOrTemplateTo,
+    convertToTemplateOptions,
+    convertToWidgetOptions } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -782,13 +784,16 @@ const LayoutManager = Widget.inherit({
             editorOptions.name = renderOptions.dataField;
         }
 
-        const editorWidget = renderEditorContentTo({
+        const templateOptions = convertToTemplateOptions(renderOptions, editorOptions, this._getComponentOwner());
+
+        const widgetOptions = convertToWidgetOptions(renderOptions, editorOptions);
+
+        const editorWidget = renderEditorOrTemplateTo({
             $container: options.$container,
-            renderOptions,
-            editorOptions,
             labelLocation: this.option('labelLocation'),
-            componentOwner: this._getComponentOwner(),
-            createComponentCallback: this._createComponent.bind(this)
+            createComponentCallback: this._createComponent.bind(this),
+            templateOptions,
+            widgetOptions
         });
 
         if(editorWidget && renderOptions.dataField) {

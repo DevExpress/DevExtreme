@@ -153,7 +153,31 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
     $container.parent().css('justifyContent', justifyContent);
 }
 
-export function renderEditorContentTo({ $container, renderOptions, editorOptions, labelLocation, componentOwner, createComponentCallback }) {
+export function convertToTemplateOptions(renderOptions, editorOptions, componentOwner) {
+    if(!renderOptions.template) {
+        return null;
+    }
+    return {
+        template: renderOptions.template,
+        dataField: renderOptions.dataField,
+        editorType: renderOptions.editorType,
+        editorOptions: editorOptions,
+        component: componentOwner,
+        name: renderOptions.name
+    };
+}
+
+export function convertToWidgetOptions(renderOptions, editorOptions) {
+    return {
+        editorType: renderOptions.editorType,
+        helpID: renderOptions.helpID,
+        labelID: renderOptions.labelID,
+        isRequired: renderOptions.isRequired,
+        editorOptions: editorOptions
+    };
+}
+
+export function renderEditorOrTemplateTo({ $container, labelLocation, createComponentCallback, templateOptions, widgetOptions }) {
     let result;
 
     const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
@@ -161,27 +185,19 @@ export function renderEditorContentTo({ $container, renderOptions, editorOptions
         addClass(FIELD_ITEM_CONTENT_CLASS).
         addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + locationClassSuffix[labelLocation]);
 
-    if(renderOptions.template) {
-        const data = {
-            dataField: renderOptions.dataField,
-            editorType: renderOptions.editorType,
-            editorOptions: editorOptions,
-            component: componentOwner,
-            name: renderOptions.name
-        };
-
-        renderOptions.template.render({
-            model: data,
+    if(templateOptions) {
+        templateOptions.template.render({
+            model: templateOptions,
             container: getPublicElement($container)
         });
     } else {
         const $editor = $('<div>').appendTo($container);
 
         try {
-            result = createComponentCallback($editor, renderOptions.editorType, editorOptions);
-            result.setAria('describedby', renderOptions.helpID);
-            result.setAria('labelledby', renderOptions.labelID);
-            result.setAria('required', renderOptions.isRequired);
+            result = createComponentCallback($editor, widgetOptions.editorType, widgetOptions.editorOptions);
+            result.setAria('describedby', widgetOptions.helpID);
+            result.setAria('labelledby', widgetOptions.labelID);
+            result.setAria('required', widgetOptions.isRequired);
         } catch(e) {
             errors.log('E1035', e.message);
         }
