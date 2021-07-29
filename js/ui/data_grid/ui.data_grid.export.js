@@ -1,4 +1,3 @@
-import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -8,22 +7,10 @@ import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
 import messageLocalization from '../../localization/message';
-import Button from '../button';
-import List from '../list';
-import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
-const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
-const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';
 const DATAGRID_EXPORT_ICON = 'export-to';
-const DATAGRID_EXPORT_EXCEL_ICON = 'xlsxfile';
-const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 const DATAGRID_EXPORT_EXCEL_BUTTON_ICON = 'export-excel-button';
-
-const TOOLBAR_ITEM_AUTO_HIDE_CLASS = 'dx-toolbar-item-auto-hide';
-const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
-
-const BUTTON_CLASS = 'dx-button';
 
 export const DataProvider = Class.inherit({
     ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
@@ -728,11 +715,11 @@ dataGridCore.registerModule('export', {
                         widget = 'dxDropDownButton';
                         widgetOptions = {
                             icon: 'export',
-                            // text: 'Export asdasdasd',
                             displayExpr: 'text',
                             items: items,
                             dropDownOptions: {
-                                width: '100%'
+                                wrapperAttr: { 'class': 'dx-datagrid-export-menu' },
+                                width: 'auto'
                             }
                         };
                     }
