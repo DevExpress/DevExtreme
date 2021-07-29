@@ -9,6 +9,7 @@ const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     get viewDataProvider() { return this.options.viewDataProvider; }
+    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
 
     calculateAppointmentWidth(appointment, position) {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
@@ -47,7 +48,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
     createTaskPositionMap(items, skipSorting) {
         if(!skipSorting) {
-            this.instance.getAppointmentsInstance()._sortAppointmentsByStartDate(items);
+            this.appointmentDataProvider.sortAppointmentsByStartDate(items);
         }
 
         return super.createTaskPositionMap(items);
