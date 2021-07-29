@@ -57,7 +57,7 @@ export const DataArea = AreaItem.inherit({
     updateScrollableOptions: function({ useNative, ...restOptions }) {
         const scrollable = this._getScrollable();
 
-        scrollable.option('useNative', true);
+        scrollable.option('useNative', useNative);
         scrollable.option(restOptions);
     },
 

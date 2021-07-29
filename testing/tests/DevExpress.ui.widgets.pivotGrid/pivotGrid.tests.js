@@ -2950,7 +2950,7 @@ QUnit.module('dxPivotGrid', {
                     this.clock.tick(100);
 
                     const scrollDistance = browser.msie ? 1950 : 1985; // there is a difference in font size for IE
-                    const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
+                    const scrollable = pivotGrid._dataArea._getScrollable();
                     scrollable.scrollTo({ left: scrollDistance, top: 2000 });
                     useNative && triggerScrollEvent(scrollable, this.clock);
                     this.clock.tick(100);
