@@ -587,7 +587,9 @@ function initEvent(EventClass) {
 
 initEvent(normalizeEventArguments(function(src, config) {
     const that = this;
-    const srcIsEvent = src instanceof eventsEngine.Event || (hasWindow() && src instanceof window.Event);
+    const srcIsEvent = src instanceof eventsEngine.Event
+        || (hasWindow() && src instanceof window.Event)
+        || (src.view?.Event && src instanceof src.view.Event);
 
     if(srcIsEvent) {
         that.originalEvent = src;
@@ -595,7 +597,7 @@ initEvent(normalizeEventArguments(function(src, config) {
         that.currentTarget = undefined;
         that.timeStamp = src.timeStamp || Date.now();
     } else {
-        extend(that, src);
+        Object.assign(that, src);
     }
 
     addProperty('which', calculateWhich, that);
