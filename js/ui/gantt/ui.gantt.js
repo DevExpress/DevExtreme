@@ -716,6 +716,7 @@ class Gantt extends Widget {
                 this._sizeHelper?.setGanttHeight(this._$element.height());
                 break;
             case 'sorting':
+                this._ganttTreeList?.setOption('sorting', args.value);
                 break;
             default:
                 super._optionChanged(args);
