@@ -1202,10 +1202,10 @@ module('Table resizing integration', {
             $table = this.$element.find('table');
 
             $table.find('tr').eq(0).find('td').each((i, columnElement) => {
-                assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2.01, 'Column has expected width, index = ' + i);
+                assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2.51, 'Column has expected width, index = ' + i);
             });
 
-            assert.roughEqual($table.outerWidth(), tableWidth, 2.01, 'Table width is not changed');
+            assert.roughEqual($table.outerWidth(), tableWidth, 2.51, 'Table width is not changed');
         });
 
         test('Column resizers should be updated after a column insert', function(assert) {
