@@ -6,7 +6,6 @@ import {
   Mutable,
 } from '@devextreme-generator/declarations';
 import { Page, PageProps } from './page';
-import { PagerProps } from '../common/pager_props';
 import { InternalPagerProps } from '../common/internal_page_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
@@ -91,7 +90,7 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount'> & Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange'>;
+type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {

@@ -4,9 +4,10 @@ import {
   Event,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
+import { BasePagerProps } from './pager_props';
 
 @ComponentBindings()
-export class InternalPagerProps {
+export class InternalPagerProps extends BasePagerProps {
   @OneWay() pageIndex = 1;
 
   @OneWay() pageSize = 5;

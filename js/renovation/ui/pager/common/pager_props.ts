@@ -6,7 +6,7 @@ import { EventCallback } from '../../common/event_callback';
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 @ComponentBindings()
-export class PagerProps {
+export class BasePagerProps {
   @OneWay() gridCompatibility = true;
 
   @OneWay() className?: string;
@@ -31,10 +31,6 @@ export class PagerProps {
 
   @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
 
-  @TwoWay() pageIndex = 1;
-
-  @TwoWay() pageSize = 5;
-
   @OneWay() showPageSizes = true;
 
   @OneWay() pageSizes: (number | 'all')[] = [5, 10];
@@ -46,4 +42,11 @@ export class PagerProps {
   @OneWay() totalCount = 0;
 
   @Event() onKeyDown?: EventCallback<Event>;
+}
+
+@ComponentBindings()
+export class PagerProps extends BasePagerProps {
+  @TwoWay() pageIndex = 1;
+
+  @TwoWay() pageSize = 5;
 }

@@ -6,7 +6,6 @@ import {
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import { PagerProps } from '../common/pager_props';
 import { InternalPagerProps } from '../common/internal_page_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
@@ -40,17 +39,18 @@ export const viewFunction = ({
 function getAllText(): string {
   return messageLocalization.getFormatter('dxPager-pageSizesAllText')();
 }
+
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-class PageSizeSelectorProps {
+class PageSizeSelectorProps extends InternalPagerProps {
   @OneWay() isLargeDisplayMode = true;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSizes'> & Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSelectorProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent<PageSizeSelectorPropsType>() {
+  extends JSXComponent<PageSizeSelectorProps, 'pageSize' | 'pageSizeChange'>() {
   @Ref() htmlRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

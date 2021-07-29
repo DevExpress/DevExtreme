@@ -20,12 +20,9 @@ export const viewFunction = ({
   </LightButton>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize' > & PageProps;
-
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageProps {
+export class PageProps extends InternalPagerProps {
   @OneWay() index = 0;
 
   /* istanbul ignore next: EventCallback cannot be tested */
@@ -41,7 +38,7 @@ export class PageProps {
   view: viewFunction,
 })
 
-export class Page extends JSXComponent<PagePropsType>() {
+export class Page extends JSXComponent<PageProps, 'pageSizeChange' | 'pageSize'>() {
   get label(): string {
     return `Page ${this.value}`;
   }
