@@ -57,7 +57,7 @@ class AppointmentLayoutManager {
             maxAppointmentsPerCell: this.modelProvider.maxAppointmentsPerCell,
             agendaDuration: workspace.option('agendaDuration'),
             currentDate: this.modelProvider.currentDate,
-            isVirtualScrolling: () => this.instance.isVirtualScrolling,
+            isVirtualScrolling: this.instance.isVirtualScrolling(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
             getCellWidth: () => workspace.getCellWidth(),
             getCellHeight: () => workspace.getCellHeight(),

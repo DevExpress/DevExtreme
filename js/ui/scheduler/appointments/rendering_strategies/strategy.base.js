@@ -39,7 +39,7 @@ class BaseRenderingStrategy {
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
 
-    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
+    get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
