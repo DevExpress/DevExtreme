@@ -155,10 +155,7 @@ interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
-/**
- * @namespace DevExpress.data
- * @deprecated use Properties instead
- */
+/** @namespace DevExpress.data */
 export interface PivotGridDataSourceOptions {
     /**
      * @docid
@@ -696,9 +693,3 @@ export default class PivotGridDataSource {
      */
     state(state: any): void;
 }
-
-/**
- * @public
- * @namespace DevExpress.data.PivotGridDataSource
- */
-export type Properties = PivotGridDataSourceOptions;
