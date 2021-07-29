@@ -1938,7 +1938,7 @@ const JSPdfBandsTests = {
                 }];
 
                 const expectedLog = [
-                    'text,F1,10,45,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,60',
+                    'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,60',
                     'text,Band1,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,16',
                     'text,F2,80,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,44',
                     'text,Band1_1,160,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,31,60,20',
@@ -1949,7 +1949,7 @@ const JSPdfBandsTests = {
                     'addPage,',
                     'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,210,16',
                     'text,Band1_1,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,70,20',
-                    'text,Band1_2,80,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,84.2,20',
+                    'text,Band1_2,80,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,90,20',
                     'text,F7,170,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,170,31,50,44',
                     'text,F4,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,70,24',
                     'text,F5,80,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,51,50,24',
@@ -2010,7 +2010,7 @@ const JSPdfBandsTests = {
                 }];
 
                 const expectedLog = [
-                    'text,F1,10,45,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,60',
+                    'text,F1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,70,60',
                     'text,Band1,80,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,15,140,16',
                     'text,F2,80,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,31,80,44',
                     'text,Band1_1,160,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,160,31,60,20',
@@ -2027,7 +2027,7 @@ const JSPdfBandsTests = {
                     'text,f4_1,10,84.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,75,70,30',
                     'text,f5_1,80,84.2,{baseline:middle}', 'setLineWidth,1', 'rect,80,75,50,30',
                     'addPage,',
-                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,84.2,16',
+                    'text,Band1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,90,16',
                     'text,Band1_2,10,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
                     'text,F7,50,40.2,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,50,44',
                     'text,F6,10,60.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
