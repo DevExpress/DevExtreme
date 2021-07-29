@@ -71,9 +71,13 @@ export default class dxNavBar extends dxTabs {
 }
 
 /**
- * @docid
- * @inherits dxTabsItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxNavBar
+ */
+export type Item = dxNavBarItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxNavBarItem extends dxTabsItem {

@@ -81,10 +81,11 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     collapsible?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -132,10 +133,11 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxAccordionItem | any>
      * @fires dxAccordionOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxAccordionItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -206,10 +208,14 @@ export default class dxAccordion extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxAccordion
+ */
+export type Item = dxAccordionItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**

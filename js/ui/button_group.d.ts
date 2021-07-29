@@ -70,9 +70,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<dxButtonGroupItem>
      * @public
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default 'text'
