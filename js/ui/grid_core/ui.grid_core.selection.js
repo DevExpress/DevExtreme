@@ -622,7 +622,7 @@ export const selectionModule = {
 
                         $editor.dxCheckBox('instance').option({
                             visible: isVisible,
-                            value: selectAllValue,
+                            value: selectAllValue
                         });
                     }
                 },

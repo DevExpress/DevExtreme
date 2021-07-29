@@ -12,6 +12,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
+import getElementComputedStyle from '../../utils/get_computed_style';
 import { isMaterial, current } from '../../../ui/themes';
 import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
@@ -160,13 +161,25 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const iconElement = this.iconRef?.current;
     const { iconWidth, iconHeight } = this.props;
 
-    if (iconElement !== null && iconElement !== undefined) {
-      const width = typeof iconWidth === 'number' ? iconWidth : iconElement.offsetWidth;
-      const height = typeof iconHeight === 'number' ? iconHeight : iconElement.offsetHeight;
-      const defaultFontSize = 16;
-      const defaultIconSize = isMaterial(current()) ? 18 : 22;
-      const iconSize = width > 0 && height > 0 ? Math.min(width, height) : defaultIconSize;
+    if (iconElement) {
+      const isCompactTheme = current()?.includes('compact');
+      const defaultFontSize = isCompactTheme ? 12 : 16;
+      const isMaterialTheme = isMaterial(current());
+      let defaultIconSize = isMaterialTheme ? 18 : 22;
+      if (isCompactTheme) {
+        defaultIconSize = 16;
+      }
       const iconFontSizeRatio = defaultFontSize / defaultIconSize;
+
+      let getIconComputedStyle = (): CSSStyleDeclaration => {
+        const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
+        getIconComputedStyle = (): CSSStyleDeclaration => computedStyle;
+        return computedStyle;
+      };
+
+      const width = typeof iconWidth === 'number' ? iconWidth : parseInt(getIconComputedStyle().width, 10);
+      const height = typeof iconHeight === 'number' ? iconHeight : parseInt(getIconComputedStyle().height, 10);
+      const iconSize = Math.min(width, height);
       const calculatedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
 
       iconElement.style.fontSize = calculatedFontSize;

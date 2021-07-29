@@ -188,6 +188,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const { parentNode } = containerNode;
 
     if (parentNode) {
+      cleanDataRecursive(containerNode);
       parentNode.$V = containerNode.$V;
       render(null, parentNode);
       parentNode.appendChild(containerNode);

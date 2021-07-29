@@ -9,6 +9,36 @@ const VIEW_TYPES = [
     'timelineWorkWeek', 'timelineMonth', 'agenda'
 ];
 
+const VIEW_RENDERING_CONFIG = {
+    day: {
+        renderingStrategy: 'vertical'
+    },
+    week: {
+        renderingStrategy: 'vertical'
+    },
+    workWeek: {
+        renderingStrategy: 'vertical'
+    },
+    month: {
+        renderingStrategy: 'horizontalMonth'
+    },
+    timelineDay: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineWeek: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineWorkWeek: {
+        renderingStrategy: 'horizontal'
+    },
+    timelineMonth: {
+        renderingStrategy: 'horizontalMonthLine'
+    },
+    agenda: {
+        renderingStrategy: 'agenda'
+    }
+};
+
 export class ModelProvider {
     constructor(model) {
         this.model = model;
@@ -32,6 +62,8 @@ export class ModelProvider {
             ? this.currentView.type
             : this.currentView;
     }
+    get agendaDuration() { return this.model['agendaDuration']; }
+    get currentDate() { return this.model['currentDate']; }
 
     supportAllDayResizing() {
         return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
@@ -78,5 +110,10 @@ export class ModelProvider {
         }
 
         return this.model[optionName];
+    }
+
+    getViewRenderingStrategyName() {
+        const { renderingStrategy } = VIEW_RENDERING_CONFIG[this.currentViewType];
+        return renderingStrategy;
     }
 }
