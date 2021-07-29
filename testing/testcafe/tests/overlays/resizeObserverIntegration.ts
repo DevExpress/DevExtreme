@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import Popup from '../../model/popup';
 import asyncForEach from '../../helpers/asyncForEach';
@@ -65,4 +66,20 @@ test('Popup dimensions should be correct after width or height animation', async
   await t
     .expect(contentRect.height)
     .eql(300);
+});
+
+fixture`Resize during animation`
+  .page(url(__dirname, './pages/resizeObserverIntegration/shownAfterResizeDuringAnimation.html'))
+  .beforeEach(async (t) => { await t.wait(10000); });
+
+test('Showing and shown events should be raised only once even after resize during animation', async (t) => {
+  const shownCallCount = Number(await Selector('#shown_call_count').innerText);
+  const showingCallCount = Number(await Selector('#showing_call_count').innerText);
+
+  await t
+    .expect(shownCallCount)
+    .eql(1);
+  await t
+    .expect(showingCallCount)
+    .eql(1);
 });

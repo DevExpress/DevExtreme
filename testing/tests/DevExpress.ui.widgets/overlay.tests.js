@@ -4251,30 +4251,4 @@ QUnit.module('resizeObserver integration', {
             resizeOnOpeningDone();
         }, this.timeToWaitResize);
     });
-
-    QUnit.testInActiveWindow('showing and shown events should be raised only once when content is resized during animation', function(assert) {
-        fx.off = false;
-
-        const showingHandled = assert.async();
-        const resizingHandled = assert.async();
-        const showingStub = sinon.stub();
-        const shownStub = sinon.stub();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true,
-            width: 200,
-            height: 200,
-            onShowing: showingStub,
-            onShown: shownStub
-        }).dxOverlay('instance');
-        overlay.option('width', 300);
-
-        setTimeout(() => {
-            setTimeout(() => {
-                assert.ok(shownStub.calledOnce, 'shown is called only once');
-                assert.ok(showingStub.calledOnce, 'showing is called only once');
-                resizingHandled();
-            }, 300);
-            showingHandled();
-        }, 300);
-    });
 });
