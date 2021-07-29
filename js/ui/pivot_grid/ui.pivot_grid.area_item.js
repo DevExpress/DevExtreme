@@ -59,6 +59,14 @@ export { getRealElementWidth };
 ///#ENDDEBUG
 
 export const AreaItem = Class.inherit({
+    ctor: function(component) {
+        this.component = component;
+    },
+
+    option: function() {
+        return this.component.option.apply(this.component, arguments);
+    },
+
     _getRowElement: function(index) {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -289,14 +297,6 @@ export const AreaItem = Class.inherit({
         }
     },
 
-    ctor: function(component) {
-        this.component = component;
-    },
-
-    option: function() {
-        return this.component.option.apply(this.component, arguments);
-    },
-
     getRowsLength: function() {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -410,19 +410,23 @@ export const AreaItem = Class.inherit({
     },
 
     getGroupHeight: function() {
-        const height = this._getGroupElementSize('height');
-
-        return isNumeric(height) ? height : null;
+        return this._getGroupElementSize('height');
     },
 
     getGroupWidth: function() {
-        const width = this._getGroupElementSize('width');
-
-        return isNumeric(width) ? width : null;
+        return this._getGroupElementSize('width');
     },
 
     _getGroupElementSize(dimension) {
-        return this._getScrollable().option(dimension);
+        const size = this._getScrollable().option(dimension);
+
+        if(isNumeric(size)) {
+            return size;
+        } else if(size.indexOf('px') > 0) {
+            return parseFloat(size);
+        }
+
+        return null;
     },
 
     groupElement: function() {

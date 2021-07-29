@@ -28,6 +28,11 @@ function getCellPath(tableElement, cell) {
 }
 
 export const HorizontalHeadersArea = AreaItem.inherit({
+    ctor: function(component) {
+        this.callBase(component);
+        this._scrollBarWidth = 0;
+    },
+
     _getAreaName: function() {
         return 'column';
     },
@@ -102,7 +107,7 @@ export const HorizontalHeadersArea = AreaItem.inherit({
         return false;
     },
 
-    processScroll: function() {
+    renderScrollable: function() {
         this._groupElement.dxScrollable({
             useNative: false,
             useSimulatedScrollbar: false,
@@ -114,27 +119,21 @@ export const HorizontalHeadersArea = AreaItem.inherit({
     },
 
     processScrollBarSpacing: function(scrollBarWidth) {
-        const that = this;
-        const groupAlignment = that.option('rtlEnabled') ? 'right' : 'left';
+        const groupAlignment = this.option('rtlEnabled') ? 'right' : 'left';
         const groupWidth = this.getGroupWidth();
 
         if(groupWidth) {
-            that.setGroupWidth(groupWidth - scrollBarWidth);
+            this.setGroupWidth(groupWidth - scrollBarWidth);
         }
 
-        if(that._scrollBarWidth) {
-            that._groupElement.next().remove();
+        if(this._scrollBarWidth) {
+            this._groupElement.next().remove();
         }
 
-        that._groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
+        this._groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
 
-        that._groupElement.css('float', groupAlignment).width(that.getGroupHeight());
-        that._scrollBarWidth = scrollBarWidth;
-    },
-
-    ctor: function(component) {
-        this.callBase(component);
-        this._scrollBarWidth = 0;
+        this._groupElement.css('float', groupAlignment).width(this.getGroupHeight());
+        this._scrollBarWidth = scrollBarWidth;
     },
 
     getScrollPath: function(offset) {
@@ -204,7 +203,7 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
         return false;
     },
 
-    processScroll: function() {
+    renderScrollable: function() {
         this._groupElement.dxScrollable({
             useNative: false,
             useSimulatedScrollbar: false,
@@ -216,26 +215,25 @@ export const VerticalHeadersArea = HorizontalHeadersArea.inherit({
     },
 
     processScrollBarSpacing: function(scrollBarWidth) {
-        const that = this;
-        const groupHeight = that.getGroupHeight();
+        const groupHeight = this.getGroupHeight();
 
         if(groupHeight) {
-            that.setGroupHeight(groupHeight - scrollBarWidth);
+            this.setGroupHeight(groupHeight - scrollBarWidth);
         }
 
-        if(that._scrollBarWidth) {
-            that._groupElement.next().remove();
+        if(this._scrollBarWidth) {
+            this._groupElement.next().remove();
         }
 
         if(scrollBarWidth) {
-            that._groupElement.after(
+            this._groupElement.after(
                 $('<div>')
                     .width('100%')
                     .height(scrollBarWidth - 1)
             );
         }
 
-        that._scrollBarWidth = scrollBarWidth;
+        this._scrollBarWidth = scrollBarWidth;
     },
 
     getScrollPath: function(offset) {

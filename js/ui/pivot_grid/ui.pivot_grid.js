@@ -31,6 +31,8 @@ import Popup from '../popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
+import { getScrollBarInfo } from './utils/get_scrollbar_info';
+
 // STYLE pivotGrid
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
@@ -83,50 +85,6 @@ function subscribeToScrollEvent(area, handler) {
 
     area.on('scroll', handler)
         .on('stop', handler);
-}
-
-const scrollBarInfoCache = {};
-
-function getScrollBarInfo(useNativeScrolling) {
-    if(scrollBarInfoCache[useNativeScrolling]) {
-        return scrollBarInfoCache[useNativeScrolling];
-    }
-
-    let scrollBarWidth = 0;
-    const options = {};
-
-    const container = $(DIV).css({
-        position: 'absolute',
-        visibility: 'hidden',
-        top: -1000,
-        left: -1000,
-        width: 100,
-        height: 100
-    }).appendTo('body');
-
-    const content = $('<p>').css({
-        width: '100%',
-        height: 200
-    }).appendTo(container);
-
-    if(useNativeScrolling !== 'auto') {
-        options.useNative = !!useNativeScrolling;
-        options.useSimulatedScrollbar = !useNativeScrolling;
-    }
-
-    container.dxScrollable(options);
-
-    const scrollBarUseNative = container.dxScrollable('instance').option('useNative');
-    scrollBarWidth = scrollBarUseNative ? container.width() - content.width() : 0;
-
-    container.remove();
-
-    scrollBarInfoCache[useNativeScrolling] = {
-        scrollBarWidth: scrollBarWidth,
-        scrollBarUseNative: scrollBarUseNative
-    };
-
-    return scrollBarInfoCache[useNativeScrolling];
 }
 
 function getCommonBorderWidth(elements, direction) {
@@ -1118,9 +1076,9 @@ const PivotGrid = Widget.inherit({
             that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
             that._renderDescriptionArea();
 
-            rowsArea.processScroll();
-            columnsArea.processScroll();
-            dataArea.processScroll();
+            rowsArea.renderScrollable();
+            columnsArea.renderScrollable();
+            dataArea.renderScrollable();
         }
 
         [dataArea, rowsArea, columnsArea].forEach(function(area) {
@@ -1265,7 +1223,6 @@ const PivotGrid = Widget.inherit({
 
         deferUpdate(function() {
             const resultWidths = that._dataArea.getColumnsWidth();
-
             const rowHeights = that._rowsArea.getRowsHeight();
 
             const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
@@ -1396,7 +1353,12 @@ const PivotGrid = Widget.inherit({
                 }
 
                 const updateScrollableResults = [];
-                that._dataArea.updateScroll(scrollBarInfo.scrollBarUseNative, that.option('rtlEnabled'), that._getDataAreaScrollDirection(hasColumnsScroll, hasRowsScroll));
+                that._dataArea.updateScrollableOptions({
+                    useNative: !!scrollBarInfo.scrollBarUseNative,
+                    useSimulatedScrollbar: !scrollBarInfo.scrollBarUseNative,
+                    direction: that._dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
+                    rtlEnabled: that.option('rtlEnabled')
+                });
 
                 each([that._columnsArea, that._rowsArea, that._dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
@@ -1450,16 +1412,6 @@ const PivotGrid = Widget.inherit({
             width: virtualContentParams.width,
             height: this._columnsArea.groupElement().height()
         });
-    },
-
-    _getDataAreaScrollDirection: function(horizontalScroll, verticalScroll) {
-        if(horizontalScroll && !verticalScroll) {
-            return 'horizontal';
-        } else if(!horizontalScroll && verticalScroll) {
-            return 'vertical';
-        }
-
-        return 'both';
     },
 
     applyPartialDataSource: function(area, path, dataSource) {

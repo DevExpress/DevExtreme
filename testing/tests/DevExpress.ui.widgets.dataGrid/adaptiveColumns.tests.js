@@ -448,7 +448,7 @@ QUnit.module('AdaptiveColumns', {
         const adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
 
         // assert
-        assert.equal(adaptiveRowsWidth, adaptiveHeadersWidth, 'adaptive command column\'s width');
+        assert.roughEqual(parseFloat(adaptiveRowsWidth), parseFloat(adaptiveHeadersWidth), 0.1, 'adaptive command column\'s width');
     });
 
     QUnit.test('Adaptive command column should not be displayed for a group summary row', function(assert) {
