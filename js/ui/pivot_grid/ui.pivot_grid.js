@@ -1078,7 +1078,6 @@ const PivotGrid = Widget.inherit({
 
             rowsArea.renderScrollable();
             columnsArea.renderScrollable();
-            dataArea.renderScrollable();
         }
 
         [dataArea, rowsArea, columnsArea].forEach(function(area) {
@@ -1353,13 +1352,13 @@ const PivotGrid = Widget.inherit({
                 }
 
                 const updateScrollableResults = [];
-                that._dataArea.updateScrollableOptions({
+
+                that._dataArea.renderScrollable({
                     useNative: !!scrollBarInfo.scrollBarUseNative,
                     useSimulatedScrollbar: !scrollBarInfo.scrollBarUseNative,
                     direction: that._dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
                     rtlEnabled: that.option('rtlEnabled')
                 });
-
                 each([that._columnsArea, that._rowsArea, that._dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
