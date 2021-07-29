@@ -804,7 +804,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _sortAppointmentsByStartDate(appointments) {
-        getAppointmentDataProvider(this.key).sortAppointmentsByStartDate(appointments);
+        getAppointmentDataProvider(this.option('key')).sortAppointmentsByStartDate(appointments);
     }
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
