@@ -699,168 +699,86 @@ dataGridCore.registerModule('export', {
                 _getToolbarItems: function() {
                     const items = this.callBase();
 
-                    return this._appendExportItems(items);
-                },
-
-                _appendExportItems: function(items) {
-                    const that = this;
-                    const exportOptions = that.option('export');
-
-                    if(exportOptions.enabled) {
-                        const exportItems = [];
-
-                        if(exportOptions.allowExportSelectedData) {
-                            exportItems.push({
-                                template: function(data, index, container) {
-                                    const $container = $(container);
-                                    that._renderButton(data, $container);
-                                    that._renderExportMenu($container);
-                                },
-                                menuItemTemplate: function(data, index, container) {
-                                    that._renderList(data, $(container));
-                                },
-                                name: 'exportButton',
-                                allowExportSelected: true,
-                                location: 'after',
-                                locateInMenu: 'auto',
-                                sortIndex: 30
-                            });
-
-                        } else {
-                            exportItems.push({
-                                template: function(data, index, container) {
-                                    that._renderButton(data, $(container));
-                                },
-                                menuItemTemplate: function(data, index, container) {
-                                    that._renderButton(data, $(container), true);
-                                },
-                                name: 'exportButton',
-                                location: 'after',
-                                locateInMenu: 'auto',
-                                sortIndex: 30
-                            });
-                        }
-                        items = items.concat(exportItems);
-                        that._correctItemsPosition(items);
+                    const exportButton = this._getExportToolbarButton();
+                    if(exportButton) {
+                        items.push(exportButton);
+                        this._correctItemsPosition(items);
                     }
 
                     return items;
                 },
 
-                _renderButton: function(data, $container, withText) {
-                    const that = this;
-                    const buttonOptions = that._getButtonOptions(data.allowExportSelected);
-                    const $buttonContainer = that._getButtonContainer()
-                        .addClass(DATAGRID_EXPORT_BUTTON_CLASS)
-                        .appendTo($container);
+                _getExportToolbarButton: function() {
+                    const items = this._getExportToolbarItems();
 
-                    if(withText) {
-                        const wrapperNode = $('<div>').addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS);
-                        $container
-                            .wrapInner(wrapperNode)
-                            .parent()
-                            .addClass('dx-toolbar-menu-action dx-toolbar-menu-button ' + TOOLBAR_HIDDEN_BUTTON_CLASS);
-                        buttonOptions.text = buttonOptions.hint;
+                    if(items.length === 0) {
+                        return null;
                     }
 
-                    that._createComponent(
-                        $buttonContainer,
-                        Button,
-                        buttonOptions
-                    );
-                },
+                    let widget;
+                    let widgetOptions;
 
-                _renderList: function(data, $container) {
-                    const that = this;
-                    const texts = that.option('export.texts');
-                    const items = [{
-                        template: function(data, index, container) {
-                            that._renderFakeButton(data, $(container), DATAGRID_EXPORT_EXCEL_ICON);
-                        },
-                        text: texts.exportAll
-                    }, {
-                        template: function(data, index, container) {
-                            that._renderFakeButton(data, $(container), DATAGRID_EXPORT_SELECTED_ICON);
-                        },
-                        text: texts.exportSelectedRows,
-                        exportSelected: true
-                    }];
-
-                    that._createComponent(
-                        $container,
-                        List,
-                        {
+                    if(items.length === 1) {
+                        widget = 'dxButton';
+                        widgetOptions = items[0];
+                        widgetOptions.hint = widgetOptions.text;
+                        delete widgetOptions.text;
+                        widgetOptions.icon = 'export';
+                    } else {
+                        widget = 'dxDropDownButton';
+                        widgetOptions = {
+                            icon: 'export',
+                            // text: 'Export asdasdasd',
+                            displayExpr: 'text',
                             items: items,
-                            onItemClick: function(e) {
-                                that._exportController.exportToExcel(e.itemData.exportSelected);
-                            },
-                            scrollingEnabled: false
-                        }
-                    );
+                            dropDownOptions: {
+                                width: '100%'
+                            }
+                        };
+                    }
+
+                    const toolbarButtonOptions = {
+                        widget: widget,
+                        options: widgetOptions,
+                        location: 'after',
+                        locateInMenu: 'auto',
+                        sortIndex: 30
+                    };
+
+                    return toolbarButtonOptions;
                 },
 
-                _renderFakeButton: function(data, $container, iconName) {
-                    const $icon = $('<div>')
-                        .addClass('dx-icon dx-icon-' + iconName);
-                    const $text = $('<span>')
-                        .addClass('dx-button-text')
-                        .text(data.text);
-                    const $content = $('<div>')
-                        .addClass('dx-button-content')
-                        .append($icon)
-                        .append($text);
-                    const $button = $('<div>')
-                        .addClass(BUTTON_CLASS + ' dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button')
-                        .append($content);
-                    const $toolbarItem = $('<div>')
-                        .addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS)
-                        .append($button);
+                _getExportToolbarItems: function() {
+                    const exportOptions = this.option('export');
+                    const texts = this.option('export.texts');
+                    const items = [];
 
-                    $container
-                        .append($toolbarItem)
-                        .parent()
-                        .addClass('dx-toolbar-menu-custom ' + TOOLBAR_HIDDEN_BUTTON_CLASS);
+                    if(exportOptions.enabled) {
+                        items.push({
+                            text: texts.exportAll,
+                            icon: 'exportxlsx',
+                            onClick: () => {
+                                this._exportController.exportToExcel();
+                            }
+                        });
+
+                        if(exportOptions.allowExportSelectedData) {
+                            items.push({
+                                text: texts.exportSelectedRows,
+                                icon: 'exportselected',
+                                onClick: () => {
+                                    this._exportController.exportToExcel(true);
+                                }
+                            });
+                        }
+                    }
+
+                    return items;
                 },
 
                 _correctItemsPosition: function(items) {
                     items.sort(function(itemA, itemB) {
                         return itemA.sortIndex - itemB.sortIndex;
-                    });
-                },
-
-                _renderExportMenu: function($buttonContainer) {
-                    const that = this;
-                    const $button = $buttonContainer.find('.' + BUTTON_CLASS);
-                    const texts = that.option('export.texts');
-                    const menuItems = [
-                        {
-                            text: texts.exportAll,
-                            icon: DATAGRID_EXPORT_EXCEL_ICON
-                        },
-                        {
-                            text: texts.exportSelectedRows,
-                            exportSelected: true,
-                            icon: DATAGRID_EXPORT_SELECTED_ICON
-                        }
-                    ];
-                    const $menuContainer = $('<div>').appendTo($buttonContainer);
-
-                    that._contextMenu = that._createComponent($menuContainer, ContextMenu, {
-                        showEvent: 'dxclick',
-                        items: menuItems,
-                        cssClass: DATAGRID_EXPORT_MENU_CLASS,
-                        onItemClick: function(e) {
-                            that._exportController.exportToExcel(e.itemData.exportSelected);
-                        },
-                        target: $button,
-                        position: {
-                            at: 'left bottom',
-                            my: 'left top',
-                            offset: '0 3',
-                            collision: 'fit',
-                            boundary: that._$parent,
-                            boundaryOffset: '1 1'
-                        }
                     });
                 },
 
