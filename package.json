@@ -160,7 +160,7 @@
     "run-sequence": "^1.1.5",
     "sass": "^1.34.1",
     "shelljs": "^0.8.3",
-    "string-replace-loader": "^2.1.1",
+    "string-replace-loader": "^3.0.3",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-devextreme": "0.0.6",
