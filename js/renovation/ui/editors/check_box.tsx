@@ -12,6 +12,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
+import getElementComputedStyle from '../../utils/get_computed_style';
 import { isMaterial, current } from '../../../ui/themes';
 import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
@@ -171,7 +172,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       const iconFontSizeRatio = defaultFontSize / defaultIconSize;
 
       let getIconComputedStyle = (): CSSStyleDeclaration => {
-        const computedStyle = window.getComputedStyle(iconElement);
+        const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
         getIconComputedStyle = (): CSSStyleDeclaration => computedStyle;
         return computedStyle;
       };
