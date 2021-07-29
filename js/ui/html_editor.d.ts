@@ -99,6 +99,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     mentions?: Array<dxHtmlEditorMention>;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    tableContextMenuEnabled?: boolean;
+    /**
+     * @docid
      * @hidden false
      * @public
      */
