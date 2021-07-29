@@ -611,10 +611,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     onDataSourceChanged() {
     }
 
-    preRenderAppointments(options) {
-        this.option('allDayExpanded', options.allDayExpanded);
-    }
-
     isGroupedAllDayPanel() {
         return calculateIsGroupedAllDayPanel(
             this.option('groups'),
