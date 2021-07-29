@@ -5190,8 +5190,8 @@ QUnit.module('Tests with stubs', {
             virtualRowHeight: 50
         });
 
-        assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], {
+        assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
+        assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
             useNative: pivotGrid.__scrollBarUseNative,
@@ -5259,8 +5259,8 @@ QUnit.module('Tests with stubs', {
             virtualRowHeight: 50
         });
 
-        assert.ok(this.dataArea.renderScrollable.calledAfter(this.horizontalArea.setVirtualContentParams));
-        assert.deepEqual(this.dataArea.renderScrollable.lastCall.args[0], {
+        assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
+        assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
             rtlEnabled: false,
             useNative: pivotGrid.__scrollBarUseNative,
