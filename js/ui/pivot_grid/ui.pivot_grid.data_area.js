@@ -54,8 +54,11 @@ export const DataArea = AreaItem.inherit({
         });
     },
 
-    updateScrollableOptions: function(options) {
-        this._getScrollable().option(options);
+    updateScrollableOptions: function({ useNative, ...restOptions }) {
+        const scrollable = this._getScrollable();
+
+        scrollable.option('useNative', true);
+        scrollable.option(restOptions);
     },
 
     getScrollableDirection: function(horizontal, vertical) {
