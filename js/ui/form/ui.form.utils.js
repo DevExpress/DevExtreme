@@ -1,5 +1,7 @@
 import $ from '../../core/renderer';
+import errors from '../widget/ui.errors';
 import { isDefined } from '../../core/utils/type';
+import { getPublicElement } from '../../core/element';
 
 import {
     WIDGET_CLASS,
@@ -12,7 +14,9 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_BUTTON_ITEM_CLASS,
-    FIELD_ITEM_CLASS
+    FIELD_ITEM_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -147,4 +151,41 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
 
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', justifyContent);
+}
+
+export function renderEditorContentTo({ $container, renderOptions, editorOptions, labelLocation, componentOwner, createComponentCallback }) {
+    let result;
+
+    const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
+    $container.
+        addClass(FIELD_ITEM_CONTENT_CLASS).
+        addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + locationClassSuffix[labelLocation]);
+
+    if(renderOptions.template) {
+        const data = {
+            dataField: renderOptions.dataField,
+            editorType: renderOptions.editorType,
+            editorOptions: editorOptions,
+            component: componentOwner,
+            name: renderOptions.name
+        };
+
+        renderOptions.template.render({
+            model: data,
+            container: getPublicElement($container)
+        });
+    } else {
+        const $editor = $('<div>').appendTo($container);
+
+        try {
+            result = createComponentCallback($editor, renderOptions.editorType, editorOptions);
+            result.setAria('describedby', renderOptions.helpID);
+            result.setAria('labelledby', renderOptions.labelID);
+            result.setAria('required', renderOptions.isRequired);
+        } catch(e) {
+            errors.log('E1035', e.message);
+        }
+    }
+
+    return result;
 }

@@ -4,7 +4,6 @@ import Guid from '../../core/guid';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
-import { getPublicElement } from '../../core/element';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import { format } from '../../core/utils/string';
@@ -14,7 +13,6 @@ import { inArray, normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import { name as clickEventName } from '../../events/click';
-import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import { captionize } from '../../core/utils/inflector';
@@ -33,8 +31,6 @@ import {
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
@@ -44,7 +40,13 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel, renderHelpText, adjustContainerAsButtonItem, convertAlignmentToJustifyContent, convertAlignmentToTextAlign } from './ui.form.utils';
+import {
+    renderLabel,
+    renderHelpText,
+    adjustContainerAsButtonItem,
+    convertAlignmentToJustifyContent,
+    convertAlignmentToTextAlign,
+    renderEditorContentTo } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -780,12 +782,13 @@ const LayoutManager = Widget.inherit({
             editorOptions.name = renderOptions.dataField;
         }
 
-        const editorWidget = this._renderEditor2({
+        const editorWidget = renderEditorContentTo({
             $container: options.$container,
             renderOptions,
             editorOptions,
             labelLocation: this.option('labelLocation'),
-            componentOwner: this._getComponentOwner()
+            componentOwner: this._getComponentOwner(),
+            createComponentCallback: this._createComponent.bind(this)
         });
 
         if(editorWidget && renderOptions.dataField) {
@@ -856,67 +859,6 @@ const LayoutManager = Widget.inherit({
             .on('focusIn', toggleInvalidClass)
             .on('focusOut', toggleInvalidClass)
             .on('enterKey', toggleInvalidClass);
-    },
-
-    _renderEditor2: function({ $container, renderOptions, editorOptions, labelLocation, componentOwner }) {
-        function adjustElementByLabelLocation($element, labelLocation) {
-            const oppositeClasses = {
-                right: 'left',
-                left: 'right',
-                top: 'bottom'
-            };
-            $container.
-                addClass(FIELD_ITEM_CONTENT_CLASS).
-                addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation]);
-        }
-
-        const that = this;
-        const template = renderOptions.template;
-        let editorWidget;
-
-        adjustElementByLabelLocation($container, labelLocation);
-
-        if(template) {
-            const data = {
-                dataField: renderOptions.dataField,
-                editorType: renderOptions.editorType,
-                editorOptions: editorOptions,
-                component: componentOwner,
-                name: renderOptions.name
-            };
-
-            template.render({
-                model: data,
-                container: getPublicElement($container)
-            });
-        } else {
-            // function renderEditorWidgetTo($container, renderOptions, editorOptions, createComponentCallback) {
-            //     const $editor = $('<div>').appendTo($container);
-
-            //     try {
-            //         editorWidget = createComponentCallback($editor, renderOptions.editorType, editorOptions);
-            //         editorWidget.setAria('describedby', renderOptions.helpID);
-            //         editorWidget.setAria('labelledby', renderOptions.labelID);
-            //         editorWidget.setAria('required', renderOptions.isRequired);
-            //     } catch(e) {
-            //         errors.log('E1035', e.message);
-            //     }
-            // }
-            // return renderEditorWidgetTo($container, renderOptions, editorOptions, that._createComponent.bind(this));
-
-            const $editor = $('<div>').appendTo($container);
-
-            try {
-                editorWidget = that._createComponent($editor, renderOptions.editorType, editorOptions);
-                editorWidget.setAria('describedby', renderOptions.helpID);
-                editorWidget.setAria('labelledby', renderOptions.labelID);
-                editorWidget.setAria('required', renderOptions.isRequired);
-            } catch(e) {
-                errors.log('E1035', e.message);
-            }
-        }
-
-        return editorWidget;
     },
 
     _getComponentOwner: function() {
