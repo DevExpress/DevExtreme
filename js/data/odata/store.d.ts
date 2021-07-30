@@ -25,7 +25,7 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url: string, async: boolean, method: string, timeout: number, params: any, payload: any, headers: any }) => void);
+    beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
      * @docid
      * @public
@@ -39,7 +39,7 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus: number, errorDetails: any, requestOptions: ODataRequestOptions }) => void);
+    errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
      * @docid
      * @default {}
@@ -110,7 +110,7 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TValue>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -118,7 +118,7 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
      * @return object
      * @public
      */
-    createQuery(loadOptions?: { expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any }): Query;
+    createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 
     /**
      * @docid

@@ -52,12 +52,12 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
        * @docid
        * @default 0
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        * @default 0
        */
-      y?: number
+      y?: number;
     };
     /**
      * @docid

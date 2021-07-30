@@ -53,7 +53,7 @@ export type ContextMenuPreparingEvent = Cancelable & {
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
-    readonly items?: Array<any>
+    readonly items?: Array<any>;
 };
 
 /** @public */
@@ -211,7 +211,7 @@ export type TaskUpdatedEvent = EventInfo<dxGantt> & {
 export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
     readonly newValues: any;
     readonly values: any;
-    readonly key: any
+    readonly key: any;
 };
 
 /** @public */
@@ -263,27 +263,27 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "predecessorId"
        */
-      predecessorIdExpr?: string | Function,
+      predecessorIdExpr?: string | Function;
       /**
        * @docid
        * @default "successorId"
        */
-      successorIdExpr?: string | Function,
+      successorIdExpr?: string | Function;
       /**
        * @docid
        * @default "type"
        */
-      typeExpr?: string | Function
+      typeExpr?: string | Function;
     };
     /**
      * @docid
@@ -294,52 +294,52 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default true
        */
-      allowDependencyAdding?: boolean,
+      allowDependencyAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowDependencyDeleting?: boolean,
+      allowDependencyDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceAdding?: boolean,
+      allowResourceAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceDeleting?: boolean,
+      allowResourceDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResourceUpdating?: boolean,
+      allowResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskAdding?: boolean,
+      allowTaskAdding?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskDeleting?: boolean,
+      allowTaskDeleting?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskResourceUpdating?: boolean,
+      allowTaskResourceUpdating?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowTaskUpdating?: boolean,
+      allowTaskUpdating?: boolean;
       /**
        * @docid
        * @default false
        */
-      enabled?: boolean
+      enabled?: boolean;
     };
     /**
      * @docid
@@ -350,17 +350,17 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default false
        */
-      validateDependencies?: boolean,
+      validateDependencies?: boolean;
       /**
        * @docid
        * @default false
        */
-      autoUpdateParentTasks?: boolean,
+      autoUpdateParentTasks?: boolean;
       /**
        * @docid
        * @default false
        */
-       enablePredecessorGap?: boolean
+       enablePredecessorGap?: boolean;
     };
     /**
      * @docid
@@ -729,22 +729,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "resourceId"
        */
-      resourceIdExpr?: string | Function,
+      resourceIdExpr?: string | Function;
       /**
        * @docid
        * @default "taskId"
        */
-      taskIdExpr?: string | Function
+      taskIdExpr?: string | Function;
     };
     /**
      * @docid
@@ -756,22 +756,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "text"
        */
-      textExpr?: string | Function
+      textExpr?: string | Function;
     };
     /**
      * @docid
@@ -828,42 +828,42 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @docid
        * @default "color"
        */
-      colorExpr?: string | Function,
+      colorExpr?: string | Function;
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @default "end"
        */
-      endExpr?: string | Function,
+      endExpr?: string | Function;
       /**
        * @docid
        * @default "id"
        */
-      keyExpr?: string | Function,
+      keyExpr?: string | Function;
       /**
        * @docid
        * @default "parentId"
        */
-      parentIdExpr?: string | Function,
+      parentIdExpr?: string | Function;
       /**
        * @docid
        * @default "progress"
        */
-      progressExpr?: string | Function,
+      progressExpr?: string | Function;
       /**
        * @docid
        * @default "start"
        */
-      startExpr?: string | Function,
+      startExpr?: string | Function;
       /**
        * @docid
        * @default "title"
        */
-      titleExpr?: string | Function
+      titleExpr?: string | Function;
     };
     /**
      * @docid
@@ -1129,7 +1129,7 @@ export interface dxGanttContextMenu {
      * @default true
      * @public
      */
-    enabled?: boolean
+    enabled?: boolean;
     /**
      * @docid
      * @type Array<dxGanttContextMenuItem,Enums.GanttContextMenuItem>
@@ -1217,28 +1217,28 @@ export interface Sorting {
      * @docid
      * @default "Sort Ascending"
      */
-    ascendingText?: string,
+    ascendingText?: string;
     /**
      * @docid
      * @default "Clear Sorting"
      */
-    clearText?: string,
+    clearText?: string;
     /**
      * @docid
      * @default "Sort Descending"
      */
-    descendingText?: string,
+    descendingText?: string;
     /**
      * @docid
      * @type Enums.GanttSortingMode|string
      * @default "none"
      */
-    mode?: 'multiple' | 'none' | 'single',
+    mode?: 'multiple' | 'none' | 'single';
     /**
      * @docid
      * @default false
      */
-    showSortIndexes?: boolean
+    showSortIndexes?: boolean;
 }
 
 /** @public */

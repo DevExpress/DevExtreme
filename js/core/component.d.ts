@@ -21,7 +21,7 @@ export interface ComponentOptions<TComponent> {
    * @default null
    * @public
    */
-  onInitialized?: ((e: { component?: TComponent, element?: DxElement }) => void);
+  onInitialized?: ((e: { component?: TComponent; element?: DxElement }) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -33,7 +33,7 @@ export interface ComponentOptions<TComponent> {
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: TComponent, name?: string, fullName?: string, value?: any }) => void);
+  onOptionChanged?: ((e: { component?: TComponent; name?: string; fullName?: string; value?: any }) => void);
 }
 /**
  * @docid Component

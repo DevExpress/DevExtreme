@@ -170,19 +170,19 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
          * @docid
          * @default 300
          */
-        hide?: number,
+        hide?: number;
         /**
          * @docid
          * @default 50
          */
-        show?: number
-      } | number,
+        show?: number;
+      } | number;
       /**
        * @docid
        * @type Enums.ShowSubmenuMode
        * @default "onClick"
        */
-      name?: 'onClick' | 'onHover'
+      name?: 'onClick' | 'onHover';
     } | 'onClick' | 'onHover';
     /**
      * @docid

@@ -329,6 +329,7 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
+        // eslint-disable-next-line @typescript-eslint/quotes
         it("should use default icon size if 'getElementComputedStyle' util returns null", () => {
           (getElementComputedStyle as jest.Mock).mockReturnValue(null);
 

@@ -42,7 +42,7 @@ import {
 interface ListItemInfo {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-    readonly itemIndex: number | { group: number; item: number; };
+    readonly itemIndex: number | { group: number; item: number };
 }
 
 export interface ScrollInfo {
@@ -230,11 +230,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param2 itemData:object
        * @type_function_return void
        */
-      action?: ((itemElement: DxElement, itemData: any) => any),
+      action?: ((itemElement: DxElement, itemData: any) => any);
       /**
        * @docid
        */
-      text?: string
+      text?: string;
     }>;
     /**
      * @docid

@@ -67,22 +67,22 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
        * @docid
        * @default undefined
        */
-      allowSearch?: boolean,
+      allowSearch?: boolean;
       /**
        * @docid
        * @default 325
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default 500
        */
-      searchTimeout?: number,
+      searchTimeout?: number;
       /**
        * @docid
        * @default false
        */
-      showRelevantValues?: boolean,
+      showRelevantValues?: boolean;
       /**
        * @docid
        */
@@ -91,23 +91,23 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
          * @docid
          * @default "Cancel"
          */
-        cancel?: string,
+        cancel?: string;
         /**
          * @docid
          * @default "(Blanks)"
          */
-        emptyValue?: string,
+        emptyValue?: string;
         /**
          * @docid
          * @default "Ok"
          */
-        ok?: string
-      },
+        ok?: string;
+      };
       /**
        * @docid
        * @default 252
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -159,27 +159,27 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
        * @docid
        * @default 'All Fields'
        */
-      allFields?: string,
+      allFields?: string;
       /**
        * @docid
        * @default 'Column Fields'
        */
-      columnFields?: string,
+      columnFields?: string;
       /**
        * @docid
        * @default 'Data Fields'
        */
-      dataFields?: string,
+      dataFields?: string;
       /**
        * @docid
        * @default 'Filter Fields'
        */
-      filterFields?: string,
+      filterFields?: string;
       /**
        * @docid
        * @default 'Row Fields'
        */
-      rowFields?: string
+      rowFields?: string;
     };
 }
 /**

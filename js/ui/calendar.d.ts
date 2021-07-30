@@ -31,9 +31,9 @@ export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
 export interface CellTemplateData {
-    readonly date: Date,
-    readonly view: string,
-    readonly text?: string
+    readonly date: Date;
+    readonly view: string;
+    readonly text?: string;
 }
 
 /** @public */

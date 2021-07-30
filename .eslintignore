@@ -3,7 +3,6 @@ js/viz/docs/*
 node_modules/*
 build/*
 testing/helpers/sinon/*
-*.d.ts
 *.j.tsx
 playground/*
 themebuilder/data/metadata/*
@@ -12,4 +11,4 @@ themebuilder-scss/coverage/*
 themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js
 testing/jest/utils/transformers/*
-!js/**/*.d.ts
+ts/

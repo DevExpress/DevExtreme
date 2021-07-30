@@ -314,7 +314,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @type_function_param1_field4 event:event
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
+    onClick?: ((e: { component?: dxDropDownButton; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
 }
 
 /** @public */

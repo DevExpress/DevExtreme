@@ -32,11 +32,11 @@ export interface ExcelDataGridCell {
       /**
        * @docid
        */
-      name?: string,
+      name?: string;
       /**
        * @docid
        */
-      value?: any
+      value?: any;
     }>;
     /**
      * @docid
@@ -176,7 +176,7 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => void);
+    customizeCell?: ((options: { gridCell?: ExcelDataGridCell; excelCell?: any }) => void);
 }
 
 /**
@@ -210,7 +210,7 @@ export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => void);
+    customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell; excelCell?: any }) => void);
 }
 
 /**

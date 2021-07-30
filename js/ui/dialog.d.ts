@@ -10,12 +10,12 @@ import {
  * @public
  */
 export interface CustomDialogOptions {
-    title?: string,
-    messageHtml?: string,
-    buttons?: Array<dxButtonOptions>,
-    showTitle?: boolean,
-    message?: string,
-    dragEnabled?: boolean
+    title?: string;
+    messageHtml?: string;
+    buttons?: Array<dxButtonOptions>;
+    showTitle?: boolean;
+    message?: string;
+    dragEnabled?: boolean;
 }
 /**
  * @docid ui.dialog.alert

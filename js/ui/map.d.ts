@@ -86,17 +86,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default ""
        */
-      bing?: string,
+      bing?: string;
       /**
        * @docid
        * @default ""
        */
-      google?: string,
+      google?: string;
       /**
        * @docid
        * @default ""
        */
-      googleStatic?: string
+      googleStatic?: string;
     };
     /**
      * @docid
@@ -142,17 +142,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default ""
        */
-      bing?: string,
+      bing?: string;
       /**
        * @docid
        * @default ""
        */
-      google?: string,
+      google?: string;
       /**
        * @docid
        * @default ""
        */
-      googleStatic?: string
+      googleStatic?: string;
     };
     /**
      * @docid
@@ -169,17 +169,17 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       /**
        * @docid
        */
-      iconSrc?: string,
+      iconSrc?: string;
       /**
        * @docid
        * @extends MapLocationType
        * @inherits MapLocation
        */
-      location?: any | string | Array<number>,
+      location?: any | string | Array<number>;
       /**
        * @docid
        */
-      onClick?: Function,
+      onClick?: Function;
       /**
        * @docid
        */
@@ -188,12 +188,12 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
          * @docid
          * @default false
          */
-        isShown?: boolean,
+        isShown?: boolean;
         /**
          * @docid
          */
-        text?: string
-      }
+        text?: string;
+      };
     }>;
     /**
      * @docid
@@ -288,30 +288,30 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default '#0000FF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @extends MapLocationType
        * @inherits MapLocation
        * @type Array<object>
        */
-      locations?: Array<any>,
+      locations?: Array<any>;
       /**
        * @docid
        * @type Enums.GeoMapRouteMode
        * @default 'driving'
        */
-      mode?: 'driving' | 'walking',
+      mode?: 'driving' | 'walking';
       /**
        * @docid
        * @default 0.5
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default 5
        */
-      weight?: number
+      weight?: number;
     }>;
     /**
      * @docid

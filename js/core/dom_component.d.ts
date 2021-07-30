@@ -40,7 +40,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: TComponent; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @action
@@ -48,7 +48,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: TComponent; element?: DxElement; model?: any; name?: string; fullName?: string; value?: any }) => void);
     /**
      * @docid
      * @default false

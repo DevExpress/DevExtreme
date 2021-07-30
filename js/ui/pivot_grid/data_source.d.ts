@@ -89,13 +89,13 @@ export interface PivotGridDataSourceOptions {
        * @docid
        * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla'
+      type?: 'array' | 'local' | 'odata' | 'xmla';
     }> | {
       /**
        * @docid
        * @type Enums.PivotGridStoreType
        */
-      type?: 'array' | 'local' | 'odata' | 'xmla'
+      type?: 'array' | 'local' | 'odata' | 'xmla';
     };
 }
 /** @namespace DevExpress.data */
@@ -152,7 +152,7 @@ export interface PivotGridDataSourceField {
      * @type_function_param1_field3 totalValue:any
      * @public
      */
-    calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => void);
+    calculateCustomSummary?: ((options: { summaryProcess?: string; value?: any; totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
      * @type_function_param1 e:dxPivotGridSummaryCell
@@ -175,7 +175,7 @@ export interface PivotGridDataSourceField {
      * @type_function_return string
      * @public
      */
-    customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
+    customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
      * @docid PivotGridDataSourceOptions.fields.dataField
      * @default undefined
@@ -243,7 +243,7 @@ export interface PivotGridDataSourceField {
      * @docid PivotGridDataSourceOptions.fields.headerFilter
      * @public
      */
-    headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
+    headerFilter?: { allowSearch?: boolean; height?: number; width?: number };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure
      * @default undefined
@@ -326,7 +326,7 @@ export interface PivotGridDataSourceField {
      * @default undefined
      * @public
      */
-    sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
+    sortingMethod?: ((a: { value?: string | number; children?: Array<any> }, b: { value?: string | number; children?: Array<any> }) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryDisplayMode
      * @type Enums.PivotGridSummaryDisplayMode
@@ -396,7 +396,7 @@ export default class PivotGridDataSource {
      * @return DataSource
      * @public
      */
-    createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
+    createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>; rowPath?: Array<string | number | Date>; dataIndex?: number; maxRowCount?: number; customColumns?: Array<string> }): DataSource;
     /**
      * @docid
      * @publicName dispose()

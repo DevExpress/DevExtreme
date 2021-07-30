@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: AnimationConfig,
+      hide?: AnimationConfig;
       /**
        * @docid
        * @default undefined
        */
-      show?: AnimationConfig
+      show?: AnimationConfig;
     };
     /**
      * @docid

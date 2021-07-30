@@ -61,7 +61,7 @@ export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
 export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
     readonly request: XMLHttpRequest;
-    message: string
+    message: string;
 };
 
 /** @public */
@@ -82,7 +82,7 @@ export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
 /** @public */
 export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
     readonly file: File;
-    readonly request: XMLHttpRequest
+    readonly request: XMLHttpRequest;
 };
 
 /** @public */

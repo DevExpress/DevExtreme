@@ -36,7 +36,7 @@ export function currentPalette(paletteName: string): void;
  * @export generateColors
  * @public
  */
-export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType, baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType; baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
 
 /**
  * @docid viz.getPalette

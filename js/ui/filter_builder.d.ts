@@ -124,67 +124,67 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
        * @docid
        * @default "Between"
        */
-      between?: string,
+      between?: string;
       /**
        * @docid
        * @default "Contains"
        */
-      contains?: string,
+      contains?: string;
       /**
        * @docid
        * @default "Ends with"
        */
-      endsWith?: string,
+      endsWith?: string;
       /**
        * @docid
        * @default "Equals"
        */
-      equal?: string,
+      equal?: string;
       /**
        * @docid
        * @default "Greater than"
        */
-      greaterThan?: string,
+      greaterThan?: string;
       /**
        * @docid
        * @default "Greater than or equal to"
        */
-      greaterThanOrEqual?: string,
+      greaterThanOrEqual?: string;
       /**
        * @docid
        * @default "Is blank"
        */
-      isBlank?: string,
+      isBlank?: string;
       /**
        * @docid
        * @default "Is not blank"
        */
-      isNotBlank?: string,
+      isNotBlank?: string;
       /**
        * @docid
        * @default "Less than"
        */
-      lessThan?: string,
+      lessThan?: string;
       /**
        * @docid
        * @default "Less than or equal to"
        */
-      lessThanOrEqual?: string,
+      lessThanOrEqual?: string;
       /**
        * @docid
        * @default "Does not contain"
        */
-      notContains?: string,
+      notContains?: string;
       /**
        * @docid
        * @default "Does not equal"
        */
-      notEqual?: string,
+      notEqual?: string;
       /**
        * @docid
        * @default "Starts with"
        */
-      startsWith?: string
+      startsWith?: string;
     };
     /**
      * @docid
@@ -195,22 +195,22 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
        * @docid
        * @default "And"
        */
-      and?: string,
+      and?: string;
       /**
        * @docid
        * @default "Not And"
        */
-      notAnd?: string,
+      notAnd?: string;
       /**
        * @docid
        * @default "Not Or"
        */
-      notOr?: string,
+      notOr?: string;
       /**
        * @docid
        * @default "Or"
        */
-      or?: string
+      or?: string;
     };
     /**
      * @docid
@@ -340,7 +340,7 @@ export interface dxFilterBuilderCustomOperation {
      * @type_function_return string
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string, field?: dxFilterBuilderField }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: dxFilterBuilderField }) => string);
     /**
      * @docid
      * @type Array<Enums.FilterBuilderFieldDataType>
@@ -407,7 +407,7 @@ export interface dxFilterBuilderField {
      * @type_function_return string
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
      * @docid
      * @default undefined
@@ -467,26 +467,26 @@ export interface dxFilterBuilderField {
        * @docid
        * @default false
        */
-      allowClearing?: boolean,
+      allowClearing?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      dataSource?: Array<any> | Store | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSourceOptions;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        * @type_function_return string
        */
-      displayExpr?: string | ((data: any) => string),
+      displayExpr?: string | ((data: any) => string);
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        * @type_function_return string|number|boolean
        */
-      valueExpr?: string | ((data: any) => string | number | boolean)
+      valueExpr?: string | ((data: any) => string | number | boolean);
     };
     /**
      * @docid

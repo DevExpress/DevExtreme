@@ -56,22 +56,22 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
@@ -102,22 +102,22 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
        * @type number | Enums.Mode
        * @default 0
        */
-      baseSize?: number | 'auto',
+      baseSize?: number | 'auto';
       /**
        * @docid
        * @default 1
        */
-      ratio?: number,
+      ratio?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string,
+      screen?: string;
       /**
        * @docid
        * @default 1
        */
-      shrink?: number
+      shrink?: number;
     }>;
     /**
      * @docid
@@ -164,27 +164,27 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
       /**
        * @docid
        */
-      col?: number,
+      col?: number;
       /**
        * @docid
        * @default undefined
        */
-      colspan?: number,
+      colspan?: number;
       /**
        * @docid
        */
-      row?: number,
-      /**
-       * @docid
-       * @default undefined
-       */
-      rowspan?: number,
+      row?: number;
       /**
        * @docid
        * @default undefined
        */
-      screen?: string
-    } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
+      rowspan?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
 /** @public */

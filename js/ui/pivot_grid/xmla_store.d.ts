@@ -11,7 +11,7 @@ export interface XmlaStoreOptions {
      * @type_function_param1_field6 dataType:string
      * @public
      */
-    beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => void);
+    beforeSend?: ((options: { url?: string; method?: string; headers?: any; xhrFields?: any; data?: string; dataType?: string }) => void);
     /**
      * @docid
      * @public

@@ -12,7 +12,7 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @type_function_param1_field3 formData:object
      * @public
      */
-    beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => void);
+    beforeAjaxSend?: ((options: { headers?: any; xhrFields?: any; formData?: any }) => void);
     /**
      * @docid
      * @type_function_param1 options: object

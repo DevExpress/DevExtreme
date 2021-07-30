@@ -72,23 +72,23 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
        * @docid
        * @default 1000
        */
-      duration?: number,
+      duration?: number;
       /**
        * @docid
        * @type Enums.VizAnimationEasing
        * @default 'easeOutCubic'
        */
-      easing?: 'easeOutCubic' | 'linear',
+      easing?: 'easeOutCubic' | 'linear';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 300
        */
-      maxPointCountSupported?: number
+      maxPointCountSupported?: number;
     } | boolean;
     /**
      * @docid

@@ -354,22 +354,22 @@ export interface BaseWidgetTitle {
        * @docid BaseWidgetOptions.title.margin.bottom
        * @default 10
        */
-      bottom?: number,
+      bottom?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.left
        * @default 10
        */
-      left?: number,
+      left?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.right
        * @default 10
        */
-      right?: number,
+      right?: number;
       /**
        * @docid BaseWidgetOptions.title.margin.top
        * @default 10
        */
-      top?: number
+      top?: number;
     };
     /**
      * @docid BaseWidgetOptions.title.placeholderSize
@@ -389,29 +389,29 @@ export interface BaseWidgetTitle {
        * @default 200 &prop(weight)
        * @extends CommonVizLightFontFamily
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid BaseWidgetOptions.title.subtitle.offset
        * @default 0
        */
-      offset?: number,
+      offset?: number;
       /**
        * @docid BaseWidgetOptions.title.subtitle.text
        * @default null
        */
-      text?: string,
+      text?: string;
       /**
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @type Enums.VizTextOverflow
        * @default "ellipsis"
        */
-      textOverflow?: VizTextOverflowType,
+      textOverflow?: VizTextOverflowType;
       /**
        * @docid BaseWidgetOptions.title.subtitle.wordWrap
        * @type Enums.VizWordWrap
        * @default "normal"
        */
-      wordWrap?: WordWrapType
+      wordWrap?: WordWrapType;
     } | string;
     /**
      * @docid BaseWidgetOptions.title.text
@@ -458,28 +458,28 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.border.color
        * @default '#d3d3d3'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseWidgetOptions.tooltip.border.dashStyle
        * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid BaseWidgetOptions.tooltip.border.opacity
        * @default undefined
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.border.visible
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseWidgetOptions.tooltip.border.width
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseWidgetOptions.tooltip.color
@@ -545,27 +545,27 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.shadow.blur
        * @default 2
        */
-      blur?: number,
+      blur?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.color
        * @default #000000
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.offsetX
        * @default 0
        */
-      offsetX?: number,
+      offsetX?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.offsetY
        * @default 4
        */
-      offsetY?: number,
+      offsetY?: number;
       /**
        * @docid BaseWidgetOptions.tooltip.shadow.opacity
        * @default 0.4
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid BaseWidgetOptions.tooltip.zIndex
@@ -710,34 +710,34 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default '#dddddd'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0
        * @default 4 &for(Material)
        */
-      cornerRadius?: number,
+      cornerRadius?: number;
       /**
        * @docid
        * @type Enums.DashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType,
+      dashStyle?: DashStyleType;
       /**
        * @docid
        * @default undefined
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -777,17 +777,17 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 30
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        * @default undefined
        */
-      url?: string,
+      url?: string;
       /**
        * @docid
        * @default 30
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -828,27 +828,27 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 4
        */
-      blur?: number,
+      blur?: number;
       /**
        * @docid
        * @default '#000000'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid
        * @default 0
        */
-      offsetX?: number,
+      offsetX?: number;
       /**
        * @docid
        * @default 1
        */
-      offsetY?: number,
+      offsetY?: number;
       /**
        * @docid
        * @default 0.15
        */
-      opacity?: number
+      opacity?: number;
     };
     /**
      * @docid

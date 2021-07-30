@@ -92,12 +92,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -122,12 +122,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid

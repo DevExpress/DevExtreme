@@ -50,27 +50,27 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
       /**
        * @docid
        */
-      applyValidationResults?: Function,
+      applyValidationResults?: Function;
       /**
        * @docid
        */
-      bypass?: Function,
+      bypass?: Function;
       /**
        * @docid
        */
-      focus?: Function,
+      focus?: Function;
       /**
        * @docid
        */
-      getValue?: Function,
+      getValue?: Function;
       /**
        * @docid
        */
-      reset?: Function,
+      reset?: Function;
       /**
        * @docid
        */
-      validationRequestsCallbacks?: Array<Function>
+      validationRequestsCallbacks?: Array<Function>;
     };
     /**
      * @docid

@@ -110,32 +110,32 @@ export interface FormatObject {
      * @docid Format.currency
      * @public
      */
-   currency?: string,
+   currency?: string;
    /**
     * @docid Format.formatter
     * @public
     * @type_function_param1 value:number|date
     * @type_function_return string
     */
-   formatter?: ((value: number | Date) => string),
+   formatter?: ((value: number | Date) => string);
    /**
     * @docid Format.parser
     * @public
     * @type_function_param1 value:string
     * @type_function_return number|date
     */
-   parser?: ((value: string) => number | Date),
+   parser?: ((value: string) => number | Date);
    /**
     * @docid Format.precision
     * @public
     */
-   precision?: number,
+   precision?: number;
    /**
     * @docid Format.type
     * @public
     * @type Enums.Format|string
     */
-   type?: PredefinedFormat | string
+   type?: PredefinedFormat | string;
 }
 type ExternalFormat = any;
 

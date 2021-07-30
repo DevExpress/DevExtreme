@@ -601,28 +601,28 @@ export interface dxFormSimpleItem {
        * @type Enums.HorizontalAlignment
        * @default "left"
        */
-      alignment?: 'center' | 'left' | 'right',
+      alignment?: 'center' | 'left' | 'right';
       /**
        * @docid
        * @type Enums.FormLabelLocation
        * @default "left"
        */
-      location?: 'left' | 'right' | 'top',
+      location?: 'left' | 'right' | 'top';
       /**
        * @docid
        * @default from showColonAfterLabel
        */
-      showColon?: boolean,
+      showColon?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      text?: string,
+      text?: string;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -712,47 +712,39 @@ export interface dxFormTabbedItem {
        * @docid
        * @default true
        */
-      alignItemLabels?: boolean,
+      alignItemLabels?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      badge?: string,
+      badge?: string;
       /**
        * @docid
        * @default 1
        */
-      colCount?: number,
+      colCount?: number;
       /**
        * @docid
        * @extends ColCountResponsibleType
        * @inherits ColCountResponsible
        * @default undefined
        */
-      colCountByScreen?: any,
+      colCountByScreen?: any;
       /**
        * @docid
        * @default false
        */
-      disabled?: boolean,
+      disabled?: boolean;
       /**
        * @docid
        * @default undefined
        */
-      icon?: string,
+      icon?: string;
       /**
        * @docid
        * @default undefined
        */
-      items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>,
-      /**
-       * @docid
-       * @type_function_param1 tabData:object
-       * @type_function_param2 tabIndex:number
-       * @type_function_param3 tabElement:DxElement
-       * @default undefined
-       */
-      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
       /**
        * @docid
        * @type_function_param1 tabData:object
@@ -760,12 +752,20 @@ export interface dxFormTabbedItem {
        * @type_function_param3 tabElement:DxElement
        * @default undefined
        */
-      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any),
+      tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
+      /**
+       * @docid
+       * @type_function_param1 tabData:object
+       * @type_function_param2 tabIndex:number
+       * @type_function_param3 tabElement:DxElement
+       * @default undefined
+       */
+      template?: template | ((tabData: any, tabIndex: number, tabElement: DxElement) => any);
       /**
        * @docid
        * @default undefined
        */
-      title?: string
+      title?: string;
     }>;
     /**
      * @docid

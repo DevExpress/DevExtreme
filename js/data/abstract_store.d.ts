@@ -192,7 +192,7 @@ export default class Store<TKey = any, TValue = any> {
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<{ type: 'insert' | 'update' | 'remove', data?: TValue, key?: TKey, index?: number }>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: TValue; key?: TKey; index?: number }>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -210,7 +210,7 @@ export default class Store<TKey = any, TValue = any> {
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>, group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)

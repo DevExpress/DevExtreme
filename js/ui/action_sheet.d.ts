@@ -183,7 +183,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @type_function_param1_field4 event:event
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: DxElement, model?: any, event?: DxEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

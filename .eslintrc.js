@@ -346,8 +346,7 @@ module.exports = {
         },
         {
             'files': [
-                'js/**/*.d.ts',
-                'js/**/*.tsx'
+                '*.d.ts'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [
@@ -365,7 +364,7 @@ module.exports = {
                 '@typescript-eslint/strict-boolean-expressions': 'warn',
                 '@typescript-eslint/unbound-method': 'warn',
                 '@typescript-eslint/no-unsafe-member-access': 'warn',
-                '@typescript-eslint/member-delimiter-style': 'off',
+                '@typescript-eslint/member-delimiter-style': 'error',
                 '@typescript-eslint/indent': 'off',
                 '@typescript-eslint/quotes': ['error', 'single'],
                 'spaced-comment': 'off',
@@ -396,19 +395,6 @@ module.exports = {
                 '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* can write DxPromise<void>, not just DxPromise (where void is default option)*/
                 '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */
                 '@typescript-eslint/ban-types': 'off', /* +: will ban Function, object -: it look like in few place we need to pass constructors, not type */
-            }
-        },
-        {
-            'files': [
-                'js/renovation/**/*.d.ts',
-                'js/renovation/**/*.tsx'
-            ],
-            'parser': '@typescript-eslint/parser',
-            'extends': [
-                'devextreme/typescript'
-            ],
-            'rules': {
-                '@typescript-eslint/no-explicit-any': 'error',
             }
         },
         {

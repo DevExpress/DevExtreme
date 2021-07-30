@@ -161,24 +161,24 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
          * @docid
          * @default ["thumbnail", "name", "dateModified", "size"]
          */
-        columns?: Array<dxFileManagerDetailsColumn | string>
-      },
+        columns?: Array<dxFileManagerDetailsColumn | string>;
+      };
       /**
        * @docid
        * @type Enums.FileManagerItemViewMode
        * @default "details"
        */
-      mode?: 'details' | 'thumbnails',
+      mode?: 'details' | 'thumbnails';
       /**
        * @docid
        * @default true
        */
-      showFolders?: boolean,
+      showFolders?: boolean;
       /**
        * @docid
        * @default true
        */
-      showParentFolder?: boolean
+      showParentFolder?: boolean;
     };
     /**
      * @docid
@@ -189,13 +189,13 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default true
        */
-      showPanel?: boolean,
+      showPanel?: boolean;
       /**
        * @docid
        * @default true
        */
-      showPopup?: boolean
-    }
+      showPopup?: boolean;
+    };
     /**
      * @docid
      * @default null
@@ -318,37 +318,37 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default false
        */
-      copy?: boolean,
+      copy?: boolean;
       /**
        * @docid
        * @default false
        */
-      create?: boolean,
+      create?: boolean;
       /**
        * @docid
        * @default false
        */
-      download?: boolean,
+      download?: boolean;
       /**
        * @docid
        * @default false
        */
-      move?: boolean,
+      move?: boolean;
       /**
        * @docid
        * @default false
        */
-      delete?: boolean,
+      delete?: boolean;
       /**
        * @docid
        * @default false
        */
-      rename?: boolean,
+      rename?: boolean;
       /**
        * @docid
        * @default false
        */
-      upload?: boolean
+      upload?: boolean;
     };
     /**
      * @docid
@@ -389,12 +389,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default 0
        */
-      maxFileSize?: number,
+      maxFileSize?: number;
       /**
        * @docid
        * @default 200000
        */
-      chunkSize?: number
+      chunkSize?: number;
     };
 }
 /**

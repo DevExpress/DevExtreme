@@ -51,14 +51,14 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @action
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
+    onRendered?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @default null
      * @action
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: DxElement, model?: any }) => void);
+    onShown?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @type DxPromise|bool

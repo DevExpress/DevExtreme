@@ -179,12 +179,12 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid

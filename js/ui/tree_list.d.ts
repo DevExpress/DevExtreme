@@ -811,17 +811,17 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
          * @docid
          * @default false
          */
-        filtering?: boolean,
+        filtering?: boolean;
         /**
          * @docid
          * @default false
          */
-        grouping?: boolean,
+        grouping?: boolean;
         /**
          * @docid
          * @default false
          */
-        sorting?: boolean
+        sorting?: boolean;
     } | 'auto';
     /**
      * @docid
@@ -866,7 +866,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowAdding?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
@@ -876,7 +876,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
@@ -886,7 +886,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
@@ -1202,7 +1202,7 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
      * @type Enums.TreeListToolbarItem|string
      * @public
      */
-    name?: dxTreeListDefaultToolbarItemName | string
+    name?: dxTreeListDefaultToolbarItemName | string;
 }
 
 /**
@@ -1361,7 +1361,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
     /**
      * @docid dxTreeListColumnButton.disabled
      * @default false
@@ -1372,7 +1372,7 @@ export interface ColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { readonly component: dxTreeList, readonly row?: RowObject, readonly column: Column }) => boolean);
+    disabled?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
 }
 
 /**

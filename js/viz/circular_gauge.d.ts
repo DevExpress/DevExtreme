@@ -64,12 +64,12 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
        * @docid
        * @default 315
        */
-      endAngle?: number,
+      endAngle?: number;
       /**
        * @docid
        * @default 225
        */
-      startAngle?: number
+      startAngle?: number;
     };
     /**
      * @docid

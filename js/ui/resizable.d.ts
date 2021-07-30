@@ -17,7 +17,7 @@ export interface ResizeInfo {
         readonly top: boolean;
         readonly right: boolean;
         readonly bottom: boolean;
-    }
+    };
 }
 
 /** @public */
