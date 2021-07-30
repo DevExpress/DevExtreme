@@ -79,6 +79,9 @@ function createMockPdfDoc() {
 
     result.__text = result.text;
     result.text = function() {
+        if(arguments.length >= 3 && arguments[3].baseline === 'alphabetic') {
+            arguments[3] = undefined;
+        }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
         this.__text.apply(this, arguments);
     };

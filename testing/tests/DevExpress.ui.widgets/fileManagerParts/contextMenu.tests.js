@@ -749,6 +749,21 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.equal($items.length, 0, 'context menu is invisible');
     });
 
+    test('event propagation is stopped for click by folder node T1009625', function(assert) {
+        const done = assert.async();
+        this.wrapper.getInstance().option({
+            onContextMenuShowing: function({ event }) {
+                assert.ok(event.isDefaultPrevented(), 'default is prevented');
+                assert.ok(event.isPropagationStopped(), 'propagation is stopped');
+                done();
+            }
+        });
+        assert.equal(this.wrapper.getContextMenuItems(true).length, 0, 'context menu is hidden');
+
+        this.wrapper.getFolderNode(1).trigger('dxcontextmenu');
+        assert.ok(this.wrapper.getContextMenuItems(true).length > 0, 'context menu is shown');
+    });
+
 });
 
 QUnit.module('Cutomize context menu', moduleConfig, () => {
