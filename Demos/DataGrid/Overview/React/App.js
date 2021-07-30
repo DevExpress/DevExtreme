@@ -39,6 +39,7 @@ class App extends React.Component {
       <DataGrid
         dataSource={dataSourceOptions}
         allowColumnReordering={true}
+        rowAlternationEnabled={true}
         showBorders={true}
         onContentReady={this.onContentReady}
       >

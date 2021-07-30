@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { SelectBox, CheckBox, NumberBox, DateBox } from 'devextreme-react';
+import { SelectBox } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import { NumberBox } from 'devextreme-react/number-box';
+import { DateBox } from 'devextreme-react/date-box';
 import { Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item } from 'devextreme-react/gantt';
 
 import { tasks, dependencies, resources, resourceAssignments } from './data.js';
