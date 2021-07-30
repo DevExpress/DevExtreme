@@ -363,3 +363,9 @@ const SlideOut = CollectionWidget.inherit({
 registerComponent('dxSlideOut', SlideOut);
 
 export default SlideOut;
+
+/**
+ * @name dxSlideOutItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

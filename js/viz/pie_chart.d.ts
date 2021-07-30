@@ -105,9 +105,13 @@ export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 /**
- * @docid
- * @type object
- * @inherits BaseLegendItem
+ * @public
+ * @namespace DevExpress.viz.dxPieChart
+ */
+export type LegendItem = PieChartLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
  * @namespace DevExpress.viz
  */
 export interface PieChartLegendItem extends BaseLegendItem {
@@ -407,7 +411,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @type_function_return Array<PieChartLegendItem>
      * @public
      */
-    customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxPieChartOptions.legend.customizeText
      * @type_function_param1 pointInfo:object
@@ -434,7 +438,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 /**
  * @docid

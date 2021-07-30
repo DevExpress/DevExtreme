@@ -128,10 +128,11 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     createChildren?: ((parentNode: dxTreeViewNode) => PromiseLike<any> | Array<any>);
     /**
      * @docid
+     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
@@ -173,9 +174,10 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     hasItemsExpr?: string | Function;
     /**
      * @docid
+     * @type Array<dxTreeViewItem>
      * @public
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -554,9 +556,13 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTreeView
+ */
+export type Item = dxTreeViewItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTreeViewItem extends CollectionWidgetItem {

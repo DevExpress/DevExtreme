@@ -696,3 +696,9 @@ const DropDownButton = Widget.inherit({
 
 registerComponent('dxDropDownButton', DropDownButton);
 export default DropDownButton;
+
+/**
+ * @name dxDropDownButtonItem
+ * @inherits dxListItem
+ * @type object
+ */
