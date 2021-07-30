@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import errors from '../widget/ui.errors';
 import { isDefined } from '../../core/utils/type';
 
 import {
@@ -12,7 +13,9 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_BUTTON_ITEM_CLASS,
-    FIELD_ITEM_CLASS
+    FIELD_ITEM_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS
 } from './constants';
 
 export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
@@ -148,3 +151,42 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
     $container.parent().css('justifyContent', justifyContent);
 }
+
+export function convertToTemplateOptions(renderOptions, editorOptions, componentOwner) {
+    return {
+        dataField: renderOptions.dataField,
+        editorType: renderOptions.editorType,
+        editorOptions: editorOptions,
+        component: componentOwner,
+        name: renderOptions.name
+    };
+}
+
+export function adjustEditorContainer({ $container, labelLocation }) {
+    const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
+    $container.
+        addClass(FIELD_ITEM_CONTENT_CLASS).
+        addClass(FIELD_ITEM_CONTENT_LOCATION_CLASS + locationClassSuffix[labelLocation]);
+}
+
+export function renderTemplateTo({ $container, template, templateOptions }) {
+    template.render({
+        model: templateOptions,
+        container: $container
+    });
+}
+
+export function renderComponentTo({ $container, createComponentCallback, componentType, componentOptions, helpID, labelID, isRequired }) {
+    const $div = $('<div>').appendTo($container);
+
+    try {
+        const result = createComponentCallback($div, componentType, componentOptions);
+        result.setAria('describedby', helpID);
+        result.setAria('labelledby', labelID);
+        result.setAria('required', isRequired);
+        return result;
+    } catch(e) {
+        errors.log('E1035', e.message);
+    }
+}
+

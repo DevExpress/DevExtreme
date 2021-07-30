@@ -46,20 +46,19 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    renderScrollable: function({
-        useNative,
-        useSimulatedScrollbar,
-        direction,
-        rtlEnabled
-    }) {
+    renderScrollable: function() {
         this._groupElement.dxScrollable({
-            rtlEnabled,
-            useNative,
-            useSimulatedScrollbar,
-            direction,
+            rtlEnabled: this.component.option('rtlEnabled'),
             bounceEnabled: false,
-            updateManually: true
+            updateManually: true,
         });
+    },
+
+    updateScrollableOptions: function({ useNative, ...restOptions }) {
+        const scrollable = this._getScrollable();
+
+        scrollable.option('useNative', useNative);
+        scrollable.option(restOptions);
     },
 
     getScrollableDirection: function(horizontal, vertical) {

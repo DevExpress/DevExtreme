@@ -8,16 +8,11 @@ class ResizeObserver {
         }
 
         this._observer = new window.ResizeObserver((...args) => {
-            const shouldSkip = options.shouldSkipCallback?.(...args) || this._shouldSkipNextResize;
+            const shouldSkip = options.shouldSkipCallback?.(...args);
             if(!shouldSkip) {
                 options.callback(...args);
             }
-            this._shouldSkipNextResize = false;
         });
-    }
-
-    skipNextResize() {
-        this._shouldSkipNextResize = true;
     }
 
     observe(element) {

@@ -1062,10 +1062,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   // eslint-disable-next-line class-methods-use-this
   tryGetDevicePixelRatio(): number | undefined {
-    if (hasWindow()) {
-      return (getWindow() as Window).devicePixelRatio;
-    }
-    return undefined;
+    return hasWindow() ? getWindow().devicePixelRatio : undefined;
   }
 
   scrollByPage(page: number): void {

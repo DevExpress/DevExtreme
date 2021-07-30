@@ -8,6 +8,7 @@ const JSPdfStylesTests = {
             pdfCell.drawRightBorder = false;
             pdfCell.drawTopBorder = false;
             pdfCell.drawBottomBorder = false;
+            pdfCell.textOptions = { baseline: 'alphabetic' };
         };
 
         const rowOptions = {
@@ -34,11 +35,11 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F1,10,23,{baseline:middle}',
+                    'text,F1,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F2,100,23,{baseline:middle}',
-                    'text,f1_1,10,39,{baseline:middle}',
-                    'text,f1_2,100,39,{baseline:middle}'
+                    'text,F2,100,23,',
+                    'text,f1_1,10,39,',
+                    'text,f1_2,100,39,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
@@ -71,11 +72,11 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#ffff00', 'rect,10,15,90,16,F',
-                    'text,F1,10,23,{baseline:middle}',
+                    'text,F1,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F2,100,23,{baseline:middle}',
-                    'text,f1_1,10,39,{baseline:middle}',
-                    'text,f1_2,100,39,{baseline:middle}'
+                    'text,F2,100,23,',
+                    'text,f1_1,10,39,',
+                    'text,f1_2,100,39,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -108,12 +109,12 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F1,10,23,{baseline:middle}',
+                    'text,F1,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F2,100,23,{baseline:middle}',
+                    'text,F2,100,23,',
                     'setFillColor,#ffff00', 'rect,10,31,90,16,F',
-                    'text,f1_1,10,39,{baseline:middle}',
-                    'text,f1_2,100,39,{baseline:middle}'
+                    'text,f1_1,10,39,',
+                    'text,f1_2,100,39,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -141,17 +142,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F3,100,23,{baseline:middle}',
+                    'text,F3,100,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1_1,10,39,{baseline:middle}',
-                    'text,f1_2,20,55,{baseline:middle}',
-                    'text,f1_3,100,55,{baseline:middle}',
+                    'text,F1: f1_1,10,39,',
+                    'text,f1_2,20,55,',
+                    'text,f1_3,100,55,',
                     'setFillColor,#d3d3d3', 'rect,10,63,170,16,F',
-                    'text,F1: f2_1,10,71,{baseline:middle}',
-                    'text,f2_2,20,87,{baseline:middle}',
-                    'text,f2_3,100,87,{baseline:middle}'
+                    'text,F1: f2_1,10,71,',
+                    'text,f2_2,20,87,',
+                    'text,f2_3,100,87,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
@@ -186,17 +187,17 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F3,100,23,{baseline:middle}',
+                    'text,F3,100,23,',
                     'setFillColor,#ffff00', 'rect,10,31,170,16,F',
-                    'text,F1: f1_1,10,39,{baseline:middle}',
-                    'text,f1_2,20,55,{baseline:middle}',
-                    'text,f1_3,100,55,{baseline:middle}',
+                    'text,F1: f1_1,10,39,',
+                    'text,f1_2,20,55,',
+                    'text,f1_3,100,55,',
                     'setFillColor,#d3d3d3', 'rect,10,63,170,16,F',
-                    'text,F1: f2_1,10,71,{baseline:middle}',
-                    'text,f2_2,20,87,{baseline:middle}',
-                    'text,f2_3,100,87,{baseline:middle}'
+                    'text,F1: f2_1,10,71,',
+                    'text,f2_2,20,87,',
+                    'text,f2_3,100,87,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -231,19 +232,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F3,100,23,{baseline:middle}',
+                    'text,F3,100,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1_1,10,39,{baseline:middle}',
+                    'text,F1: f1_1,10,39,',
                     'setFillColor,#ffff00', 'rect,20,47,80,16,F',
-                    'text,f1_2,20,55,{baseline:middle}',
-                    'text,f1_3,100,55,{baseline:middle}',
+                    'text,f1_2,20,55,',
+                    'text,f1_3,100,55,',
                     'setFillColor,#d3d3d3', 'rect,10,63,170,16,F',
-                    'text,F1: f2_1,10,71,{baseline:middle}',
+                    'text,F1: f2_1,10,71,',
                     'setFillColor,#ffff00', 'rect,20,79,80,16,F',
-                    'text,f2_2,20,87,{baseline:middle}',
-                    'text,f2_3,100,87,{baseline:middle}'
+                    'text,f2_2,20,87,',
+                    'text,f2_3,100,87,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -272,19 +273,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F4,100,23,{baseline:middle}',
+                    'text,F4,100,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,F1: f1,10,39,',
                     'setFillColor,#d3d3d3', 'rect,20,47,160,16,F',
-                    'text,F2: f1_2,20,55,{baseline:middle}',
-                    'text,f1_3,30,71,{baseline:middle}',
-                    'text,f1_4,100,71,{baseline:middle}',
+                    'text,F2: f1_2,20,55,',
+                    'text,f1_3,30,71,',
+                    'text,f1_4,100,71,',
                     'setFillColor,#d3d3d3', 'rect,20,79,160,16,F',
-                    'text,F2: f2_2,20,87,{baseline:middle}',
-                    'text,f2_3,30,103,{baseline:middle}',
-                    'text,f2_4,100,103,{baseline:middle}'
+                    'text,F2: f2_2,20,87,',
+                    'text,f2_3,30,103,',
+                    'text,f2_4,100,103,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
@@ -320,19 +321,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,90,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,100,15,80,16,F',
-                    'text,F4,100,23,{baseline:middle}',
+                    'text,F4,100,23,',
                     'setFillColor,#ffff00', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,F1: f1,10,39,',
                     'setFillColor,#ffff00', 'rect,20,47,160,16,F',
-                    'text,F2: f1_2,20,55,{baseline:middle}',
-                    'text,f1_3,30,71,{baseline:middle}',
-                    'text,f1_4,100,71,{baseline:middle}',
+                    'text,F2: f1_2,20,55,',
+                    'text,f1_3,30,71,',
+                    'text,f1_4,100,71,',
                     'setFillColor,#ffff00', 'rect,20,79,160,16,F',
-                    'text,F2: f2_2,20,87,{baseline:middle}',
-                    'text,f2_3,30,103,{baseline:middle}',
-                    'text,f2_4,100,103,{baseline:middle}'
+                    'text,F2: f2_2,20,87,',
+                    'text,f2_3,30,103,',
+                    'text,f2_4,100,103,'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -361,18 +362,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}',
+                    'text,F4,180,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,F1: f1,10,39,',
                     'setFillColor,#d3d3d3', 'rect,180,31,80,16,F',
-                    'text,Max: f4,180,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
-                    'text,f4,180,55,{baseline:middle}' ];
+                    'text,Max: f4,180,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
+                    'text,f4,180,55,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -407,18 +408,18 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}',
+                    'text,F4,180,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
+                    'text,F1: f1,10,39,',
                     'setFillColor,#ffff00', 'rect,180,31,80,16,F',
-                    'text,Max: f4,180,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
-                    'text,f4,180,55,{baseline:middle}' ];
+                    'text,Max: f4,180,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
+                    'text,f4,180,55,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -446,20 +447,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}',
+                    'text,F4,180,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
-                    'text,f4,180,55,{baseline:middle}',
+                    'text,F1: f1,10,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
+                    'text,f4,180,55,',
                     'setFillColor,#ffffe0', 'rect,20,63,70,16,F',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F',
                     'setFillColor,#ffffe0', 'rect,180,63,80,16,F',
-                    'text,Max: f4,180,71,{baseline:middle}' ];
+                    'text,Max: f4,180,71,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -494,20 +495,20 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#808080', 'rect,180,15,80,16,F',
-                    'text,F4,180,23,{baseline:middle}',
+                    'text,F4,180,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
-                    'text,f4,180,55,{baseline:middle}',
+                    'text,F1: f1,10,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
+                    'text,f4,180,55,',
                     'setFillColor,#ffffe0', 'rect,20,63,70,16,F',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F',
                     'setFillColor,#ffff00', 'rect,180,63,80,16,F',
-                    'text,Max: f4,180,71,{baseline:middle}' ];
+                    'text,Max: f4,180,71,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -538,19 +539,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}',
+                    'text,F4,260,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
+                    'text,F1: f1 (Max: f1),10,39,',
                     'setFillColor,#d3d3d3', 'rect,260,31,100,16,F',
-                    'text,Max: f4,260,39,{baseline:middle}',
+                    'text,Max: f4,260,39,',
                     'setFillColor,#d3d3d3', 'rect,20,47,240,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
+                    'text,F2: f2 (Max of F1 is f1),20,55,',
                     'setFillColor,#d3d3d3', 'rect,260,47,100,16,F',
-                    'text,Max: f4,260,55,{baseline:middle}',
-                    'text,f3,30,71,{baseline:middle}',
-                    'text,f4,260,71,{baseline:middle}' ];
+                    'text,Max: f4,260,55,',
+                    'text,f3,30,71,',
+                    'text,f4,260,71,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -588,19 +589,19 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}',
+                    'text,F4,260,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,250,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
+                    'text,F1: f1 (Max: f1),10,39,',
                     'setFillColor,#ffff00', 'rect,260,31,100,16,F',
-                    'text,Max: f4,260,39,{baseline:middle}',
+                    'text,Max: f4,260,39,',
                     'setFillColor,#d3d3d3', 'rect,20,47,240,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
+                    'text,F2: f2 (Max of F1 is f1),20,55,',
                     'setFillColor,#ffff00', 'rect,260,47,100,16,F',
-                    'text,Max: f4,260,55,{baseline:middle}',
-                    'text,f3,30,71,{baseline:middle}',
-                    'text,f4,260,71,{baseline:middle}' ];
+                    'text,Max: f4,260,55,',
+                    'text,f3,30,71,',
+                    'text,f4,260,71,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -631,21 +632,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}',
+                    'text,F4,260,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,350,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
+                    'text,F1: f1 (Max: f1),10,39,',
                     'setFillColor,#d3d3d3', 'rect,20,47,340,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
-                    'text,f3,30,71,{baseline:middle}',
-                    'text,f4,260,71,{baseline:middle}',
+                    'text,F2: f2 (Max of F1 is f1),20,55,',
+                    'text,f3,30,71,',
+                    'text,f4,260,71,',
                     'setFillColor,#ffffe0', 'rect,30,79,230,16,F',
                     'setFillColor,#ffffe0', 'rect,260,79,100,16,F',
-                    'text,Max: f4,260,87,{baseline:middle}',
+                    'text,Max: f4,260,87,',
                     'setFillColor,#ffffe0', 'rect,20,95,240,16,F',
                     'setFillColor,#ffffe0', 'rect,260,95,100,16,F',
-                    'text,Max: f4,260,103,{baseline:middle}' ];
+                    'text,Max: f4,260,103,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -683,21 +684,21 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,250,16,F',
-                    'text,F3,10,23,{baseline:middle}',
+                    'text,F3,10,23,',
                     'setFillColor,#808080', 'rect,260,15,100,16,F',
-                    'text,F4,260,23,{baseline:middle}',
+                    'text,F4,260,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,350,16,F',
-                    'text,F1: f1 (Max: f1),10,39,{baseline:middle}',
+                    'text,F1: f1 (Max: f1),10,39,',
                     'setFillColor,#d3d3d3', 'rect,20,47,340,16,F',
-                    'text,F2: f2 (Max of F1 is f1),20,55,{baseline:middle}',
-                    'text,f3,30,71,{baseline:middle}',
-                    'text,f4,260,71,{baseline:middle}',
+                    'text,F2: f2 (Max of F1 is f1),20,55,',
+                    'text,f3,30,71,',
+                    'text,f4,260,71,',
                     'setFillColor,#ffffe0', 'rect,30,79,230,16,F',
                     'setFillColor,#ffff00', 'rect,260,79,100,16,F',
-                    'text,Max: f4,260,87,{baseline:middle}',
+                    'text,Max: f4,260,87,',
                     'setFillColor,#ffffe0', 'rect,20,95,240,16,F',
                     'setFillColor,#ffff00', 'rect,260,95,100,16,F',
-                    'text,Max: f4,260,103,{baseline:middle}' ];
+                    'text,Max: f4,260,103,' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
                     // doc.save();
@@ -725,13 +726,13 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F1,10,23,{baseline:middle}',
+                    'text,F1,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F2,90,23,{baseline:middle}',
-                    'text,f1,10,39,{baseline:middle}',
-                    'text,f2,90,39,{baseline:middle}',
+                    'text,F2,90,23,',
+                    'text,f1,10,39,',
+                    'text,f2,90,39,',
                     'setFillColor,#ffffe0', 'rect,10,47,80,16,F',
-                    'text,Max: f1,10,55,{baseline:middle}',
+                    'text,Max: f1,10,55,',
                     'setFillColor,#ffffe0', 'rect,90,47,90,16,F' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
@@ -767,13 +768,13 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F1,10,23,{baseline:middle}',
+                    'text,F1,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F2,90,23,{baseline:middle}',
-                    'text,f1,10,39,{baseline:middle}',
-                    'text,f2,90,39,{baseline:middle}',
+                    'text,F2,90,23,',
+                    'text,f1,10,39,',
+                    'text,f2,90,39,',
                     'setFillColor,#ffff00', 'rect,10,47,80,16,F',
-                    'text,Max: f1,10,55,{baseline:middle}',
+                    'text,Max: f1,10,55,',
                     'setFillColor,#ffffe0', 'rect,90,47,90,16,F' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
@@ -803,15 +804,15 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
+                    'text,F1: f1,10,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
                     'setFillColor,#ffffe0', 'rect,10,63,80,16,F',
-                    'text,Max: f2,10,71,{baseline:middle}',
+                    'text,Max: f2,10,71,',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
@@ -848,15 +849,15 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFillColor,#808080', 'rect,10,15,80,16,F',
-                    'text,F2,10,23,{baseline:middle}',
+                    'text,F2,10,23,',
                     'setFillColor,#808080', 'rect,90,15,90,16,F',
-                    'text,F3,90,23,{baseline:middle}',
+                    'text,F3,90,23,',
                     'setFillColor,#d3d3d3', 'rect,10,31,170,16,F',
-                    'text,F1: f1,10,39,{baseline:middle}',
-                    'text,f2,20,55,{baseline:middle}',
-                    'text,f3,90,55,{baseline:middle}',
+                    'text,F1: f1,10,39,',
+                    'text,f2,20,55,',
+                    'text,f3,90,55,',
                     'setFillColor,#ffff00', 'rect,10,63,80,16,F',
-                    'text,Max: f2,10,71,{baseline:middle}',
+                    'text,Max: f2,10,71,',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F' ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
