@@ -205,7 +205,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @type Array<Object>
      * @public
      */
-    toolbarItems?: Array<dxPopupToolbarItem>;
+    toolbarItems?: Array<ToolbarItem>;
     /**
      * @docid
      * @type_function_return number|string
@@ -229,7 +229,17 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
      */
     show?: animationConfig;
 }
-/** @namespace DevExpress.ui */
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxPopup
+ */
+export type ToolbarItem = dxPopupToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
+ * @namespace DevExpress.ui
+ */
 export interface dxPopupToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.disabled
@@ -305,4 +315,3 @@ export type Options = dxPopupOptions;
 
 /** @deprecated use Properties instead */
 export type IOptions = dxPopupOptions;
-export type ToolbarItem = dxPopupToolbarItem;
