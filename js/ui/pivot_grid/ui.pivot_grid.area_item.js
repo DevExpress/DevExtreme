@@ -4,7 +4,6 @@ import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
-import { setHeight, setWidth } from '../../core/utils/style';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -403,11 +402,11 @@ export const AreaItem = Class.inherit({
     },
 
     setGroupWidth: function(value) {
-        setWidth(this.groupElement(), value);
+        this._getScrollable().option('width', value);
     },
 
     setGroupHeight: function(value) {
-        setHeight(this.groupElement(), value);
+        this._getScrollable().option('height', value);
     },
 
     getGroupHeight: function() {
