@@ -6,7 +6,7 @@ fixture.disablePageReloads`Virtual Columns`
   .page(url(__dirname, '../container.html'))
   .afterEach(() => disposeWidgets());
 
-test('DataGrid should not scroll back to the focused cell after horizontal scrolling if \'columnRenderingMode\' is virtual', async (t) => {
+test.skip('DataGrid should not scroll back to the focused cell after horizontal scrolling if \'columnRenderingMode\' is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.click(dataGrid.getDataCell(0, 0).element);
