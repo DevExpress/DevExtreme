@@ -34,10 +34,6 @@ if(Quill) {
             eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
         }
 
-        _isTableTarget() {
-
-        }
-
         // _getContextMenuItems() {
         //     return [
         //         { text: 'Download' },
@@ -58,18 +54,46 @@ if(Quill) {
         _getListConfig(options) {
             return {
                 dataSource: [
-                    { text: 'Download' },
-                    { text: 'Comment' },
-                    { text: 'Favorite' }
+                    { text: 'Insert Row Above', onClick: () => { this._tableAction('insertRowAbove'); } },
+                    { text: 'Insert Row Below', onClick: () => { this._tableAction('insertRowBelow'); } },
+                    { text: 'Insert Column Left', onClick: () => { this._tableAction('insertColumnLeft'); } },
+                    { text: 'Insert Column Right', onClick: () => { this._tableAction('insertColumnRight'); } },
+                    { text: 'Delete Column', onClick: () => { this._tableAction('deleteColumn'); } },
+                    { text: 'Delete Row', onClick: () => { this._tableAction('deleteRow'); } },
+                    { text: 'Delete Table', onClick: () => { this._tableAction('deleteTable'); } }
                 ],
 
             };
         }
 
-        _openTableContextMenu(event) {
-            this.showPopup();
+        _getTableOperationHandler(operationName, ...rest) {
+            return () => {
+                const table = this.quill.getModule('table');
 
-            event.preventDefault();
+                if(!table) {
+                    return;
+                }
+                this.quill.focus();
+                return table[operationName](...rest);
+            };
+        }
+
+        _tableAction(action) {
+            this._getTableOperationHandler(action)();
+            this._popup && this._popup.hide();
+        }
+
+        _openTableContextMenu(event) {
+            if(this._isTableTarget(event)) {
+                this.showPopup();
+
+                event.preventDefault();
+            }
+
+        }
+
+        _isTableTarget() {
+            return true;
         }
 
         // _findTables() {
