@@ -891,7 +891,7 @@ const Overlay = Widget.inherit({
 
         const closeOnScroll = this.option('closeOnTargetScroll');
         if(needSubscribe && closeOnScroll) {
-            let $parents = getElement(this._position.of).parents();
+            let $parents = getElement(this._$wrapper).parents();
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
