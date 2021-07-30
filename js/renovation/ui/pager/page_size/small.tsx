@@ -31,8 +31,7 @@ export const viewFunction = ({
   />
 );
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSmallPropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize'> & PageSizeSmallProps;
+type PageSizeSmallPropsType = Omit<InternalPagerProps, 'pageSizes'> & Pick<PageSizeSmallProps, 'parentRef' | 'pageSizes'>;
 
 @ComponentBindings()
 export class PageSizeSmallProps {
@@ -43,7 +42,7 @@ export class PageSizeSmallProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
-  extends JSXComponent<PageSizeSmallPropsType, 'parentRef' | 'pageSizes'>() {
+  extends JSXComponent<PageSizeSmallPropsType, 'pageSizeChange' | 'pageSize'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {
