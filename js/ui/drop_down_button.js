@@ -48,7 +48,7 @@ const DropDownButton = Widget.inherit({
 
             keyExpr: 'this',
 
-            displayExpr: 'this',
+            displayExpr: undefined,
 
             selectedItem: null,
 
