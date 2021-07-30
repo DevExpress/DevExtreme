@@ -70,10 +70,11 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     baseItemWidth?: number;
     /**
      * @docid
+     * @type string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.Orientation
@@ -108,10 +109,11 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     itemMargin?: number;
     /**
      * @docid
+     * @type Array<string | dxTileViewItem | any>
      * @fires dxTileViewOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTileViewItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -139,9 +141,13 @@ export default class dxTileView extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTileView
+ */
+export type Item = dxTileViewItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTileViewItem extends CollectionWidgetItem {

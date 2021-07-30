@@ -16,3 +16,14 @@ dxFunnel.addPlugin(pluginTooltip);
 dxFunnel.addPlugin(pluginLoadingIndicator);
 
 export default dxFunnel;
+
+/**
+ * @name FunnelLegendItem
+ * @inherits BaseLegendItem
+ * @type object
+ */
+
+/**
+ * @name dxFunnelItem
+ * @publicName Item
+ */

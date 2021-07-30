@@ -1377,7 +1377,7 @@ export interface Node {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use RowObject instead
  */
 export type dxTreeListRowObject = RowObject;
 

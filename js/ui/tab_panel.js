@@ -377,3 +377,9 @@ TabPanel.ItemClass = TabPanelItem;
 registerComponent('dxTabPanel', TabPanel);
 
 export default TabPanel;
+
+/**
+ * @name dxTabPanelItem
+ * @inherits dxMultiViewItem
+ * @type object
+ */
