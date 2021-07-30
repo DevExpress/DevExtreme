@@ -1,5 +1,6 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
+import devices from 'core/devices';
 
 testStart(() => initTestMarkup());
 
@@ -64,14 +65,18 @@ test('should display correct caption after changing to day view if startDate is 
                     intervalCount: 3,
                     startDate: new Date(2021, 6, 30),
                 }
-            ]
+            ],
         });
 
-        scheduler.header.viewSwitcher.getButton('Day').click();
+        scheduler.option('currentView', 'day');
+
+        const expectedCaption = devices.current().deviceType === 'desktop'
+            ? '27-29 July 2021'
+            : '27-29 Jul 2021';
 
         assert.equal(
             scheduler.header.navigator.caption.getText(),
-            '27-29 July 2021',
+            expectedCaption,
             'caption must take into account startDate'
         );
     }
@@ -92,7 +97,7 @@ test('should display correct caption after changing to month view if startDate i
             ]
         });
 
-        scheduler.header.viewSwitcher.getButton('Month').click();
+        scheduler.option('currentView', 'month');
 
         assert.equal(
             scheduler.header.navigator.caption.getText(),
