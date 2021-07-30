@@ -458,6 +458,30 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
     });
 
+    test('resizeEnd should trigger positioned event', function(assert) {
+        const positionedHandlerStub = sinon.stub();
+
+        const instance = $('#overlay').dxOverlay({
+            resizeEnabled: true,
+            visible: true
+        }).dxOverlay('instance');
+        instance.on('positioned', positionedHandlerStub);
+
+        const $content = $(instance.$content());
+        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(0, 50).dragEnd();
+
+        const contentRect = $content.get(0).getBoundingClientRect();
+        assert.ok(positionedHandlerStub.calledOnce, 'positioned event is triggered');
+        assert.deepEqual(
+            positionedHandlerStub.getCall(0).args[0].position,
+            { h: { location: contentRect.left }, v: { location: contentRect.top } },
+            'position parameter is correct'
+        );
+    });
+
     test('resize should change overlay width/height options value', function(assert) {
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -4177,46 +4201,6 @@ QUnit.module('resizeObserver integration', {
         }, this.timeToWaitResize);
     });
 
-    QUnit.testInActiveWindow('content resize should trigger overlay geometry rendering', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnRestylingDone = assert.async();
-        const overlay = $('#overlay').dxOverlay({
-            contentTemplate: () => {
-                return $('<div>')
-                    .attr({ id: 'customOverlayContent' })
-                    .css({ width: 100, height: 100 });
-            },
-            width: 'auto',
-            height: 'auto',
-            visible: true
-        }).dxOverlay('instance');
-
-        if(!overlay.option('_observeContentResize')) {
-            assert.ok(true, 'resize observer is disabled on this env');
-            return;
-        }
-
-        const overlayContentElement = overlay.$content().get(0);
-        const contentRect = overlayContentElement.getBoundingClientRect();
-        const getCenter = (rect, dimension) => {
-            if(dimension === 'x') {
-                return (rect.left + rect.right) / 2;
-            }
-            return (rect.bottom + rect.top) / 2;
-        };
-
-        setTimeout(() => {
-            $('#customOverlayContent').css({ width: 500, height: 500 });
-            setTimeout(() => {
-                const contentRectAfterResize = overlayContentElement.getBoundingClientRect();
-                assert.strictEqual(getCenter(contentRect, 'x'), getCenter(contentRectAfterResize, 'x'), 'horizontal center is correct');
-                assert.strictEqual(getCenter(contentRect, 'y'), getCenter(contentRectAfterResize, 'y'), 'vertical center is correct');
-                resizeOnRestylingDone();
-            }, 100);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
-    });
-
     QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
         const resizeOnOpeningDone = assert.async();
         const resizeOnDraggingDone = assert.async();
@@ -4266,31 +4250,5 @@ QUnit.module('resizeObserver integration', {
             }, this.timeToWaitResize);
             resizeOnOpeningDone();
         }, this.timeToWaitResize);
-    });
-
-    QUnit.testInActiveWindow('showing and shown events should be raised only once when content is resized during animation', function(assert) {
-        fx.off = false;
-
-        const showingHandled = assert.async();
-        const resizingHandled = assert.async();
-        const showingStub = sinon.stub();
-        const shownStub = sinon.stub();
-        const overlay = $('#overlay').dxOverlay({
-            visible: true,
-            width: 200,
-            height: 200,
-            onShowing: showingStub,
-            onShown: shownStub
-        }).dxOverlay('instance');
-        overlay.option('width', 300);
-
-        setTimeout(() => {
-            setTimeout(() => {
-                assert.ok(shownStub.calledOnce, 'shown is called only once');
-                assert.ok(showingStub.calledOnce, 'showing is called only once');
-                resizingHandled();
-            }, 300);
-            showingHandled();
-        }, 300);
     });
 });
