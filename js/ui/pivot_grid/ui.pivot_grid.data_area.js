@@ -14,7 +14,8 @@ export const DataArea = AreaItem.inherit({
     _createGroupElement: function() {
         return $('<div>')
             .addClass(PIVOTGRID_AREA_CLASS)
-            .addClass(PIVOTGRID_AREA_DATA_CLASS);
+            .addClass(PIVOTGRID_AREA_DATA_CLASS)
+            .css('borderTopWidth', 0);
     },
 
     _applyCustomStyles: function(options) {
@@ -45,23 +46,29 @@ export const DataArea = AreaItem.inherit({
         this.callBase();
     },
 
-    processScroll: function(useNativeScrolling, rtlEnabled, horizontalScroll, verticalScroll) {
-        let direction = 'both';
-        if(horizontalScroll && !verticalScroll) {
-            direction = 'horizontal';
-        } else if(!horizontalScroll && verticalScroll) {
-            direction = 'vertical';
+    renderScrollable: function() {
+        this._groupElement.dxScrollable({
+            rtlEnabled: this.component.option('rtlEnabled'),
+            bounceEnabled: false,
+            updateManually: true,
+        });
+    },
+
+    updateScrollableOptions: function({ useNative, ...restOptions }) {
+        const scrollable = this._getScrollable();
+
+        scrollable.option('useNative', useNative);
+        scrollable.option(restOptions);
+    },
+
+    getScrollableDirection: function(horizontal, vertical) {
+        if(horizontal && !vertical) {
+            return 'horizontal';
+        } else if(!horizontal && vertical) {
+            return 'vertical';
         }
 
-        this._groupElement.css('borderTopWidth', 0)
-            .dxScrollable({
-                rtlEnabled,
-                useNative: !!useNativeScrolling,
-                useSimulatedScrollbar: !useNativeScrolling,
-                direction,
-                bounceEnabled: false,
-                updateManually: true
-            });
+        return 'both';
     },
 
     reset: function() {
