@@ -12,6 +12,8 @@ const moduleSetup = {
     }
 };
 
+const overlayWrapperSelector = '.dx-overlay-wrapper';
+
 QUnit.module('options', moduleSetup, () => {
     QUnit.test('default maxWidth should be 100%', function(assert) {
         assert.strictEqual(this._validationMessage.option('maxWidth'), '100%', 'default maxWidth was calculated correctly');
@@ -37,15 +39,14 @@ QUnit.module('options', moduleSetup, () => {
             position: 'absolute',
             left: 100
         });
-        const onShowingSpy = sinon.spy();
 
         try {
             $element.appendTo('#qunit-fixture');
-            this._validationMessage.on('showing', onShowingSpy);
+            const srcRect = $(overlayWrapperSelector)[0].getBoundingClientRect();
 
             this._validationMessage.option('target', $element);
 
-            assert.strictEqual(onShowingSpy.callCount, 1, 'position is recalculated');
+            assert.notEqual(srcRect.left, $(overlayWrapperSelector)[0].getBoundingClientRect().left, 'position is recalculated');
         } finally {
             $element.remove();
         }
