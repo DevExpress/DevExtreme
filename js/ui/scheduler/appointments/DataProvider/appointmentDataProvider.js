@@ -107,19 +107,10 @@ export class AppointmentDataProvider {
 
     sortAppointmentsByStartDate(appointments) {
         appointments.sort((a, b) => {
-            let result = 0;
-            const firstDate = new Date(ExpressionUtils.getField(this.key, 'startDate', a.settings || a)).getTime();
-            const secondDate = new Date(ExpressionUtils.getField(this.key, 'startDate', b.settings || b)).getTime();
+            const firstDate = new Date(ExpressionUtils.getField(this.key, 'startDate', a.settings || a));
+            const secondDate = new Date(ExpressionUtils.getField(this.key, 'startDate', b.settings || b));
 
-            if(firstDate < secondDate) {
-                result = -1;
-            }
-
-            if(firstDate > secondDate) {
-                result = 1;
-            }
-
-            return result;
+            return Math.sign(firstDate.getTime() - secondDate.getTime());
         });
     }
 
