@@ -13,6 +13,9 @@ export interface DomAdapter {
   isElementNode: (element: unknown) => boolean;
   createElement: (tagName: string, context?: Document) => HTMLElement;
   createDocumentFragment: () => DocumentFragment;
+  setClass: (element: HTMLElement, className: string, isAdd: boolean) => void;
+  removeElement: (element: HTMLElement) => void;
+  inject: (obj: Record<string, unknown>) => void;
 }
 
 declare const domAdapter: DomAdapter;

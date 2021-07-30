@@ -79,7 +79,6 @@ import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
 import { getElementPaddingBottom } from './utils/get_element_padding';
-import { Scrollbar } from './scrollbar';
 
 const DEFAULT_OFFSET = { top: 0, left: 0 };
 
@@ -334,7 +333,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   release(): void {
     this.updateSizes();
-    this.eventHandler((scrollbar: Scrollbar): void => scrollbar.releaseHandler());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.eventHandler((scrollbar: any): void => scrollbar.releaseHandler() as undefined);
   }
 
   @Method()
@@ -782,14 +782,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const crossThumbScrolling = this.isCrossThumbScrolling(event);
 
     this.eventHandler(
-      (scrollbar: Scrollbar): void => scrollbar.initHandler(event, crossThumbScrolling),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (scrollbar: any): void => scrollbar.initHandler(event, crossThumbScrolling) as undefined,
     );
   }
 
   handleStart(event: DxMouseEvent): void {
     this.eventForUserAction = event;
 
-    this.eventHandler((scrollbar: Scrollbar): void => scrollbar.startHandler());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.eventHandler((scrollbar: any): void => scrollbar.startHandler() as undefined);
 
     this.onStart();
   }
@@ -805,23 +807,30 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    this.eventHandler((scrollbar: Scrollbar): void => scrollbar.moveHandler(e.delta));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.eventHandler((scrollbar: any): void => scrollbar.moveHandler(e.delta) as undefined);
   }
 
   handleEnd(event: DxMouseEvent): void {
     this.adjustDistance(event, 'velocity');
     this.eventForUserAction = event;
-    this.eventHandler((scrollbar: Scrollbar): void => scrollbar.endHandler(event.velocity, true));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.eventHandler((scrollbar: any): void => scrollbar.endHandler(
+      event.velocity,
+      true,
+    ) as undefined);
   }
 
   handleStop(): void {
-    this.eventHandler((scrollbar: Scrollbar): void => scrollbar.stopHandler());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.eventHandler((scrollbar: any): void => scrollbar.stopHandler() as undefined);
   }
 
   handleCancel(event: DxMouseEvent): void {
     this.eventForUserAction = event;
     this.eventHandler(
-      (scrollbar: Scrollbar): void => scrollbar.endHandler({ x: 0, y: 0 }, false),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (scrollbar: any): void => scrollbar.endHandler({ x: 0, y: 0 }, false) as undefined,
     );
   }
 
@@ -878,9 +887,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  validateEvent(event: DxMouseEvent, scrollbarRef: AnimatedScrollbar): boolean {
+  validateEvent(event: DxMouseEvent, scrollbarRef: any): boolean {
     const { scrollByThumb, scrollByContent } = this.props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (scrollByThumb && scrollbarRef.validateEvent(event))
     || (scrollByContent && this.isContent(event.originalEvent.target));
   }

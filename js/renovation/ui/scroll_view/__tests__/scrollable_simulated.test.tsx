@@ -703,7 +703,7 @@ describe('Simulated > Behavior', () => {
               each([undefined, 0, 54]).describe('animationScrollbar.reachedMax: %o', (validateWheelTimer) => {
                 it('validateWheel(event)', () => {
                   const viewModel = new Scrollable({ direction });
-                  const event = { ...defaultEvent, delta } as unknown as DxMouseEvent;
+                  const event = { ...defaultEvent, delta } as unknown as DxMouseWheelEvent;
 
                   viewModel.wheelDirection = jest.fn(() => wheelDirection);
                   viewModel.validateWheelTimer = validateWheelTimer;
@@ -752,7 +752,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: true } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: true } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'horizontal' : direction);
         });
 
@@ -760,7 +760,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: false } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: false } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'vertical' : direction);
         });
       });

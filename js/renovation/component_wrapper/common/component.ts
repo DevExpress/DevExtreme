@@ -158,7 +158,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         createElement(this._viewComponent, props),
         mountNode,
       );
-      containerNode.$V = mountNode.$V;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      containerNode.$V = (mountNode as any).$V;
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }

@@ -724,7 +724,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     if (isDefined(this.tryGetAllowedDirection())) {
-      e.originalEvent.isScrollingEvent = true;
+      // eslint-disable-next-line
+      (e.originalEvent as any).isScrollingEvent = true;
     }
 
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
