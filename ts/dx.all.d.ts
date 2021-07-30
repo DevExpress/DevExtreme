@@ -512,7 +512,7 @@ declare module DevExpress {
   /**
    * [descr:AnimationConfig]
    */
-  export interface AnimationConfig {
+  export type AnimationConfig = {
     /**
      * [descr:AnimationConfig.complete]
      */
@@ -567,7 +567,7 @@ declare module DevExpress {
       | 'slide'
       | 'slideIn'
       | 'slideOut';
-  }
+  };
   /**
    * [descr:animationPresets]
    */
@@ -1453,10 +1453,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface ComponentFactory<TComponent> {
+  type ComponentFactory<TComponent> = {
     new (): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
-  }
+  };
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1548,10 +1548,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface Rule<T> {
+  export type Rule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
-  }
+  };
   /**
    * [descr:template]
    */
@@ -1635,9 +1635,9 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface BaseGroupDescriptor<T> {
+  type BaseGroupDescriptor<T> = {
     selector: KeySelector<T>;
-  }
+  };
   /**
    * [descr:CustomStore]
    */
@@ -4843,10 +4843,10 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxButton> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxButtonOptions;
-    export interface TemplateData {
+    export type TemplateData = {
       readonly text?: string;
       readonly icon?: string;
-    }
+    };
   }
   /**
    * [descr:dxButtonGroup]
@@ -5003,11 +5003,11 @@ declare module DevExpress.ui {
    */
   export class dxCalendar extends Editor<dxCalendarOptions> {}
   module dxCalendar {
-    export interface CellTemplateData {
+    export type CellTemplateData = {
       readonly date: Date;
       readonly view: string;
       readonly text?: string;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6007,7 +6007,7 @@ declare module DevExpress.ui {
         row?: RowObject;
         column?: Column;
       };
-    export interface ColumnButtonTemplateData {
+    export type ColumnButtonTemplateData = {
       readonly component: dxDataGrid;
       readonly data?: any;
       readonly key?: any;
@@ -6016,8 +6016,8 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly rowType: string;
       readonly row: RowObject;
-    }
-    export interface ColumnCellTemplateData {
+    };
+    export type ColumnCellTemplateData = {
       readonly data?: any;
       readonly component: dxDataGrid;
       readonly value?: any;
@@ -6030,7 +6030,7 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6081,7 +6081,7 @@ declare module DevExpress.ui {
       target?: string;
       groupInterval?: string | number;
     }
-    export interface ColumnEditCellTemplateData {
+    export type ColumnEditCellTemplateData = {
       readonly setValue?: any;
       readonly data?: any;
       readonly component: dxDataGrid;
@@ -6094,7 +6094,7 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6129,7 +6129,7 @@ declare module DevExpress.ui {
        */
       unfix?: string;
     }
-    export interface ColumnGroupCellTemplateData {
+    export type ColumnGroupCellTemplateData = {
       readonly data?: any;
       readonly component: dxDataGrid;
       readonly value?: any;
@@ -6142,12 +6142,12 @@ declare module DevExpress.ui {
       readonly summaryItems: Array<any>;
       readonly groupContinuesMessage?: string;
       readonly groupContinuedMessage?: string;
-    }
-    export interface ColumnHeaderCellTemplateData {
+    };
+    export type ColumnHeaderCellTemplateData = {
       readonly component: dxDataGrid;
       readonly columnIndex: number;
       readonly column: Column;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6987,11 +6987,11 @@ declare module DevExpress.ui {
             detailInfo: MasterDetailTemplateData
           ) => any);
     }
-    export interface MasterDetailTemplateData {
+    export type MasterDetailTemplateData = {
       readonly key: any;
       readonly data: any;
       readonly watch?: Function;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7357,7 +7357,7 @@ declare module DevExpress.ui {
       readonly key: any;
       cancel: boolean | PromiseLike<void>;
     }
-    export interface RowTemplateData {
+    export type RowTemplateData = {
       readonly key: any;
       readonly data: any;
       readonly component: dxDataGrid;
@@ -7368,7 +7368,7 @@ declare module DevExpress.ui {
       readonly rowType: string;
       readonly groupIndex?: number;
       readonly isExpanded?: boolean;
-    }
+    };
     export type RowUpdatedEvent = DevExpress.events.EventInfo<dxDataGrid> &
       RowUpdatedInfo;
     /**
@@ -8260,17 +8260,17 @@ declare module DevExpress.ui {
   }
   module dxDiagram {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDiagram>;
-    export interface CustomCommandEvent {
+    export type CustomCommandEvent = {
       readonly component: dxDiagram;
       readonly element: DevExpress.core.DxElement;
       readonly name: string;
-    }
-    export interface CustomShapeTemplateData {
+    };
+    export type CustomShapeTemplateData = {
       readonly item: dxDiagramShape;
-    }
-    export interface CustomShapeToolboxTemplateData {
+    };
+    export type CustomShapeToolboxTemplateData = {
       readonly item: dxDiagramShape;
-    }
+    };
     export type DisposingEvent = DevExpress.events.EventInfo<dxDiagram>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDiagram>;
@@ -10067,10 +10067,10 @@ declare module DevExpress.ui {
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromData?: any;
       };
-    export interface DragTemplateData {
+    export type DragTemplateData = {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
-    }
+    };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxDraggable>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxDraggable> &
@@ -10206,10 +10206,10 @@ declare module DevExpress.ui {
   module dxDropDownBox {
     export type ChangeEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type ClosedEvent = DevExpress.events.EventInfo<dxDropDownBox>;
-    export interface ContentTemplateData {
+    export type ContentTemplateData = {
       component: dxDropDownBox;
       readonly value?: any;
-    }
+    };
     export type CopyEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type CutEvent = DevExpress.events.NativeEventInfo<dxDropDownBox>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxDropDownBox>;
@@ -11468,11 +11468,11 @@ declare module DevExpress.ui {
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
-    export interface CustomOperationEditorTemplate {
+    export type CustomOperationEditorTemplate = {
       readonly value?: string | number | Date;
       readonly field: dxFilterBuilderField;
       readonly setValue: Function;
-    }
+    };
     export type DisposingEvent = DevExpress.events.EventInfo<dxFilterBuilder>;
     export type EditorPreparedEvent =
       DevExpress.events.EventInfo<dxFilterBuilder> & {
@@ -11503,12 +11503,12 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
-    export interface FieldEditorTemplate {
+    export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
       readonly field: dxFilterBuilderField;
       readonly setValue: Function;
-    }
+    };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFilterBuilder>;
     export type OptionChangedEvent =
@@ -11859,22 +11859,22 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly value?: any;
     };
-    export interface GroupItemTemplateData {
+    export type GroupItemTemplateData = {
       readonly component: dxForm;
       readonly formData?: any;
-    }
+    };
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxForm>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxForm> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxFormOptions;
-    export interface SimpleItemTemplateData {
+    export type SimpleItemTemplateData = {
       readonly component: dxForm;
       readonly dataField?: string;
       readonly editorOptions?: any;
       readonly editorType?: string;
       readonly name?: string;
-    }
+    };
   }
   /**
    * [descr:dxFormButtonItem]
@@ -12566,11 +12566,11 @@ declare module DevExpress.ui {
       readonly data?: any;
       readonly items?: Array<any>;
     };
-    export interface CustomCommandEvent {
+    export type CustomCommandEvent = {
       readonly component?: dxGantt;
       readonly element?: DevExpress.core.DxElement;
       readonly name: string;
-    }
+    };
     export type DependencyDeletedEvent =
       DevExpress.events.EventInfo<dxGantt> & {
         readonly values: any;
@@ -12595,9 +12595,9 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxGantt>;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxGantt> &
       DevExpress.events.ChangedOptionInfo;
-    export interface ProgressTooltipTemplateData {
+    export type ProgressTooltipTemplateData = {
       readonly progress: number;
-    }
+    };
     export type Properties = dxGanttOptions;
     export type ResourceAssignedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly values: any;
@@ -12646,7 +12646,7 @@ declare module DevExpress.ui {
       readonly key?: any;
       readonly data?: any;
     };
-    export interface TaskContentTemplateData {
+    export type TaskContentTemplateData = {
       readonly cellSize: any;
       readonly isMilestone: boolean;
       readonly taskData: any;
@@ -12654,7 +12654,7 @@ declare module DevExpress.ui {
       readonly taskPosition: any;
       readonly taskResources: Array<any>;
       readonly taskSize: any;
-    }
+    };
     export type TaskDblClickEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxGantt> & {
         readonly key?: any;
@@ -12700,10 +12700,10 @@ declare module DevExpress.ui {
         readonly values: any;
         readonly key: any;
       };
-    export interface TimeTooltipTemplateData {
+    export type TimeTooltipTemplateData = {
       readonly start: Date;
       readonly end: Date;
-    }
+    };
   }
   /**
    * [descr:dxGanttContextMenu]
@@ -16922,10 +16922,10 @@ declare module DevExpress.ui {
       TargetedAppointmentInfo & {
         readonly appointmentElement: DevExpress.core.DxElement;
       };
-    export interface AppointmentCollectorTemplateData {
+    export type AppointmentCollectorTemplateData = {
       readonly appointmentCount: number;
       readonly isCompact: boolean;
-    }
+    };
     export type AppointmentContextMenuEvent =
       DevExpress.events.NativeEventInfo<dxScheduler> &
         TargetedAppointmentInfo & {
@@ -17014,11 +17014,11 @@ declare module DevExpress.ui {
         readonly cellElement: DevExpress.core.DxElement;
       };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxScheduler>;
-    export interface DateNavigatorTextInfo {
+    export type DateNavigatorTextInfo = {
       readonly startDate: Date;
       readonly endDate: Date;
       readonly text: string;
-    }
+    };
     export type DisposingEvent = DevExpress.events.EventInfo<dxScheduler>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxScheduler>;
@@ -19850,7 +19850,7 @@ declare module DevExpress.ui {
         row?: RowObject;
         column?: Column;
       };
-    export interface ColumnButtonTemplateData {
+    export type ColumnButtonTemplateData = {
       readonly component: dxTreeList;
       readonly data: any;
       readonly key: any;
@@ -19859,8 +19859,8 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly rowType: string;
       readonly row: RowObject;
-    }
-    export interface ColumnCellTemplateData {
+    };
+    export type ColumnCellTemplateData = {
       readonly data: any;
       readonly component: dxTreeList;
       readonly value?: any;
@@ -19873,8 +19873,8 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    }
-    export interface ColumnEditCellTemplateData {
+    };
+    export type ColumnEditCellTemplateData = {
       readonly setValue?: any;
       readonly data: any;
       readonly component: dxTreeList;
@@ -19887,15 +19887,15 @@ declare module DevExpress.ui {
       readonly row: RowObject;
       readonly rowType: string;
       readonly watch?: Function;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface ColumnHeaderCellTemplateData {
+    export type ColumnHeaderCellTemplateData = {
       readonly component: dxTreeList;
       readonly columnIndex: number;
       readonly column: Column;
-    }
+    };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeList>;
     export type ContextMenuPreparingEvent =
       DevExpress.events.EventInfo<dxTreeList> & {
@@ -21002,7 +21002,7 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxValidator> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxValidatorOptions;
-    export interface ValidatedEvent {
+    export type ValidatedEvent = {
       name?: string;
       isValid?: boolean;
       value?: any;
@@ -21010,7 +21010,7 @@ declare module DevExpress.ui {
       brokenRule?: ValidationRule;
       brokenRules?: ValidationRule;
       status?: 'valid' | 'invalid' | 'pending';
-    }
+    };
   }
   /**
    * @deprecated use Properties instead

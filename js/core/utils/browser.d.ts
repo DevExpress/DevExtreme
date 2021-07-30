@@ -1,4 +1,4 @@
-export interface BrowserInfo {
+export type BrowserInfo = {
     webkit?: boolean;
     chrome?: boolean;
     mozilla?: boolean;
@@ -6,7 +6,7 @@ export interface BrowserInfo {
     unknown?: boolean;
     msie?: boolean;
     version?: string;
-}
+};
 
 declare const browser: BrowserInfo;
 

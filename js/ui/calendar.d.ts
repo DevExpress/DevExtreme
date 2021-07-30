@@ -30,11 +30,11 @@ export type ContentReadyEvent = EventInfo<dxCalendar>;
 export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
-export interface CellTemplateData {
+export type CellTemplateData = {
     readonly date: Date;
     readonly view: string;
     readonly text?: string;
-}
+};
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;

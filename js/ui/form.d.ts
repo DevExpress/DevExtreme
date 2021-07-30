@@ -71,19 +71,19 @@ export type InitializedEvent = InitializedEventInfo<dxForm>;
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
-export interface GroupItemTemplateData {
+export type GroupItemTemplateData = {
     readonly component: dxForm;
     readonly formData?: any;
-}
+};
 
 /** @public */
-export interface SimpleItemTemplateData {
+export type SimpleItemTemplateData = {
     readonly component: dxForm;
     readonly dataField?: string;
     readonly editorOptions?: any;
     readonly editorType?: string;
     readonly name?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead

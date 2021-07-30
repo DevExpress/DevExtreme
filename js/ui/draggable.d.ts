@@ -144,10 +144,10 @@ export type InitializedEvent = InitializedEventInfo<dxDraggable>;
 export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
 
 /** @public */
-export interface DragTemplateData {
+export type DragTemplateData = {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead

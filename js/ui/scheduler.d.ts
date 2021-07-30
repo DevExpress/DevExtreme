@@ -177,17 +177,17 @@ export type AppointmentTemplateData = TargetedAppointmentInfo;
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo;
 
 /** @public */
-export interface AppointmentCollectorTemplateData {
+export type AppointmentCollectorTemplateData = {
   readonly appointmentCount: number;
   readonly isCompact: boolean;
-}
+};
 
 /** @public */
-export interface DateNavigatorTextInfo {
+export type DateNavigatorTextInfo = {
   readonly startDate: Date;
   readonly endDate: Date;
   readonly text: string;
-}
+};
 
 /**
  * @deprecated use Properties instead

@@ -336,7 +336,7 @@ export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
 };
 
 /** @public */
-export interface ColumnButtonTemplateData {
+export type ColumnButtonTemplateData = {
     readonly component: dxTreeList;
     readonly data: any;
     readonly key: any;
@@ -345,10 +345,10 @@ export interface ColumnButtonTemplateData {
     readonly rowIndex: number;
     readonly rowType: string;
     readonly row: RowObject;
-}
+};
 
 /** @public */
-export interface ColumnCellTemplateData {
+export type ColumnCellTemplateData = {
     readonly data: any;
     readonly component: dxTreeList;
     readonly value?: any;
@@ -361,10 +361,10 @@ export interface ColumnCellTemplateData {
     readonly row: RowObject;
     readonly rowType: string;
     readonly watch?: Function;
-}
+};
 
 /** @public */
-export interface ColumnEditCellTemplateData {
+export type ColumnEditCellTemplateData = {
     readonly setValue?: any;
     readonly data: any;
     readonly component: dxTreeList;
@@ -377,13 +377,13 @@ export interface ColumnEditCellTemplateData {
     readonly row: RowObject;
     readonly rowType: string;
     readonly watch?: Function;
-}
+};
 
-export interface ColumnHeaderCellTemplateData {
+export type ColumnHeaderCellTemplateData = {
     readonly component: dxTreeList;
     readonly columnIndex: number;
     readonly column: Column;
-}
+};
 
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;

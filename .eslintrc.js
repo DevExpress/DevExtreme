@@ -395,6 +395,8 @@ module.exports = {
                 '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* can write DxPromise<void>, not just DxPromise (where void is default option)*/
                 '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */
                 '@typescript-eslint/ban-types': 'off', /* +: will ban Function, object -: it look like in few place we need to pass constructors, not type */
+                '@typescript-eslint/prefer-interface': 'off', /* we need types in public d.ts */
+                '@typescript-eslint/consistent-type-definitions': 'off',
             }
         },
         {

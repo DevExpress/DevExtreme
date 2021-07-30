@@ -78,19 +78,19 @@ export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
 };
 
 /** @public */
-export interface CustomOperationEditorTemplate {
+export type CustomOperationEditorTemplate = {
     readonly value?: string | number | Date;
     readonly field: dxFilterBuilderField;
     readonly setValue: Function;
-}
+};
 
 /** @public */
-export interface FieldEditorTemplate {
+export type FieldEditorTemplate = {
     readonly value?: string | number | Date;
     readonly filterOperation?: string;
     readonly field: dxFilterBuilderField;
     readonly setValue: Function;
-}
+};
 
 /**
  * @deprecated use Properties instead

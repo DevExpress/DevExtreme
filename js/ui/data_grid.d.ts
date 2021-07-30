@@ -3091,7 +3091,7 @@ export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
 };
 
 /** @public */
-export interface ColumnButtonTemplateData {
+export type ColumnButtonTemplateData = {
   readonly component: dxDataGrid;
   readonly data?: any;
   readonly key?: any;
@@ -3100,10 +3100,10 @@ export interface ColumnButtonTemplateData {
   readonly rowIndex: number;
   readonly rowType: string;
   readonly row: RowObject;
-}
+};
 
 /** @public */
-export interface ColumnCellTemplateData {
+export type ColumnCellTemplateData = {
   readonly data?: any;
   readonly component: dxDataGrid;
   readonly value?: any;
@@ -3116,10 +3116,10 @@ export interface ColumnCellTemplateData {
   readonly row: RowObject;
   readonly rowType: string;
   readonly watch?: Function;
-}
+};
 
 /** @public */
-export interface ColumnEditCellTemplateData {
+export type ColumnEditCellTemplateData = {
   readonly setValue?: any;
   readonly data?: any;
   readonly component: dxDataGrid;
@@ -3132,10 +3132,10 @@ export interface ColumnEditCellTemplateData {
   readonly row: RowObject;
   readonly rowType: string;
   readonly watch?: Function;
-}
+};
 
 /** @public */
-export interface ColumnGroupCellTemplateData {
+export type ColumnGroupCellTemplateData = {
   readonly data?: any;
   readonly component: dxDataGrid;
   readonly value?: any;
@@ -3148,27 +3148,27 @@ export interface ColumnGroupCellTemplateData {
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
-}
+};
 
 /** @public */
-export interface ColumnHeaderCellTemplateData {
+export type ColumnHeaderCellTemplateData = {
   readonly component: dxDataGrid;
   readonly columnIndex: number;
   readonly column: Column;
-}
+};
 
 /** @public */
-export interface MasterDetailTemplateData {
+export type MasterDetailTemplateData = {
   readonly key: any;
   readonly data: any;
   readonly watch?: Function;
-}
+};
 
 /** @public */
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
 /** @public */
-export interface RowTemplateData {
+export type RowTemplateData = {
   readonly key: any;
   readonly data: any;
   readonly component: dxDataGrid;
@@ -3179,7 +3179,7 @@ export interface RowTemplateData {
   readonly rowType: string;
   readonly groupIndex?: number;
   readonly isExpanded?: boolean;
-}
+};
 
 /**
  * @deprecated use Properties instead

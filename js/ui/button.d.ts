@@ -36,10 +36,10 @@ export type InitializedEvent = InitializedEventInfo<dxButton>;
 export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */
-export interface TemplateData {
+export type TemplateData = {
     readonly text?: string;
     readonly icon?: string;
-}
+};
 
 /**
  * @deprecated use Properties instead

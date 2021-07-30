@@ -6,9 +6,9 @@ export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith
 
 type KeySelector<T> = string | ((source: T) => string);
 
-interface BaseGroupDescriptor<T> {
+type BaseGroupDescriptor<T> = {
     selector: KeySelector<T>;
-}
+};
 
 /**
  * @docid

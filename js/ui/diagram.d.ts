@@ -26,11 +26,11 @@ import Widget, {
 export type ContentReadyEvent = EventInfo<dxDiagram>;
 
 /** @public */
-export interface CustomCommandEvent {
+export type CustomCommandEvent = {
     readonly component: dxDiagram;
     readonly element: DxElement;
     readonly name: string;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDiagram>;
@@ -71,14 +71,14 @@ export type SelectionChangedEvent = EventInfo<dxDiagram> & {
 };
 
 /** @public */
-export interface CustomShapeTemplateData {
+export type CustomShapeTemplateData = {
     readonly item: dxDiagramShape;
-}
+};
 
 /** @public */
-export interface CustomShapeToolboxTemplateData {
+export type CustomShapeToolboxTemplateData = {
     readonly item: dxDiagramShape;
-}
+};
 
 /**
  * @deprecated use Properties instead

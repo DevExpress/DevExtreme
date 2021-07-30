@@ -89,10 +89,10 @@ export type PasteEvent = NativeEventInfo<dxDropDownBox>;
 export type ValueChangedEvent = NativeEventInfo<dxDropDownBox> & ValueChangedInfo;
 
 /** @public */
-export interface ContentTemplateData {
+export type ContentTemplateData = {
     component: dxDropDownBox;
     readonly value?: any;
-}
+};
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

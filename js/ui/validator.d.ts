@@ -27,7 +27,7 @@ export type InitializedEvent = InitializedEventInfo<dxValidator>;
 export type OptionChangedEvent = EventInfo<dxValidator> & ChangedOptionInfo;
 
 /** @public */
-export interface ValidatedEvent {
+export type ValidatedEvent = {
     name?: string;
     isValid?: boolean;
     value?: any;
@@ -35,7 +35,7 @@ export interface ValidatedEvent {
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
     status?: 'valid' | 'invalid' | 'pending';
-}
+};
 
 /**
  * @deprecated use Properties instead

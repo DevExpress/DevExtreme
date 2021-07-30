@@ -45,7 +45,7 @@ export type AnimationState = string | number | {
  * @type object
  * @public
  */
-export interface AnimationConfig {
+export type AnimationConfig = {
     /**
      * @docid
      * @type_function_param1 $element:DxElement
@@ -110,7 +110,7 @@ export interface AnimationConfig {
      * @public
      */
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
-}
+};
 
 /**
  * @public

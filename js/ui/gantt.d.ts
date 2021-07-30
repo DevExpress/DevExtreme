@@ -57,11 +57,11 @@ export type ContextMenuPreparingEvent = Cancelable & {
 };
 
 /** @public */
-export interface CustomCommandEvent {
+export type CustomCommandEvent = {
     readonly component?: dxGantt;
     readonly element?: DxElement;
     readonly name: string;
-}
+};
 
 /** @public */
 export type DependencyDeletedEvent = EventInfo<dxGantt> & {
@@ -215,7 +215,7 @@ export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
 };
 
 /** @public */
-export interface TaskContentTemplateData {
+export type TaskContentTemplateData = {
     readonly cellSize: any;
     readonly isMilestone: boolean;
     readonly taskData: any;
@@ -223,18 +223,18 @@ export interface TaskContentTemplateData {
     readonly taskPosition: any;
     readonly taskResources: Array<any>;
     readonly taskSize: any;
-}
+};
 
 /** @public */
-export interface ProgressTooltipTemplateData {
+export type ProgressTooltipTemplateData = {
     readonly progress: number;
-}
+};
 
 /** @public */
-export interface TimeTooltipTemplateData {
+export type TimeTooltipTemplateData = {
     readonly start: Date;
     readonly end: Date;
-}
+};
 
 /**
  * @deprecated use Properties instead

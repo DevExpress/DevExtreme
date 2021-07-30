@@ -6,10 +6,10 @@ export type RecursivePartial<T> = {
     [P in keyof T]?: RecursivePartial<T[P]>;
 };
 
-export interface Rule<T> {
+export type Rule<T> = {
     device: ((device: Device) => boolean) | Device | Device[];
     options: RecursivePartial<T>;
-}
+};
 
 export function convertRulesToOptions<T>(rules: Rule<T>[]): T;
 

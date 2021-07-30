@@ -1,10 +1,10 @@
 import DOMComponent from './dom_component';
 import { UserDefinedElement } from './element';
 
-interface ComponentFactory<TComponent> {
+type ComponentFactory<TComponent> = {
     new(): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
-}
+};
 
 /**
  * @docid
