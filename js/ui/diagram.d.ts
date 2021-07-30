@@ -1162,7 +1162,7 @@ export default class dxDiagram extends Widget {
  * @inherits dxDiagramItem
  * @namespace DevExpress.ui
  */
-export interface dxDiagramConnector extends Item {
+export interface dxDiagramConnector extends dxDiagramItem {
     /**
      * @docid
      * @public
@@ -1254,7 +1254,7 @@ export interface dxDiagramItem {
  * @inherits dxDiagramItem
  * @namespace DevExpress.ui
  */
-export interface dxDiagramShape extends Item {
+export interface dxDiagramShape extends dxDiagramItem {
     /**
      * @docid
      * @public
