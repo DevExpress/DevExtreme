@@ -11,6 +11,7 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
+import { cleanDataRecursive } from '../../../core/element_data';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
@@ -187,6 +188,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const { parentNode } = containerNode;
 
     if (parentNode) {
+      cleanDataRecursive(containerNode);
       parentNode.$V = containerNode.$V;
       render(null, parentNode);
       parentNode.appendChild(containerNode);
