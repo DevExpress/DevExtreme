@@ -85,7 +85,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     deferRendering?: boolean;
     /**
      * @docid
-     * @default 'this'
+     * @default undefined
      * @type_function_param1 itemData:object
      * @type_function_return string
      * @public
