@@ -208,9 +208,13 @@ export interface MapLayerElement {
 }
 
 /**
- * @docid
- * @inherits BaseLegendItem
- * @type object
+ * @public
+ * @namespace DevExpress.viz.dxVectorMap
+ */
+export type LegendItem = VectorMapLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
  * @namespace DevExpress.viz
  */
 export interface VectorMapLegendItem extends BaseLegendItem {
@@ -731,7 +735,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @type_function_return Array<VectorMapLegendItem>
      * @public
      */
-    customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxVectorMapOptions.legends.customizeText
      * @type_function_param1 itemInfo:object
@@ -778,7 +782,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme

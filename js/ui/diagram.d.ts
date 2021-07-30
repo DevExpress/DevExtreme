@@ -42,12 +42,12 @@ export type InitializedEvent = InitializedEventInfo<dxDiagram>;
 
 /** @public */
 export type ItemClickEvent = EventInfo<dxDiagram> & {
-    readonly item: dxDiagramItem;
+    readonly item: Item;
 }
 
 /** @public */
 export type ItemDblClickEvent = EventInfo<dxDiagram> & {
-    readonly item: dxDiagramItem;
+    readonly item: Item;
 }
 
 /** @public */
@@ -69,7 +69,7 @@ export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxDiagram> & {
-    readonly items: Array<dxDiagramItem>;
+    readonly items: Array<Item>;
 }
 
 /** @public */
@@ -1089,7 +1089,7 @@ export default class dxDiagram extends Widget {
      * @return dxDiagramItem
      * @public
      */
-    getItemByKey(key: Object): dxDiagramItem;
+    getItemByKey(key: Object): Item;
     /**
      * @docid
      * @publicName getItemById(id)
@@ -1097,35 +1097,35 @@ export default class dxDiagram extends Widget {
      * @return dxDiagramItem
      * @public
      */
-    getItemById(id: string): dxDiagramItem;
+    getItemById(id: string): Item;
     /**
      * @docid
      * @publicName getItems()
      * @return Array<dxDiagramItem>
      * @public
      */
-     getItems(): Array<dxDiagramItem>;
+     getItems(): Array<Item>;
     /**
      * @docid
      * @publicName getSelectedItems()
      * @return Array<dxDiagramItem>
      * @public
      */
-     getSelectedItems(): Array<dxDiagramItem>;
+     getSelectedItems(): Array<Item>;
     /**
      * @docid
      * @publicName setSelectedItems(items)
      * @param1 items:Array<dxDiagramItem>
      * @public
      */
-     setSelectedItems(items: Array<dxDiagramItem>): void;
+     setSelectedItems(items: Array<Item>): void;
     /**
      * @docid
      * @publicName scrollToItem(item)
      * @param1 item:dxDiagramItem
      * @public
      */
-     scrollToItem(item: dxDiagramItem): void;
+     scrollToItem(item: Item): void;
     /**
      * @docid
      * @publicName export()
@@ -1216,7 +1216,13 @@ export interface dxDiagramConnector extends dxDiagramItem {
 }
 
 /**
- * @docid
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
+export type Item = dxDiagramItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxDiagramItem {
