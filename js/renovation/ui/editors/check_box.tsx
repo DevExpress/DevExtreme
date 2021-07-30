@@ -23,6 +23,7 @@ import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
+import { hasWindow } from '../../../core/utils/window';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -161,7 +162,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     const iconElement = this.iconRef?.current;
     const { iconWidth, iconHeight } = this.props;
 
-    if (iconElement) {
+    if (iconElement && hasWindow()) {
       const isCompactTheme = current()?.includes('compact');
       const defaultFontSize = isCompactTheme ? 12 : 16;
       const isMaterialTheme = isMaterial(current());

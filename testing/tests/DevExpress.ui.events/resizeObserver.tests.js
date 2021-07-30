@@ -28,132 +28,75 @@ QUnit.module('Resize observer', () => {
         }
     });
 
-    QUnit.module('shouldSkipCallback', {
+    QUnit.module('base functionality', {
         beforeEach: function() {
-            this.callback = sinon.stub();
             this.$element = $('#root');
         },
         afterEach: function() {
             this.observer.disconnect();
+            this.$element.width(200);
         }
     }, () => {
-        QUnit.testInActiveWindow('should call passed "shouldSkipCallback" function before each callback', function(assert) {
-            const observeHandled = assert.async();
+        QUnit.testInActiveWindow('should call passed "shouldSkipCallback" function before callback', function(assert) {
             const resizeHandled = assert.async();
             this.shouldSkipCallback = sinon.stub();
 
-            this.observer = new ResizeObserver({ callback: this.callback, shouldSkipCallback: this.shouldSkipCallback });
+            this.observer = new ResizeObserver({
+                callback: () => {
+                    assert.strictEqual(this.shouldSkipCallback.callCount, 1, 'shouldSkipCallback is called before callback call');
+                    resizeHandled();
+                },
+                shouldSkipCallback: this.shouldSkipCallback
+            });
+
             this.observer.observe(this.$element.get(0));
+        });
+
+        QUnit.testInActiveWindow('callback should be raised after observable element resize', function(assert) {
+            const resizeHandled = assert.async();
+
+            this.observer = new ResizeObserver({
+                callback: () => {
+                    assert.ok(true, 'observer callback is called');
+                    resizeHandled();
+                }
+            });
+
+            this.observer.observe(this.$element.get(0));
+            this.$element.width(50);
+        });
+
+        QUnit.testInActiveWindow('callback should not be raised after element is unobserved', function(assert) {
+            const done = assert.async();
+
+            this.observer = new ResizeObserver({
+                callback: () => {
+                    assert.ok(false, 'observer callback was called after unobserve');
+                }
+            });
+            this.observer.observe(this.$element.get(0));
+            this.observer.unobserve(this.$element.get(0));
 
             setTimeout(() => {
-                this.$element.width(50);
-                setTimeout(() => {
-                    assert.ok(this.shouldSkipCallback.called);
-                    resizeHandled();
-                }, TIME_TO_WAIT);
-                observeHandled();
+                assert.ok(true, 'no callbacks were called');
+                done();
             }, TIME_TO_WAIT);
         });
 
         QUnit.testInActiveWindow('should not call "callback" if "shouldSkipCallback" returns true', function(assert) {
-            const observeHandled = assert.async();
-            const resizeHandled = assert.async();
-            this.shouldSkipCallback = sinon.stub().returns(true);
+            const done = assert.async();
+            const shouldSkipCallback = sinon.stub().returns(true);
+            const callback = sinon.stub();
 
-            this.observer = new ResizeObserver({ callback: this.callback, shouldSkipCallback: this.shouldSkipCallback });
+            this.observer = new ResizeObserver({ callback, shouldSkipCallback });
             this.observer.observe(this.$element.get(0));
 
             setTimeout(() => {
                 this.$element.width(50);
                 setTimeout(() => {
-                    assert.ok(this.callback.notCalled);
-                    resizeHandled();
+                    assert.strictEqual(callback.callCount, 0, 'callback was not called');
+                    done();
                 }, TIME_TO_WAIT);
-                observeHandled();
-            }, TIME_TO_WAIT);
-        });
-    });
-
-    QUnit.module('base functionality', {
-        beforeEach: function() {
-            this.callback = sinon.stub();
-            this.observer = new ResizeObserver({ callback: this.callback });
-            this.$element = $('#root');
-        },
-        afterEach: function() {
-            this.observer.disconnect();
-            this.callback.reset();
-        }
-    }, () => {
-        QUnit.testInActiveWindow('callback should be raised after observable element resize', function(assert) {
-            const observeHandled = assert.async();
-            const resizeHandled = assert.async();
-
-            this.observer.observe(this.$element.get(0));
-
-            setTimeout(() => {
-                this.$element.width(50);
-                setTimeout(() => {
-                    assert.strictEqual(this.callback.callCount, 2, 'on "observe" call and on target element resize');
-                    resizeHandled();
-                }, TIME_TO_WAIT);
-                observeHandled();
-            }, TIME_TO_WAIT);
-        });
-
-        QUnit.testInActiveWindow('callback should not be raised on element resize if it was unobserved', function(assert) {
-            const observeHandled = assert.async();
-            const resizeHandled = assert.async();
-
-            this.observer.observe(this.$element.get(0));
-
-            setTimeout(() => {
-                this.observer.unobserve(this.$element.get(0));
-                this.$element.width(50);
-                setTimeout(() => {
-                    assert.ok(this.callback.calledOnce, 'called only on "observe" method invoke');
-                    resizeHandled();
-                }, TIME_TO_WAIT);
-                observeHandled();
-            }, TIME_TO_WAIT);
-        });
-
-        QUnit.testInActiveWindow('callback should not be raised after "skipNextResize" method call', function(assert) {
-            const observeHandled = assert.async();
-            const resizeHandled = assert.async();
-
-            this.observer.observe(this.$element.get(0));
-
-            this.observer.skipNextResize();
-            setTimeout(() => {
-                this.$element.width(50);
-                setTimeout(() => {
-                    assert.ok(this.callback.calledOnce, 'called only on "observe" method invoke');
-                    resizeHandled();
-                }, TIME_TO_WAIT);
-                observeHandled();
-            }, TIME_TO_WAIT);
-        });
-
-        QUnit.testInActiveWindow('only one callback should be skipped after "skipNextResize" method call', function(assert) {
-            const observeHandled = assert.async();
-            const firstResizeHandled = assert.async();
-            const secondResizeHandled = assert.async();
-
-            this.observer.observe(this.$element.get(0));
-
-            this.observer.skipNextResize();
-            setTimeout(() => {
-                this.$element.width(50);
-                setTimeout(() => {
-                    this.$element.width(100);
-                    setTimeout(() => {
-                        assert.strictEqual(this.callback.callCount, 2, 'on "observe" call and on second resize');
-                        secondResizeHandled();
-                    }, TIME_TO_WAIT);
-                    firstResizeHandled();
-                }, TIME_TO_WAIT);
-                observeHandled();
             }, TIME_TO_WAIT);
         });
     });
