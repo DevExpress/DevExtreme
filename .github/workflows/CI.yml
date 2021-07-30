@@ -1,7 +1,6 @@
 name: QUnit IE
 
 on: [push, pull_request]
-
 jobs:
   test:
     strategy:
