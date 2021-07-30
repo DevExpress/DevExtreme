@@ -52,6 +52,56 @@ test('should has correct caption(with agendaDuration)', function(assert) {
     assert.equal(scheduler.header.navigator.getText(), '7-10 May 2021');
 });
 
+test('should display correct caption after changing to day view if startDate is settled in views',
+    function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2021, 6, 28),
+            currentView: 'month',
+            views: [
+                'month',
+                {
+                    type: 'day',
+                    intervalCount: 3,
+                    startDate: new Date(2021, 6, 30),
+                }
+            ]
+        });
+
+        scheduler.header.viewSwitcher.getButton('Day').click();
+
+        assert.equal(
+            scheduler.header.navigator.caption.getText(),
+            '27-29 July 2021',
+            'caption must take into account startDate'
+        );
+    }
+);
+
+test('should display correct caption after changing to month view if startDate is settled in views',
+    function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2021, 6, 28),
+            currentView: 'day',
+            views: [
+                'day',
+                {
+                    type: 'month',
+                    intervalCount: 3,
+                    startDate: new Date(2021, 5, 30),
+                },
+            ]
+        });
+
+        scheduler.header.viewSwitcher.getButton('Month').click();
+
+        assert.equal(
+            scheduler.header.navigator.caption.getText(),
+            'Jun-Aug 2021',
+            'caption must take into account startDate'
+        );
+    }
+);
+
 module('Option Changing', () => {
     test('should change caption text after changing "currentView"', function(assert) {
         const scheduler = createWrapper({
