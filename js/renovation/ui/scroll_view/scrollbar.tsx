@@ -603,7 +603,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get isReachBottom(): boolean {
     return this.props.reachBottomEnabled
-      && (this.props.scrollLocation + this.visibleScrollAreaSize <= 0.5);
+      && (this.props.scrollLocation + this.visibleScrollAreaSize < 0);
   }
 
   get visibleContentAreaSize(): number {
