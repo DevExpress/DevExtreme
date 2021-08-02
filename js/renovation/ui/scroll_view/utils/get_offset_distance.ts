@@ -4,8 +4,8 @@ import {
 } from '../types.d';
 import { ensureDefined } from '../../../../core/utils/common';
 import {
-  restoreLocation,
-} from './restore_location';
+  convertToLocation,
+} from './convert_location';
 
 export function getOffsetDistance(
   targetLocation: number | Partial<ScrollOffset>,
@@ -13,7 +13,7 @@ export function getOffsetDistance(
   scrollOffset: ScrollOffset,
 ):
   { left: number; top: number } {
-  const location = restoreLocation(targetLocation, direction);
+  const location = convertToLocation(targetLocation, direction);
 
   const top = -scrollOffset.top - ensureDefined(location.top, -scrollOffset.top);
   const left = -scrollOffset.left - ensureDefined(location.left, -scrollOffset.left);

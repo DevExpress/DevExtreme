@@ -1115,6 +1115,38 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
+    QUnit.test('Correct number parsing in search', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [
+                { number: 1, string: 'FIC112' },
+                { number: 1, string: 'FIC115' },
+                { number: 1, string: 'FIC233' },
+                { number: 1, string: 'PIC122' },
+                { number: 1, string: 'PIC123' },
+                { number: 1, string: 'PIC125' },
+            ],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                dataField: 'number',
+                format: '#'
+            }, 'string']
+        });
+
+        // act
+        dataGrid.option('searchPanel.text', 'FIC1');
+        this.clock.tick();
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.equal(visibleRows.length, 2, 'row are filtered');
+        assert.deepEqual(visibleRows.map(i => i.data.string), ['FIC112', 'FIC115'], 'number rows are not shown');
+    });
+
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({

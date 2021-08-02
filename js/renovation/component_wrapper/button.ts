@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
 import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
@@ -100,3 +101,4 @@ export default class ButtonWrapper extends Component {
       : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */

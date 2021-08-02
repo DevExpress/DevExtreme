@@ -45,7 +45,10 @@ describe('ResponsiveBox > Attrs', () => {
     ])('Check has valid screen size class. Default implementation. Has window, config: %o ',
       ({ clientWidth, expectedClass }) => {
         const defaultImplementation = domAdapter.getDocumentElement;
-        domAdapter.getDocumentElement = () => ({ clientWidth });
+        domAdapter.getDocumentElement = () => {
+          const origin = defaultImplementation();
+          return { ...origin, clientWidth };
+        };
 
         const props = new ResponsiveBoxProps();
         const responsiveBox = mount<ResponsiveBox>(<ResponsiveBox {...props} />);

@@ -1,3 +1,7 @@
+import { getWindow } from '../../core/utils/window';
+
+const window = getWindow();
+
 export function getElementOffset(elem?: Element):
 { top: number; left: number } | null {
   if (!elem) return null;

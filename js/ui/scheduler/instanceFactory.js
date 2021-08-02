@@ -16,12 +16,15 @@ const Names = {
 const factoryInstances = { };
 
 let tailIndex = -1;
-export const createFactoryInstances = (options) => {
-    const key = isDefined(options.key)
-        ? options.key
+export const generateKey = (key) => {
+    return isDefined(key)
+        ? key
         : ++tailIndex;
+};
 
-    createModel(key, options.model);
+export const createFactoryInstances = (options) => {
+    const key = generateKey(options.key);
+
     createModelProvider(key, options.model);
     const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
     const resourceManager = createResourceManager(key, options.resources);
@@ -90,19 +93,16 @@ const createTimeZoneCalculator = (key, currentTimeZone) => {
     });
 };
 
-const createModel = (key, options) => {
-    return createInstance(
-        Names.model,
-        key,
-        () => options
-    );
-};
-
-const createModelProvider = (key, options) => {
+export const createModelProvider = (key, model) => {
     return createInstance(
         Names.modelProvider,
         key,
-        () => new ModelProvider(options)
+        () => {
+            const modelProvider = getInstance(Names.modelProvider, key);
+            return isDefined(modelProvider)
+                ? modelProvider
+                : new ModelProvider(model);
+        }
     );
 };
 
@@ -116,5 +116,4 @@ export const disposeFactoryInstances = (key) => {
 export const getResourceManager = (key) => getInstance(Names.resourceManager, key);
 export const getAppointmentDataProvider = (key = 0) => getInstance(Names.appointmentDataProvider, key);
 export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
-export const getModel = (key) => getInstance(Names.model, key);
 export const getModelProvider = (key) => getInstance(Names.modelProvider, key);
