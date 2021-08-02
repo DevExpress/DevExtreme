@@ -7,8 +7,12 @@ import { exportPivotGrid } from './exporter/exceljs/export_pivot_grid';
 */
 
 /**
+ * @name ExcelDataGridCell
+ * @type object
+ */
+
+/**
  * @name ExcelPivotGridCell
- * @namespace DevExpress.excelExporter
  * @inherits dxPivotGridPivotGridCell
  */
 
