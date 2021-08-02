@@ -19,10 +19,9 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ./node_modules
+        path: ~/.npm
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           ${{ runner.os }}-node-modules
 
     - name: Run npm install
@@ -33,7 +32,7 @@ jobs:
 
     - name: Install bundlers
       working-directory: ./testing/bundlers  
-      run: npm install
+      run: npm ci --no-audit --no-fund
 
     - name: Install DevExtreme package 
       working-directory: ./testing/bundlers

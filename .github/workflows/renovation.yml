@@ -18,10 +18,9 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ./node_modules
+        path: ~/.npm
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           ${{ runner.os }}-node-modules
 
     - name: Run npm install
@@ -47,10 +46,9 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ./node_modules
+        path: ~/.npm
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           ${{ runner.os }}-node-modules
 
     - name: Run npm install

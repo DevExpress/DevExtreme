@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
@@ -20,8 +20,16 @@ jobs:
       run: |
         test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules
+
     - name: Install packages in devextreme repo
-      run: npm install --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - name: Build devextreme repo
       run: npm run build-npm-devextreme

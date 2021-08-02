@@ -14,10 +14,9 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ./node_modules
+        path: ~/.npm
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           ${{ runner.os }}-node-modules
 
     - name: Run npm install
@@ -33,7 +32,7 @@ jobs:
       run: pub get
       working-directory: ./themebuilder-scss/dart-compiler
 
-    - name: Run npm install
+    - name: Run npm install for themebuilder-scss
       run: npm ci --no-audit --no-fund
       working-directory: ./themebuilder-scss
 
