@@ -40,7 +40,8 @@ $arrow-down: "\f016";
       .dx-scheduler-navigator-caption {
         width: 180px;
 
-        .dx-device-mobile & {
+        .dx-device-mobile &,
+        .dx-scheduler-adaptive & {
           width: 140px;
         }
       }
