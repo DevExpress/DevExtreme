@@ -768,9 +768,11 @@ const FilterBuilder = Widget.inherit({
 
     _createPopupWithTreeView: function(options, $container) {
         const that = this;
-        const $popup = $('<div>')
-            .addClass(options.menu.cssClass).appendTo($container);
+        const $popup = $('<div>').appendTo($container);
         this._createComponent($popup, Popup, {
+            wrapperAttr: {
+                class: options.menu.cssClass
+            },
             onHiding: options.menu.onHiding,
             onHidden: options.menu.onHidden,
             rtlEnabled: options.menu.rtlEnabled,
