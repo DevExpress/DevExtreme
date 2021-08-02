@@ -5409,7 +5409,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             const scrollable = this.rowsView._scrollable;
             scrollable.scrollTo({ y: 2500 });
-            $(scrollable._container()).trigger('scroll');
+            $(scrollable.container()).trigger('scroll');
             clock.tick(500);
 
             // assert
