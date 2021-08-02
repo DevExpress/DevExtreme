@@ -1,10 +1,13 @@
 import Quill from 'devextreme-quill';
-
+import $ from '../../../core/renderer';
 import BaseModule from './base';
 import PopupModule from './popup';
 import eventsEngine from '../../../events/core/events_engine';
 // import ContextMenu from '../../context_menu';
 import { addNamespace } from '../../../events/utils/index';
+// import { extend } from '../../../core/utils/extend';
+import Popup from '../../popup';
+import Form from '../../form';
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
 
@@ -22,6 +25,7 @@ if(Quill) {
 
             if(this.enabled) {
                 // this._createContentMenu();
+                this._formPopup = this._renderFormPopup();
                 this._attachEvents();
             }
         }
@@ -51,18 +55,132 @@ if(Quill) {
         //     });
         // }
 
+        // _getPopupConfig() {
+        //     debugger;
+        //     const baseConfig = super._getPopupConfig();
+
+        //     const position = {
+        //         my: 'left top',
+        //         at: 'left top',
+        //         collision
+        //     };
+
+        //     return extend(baseConfig, position);
+        // }
+
+        _getFormPopupConfig() {
+
+        }
+
+        _renderFormPopup() {
+            const editorInstance = this.options.editorInstance;
+            const $container = $('<div>').appendTo(editorInstance.$element());
+            const popupConfig = {
+                showTitle: false,
+                shading: false,
+                closeOnTargetScroll: true,
+                closeOnOutsideClick: true
+            };
+            // type === 'cell' ? this._getCellFormPopupConfig($container) : this._getTableFormPopupConfig($container);
+
+            return editorInstance._createComponent($container, Popup, popupConfig);
+        }
+
+        _showCellProperties() {
+            this._formPopup.option(this._getCellFormPopupConfig());
+            this._formPopup.show();
+        }
+
+        _showTableProperties() {
+            const formOptions = {
+                formData: {
+                    width: 100,
+                    height: 100
+                },
+                showColonAfterLabel: true,
+                labelLocation: 'top',
+                minColWidth: 300,
+                colCount: 2
+            };
+
+            this._formPopup.option('contentTemplate', () => {
+                const $form = $('<div>');
+                // .addClass(SUGGESTION_LIST_CLASS)
+                // .appendTo($container);
+                this._tablePropertiesForm = this.options.editorInstance._createComponent($form, Form, formOptions);
+            });
+
+            this._formPopup.show();
+        }
+
+        _getCellFormPopupConfig($container) {
+            const formOptions = {
+                formData: {
+                    width: 100,
+                    height: 100
+                },
+                showColonAfterLabel: true,
+                labelLocation: 'top',
+                minColWidth: 300,
+                colCount: 2
+            };
+
+            const that = this;
+
+            return {
+                showTitle: false,
+                shading: false,
+                closeOnTargetScroll: true,
+                closeOnOutsideClick: true,
+                contentTemplate: () => {
+                    const $form = $('<div>')
+                    // .addClass(SUGGESTION_LIST_CLASS)
+                        .appendTo($container);
+                    this._tablePropertiesForm = that.options.editorInstance._createComponent($form, Form, formOptions);
+                }
+            };
+        }
+
+        _getTableFormPopupConfig() {
+            return {
+                showTitle: false,
+                shading: false,
+                closeOnTargetScroll: true,
+                closeOnOutsideClick: true,
+                contentTemplate: () => {
+
+                }
+            };
+        }
+
+        // _getPopupConfig(type = 'list') {
+        //     let contentTemplate;
+        //     const baseConfig = super._getPopupConfig();
+
+        //     if(type === 'form') {
+        //         contentTemplate = () => {
+
+        //         }
+        //     } else {
+        //         contentTemplate = baseConfig.contentTemplate;
+        //     }
+
+        //     return extend(baseConfig, { contentTemplate });
+        // }
+
         _getListConfig(options) {
             return {
                 dataSource: [
-                    { text: 'Insert Row Above', onClick: () => { this._tableAction('insertRowAbove'); } },
-                    { text: 'Insert Row Below', onClick: () => { this._tableAction('insertRowBelow'); } },
-                    { text: 'Insert Column Left', onClick: () => { this._tableAction('insertColumnLeft'); } },
-                    { text: 'Insert Column Right', onClick: () => { this._tableAction('insertColumnRight'); } },
-                    { text: 'Delete Column', onClick: () => { this._tableAction('deleteColumn'); } },
-                    { text: 'Delete Row', onClick: () => { this._tableAction('deleteRow'); } },
-                    { text: 'Delete Table', onClick: () => { this._tableAction('deleteTable'); } }
-                ],
-
+                    { text: 'Cell Properties', onClick: this._showCellProperties.bind(this) },
+                    { text: 'Table Properties', onClick: this._showTableProperties.bind(this) },
+                    { text: 'Insert Row Above', onClick: this._getTableOperationHandler('insertRowAbove') },
+                    { text: 'Insert Row Below', onClick: this._getTableOperationHandler('insertRowBelow') },
+                    { text: 'Insert Column Left', onClick: this._getTableOperationHandler('insertColumnLeft') },
+                    { text: 'Insert Column Right', onClick: this._getTableOperationHandler('insertColumnRight') },
+                    { text: 'Delete Column', onClick: this._getTableOperationHandler('deleteColumn') },
+                    { text: 'Delete Row', onClick: this._getTableOperationHandler('deleteRow') },
+                    { text: 'Delete Table', onClick: this._getTableOperationHandler('deleteTable') }
+                ]
             };
         }
 
@@ -74,22 +192,37 @@ if(Quill) {
                     return;
                 }
                 this.quill.focus();
+                this._popup && this._popup.hide();
                 return table[operationName](...rest);
             };
         }
 
-        _tableAction(action) {
-            this._getTableOperationHandler(action)();
-            this._popup && this._popup.hide();
-        }
+        // _tableAction(action) {
+        //     this._getTableOperationHandler(action)();
+
+        // }
 
         _openTableContextMenu(event) {
             if(this._isTableTarget(event)) {
+                this._setPopupPosition(event);
+
                 this.showPopup();
 
                 event.preventDefault();
             }
 
+        }
+
+        _setPopupPosition(event) {
+            this?._popup.option({
+                position: {
+                    my: 'left top',
+                    at: 'left top',
+                    collision: 'fit flip',
+                    // of: event.currentTarget,
+                    offset: { x: event.clientX, y: event.clientY }
+                }
+            });
         }
 
         _isTableTarget() {
