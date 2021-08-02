@@ -38,7 +38,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
                     const pdfCell = createPdfCell(cellInfo);
                     if(options.onCellExporting) {
-                        options.onCellExporting({ gridCell: { value: cellInfo.value }, pdfCell });
+                        options.onCellExporting({ gridCell: cellInfo.gridCell, pdfCell });
                     }
                     currentRowPdfCells.push(pdfCell);
                 });
