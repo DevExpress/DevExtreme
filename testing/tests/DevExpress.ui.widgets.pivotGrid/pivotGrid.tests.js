@@ -34,7 +34,7 @@ import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import eventsEngine from 'events/core/events_engine';
-import { getScrollBarInfo } from '../../../js/ui/pivot_grid/utils/get_scrollbar_info.js';
+import { getScrollBarInfo } from 'ui/pivot_grid/utils/get_scrollbar_info.js';
 
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
