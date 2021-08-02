@@ -15,8 +15,17 @@ jobs:
       with:
         node-version: '15'
 
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node-modules
+
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm ci --no-audit --no-fund
 
     - name: Run tests
       run: npm run test-styles

@@ -1,0 +1,29 @@
+{
+    "extends": [
+        "config:base"
+    ],
+    "baseBranches": [
+        "21_2"
+    ],
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": [
+            "every 1 day"
+        ],
+        "automerge": true
+    },
+    "vulnerabilityAlerts": {
+        "enabled": false
+    },
+    "packageRules": [
+        {
+            "packagePatterns": [
+                "*"
+            ],
+            "enabled": false
+        }
+    ],
+    "ignorePaths": [
+        ".github"
+    ]
+}
