@@ -5,6 +5,7 @@ import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
+import { getOffset } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
@@ -194,6 +195,8 @@ const Overlay = Widget.inherit({
             contentTemplate: 'content',
 
             dragEnabled: false,
+
+            dragArea: 'container',
 
             resizeEnabled: false,
             onResizeStart: null,
@@ -1104,7 +1107,15 @@ const Overlay = Widget.inherit({
         const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
 
-        return $container;
+        switch(this.option('dragArea')) {
+            case 'container':
+                return $container;
+            case 'window':
+            case 'outOfWindow':
+                return $(window);
+            default:
+                return $container;
+        }
     },
 
     _deltaSize: function() {
@@ -1115,15 +1126,18 @@ const Overlay = Widget.inherit({
         const contentHeight = $content.outerHeight();
         let containerWidth = $container.outerWidth();
         let containerHeight = $container.outerHeight();
+        const document = domAdapter.getDocument();
 
         if(this._isWindow($container)) {
-            const document = domAdapter.getDocument();
             const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
             const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
         }
+
+        containerHeight = Math.min(containerHeight, $(document).outerHeight());
+        containerWidth = Math.min(containerWidth, $(document).outerWidth());
 
         return {
             width: containerWidth - contentWidth,
@@ -1156,17 +1170,22 @@ const Overlay = Widget.inherit({
     },
 
     _allowedOffsets: function() {
-        const position = locate(this._$content);
+        const position = this.option('dragArea') === 'container'
+            ? locate(this._$content)
+            : getOffset(this._$content.get(0));
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
         const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
         const boundaryOffset = this.option('boundaryOffset');
+        const outOfWindowOffset = this.option('dragArea') === 'outOfWindow'
+            ? { height: this._$content.outerHeight(), width: this._$content.outerWidth() }
+            : { height: 0, width: 0 };
 
         return {
-            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
+            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v + outOfWindowOffset.height : 0,
+            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v + outOfWindowOffset.height : 0,
+            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h + outOfWindowOffset.width : 0,
+            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h + outOfWindowOffset.width : 0
         };
     },
 
