@@ -31,7 +31,7 @@ export function getScrollBarInfo(useNativeScrolling) {
         options.useSimulatedScrollbar = !useNativeScrolling;
     }
 
-    const scrollable = $scrollable.dxScrollable(options);
+    const scrollable = $scrollable.dxScrollable(options).dxScrollable('instance');
 
     const scrollBarUseNative = scrollable.option('useNative');
     scrollBarWidth = scrollBarUseNative ? getScrollbarWidth($(scrollable.container()).get(0)) : 0;
