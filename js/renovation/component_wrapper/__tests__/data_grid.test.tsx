@@ -371,6 +371,17 @@ describe('DataGrid Wrapper', () => {
       expect(mockInternalComponent.option).toBeCalledTimes(2);
       expect(mockInternalComponent.option).toBeCalledWith('dataSource', dataSource);
     });
+
+    it('If editing.changes not changed update it directly for refresh data', () => {
+      const changes: Object[] = [];
+      const component: any = createDataGrid();
+      component.__options = { editing: { changes } };
+      mockInternalComponent.option.mockReturnValueOnce(changes);
+      changes.push({ key: 1, type: 'update', data: { updated: true } });
+      component._optionChanged({ fullName: 'editing.changes', value: changes });
+      expect(mockInternalComponent.option).toBeCalledTimes(2);
+      expect(mockInternalComponent.option).toBeCalledWith('editing.changes', changes);
+    });
   });
 
   describe('_internalOptionChangedHandler and _invalidate', () => {
