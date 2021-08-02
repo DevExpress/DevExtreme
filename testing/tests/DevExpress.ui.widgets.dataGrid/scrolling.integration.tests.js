@@ -128,18 +128,17 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             this.clock.tick(100);
 
             const $dataGrid = dataGrid.$element();
-            const $scrollable = $('.dx-scrollable');
-            const scrollable = $scrollable.dxScrollable('instance');
-            const $scrollContainer = $scrollable.find('.dx-scrollable-container');
+            const scrollable = dataGrid.getScrollable();
+            const $scrollableContainer = $(scrollable.container());
 
             // act
             scrollable.scrollTo({ x: 50 });
-            $scrollContainer.trigger('scroll');
+            $scrollableContainer.trigger('scroll');
             this.clock.tick(500);
 
             $dataGrid.css('width', 500);
             dataGrid.updateDimensions();
-            $scrollContainer.trigger('scroll');
+            $scrollableContainer.trigger('scroll');
 
             // assert
             assert.notOk(dataGrid.getView('rowsView').isScrollbarVisible(true), 'scrollbar is hidden');
@@ -150,7 +149,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             this.clock.tick(500);
 
             // assert
-            assert.equal($scrollable.scrollLeft(), 0, 'scrollable');
+            assert.equal(scrollable.scrollLeft(), $scrollableContainer.get(0).scrollWidth - $scrollableContainer.get(0).clientWidth, 'scrollable');
 
             const $headerScrollContainer = dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container');
             assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100, 'headers');
@@ -173,11 +172,12 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         $('#container').append($dataGrid);
-        $dataGrid.dxDataGrid('instance').updateDimensions();
-        const scrollLeft = $('.dx-scrollable').dxScrollable('instance').scrollLeft();
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        dataGrid.updateDimensions();
 
         // assert
-        assert.equal(scrollLeft, 100);
+        assert.equal(dataGrid.getScrollable().scrollLeft(), 100);
     });
 
     // T475354
@@ -480,10 +480,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             ]
         });
         const dataGrid = $dataGrid.dxDataGrid('instance');
-
-
-        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
-
+        const scrollable = dataGrid.getScrollable();
 
         // act
         scrollable.scrollTo({ x: 0, y: 50 });
@@ -950,7 +947,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
+        const scrollable = dataGrid.getScrollable();
 
         // act
         scrollable.scrollTo(100.7);
@@ -991,7 +988,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
+        const scrollable = dataGrid.getScrollable();
 
         // act
         scrollable.scrollTo(200);
