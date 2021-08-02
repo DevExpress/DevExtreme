@@ -23,6 +23,9 @@
             "enabled": false
         }
     ],
+    "reviewers": [
+        "team:devextreme-core"
+    ],
     "ignorePaths": [
         ".github"
     ]
