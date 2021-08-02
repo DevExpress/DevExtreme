@@ -1,4 +1,5 @@
 import $ from '../../../core/renderer';
+import { getScrollbarWidth } from './get_scrollbar_width';
 
 const scrollBarInfoCache = {};
 
@@ -10,31 +11,32 @@ export function getScrollBarInfo(useNativeScrolling) {
     let scrollBarWidth = 0;
     const options = {};
 
-    const container = $('<div>').css({
+    const $testContainer = $('<div>').appendTo('body');
+    const $scrollable = $('<div>').css({
         position: 'absolute',
         visibility: 'hidden',
         top: -1000,
         left: -1000,
         width: 100,
         height: 100
-    }).appendTo('body');
+    }).appendTo($testContainer);
 
-    const content = $('<p>').css({
+    $('<p>').css({
         width: '100%',
         height: 200
-    }).appendTo(container);
+    }).appendTo($scrollable);
 
     if(useNativeScrolling !== 'auto') {
         options.useNative = !!useNativeScrolling;
         options.useSimulatedScrollbar = !useNativeScrolling;
     }
 
-    container.dxScrollable(options);
+    const scrollable = $scrollable.dxScrollable(options);
 
-    const scrollBarUseNative = container.dxScrollable('instance').option('useNative');
-    scrollBarWidth = scrollBarUseNative ? container.width() - content.width() : 0;
+    const scrollBarUseNative = scrollable.option('useNative');
+    scrollBarWidth = scrollBarUseNative ? getScrollbarWidth($(scrollable.container()).get(0)) : 0;
 
-    container.remove();
+    $testContainer.remove();
 
     scrollBarInfoCache[useNativeScrolling] = {
         scrollBarWidth: scrollBarWidth,
