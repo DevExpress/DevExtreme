@@ -14,6 +14,16 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Clone devextreme-demos repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+
+    - name: Clone devextreme-demos repo
+      run: |
+        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+
     # - name: Restore npm cache
     #   uses: actions/cache@v2
     #   with:
@@ -24,16 +34,6 @@ jobs:
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
-
-    - name: Clone devextreme-demos repo from PR author fork
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
-
-    - name: Clone devextreme-demos repo
-      run: |
-        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Build devextreme package
       run: npm run build-npm-devextreme
@@ -72,6 +72,16 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v2
+
+    - name: Clone devextreme-demos repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+
+    - name: Clone devextreme-demos repo
+      run: |
+        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v2
