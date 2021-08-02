@@ -5166,7 +5166,6 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
-            rtlEnabled: false,
             useNative: pivotGrid.__scrollBarUseNative,
             useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
@@ -5235,7 +5234,6 @@ QUnit.module('Tests with stubs', {
         assert.ok(this.dataArea.updateScrollableOptions.calledAfter(this.horizontalArea.setVirtualContentParams));
         assert.deepEqual(this.dataArea.updateScrollableOptions.lastCall.args[0], {
             direction: 'both',
-            rtlEnabled: false,
             useNative: pivotGrid.__scrollBarUseNative,
             useSimulatedScrollbar: !pivotGrid.__scrollBarUseNative
         });
