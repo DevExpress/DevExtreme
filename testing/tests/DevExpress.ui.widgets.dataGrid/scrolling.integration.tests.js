@@ -482,7 +482,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
 
 
-        const scrollable = $dataGrid.find('.dx-scrollable').dxScrollable('instance');
+        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
 
 
         // act
@@ -946,10 +946,11 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columnAutoWidth: true,
             dataSource: [{ field1: 'test test test', field2: 'test test test', field3: 'test test test', field4: 'test test test' }]
         });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
 
         this.clock.tick();
 
-        const scrollable = $dataGrid.getScrollable().dxScrollable('instance');
+        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
 
         // act
         scrollable.scrollTo(100.7);
@@ -990,7 +991,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        const scrollable = $dataGrid.find('.dx-scrollable').dxScrollable('instance');
+        const scrollable = dataGrid.getScrollable().dxScrollable('instance');
 
         // act
         scrollable.scrollTo(200);
@@ -1056,7 +1057,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.equal(scrollable.$content().width(), $(scrollable.container()).width(), 'no scrollbar');
+        assert.roughEqual(scrollable.$content().width(), $(scrollable.container()).width(), 0.01, 'no scrollbar');
     });
 
     QUnit.test('The scroll position should be updated after resizing column', function(assert) {
