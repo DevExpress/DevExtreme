@@ -63,9 +63,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'header' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -100,9 +100,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'f1_1') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -178,9 +178,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1: f1_1') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.value === 'f1_1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -223,9 +223,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'f1_2' || pdfCell.text === 'f2_2') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f2') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -312,9 +312,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1: f1' || pdfCell.text === 'F2: f1_2' || pdfCell.text === 'F2: f2_2') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -399,9 +399,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -486,9 +486,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'groupFooter' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -580,9 +580,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -675,9 +675,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'groupFooter' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -759,9 +759,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f1') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'totalFooter' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -840,9 +840,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f2') {
+                const _onCellExporting = ({ gridCell, pdfCell }) => {
+                    onCellExporting({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'totalFooter' && gridCell.column.dataField === 'f2') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
