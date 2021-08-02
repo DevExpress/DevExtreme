@@ -18,13 +18,11 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+        path: ./node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
     - name: Run npm install
-      run: npm ci --no-audit --no-fund
+      run: npm i --no-audit --no-fund
 
     - name: Compile renovation
       run: npm run compile:r
@@ -47,13 +45,11 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+        path: ./node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
     - name: Run npm install
-      run: npm ci --no-audit --no-fund
+      run: npm i --no-audit --no-fund
 
     - name: Lint TS
       run: npm run lint-ts
