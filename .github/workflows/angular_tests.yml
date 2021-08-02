@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 60
 
     steps:
@@ -20,10 +20,15 @@ jobs:
       run: |
         test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
+    - name: Get npm cache directory
+      id: npm-cache
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+        
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ~/.npm
+        path: ${{ steps.npm-cache.outputs.dir }}
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules
