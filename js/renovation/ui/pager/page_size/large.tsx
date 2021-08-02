@@ -11,7 +11,7 @@ import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types.d';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
 
-import { InternalPagerProps } from '../common/internal_page_props';
+import { PagerProps } from '../common/pager_props';
 
 export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
   <Fragment>
@@ -27,16 +27,13 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
   </Fragment>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageSize'> & PageSizeLargeProps;
-
 @ComponentBindings()
-export class PageSizeLargeProps {
+export class PageSizeLargeProps extends PagerProps {
   @OneWay() pageSizes!: FullPageSize[];
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType>() {
+export class PageSizeLarge extends JSXComponent<PageSizeLargeProps>() {
   get pageSizesText(): {
     className: string;
     click: () => void;

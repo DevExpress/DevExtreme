@@ -13,13 +13,12 @@ export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX
   </div>
 );
 @ComponentBindings()
-export class InfoTextProps {
+export class InfoTextProps extends PagerProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
-type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class InfoText extends JSXComponent<InfoTextPropsType>() {
+export class InfoText extends JSXComponent<InfoTextProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>() {
   get infoText(): string {
     return (this.props.infoText ?? '') || messageLocalization.getFormatter('dxPager-infoText')();
   }

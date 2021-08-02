@@ -6,7 +6,7 @@ import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EventCallback } from '../../common/event_callback';
-import { InternalPagerProps } from '../common/internal_page_props';
+import { PagerProps } from '../common/pager_props';
 
 export const viewFunction = ({
   className, value, label, props: { onClick },
@@ -22,7 +22,7 @@ export const viewFunction = ({
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageProps extends InternalPagerProps {
+export class PageProps extends PagerProps {
   @OneWay() index = 0;
 
   /* istanbul ignore next: EventCallback cannot be tested */

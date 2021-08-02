@@ -8,7 +8,6 @@ import { PagerProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
-import { InternalPagerProps } from './common/internal_page_props';
 
 export const viewFunction = ({
   pagerProps,
@@ -22,16 +21,13 @@ export const viewFunction = ({
   />
 );
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerPropsType = Pick<InternalPagerProps, 'pageSizeChange' | 'pageIndexChange' | 'pageIndex'> & PagerProps;
-
 @Component({
   defaultOptionRules: null,
   jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
 
-export class Pager extends JSXComponent<PagerPropsType>() {
+export class Pager extends JSXComponent<PagerProps>() {
   pageIndexChange(newPageIndex: number): void {
     if (this.props.gridCompatibility) {
       this.props.pageIndexChange(newPageIndex + 1);
@@ -61,7 +57,7 @@ export class Pager extends JSXComponent<PagerPropsType>() {
     return this.props.className;
   }
 
-  get pagerProps(): PagerPropsType {
+  get pagerProps(): PagerProps {
     return {
       ...this.props,
       className: this.className,

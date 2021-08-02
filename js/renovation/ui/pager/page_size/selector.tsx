@@ -6,7 +6,7 @@ import {
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import { InternalPagerProps } from '../common/internal_page_props';
+import { ExtendedPagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 
@@ -42,7 +42,7 @@ function getAllText(): string {
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-class PageSizeSelectorProps extends InternalPagerProps {
+class PageSizeSelectorProps extends ExtendedPagerProps {
   @OneWay() isLargeDisplayMode = true;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;

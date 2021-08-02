@@ -13,7 +13,7 @@ import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
-import { InternalPagerProps } from '../common/internal_page_props';
+import { PagerProps } from '../common/pager_props';
 
 export const viewFunction = ({
   width,
@@ -31,10 +31,8 @@ export const viewFunction = ({
   />
 );
 
-type PageSizeSmallPropsType = Omit<InternalPagerProps, 'pageSizes'> & Pick<PageSizeSmallProps, 'parentRef' | 'pageSizes'>;
-
 @ComponentBindings()
-export class PageSizeSmallProps {
+export class PageSizeSmallProps extends PagerProps {
   @Ref() parentRef!: RefObject<HTMLElement>;
 
   @OneWay() pageSizes!: FullPageSize[];
@@ -42,7 +40,7 @@ export class PageSizeSmallProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
-  extends JSXComponent<PageSizeSmallPropsType, 'pageSizeChange' | 'pageSize'>() {
+  extends JSXComponent<PageSizeSmallProps, 'pageSizeChange' | 'pageSize' | 'parentRef' | 'pageSizes'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {

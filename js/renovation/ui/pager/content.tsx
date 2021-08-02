@@ -17,8 +17,8 @@ import { PageSizeSelector } from './page_size/selector';
 import {
   PAGER_PAGES_CLASS, PAGER_PAGE_INDEXES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
 } from './common/consts';
-import { DisplayMode } from './common/pager_props';
-import { InternalPagerProps } from './common/internal_page_props';
+import { DisplayMode } from './common/base_pager_props';
+import { ExtendedPagerProps } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -101,7 +101,7 @@ export const viewFunction = ({
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PagerContentProps extends InternalPagerProps {
+export class PagerContentProps extends ExtendedPagerProps {
   @OneWay() infoTextVisible = true;
 
   @OneWay() isLargeDisplayMode = true;
@@ -116,7 +116,7 @@ export class PagerContentProps extends InternalPagerProps {
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagerContent extends JSXComponent<PagerContentProps, 'pageSize' | 'pageSizeChange' | 'pageIndexChange'>() {
+export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

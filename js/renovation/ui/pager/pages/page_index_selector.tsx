@@ -11,7 +11,6 @@ import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 import { PagerProps } from '../common/pager_props';
-import { InternalPagerProps } from '../common/internal_page_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
@@ -76,23 +75,12 @@ function getIncrement(direction: Direction): number {
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageIndexSelectorProps {
+export class PageIndexSelectorProps extends PagerProps {
   @OneWay() isLargeDisplayMode = true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageIndexSelectorPropsType = Pick<PagerProps,
-'hasKnownLastPage'
-| 'maxPagesCount'
-| 'pageCount'
-| 'pagesCountText'
-| 'showNavigationButtons'
-| 'totalCount'>
-& Pick<InternalPagerProps, 'pageIndex' | 'pageIndexChange'>
-& PageIndexSelectorProps;
-
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {
+export class PageIndexSelector extends JSXComponent<PageIndexSelectorProps, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
