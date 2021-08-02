@@ -98,8 +98,8 @@ QUnit.module('event utils', () => {
                     assert.ok(this in e || this in e.originalEvent, 'event has \'' + this + '\' property');
                 });
                 if(!navigator.pointerEnabled && !navigator.msPointerEnabled) {
-                    $.each(eventOwnProps, function() {
-                        assert.ok(Object.keys(e).indexOf(this) > -1, 'property \'' + this + '\' is own property');
+                    $.each(eventOwnProps, function(_, propName) {
+                        assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property');
                     });
                 }
             });
