@@ -13,7 +13,7 @@
         "automerge": true
     },
     "vulnerabilityAlerts": {
-        "enabled": false
+        "enabled": true
     },
     "packageRules": [
         {
