@@ -204,7 +204,7 @@ describe('CheckBox', () => {
 
       describe('updateIconFontSize', () => {
         it('should set icon font size on init', () => {
-          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+          const checkBox = new CheckBox({ iconSize: 22 });
           checkBox.iconRef = { current: { style: {} } } as any;
           const icon = checkBox.iconRef.current;
 
@@ -213,39 +213,22 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it('should change icon font size after runtime decreasing "iconWidth" option', () => {
-          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+        it('should change icon font size after runtime changing "iconWidth" option', () => {
+          const checkBox = new CheckBox({ iconSize: 22 });
           checkBox.iconRef = { current: { style: {} } } as any;
           const icon = checkBox.iconRef.current;
 
           checkBox.updateIconFontSize();
-          checkBox.props.iconWidth = 16;
+          checkBox.props.iconSize = 16;
 
           checkBox.updateIconFontSize();
 
           expect(icon?.style.fontSize).toEqual('12px');
         });
 
-        it('should not change icon font size after runtime increasing "iconHeight" option', () => {
-          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
-          checkBox.iconRef = { current: { style: {} } } as any;
-          const icon = checkBox.iconRef.current;
-
-          checkBox.updateIconFontSize();
-
-          checkBox.props.iconHeight = 44;
-
-          checkBox.updateIconFontSize();
-
-          expect(icon?.style.fontSize).toEqual('16px');
-        });
-
         it('should set default generic theme font-size if theme is not defined (e.g. in SSR)', () => {
           (current as Mock).mockImplementation(() => undefined);
-          const checkBox = new CheckBox({
-            iconHeight: 22,
-            iconWidth: 22,
-          });
+          const checkBox = new CheckBox({ iconSize: 22 });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             style: {},
@@ -265,14 +248,9 @@ describe('CheckBox', () => {
               iconSize = 16;
             }
 
-            const checkBox = new CheckBox({
-              iconHeight: iconSize,
-              iconWidth: iconSize,
-            });
+            const checkBox = new CheckBox({ iconSize });
             checkBox.iconRef = React.createRef() as any;
-            checkBox.iconRef.current = {
-              style: {},
-            } as any;
+            checkBox.iconRef.current = { style: {} } as any;
             const icon = checkBox.iconRef.current;
 
             checkBox.updateIconFontSize();
@@ -299,11 +277,7 @@ describe('CheckBox', () => {
 
             const checkBox = new CheckBox({});
             checkBox.iconRef = React.createRef() as any;
-            checkBox.iconRef.current = {
-              offsetHeight: iconSize,
-              offsetWidth: iconSize,
-              style: {},
-            } as any;
+            checkBox.iconRef.current = { style: {} } as any;
             const icon = checkBox.iconRef.current;
 
             checkBox.updateIconFontSize();
@@ -314,10 +288,10 @@ describe('CheckBox', () => {
             expect(icon?.style.fontSize).toEqual(expectedValue);
           });
 
-        it("should correctly change icon font size if 'iconHeight'/'iconWidth' options are defined in pixels string", () => {
+        it("should correctly change icon font size if 'iconSize' option is defined in pixels string", () => {
           (getElementComputedStyle as jest.Mock).mockReturnValue({ width: '22px', height: '22px' });
 
-          const checkBox = new CheckBox({ iconHeight: '22px', iconWidth: '22px' });
+          const checkBox = new CheckBox({ iconSize: '22px' });
           checkBox.iconRef = React.createRef() as any;
           checkBox.iconRef.current = {
             style: {},
@@ -333,9 +307,7 @@ describe('CheckBox', () => {
 
           const checkBox = new CheckBox({});
           checkBox.iconRef = React.createRef() as any;
-          checkBox.iconRef.current = {
-            style: {},
-          } as any;
+          checkBox.iconRef.current = { style: {} } as any;
           checkBox.updateIconFontSize();
 
           const icon = checkBox.iconRef.current;
@@ -512,7 +484,7 @@ describe('CheckBox', () => {
     describe('Getters', () => {
       describe('icon styles', () => {
         it('should have "width","height" styles', () => {
-          const checkBox = new CheckBox({ iconHeight: 22, iconWidth: 22 });
+          const checkBox = new CheckBox({ iconSize: 22 });
 
           checkBox.updateIconFontSize();
 
@@ -522,14 +494,14 @@ describe('CheckBox', () => {
         each([22, '22px'])
           .it('should convert "%s" in "22px"', (value) => {
             expect(new CheckBox({
-              iconHeight: value, iconWidth: value,
+              iconSize: value,
             }).iconStyles).toMatchObject({ width: '22px', height: '22px' });
           });
 
         each(['50%', '1em', 'auto'])
           .it('should apply "%s" as it is', (value) => {
             expect(new CheckBox({
-              iconHeight: value, iconWidth: value, width: 44, height: 44,
+              iconSize: value, width: 44, height: 44,
             }).iconStyles).toMatchObject({ width: value, height: value });
           });
       });
