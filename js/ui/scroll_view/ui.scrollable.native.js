@@ -28,8 +28,8 @@ const NativeStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
-        this._$content = scrollable._$content;
+        this._$container = $(scrollable.container());
+        this._$content = $(scrollable.content());
 
         this._direction = scrollable.option('direction');
         this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
