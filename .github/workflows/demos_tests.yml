@@ -113,7 +113,7 @@ jobs:
         BROWSERS: chrome:headless
         CONCURRENCY: 4
         TCQUARANTINE: true
-        CONSTEL: jquery(1/1)
+        CONSTEL: ${{ matrix.CONSTEL }}
       run: npm run test-testcafe
 
     - name: Copy screenshots artifacts
