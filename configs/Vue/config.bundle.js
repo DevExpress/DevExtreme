@@ -17,7 +17,10 @@ const bundleConfig = {
             'devextreme/ui/pivot_grid/*',
             'devextreme/viz/*',
             'devextreme/viz/vector_map/*',
-            'devextreme-vue/*'
+            'devextreme-vue/*',
+            'devextreme-quill',
+            'devexpress-gantt',
+            'devexpress-diagram',
         ]
     },
     map: {
@@ -30,7 +33,10 @@ System.config(bundleConfig);
 if(window.config) {
     [
         'devextreme',
-        'devextreme-vue'
+        'devextreme-vue',
+        'devextreme-quill',
+        'devexpress-gantt',
+        'devexpress-diagram',
     ].forEach(pkg => delete window.config.map[pkg]);
 
     System.config(window.config);
