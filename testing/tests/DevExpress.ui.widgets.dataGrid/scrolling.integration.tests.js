@@ -820,7 +820,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.roughEqual($(scrollable.content()).width(), $(scrollable._container()).width(), 1.01, 'no scroll');
+        assert.roughEqual($(scrollable.content()).width(), $(scrollable.container()).width(), 1.01, 'no scroll');
     });
 
     QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView', function(assert) {
@@ -956,7 +956,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(scrollable.scrollLeft(), 100.7);
-        assert.equal(scrollable._container().scrollLeft(), 100);
+        assert.equal(scrollable.container().scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
         assert.equal($headersScrollable.scrollLeft(), 100);
@@ -1056,7 +1056,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.equal(scrollable.$content().width(), scrollable._container().width(), 'no scrollbar');
+        assert.equal(scrollable.$content().width(), $(scrollable.container()).width(), 'no scrollbar');
     });
 
     QUnit.test('The scroll position should be updated after resizing column', function(assert) {

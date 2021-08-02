@@ -1022,7 +1022,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getScrollableContainer() {
-        return this._dateTableScrollable._container();
+        return $(this._dateTableScrollable.container());
     }
 
     getHeaderPanelHeight() {
