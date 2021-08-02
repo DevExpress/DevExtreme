@@ -35,6 +35,16 @@ $arrow-down: "\f016";
     .dx-toolbar-menu-container {
       padding: $item-padding;
     }
+
+    .dx-scheduler-navigator {
+      .dx-scheduler-navigator-caption {
+        width: 180px;
+
+        .dx-device-mobile & {
+          width: 140px;
+        }
+      }
+    }
   }
 }
 
