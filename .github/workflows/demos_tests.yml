@@ -38,15 +38,17 @@ jobs:
     - name: Build devextreme package
       run: npm run build-npm-devextreme
 
+    - name: Pack devextreme package
+      working-directory: ./artifacts/npm/devextreme
+      run: npm pack
+
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
       run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: |
-        rm -rf ./node_modules/devextreme 
-        npm install ../artifacts/npm/devextreme
+      run: npm install $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Zip node_modules    
       run: 7z a -t7z -mx3 -mmt2 node_modules.7z ./devextreme-demos/node_modules
