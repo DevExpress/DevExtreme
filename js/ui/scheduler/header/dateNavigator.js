@@ -52,7 +52,7 @@ const getPreviousButtonOptions = (header) => {
                 previousButton.option('disabled', isPreviousButtonDisabled(header));
             });
 
-            header._addEvent('displayedDate', () => {
+            header._addEvent('startViewDate', () => {
                 previousButton.option('disabled', isPreviousButtonDisabled(header));
             });
         },
@@ -76,7 +76,7 @@ const getCalendarButtonOptions = (header) => {
                 calendarButton.option('text', header.captionText);
             });
 
-            header._addEvent('displayedDate', () => {
+            header._addEvent('startViewDate', () => {
                 calendarButton.option('text', header.captionText);
             });
 
@@ -110,7 +110,7 @@ const getNextButtonOptions = (header) => {
                 nextButton.option('disabled', isNextButtonDisabled(header));
             });
 
-            header._addEvent('displayedDate', () => {
+            header._addEvent('startViewDate', () => {
                 nextButton.option('disabled', isNextButtonDisabled(header));
             });
         },
@@ -124,13 +124,12 @@ const isPreviousButtonDisabled = (header) => {
 
     min = new Date(min);
 
-    const date = header.date;
-    const caption = header._getCaption(date);
+    const caption = header._getCaption();
 
     min = trimTime(min);
 
     const previousDate = header._getNextDate(-1, caption.endDate);
-    return previousDate < trimTime(min);
+    return previousDate < min;
 };
 
 const isNextButtonDisabled = (header) => {
@@ -140,8 +139,7 @@ const isNextButtonDisabled = (header) => {
 
     max = new Date(max);
 
-    const date = header.date;
-    const caption = header._getCaption(date);
+    const caption = header._getCaption();
 
     max = max.setHours(23, 59, 59);
 

@@ -567,7 +567,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
     const { onOptionChanged, ...restProps } = {
       ...this.props,
-      onInitialized: (e) => {
+      onInitialized: (e: { component: GridInstance }) => {
         this.instance = e.component;
 
         (onInitialized as (e: unknown) => void)?.(e);

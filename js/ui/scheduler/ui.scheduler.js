@@ -553,7 +553,7 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', []);
                 this._workSpace.option(name, new Date(value));
                 this._header.option(name, new Date(value));
-                this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+                this._header.option('startViewDate', this.getStartViewDate());
                 this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
 
@@ -814,7 +814,7 @@ class Scheduler extends Widget {
         this._header.option(
             {
                 'intervalCount': this._getViewCountConfig().intervalCount,
-                'displayedDate': this._workSpace._getViewStartByOptions(),
+                'startViewDate': this.getStartViewDate(),
                 'min': this._dateOption('min'),
                 'max': this._dateOption('max'),
                 'currentDate': this._dateOption('currentDate'),
