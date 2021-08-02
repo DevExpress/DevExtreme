@@ -4,7 +4,7 @@ function isScrollInverted(rtlEnabled: boolean): boolean {
   const { decreasing, positive } = getScrollRtlBehavior();
 
   // eslint-disable-next-line no-bitwise
-  return rtlEnabled && !!(decreasing ^ positive);
+  return rtlEnabled && (decreasing !== positive);
 }
 
 export function getScrollSign(rtlEnabled: boolean): number {
