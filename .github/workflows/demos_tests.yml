@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  testcafe:
+  demos_build:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -35,43 +35,70 @@ jobs:
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
-    - name: Install packages for devextreme-demos
-      run: |
-        cd ./devextreme-demos
-        npm install --no-package-lock --no-audit --no-fund
+    - name: Build devextreme package
+      run: npm run build-npm-devextreme
 
-    - name: Build devextreme
-      run: |
-        npm run build
+    - name: Install packages for devextreme-demos
+      working-directory: ./devextreme-demos
+      run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Install devextreme package
+      working-directory: ./devextreme-demos
       run: |
-        cd ./devextreme-demos
         rm -rf ./node_modules/devextreme 
-        npm install --no-package-lock ../artifacts/npm/devextreme
+        npm install ../artifacts/npm/devextreme
+
+    - name: Zip node_modules    
+      run: 7z a -t7z -mx3 -mmt2 node_modules.7z ./devextreme-demos/node_modules
+
+    - name: Copy build artifacts      
+      uses: actions/upload-artifact@v2
+      with:
+        name: devextreme-demos-sources
+        path: node_modules.7z
+        retention-days: 1
+
+  demos_testcafe:
+    needs: demos_build
+    strategy:
+      fail-fast: false
+      matrix:      
+        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-demos-sources
+        path: ./devextreme-demos
+
+    - name: Unpack artifacts
+      working-directory: ./devextreme-demos
+      run: 7z x node_modules.7z
 
     - name: Prepare JS
-      run: |
-        cd ./devextreme-demos
-        npm run prepare-js
-
+      working-directory: ./devextreme-demos
+      run: npm run prepare-js
+      
     - name: Run Web Server
+      working-directory: ./devextreme-demos
       run: |
-        cd ./devextreme-demos
         python -m http.server 8080 &
         python -m http.server 8081 &
         python -m http.server 8082 &
         python -m http.server 8083 &
 
     - name: Run TestCafe tests
+      working-directory: ./devextreme-demos
       env:
         BROWSERS: chrome:headless
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: jquery(1/1)
-      run: |
-        cd ./devextreme-demos
-        npm run test-testcafe
+      run: npm run test-testcafe
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
