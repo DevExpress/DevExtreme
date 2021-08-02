@@ -19,7 +19,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm i --no-audit --no-fund
@@ -46,7 +47,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm i --no-audit --no-fund
@@ -69,13 +71,12 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm ci --no-audit --no-fund
+      run: npm i --no-audit --no-fund
 
     - name: Lint TS
       run: npm run lint-js
@@ -95,13 +96,12 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ~/.npm
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm ci --no-audit --no-fund
+      run: npm i --no-audit --no-fund
 
     - name: Lint CSS
       run: npm run lint-css

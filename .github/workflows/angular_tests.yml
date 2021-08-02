@@ -20,21 +20,15 @@ jobs:
       run: |
         test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
-    - name: Get npm cache directory
-      id: npm-cache
-      run: |
-        echo "::set-output name=dir::$(npm config get cache)"
-        
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ${{ steps.npm-cache.outputs.dir }}
+        path: ./mode_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-modules
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
-      run: npm ci --no-audit --no-fund
+      run: npm i --no-audit --no-fund
 
     - name: Build devextreme repo
       run: npm run build-npm-devextreme
