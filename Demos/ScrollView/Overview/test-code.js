@@ -1,1 +1,1 @@
-testUtils.findElements(".demo-container").forEach(x=>x.minHeight = '450px');
+testUtils.findElements(".demo-container").forEach(x=>x.style.minHeight = '450px');
