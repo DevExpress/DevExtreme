@@ -98,7 +98,15 @@ if(Quill) {
             return editorInstance._createComponent($container, Popup, popupConfig);
         }
 
+        _getListClass() {
+            return 'dx-context-menu-list';
+        }
+
         _showCellProperties() {
+            if(!this._formPopup) {
+                return;
+            }
+
             const formOptions = {
                 formData: {
                     width: 100,
@@ -131,6 +139,10 @@ if(Quill) {
         }
 
         _showTableProperties() {
+            if(!this._formPopup) {
+                return;
+            }
+
             const formOptions = {
                 formData: {
                     width: 100,
@@ -159,6 +171,7 @@ if(Quill) {
 
             this._popup.hide();
             this._formPopup.show();
+
         }
 
         // _getCellFormPopupConfig($container) {
@@ -251,7 +264,7 @@ if(Quill) {
         // }
 
         _openTableContextMenu(event) {
-            if(this._isTableTarget(event)) {
+            if(this._isTableTarget(event.target)) {
                 this._setPopupPosition(event);
 
                 this.showPopup();
@@ -273,8 +286,8 @@ if(Quill) {
             });
         }
 
-        _isTableTarget() {
-            return true;
+        _isTableTarget(targetElement) {
+            return targetElement.tagName.toUpperCase() === 'TD' || targetElement.tagName.toUpperCase() === 'TH';
         }
 
         // _findTables() {

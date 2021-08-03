@@ -1,4 +1,7 @@
 import $ from 'jquery';
+import 'ui/html_editor';
+
+
 const tableMarkup = '\
     <table>\
         <tr>\
@@ -22,6 +25,8 @@ const tableMarkup = '\
     </table>\
     <br><br>';
 
+const { test, module } = QUnit;
+
 
 module('Table resizing integration', {
     beforeEach: function() {
@@ -29,7 +34,7 @@ module('Table resizing integration', {
 
         this.$element = $('#htmlEditor');
         this.options = {
-            tableContextMenuEnabled: true,
+            // tableContextMenuEnabled: true,
             value: tableMarkup
         };
 
@@ -47,12 +52,10 @@ module('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
-    module('resizing frames initialization', {}, () => {
+    module('table context menu initialization', {}, () => {
         test('Frame is created for table by default if the tableResizing option is enabled', function(assert) {
-            // this.createWidget();
-            // this.clock.tick(TIME_TO_WAIT);
-
-            // assert.strictEqual($draggableElements.length, 0, 'Column resizers draggable elements are not created before the pointerDown event');
+            this.createWidget();
+            assert.ok(true);
         });
     });
 });
