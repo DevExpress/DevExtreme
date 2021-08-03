@@ -362,7 +362,7 @@ module.exports = {
                 '@typescript-eslint/quotes': ['error', 'single'],
                 'spaced-comment': 'off',
                 'max-len': 'off',
-                '@typescript-eslint/method-signature-style': ['error', 'method'],
+                '@typescript-eslint/method-signature-style': 'off',
                 '@typescript-eslint/unified-signatures': 'off',
                 '@typescript-eslint/naming-convention': [
                     'error',
