@@ -93,4 +93,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     getCellCountInDay() {
         return 1;
     }
+
+    setHiddenInterval() {
+        this.hiddenInterval = 0;
+    }
 }

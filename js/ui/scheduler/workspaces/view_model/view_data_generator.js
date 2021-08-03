@@ -9,6 +9,7 @@ import {
 } from '../utils/base';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
+const DAY_MS = dateUtils.dateToMilliseconds('day');
 
 export class ViewDataGenerator {
     get daysInInterval() { return 1; }
@@ -32,6 +33,8 @@ export class ViewDataGenerator {
         } = options;
 
         this._setVisibilityDates(options);
+        this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
+
         const groupsList = getAllGroups(groups);
         const cellCountInGroupRow = this.getCellCount({
             intervalCount,
@@ -393,7 +396,6 @@ export class ViewDataGenerator {
         const {
             startDayHour,
             columnsInDay,
-            hiddenInterval,
             interval,
             rowCountBase,
             columnCountBase,
@@ -409,7 +411,7 @@ export class ViewDataGenerator {
         }
 
         const cellIndex = this._calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
-        const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
+        const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
         const offsetByCount = this.isWorkView
             ? this.getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
@@ -427,11 +429,11 @@ export class ViewDataGenerator {
         return currentDate;
     }
 
-    getMillisecondsOffset(cellIndex, interval, hiddenIntervalBase, cellCountInDay) {
+    getMillisecondsOffset(cellIndex, interval, cellCountInDay) {
         const dayIndex = Math.floor(cellIndex / cellCountInDay);
-        const hiddenInterval = dayIndex * hiddenIntervalBase;
+        const realHiddenInterval = dayIndex * this.hiddenInterval;
 
-        return interval * cellIndex + hiddenInterval;
+        return interval * cellIndex + realHiddenInterval;
     }
 
     getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek) {
@@ -667,5 +669,15 @@ export class ViewDataGenerator {
             : 1;
 
         return rowCountInDay;
+    }
+
+    setHiddenInterval(startDayHour, endDayHour, hoursInterval) {
+        this.hiddenInterval = DAY_MS - this.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
+    }
+
+    getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+        const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+
+        return hoursInterval * cellCountInDay * HOUR_MS;
     }
 }

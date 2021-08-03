@@ -45,6 +45,8 @@ export default class ViewDataProvider {
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
+    get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
+
     update(options, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
 
@@ -413,5 +415,9 @@ export default class ViewDataProvider {
 
     getRowCount(options) {
         return this.viewDataGenerator.getRowCount(options);
+    }
+
+    getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+        return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
     }
 }

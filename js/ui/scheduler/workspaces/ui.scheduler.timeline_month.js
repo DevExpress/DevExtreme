@@ -32,10 +32,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return this.option('dateCellTemplate');
     }
 
-    _getHiddenInterval() {
-        return 0;
-    }
-
     _calculateDurationInCells(timeDiff) {
         return timeDiff / this.getCellDuration();
     }

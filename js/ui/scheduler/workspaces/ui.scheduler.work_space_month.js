@@ -76,11 +76,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         });
     }
 
-    _getHiddenInterval() {
-        return 0;
-    }
-
-
     _insertAllDayRowsIntoDateTable() {
         return false;
     }

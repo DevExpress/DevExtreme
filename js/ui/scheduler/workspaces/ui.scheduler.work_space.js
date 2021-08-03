@@ -655,7 +655,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             firstDayOfWeek: this._firstDayOfWeek(),
 
             columnsInDay: 1, // TODO: try to remove
-            hiddenInterval: this._hiddenInterval, // TODO: remove
             calculateCellIndex,
             rowCountBase: this._getRowCount(), // TODO: remove
             columnCountBase: this._getCellCount(), // TODO: remove
@@ -1049,22 +1048,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             endDayHour: this.option('endDayHour'),
             isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
             columnsInDay: 1,
-            hiddenInterval: this._hiddenInterval,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
-            startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
+            startViewDate: this.getStartViewDate(),
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
             firstDayOfWeek: this._firstDayOfWeek(),
         };
     }
 
-    _getHiddenInterval() {
-        if(this._hiddenInterval === undefined) {
-            this._hiddenInterval = DAY_MS - this.getVisibleDayDuration();
-        }
-        return this._hiddenInterval;
-    }
-
+    // TODO: refactor current time indicator
     _getIntervalBetween(currentDate, allDay) {
         const firstViewDate = this.getStartViewDate();
 
@@ -1076,7 +1068,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         let result = (days - weekendsCount) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - days * this._getHiddenInterval() - weekendsCount * this.getVisibleDayDuration();
+            const hiddenInterval = this.viewDataProvider.hiddenInterval;
+            const visibleDayDuration = this.getVisibleDayDuration();
+
+            result = fullInterval - days * hiddenInterval - weekendsCount * visibleDayDuration;
         }
 
         return result;
@@ -1311,6 +1306,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             && this._getGroupCount() > 0;
     }
 
+    // TODO: refactor current time indicator
     getCellIndexByDate(date, inAllDayRow) {
         const viewDataGenerator = this.viewDataProvider.viewDataGenerator;
 
@@ -1496,7 +1492,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getVisibleDayDuration() {
-        return this.option('hoursInterval') * this._getCellCountInDay() * HOUR_MS;
+        const startDayHour = this.option('startDayHour');
+        const endDayHour = this.option('endDayHour');
+        const hoursInterval = this.option('hoursInterval');
+
+        return this.viewDataProvider.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
     }
 
     getGroupBounds(coordinates) {
@@ -2537,8 +2537,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _toggleFixedScrollableClass() { return noop(); }
 
     _renderView() {
-        this._hiddenInterval = this._getHiddenInterval();
-
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {
                 this.renderRGroupPanel();
@@ -2629,7 +2627,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._shader?.clean();
 
-        delete this._hiddenInterval;
         delete this._interval;
     }
 
