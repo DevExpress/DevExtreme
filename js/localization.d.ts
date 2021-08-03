@@ -66,7 +66,7 @@ export function locale(): string;
 
 /**
  * @docid localization.locale
- * @publicName locale(locale)
+ * @publicName locale(localeToSet)
  * @param1 locale:string
  * @static
  * @module localization
@@ -74,7 +74,7 @@ export function locale(): string;
  * @namespace DevExpress.localization
  * @public
  */
-export function locale(locale_: string): void;
+export function locale(localeToSet: string): void;
 
 /**
  * @docid localization.parseDate

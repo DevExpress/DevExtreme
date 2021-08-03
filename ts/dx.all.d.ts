@@ -698,9 +698,9 @@ declare module DevExpress {
    */
   export function config(): globalConfig;
   /**
-   * [descr:config(config)]
+   * [descr:config(configuration)]
    */
-  export function config(config_: globalConfig): void;
+  export function config(configuration: globalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -836,13 +836,9 @@ declare module DevExpress {
     element(): DevExpress.core.DxElement;
 
     $element(): DevExpress.core.UserDefinedElement;
-    // eslint-disable-next-line no-underscore-dangle
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
-    // eslint-disable-next-line no-underscore-dangle
     _invalidate(): void;
-    // eslint-disable-next-line no-underscore-dangle
     _refresh(): void;
-    // eslint-disable-next-line no-underscore-dangle
     _notifyOptionChanged(
       fullName: string,
       value: unknown,
@@ -859,6 +855,8 @@ declare module DevExpress {
      */
     type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
+  /* eslint-disable no-underscore-dangle */
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1457,7 +1455,6 @@ declare module DevExpress.core {
     new (): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
   };
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1498,7 +1495,6 @@ declare module DevExpress.core {
      */
     name?: string;
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1507,7 +1503,6 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface ElementsArrayWrapper<T extends Element> extends JQuery<T> {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -3077,6 +3072,7 @@ declare module DevExpress.events {
     readonly value?: any;
     readonly previousValue?: any;
   }
+  /* eslint-enable @typescript-eslint/no-empty-interface */
   /**
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3146,7 +3142,6 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -3930,9 +3925,9 @@ declare module DevExpress.localization {
    */
   export function locale(): string;
   /**
-   * [descr:localization.locale(locale)]
+   * [descr:localization.locale(localeToSet)]
    */
-  export function locale(locale_: string): void;
+  export function locale(localeToSet: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */

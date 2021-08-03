@@ -377,7 +377,7 @@ module.exports = {
                 ],
                 '@typescript-eslint/array-type': 'off',
                 'no-irregular-whitespace': 'error',
-                'import/named': 'off', /* if turned on require 'import type { Sometype }' and that crashes gulpfile build */
+                'import/named': 'off',
                 'import/default': 'off',
                 '@typescript-eslint/no-type-alias': 'off',
                 '@typescript-eslint/member-ordering': 'off',
@@ -385,10 +385,10 @@ module.exports = {
                 '@typescript-eslint/no-explicit-any': 'off',
                 '@typescript-eslint/explicit-module-boundary-types': 'off',
                 '@typescript-eslint/explicit-member-accessibility': 'off',
-                '@typescript-eslint/no-unnecessary-type-arguments': 'off', /* can write DxPromise<void>, not just DxPromise (where void is default option)*/
-                '@typescript-eslint/no-magic-numbers': 'off', /* error. should i use enums? */
-                '@typescript-eslint/ban-types': 'off', /* +: will ban Function, object -: it look like in few place we need to pass constructors, not type */
-                '@typescript-eslint/prefer-interface': 'off', /* we need types in public d.ts */
+                '@typescript-eslint/no-unnecessary-type-arguments': 'off',
+                '@typescript-eslint/no-magic-numbers': 'off',
+                '@typescript-eslint/ban-types': 'off',
+                '@typescript-eslint/prefer-interface': 'off',
                 '@typescript-eslint/consistent-type-definitions': 'off',
             }
         },

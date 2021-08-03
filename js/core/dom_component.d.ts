@@ -12,6 +12,8 @@ import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { Rule } from './options/utils';
 
+/* eslint-disable no-underscore-dangle */
+
 /** @namespace DevExpress */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
     /**
@@ -116,20 +118,16 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     element(): DxElement;
 
     $element(): UserDefinedElement;
-     // eslint-disable-next-line no-underscore-dangle
     _getTemplate(template: unknown): FunctionTemplate;
-     // eslint-disable-next-line no-underscore-dangle
     _invalidate(): void;
-     // eslint-disable-next-line no-underscore-dangle
     _refresh(): void;
-     // eslint-disable-next-line no-underscore-dangle
     _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
 }
 
-export interface ComponentClass<TProperties> {
+export type ComponentClass<TProperties> = {
     new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
     getInstance(widgetRef: HTMLDivElement): DOMComponent<TProperties>;
-}
+};
 
 interface DOMComponentInstance extends DOMComponent<Properties> { }
 

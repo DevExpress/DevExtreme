@@ -2,10 +2,10 @@ import {
     DxElement,
 } from '../core/element';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface EventExtension { }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EventType { }
+/* eslint-enable @typescript-eslint/no-empty-interface */
 /**
  * @docid
  * @type EventObject|jQuery.Event

@@ -15,14 +15,14 @@ declare function config(): globalConfig;
 
 /**
  * @docid
- * @publicName config(config)
+ * @publicName config(configuration)
  * @param1 config:globalConfig
  * @namespace DevExpress
  * @module core/config
  * @export default
  * @public
  */
-declare function config(config_: globalConfig): void;
+declare function config(configuration: globalConfig): void;
 
 /**
  * @docid
