@@ -144,7 +144,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _getMaxOffset: function() {
-        const { scrollWidth, clientWidth, scrollHeight, clientHeight } = this.container();
+        const { scrollWidth, clientWidth, scrollHeight, clientHeight } = $(this.container()).get(0);
 
         return {
             left: scrollWidth - clientWidth,
@@ -511,7 +511,10 @@ const Scrollable = DOMComponent.inherit({
                 : leftPosition;
 
             if(this._isRtlNativeStrategy()) {
-                scrollPosition.left += this.container().offsetWidth - this.container().clientWidth;
+                const containerElement = $(this.container()).get(0);
+                const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+
+                scrollPosition.left += scrollbarWidth;
             }
         }
         if(direction !== HORIZONTAL) {
@@ -530,7 +533,7 @@ const Scrollable = DOMComponent.inherit({
         const elementPosition = elementPositionRelativeToContent;
         const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
         const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-        const clientSize = this.container()[isVertical ? 'clientHeight' : 'clientWidth'];
+        const clientSize = $(this.container()).get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
 
         const startDistance = scrollLocation - elementPosition + startOffset;
         const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
