@@ -55,13 +55,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     }
 
-    _getDateGenerationOptions() {
-        return {
-            ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
-        };
-    }
-
     getPositionShift() {
         return {
             top: 0,
@@ -84,7 +77,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return {
             ...options,
             getDateForHeaderText: (_, date) => date,
-            columnsInDay: 1,
         };
     }
 }

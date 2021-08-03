@@ -43,17 +43,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _getDateGenerationOptions() {
         return {
             ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
             cellCountInDay: 1,
-        };
-    }
-
-    generateRenderOptions() {
-        const options = super.generateRenderOptions();
-
-        return {
-            ...options,
-            columnsInDay: 1,
         };
     }
 

@@ -395,9 +395,9 @@ export class ViewDataGenerator {
         let startViewDate = options.startViewDate;
         const {
             startDayHour,
-            columnsInDay,
             interval,
             firstDayOfWeek,
+            intervalCount,
         } = options;
 
         const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
@@ -414,8 +414,12 @@ export class ViewDataGenerator {
         const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
         const offsetByCount = this.isWorkView
-            ? this.getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
-            : 0;
+            ? this.getTimeOffsetByColumnIndex(
+                columnIndex,
+                firstDayOfWeek,
+                columnCountBase,
+                intervalCount,
+            ) : 0;
 
         const startViewDateTime = startViewDate.getTime();
         const currentDate = new Date(startViewDateTime + millisecondsOffset + offsetByCount);
@@ -436,9 +440,10 @@ export class ViewDataGenerator {
         return interval * cellIndex + realHiddenInterval;
     }
 
-    getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek) {
+    getTimeOffsetByColumnIndex(columnIndex, firstDayOfWeek, columnCount, intervalCount) {
         const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
-        const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
+        const columnsInWeek = columnCount / intervalCount;
+        const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
 
         return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
     }

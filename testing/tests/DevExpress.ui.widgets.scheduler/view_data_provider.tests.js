@@ -1024,7 +1024,6 @@ module('View Data Provider', {
                 isGenerateTimePanelData: true,
                 startDayHour: 5,
                 endDayHour: 7,
-                columnsInDay: 1,
                 hoursInterval: 1,
                 currentDate: new Date(baseStartDate),
                 firstDayOfWeek: 0,

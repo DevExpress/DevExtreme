@@ -653,7 +653,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: this.option('startDate'),
             firstDayOfWeek: this._firstDayOfWeek(),
 
-            columnsInDay: 1, // TODO: try to remove
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -1043,7 +1042,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDayHour: this.option('startDayHour'),
             endDayHour: this.option('endDayHour'),
             isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
-            columnsInDay: 1,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
             startViewDate: this.getStartViewDate(),
             firstDayOfWeek: this._firstDayOfWeek(),
