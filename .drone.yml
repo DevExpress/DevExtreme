@@ -19,7 +19,6 @@ pipeline:
     environment:
       - TRAVIS=true
     commands:
-      - ./drone-cache.sh restore
       - script -qefc ./docker-ci.sh /dev/null
       - ./drone-cache.sh rebuild
 
