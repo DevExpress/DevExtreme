@@ -455,7 +455,6 @@ const HtmlEditor = Editor.inherit({
             case 'variables':
             case 'toolbar':
             case 'mentions':
-            case 'tableContextMenuEnabled':
             case 'customizeModules':
             case 'allowSoftLineBreak':
                 this._invalidate();
@@ -484,6 +483,13 @@ const HtmlEditor = Editor.inherit({
                 break;
             case 'formDialogOptions':
                 this._renderFormDialog();
+                break;
+            case 'tableContextMenuEnabled':
+                if(this._quillInstance?.getModule('tableResizing')) {
+                    this._quillInstance?.getModule('tableResizing').option(args.name, args.value);
+                } else {
+                    this._invalidate();
+                }
                 break;
             case 'mediaResizing':
                 if(!args.previousValue || !args.value) {

@@ -290,6 +290,14 @@ if(Quill) {
             return targetElement.tagName.toUpperCase() === 'TD' || targetElement.tagName.toUpperCase() === 'TH';
         }
 
+        option(option, value) {
+
+            if(option === 'enabled') {
+                this.enabled = value;
+                value ? this._attachEvents(true) : this.clean();
+            }
+        }
+
         // _findTables() {
         //     return $(this._quillContainer).find('table');
         // }
