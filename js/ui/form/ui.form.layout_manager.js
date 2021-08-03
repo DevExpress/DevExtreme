@@ -147,9 +147,9 @@ const LayoutManager = Widget.inherit({
         return dataField ? this.option('layoutData.' + dataField) : null;
     },
 
-    _isCheckboxUndefinedStateEnabled: function(editorOption) {
-        if(editorOption.allowIndeterminateState === true && editorOption.editorType === 'dxCheckBox') {
-            const nameParts = ['layoutData', ...editorOption.dataField.split('.')];
+    _isCheckboxUndefinedStateEnabled: function({ allowIndeterminateState, editorType, dataField }) {
+        if(allowIndeterminateState === true && editorType === 'dxCheckBox') {
+            const nameParts = ['layoutData', ...dataField.split('.')];
             const propertyName = nameParts.pop();
             const layoutData = this.option(nameParts.join('.'));
 
@@ -640,6 +640,10 @@ const LayoutManager = Widget.inherit({
             allowIndeterminateState: item.allowIndeterminateState
         });
 
+        if(instance && item.dataField) {
+            this._bindDataField(instance, item.dataField, item.editorType, $editor);
+        }
+
         this._itemsRunTimeInfo.add({
             item,
             widgetInstance: instance,
@@ -749,13 +753,14 @@ const LayoutManager = Widget.inherit({
         };
     },
 
-    _renderEditor: function(options) {
+    _createEditorOptions: function(options) {
         const dataValue = this._getDataByField(options.dataField);
-        const defaultEditorOptions = dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(options)
-            ? { value: dataValue }
-            : {};
-        const isDeepExtend = true;
-        let editorWidget;
+        const defaultEditorOptions =
+            dataValue !== undefined
+            || this._isCheckboxUndefinedStateEnabled({
+                allowIndeterminateState: options.allowIndeterminateState, editorType: options.editorType, dataField: options.dataField })
+                ? { value: dataValue }
+                : {};
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
@@ -763,57 +768,64 @@ const LayoutManager = Widget.inherit({
 
         const formInstance = this.option('form');
 
-        const editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
-            inputAttr: {
-                id: options.id
+        const editorOptions = extend(true, defaultEditorOptions,
+            options.editorOptions,
+            {
+                inputAttr: { id: options.id },
+                validationBoundary: options.validationBoundary,
+                stylingMode: formInstance && formInstance.option('stylingMode')
             },
-            validationBoundary: options.validationBoundary,
-            stylingMode: formInstance && formInstance.option('stylingMode')
-        });
+        );
 
-        this._replaceDataOptions(options.editorOptions, editorOptions);
-
-        const renderOptions = {
-            editorType: options.editorType,
-            dataField: options.dataField,
-            template: options.template,
-            name: options.name,
-            helpID: options.helpID,
-            labelID: options.labelID,
-            isRequired: options.isRequired
-        };
-
-        if(renderOptions.dataField && !editorOptions.name) {
-            editorOptions.name = renderOptions.dataField;
+        if(options.editorOptions) {
+            if(editorOptions.dataSource) {
+                editorOptions.dataSource = options.editorOptions.dataSource;
+            }
+            if(editorOptions.items) {
+                editorOptions.items = options.editorOptions.items;
+            }
         }
+
+        if(options.dataField && !editorOptions.name) {
+            editorOptions.name = options.dataField;
+        }
+        return editorOptions;
+    },
+
+    _renderEditor: function(options) {
+        let result;
+        const editorOptions = this._createEditorOptions(options);
 
         adjustEditorContainer({
             $container: options.$container,
             labelLocation: this.option('labelLocation'),
         });
 
-        if(renderOptions.template) {
+        if(options.template) {
             renderTemplateTo({
                 $container: getPublicElement(options.$container),
-                template: renderOptions.template,
-                templateOptions: convertToTemplateOptions(renderOptions, editorOptions, this._getComponentOwner())
+                template: options.template,
+                templateOptions: {
+                    dataField: options.dataField,
+                    editorType: options.editorType,
+                    editorOptions: editorOptions,
+                    component: this._getComponentOwner(),
+                    name: options.name
+                }
             });
         } else {
-            editorWidget = renderComponentTo({
+            result = renderComponentTo({
                 $container: options.$container,
                 createComponentCallback: this._createComponent.bind(this),
-                componentType: renderOptions.editorType,
+                componentType: options.editorType,
                 componentOptions: editorOptions,
-                helpID: renderOptions.helpID,
-                labelID: renderOptions.labelID,
-                isRequired: renderOptions.isRequired
+                helpID: options.helpID,
+                labelID: options.labelID,
+                isRequired: options.isRequired
             });
 
         }
-        if(editorWidget && renderOptions.dataField) {
-            this._bindDataField(editorWidget, renderOptions, options.$container);
-        }
-        return editorWidget;
+        return result;
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -884,18 +896,18 @@ const LayoutManager = Widget.inherit({
         return this.option('form') || this;
     },
 
-    _bindDataField: function(editorInstance, renderOptions, $container) {
+    _bindDataField: function(editorInstance, dataField, editorType, $container) {
         const componentOwner = this._getComponentOwner();
 
         editorInstance.on('enterKey', function(args) {
-            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: renderOptions.dataField }));
+            componentOwner._createActionByOption('onEditorEnterKey')(extend(args, { dataField: dataField }));
         });
 
-        this._createWatcher(editorInstance, $container, renderOptions);
-        this.linkEditorToDataField(editorInstance, renderOptions.dataField, renderOptions.editorType);
+        this._createWatcher(editorInstance, $container, dataField);
+        this.linkEditorToDataField(editorInstance, dataField, editorType);
     },
 
-    _createWatcher: function(editorInstance, $container, renderOptions) {
+    _createWatcher: function(editorInstance, $container, dataField) {
         const that = this;
         const watch = that._getWatch();
 
@@ -905,10 +917,10 @@ const LayoutManager = Widget.inherit({
 
         const dispose = watch(
             function() {
-                return that._getDataByField(renderOptions.dataField);
+                return that._getDataByField(dataField);
             },
             function() {
-                editorInstance.option('value', that._getDataByField(renderOptions.dataField));
+                editorInstance.option('value', that._getDataByField(dataField));
             },
             {
                 deep: true,
@@ -1052,7 +1064,8 @@ const LayoutManager = Widget.inherit({
                                     const valueGetter = compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
-                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(itemRunTimeInfo.item)) {
+                                    if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(
+                                        { allowIndeterminateState: itemRunTimeInfo.item.allowIndeterminateState, editorType: itemRunTimeInfo.item.editorType, dataField: itemRunTimeInfo.item.dataField })) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
                                         this._resetWidget(itemRunTimeInfo.widgetInstance);
