@@ -147,7 +147,7 @@ export class ViewProps extends BaseSchedulerProps {
   startDate?: Date | number | string;
 
   @OneWay()
-  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+  type?: ViewType;
 
   @Nested()
   scrolling?: ScrollingProps;
@@ -231,7 +231,7 @@ export class SchedulerProps extends BaseSchedulerProps {
   currentDate?: Date | number | string = new Date();
 
   @TwoWay()
-  currentView?: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
+  currentView?: string | ViewType = 'day';
 
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
@@ -294,8 +294,8 @@ export class SchedulerProps extends BaseSchedulerProps {
   @OneWay()
   useDropDownViewSwitcher?: boolean;
 
-  @Nested()
-  views?: ('day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | ViewProps)[];
+  @OneWay()
+  views?: (ViewType | ViewProps)[];
 
   /* Events */
 
@@ -367,3 +367,14 @@ export class SchedulerProps extends BaseSchedulerProps {
   @OneWay()
   textExpr?: string;
 }
+
+export type ViewType =
+  'day'
+  | 'week'
+  | 'workWeek'
+  | 'month'
+  | 'timelineDay'
+  | 'timelineWeek'
+  | 'timelineWorkWeek'
+  | 'timelineMonth'
+  | 'agenda';

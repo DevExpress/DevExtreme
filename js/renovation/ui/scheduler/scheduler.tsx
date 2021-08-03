@@ -9,7 +9,7 @@ import {
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
-import { SchedulerProps } from './props';
+import { SchedulerProps, ViewProps, ViewType } from './props';
 
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
