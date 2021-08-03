@@ -38,19 +38,11 @@ if(Quill) {
             eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
         }
 
-        // _getContextMenuItems() {
-        //     return [
-        //         { text: 'Download' },
-        //         { text: 'Comment' },
-        //         { text: 'Favorite' }
-        //     ];
-        // }
-
         // _createContentMenu() {
         //     this._contextMenu = this.editorInstance._createComponent(this.editorInstance._getContent(), ContextMenu, {
         //         dataSource: this._getContextMenuItems(),
         //         width: 200,
-        //         target: "table",
+        //         target: 'table',
         //         displayExpr: 'text'
         //     });
         // }
@@ -73,13 +65,33 @@ if(Quill) {
         }
 
         _renderFormPopup() {
+            const that = this;
             const editorInstance = this.options.editorInstance;
             const $container = $('<div>').appendTo(editorInstance.$element());
             const popupConfig = {
                 showTitle: false,
                 shading: false,
                 closeOnTargetScroll: true,
-                closeOnOutsideClick: true
+                closeOnOutsideClick: true,
+                width: 600,
+                height: 300,
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: 'Apply',
+                        onClick: function(e) { /* console.log('Apply'); */ that._formPopup?.hide(); }
+                    }
+                }, {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: 'Cancel',
+                        onClick: function(e) { /* console.log('Cancel'); */ that._formPopup?.hide(); }
+                    }
+                }]
             };
             // type === 'cell' ? this._getCellFormPopupConfig($container) : this._getTableFormPopupConfig($container);
 
@@ -87,8 +99,35 @@ if(Quill) {
         }
 
         _showCellProperties() {
-            this._formPopup.option(this._getCellFormPopupConfig());
+            const formOptions = {
+                formData: {
+                    width: 100,
+                    height: 100
+                },
+                items: [{
+                    itemType: 'group',
+                    caption: 'Dimentions',
+                    colCount: 2,
+                    items: [ 'width', 'height' ]
+                }],
+                // showColonAfterLabel: true,
+                labelLocation: 'top',
+                minColWidth: 300,
+
+            };
+
+            this._formPopup.option('contentTemplate', () => {
+                const $form = $('<div>');
+                // .addClass(SUGGESTION_LIST_CLASS)
+                // .appendTo($container);
+                this._tablePropertiesForm = this.options.editorInstance._createComponent($form, Form, formOptions);
+
+                return $form;
+            });
+
+            this._popup.hide();
             this._formPopup.show();
+
         }
 
         _showTableProperties() {
@@ -97,10 +136,16 @@ if(Quill) {
                     width: 100,
                     height: 100
                 },
-                showColonAfterLabel: true,
+                items: [{
+                    itemType: 'group',
+                    caption: 'Dimentions',
+                    colCount: 2,
+                    items: [ 'width', 'height' ]
+                }],
+                // showColonAfterLabel: true,
                 labelLocation: 'top',
                 minColWidth: 300,
-                colCount: 2
+
             };
 
             this._formPopup.option('contentTemplate', () => {
@@ -108,50 +153,53 @@ if(Quill) {
                 // .addClass(SUGGESTION_LIST_CLASS)
                 // .appendTo($container);
                 this._tablePropertiesForm = this.options.editorInstance._createComponent($form, Form, formOptions);
+
+                return $form;
             });
 
+            this._popup.hide();
             this._formPopup.show();
         }
 
-        _getCellFormPopupConfig($container) {
-            const formOptions = {
-                formData: {
-                    width: 100,
-                    height: 100
-                },
-                showColonAfterLabel: true,
-                labelLocation: 'top',
-                minColWidth: 300,
-                colCount: 2
-            };
+        // _getCellFormPopupConfig($container) {
+        //     const formOptions = {
+        //         formData: {
+        //             width: 100,
+        //             height: 100
+        //         },
+        //         showColonAfterLabel: true,
+        //         labelLocation: 'top',
+        //         minColWidth: 300,
+        //         colCount: 2
+        //     };
 
-            const that = this;
+        //     const that = this;
 
-            return {
-                showTitle: false,
-                shading: false,
-                closeOnTargetScroll: true,
-                closeOnOutsideClick: true,
-                contentTemplate: () => {
-                    const $form = $('<div>')
-                    // .addClass(SUGGESTION_LIST_CLASS)
-                        .appendTo($container);
-                    this._tablePropertiesForm = that.options.editorInstance._createComponent($form, Form, formOptions);
-                }
-            };
-        }
+        //     return {
+        //         showTitle: false,
+        //         shading: false,
+        //         closeOnTargetScroll: true,
+        //         closeOnOutsideClick: true,
+        //         contentTemplate: () => {
+        //             const $form = $('<div>')
+        //             // .addClass(SUGGESTION_LIST_CLASS)
+        //                 .appendTo($container);
+        //             this._tablePropertiesForm = that.options.editorInstance._createComponent($form, Form, formOptions);
+        //         }
+        //     };
+        // }
 
-        _getTableFormPopupConfig() {
-            return {
-                showTitle: false,
-                shading: false,
-                closeOnTargetScroll: true,
-                closeOnOutsideClick: true,
-                contentTemplate: () => {
+        // _getTableFormPopupConfig() {
+        //     return {
+        //         showTitle: false,
+        //         shading: false,
+        //         closeOnTargetScroll: true,
+        //         closeOnOutsideClick: true,
+        //         contentTemplate: () => {
 
-                }
-            };
-        }
+        //         }
+        //     };
+        // }
 
         // _getPopupConfig(type = 'list') {
         //     let contentTemplate;
