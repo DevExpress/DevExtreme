@@ -23,7 +23,8 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
 };
 
 const getAllDayEndDate = startDate => {
-    return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
+    // return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
+    return new Date(new Date(startDate).setDate(startDate.getDate()));
 };
 
 const getStartDateWithStartHour = (startDate, startDayHour) => {
