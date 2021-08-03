@@ -269,7 +269,6 @@ const Overlay = Widget.inherit({
         this._initActions();
         this._initCloseOnOutsideClickHandler();
         this._initTabTerminatorHandler();
-        this._normalizePosition();
 
         this._customWrapperClass = null;
         this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
@@ -598,6 +597,8 @@ const Overlay = Widget.inherit({
         }
         this._currentVisible = true;
         this._isShown = false;
+
+        this._normalizePosition();
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -1235,6 +1236,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometryImpl: function() {
+        this._normalizePosition();
         this._renderWrapper();
         this._renderDimensions();
         this._cacheDimensions();
@@ -1323,7 +1325,7 @@ const Overlay = Widget.inherit({
         const container = this.option('container');
         let positionOf = null;
 
-        if(!container) {
+        if(!container && position) {
             positionOf = isEvent(position.of) ? window : (position.of || window);
         }
 
@@ -1355,7 +1357,7 @@ const Overlay = Widget.inherit({
             });
         } else {
             const position = this._position;
-            this._renderOverlayBoundaryOffset(position);
+            this._renderOverlayBoundaryOffset(position || { boundaryOffset: DEFAULT_BOUNDARY_OFFSET });
 
             resetPosition(this._$content);
 
@@ -1506,7 +1508,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'position':
                 this._positionChangeHandled = false;
-                this._normalizePosition();
                 this._renderGeometry();
                 this._toggleSafariScrolling();
                 break;
@@ -1521,7 +1522,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'target':
                 this._setAnimationTarget(value);
-                this._normalizePosition();
                 this._invalidate();
                 break;
             case 'container':
