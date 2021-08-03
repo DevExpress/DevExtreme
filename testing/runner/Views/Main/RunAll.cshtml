@@ -103,10 +103,6 @@
             }
         })();
 
-        function invoke(methodName, parameters) {
-            $.post(@Html.Raw(Json.Serialize(Url.Action(methodName))), parameters);
-        }
-
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
@@ -354,7 +350,7 @@
                 );
             }
 
-            invoke("NotifyTestStarted", { name: getTestCaseName(testSuite, qunitData) });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -444,7 +440,7 @@
                 );
             }
 
-            invoke("NotifyTestCompleted", { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -459,7 +455,7 @@
 
         window.RUNNER_ON_MISC_ERROR = function(worker, msg) {
             msg = String(worker.location || worker) + ": " + msg;
-            invoke("LogMiscError", { msg: msg });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { msg: msg });
         };
 
         window.onbeforeunload = function(e) {
@@ -487,10 +483,10 @@
         }
 
         function notifySuiteFinalized(name, passed, runtime) {
-            invoke("NotifySuiteFinalized", { name: name, passed: passed, runtime: runtime });
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))), { name: name, passed: passed, runtime: runtime });
         }
         function notifyIsAlive(){
-            invoke("NotifyIsAlive");
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))));
         }
 
         function roundTime(time) {
