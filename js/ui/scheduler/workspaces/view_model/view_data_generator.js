@@ -15,6 +15,8 @@ export class ViewDataGenerator {
 
     get isWorkView() { return false; }
 
+    get tableAllDay() { return false; }
+
     getCompleteViewDataMap(options) {
         const {
             groups,
@@ -344,7 +346,6 @@ export class ViewDataGenerator {
     prepareCellData(options, rowIndex, columnIndex) {
         const {
             groups,
-            tableAllDay,
             startDayHour,
             endDayHour,
             interval,
@@ -364,7 +365,7 @@ export class ViewDataGenerator {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: tableAllDay,
+            allDay: this.tableAllDay,
             groupIndex: 0,
         };
 

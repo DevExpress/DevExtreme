@@ -657,7 +657,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             columnsInDay: 1, // TODO: try to remove
             hiddenInterval: this._hiddenInterval, // TODO: remove
             calculateCellIndex,
-            tableAllDay: this._getTableAllDay(),
             rowCountBase: this._getRowCount(), // TODO: remove
             columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
@@ -916,10 +915,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
     }
 
-    _getTableAllDay() {
-        return false;
-    }
-
     calculateEndDate(startDate) {
         const viewDataGenerator = this.viewDataProvider.viewDataGenerator;
 
@@ -1059,7 +1054,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
             rowCountBase: this._getRowCount(),
             columnCountBase: this._getCellCount(),
-            tableAllDay: this._getTableAllDay(),
             firstDayOfWeek: this._firstDayOfWeek(),
         };
     }

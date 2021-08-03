@@ -14,6 +14,8 @@ const DAYS_IN_WEEK = 7;
 const WEEKS_IN_MONTH = 4;
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
+    get tableAllDay() { return undefined; }
+
     getCellData(rowIndex, columnIndex, options, allDay) {
         const data = super.getCellData(rowIndex, columnIndex, options, false);
 
