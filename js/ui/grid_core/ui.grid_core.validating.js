@@ -1309,7 +1309,7 @@ export const validatingModule = {
             })(),
             data: {
                 _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-                    const cell = oldRow.cells[columnIndex];
+                    const cell = oldRow.cells?.[columnIndex];
                     const oldValidationStatus = cell && cell.validationStatus;
                     const validatingController = this.getController('validating');
                     const validationResult = validatingController.getCellValidationResult({
