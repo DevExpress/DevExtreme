@@ -9,5 +9,4 @@ export type BrowserInfo = {
 }
 
 declare const browser: BrowserInfo;
-
 export default browser;

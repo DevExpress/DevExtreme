@@ -64,6 +64,7 @@ export class ModelProvider {
     }
     get agendaDuration() { return this.model['agendaDuration']; }
     get currentDate() { return this.model['currentDate']; }
+    get timeZone() { return this.model['timeZone']; }
 
     supportAllDayResizing() {
         return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
