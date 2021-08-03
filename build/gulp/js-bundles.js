@@ -54,6 +54,7 @@ function prepareDebugMeta(watch) {
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
+    debugConfig.mode = watch ? 'development' : debugConfig.mode;
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
 
@@ -85,10 +86,6 @@ function createDebugBundlesStream(watch) {
     return task;
 }
 
-gulp.task('js-bundles-debug', gulp.series(
-    createDebugBundlesStream(false)
-));
+gulp.task('js-bundles-debug', createDebugBundlesStream(false));
 
-gulp.task('js-bundles-watch', gulp.parallel(
-    createDebugBundlesStream(true)
-));
+gulp.task('js-bundles-watch', createDebugBundlesStream(true));
