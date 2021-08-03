@@ -50,7 +50,7 @@ class PageSizeSelectorProps extends ExtendedPagerProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent<PageSizeSelectorProps, 'pageSize' | 'pageSizeChange'>() {
+  extends JSXComponent<PageSizeSelectorProps>() {
   @Ref() htmlRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

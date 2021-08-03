@@ -40,7 +40,7 @@ export class PageSizeSmallProps extends PagerProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
-  extends JSXComponent<PageSizeSmallProps, 'pageSizeChange' | 'pageSize' | 'parentRef' | 'pageSizes'>() {
+  extends JSXComponent<PageSizeSmallProps, 'parentRef' | 'pageSizes'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {

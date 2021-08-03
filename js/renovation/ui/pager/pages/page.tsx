@@ -38,7 +38,7 @@ export class PageProps extends PagerProps {
   view: viewFunction,
 })
 
-export class Page extends JSXComponent<PageProps, 'pageSizeChange' | 'pageSize'>() {
+export class Page extends JSXComponent<PageProps>() {
   get label(): string {
     return `Page ${this.value}`;
   }
