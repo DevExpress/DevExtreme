@@ -368,10 +368,8 @@ $generic-texteditor-label-transition:
       }
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        border-top: $border-width $borderStyle $borderColor;
-      }
+    .dx-texteditor-buttons-container {
+      border-top: $border-width $borderStyle $borderColor;
     }
   }
 
@@ -396,10 +394,8 @@ $generic-texteditor-label-transition:
       }
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        border-top: $border-width $borderStyle transparent;
-      }
+    .dx-texteditor-buttons-container {
+      border-top: $border-width $borderStyle transparent;
     }
 
     &.dx-textarea {
@@ -420,19 +416,10 @@ $generic-texteditor-label-transition:
   .dx-texteditor-buttons-container {
     + .dx-texteditor-input-container {
       .dx-texteditor-label {
-        &::after,
         &::before {
           border-radius: 0;
-        }
-
-        &::before {
           padding-left: 1px;
           margin-left: -1px;
-        }
-
-        &::after {
-          padding-right: 1px;
-          margin-right: -1px;
         }
       }
     }
@@ -458,7 +445,7 @@ $generic-texteditor-label-transition:
       box-sizing: border-box;
       margin-top: 0;
       min-width: $generic-base-inline-borderedwidget-horizontal-padding - 2px;
-      height: 1px;
+      height: $texteditor-input-border-radius;
       box-shadow: inset 0 0 transparent;
     }
 
@@ -489,6 +476,11 @@ $generic-texteditor-label-transition:
 
       &.dx-invalid {
         @include dx-state-empty($texteditor-invalid-faded-border-color, solid);
+
+        &.dx-state-focused,
+        &.dx-state-focused.dx-state-hover {
+          border-top-color: transparent;
+        }
       }
 
       &.dx-state-hover {
@@ -542,10 +534,8 @@ $generic-texteditor-label-transition:
         }
       }
 
-      &.dx-texteditor-with-custom-buttons {
-        .dx-texteditor-buttons-container {
-          border-top: 1px solid $texteditor-invalid-faded-border-color;
-        }
+      .dx-texteditor-buttons-container {
+        border-top: 1px solid $texteditor-invalid-faded-border-color;
       }
     }
 
@@ -563,19 +553,29 @@ $generic-texteditor-label-transition:
       overflow: visible;
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        border-top: 1px solid $texteditor-border-color;
-
-        &:first-child {
-          border-radius: $texteditor-input-border-radius 0;
-        }
-
-        &:last-child {
-          border-radius: 0 $texteditor-input-border-radius;
+    &.dx-texteditor-with-after-buttons,
+    &.dx-dropdowneditor:not(.dx-lookup) {
+      .dx-texteditor-label {
+        &::after {
+          border-radius: 0;
+          padding-right: 1px;
+          margin-right: -1px;
         }
       }
     }
+
+    .dx-texteditor-buttons-container {
+      border-top: 1px solid $texteditor-border-color;
+
+      &:first-child {
+        border-radius: $texteditor-input-border-radius 0;
+      }
+
+      &:last-child {
+        border-radius: 0 $texteditor-input-border-radius;
+      }
+    }
+
 
     .dx-texteditor-label {
       width: 100%;

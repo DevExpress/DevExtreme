@@ -512,10 +512,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        box-shadow: inset 0 #{$shadowOffset}px $borderColor;
-      }
+    .dx-texteditor-buttons-container {
+      box-shadow: inset 0 #{$shadowOffset}px $borderColor;
     }
   }
 
@@ -541,10 +539,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        box-shadow: inset 0 #{$shadowOffset}px transparent;
-      }
+    .dx-texteditor-buttons-container {
+      box-shadow: inset 0 #{$shadowOffset}px transparent;
     }
 
     &.dx-textarea {
@@ -562,19 +558,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   .dx-texteditor-buttons-container {
     + .dx-texteditor-input-container {
       .dx-texteditor-label {
-        &::after,
         &::before {
           border-radius: 0;
-        }
-
-        &::before {
           padding-left: 1px;
           margin-left: -1px;
-        }
-
-        &::after {
-          padding-right: 1px;
-          margin-right: -1px;
         }
       }
     }
@@ -600,7 +587,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       box-sizing: border-box;
       margin-top: 0;
       min-width: $material-filled-texteditor-input-horizontal-padding - 4px;
-      min-height: 1px;
+      height: $texteditor-input-border-radius;
       box-shadow: inset 0 0 transparent;
     }
 
@@ -694,10 +681,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         }
       }
 
-      &.dx-texteditor-with-custom-buttons {
-        .dx-texteditor-buttons-container {
-          box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
-        }
+      .dx-texteditor-buttons-container {
+        box-shadow: inset 0 1px $texteditor-invalid-faded-border-color;
       }
     }
 
@@ -706,17 +691,26 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       overflow: visible;
     }
 
-    &.dx-texteditor-with-custom-buttons {
-      .dx-texteditor-buttons-container {
-        box-shadow: inset 0 1px $texteditor-border-color;
-
-        &:first-child {
-          border-radius: $texteditor-input-border-radius 0;
+    &.dx-texteditor-with-after-buttons,
+    &.dx-dropdowneditor:not(.dx-lookup) {
+      .dx-texteditor-label {
+        &::after {
+          border-radius: 0;
+          padding-right: 1px;
+          margin-right: -1px;
         }
+      }
+    }
 
-        &:last-child {
-          border-radius: 0 $texteditor-input-border-radius;
-        }
+    .dx-texteditor-buttons-container {
+      box-shadow: inset 0 1px $texteditor-border-color;
+
+      &:first-child {
+        border-radius: $texteditor-input-border-radius 0;
+      }
+
+      &:last-child {
+        border-radius: 0 $texteditor-input-border-radius;
       }
     }
 

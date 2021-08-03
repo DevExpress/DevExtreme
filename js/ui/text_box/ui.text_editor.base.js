@@ -449,11 +449,11 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function(container) {
-        const TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS = 'dx-texteditor-with-custom-buttons';
+        const TEXTEDITOR_WITH_AFTER_BUTTONS_CLASS = 'dx-texteditor-with-after-buttons';
         const $container = container || this.$element();
 
-        if(this._$label && $container.find('.' + TEXTEDITOR_LABEL_CLASS).length === 1) {
-            $('.' + TEXTEDITOR_LABEL_CLASS).first().remove();
+        if(!this.label && $container.find('.' + TEXTEDITOR_LABEL_CLASS).length === 1 || $container.find('.' + TEXTEDITOR_LABEL_CLASS).length === 2) {
+            this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).first().remove();
         }
 
         if(this._$label) {
@@ -464,7 +464,7 @@ const TextEditorBase = Editor.inherit({
         this.$element()
             .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
             .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
+            .removeClass(TEXTEDITOR_WITH_AFTER_BUTTONS_CLASS);
 
         if(!this.option('label') || this.option('labelMode') === 'hidden') return;
 
@@ -482,8 +482,8 @@ const TextEditorBase = Editor.inherit({
             $label.appendTo($textEditorInputContainer);
 
 
-        if((this._$beforeButtonsContainer || this._$afterButtonsContainer) && this.option('stylingMode') === 'outlined') {
-            this.$element().addClass(TEXTEDITOR_WITH_CUSTOM_BUTTONS_CLASS);
+        if(this.option('stylingMode') === 'outlined' && this._$afterButtonsContainer) {
+            this.$element().addClass(TEXTEDITOR_WITH_AFTER_BUTTONS_CLASS);
         }
     },
 

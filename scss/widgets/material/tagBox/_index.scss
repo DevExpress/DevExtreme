@@ -37,11 +37,9 @@
           }
         }
 
-        &.dx-texteditor-with-custom-buttons {
-          .dx-texteditor-label::before {
-            padding-left: 4px;
-            margin-left: -4px;
-          }
+        .dx-texteditor-label::before {
+          padding-left: 4px;
+          margin-left: -4px;
         }
 
         &.dx-rtl {
@@ -50,16 +48,19 @@
             padding-left: 0;
           }
 
-          &.dx-texteditor-with-custom-buttons {
-            .dx-texteditor-label {
-              &::before {
-                padding-right: 4px;
-                padding-left: 1px;
-                margin-right: -4px;
-                margin-left: -1px;
-              }
-            }
+
+          .dx-texteditor-label::before {
+            padding-right: 4px;
+            padding-left: 1px;
+            margin-right: -4px;
+            margin-left: -1px;
           }
+        }
+      }
+
+      &.dx-invalid.dx-show-invalid-badge {
+        .dx-texteditor-input-container::after {
+          margin-top: math.div(-$material-texteditor-font-size, 3);
         }
       }
     }
