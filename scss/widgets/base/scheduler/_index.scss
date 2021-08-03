@@ -30,6 +30,7 @@ $agenda-appointment-title-font-size: null !default;
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
 
+@use "./layout/header" as *;
 @use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -121,8 +122,6 @@ $scheduler-current-time-cell-border-size: 2px;
 $scheduler-timeline-min-height: 100px;
 
 $scheduler-appointment-form-label-padding: 20px;
-
-$arrow-down: "\f016";
 
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
@@ -554,25 +553,7 @@ $arrow-down: "\f016";
   }
 
   .dx-scheduler-header {
-    border: $scheduler-base-border;
-    position: relative;
-    z-index: 1;
-    width: 100%;
-
-    .dx-toolbar {
-      height: 100%;
-      background-color: transparent;
-
-      .dx-toolbar-items-container {
-        height: 100%;
-      }
-
-      .dx-toolbar-menu-container {
-        .dx-icon::before {
-          content: $arrow-down;
-        }
-      }
-    }
+    @include header-base($scheduler-base-border);
   }
 
   .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {

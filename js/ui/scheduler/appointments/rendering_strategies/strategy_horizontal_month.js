@@ -7,13 +7,19 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
+    get dateTableOffset() { return this.options.dateTableOffset; }
+    get endViewDate() { return this.options.endViewDate; }
+    get getGroupWidthCallback() { return this.options.getGroupWidthCallback; }
+    get adaptivityEnabled() { return this.options.adaptivityEnabled; }
+
     _getLeftPosition(settings) {
         const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
 
         let result = this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
 
-        if(this.instance._groupOrientation === 'vertical') {
-            result += this.instance.fire('getWorkSpaceDateTableOffset');
+        // TODO get rid of this after rework date table layout
+        if(this.isVerticalOrientation) {
+            result += this.dateTableOffset;
         }
 
         return result;
@@ -47,7 +53,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
         const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
         const leftPosition = this._getLeftPosition(settings);
 
-        const hasTailChunk = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
+        const hasTailChunk = this.endViewDate > settings.info.appointment.endDate;
         const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
 
         const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
@@ -76,9 +82,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
-        this._maxFullWeekAppointmentWidth = this.instance.fire('getFullWeekAppointmentWidth', {
-            groupIndex: groupIndex,
-        });
+        this._maxFullWeekAppointmentWidth = this.getGroupWidthCallback(groupIndex);
 
         return this._maxFullWeekAppointmentWidth;
     }
@@ -116,7 +120,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     }
 
     getDropDownAppointmentWidth(intervalCount) {
-        if(this.instance.fire('isAdaptive')) {
+        if(this.adaptivityEnabled) {
             return this.getDropDownButtonAdaptiveSize();
         }
         const offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;

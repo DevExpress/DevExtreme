@@ -34,8 +34,6 @@ import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
-import ResizeObserver from './resize_observer';
-import { compare as compareVersions } from '../../core/utils/version';
 const ready = readyCallbacks.add;
 const window = getWindow();
 const viewPortChanged = changeCallback;
@@ -211,8 +209,7 @@ const Overlay = Widget.inherit({
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
-            _fixWrapperPosition: false,
-            _observeContentResize: true
+            _fixWrapperPosition: false
         });
     },
 
@@ -226,17 +223,6 @@ const Overlay = Widget.inherit({
                 height: null,
                 animation: null,
                 _checkParentVisibility: false
-            }
-        }, {
-            device: function() {
-                const device = devices.real();
-                const platform = device.platform;
-                const version = device.version;
-                return platform === 'ios' && compareVersions(version, '13.3') <= 0
-                    || platform === 'android' && compareVersions(version, '4.4.4') <= 0;
-            },
-            options: {
-                _observeContentResize: false
             }
         }]);
     },
@@ -292,7 +278,6 @@ const Overlay = Widget.inherit({
             handler: (e => { this._targetParentsScrollHandler(e); })
         };
 
-        this._initResizeObserver();
         this._updateResizeCallbackSkipCondition();
     },
 
@@ -369,19 +354,6 @@ const Overlay = Widget.inherit({
         };
     },
 
-    _initResizeObserver: function() {
-        if(!this.option('_observeContentResize')) {
-            return;
-        }
-
-        this._resizeObserver = new ResizeObserver({
-            callback: () => {
-                this._renderGeometry({ shouldOnlyReposition: true });
-            },
-            shouldSkipCallback: (entries) => this._shouldSkipResizeCallback(entries)
-        });
-    },
-
     _areContentDimensionsRendered: function(entries) {
         const contentBox = entries[0].contentBoxSize?.[0];
         if(contentBox) {
@@ -394,12 +366,25 @@ const Overlay = Widget.inherit({
                 && parseInt(contentRect.height, 10) === this._renderedDimensions?.height;
     },
 
+    _resizeObserverCallback(entries) {
+        entries.forEach(entry => {
+            if(entry.target === this._$content.get(0)) {
+                this._renderGeometry({ shouldOnlyReposition: true });
+            }
+        });
+    },
+
     _updateResizeCallbackSkipCondition() {
         const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
 
-        this._shouldSkipResizeCallback = (entries) => {
-            return doesShowAnimationChangeDimensions && this._showAnimationProcessing
-                || this._areContentDimensionsRendered(entries);
+        this._shouldSkipResizeObserverCallback = (entries) => {
+            for(let i = 0; i < entries.length; ++i) {
+                const entry = entries[i];
+                if(entry.target === this._$content.get(0)) {
+                    return doesShowAnimationChangeDimensions && this._showAnimationProcessing
+                        || this._areContentDimensionsRendered(entries);
+                }
+            }
         };
     },
 
@@ -413,7 +398,7 @@ const Overlay = Widget.inherit({
     },
 
     _observeContentResize: function(shouldObserve) {
-        if(!this.option('_observeContentResize')) {
+        if(!this.option('useResizeObserver')) {
             return;
         }
 
@@ -1203,11 +1188,11 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometry: function(options) {
-        const { visible, _observeContentResize } = this.option();
+        const { visible, useResizeObserver } = this.option();
 
         if(visible && hasWindow()) {
             const isAnimated = this._showAnimationProcessing;
-            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && _observeContentResize;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
             this._stopAnimation();
@@ -1225,7 +1210,7 @@ const Overlay = Widget.inherit({
     },
 
     _cacheDimensions: function() {
-        if(!this.option('_observeContentResize')) {
+        if(!this.option('useResizeObserver')) {
             return;
         }
 
@@ -1444,9 +1429,6 @@ const Overlay = Widget.inherit({
     },
 
     _dispose: function() {
-        this._resizeObserver?.disconnect();
-        this._resizeObserver = undefined;
-
         fx.stop(this._$content, false);
         clearTimeout(this._deferShowTimer);
 
@@ -1548,7 +1530,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'closeOnOutsideClick':
             case 'propagateOutsideClick':
-            case '_observeContentResize':
                 break;
             case 'animation':
                 this._updateResizeCallbackSkipCondition();
