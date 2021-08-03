@@ -103,6 +103,10 @@
             }
         })();
 
+        function invoke(methodName, parameters) {
+            $.post(@Html.Raw(Json.Serialize(Url.Action(methodName))), parameters);
+        }
+
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
@@ -349,6 +353,8 @@
                     new Error().stack
                 );
             }
+
+            invoke("NotifyTestStarted", { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -437,6 +443,8 @@
                     new Error().stack
                 );
             }
+
+            invoke("NotifyTestCompleted", { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -451,7 +459,7 @@
 
         window.RUNNER_ON_MISC_ERROR = function(worker, msg) {
             msg = String(worker.location || worker) + ": " + msg;
-            $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { msg: msg });
+            invoke("LogMiscError", { msg: msg });
         };
 
         window.onbeforeunload = function(e) {
@@ -479,12 +487,10 @@
         }
 
         function notifySuiteFinalized(name, passed, runtime) {
-            var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
-            $.post(url, { name: name, passed: passed, runtime: runtime });
+            invoke("NotifySuiteFinalized", { name: name, passed: passed, runtime: runtime });
         }
         function notifyIsAlive(){
-            var url = @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive")));
-            $.post(url);
+            invoke("NotifyIsAlive");
         }
 
         function roundTime(time) {
