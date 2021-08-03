@@ -51,10 +51,6 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    createAppointmentSettings: function(appointment) {
-        return this._getAppointmentSettingsGenerator(appointment).create();
-    },
-
     isGroupedByDate: function() { // TODO replace with ModelProvider
         return this.getWorkSpace().isGroupedByDate();
     },
