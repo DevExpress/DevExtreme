@@ -11,7 +11,7 @@ import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '../../data/utils';
 import formatHelper from '../../format_helper';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
@@ -189,15 +189,13 @@ export default {
                 shading: false,
                 message: loadPanelOptions.text,
                 position: function() {
-                    if(hasWindow()) {
-                        const $window = $(getWindow());
-                        if($element.height() > $window.height()) {
-                            return {
-                                of: $window,
-                                boundary: $element,
-                                collision: 'fit'
-                            };
-                        }
+                    const $window = $(getWindow());
+                    if($element.height() > $window.height()) {
+                        return {
+                            of: $window,
+                            boundary: $element,
+                            collision: 'fit'
+                        };
                     }
                     return { of: $element };
                 },
