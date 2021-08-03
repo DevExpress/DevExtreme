@@ -511,7 +511,7 @@ const Scrollable = DOMComponent.inherit({
                 : leftPosition;
 
             if(this._isRtlNativeStrategy()) {
-                scrollPosition.left += this.container().offsetWidth - this.container.clientWidth;
+                scrollPosition.left += this.container().offsetWidth - this.container().clientWidth;
             }
         }
         if(direction !== HORIZONTAL) {
