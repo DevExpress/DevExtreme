@@ -21,11 +21,16 @@ export interface ScrollOffset {
 }
 
 export interface DxMouseEvent extends MouseEvent {
-  originalEvent: DxMouseEvent;
-  delta: number;
+  originalEvent: MouseEvent;
+  delta: { x: number; y: number };
   isScrollingEvent: boolean;
   cancel: boolean;
   velocity: { x: number; y: number };
+}
+
+export interface DxMouseWheelEvent extends MouseEvent {
+  originalEvent: MouseEvent;
+  delta: number;
 }
 
 export interface DxKeyboardEvent extends KeyboardEvent {

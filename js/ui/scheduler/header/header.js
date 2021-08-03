@@ -21,6 +21,8 @@ import {
     getNextIntervalDate,
     validateViews,
     getStep,
+    getViewType,
+    nextWeek,
 } from './utils';
 
 const DEFAULT_ELEMENT = 'defaultElement';
@@ -38,12 +40,8 @@ export class SchedulerHeader extends Widget {
         return this.option('views');
     }
 
-    get date() {
-        return this.option('displayedDate') || this.option('currentDate');
-    }
-
     get captionText() {
-        return this._getCaption(this.date).text;
+        return this._getCaption().text;
     }
 
     get intervalOptions() {
@@ -66,8 +64,7 @@ export class SchedulerHeader extends Widget {
             [
                 ['items', [this.repaint.bind(this)]],
                 ['views', [validateViews]],
-                ['currentDate', [this._getCalendarDateUpdater()]],
-                ['displayedDate', [this._getCalendarDateUpdater()]],
+                ['currentDate', [this._getCalendarOptionUpdater('date')]],
                 ['min', [this._getCalendarOptionUpdater('min')]],
                 ['max', [this._getCalendarOptionUpdater('max')]],
                 ['tabIndex', [this.repaint.bind(this)]],
@@ -181,7 +178,7 @@ export class SchedulerHeader extends Widget {
 
     _renderCalendar() {
         this._calendar = this._createComponent('<div>', SchedulerCalendar, {
-            date: this.date,
+            date: this.option('currentDate'),
             min: this.option('min'),
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -206,16 +203,6 @@ export class SchedulerHeader extends Widget {
         };
     }
 
-    _getCalendarDateUpdater() {
-        return () => {
-            if(this._calendar) {
-                const date = this.date;
-
-                this._calendar.option('date', date);
-            }
-        };
-    }
-
     _getNextDate(direction, initialDate = null) {
         const date = initialDate || this.option('currentDate');
         const options = { ...this.intervalOptions, date };
@@ -223,7 +210,28 @@ export class SchedulerHeader extends Widget {
         return getNextIntervalDate(options, direction);
     }
 
-    _getCaption(date) {
+    _isMonth() {
+        const currentView = this.option('currentView');
+        return getViewType(currentView) === 'month';
+    }
+
+    _getDisplayedDate() {
+        const startViewDate = this.option('startViewDate');
+
+        if(this._isMonth()) {
+            return nextWeek(startViewDate);
+        }
+
+        return new Date(startViewDate);
+    }
+
+    _getCaption() {
+        let date = this.option('currentDate');
+
+        if(this.option('startViewDate')) {
+            date = this._getDisplayedDate();
+        }
+
         const options = { ...this.intervalOptions, date };
         const customizationFunction = this.option('customizeDateNavigatorText');
         const useShortDateFormat = this.option('_useShortDateFormat');

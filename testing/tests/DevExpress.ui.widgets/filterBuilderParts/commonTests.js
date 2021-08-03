@@ -410,6 +410,25 @@ QUnit.module('Rendering', function() {
         // assert
         assert.notOk($container.find('.' + FILTER_BUILDER_OVERLAY_CLASS).dxPopup('instance').option('target'), 'popup target shoud not be set');
     });
+
+    QUnit.test('Menu wrapper has filter builder overlay class', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        $container.dxFilterBuilder({
+            value: ['Weight', '=', 3.14],
+            fields: [{
+                dataField: 'Weight',
+                dataType: 'number'
+            }]
+        });
+
+        // act
+        $('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger('dxclick');
+
+        // assert
+        assert.ok($('.dx-overlay-wrapper').hasClass(FILTER_BUILDER_OVERLAY_CLASS), 'overlay wrapper class');
+    });
 });
 
 QUnit.module('Filter value', function() {
