@@ -55,7 +55,6 @@ import SchedulerWorkSpaceWeek from './workspaces/ui.scheduler.work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_work_week';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { AppointmentTooltipInfo } from './dataStructures';
-import { AppointmentSettingsGenerator } from './appointments/settingsGenerator';
 import { utils } from './utils';
 import {
     createFactoryInstances,
@@ -481,37 +480,6 @@ class Scheduler extends Widget {
                 }
             }
         ]);
-    }
-
-    _getAppointmentSettingsGenerator(rawAppointment) {
-        const workspace = this.getWorkSpace();
-
-        return new AppointmentSettingsGenerator({
-            key: this.key,
-            rawAppointment,
-            timeZoneCalculator: getTimeZoneCalculator(this.key),
-            resourceManager: getResourceManager(this.key),
-            appointmentTakesAllDay: this.appointmentTakesAllDay(rawAppointment),
-            timeZone: this.option('timeZone'),
-            firstDayOfWeek: this.getFirstDayOfWeek(),
-            viewStartDayHour: this._getCurrentViewOption('startDayHour'),
-            viewEndDayHour: this._getCurrentViewOption('endDayHour'),
-            isVirtualScrolling: this.isVirtualScrolling(),
-            viewType: workspace.type,
-            endViewDate: workspace.getEndViewDate(),
-            positionHelper: workspace.positionHelper,
-            isGroupedByDate: workspace.isGroupedByDate(),
-            cellDuration: workspace.getCellDuration(),
-            viewDataProvider: workspace.viewDataProvider,
-            supportAllDayRow: workspace.supportAllDayRow(),
-            dateRange: workspace.getDateRange(),
-            intervalDuration: workspace.getIntervalDuration(),
-            isVerticalOrientation: workspace.isVerticalOrientation(),
-            allDayIntervalDuration: workspace.getIntervalDuration(true),
-            isSkippedDataCallback: workspace._isSkippedData.bind(workspace),
-            getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
-            DOMMetaData: workspace.getDOMElementsMetaData(),
-        });
     }
 
     _postponeDataSourceLoading(promise) {

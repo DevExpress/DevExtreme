@@ -12,9 +12,7 @@ export class ScrollableWrapper extends Component {
 
   update(): unknown {
     (this.viewRef as Scrollable).updateHandler();
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return new (Deferred as any)().resolve();
+    return Deferred().resolve();
   }
 
   _visibilityChanged(): void {}
@@ -28,7 +26,8 @@ export class ScrollableWrapper extends Component {
   }
 
   _moveIsAllowed(event: DxMouseEvent): boolean {
-    return (this.viewRef as Scrollable).scrollableRef.moveIsAllowed(event) as boolean;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return (this.viewRef as Scrollable).scrollableRef.moveIsAllowed(event);
   }
 
   _prepareDirections(value: boolean): void {
