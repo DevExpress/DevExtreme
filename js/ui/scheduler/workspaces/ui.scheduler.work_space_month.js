@@ -7,7 +7,6 @@ import { getBoundingRect } from '../../../core/utils/position';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     getViewStartByOptions,
-    calculateCellIndex,
     getCellText,
 } from './utils/month';
 import { calculateDayDuration, formatWeekday } from './utils/base';
@@ -46,7 +45,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             ...super._getDateGenerationOptions(),
             columnsInDay: 1,
             cellCountInDay: 1,
-            calculateCellIndex,
         };
     }
 
@@ -56,7 +54,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return {
             ...options,
             columnsInDay: 1,
-            calculateCellIndex,
         };
     }
 

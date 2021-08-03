@@ -60,7 +60,6 @@ import {
     getFirstDayOfWeek,
     calculateViewStartDate,
     getViewStartByOptions,
-    calculateCellIndex,
     validateDayHours,
     getStartViewDateTimeOffset,
     isDateAndTimeView,
@@ -655,7 +654,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             firstDayOfWeek: this._firstDayOfWeek(),
 
             columnsInDay: 1, // TODO: try to remove
-            calculateCellIndex,
             rowCountBase: this._getRowCount(), // TODO: remove
             columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
