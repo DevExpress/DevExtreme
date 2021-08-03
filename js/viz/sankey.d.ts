@@ -19,7 +19,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -50,7 +49,7 @@ export type ExportedEvent = EventInfo<dxSankey>;
 export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
 /** @public */
-export type FileSavingEvent = Cancelable & FileSavingEventInfo<dxSankey>;
+export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
 
 /** @public */
 export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;

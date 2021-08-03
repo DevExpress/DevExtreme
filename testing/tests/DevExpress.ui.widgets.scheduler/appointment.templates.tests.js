@@ -3,16 +3,21 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import {
     initTestMarkup,
-    createWrapper
+    createWrapper,
+    asyncWrapper,
+    execAsync
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
 const {
-    module,
-    test
+    module
 } = QUnit;
+
+const test = (description, callback) => {
+    return QUnit.test(description, sinon.test(callback));
+};
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -278,7 +283,7 @@ module('Integration: Appointment templates', {
     });
 
     module('appointmentTooltipTemplate', () => {
-        const cases = [
+        [
             {
                 data: commonData,
                 appointmentTooltip: createTestForCommonData,
@@ -289,55 +294,102 @@ module('Integration: Appointment templates', {
                 appointmentTooltip: createTestForRecurrenceData,
                 name: 'recurrence'
             },
-            {
-                data: recurrenceAndCompactData,
-                appointmentTooltip: createTestForRecurrenceData,
-                name: 'recurrence in collector',
-                testCollector: true
-            },
-            {
-                data: hourlyRecurrenceData,
-                options: {
-                    textExpr: 'textCustom',
-                    startDateExpr: 'startDateCustom',
-                    endDateExpr: 'endDateCustom',
-                    currentView: 'week'
-                },
-                appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector',
-                testCollector: true
-            },
-            {
-                data: hourlyRecurrenceData,
-                options: {
-                    textExpr: 'textCustom',
-                    startDateExpr: 'startDateCustom',
-                    endDateExpr: 'endDateCustom',
-                    currentView: 'week',
-                    timeZone: 'Africa/Bangui', // NOTE: +1
-                    startDayHour: 0,
-                    endDayHour: 24
-                },
-                appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector, custom timezone is set',
-                testCollector: true
-            }
-        ];
-
-        cases.forEach(testCase => {
-            test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
+        ].forEach(testCase => {
+            test(`Appointment click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, function(assert) {
                 const scheduler = createScheduler(testCase.data, testCase.options);
-                scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
+                const DoubleClickTimeout = 300;
+                const appointmentAmount = 5;
 
-                for(let i = 0; i < 5; i++) {
-                    if(testCase.testCollector) {
-                        scheduler.appointments.compact.click(i);
-                    } else {
-                        scheduler.appointments.click(i);
+                scheduler.option(
+                    'appointmentTooltipTemplate',
+                    testCase.appointmentTooltip(assert, scheduler, true)
+                );
+
+                this.clock.restore();
+
+                return asyncWrapper(assert, promise => {
+                    for(let i = 0; i < appointmentAmount; ++i) {
+                        promise = execAsync(
+                            assert,
+                            promise,
+                            null,
+                            () => {
+                                scheduler.appointments.click(i, true);
+
+                                assert.strictEqual(eventCallCount, i, `appointmentTemplate raised ${i} times`);
+                            },
+                            DoubleClickTimeout,
+                        );
                     }
-                }
 
-                assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
+                    return promise;
+                });
+            });
+        });
+
+        [{
+            data: recurrenceAndCompactData,
+            appointmentTooltip: createTestForRecurrenceData,
+            name: 'recurrence in collector',
+            testCollector: true
+        },
+        {
+            data: hourlyRecurrenceData,
+            options: {
+                textExpr: 'textCustom',
+                startDateExpr: 'startDateCustom',
+                endDateExpr: 'endDateCustom',
+                currentView: 'week'
+            },
+            appointmentTooltip: createTestForHourlyRecurrenceData,
+            name: 'hourly recurrence in collector',
+            testCollector: true
+        },
+        {
+            data: hourlyRecurrenceData,
+            options: {
+                textExpr: 'textCustom',
+                startDateExpr: 'startDateCustom',
+                endDateExpr: 'endDateCustom',
+                currentView: 'week',
+                timeZone: 'Africa/Bangui', // NOTE: +1
+                startDayHour: 0,
+                endDayHour: 24
+            },
+            appointmentTooltip: createTestForHourlyRecurrenceData,
+            name: 'hourly recurrence in collector, custom timezone is set',
+            testCollector: true
+        }].forEach(testCase => {
+            test(`Appointment tooltip click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, function(assert) {
+                const scheduler = createScheduler(testCase.data, testCase.options);
+                const doubleClickTimeout = 300;
+                const appointmentAmount = 5;
+
+                scheduler.option(
+                    'appointmentTooltipTemplate',
+                    testCase.appointmentTooltip(assert, scheduler)
+                );
+
+                this.clock.restore();
+
+                return asyncWrapper(assert, promise => {
+                    for(let i = 0; i < appointmentAmount; ++i) {
+                        promise = execAsync(
+                            assert,
+                            promise,
+                            null,
+                            () => {
+                                scheduler.appointments.compact.click(i);
+
+                                const callCount = i + 1;
+                                assert.strictEqual(eventCallCount, callCount, `appointmentTemplate raised ${callCount} times`);
+                            },
+                            doubleClickTimeout,
+                        );
+                    }
+
+                    return promise;
+                });
             });
         });
     });

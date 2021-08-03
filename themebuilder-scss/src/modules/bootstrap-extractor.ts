@@ -13,8 +13,11 @@ export default class BootstrapExtractor {
 
   input: string;
 
+  version: number;
+
   constructor(source: string, version: number) {
     this.input = source;
+    this.version = version;
     if (version === 3) {
       this.compiler = BootstrapExtractor.lessRender;
       this.sourceProcessor = this.lessProcessor;
@@ -22,13 +25,8 @@ export default class BootstrapExtractor {
     } else {
       this.compiler = BootstrapExtractor.sassRender;
       this.sourceProcessor = this.sassProcessor;
-      this.meta = bootstrap4meta;
+      this.meta = bootstrap4meta; // suitable for 4 and 5
     }
-  }
-
-  static async readSassFile(fileName: string): Promise<string> {
-    const path = require.resolve(`bootstrap/scss/${fileName}`);
-    return fs.readFile(path, 'utf8');
   }
 
   static async sassRender(input: string): Promise<string> {
@@ -59,9 +57,14 @@ export default class BootstrapExtractor {
     return cssValue.replace(remValueRegex, replaceHandler);
   }
 
+  async readSassFile(fileName: string): Promise<string> {
+    const path = require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    return fs.readFile(path, 'utf8');
+  }
+
   async sassProcessor(): Promise<string> {
-    const functions = await BootstrapExtractor.readSassFile('_functions.scss');
-    const variables = await BootstrapExtractor.readSassFile('_variables.scss');
+    const functions = await this.readSassFile('_functions.scss');
+    const variables = await this.readSassFile('_variables.scss');
     return functions
       + this.input
       + variables

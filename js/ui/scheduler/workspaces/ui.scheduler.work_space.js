@@ -482,7 +482,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _headerScrollableConfig() {
         const config = {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'horizontal',
             useNative: false,
             updateManually: true,
@@ -609,10 +609,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     onDataSourceChanged() {
-    }
-
-    preRenderAppointments(options) {
-        this.option('allDayExpanded', options.allDayExpanded);
     }
 
     isGroupedAllDayPanel() {
@@ -2337,10 +2333,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleGroupByDateClass();
     }
 
-    _initGroupedStrategy() {
-        const strategyName = this.option('groups').length ? this.option('groupOrientation') : this._getDefaultGroupStrategy();
+    isVerticalOrientation() {
+        const orientation = this.option('groups').length
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
-        const Strategy = strategyName === 'vertical' ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        return orientation === 'vertical';
+    }
+
+    _initGroupedStrategy() {
+        const Strategy = this.isVerticalOrientation()
+            ? VerticalGroupedStrategy
+            : HorizontalGroupedStrategy;
 
         this._groupedStrategy = new Strategy(this);
     }
@@ -2470,7 +2474,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'vertical',
             useNative: false,
             updateManually: true,

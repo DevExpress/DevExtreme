@@ -19,7 +19,7 @@ import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
-import getElementComputedStyle from '../../../utils/get_computed_style';
+import { getElementComputedStyle } from '../utils/get_element_computed_style';
 import {
   ScrollableSimulated as Scrollable,
 } from '../scrollable_simulated';
@@ -34,7 +34,7 @@ import {
 } from './utils';
 
 import { ScrollableTestHelper } from './scrollable_simulated_test_helper';
-import { DxKeyboardEvent, DxMouseEvent } from '../types';
+import { DxKeyboardEvent, DxMouseEvent, DxMouseWheelEvent } from '../types';
 import { AnimatedScrollbar } from '../animated_scrollbar';
 
 jest.mock('../../../../core/devices', () => {
@@ -42,6 +42,14 @@ jest.mock('../../../../core/devices', () => {
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
   return actualDevices;
 });
+
+jest.mock('../utils/get_element_computed_style', () => ({
+  ...jest.requireActual('../utils/get_element_computed_style'),
+  getElementComputedStyle: jest.fn(() => ({
+    paddingBottom: '8px',
+  })),
+}));
+
 jest.mock('../../../utils/get_computed_style');
 
 describe('Simulated > View', () => {
@@ -671,9 +679,9 @@ describe('Simulated > Behavior', () => {
             ? direction
             : undefined;
 
-          const event = { ...defaultEvent, shiftKey } as unknown as DxMouseEvent;
+          const event = { ...defaultEvent, shiftKey };
           if (isDxWheelEvent) {
-            (event as any).type = 'dxmousewheel';
+            event.type = 'dxmousewheel';
           }
 
           if (isDxWheelEvent) {
@@ -683,7 +691,9 @@ describe('Simulated > Behavior', () => {
             }
           }
 
-          expect(helper.viewModel.tryGetAllowedDirection(event)).toBe(expectedDirectionResult);
+          expect(helper.viewModel
+            .tryGetAllowedDirection(event as unknown as DxMouseWheelEvent))
+            .toBe(expectedDirectionResult);
         });
 
       each([-1, 1]).describe('wheelDelta: %o', (delta) => {
@@ -693,7 +703,7 @@ describe('Simulated > Behavior', () => {
               each([undefined, 0, 54]).describe('animationScrollbar.reachedMax: %o', (validateWheelTimer) => {
                 it('validateWheel(event)', () => {
                   const viewModel = new Scrollable({ direction });
-                  const event = { ...defaultEvent, delta } as unknown as DxMouseEvent;
+                  const event = { ...defaultEvent, delta } as unknown as DxMouseWheelEvent;
 
                   viewModel.wheelDirection = jest.fn(() => wheelDirection);
                   viewModel.validateWheelTimer = validateWheelTimer;
@@ -742,7 +752,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: true } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: true } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'horizontal' : direction);
         });
 
@@ -750,7 +760,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: false } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: false } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'vertical' : direction);
         });
       });

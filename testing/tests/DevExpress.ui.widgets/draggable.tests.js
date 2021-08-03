@@ -1789,32 +1789,37 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         assert.equal($('#scrollable').scrollLeft(), 0, 'scrollLeft');
     });
 
-    QUnit.test('Scrolling with scrollView', function(assert) {
-    // arrange
-        const scrollView = $('#scrollable').dxScrollView({
-            direction: 'both',
-            useNative: false
-        }).dxScrollView('instance');
+    [false, true].forEach((isOverlay) => {
+        QUnit.test(`Scrolling with scrollView${isOverlay ? ' inside overlay' : ''}`, function(assert) {
+            // arrange
+            $('body').toggleClass('dx-overlay-content', isOverlay); // T1015060
+            const scrollView = $('#scrollable').dxScrollView({
+                direction: 'both',
+                useNative: false
+            }).dxScrollView('instance');
 
-        this.createDraggable({
-            scrollSensitivity: 10,
-            scrollSpeed: 20
+            this.createDraggable({
+                scrollSensitivity: 10,
+                scrollSpeed: 20
+            });
+
+            // act, assert
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
+
+            this.pointer.down().move(240, 240);
+
+            this.pointer.move(1, 1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            this.pointer.move(-1, -1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            $('body').removeClass('dx-overlay-content');
         });
-
-        // act, assert
-        assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
-
-        this.pointer.down().move(240, 240);
-
-        this.pointer.move(1, 1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
-
-        this.pointer.move(-1, -1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
     });
 
     QUnit.test('Autoscroll should work fine if element was dropped and dragged again', function(assert) {

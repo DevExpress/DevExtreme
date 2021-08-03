@@ -41,25 +41,27 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxOverlay({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                _observeContentResize: false
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 11);
+        assert.measureStyleRecalculation(measureFunction, 10);
     });
 
     QUnit.performanceTest(`showing dxOverlay with shading=${shading} should be with minimum count of relayouts`, function(assert) {
         const overlay = $('#element').dxOverlay({
             shading,
             visible: false,
-            animation: null
+            animation: null,
+            _observeContentResize: false
         }).dxOverlay('instance');
 
         const measureFunction = function() {
             overlay.show();
         };
 
-        assert.measureStyleRecalculation(measureFunction, 9);
+        assert.measureStyleRecalculation(measureFunction, 8);
     });
 
 
@@ -68,7 +70,8 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxPopup({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                _observeContentResize: false
             });
         };
 

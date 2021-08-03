@@ -83,6 +83,7 @@ class Gantt extends Widget {
         this._ganttView?._ganttViewCore.cleanMarkup();
         delete this._ganttView;
         delete this._dialogInstance;
+        delete this._loadPanel;
         super._clean();
     }
     _refresh() {
@@ -102,6 +103,7 @@ class Gantt extends Widget {
     _renderTreeList() {
         this._ganttTreeList = new GanttTreeList(this);
         this._treeList = this._ganttTreeList.getTreeList();
+        this._ganttTreeList.onAfterTreeListCreate();
     }
     _renderSplitter() {
         this._splitter = this._createComponent(this._$splitter, SplitterControl, {
@@ -175,26 +177,25 @@ class Gantt extends Widget {
     _refreshDataSource(name) {
         let dataOption = this[`_${name}Option`];
         if(dataOption) {
-            dataOption._disposeDataSource();
+            dataOption.dispose();
             delete this[`_${name}Option`];
             delete this[`_${name}`];
         }
-        if(this.option(`${name}.dataSource`)) {
-            dataOption = new DataOption(name, this._getLoadPanel(), (name, data) => {
-                this._dataSourceChanged(name, data);
-            });
-            dataOption.option('dataSource', this._getSpecificDataSourceOption(name));
-            dataOption._refreshDataSource();
-            this[`_${name}Option`] = dataOption;
-        }
+
+        dataOption = new DataOption(name, this._getLoadPanel(), (name, data) => {
+            this._dataSourceChanged(name, data);
+        });
+        dataOption.option('dataSource', this._getSpecificDataSourceOption(name));
+        dataOption._refreshDataSource();
+        this[`_${name}Option`] = dataOption;
     }
     _getSpecificDataSourceOption(name) {
         const dataSource = this.option(`${name}.dataSource`);
-        if(Array.isArray(dataSource)) {
+        if(!dataSource || Array.isArray(dataSource)) {
             return {
                 store: {
                     type: 'array',
-                    data: dataSource,
+                    data: dataSource ?? [],
                     key: this.option(`${name}.keyExpr`)
                 }
             };
@@ -203,15 +204,52 @@ class Gantt extends Widget {
     }
     _dataSourceChanged(dataSourceName, data) {
         const getters = GanttHelper.compileGettersByOption(this.option(dataSourceName));
-        const mappedData = data.map(GanttHelper.prepareMapHandler(getters));
+        const validatedData = this._validateSourceData(dataSourceName, data);
+        const mappedData = validatedData.map(GanttHelper.prepareMapHandler(getters));
 
         this[`_${dataSourceName}`] = mappedData;
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
-            this._tasksRaw = data;
-            const expandedRowKeys = data.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
+            this._tasksRaw = validatedData;
+            const expandedRowKeys = validatedData.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
             this._ganttTreeList?.setOption('expandedRowKeys', expandedRowKeys);
-            this._ganttTreeList?.setOption('dataSource', data);
+            this._ganttTreeList?.updateDataSource(validatedData);
+        }
+    }
+    _validateSourceData(dataSourceName, data) {
+        return data && dataSourceName === GANTT_TASKS ? this._validateTaskData(data) : data;
+    }
+    _validateTaskData(data) {
+        const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const parentIdGetter = compileGetter(this.option(`${GANTT_TASKS}.parentIdExpr`));
+        const rootValue = this.option('rootValue') ?? 'dx_dxt_gantt_default_root_value';
+
+        const validationTree = { };
+        for(let i = 0; i < data.length; i++) {
+            const item = data[i];
+            if(item) {
+                const key = keyGetter(item);
+                const isRootTask = key === rootValue;
+                const treeItem = validationTree[key] ??= { key: key, children: [ ] };
+                if(!isRootTask) {
+                    const parentId = parentIdGetter(item) ?? rootValue;
+                    const parentTreeItem = validationTree[parentId] ??= { key: parentId, children: [ ] };
+                    parentTreeItem.children.push(treeItem);
+                    treeItem.parent = parentTreeItem;
+                }
+            }
+        }
+        const validKeys = [ rootValue ];
+        this._appendChildKeys(validationTree[rootValue], validKeys);
+
+        return data.filter(item => validKeys.indexOf(keyGetter(item)) > -1);
+    }
+    _appendChildKeys(treeItem, keys) {
+        const children = treeItem?.children;
+        for(let i = 0; i < children?.length; i++) {
+            const child = children[i];
+            keys.push(child.key);
+            this._appendChildKeys(child, keys);
         }
     }
 
@@ -219,7 +257,8 @@ class Gantt extends Widget {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             const data = GanttHelper.getStoreObject(this.option(optionName), record);
-            if(optionName === GANTT_TASKS) {
+            const isTaskInsert = optionName === GANTT_TASKS;
+            if(isTaskInsert) {
                 this._customFieldsManager.addCustomFieldsDataFromCache(GANTT_NEW_TASK_CACHE_KEY, data);
             }
 
@@ -227,23 +266,11 @@ class Gantt extends Widget {
                 const keyGetter = compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
                 callback(insertedId);
-                if(optionName === GANTT_TASKS) {
-                    this._ganttTreeList.updateDataSource();
-                    const parentId = record.parentId;
-                    if(parentId !== undefined) {
-                        const expandedRowKeys = this._ganttTreeList?.getOption('expandedRowKeys');
-                        if(expandedRowKeys.indexOf(parentId) === -1) {
-                            expandedRowKeys.push(parentId);
-                            this._ganttTreeList?.setOption('expandedRowKeys', expandedRowKeys);
-                        }
+                dataOption._reloadDataSource().done(data => {
+                    if(isTaskInsert) {
+                        this._ganttTreeList.onTaskInserted(insertedId, record.parentId);
                     }
-                    this._ganttTreeList.selectRows(GanttHelper.getArrayFromOneElement(insertedId));
-                    this._ganttTreeList?.setOption('focusedRowKey', insertedId);
-                    setTimeout(() => {
-                        this._sizeHelper.updateGanttRowHeights();
-                    }, 300);
-                }
-                dataOption._reloadDataSource();
+                });
                 this._actionsManager.raiseInsertedAction(optionName, data, insertedId);
             });
         }
@@ -260,9 +287,6 @@ class Gantt extends Widget {
                 this._customFieldsManager.addCustomFieldsDataFromCache(key, data);
             }
             dataOption.update(key, data, () => {
-                if(isTaskUpdated) {
-                    this._ganttTreeList.updateDataSource();
-                }
                 dataOption._reloadDataSource();
                 this._actionsManager.raiseUpdatedAction(optionName, data, key);
             });
@@ -272,9 +296,6 @@ class Gantt extends Widget {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             dataOption.remove(key, () => {
-                if(optionName === GANTT_TASKS) {
-                    this._ganttTreeList.updateDataSource();
-                }
                 dataOption._reloadDataSource();
                 this._actionsManager.raiseDeletedAction(optionName, key, this._mappingHelper.convertCoreToMappedData(optionName, data));
             });
@@ -285,9 +306,27 @@ class Gantt extends Widget {
         this._actionsManager.raiseUpdatedAction(GANTT_TASKS, mappedData, data.id);
     }
     _onParentTasksRecalculated(data) {
-        const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
-        const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
-        this._ganttTreeList?.setOption('dataSource', treeDataSource);
+        if(!this.isSorting) {
+            const setters = GanttHelper.compileSettersByOption(this.option(GANTT_TASKS));
+            const treeDataSource = this._customFieldsManager.appendCustomFields(data.map(GanttHelper.prepareSetterMapHandler(setters)));
+            this._ganttTreeList?.setOption('dataSource', treeDataSource);
+        }
+        this.isSorting = false;
+    }
+
+    _sort() {
+        const columns = this._treeList.getVisibleColumns();
+        const sortColumn = columns.filter(c => c.sortIndex === 0)[0];
+        const isClearSorting = (this.sortColumn && !sortColumn);
+
+        if(sortColumn || isClearSorting) {
+            const sortedItems = this._ganttTreeList.getSortedItems();
+            const sortOptions = { sortedItems: sortedItems, sortColumn: sortColumn };
+            this.isSorting = !isClearSorting;
+            this._setGanttViewOption('sorting', isClearSorting ? undefined : sortOptions);
+        }
+
+        this.sortColumn = sortColumn;
     }
 
     _getToolbarItems() {
@@ -675,6 +714,9 @@ class Gantt extends Widget {
             case 'height':
                 super._optionChanged(args);
                 this._sizeHelper?.setGanttHeight(this._$element.height());
+                break;
+            case 'sorting':
+                this._ganttTreeList?.setOption('sorting', args.value);
                 break;
             default:
                 super._optionChanged(args);

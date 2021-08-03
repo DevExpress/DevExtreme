@@ -104,12 +104,14 @@ export class Appointment extends DOMComponent {
             body: '',
             tail: this.option('rtlEnabled') ? 'left' : 'right'
         };
+        const getResizableStep = this.option('getResizableStep');
+        const step = getResizableStep ? getResizableStep() : 0;
 
         return {
             handles: this.option('reduced') ? reducedHandles[this.option('reduced')] : DEFAULT_HORIZONTAL_HANDLES,
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
-            step: this.invoke('getResizableStep'),
+            step,
             roundStepValue: false,
         };
     }
@@ -256,7 +258,14 @@ export class Appointment extends DOMComponent {
 
     _renderResizable() {
         if(this.option('allowResize')) {
-            this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option('resizableConfig')));
+            this._createComponent(
+                this.$element(),
+                Resizable,
+                extend(
+                    this._createResizingConfig(),
+                    this.option('resizableConfig')
+                )
+            );
         }
     }
 

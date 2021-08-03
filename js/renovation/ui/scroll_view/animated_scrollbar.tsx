@@ -319,11 +319,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(location: number): void {
-    this.scrollbar.moveTo(location);
+    this.scrollbar.moveTo(location) as undefined;
   }
 
   stopAnimator(animator: string): void {
-    this.scrollbar.stopAnimator(animator);
+    this.scrollbar.stopAnimator(animator) as undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

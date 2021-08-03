@@ -14,7 +14,6 @@ import { inArray, normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
 import { removeEvent } from '../../core/remove_event';
 import { name as clickEventName } from '../../events/click';
-import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import { captionize } from '../../core/utils/inflector';
@@ -28,16 +27,12 @@ import {
     LAYOUT_MANAGER_ONE_COLUMN,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_CONTENT_WRAPPER_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
-    FIELD_BUTTON_ITEM_CLASS,
     SINGLE_COLUMN_ITEM_CONTENT,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
@@ -46,7 +41,16 @@ import '../number_box';
 import '../check_box';
 import '../date_box';
 import '../button';
-import { renderLabel } from './ui.form.utils';
+import {
+    renderLabel,
+    renderHelpText,
+    adjustContainerAsButtonItem,
+    convertAlignmentToJustifyContent,
+    convertAlignmentToTextAlign,
+    renderComponentTo,
+    renderTemplateTo,
+    adjustEditorContainer,
+    convertToTemplateOptions } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -557,48 +561,29 @@ const LayoutManager = Widget.inherit({
             .html('&nbsp;');
     },
 
-    _getButtonHorizontalAlignment: function(item) {
-        if(isDefined(item.horizontalAlignment)) {
-            return item.horizontalAlignment;
-        }
-
-        return 'right';
-    },
-
-    _getButtonVerticalAlignment: function(item) {
-        switch(item.verticalAlignment) {
-            case 'center':
-                return 'center';
-            case 'bottom':
-                return 'flex-end';
-            default:
-                return 'flex-start';
-        }
-    },
-
     _renderButtonItem: function(item, $container) {
-        const $button = $('<div>').appendTo($container);
-        const defaultOptions = {
-            validationGroup: this.option('validationGroup')
-        };
+        // TODO: try to create $container in this function and return it
+        adjustContainerAsButtonItem({
+            $container,
+            justifyContent: convertAlignmentToJustifyContent(item.verticalAlignment),
+            textAlign: convertAlignmentToTextAlign(item.horizontalAlignment),
+            cssItemClass: this.option('cssItemClass'),
+            targetColIndex: item.col
+        });
 
-        $container
-            .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css('textAlign', this._getButtonHorizontalAlignment(item));
+        const $button = $('<div>');
+        $container.append($button);
+        const buttonWidget = this._createComponent(
+            $button, 'dxButton',
+            extend({ validationGroup: this.option('validationGroup') }, item.buttonOptions));
 
-        $container.parent().css('justifyContent', this._getButtonVerticalAlignment(item));
-
-        const instance = this._createComponent($button, 'dxButton', extend(defaultOptions, item.buttonOptions));
-
+        // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
         this._itemsRunTimeInfo.add({
             item,
-            widgetInstance: instance,
+            widgetInstance: buttonWidget, // TODO: try to remove 'widgetInstance'
             guid: item.guid,
             $itemContainer: $container
         });
-        this._addItemClasses($container, item.col);
-
-        return $button;
     },
 
     _addItemClasses: function($item, column) {
@@ -674,7 +659,20 @@ const LayoutManager = Widget.inherit({
             }
         }
 
-        that._renderHelpText(item, $editor, helpID);
+        const helpText = item.helpText;
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+
+        if(helpText && isSimpleItem) {
+            const $editorParent = $editor.parent();
+
+            // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()
+            $editorParent.append(
+                $('<div>')
+                    .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
+                    .append($editor)
+                    .append(renderHelpText(helpText, helpID))
+            );
+        }
 
         that._attachClickHandler($label, $editor, item.editorType);
     },
@@ -757,6 +755,7 @@ const LayoutManager = Widget.inherit({
             ? { value: dataValue }
             : {};
         const isDeepExtend = true;
+        let editorWidget;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
@@ -784,7 +783,37 @@ const LayoutManager = Widget.inherit({
             isRequired: options.isRequired
         };
 
-        return this._createEditor(options.$container, renderOptions, editorOptions);
+        if(renderOptions.dataField && !editorOptions.name) {
+            editorOptions.name = renderOptions.dataField;
+        }
+
+        adjustEditorContainer({
+            $container: options.$container,
+            labelLocation: this.option('labelLocation'),
+        });
+
+        if(renderOptions.template) {
+            renderTemplateTo({
+                $container: getPublicElement(options.$container),
+                template: renderOptions.template,
+                templateOptions: convertToTemplateOptions(renderOptions, editorOptions, this._getComponentOwner())
+            });
+        } else {
+            editorWidget = renderComponentTo({
+                $container: options.$container,
+                createComponentCallback: this._createComponent.bind(this),
+                componentType: renderOptions.editorType,
+                componentOptions: editorOptions,
+                helpID: renderOptions.helpID,
+                labelID: renderOptions.labelID,
+                isRequired: renderOptions.isRequired
+            });
+
+        }
+        if(editorWidget && renderOptions.dataField) {
+            this._bindDataField(editorWidget, renderOptions, options.$container);
+        }
+        return editorWidget;
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -851,50 +880,6 @@ const LayoutManager = Widget.inherit({
             .on('enterKey', toggleInvalidClass);
     },
 
-    _createEditor: function($container, renderOptions, editorOptions) {
-        const that = this;
-        const template = renderOptions.template;
-        let editorInstance;
-
-        if(renderOptions.dataField && !editorOptions.name) {
-            editorOptions.name = renderOptions.dataField;
-        }
-
-        that._addItemContentClasses($container);
-
-        if(template) {
-            const data = {
-                dataField: renderOptions.dataField,
-                editorType: renderOptions.editorType,
-                editorOptions: editorOptions,
-                component: that._getComponentOwner(),
-                name: renderOptions.name
-            };
-
-            template.render({
-                model: data,
-                container: getPublicElement($container)
-            });
-        } else {
-            const $editor = $('<div>').appendTo($container);
-
-            try {
-                editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
-                editorInstance.setAria('describedby', renderOptions.helpID);
-                editorInstance.setAria('labelledby', renderOptions.labelID);
-                editorInstance.setAria('required', renderOptions.isRequired);
-
-                if(renderOptions.dataField) {
-                    that._bindDataField(editorInstance, renderOptions, $container);
-                }
-            } catch(e) {
-                errors.log('E1035', e.message);
-            }
-        }
-
-        return editorInstance;
-    },
-
     _getComponentOwner: function() {
         return this.option('form') || this;
     },
@@ -944,22 +929,6 @@ const LayoutManager = Widget.inherit({
         return this._watch;
     },
 
-    _addItemContentClasses: function($itemContent) {
-        const locationSpecificClass = this._getItemContentLocationSpecificClass();
-        $itemContent.addClass([FIELD_ITEM_CONTENT_CLASS, locationSpecificClass].join(' '));
-    },
-
-    _getItemContentLocationSpecificClass: function() {
-        const labelLocation = this.option('labelLocation');
-        const oppositeClasses = {
-            right: 'left',
-            left: 'right',
-            top: 'bottom'
-        };
-
-        return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
-    },
-
     _createComponent: function($editor, type, editorOptions) {
         const that = this;
         const readOnlyState = this.option('readOnly');
@@ -1003,23 +972,6 @@ const LayoutManager = Widget.inherit({
             $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
         } else {
             $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-        }
-    },
-
-    _renderHelpText: function(fieldItem, $editor, helpID) {
-        const helpText = fieldItem.helpText;
-        const isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
-
-        if(helpText && isSimpleItem) {
-            const $editorWrapper = $('<div>').addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
-
-            $editor.wrap($editorWrapper);
-
-            $('<div>')
-                .addClass(FIELD_ITEM_HELP_TEXT_CLASS)
-                .attr('id', helpID)
-                .text(helpText)
-                .appendTo($editor.parent());
         }
     },
 

@@ -60,9 +60,9 @@ const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (
 ResultItem[] => {
   const resultPaths: ResultItem[] = [];
   const processItem = !Array.isArray(oldProps)
-    ? (propName): void => {
+    ? (propName: string): void => {
       compare(resultPaths, oldProps[propName], props[propName], propName, `${fullPropName}.${propName}`, notDeepCopyArrays);
-    } : (propName): void => {
+    } : (propName: string): void => {
       compare(resultPaths, oldProps[propName], props[propName], `[${propName}]`, `${fullPropName}.${propName}`, notDeepCopyArrays);
     };
 

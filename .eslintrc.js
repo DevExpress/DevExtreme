@@ -321,27 +321,19 @@ module.exports = {
                 'no-return-await': 'off',
                 '@typescript-eslint/no-misused-promises': 'error',
                 '@typescript-eslint/no-floating-promises': 'error',
-                'rulesdir/no-non-null-assertion': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'error',
+                'rulesdir/no-non-null-assertion': 'error',
+                '@typescript-eslint/no-unsafe-member-access': 'warn',
                 '@typescript-eslint/no-non-null-assertion': 'off'
                 /*
-            "@typescript-eslint/no-non-null-assertion": "error",
             "@typescript-eslint/no-magic-numbers": "error",
-
-            "@typescript-eslint/explicit-function-return-type": "error",
             "no-return-await": "off",
-            "@typescript-eslint/no-extraneous-class": "error",
-            "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/no-unsafe-assignment": "error",
             "@typescript-eslint/restrict-template-expressions": "error",
             "@typescript-eslint/no-unsafe-call": "error",
             "@typescript-eslint/no-unnecessary-condition": "error",
             "@typescript-eslint/strict-boolean-expressions": "error",
             "@typescript-eslint/unbound-method": "error",
-            "@typescript-eslint/no-unsafe-member-access": "error",
-            "@typescript-eslint/prefer-readonly-parameter-types": "error",
-            "@typescript-eslint/explicit-member-accessibility": "error",
-
             */
             }
         },

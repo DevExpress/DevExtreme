@@ -4,7 +4,7 @@ import AppointmentTooltip from './appointment/tooltip';
 import AppointmentCollector from './appointment/collector';
 import AppointmentDialog from './appointment/dialog';
 import Appointment from './appointment';
-import Navigator from './navigator';
+import Toolbar from './toolbar';
 
 export const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -126,7 +126,7 @@ export default class Scheduler extends Widget {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
   }
 
-  getNavigator(): Navigator {
-    return new Navigator(this.element);
+  getToolbar(): Toolbar {
+    return new Toolbar(this.element);
   }
 }

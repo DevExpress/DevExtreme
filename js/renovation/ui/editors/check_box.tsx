@@ -12,14 +12,18 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { createDefaultOptionRules } from '../../../core/options/utils';
+import getElementComputedStyle from '../../utils/get_computed_style';
+import { isMaterial, current } from '../../../ui/themes';
 import devices from '../../../core/devices';
 import Guid from '../../../core/guid';
 import { Widget } from '../common/widget';
 import BaseComponent from '../../component_wrapper/editors/check_box';
+import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from '../common/base_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ValidationMessage } from '../overlays/validation_message';
+import { hasWindow } from '../../../core/utils/window';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -69,7 +73,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className="dx-checkbox-container">
-        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
+        <span className="dx-checkbox-icon" ref={viewModel.iconRef} style={viewModel.iconStyles} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.showValidationMessage
@@ -108,6 +112,8 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() readOnly = false;
 
+  @OneWay() iconSize?: number | string;
+
   @OneWay() isValid = true;
 
   @TwoWay() value: boolean | null = false;
@@ -145,6 +151,35 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   updateValidationMessageVisibility(): EffectReturn {
     this.showValidationMessage = this.shouldShowValidationMessage;
+
+    return undefined;
+  }
+
+  @Effect()
+  updateIconFontSize(): EffectReturn {
+    const iconElement = this.iconRef?.current;
+    const { iconSize } = this.props;
+
+    if (iconElement && hasWindow()) {
+      const isCompactTheme = current()?.includes('compact');
+      const defaultFontSize = isCompactTheme ? 12 : 16;
+      const isMaterialTheme = isMaterial(current());
+      let defaultIconSize = isMaterialTheme ? 18 : 22;
+      if (isCompactTheme) {
+        defaultIconSize = 16;
+      }
+      const iconFontSizeRatio = defaultFontSize / defaultIconSize;
+
+      const getIconComputedStyle = (): CSSStyleDeclaration => {
+        const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
+        return computedStyle;
+      };
+
+      const computedIconSize = typeof iconSize === 'number' ? iconSize : parseInt(getIconComputedStyle().width, 10);
+      const computedFontSize = `${Math.ceil(computedIconSize * iconFontSizeRatio)}px`;
+
+      iconElement.style.fontSize = computedFontSize;
+    }
 
     return undefined;
   }
@@ -190,6 +225,14 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     }
 
     return undefined;
+  }
+
+  get iconStyles(): { [key: string]: string | number } {
+    const { iconSize } = this.props;
+    const width = normalizeStyleProp('width', iconSize);
+    const height = normalizeStyleProp('height', iconSize);
+
+    return { height, width };
   }
 
   get cssClasses(): string {
