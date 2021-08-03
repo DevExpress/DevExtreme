@@ -210,7 +210,8 @@ export class GanttTreeList {
     getSortedItems() {
         const rootNode = this._treeList.getRootNode();
         if(!rootNode) { return undefined; }
-        const resultArray = GanttHelper.convertTreeToList(rootNode);
+        const resultArray = [];
+        GanttHelper.convertTreeToList(rootNode, resultArray);
 
         const getters = GanttHelper.compileGettersByOption(this._gantt.option(GANTT_TASKS));
         const validatedData = this._gantt._validateSourceData(GANTT_TASKS, resultArray);

@@ -258,7 +258,14 @@ export class Appointment extends DOMComponent {
 
     _renderResizable() {
         if(this.option('allowResize')) {
-            this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option('resizableConfig')));
+            this._createComponent(
+                this.$element(),
+                Resizable,
+                extend(
+                    this._createResizingConfig(),
+                    this.option('resizableConfig')
+                )
+            );
         }
     }
 
