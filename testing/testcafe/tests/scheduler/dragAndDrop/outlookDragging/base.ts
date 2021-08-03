@@ -8,7 +8,6 @@ fixture`Outlook dragging base tests`
 
 test('Basic drag-n-drop movements in groups', async (t) => {
   const scheduler = new Scheduler('#container');
-  // T
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
