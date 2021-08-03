@@ -119,9 +119,9 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   }
 
   private createFakeInstance(): {
-    option(): boolean;
-    element(): HTMLElement | null;
-    _createActionByOption(): (e: any) => void;
+    option: () => boolean;
+    element: () => HTMLElement | null;
+    _createActionByOption: () => (e: any) => void;
   } {
     return {
       option: (): boolean => false,

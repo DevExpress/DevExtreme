@@ -218,7 +218,7 @@ module.exports = {
                 'lines-between-class-members': 'off',
                 '@typescript-eslint/lines-between-class-members': 'error',
                 '@typescript-eslint/member-delimiter-style': 'error',
-                '@typescript-eslint/method-signature-style': ['error', 'method'],
+                '@typescript-eslint/method-signature-style': 'error',
                 '@typescript-eslint/naming-convention': 'error',
                 'no-array-constructor': 'off',
                 '@typescript-eslint/no-array-constructor': 'error',

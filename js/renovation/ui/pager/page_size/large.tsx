@@ -32,7 +32,7 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
     className: string;
     label: string;
     text: string;
-    click(): void;
+    click: () => void;
   }[] {
     const { pageSize, pageSizes } = this.props;
     return pageSizes.map(({ value: processedPageSize, text }) => {

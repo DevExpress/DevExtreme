@@ -11,12 +11,13 @@ import { ArgumentAxisRange, ValueAxisRange } from './types.d';
 const DEFAULT_LINE_SPACING = 2;
 
 export interface Axis {
-  getTranslator(): Translator;
-  update(range: ArgumentAxisRange | ValueAxisRange, canvas: ClientRect, options: undefined): void;
-  getVisibleArea(): [number, number];
-  visualRange(): void;
-  calculateInterval(): void;
-  getMarginOptions(): Record<string, number>;
+  getTranslator: () => Translator;
+  update: (range: ArgumentAxisRange | ValueAxisRange, canvas: ClientRect, options: undefined)
+  => void;
+  getVisibleArea: () => [number, number];
+  visualRange: () => void;
+  calculateInterval: () => void;
+  getMarginOptions: () => Record<string, number>;
 }
 
 export interface SparklineTooltipData extends TooltipData {

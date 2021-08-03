@@ -3,7 +3,7 @@ import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { EventCallback } from '../../common/event_callback';
 
 export interface KeyboardActionContextType {
-  registerKeyboardAction(el: HTMLElement, handler: EventCallback): DisposeEffectReturn;
+  registerKeyboardAction: (el: HTMLElement, handler: EventCallback) => DisposeEffectReturn;
 }
 
 export const KeyboardActionContext = createContext<KeyboardActionContextType |
