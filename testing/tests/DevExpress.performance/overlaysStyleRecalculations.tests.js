@@ -42,7 +42,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                 shading,
                 visible: true,
                 animation: null,
-                _observeContentResize: false
+                useResizeObserver: false
             });
         };
 
@@ -54,7 +54,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             shading,
             visible: false,
             animation: null,
-            _observeContentResize: false
+            useResizeObserver: false
         }).dxOverlay('instance');
 
         const measureFunction = function() {
@@ -71,7 +71,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
                 shading,
                 visible: true,
                 animation: null,
-                _observeContentResize: false
+                useResizeObserver: false
             });
         };
 

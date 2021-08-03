@@ -439,13 +439,13 @@ QUnit.module('AdaptiveColumns', {
         this.resizingController.updateDimensions();
         this.clock.tick();
         let $cols = $('.dx-datagrid-rowsview col');
-        const adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveRowsWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         this.dataController.collapseAll();
         this.clock.tick();
 
         $cols = $('.dx-datagrid-headers col');
-        const adaptiveHeadersWidth = $cols.eq($cols.length - 1).css('width');
+        const adaptiveHeadersWidth = parseFloat($cols.eq($cols.length - 1).css('width'));
 
         // assert
         assert.roughEqual(parseFloat(adaptiveRowsWidth), parseFloat(adaptiveHeadersWidth), 0.1, 'adaptive command column\'s width');

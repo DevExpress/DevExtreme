@@ -136,8 +136,9 @@ export default class DataGridWrapper extends Component {
 
     if (originalCustomizeExcelCell) {
       exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         (e as any).component = this;
+
         return originalCustomizeExcelCell(e);
       };
     }

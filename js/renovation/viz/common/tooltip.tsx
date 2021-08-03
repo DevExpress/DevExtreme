@@ -379,7 +379,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
         return propsContainer;
       }
     }
-    return domAdapter.getBody() as HTMLBodyElement;
+    return domAdapter.getBody();
   }
 
   get customizedOptions(): CustomizedOptions {

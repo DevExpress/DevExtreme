@@ -67,7 +67,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return super._getItemPosition(appointment);
         }
 
-        const settings = this._getAppointmentCoordinates(appointment);
+        const settings = this.generateAppointmentSettings(appointment);
         let result = [];
 
         for(let j = 0; j < settings.length; j++) {
