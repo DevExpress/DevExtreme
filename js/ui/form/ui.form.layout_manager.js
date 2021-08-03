@@ -49,8 +49,7 @@ import {
     convertAlignmentToTextAlign,
     renderComponentTo,
     renderTemplateTo,
-    adjustEditorContainer,
-    convertToTemplateOptions } from './ui.form.utils';
+    adjustEditorContainer } from './ui.form.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
