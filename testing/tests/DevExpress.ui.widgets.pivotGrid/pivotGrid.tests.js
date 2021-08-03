@@ -1986,7 +1986,8 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
-        assert.equal(pivotGrid.__scrollBarWidth, getScrollBarInfo[true].scrollBarWidth);
+
+        assert.equal(pivotGrid.__scrollBarWidth, getScrollBarInfo(true).scrollBarWidth);
     });
 
     QUnit.test('Sorting by Summary context menu when sorting defined for grand total', function(assert) {

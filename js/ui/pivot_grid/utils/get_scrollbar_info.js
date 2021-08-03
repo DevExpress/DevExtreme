@@ -3,9 +3,9 @@ import { getScrollbarWidth } from './get_scrollbar_width';
 
 const scrollBarInfoCache = {};
 
-export function getScrollBarInfo(useNativeScrolling) {
-    if(scrollBarInfoCache[useNativeScrolling]) {
-        return scrollBarInfoCache[useNativeScrolling];
+export function getScrollBarInfo(useNative) {
+    if(scrollBarInfoCache[useNative]) {
+        return scrollBarInfoCache[useNative];
     }
 
     let scrollBarWidth = 0;
@@ -26,9 +26,9 @@ export function getScrollBarInfo(useNativeScrolling) {
         height: 200
     }).appendTo($scrollable);
 
-    if(useNativeScrolling !== 'auto') {
-        options.useNative = !!useNativeScrolling;
-        options.useSimulatedScrollbar = !useNativeScrolling;
+    if(useNative !== 'auto') {
+        options.useNative = !!useNative;
+        options.useSimulatedScrollbar = !useNative;
     }
 
     const scrollable = $scrollable.dxScrollable(options).dxScrollable('instance');
@@ -38,10 +38,10 @@ export function getScrollBarInfo(useNativeScrolling) {
 
     $testContainer.remove();
 
-    scrollBarInfoCache[useNativeScrolling] = {
+    scrollBarInfoCache[useNative] = {
         scrollBarWidth: scrollBarWidth,
         scrollBarUseNative: scrollBarUseNative
     };
 
-    return scrollBarInfoCache[useNativeScrolling];
+    return scrollBarInfoCache[useNative];
 }
