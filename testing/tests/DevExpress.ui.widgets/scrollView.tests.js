@@ -327,7 +327,7 @@ QUnit.module('actions', moduleConfig, () => {
         pointerMock($content)
             .start()
             .down()
-            .move(0, $container.height() - $content.height() + $bottomPocket.height() + 0.49)
+            .move(0, $container.height() - $content.height() + $bottomPocket.height())
             .up();
     });
 
@@ -498,7 +498,8 @@ QUnit.module('dynamic', moduleConfig, () => {
             inertiaEnabled: false
         });
 
-        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         pointerMock($content)
             .start()
@@ -521,7 +522,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             useNative: false,
             inertiaEnabled: false,
             pullDownEnabled: true,
-            onPullDown: noop
+            onPullDown: noop,
         });
 
         const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
@@ -537,7 +538,7 @@ QUnit.module('dynamic', moduleConfig, () => {
 
         const location = getScrollOffset($scrollView);
 
-        assert.equal(location.top, isRenovation ? -90 : -10, 'content position was not changed');
+        assert.equal(location.top, -10, 'content position was not changed');
     });
 
     QUnit.test('scroll content stays in bounds when onPullDown turned off', function(assert) {
@@ -566,9 +567,8 @@ QUnit.module('dynamic', moduleConfig, () => {
         const location = getScrollOffset($scrollView);
 
         const maxScrollTopOffset = $content.height() - $container.height();
-        const topPocketSize = 80;
 
-        assert.equal(location.top, isRenovation ? -maxScrollTopOffset - topPocketSize : -maxScrollTopOffset, 'content position was not changed');
+        assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
