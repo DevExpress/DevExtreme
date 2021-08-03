@@ -566,12 +566,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getRowCountWithAllDayRows() {
-        const allDayRowCount = this._isShowAllDayPanel() ? 1 : 0;
-
-        return this._getRowCount() + allDayRowCount;
-    }
-
     _getCellCount() {
         return this.viewDataProvider.getCellCount({
             intervalCount: this.option('intervalCount'),
@@ -640,7 +634,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isAllDayPanelVisible: this.isAllDayPanelVisible,
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
-            rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
             startDayHour: this.option('startDayHour'),

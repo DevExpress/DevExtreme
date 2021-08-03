@@ -299,10 +299,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getRowCountWithAllDayRows() {
-        return this._getRowCount();
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
