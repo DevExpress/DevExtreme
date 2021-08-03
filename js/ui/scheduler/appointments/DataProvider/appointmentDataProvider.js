@@ -1,5 +1,6 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
+import { ExpressionUtils } from '../../expressionUtils';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -102,6 +103,15 @@ export class AppointmentDataProvider {
 
     appointmentTakesSeveralDays(appointment) {
         return this.getFilterStrategy().appointmentTakesSeveralDays(appointment);
+    }
+
+    sortAppointmentsByStartDate(appointments) {
+        appointments.sort((a, b) => {
+            const firstDate = new Date(ExpressionUtils.getField(this.key, 'startDate', a.settings || a));
+            const secondDate = new Date(ExpressionUtils.getField(this.key, 'startDate', b.settings || b));
+
+            return Math.sign(firstDate.getTime() - secondDate.getTime());
+        });
     }
 
     // Appointment data source mappings

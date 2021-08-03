@@ -3,7 +3,7 @@ import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 const JSPdfStylesTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
 
-        const onCellExporting = ({ pdfCell }) => {
+        const customizeCell = ({ pdfCell }) => {
             pdfCell.drawLeftBorder = false;
             pdfCell.drawRightBorder = false;
             pdfCell.drawTopBorder = false;
@@ -42,7 +42,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,39,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -63,9 +63,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'header' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -79,7 +79,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,39,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -100,9 +100,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'f1_1') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -117,7 +117,7 @@ const JSPdfStylesTests = {
                     'text,f1_2,100,39,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -155,7 +155,7 @@ const JSPdfStylesTests = {
                     'text,f2_3,100,87,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -178,9 +178,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1: f1_1') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.value === 'f1_1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -200,7 +200,7 @@ const JSPdfStylesTests = {
                     'text,f2_3,100,87,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -223,9 +223,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'f1_2' || pdfCell.text === 'f2_2') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f2') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -247,7 +247,7 @@ const JSPdfStylesTests = {
                     'text,f2_3,100,87,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -288,7 +288,7 @@ const JSPdfStylesTests = {
                     'text,f2_4,100,103,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -312,9 +312,9 @@ const JSPdfStylesTests = {
                     ],
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'F1: f1' || pdfCell.text === 'F2: f1_2' || pdfCell.text === 'F2: f2_2') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -336,7 +336,7 @@ const JSPdfStylesTests = {
                     'text,f2_4,100,103,'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -375,7 +375,7 @@ const JSPdfStylesTests = {
                     'text,f3,90,55,',
                     'text,f4,180,55,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -399,9 +399,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -421,7 +421,7 @@ const JSPdfStylesTests = {
                     'text,f3,90,55,',
                     'text,f4,180,55,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -462,7 +462,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,180,63,80,16,F',
                     'text,Max: f4,180,71,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -486,9 +486,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'groupFooter' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -510,7 +510,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffff00', 'rect,180,63,80,16,F',
                     'text,Max: f4,180,71,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90, 80 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -553,7 +553,7 @@ const JSPdfStylesTests = {
                     'text,f3,30,71,',
                     'text,f4,260,71,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -580,9 +580,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -603,7 +603,7 @@ const JSPdfStylesTests = {
                     'text,f3,30,71,',
                     'text,f4,260,71,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -648,7 +648,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffffe0', 'rect,260,95,100,16,F',
                     'text,Max: f4,260,103,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -675,9 +675,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f4') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'groupFooter' && gridCell.column.dataField === 'f4') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -700,7 +700,7 @@ const JSPdfStylesTests = {
                     'setFillColor,#ffff00', 'rect,260,95,100,16,F',
                     'text,Max: f4,260,103,' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 250, 100 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -735,7 +735,7 @@ const JSPdfStylesTests = {
                     'text,Max: f1,10,55,',
                     'setFillColor,#ffffe0', 'rect,90,47,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -759,9 +759,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f1') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'totalFooter' && gridCell.column.dataField === 'f1') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -777,7 +777,7 @@ const JSPdfStylesTests = {
                     'text,Max: f1,10,55,',
                     'setFillColor,#ffffe0', 'rect,90,47,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -815,7 +815,7 @@ const JSPdfStylesTests = {
                     'text,Max: f2,10,71,',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -840,9 +840,9 @@ const JSPdfStylesTests = {
                     dataSource: [{ f1: 'f1', f2: 'f2', f3: 'f3' }]
                 });
 
-                const _onCellExporting = ({ pdfCell }) => {
-                    onCellExporting({ pdfCell });
-                    if(pdfCell.text === 'Max: f2') {
+                const _customizeCell = ({ gridCell, pdfCell }) => {
+                    customizeCell({ gridCell, pdfCell });
+                    if(gridCell.rowType === 'totalFooter' && gridCell.column.dataField === 'f2') {
                         pdfCell.backgroundColor = '#ffff00';
                     }
                 };
@@ -860,7 +860,7 @@ const JSPdfStylesTests = {
                     'text,Max: f2,10,71,',
                     'setFillColor,#ffffe0', 'rect,90,63,90,16,F' ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], onCellExporting: _onCellExporting, rowOptions }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 80, 90 ], customizeCell: _customizeCell, rowOptions }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
