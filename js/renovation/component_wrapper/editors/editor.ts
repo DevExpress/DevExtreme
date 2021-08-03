@@ -125,7 +125,9 @@ export default class Editor extends Component {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/method-signature-style
 const prevIsEditor = (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
   .isEditor;
+// eslint-disable-next-line @typescript-eslint/method-signature-style
 (OldEditor as unknown as { isEditor: (instance: Component) => boolean })
   .isEditor = (instance): boolean => prevIsEditor(instance) || instance instanceof Editor;

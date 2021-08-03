@@ -33,8 +33,8 @@ interface ElementAttributes extends Record<string, unknown> {
 }
 
 export interface ComponentWrapperProps extends Record<string, unknown> {
-  onContentReady?: (e: Record<string, unknown>) => void;
   elementAttr?: ElementAttributes;
+  onContentReady?(e: Record<string, unknown>): void;
 }
 
 export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {

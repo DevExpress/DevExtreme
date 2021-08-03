@@ -12,6 +12,7 @@ import { getUpdatedOptions } from '../ui/grids/data_grid/utils/get_updated_optio
 import { themeReadyCallback } from '../../ui/themes_callback';
 import componentRegistratorCallbacks from '../../core/component_registrator_callbacks';
 
+//  eslint-disable-next-line @typescript-eslint/method-signature-style
 let dataGridClass: { defaultOptions: (options: unknown) => void } | null = null;
 
 /* istanbul ignore next: temporary workaround */
