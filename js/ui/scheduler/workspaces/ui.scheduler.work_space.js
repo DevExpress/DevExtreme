@@ -654,8 +654,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             firstDayOfWeek: this._firstDayOfWeek(),
 
             columnsInDay: 1, // TODO: try to remove
-            rowCountBase: this._getRowCount(), // TODO: remove
-            columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -1048,8 +1046,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             columnsInDay: 1,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
             startViewDate: this.getStartViewDate(),
-            rowCountBase: this._getRowCount(),
-            columnCountBase: this._getCellCount(),
             firstDayOfWeek: this._firstDayOfWeek(),
         };
     }

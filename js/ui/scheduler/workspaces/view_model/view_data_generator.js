@@ -397,8 +397,6 @@ export class ViewDataGenerator {
             startDayHour,
             columnsInDay,
             interval,
-            rowCountBase,
-            columnCountBase,
             firstDayOfWeek,
         } = options;
 
@@ -410,6 +408,8 @@ export class ViewDataGenerator {
             startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
         }
 
+        const columnCountBase = this.getCellCount(options);
+        const rowCountBase = this.getRowCount(options);
         const cellIndex = this._calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
         const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 

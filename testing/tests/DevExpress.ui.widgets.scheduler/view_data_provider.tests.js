@@ -1027,8 +1027,6 @@ module('View Data Provider', {
                 columnsInDay: 1,
                 hoursInterval: 1,
                 currentDate: new Date(baseStartDate),
-                rowCountBase: 2,
-                columnCountBase: 2,
                 firstDayOfWeek: 0,
                 intervalCount: 2,
             };
