@@ -61,7 +61,6 @@ import {
     calculateViewStartDate,
     getViewStartByOptions,
     calculateCellIndex,
-    getDateByCellIndices,
     validateDayHours,
     getStartViewDateTimeOffset,
     isDateAndTimeView,
@@ -208,8 +207,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     get viewDirection() { return 'vertical'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
-
-    get isWorkView() { return false; }
 
     get timeZoneCalculator() {
         return this.option('timeZoneCalculator');
@@ -657,7 +654,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: this.option('startDate'),
             firstDayOfWeek: this._firstDayOfWeek(),
 
-            isWorkView: this.isWorkView,
             columnsInDay: 1, // TODO: try to remove
             hiddenInterval: this._hiddenInterval, // TODO: remove
             calculateCellIndex,
@@ -1051,14 +1047,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
+    // TODO: necessary for old render
     _getDateGenerationOptions(isOldRender = false) {
         return {
             startDayHour: this.option('startDayHour'),
             endDayHour: this.option('endDayHour'),
-            isWorkView: this.isWorkView,
+            isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
             columnsInDay: 1,
             hiddenInterval: this._hiddenInterval,
-            calculateCellIndex,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
             startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
             rowCountBase: this._getRowCount(),
@@ -1900,8 +1896,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return (cell, rowIndex, columnIndex) => {
             const validColumnIndex = columnIndex % this._getCellCount();
             const options = this._getDateGenerationOptions(true);
-            let startDate = getDateByCellIndices(
-                options, rowIndex, validColumnIndex, options.calculateCellIndex, this._getCellCountInDay(),
+            let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
+                options, rowIndex, validColumnIndex, this._getCellCountInDay(),
             );
 
             startDate = dateUtils.trimTime(startDate);

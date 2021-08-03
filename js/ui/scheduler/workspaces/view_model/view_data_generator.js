@@ -2,16 +2,18 @@ import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 import { getAllGroups, getGroupCount } from '../../resources/utils';
 import {
-    getDateByCellIndices,
     calculateCellIndex,
     calculateDayDuration,
     isHorizontalView,
+    getStartViewDateWithoutDST,
 } from '../utils/base';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 
 export class ViewDataGenerator {
     get daysInInterval() { return 1; }
+
+    get isWorkView() { return false; }
 
     getCompleteViewDataMap(options) {
         const {
@@ -351,11 +353,10 @@ export class ViewDataGenerator {
 
         const groupsList = getAllGroups(groups);
 
-        const startDate = getDateByCellIndices(
+        const startDate = this.getDateByCellIndices(
             options,
             rowIndex,
             columnIndex,
-            this._calculateCellIndex,
             this.getCellCountInDay(startDayHour, endDayHour, hoursInterval),
         );
         const endDate = this.calculateEndDate(startDate, interval, endDayHour);
@@ -384,6 +385,59 @@ export class ViewDataGenerator {
             endDate: startDate,
             allDay: true,
         };
+    }
+
+    getDateByCellIndices(options, rowIndex, columnIndex, cellCountInDay) {
+        let startViewDate = options.startViewDate;
+        const {
+            startDayHour,
+            columnsInDay,
+            hiddenInterval,
+            interval,
+            rowCountBase,
+            columnCountBase,
+            firstDayOfWeek,
+        } = options;
+
+        const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
+
+        if(isStartViewDateDuringDST) {
+            const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
+
+            startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
+        }
+
+        const cellIndex = this._calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+        const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
+
+        const offsetByCount = this.isWorkView
+            ? this.getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
+            : 0;
+
+        const startViewDateTime = startViewDate.getTime();
+        const currentDate = new Date(startViewDateTime + millisecondsOffset + offsetByCount);
+
+        const timeZoneDifference = isStartViewDateDuringDST
+            ? 0
+            : dateUtils.getTimezonesDifference(startViewDate, currentDate);
+
+        currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+
+        return currentDate;
+    }
+
+    getMillisecondsOffset(cellIndex, interval, hiddenIntervalBase, cellCountInDay) {
+        const dayIndex = Math.floor(cellIndex / cellCountInDay);
+        const hiddenInterval = dayIndex * hiddenIntervalBase;
+
+        return interval * cellIndex + hiddenInterval;
+    }
+
+    getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek) {
+        const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
+        const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
+
+        return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
     }
 
     calculateEndDate(startDate, interval, endDayHour) {
