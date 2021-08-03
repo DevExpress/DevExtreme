@@ -28,7 +28,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
-      run: npm i --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
       run: npm run build-npm-devextreme

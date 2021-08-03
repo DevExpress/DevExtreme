@@ -19,7 +19,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm i --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build etalon bundles
       run: npx gulp style-compiler-themes-ci
@@ -32,7 +32,7 @@ jobs:
       working-directory: ./themebuilder-scss/dart-compiler
 
     - name: Run npm install for themebuilder-scss
-      run: npm i --no-audit --no-fund
+      run: npm install --no-audit --no-fund
       working-directory: ./themebuilder-scss
 
     - name: Build

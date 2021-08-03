@@ -23,7 +23,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm i --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Jest test
       run: |
@@ -50,7 +50,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm i --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Check components generation
       run: |
