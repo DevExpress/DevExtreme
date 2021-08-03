@@ -39,7 +39,6 @@ class App extends React.Component {
     return (
       <div>
         <Map
-          defaultCenter={['Brooklyn Bridge', 'New York', 'NY']}
           defaultZoom={11}
           height={440}
           width="100%"

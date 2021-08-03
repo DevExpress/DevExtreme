@@ -6,7 +6,6 @@
       :controls="true"
       :markers="markersData"
       v-model:routes="routesData"
-      center="Brooklyn Bridge,New York,NY"
       width="100%"
       provider="bing"
     />

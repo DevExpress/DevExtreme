@@ -29,7 +29,7 @@ class App extends React.Component {
     return (
       <div>
         <Map
-          defaultCenter={['Brooklyn Bridge', 'New York', 'NY']}
+          defaultCenter="Brooklyn Bridge,New York,NY"
           defaultZoom={14}
           apiKey={this.keys}
           height={400}
