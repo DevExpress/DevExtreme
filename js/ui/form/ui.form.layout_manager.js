@@ -599,22 +599,36 @@ const LayoutManager = Widget.inherit({
         const id = that.getItemID(name);
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
         const labelOptions = that._getLabelOptions(item, id, isRequired);
-        const $editor = $('<div>');
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-        let $label;
+        const helpText = item.helpText;
+        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
 
+        const editorOptions = this._convertToEditorOptions({
+            dataField: item.dataField,
+            editorType: item.editorType,
+            allowIndeterminateState: item.allowIndeterminateState,
+            editorOptions: item.editorOptions,
+            id,
+            validationBoundary: that.option('validationBoundary')
+        });
+        const template = that._getTemplateByFieldItem(item);
+
+        const $editor = $('<div>');
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
-        if(labelOptions.visible && labelOptions.text) {
-            $label = renderLabel(labelOptions).appendTo($container);
+        const $label = (labelOptions.visible && labelOptions.text) ? renderLabel(labelOptions) : null;
+        if($label) {
+            $container.append($label);
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
             if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== 'top') {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
-            that._hasBrowserFlex() && $container.addClass(FLEX_LAYOUT_CLASS);
+            if(that._hasBrowserFlex()) {
+                $container.addClass(FLEX_LAYOUT_CLASS);
+            }
         }
 
         $editor.data('dx-form-item', item);
@@ -624,7 +638,6 @@ const LayoutManager = Widget.inherit({
             if(location === 'top' || location === 'left') {
                 $container.append($editor);
             }
-
             if(location === 'right') {
                 $container.prepend($editor);
             }
@@ -638,22 +651,12 @@ const LayoutManager = Widget.inherit({
             $container.append($editor);
         }
 
-        const editorOptions = this._convertToEditorOptions({
-            dataField: item.dataField,
-            editorType: item.editorType,
-            allowIndeterminateState: item.allowIndeterminateState,
-            editorOptions: item.editorOptions,
-            id,
-            validationBoundary: that.option('validationBoundary')
-        });
-
         adjustEditorContainer({
             $container: $editor,
             labelLocation: this.option('labelLocation'),
         });
 
         let instance;
-        const template = that._getTemplateByFieldItem(item);
         if(template) {
             renderTemplateTo({
                 $container: getPublicElement($editor),
@@ -698,12 +701,18 @@ const LayoutManager = Widget.inherit({
             that._renderValidator($validationTarget, item);
 
             if(isMaterial()) {
-                that._addWrapperInvalidClass(validationTargetInstance);
+                const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
+                const toggleInvalidClass = function(e) {
+                    $(e.element).parents(wrapperClass)
+                        .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
+                };
+
+                validationTargetInstance
+                    .on('focusIn', toggleInvalidClass)
+                    .on('focusOut', toggleInvalidClass)
+                    .on('enterKey', toggleInvalidClass);
             }
         }
-
-        const helpText = item.helpText;
-        const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
 
         if(helpText && isSimpleItem) {
             const $editorParent = $editor.parent();
@@ -717,7 +726,13 @@ const LayoutManager = Widget.inherit({
             );
         }
 
-        that._attachClickHandler($label, $editor, item.editorType);
+        const isBooleanEditors = item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch';
+
+        if($label && isBooleanEditors) {
+            eventsEngine.on($label, clickEventName, function() {
+                eventsEngine.trigger($editor.children(), clickEventName);
+            });
+        }
     },
 
     _hasRequiredRuleInSet: function(rules) {
@@ -890,19 +905,6 @@ const LayoutManager = Widget.inherit({
         return validationRules;
     },
 
-    _addWrapperInvalidClass: function(editorInstance) {
-        const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
-        const toggleInvalidClass = function(e) {
-            $(e.element).parents(wrapperClass)
-                .toggleClass(INVALID_CLASS, e.component._isFocused() && e.component.option('isValid') === false);
-        };
-
-        editorInstance
-            .on('focusIn', toggleInvalidClass)
-            .on('focusOut', toggleInvalidClass)
-            .on('enterKey', toggleInvalidClass);
-    },
-
     _getComponentOwner: function() {
         return this.option('form') || this;
     },
@@ -970,16 +972,6 @@ const LayoutManager = Widget.inherit({
 
     _getTemplateByFieldItem: function(fieldItem) {
         return fieldItem.template ? this._getTemplate(fieldItem.template) : null;
-    },
-
-    _attachClickHandler: function($label, $editor, editorType) {
-        const isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
-
-        if($label && isBooleanEditors) {
-            eventsEngine.on($label, clickEventName, function() {
-                eventsEngine.trigger($editor.children(), clickEventName);
-            });
-        }
     },
 
     _generateRatio: function(count, isAutoSize) {
