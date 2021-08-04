@@ -777,22 +777,24 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderLabel: function(labelOptions) {
-        return renderLabel(this._getRenderLabelOptions(labelOptions));
+        return renderLabel({
+            ...labelOptions,
+            ...{ markOptions: this._getLabelMarkOptions(labelOptions.isRequired) }
+        });
     },
 
     _getLabelWidthByText: function({ text, location }) {
-        return getLabelWidthByText(this._getRenderLabelOptions({ text, location }));
+        return getLabelWidthByText({
+            text, location, markOptions: this._getLabelMarkOptions()
+        });
     },
 
-    _getRenderLabelOptions: function(labelOptions = {}) {
+    _getLabelMarkOptions: function(isRequired) {
         return {
-            ...labelOptions,
-            markOptions: {
-                isRequiredMark: this.option('showRequiredMark') && labelOptions.isRequired,
-                requiredMark: this.option('requiredMark'),
-                isOptionalMark: this.option('showOptionalMark') && !labelOptions.isRequired,
-                optionalMark: this.option('optionalMark')
-            }
+            isRequiredMark: this.option('showRequiredMark') && isRequired,
+            requiredMark: this.option('requiredMark'),
+            isOptionalMark: this.option('showOptionalMark') && !isRequired,
+            optionalMark: this.option('optionalMark')
         };
     },
 
