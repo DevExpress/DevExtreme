@@ -27,11 +27,11 @@ import Widget, {
 } from './widget/ui.widget';
 
 import {
-    dxToolbarItem
+    Item as dxToolbarItem
 } from './toolbar';
 
 import {
-    dxContextMenuItem
+    Item as dxContextMenuItem
 } from './context_menu';
 
 import {

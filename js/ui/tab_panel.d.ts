@@ -26,7 +26,7 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
-    dxMultiViewItem,
+    Item as MultiViewItem,
     dxMultiViewOptions
 } from './multi_view';
 
@@ -211,7 +211,7 @@ export type Item = dxTabPanelItem;
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabPanelItem extends dxMultiViewItem {
+export interface dxTabPanelItem extends MultiViewItem {
     /**
      * @docid
      * @public

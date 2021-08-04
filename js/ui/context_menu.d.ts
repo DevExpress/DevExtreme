@@ -259,8 +259,9 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxContextMenuItem>
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */
