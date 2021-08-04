@@ -411,7 +411,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const contentSizeChanged = this.props.contentSize !== this.prevContentSize;
     const containerSizeChanged = this.props.containerSize !== this.prevContainerSize;
 
-    if (contentSizeChanged || containerSizeChanged) {
+    if (this.props.containerDimensionsIsNotZero
+        && this.props.contentSize > 0
+        && (contentSizeChanged || containerSizeChanged)
+    ) {
       this.prevContentSize = this.props.contentSize;
       this.prevContainerSize = this.props.containerSize;
 

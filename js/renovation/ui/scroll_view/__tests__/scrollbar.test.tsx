@@ -256,59 +256,65 @@ describe('Scrollbar', () => {
         each([0, 80]).describe('maxOffset: %o', (maxOffset) => {
           each([0, 100, 500]).describe('contentSize: %o', (contentSize) => {
             each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {
-              it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
-                const topPocketSize = 85;
+              each([true, false]).describe('containerDimensionsIsNotZero: %o', (containerDimensionsIsNotZero) => {
+                it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
+                  const topPocketSize = 85;
 
-                const viewModel = new Scrollbar({
-                  showScrollbar: 'always',
-                  direction,
-                  rtlEnabled,
-                  topPocketSize,
-                  scrollLocation,
-                  contentSize,
-                  containerSize,
-                });
+                  const viewModel = new Scrollbar({
+                    showScrollbar: 'always',
+                    direction,
+                    rtlEnabled,
+                    topPocketSize,
+                    scrollLocation,
+                    contentSize,
+                    containerSize,
+                    containerDimensionsIsNotZero,
+                  });
 
-                const minOffset = -300;
-                Object.defineProperties(viewModel, {
-                  maxOffset: { get() { return maxOffset; } },
-                  minOffset: { get() { return minOffset; } },
-                });
+                  const minOffset = -300;
+                  Object.defineProperties(viewModel, {
+                    maxOffset: { get() { return maxOffset; } },
+                    minOffset: { get() { return minOffset; } },
+                  });
 
-                [0, 100, 500].forEach((prevContentSize) => {
-                  [0, 50, 200].forEach((prevContainerSize) => {
-                    [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-                      viewModel.moveTo = jest.fn();
+                  [0, 100, 500].forEach((prevContentSize) => {
+                    [0, 50, 200].forEach((prevContainerSize) => {
+                      [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+                        viewModel.moveTo = jest.fn();
 
-                      viewModel.prevContentSize = prevContentSize;
-                      viewModel.prevContainerSize = prevContainerSize;
-                      viewModel.rightScrollLocation = rightScrollLocation;
+                        viewModel.prevContentSize = prevContentSize;
+                        viewModel.prevContainerSize = prevContainerSize;
+                        viewModel.rightScrollLocation = rightScrollLocation;
 
-                      viewModel.moveToBoundaryOnSizeChange();
+                        viewModel.moveToBoundaryOnSizeChange();
 
-                      let expectedBoundaryLocation = Math.max(
-                        Math.min(scrollLocation, maxOffset), minOffset,
-                      );
+                        let expectedBoundaryLocation = Math.max(
+                          Math.min(scrollLocation, maxOffset), minOffset,
+                        );
 
-                      const contentSizeChanged = contentSize !== prevContentSize;
-                      const containerSizeChanged = containerSize !== prevContainerSize;
+                        const contentSizeChanged = contentSize !== prevContentSize;
+                        const containerSizeChanged = containerSize !== prevContainerSize;
 
-                      if ((contentSizeChanged || containerSizeChanged)
-                        && scrollLocation <= maxOffset) {
-                        expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                        if (containerDimensionsIsNotZero
+                          && contentSize > 0
+                          && (contentSizeChanged || containerSizeChanged)
+                          && scrollLocation <= maxOffset
+                        ) {
+                          expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
-                        if (direction === 'horizontal' && rtlEnabled) {
-                          expectedBoundaryLocation = minOffset - rightScrollLocation;
+                          if (direction === 'horizontal' && rtlEnabled) {
+                            expectedBoundaryLocation = minOffset - rightScrollLocation;
 
-                          if (expectedBoundaryLocation >= 0) {
-                            expectedBoundaryLocation = 0;
+                            if (expectedBoundaryLocation >= 0) {
+                              expectedBoundaryLocation = 0;
+                            }
                           }
-                        }
 
-                        expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
-                      } else {
-                        expect(viewModel.moveTo).not.toBeCalled();
-                      }
+                          expect(viewModel.moveTo).toHaveBeenCalledWith(expectedBoundaryLocation);
+                        } else {
+                          expect(viewModel.moveTo).not.toBeCalled();
+                        }
+                      });
                     });
                   });
                 });

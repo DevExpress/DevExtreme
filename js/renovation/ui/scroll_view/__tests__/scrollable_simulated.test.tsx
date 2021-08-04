@@ -1195,6 +1195,20 @@ describe('Simulated > Behavior', () => {
         });
       });
 
+      each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+        each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+          test('containerDimensionsIsNotZero()', () => {
+            const viewModel = new Scrollable({});
+
+            viewModel.containerClientHeight = containerClientHeight;
+            viewModel.containerClientWidth = containerClientWidth;
+
+            expect(viewModel.containerDimensionsIsNotZero)
+              .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+          });
+        });
+      });
+
       test.each(['onBounce', 'onStart', 'onUpdated'])('actionName: %o', (action) => {
         const helper = new ScrollableTestHelper({
           [`${action}`]: actionHandler,
