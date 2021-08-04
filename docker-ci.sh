@@ -59,7 +59,7 @@ function run_test {
         x11vnc -display :99 2>/dev/null &
     fi
 
-    node -e "v8.getHeapStatistics().total_available_size / 1024 / 1024"
+    node -e "console.log(v8.getHeapStatistics().total_available_size / 1024 / 1024)"
     
     npm ls webpack
 
@@ -69,7 +69,7 @@ function run_test {
         npm run build
         fi
 
-        find /root/.npm/_logs/*.log -exec cat {​​​​​​​}​​​​​​​ +
+        find /root/.npm/_logs/*.log -exec cat {​​​​​​​}​​​​​​​ +;
         
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
