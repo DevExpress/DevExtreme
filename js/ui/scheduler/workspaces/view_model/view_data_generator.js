@@ -445,7 +445,7 @@ export class ViewDataGenerator {
         const columnsInWeek = columnCount / intervalCount;
         const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
 
-        return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
+        return DAY_MS * weekendCount * 2;
     }
 
     calculateEndDate(startDate, interval, endDayHour) {
