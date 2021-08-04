@@ -62,7 +62,7 @@ function run_test {
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
         npm i
-        npm run build
+        npm run build-diag
         fi
 
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
