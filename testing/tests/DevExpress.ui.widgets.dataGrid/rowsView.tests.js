@@ -1757,7 +1757,7 @@ QUnit.module('Rows view', {
     });
 
     // B254289
-    QUnit.test('Selection on hold', function(assert) {
+    QUnit.test('Selection on hold if selection.mode is single', function(assert) {
     // arrange
         const rowInfos = this.items;
         const dataController = new MockDataController({ items: rowInfos });
@@ -1768,6 +1768,7 @@ QUnit.module('Rows view', {
         this.dataGrid.contextMenuView.render(testElement);
 
         this.options.selection = {
+            mode: 'single',
             showCheckBoxesMode: 'onClick'
         };
 
@@ -1785,7 +1786,6 @@ QUnit.module('Rows view', {
 
         // assert
         assert.strictEqual(selectionOptions.changeItemSelectionCallsCount, 1);
-        assert.ok(selectionOptions.isSelectionWithCheckboxes);
     });
 
     // T437599
@@ -1800,6 +1800,7 @@ QUnit.module('Rows view', {
         this.dataGrid.contextMenuView.render(testElement);
 
         this.options.selection = {
+            mode: 'multiple',
             showCheckBoxesMode: 'always'
         };
 
@@ -1830,6 +1831,7 @@ QUnit.module('Rows view', {
         const selectionOptions = this.selectionOptions;
 
         this.options.selection = {
+            mode: 'multiple',
             showCheckBoxesMode: 'onClick',
         };
 

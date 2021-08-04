@@ -47,7 +47,7 @@ function createRowsView() {
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'columns', 'rows', 'rowDragging', 'columnFixing', 'grouping', 'masterDetail', 'virtualScrolling', 'summary'], {
+    setupDataGridModules(mockDataGrid, ['data', 'columns', 'rows', 'rowDragging', 'columnFixing', 'grouping', 'masterDetail', 'virtualScrolling', 'summary', 'selection', 'editorFactory'], {
         initViews: true
     });
 
@@ -70,10 +70,12 @@ const moduleConfig = {
             }
         };
         this.createRowsView = createRowsView;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         $('#qunit-fixture').removeClass('qunit-fixture-visible');
         this.dataGrid && this.dataGrid.dispose();
+        this.clock.restore();
     }
 };
 
@@ -108,6 +110,30 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.strictEqual($placeholderElement.length, 1, 'placeholder');
         assert.ok($draggableElement.children().children().hasClass('dx-datagrid'), 'dragging element is datagrid');
         assert.strictEqual($draggableElement.find('.dx-data-row').length, 1, 'row count in dragging element');
+    });
+
+    QUnit.test('Dragging should works on hold if selection mode is multiple (T1018574)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.selection = {
+            mode: 'multiple',
+            showCheckBoxesMode: 'onClick'
+        };
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down();
+
+        this.clock.tick(1000);
+
+        pointer.move(0, 70);
+
+        // assert
+        const $draggableElement = $('body').children('.dx-sortable-dragging');
+        assert.strictEqual($draggableElement.length, 1, 'dragging is started');
     });
 
     QUnit.test('Dragging events', function(assert) {
@@ -875,6 +901,7 @@ QUnit.module('Handle', $.extend({}, moduleConfig, {
 
             return rowsView;
         };
+        this.clock = sinon.useFakeTimers();
     }
 }), () => {
 
