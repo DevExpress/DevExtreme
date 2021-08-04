@@ -80,15 +80,11 @@ describe("getOptionValue", () => {
     it("returns for complex option", () => {
         const optionValue = getOptionValue({ test: { value: "text" } }, "test");
         const optionValue1 = getOptionValue({ test: { value: "text" } }, "test.value");
+        const optionValue2 = getOptionValue({ test: { value: "text" } }, "test1.value");
 
         expect(optionValue).toEqual({ value: "text" });
         expect(optionValue1).toEqual("text");
-    });
-
-    it("returns for complex option", () => {
-        const optionValue = getOptionValue({ test: { value: "text" } }, "test");
-
-        expect(optionValue).toEqual({ value: "text" });
+        expect(optionValue2).toEqual(undefined);
     });
 
     it("returns for collection option", () => {
