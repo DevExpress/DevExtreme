@@ -42,8 +42,10 @@ import numberLocalization from 'localization/number';
 import virtualScrollingCore from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
 import ODataStore from 'data/odata/store';
 import ArrayStore from 'data/array_store';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
+const isScrollableRenovated = !!Scrollable.IS_RENOVATED_WIDGET;
 
 function getText(element) {
     return $(element).text();
@@ -241,7 +243,7 @@ QUnit.module('Rows view', {
         assert.strictEqual(scrollable.option('showScrollbar'), 'always', 'scrollable showScrollbar');
         assert.strictEqual(scrollable.option('test'), 'test', 'scrollable test');
         // T654402
-        assert.strictEqual(scrollable.option('updateManually'), false, 'scrollable updateManually');
+        !isScrollableRenovated && assert.strictEqual(scrollable.option('updateManually'), false, 'scrollable updateManually');
     });
 
     QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
@@ -5303,7 +5305,10 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.notOk(that.rowsView.getScrollable()._allowedDirection(), 'scrollbars are hidden');
+        const $scrollableContainer = $(that.rowsView.getScrollable().container());
+
+        assert.strictEqual($scrollableContainer.find('.dx-scrollbar-vertical').is(':hidden'), true, 'vertical scrollbar is hidden');
+        assert.strictEqual($scrollableContainer.find('.dx-scrollbar-horizontal').is(':hidden'), true, 'horizontal scrollbar is hidden');
         clock.restore();
     });
 

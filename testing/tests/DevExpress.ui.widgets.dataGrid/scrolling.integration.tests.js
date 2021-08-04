@@ -36,8 +36,10 @@ import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
@@ -218,7 +220,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
 
-        this.clock.restore();
         scrollable.scrollTo({ x: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
@@ -235,6 +236,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 done();
             });
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('Scroller state', function(assert) {
@@ -953,9 +956,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // act
         scrollable.scrollTo(100.7);
-
         // assert
-        assert.equal(scrollable.scrollLeft(), 100.7);
+        assert.equal(scrollable.scrollLeft(), isRenovation ? 100 : 100.7);
         assert.equal(scrollable._container().scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
@@ -1022,7 +1024,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         });
 
         // act
-
         dataGrid.focus($(dataGrid.getCellElement(0, 2)));
         this.clock.tick();
 
