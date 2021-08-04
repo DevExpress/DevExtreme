@@ -7,9 +7,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Get sources
-      uses: actions/checkout@v2
-
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
       if: github.event_name == 'pull_request'

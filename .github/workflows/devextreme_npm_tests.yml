@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Build devExtreme npm package
       uses: ./.github/actions/build_npm_devextreme
 
@@ -16,6 +19,9 @@ jobs:
     timeout-minutes: 30
 
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Angular wrapper tests
       uses: ./.github/actions/test_angular
 
@@ -25,6 +31,9 @@ jobs:
     timeout-minutes: 60
 
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Bundlers Tests
       uses: ./.github/actions/test_bundlers
 
@@ -34,6 +43,9 @@ jobs:
     timeout-minutes: 60
 
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Bundlers tests
       uses: ./.github/actions/test_bundlers
       
@@ -43,6 +55,9 @@ jobs:
     timeout-minutes: 20
 
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Demos build
       uses: ./.github/actions/build_demos
 
@@ -58,6 +73,9 @@ jobs:
     timeout-minutes: 20
   
     steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
     - name: Demos TestCafe Tests
       uses: ./.github/actions/test_demos
       with:
