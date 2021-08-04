@@ -65,6 +65,10 @@ function run_test {
         npm run build
         fi
 
+        if [ $? -ne 0 ]; then
+            cat /root/.npm/_logs/*
+        fi
+
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
         for i in {15..0}; do
