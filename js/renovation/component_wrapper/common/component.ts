@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   render, createRef, RefObject, VNode, Component,
 } from 'inferno';
@@ -11,6 +12,7 @@ import DOMComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { isDefined, isRenderer, isString } from '../../../core/utils/type';
+import { cleanDataRecursive } from '../../../core/element_data';
 
 import { TemplateModel, TemplateWrapper } from './template_wrapper';
 import { updatePropsImmutable } from '../utils/update_props_immutable';
@@ -156,7 +158,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         createElement(this._viewComponent, props),
         mountNode,
       );
-      containerNode.$V = mountNode.$V;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      containerNode.$V = (mountNode as any).$V;
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }
@@ -187,6 +190,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     const { parentNode } = containerNode;
 
     if (parentNode) {
+      cleanDataRecursive(containerNode);
       parentNode.$V = containerNode.$V;
       render(null, parentNode);
       parentNode.appendChild(containerNode);
@@ -522,3 +526,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 /// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
 /// #ENDDEBUG
+
+/* eslint-enable @typescript-eslint/ban-types */
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */

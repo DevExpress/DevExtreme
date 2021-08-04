@@ -106,9 +106,13 @@ export default class DataGridWrapper extends Component {
 
   _optionChanged(e: Option): void {
     const internalInstance = this._getInternalInstance();
-    if (internalInstance && e.fullName === 'dataSource' && e.value === internalInstance.option('dataSource')) {
-      internalInstance.option('dataSource', e.value as string);
-    }
+    ['dataSource', 'editing.changes'].forEach((fullName) => {
+      if (internalInstance
+        && e.fullName === fullName
+        && e.value === internalInstance.option(fullName)) {
+        internalInstance.option(fullName, e.value as string);
+      }
+    });
     super._optionChanged(e);
   }
 
@@ -132,8 +136,9 @@ export default class DataGridWrapper extends Component {
 
     if (originalCustomizeExcelCell) {
       exportOptions.customizeExcelCell = (e: ExcelCellInfo): void => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         (e as any).component = this;
+
         return originalCustomizeExcelCell(e);
       };
     }
