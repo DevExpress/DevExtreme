@@ -58,6 +58,7 @@ jobs:
         "font.name-list.serif.x-western", "Liberation Serif" ; do echo "user_pref($p);" >> ./firefox-profile/prefs.js; done
     - name: Run FireFox
       run: |
+        cat ./firefox-profile/prefs.js
         firefox -headless -profile ./firefox-profile http://localhost:20060/run?notimers=true&constellation=misc
     - name: Setup utils
       run: |
