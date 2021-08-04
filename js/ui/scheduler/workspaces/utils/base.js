@@ -56,65 +56,11 @@ export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount)
     return columnIndex * rowCount + rowIndex;
 };
 
-const getTimeOffsetByColumnIndex = (columnIndex, columnsInDay, firstDayOfWeek) => {
-    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
-    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / (5 * columnsInDay));
-
-    return dateUtils.dateToMilliseconds('day') * weekendCount * 2;
-};
-
 export const getStartViewDateWithoutDST = (startViewDate, startDayHour) => {
     const newStartViewDate = timeZoneUtils.getDateWithoutTimezoneChange(startViewDate);
     newStartViewDate.setHours(startDayHour);
 
     return newStartViewDate;
-};
-
-const getMillisecondsOffset = (cellIndex, interval, hiddenIntervalBase, cellCountInDay) => {
-    const dayIndex = Math.floor(cellIndex / cellCountInDay);
-    const hiddenInterval = dayIndex * hiddenIntervalBase;
-
-    return interval * cellIndex + hiddenInterval;
-};
-
-export const getDateByCellIndices = (options, rowIndex, columnIndex, calculateCellIndex, cellCountInDay) => {
-    let startViewDate = options.startViewDate;
-    const {
-        startDayHour,
-        isWorkView,
-        columnsInDay,
-        hiddenInterval,
-        interval,
-        rowCountBase,
-        columnCountBase,
-        firstDayOfWeek,
-    } = options;
-
-    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
-
-    if(isStartViewDateDuringDST) {
-        const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
-
-        startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
-    }
-
-    const cellIndex = calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
-    const millisecondsOffset = getMillisecondsOffset(cellIndex, interval, hiddenInterval, cellCountInDay);
-
-    const offsetByCount = isWorkView
-        ? getTimeOffsetByColumnIndex(columnIndex, columnsInDay, firstDayOfWeek)
-        : 0;
-
-    const startViewDateTime = startViewDate.getTime();
-    const currentDate = new Date(startViewDateTime + millisecondsOffset + offsetByCount);
-
-    const timeZoneDifference = isStartViewDateDuringDST
-        ? 0
-        : dateUtils.getTimezonesDifference(startViewDate, currentDate);
-
-    currentDate.setTime(currentDate.getTime() + timeZoneDifference);
-
-    return currentDate;
 };
 
 export const getHeaderCellText = (
