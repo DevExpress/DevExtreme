@@ -70,6 +70,12 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
     & {
       background-color: transparent;
       box-shadow: none;
+
+      &.dx-texteditor-with-floating-label,
+      &.dx-texteditor-with-label {
+        background-color: transparent;
+        box-shadow: none;
+      }
     }
   }
 }
