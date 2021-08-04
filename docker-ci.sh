@@ -94,6 +94,8 @@ function run_test {
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
+            echo "$firefox_args"
+
             firefox $firefox_args &
         ;;
 
