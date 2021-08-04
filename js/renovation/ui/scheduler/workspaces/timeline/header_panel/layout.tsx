@@ -12,8 +12,6 @@ export const viewFunction = ({
     groupByDate,
     groups,
     groupOrientation,
-    groupPanelCellBaseColSpan,
-    columnCountPerGroup,
     isRenderDateHeader,
     resourceCellTemplate,
     dateCellTemplate,
@@ -26,8 +24,6 @@ export const viewFunction = ({
     groupByDate={groupByDate}
     groups={groups}
     groupOrientation={groupOrientation}
-    groupPanelCellBaseColSpan={groupPanelCellBaseColSpan}
-    columnCountPerGroup={columnCountPerGroup}
     isRenderDateHeader={isRenderDateHeader}
     resourceCellTemplate={resourceCellTemplate}
     dateCellTemplate={dateCellTemplate}

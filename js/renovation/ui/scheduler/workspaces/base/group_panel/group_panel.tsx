@@ -1,13 +1,18 @@
 import {
   Component,
+  ComponentBindings,
   JSXComponent,
   JSXTemplate,
+  OneWay,
 } from '@devextreme-generator/declarations';
 import { isVerticalGroupingApplied } from '../../utils';
-import { GroupPanelProps } from './group_panel_props';
+import { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelVerticalLayout } from './vertical/layout';
 import { GroupPanelHorizontalLayout } from './horizontal/layout';
 import { GroupPanelLayoutProps } from './group_panel_layout_props';
+import { Group } from '../../types';
+import { GroupOrientation } from '../../../types';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 
 export const viewFunction = ({
   layout: Layout,
@@ -28,6 +33,13 @@ export const viewFunction = ({
     styles={restAttributes.style}
   />
 );
+
+@ComponentBindings()
+export class GroupPanelProps extends GroupPanelBaseProps {
+  @OneWay() groups: Group[] = [];
+
+  @OneWay() groupOrientation: GroupOrientation = VERTICAL_GROUP_ORIENTATION;
+}
 
 @Component({
   defaultOptionRules: null,

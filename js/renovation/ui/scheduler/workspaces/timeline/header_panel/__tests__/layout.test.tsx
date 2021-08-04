@@ -21,8 +21,6 @@ describe('TimelineHeaderPanelLayout', () => {
       groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
       groups: [],
       groupByDate: false,
-      groupPanelCellBaseColSpan: 5,
-      columnCountPerGroup: 15,
       isRenderDateHeader: true,
       resourceCellTemplate: () => null,
       dateCellTemplate: () => null,

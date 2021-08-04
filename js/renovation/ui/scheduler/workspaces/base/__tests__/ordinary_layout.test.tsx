@@ -125,15 +125,17 @@ describe('OrdinaryLayout', () => {
     it('should render HeaderPanel and pass to it correct props', () => {
       const props = {
         dateHeaderData,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
         timeCellTemplate: () => null,
         dateCellTemplate: () => null,
         isRenderDateHeader: true,
 
-        groupPanelCellBaseColSpan: 4,
         groupOrientation: 'horizontal',
         groupByDate: false,
         groups,
-        columnCountPerGroup: 32,
         resourceCellTemplate: () => null,
       };
       const layout = render({ props });
@@ -233,13 +235,15 @@ describe('OrdinaryLayout', () => {
     it('should render group panel when isRenderGroupPanel is true', () => {
       const resourceCellTemplate = () => null;
       const props = {
-        groupPanelCellBaseColSpan: 34,
         groupOrientation: 'vertical',
         groupByDate: false,
         groups,
-        columnCountPerGroup: 34,
         resourceCellTemplate,
         groupPanelClassName: 'groupPanelClassName',
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
       };
       const layout = render({
         isRenderGroupPanel: true,
@@ -261,11 +265,13 @@ describe('OrdinaryLayout', () => {
           groupOrientation: 'vertical',
           groupByDate: false,
           groups,
-          columnCountPerGroup: 34,
           resourceCellTemplate,
           height: 497,
-          baseColSpan: 34,
           className: 'groupPanelClassName',
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 34,
+          },
         });
     });
 

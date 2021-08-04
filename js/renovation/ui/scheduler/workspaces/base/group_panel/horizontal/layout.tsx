@@ -9,10 +9,10 @@ export const viewFunction = ({
   props: {
     resourceCellTemplate,
   },
-  groupsRenderData,
+  groupPanelItems,
 }: GroupPanelHorizontalLayout): JSX.Element => (
   <Fragment>
-    {groupsRenderData.map((group: GroupRenderItem[]) => (
+    {groupPanelItems.map((group: GroupRenderItem[]) => (
       <Row
         groupItems={group}
         cellTemplate={resourceCellTemplate}
@@ -27,7 +27,7 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class GroupPanelHorizontalLayout extends JSXComponent(GroupPanelLayoutProps) {
-  get groupsRenderData(): GroupRenderItem[][] {
+  get groupPanelItems(): GroupRenderItem[][] {
     const { groupPanelData } = this.props;
     const { baseColSpan, groupPanelItems } = groupPanelData;
 
