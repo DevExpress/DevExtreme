@@ -6,6 +6,8 @@ import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
 
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="scheduler-work-space">\
