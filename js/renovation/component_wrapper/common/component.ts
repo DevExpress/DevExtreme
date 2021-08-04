@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   render, createRef, RefObject, VNode, Component,
 } from 'inferno';
@@ -157,7 +158,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
         createElement(this._viewComponent, props),
         mountNode,
       );
-      containerNode.$V = mountNode.$V;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      containerNode.$V = (mountNode as any).$V;
       if (parentNode) {
         parentNode.insertBefore(containerNode, nextNode);
       }
@@ -524,3 +526,6 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 /// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
 /// #ENDDEBUG
+
+/* eslint-enable @typescript-eslint/ban-types */
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */

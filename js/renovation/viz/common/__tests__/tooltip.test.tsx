@@ -1042,7 +1042,7 @@ describe('Logic', () => {
         container2.appendChild(masterDiv);
 
         const rootWidgetRef = React.createRef() as RefObject<HTMLDivElement>;
-        rootWidgetRef.current = masterDiv;
+        rootWidgetRef.current = masterDiv as HTMLDivElement;
 
         const tooltip = new Tooltip({ container: '.container-class', rootWidget: rootWidgetRef });
 
