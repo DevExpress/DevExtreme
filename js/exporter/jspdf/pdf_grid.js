@@ -128,11 +128,31 @@ export class PdfGrid {
     }
 
     drawTo(doc) {
+        const docStyles = this._getOriginalDocStyles(doc);
+
         this._tables.forEach((table) => {
             if(this._newPageTables.indexOf(table) !== -1) {
                 doc.addPage();
             }
-            table.drawTo(doc);
+            table.drawTo(doc, docStyles);
         });
+
+        this._restoreOriginalDocStyles(doc, docStyles);
+    }
+
+    _getOriginalDocStyles(doc) {
+        return {
+            textColor: doc.getTextColor()
+        };
+    }
+
+    _restoreOriginalDocStyles(doc, docStyles) {
+        const {
+            textColor
+        } = docStyles;
+
+        if(doc.getTextColor() !== textColor) {
+            doc.setTextColor(textColor);
+        }
     }
 }
