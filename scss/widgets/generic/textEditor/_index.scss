@@ -563,8 +563,10 @@ $generic-texteditor-label-transition:
         }
       }
 
-      .dx-texteditor-buttons-container {
-        min-width: $texteditor-input-border-radius;
+      &.dx-textarea {
+        .dx-texteditor-buttons-container {
+          min-width: $texteditor-input-border-radius;
+        }
       }
     }
 
