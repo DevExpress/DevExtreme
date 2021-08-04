@@ -32,8 +32,7 @@ import {
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs,
-    getItemPath,
-    getLabelWidthByText
+    getItemPath
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -173,12 +172,10 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = getLabelWidthByText(
-                layoutManager._getRenderLabelOptions({
-                    text: this._getLabelText($labelTexts[i]),
-                    location: this._labelLocation(),
-                })
-            );
+            labelWidth = layoutManager.getLabelWidthByText({
+                text: this._getLabelText($labelTexts[i]),
+                location: this._labelLocation()
+            });
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
