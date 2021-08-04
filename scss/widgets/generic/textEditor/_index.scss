@@ -562,6 +562,10 @@ $generic-texteditor-label-transition:
           margin-right: -1px;
         }
       }
+
+      .dx-texteditor-buttons-container {
+        min-width: $texteditor-input-border-radius;
+      }
     }
 
     .dx-texteditor-buttons-container {

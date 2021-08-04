@@ -700,6 +700,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           margin-right: -1px;
         }
       }
+
+      .dx-texteditor-buttons-container {
+        min-width: $texteditor-input-border-radius;
+      }
     }
 
     .dx-texteditor-buttons-container {
