@@ -15,6 +15,8 @@ export class ScrollbarProps {
 
   @OneWay() containerSize = 0;
 
+  @OneWay() containerDimensionsIsNotZero = false;
+
   @OneWay() contentSize = 0;
 
   @OneWay() topPocketSize = 0;

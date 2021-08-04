@@ -112,9 +112,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() readOnly = false;
 
-  @OneWay() iconHeight?: number | string;
-
-  @OneWay() iconWidth?: number | string;
+  @OneWay() iconSize?: number | string;
 
   @OneWay() isValid = true;
 
@@ -160,7 +158,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Effect()
   updateIconFontSize(): EffectReturn {
     const iconElement = this.iconRef?.current;
-    const { iconWidth, iconHeight } = this.props;
+    const { iconSize } = this.props;
 
     if (iconElement && hasWindow()) {
       const isCompactTheme = current()?.includes('compact');
@@ -172,18 +170,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       }
       const iconFontSizeRatio = defaultFontSize / defaultIconSize;
 
-      let getIconComputedStyle = (): CSSStyleDeclaration => {
+      const getIconComputedStyle = (): CSSStyleDeclaration => {
         const computedStyle = getElementComputedStyle(iconElement) ?? { width: `${defaultIconSize}px`, height: `${defaultIconSize}px` } as CSSStyleDeclaration;
-        getIconComputedStyle = (): CSSStyleDeclaration => computedStyle;
         return computedStyle;
       };
 
-      const width = typeof iconWidth === 'number' ? iconWidth : parseInt(getIconComputedStyle().width, 10);
-      const height = typeof iconHeight === 'number' ? iconHeight : parseInt(getIconComputedStyle().height, 10);
-      const iconSize = Math.min(width, height);
-      const calculatedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
+      const computedIconSize = typeof iconSize === 'number' ? iconSize : parseInt(getIconComputedStyle().width, 10);
+      const computedFontSize = `${Math.ceil(computedIconSize * iconFontSizeRatio)}px`;
 
-      iconElement.style.fontSize = calculatedFontSize;
+      iconElement.style.fontSize = computedFontSize;
     }
 
     return undefined;
@@ -233,9 +228,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   }
 
   get iconStyles(): { [key: string]: string | number } {
-    const { iconWidth, iconHeight } = this.props;
-    const width = normalizeStyleProp('width', iconWidth);
-    const height = normalizeStyleProp('height', iconHeight);
+    const { iconSize } = this.props;
+    const width = normalizeStyleProp('width', iconSize);
+    const height = normalizeStyleProp('height', iconSize);
 
     return { height, width };
   }

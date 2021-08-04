@@ -34,7 +34,7 @@ import {
 } from './utils';
 
 import { ScrollableTestHelper } from './scrollable_simulated_test_helper';
-import { DxKeyboardEvent, DxMouseEvent } from '../types';
+import { DxKeyboardEvent, DxMouseEvent, DxMouseWheelEvent } from '../types';
 import { AnimatedScrollbar } from '../animated_scrollbar';
 
 jest.mock('../../../../core/devices', () => {
@@ -679,9 +679,9 @@ describe('Simulated > Behavior', () => {
             ? direction
             : undefined;
 
-          const event = { ...defaultEvent, shiftKey } as unknown as DxMouseEvent;
+          const event = { ...defaultEvent, shiftKey };
           if (isDxWheelEvent) {
-            (event as any).type = 'dxmousewheel';
+            event.type = 'dxmousewheel';
           }
 
           if (isDxWheelEvent) {
@@ -691,7 +691,9 @@ describe('Simulated > Behavior', () => {
             }
           }
 
-          expect(helper.viewModel.tryGetAllowedDirection(event)).toBe(expectedDirectionResult);
+          expect(helper.viewModel
+            .tryGetAllowedDirection(event as unknown as DxMouseWheelEvent))
+            .toBe(expectedDirectionResult);
         });
 
       each([-1, 1]).describe('wheelDelta: %o', (delta) => {
@@ -701,7 +703,7 @@ describe('Simulated > Behavior', () => {
               each([undefined, 0, 54]).describe('animationScrollbar.reachedMax: %o', (validateWheelTimer) => {
                 it('validateWheel(event)', () => {
                   const viewModel = new Scrollable({ direction });
-                  const event = { ...defaultEvent, delta } as unknown as DxMouseEvent;
+                  const event = { ...defaultEvent, delta } as unknown as DxMouseWheelEvent;
 
                   viewModel.wheelDirection = jest.fn(() => wheelDirection);
                   viewModel.validateWheelTimer = validateWheelTimer;
@@ -750,7 +752,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: true } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: true } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'horizontal' : direction);
         });
 
@@ -758,7 +760,7 @@ describe('Simulated > Behavior', () => {
           const viewModel = new Scrollable({ direction });
 
           expect(
-            viewModel.wheelDirection({ shiftKey: false } as DxMouseEvent),
+            viewModel.wheelDirection({ shiftKey: false } as DxMouseWheelEvent),
           ).toEqual(direction === 'both' ? 'vertical' : direction);
         });
       });
@@ -1190,6 +1192,20 @@ describe('Simulated > Behavior', () => {
           expect(viewModel.savedScrollOffset).toEqual(expectedSavedScrollOffset);
           expect(viewModel.containerRef.current!.scrollTop).toEqual(expectedContainerScrollTop);
           expect(viewModel.containerRef.current!.scrollLeft).toEqual(expectedContainerScrollLeft);
+        });
+      });
+
+      each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+        each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+          test('containerDimensionsIsNotZero()', () => {
+            const viewModel = new Scrollable({});
+
+            viewModel.containerClientHeight = containerClientHeight;
+            viewModel.containerClientWidth = containerClientWidth;
+
+            expect(viewModel.containerDimensionsIsNotZero)
+              .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+          });
         });
       });
 

@@ -10,7 +10,8 @@ const IGNORE_OPTION_NAMES = [
     'onFocusOut',
     'onKeyboardHandled',
     'ignoreParentReadOnly',
-    'loadPanel.animation' // TODO
+    'loadPanel.animation', // TODO
+    'useResizeObserver'
 ];
 
 function checkDefaultOptions(assert, options, newOptions, prefix = '') {

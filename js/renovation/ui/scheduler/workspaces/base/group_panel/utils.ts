@@ -9,7 +9,7 @@ const extendGroupItemsForGroupingByDate = (
   columnCountPerGroup: number,
 ): GroupRenderItem[][] => [...new Array(columnCountPerGroup)]
   .reduce((currentGroupItems, _, index) => groupRenderItems.map((groupsRow, rowIndex) => {
-    const currentRow = currentGroupItems[rowIndex] || [];
+    const currentRow = (currentGroupItems as [])[rowIndex] || [];
 
     return [
       ...currentRow,

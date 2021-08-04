@@ -36,6 +36,7 @@ export const EVENT = {
 };
 
 export const defaultEvent = {
+  type: '',
   isDefaultPrevented: (): void => undefined,
   preventDefault: (): void => undefined,
   stopImmediatePropagation: (): void => undefined,

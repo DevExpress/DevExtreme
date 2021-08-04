@@ -37,7 +37,6 @@ import devices from 'core/devices';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
 import themes from 'ui/themes';
-import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import SelectBox from 'ui/select_box';
@@ -49,6 +48,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { generateItems } from '../../helpers/dataGridMocks.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -280,11 +280,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -314,11 +310,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -3299,6 +3291,51 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         const $cellElement = $(dataGrid.getCellElement(0, 1));
         assert.ok($cellElement.hasClass('dx-editor-cell'), 'cell has editor');
         assert.ok($cellElement.find('.dx-texteditor-input').is(':focus'), 'cell editor is focused');
+    });
+
+    // T1016329
+    QUnit.testInActiveWindow('No exceptions on an attempt to add a change object for an invisible row to the editing.changes option', function(assert) {
+        // arrange
+        const changes = [];
+        const items = generateItems(100);
+        const dataGrid = createDataGrid({
+            dataSource: items,
+            keyExpr: 'id',
+            height: 100,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                enabled: false
+            }
+        });
+
+        this.clock.tick(100);
+
+        items.forEach((item, index) => {
+            changes.push(
+                {
+                    key: item.id,
+                    type: 'update',
+                    data: { field1: 'changed' + index }
+                }
+            );
+        });
+
+        try {
+            // act
+            dataGrid.option('editing.changes', changes);
+
+            // assert
+            assert.ok(true, 'There are no exceptions');
+        } catch(err) {
+            // assert
+            assert.ok(false, 'exception was threw:' + err);
+        }
     });
 });
 
