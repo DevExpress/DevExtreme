@@ -1,4 +1,4 @@
-name: Angular wrapper tests
+name: devextreme package tests
 
 on: [push, pull_request]
 
@@ -8,7 +8,7 @@ jobs:
 
     steps:
     - name: Build devExtreme npm package
-      uses: ./.github/actions/build_npm_devextreme.yml
+      uses: ./.github/actions/build_npm_devextreme
 
   test_angular:
     needs: cache_build
@@ -17,7 +17,7 @@ jobs:
 
     steps:
     - name: Angular wrapper tests
-      uses: ./.github/actions/test_angular.yml
+      uses: ./.github/actions/test_angular
 
   test_bundlers:
     needs: cache_build
@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Bundlers Tests
-      uses: ./.github/actions/test_bundlers.yml
+      uses: ./.github/actions/test_bundlers
 
   test-bundlers:
     needs: cache_build
@@ -35,7 +35,7 @@ jobs:
 
     steps:
     - name: Bundlers tests
-      uses: ./.github/actions/test_bundlers.yml
+      uses: ./.github/actions/test_bundlers
       
   build_demos:
     needs: cache_build
@@ -44,7 +44,7 @@ jobs:
 
     steps:
     - name: Demos build
-      uses: ./.github/actions/build_demos.yml
+      uses: ./.github/actions/build_demos
 
   test_demos:
     needs: build_demos
@@ -59,6 +59,6 @@ jobs:
   
     steps:
     - name: Demos TestCafe Tests
-      uses: ./.github/actions/test_demos.yml
+      uses: ./.github/actions/test_demos
       with:
         constel: ${{ matrix.CONSTEL }}
