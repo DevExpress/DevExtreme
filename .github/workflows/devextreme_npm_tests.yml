@@ -8,7 +8,7 @@ jobs:
 
     steps:
     - name: Build devExtreme npm package
-      uses: ./.github/actions/build_npm_devextreme
+      uses: ./.github/actions/build_npm_devextreme.yml
 
   test_angular:
     needs: cache_build
@@ -17,7 +17,7 @@ jobs:
 
     steps:
     - name: Angular wrapper tests
-      uses: ./.github/actions/test_angular
+      uses: ./.github/actions/test_angular.yml
 
   test_bundlers:
     needs: cache_build
@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Bundlers Tests
-      uses: ./.github/actions/test_bundlers
+      uses: ./.github/actions/test_bundlers.yml
 
   test-bundlers:
     needs: cache_build
@@ -35,7 +35,7 @@ jobs:
 
     steps:
     - name: Bundlers tests
-      uses: ./.github/actions/test_bundlers
+      uses: ./.github/actions/test_bundlers.yml
       
   build_demos:
     needs: cache_build
@@ -44,7 +44,7 @@ jobs:
 
     steps:
     - name: Demos build
-      uses: ./.github/actions/build_demos
+      uses: ./.github/actions/build_demos.yml
 
   test_demos:
     needs: build_demos
@@ -59,6 +59,6 @@ jobs:
   
     steps:
     - name: Demos TestCafe Tests
-      uses: ./.github/actions/test_demos
+      uses: ./.github/actions/test_demos.yml
       with:
         constel: ${{ matrix.CONSTEL }}
