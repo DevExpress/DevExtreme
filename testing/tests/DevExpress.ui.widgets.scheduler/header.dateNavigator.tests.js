@@ -1,5 +1,6 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
+import devices from 'core/devices';
 
 testStart(() => initTestMarkup());
 
@@ -51,6 +52,60 @@ test('should has correct caption(with agendaDuration)', function(assert) {
 
     assert.equal(scheduler.header.navigator.getText(), '7-10 May 2021');
 });
+
+test('should display correct caption after changing to day view if startDate is settled in views',
+    function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2021, 6, 28),
+            currentView: 'month',
+            views: [
+                'month',
+                {
+                    type: 'day',
+                    intervalCount: 3,
+                    startDate: new Date(2021, 6, 30),
+                }
+            ],
+        });
+
+        scheduler.option('currentView', 'day');
+
+        const expectedCaption = devices.current().deviceType === 'desktop'
+            ? '27-29 July 2021'
+            : '27-29 Jul 2021';
+
+        assert.equal(
+            scheduler.header.navigator.caption.getText(),
+            expectedCaption,
+            'caption must take into account startDate'
+        );
+    }
+);
+
+test('should display correct caption after changing to month view if startDate is settled in views',
+    function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2021, 6, 28),
+            currentView: 'day',
+            views: [
+                'day',
+                {
+                    type: 'month',
+                    intervalCount: 3,
+                    startDate: new Date(2021, 5, 30),
+                },
+            ]
+        });
+
+        scheduler.option('currentView', 'month');
+
+        assert.equal(
+            scheduler.header.navigator.caption.getText(),
+            'Jun-Aug 2021',
+            'caption must take into account startDate'
+        );
+    }
+);
 
 module('Option Changing', () => {
     test('should change caption text after changing "currentView"', function(assert) {

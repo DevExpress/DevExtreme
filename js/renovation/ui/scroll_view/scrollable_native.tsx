@@ -37,6 +37,7 @@ import '../../../events/gesture/emitter.gesture.scroll';
 import {
   ScrollEventArgs,
   ScrollOffset, ScrollableDirection, RefreshStrategy, DxMouseEvent,
+  DxMouseWheelEvent,
 } from './types.d';
 
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
@@ -512,8 +513,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
-  moveIsAllowed(event: DxMouseEvent): boolean {
-    if (this.props.disabled || (isDxMouseWheelEvent(event) && this.isScrollingOutOfBound(event))) {
+  moveIsAllowed(event: DxMouseEvent | DxMouseWheelEvent): boolean {
+    if (this.props.disabled || (isDxMouseWheelEvent(event)
+    && this.isScrollingOutOfBound(event as DxMouseWheelEvent))) {
       return false;
     }
 
@@ -722,7 +724,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     if (isDefined(this.tryGetAllowedDirection())) {
-      e.originalEvent.isScrollingEvent = true;
+      // eslint-disable-next-line
+      (e.originalEvent as any).isScrollingEvent = true;
     }
 
     if (this.props.forceGeneratePockets && this.isSwipeDownStrategy) {
@@ -895,7 +898,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return this.locked;
   }
 
-  isScrollingOutOfBound(event: DxMouseEvent): boolean {
+  isScrollingOutOfBound(event: DxMouseWheelEvent): boolean {
     const { delta, shiftKey } = event;
     const {
       scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
