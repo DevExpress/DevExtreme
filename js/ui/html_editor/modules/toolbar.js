@@ -59,7 +59,9 @@ if(Quill) {
         'insertColumnRight',
         'deleteColumn',
         'deleteRow',
-        'deleteTable'
+        'deleteTable',
+        'cellProperties',
+        'tableProperties'
     ];
 
     const USER_ACTION = 'user';
@@ -188,7 +190,9 @@ if(Quill) {
                 insertColumnRight: this._getTableOperationHandler('insertColumnRight'),
                 deleteColumn: this._getTableOperationHandler('deleteColumn'),
                 deleteRow: this._getTableOperationHandler('deleteRow'),
-                deleteTable: this._getTableOperationHandler('deleteTable')
+                deleteTable: this._getTableOperationHandler('deleteTable'),
+                cellProperties: () => {},
+                tableProperties: () => {}
             };
         }
 
@@ -676,6 +680,16 @@ if(Quill) {
                     }
                 },
                 deleteTable: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                cellProperties: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                tableProperties: {
                     options: {
                         disabled: true
                     }

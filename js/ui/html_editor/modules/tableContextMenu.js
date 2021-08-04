@@ -16,7 +16,7 @@ const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 let TableContextMenuModule = BaseModule;
 
 if(Quill) {
-    TableContextMenuModule = class MentionModule extends PopupModule {
+    TableContextMenuModule = class TableContextMenuModule extends PopupModule {
         constructor(quill, options) {
 
             super(quill, options);
