@@ -99,3 +99,26 @@ test('Start and end dates should be reflect the current day(create new appointme
     height: 600,
   }, true);
 });
+
+test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
+
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .doubleClick(scheduler.getDateTableCell(0, 0))
+    .expect(await takeScreenshot('form-before-change-allday-and-reccurence-options.png'))
+    .ok()
+
+    .click(appointmentPopup.allDayElement)
+    .click(appointmentPopup.recurrenceElement)
+
+    .expect(await takeScreenshot('form-after-change-allday-and-reccurence-options.png'))
+    .ok()
+
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  currentDate: new Date(2021, 1, 1),
+}));
