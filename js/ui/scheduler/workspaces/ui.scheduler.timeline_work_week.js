@@ -13,8 +13,6 @@ const LAST_DAY_WEEK_INDEX = 5;
 class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     get type() { return VIEWS.TIMELINE_WORK_WEEK; }
 
-    get isWorkView() { return true; }
-
     constructor(...args) {
         super(...args);
 
