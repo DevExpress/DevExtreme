@@ -617,12 +617,25 @@ const LayoutManager = Widget.inherit({
         }
 
         $editor.data('dx-form-item', item);
-        that._appendEditorToField({
-            $fieldItem: $container,
-            $label: $label,
-            $editor: $editor,
-            labelOptions: labelOptions
-        });
+        if($label) {
+            const location = labelOptions.location;
+
+            if(location === 'top' || location === 'left') {
+                $container.append($editor);
+            }
+
+            if(location === 'right') {
+                $container.prepend($editor);
+            }
+
+            if(location === 'top') {
+                $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
+            } else {
+                $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
+            }
+        } else {
+            $container.append($editor);
+        }
 
         const editorOptions = this._convertToEditorOptions({
             dataField: item.dataField,
@@ -948,32 +961,6 @@ const LayoutManager = Widget.inherit({
 
     _getTemplateByFieldItem: function(fieldItem) {
         return fieldItem.template ? this._getTemplate(fieldItem.template) : null;
-    },
-
-    _appendEditorToField: function(params) {
-        if(params.$label) {
-            const location = params.labelOptions.location;
-
-            if(location === 'top' || location === 'left') {
-                params.$fieldItem.append(params.$editor);
-            }
-
-            if(location === 'right') {
-                params.$fieldItem.prepend(params.$editor);
-            }
-
-            this._addInnerItemAlignmentClass(params.$fieldItem, location);
-        } else {
-            params.$fieldItem.append(params.$editor);
-        }
-    },
-
-    _addInnerItemAlignmentClass: function($fieldItem, location) {
-        if(location === 'top') {
-            $fieldItem.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
-        } else {
-            $fieldItem.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
-        }
     },
 
     _attachClickHandler: function($label, $editor, editorType) {
