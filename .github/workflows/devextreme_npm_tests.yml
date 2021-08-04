@@ -1,0 +1,64 @@
+name: Angular wrapper tests
+
+on: [push, pull_request]
+
+jobs:
+  cache_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build devExtreme npm package
+      uses: ./.github/actions/build_npm_devextreme
+
+  test_angular:
+    needs: cache_build
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Angular wrapper tests
+      uses: ./.github/actions/test_angular
+
+  test_bundlers:
+    needs: cache_build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Bundlers Tests
+      uses: ./.github/actions/test_bundlers
+
+  test-bundlers:
+    needs: cache_build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Bundlers tests
+      uses: ./.github/actions/test_bundlers
+      
+  build_demos:
+    needs: cache_build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+    - name: Demos build
+      uses: ./.github/actions/build_demos
+
+  test_demos:
+    needs: build_demos
+    strategy:
+      fail-fast: false
+      matrix:      
+        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+
+    runs-on: ubuntu-latest
+    name: ${{ matrix.CONSTEL }}
+    timeout-minutes: 20
+  
+    steps:
+    - name: Demos TestCafe Tests
+      uses: ./.github/actions/test_demos
+      with:
+        constel: ${{ matrix.CONSTEL }}

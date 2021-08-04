@@ -1,0 +1,60 @@
+name: 'Demos TestCafe Tests'
+inputs:
+  constel:
+    description: 'Constellation'
+    required: true
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Clone devextreme-demos repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+
+    - name: Clone devextreme-demos repo
+      run: |
+        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-demos-sources
+        path: ./devextreme-demos
+
+    - name: Unpack artifacts
+      working-directory: ./devextreme-demos
+      run: 7z x node_modules.7z
+
+    - name: Prepare JS
+      working-directory: ./devextreme-demos
+      run: npm run prepare-js
+      
+    - name: Run Web Server
+      working-directory: ./devextreme-demos
+      run: |
+        python -m http.server 8080 &
+        python -m http.server 8081 &
+        python -m http.server 8082 &
+        python -m http.server 8083 &
+
+    - name: Run TestCafe tests
+      working-directory: ./devextreme-demos
+      env:
+        BROWSERS: chrome:headless
+        CONCURRENCY: 4
+        TCQUARANTINE: true
+        CONSTEL: ${{ inputs.constel }}
+      run: npm run test-testcafe
+
+    - name: Copy screenshots artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
+        if-no-files-found: ignore

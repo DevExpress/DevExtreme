@@ -1,22 +1,7 @@
-name: Bundlers tests
-
-on: [push, pull_request]
-
-jobs:
-  cache_build:
-    concurrency: build-npm-devextreme-${{ github.sha }}
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Build devExtreme npm package
-      uses: ./.github/actions/build_npm_devextreme
-
-  bundler-tests:
-    needs: cache_build
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-
-    steps:
+name: 'Bundlers tests'
+runs:
+  using: "composite"
+  steps:
     - name: Build devExtreme npm package
       uses: ./.github/actions/build_npm_devextreme
 
