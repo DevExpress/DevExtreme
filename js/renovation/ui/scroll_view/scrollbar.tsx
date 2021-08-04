@@ -306,8 +306,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       && this.isReachBottom
       && !this.pendingReachBottom
       && !this.onReachBottomWasFiredOnce
-      && this.props.containerSize
-      && this.props.contentSize
+      && this.visibleScrollAreaSize > 0
     ) {
       this.onReachBottomWasFiredOnce = true;
 
