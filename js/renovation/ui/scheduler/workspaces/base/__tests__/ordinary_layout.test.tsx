@@ -178,8 +178,10 @@ describe('OrdinaryLayout', () => {
         dataCellTemplate: () => null,
       };
       const layout = render({
-        props,
-        dateTableRef: 'dateTableRef',
+        props: {
+          ...props,
+          dateTableRef: 'dateTableRef',
+        },
       });
 
       const dateTable = layout.find(dateTableTemplate);
@@ -290,6 +292,7 @@ describe('OrdinaryLayout', () => {
         props: {
           isAllDayPanelSupported: true,
           dataCellTemplate,
+          allDayPanelRef: 'allDayPanelRef',
         },
         isStandaloneAllDayPanel: true,
         isSetAllDayTitleClass: true,
@@ -309,6 +312,7 @@ describe('OrdinaryLayout', () => {
           viewData,
           dataCellTemplate,
           visible: true,
+          tableRef: 'allDayPanelRef',
         });
       expect(allDayPanelTitle.props())
         .toEqual({
@@ -323,15 +327,15 @@ describe('OrdinaryLayout', () => {
     describe('Effects', () => {
       describe('groupPanelHeightEffect', () => {
         it('should set groupPanelHeight', () => {
-          const layout = new OrdinaryLayout({} as any);
-
-          layout.dateTableRef = {
-            current: {
-              getBoundingClientRect: () => ({
-                height: 325,
-              }),
+          const layout = new OrdinaryLayout({
+            dateTableRef: {
+              current: {
+                getBoundingClientRect: () => ({
+                  height: 325,
+                }),
+              },
             },
-          } as any;
+          } as any);
 
           layout.groupPanelHeightEffect();
 
@@ -340,11 +344,11 @@ describe('OrdinaryLayout', () => {
         });
 
         it('should work if tableRef was not initialized', () => {
-          const layout = new OrdinaryLayout({} as any);
-
-          layout.dateTableRef = {
-            current: null,
-          } as any;
+          const layout = new OrdinaryLayout({
+            dateTableRef: {
+              current: null,
+            },
+          } as any);
 
           layout.groupPanelHeightEffect();
 

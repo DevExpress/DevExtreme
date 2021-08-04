@@ -46,6 +46,8 @@ export default class ViewDataProvider {
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
+    get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
+
     update(options, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
 
@@ -192,7 +194,7 @@ export default class ViewDataProvider {
     }
 
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
-        const rowsPerGroup = this._options.rowCountWithAllDayRow;
+        const rowsPerGroup = this._getRowCountWithAllDayRows();
         const isShowAllDayPanel = this._options.isAllDayPanelVisible;
 
         const firstRowInGroup = this._options.isVerticalGrouping
@@ -429,5 +431,15 @@ export default class ViewDataProvider {
 
     getRowCount(options) {
         return this.viewDataGenerator.getRowCount(options);
+    }
+
+    getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+        return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
+    }
+
+    _getRowCountWithAllDayRows() {
+        const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
+
+        return this.getRowCount(this._options) + allDayRowCount;
     }
 }
