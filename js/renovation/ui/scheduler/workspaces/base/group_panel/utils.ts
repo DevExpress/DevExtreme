@@ -2,6 +2,7 @@ import {
   GroupRenderItem,
   Group,
   GroupItem,
+  GroupPanelData,
 } from '../../types.d';
 
 const extendGroupItemsForGroupingByDate = (
@@ -26,9 +27,10 @@ export const getGroupsRenderData = (
   groups: Group[],
   columnCountPerGroup: number,
   groupByDate: boolean,
-): GroupRenderItem[][] => {
+  baseColSpan: number,
+): GroupPanelData => {
   let repeatCount = 1;
-  let groupRenderItems = groups.map((group: Group) => {
+  let groupPanelItems = groups.map((group: Group) => {
     const result = [] as GroupRenderItem[];
     const { name: resourceName, items, data } = group;
 
@@ -48,8 +50,11 @@ export const getGroupsRenderData = (
   });
 
   if (groupByDate) {
-    groupRenderItems = extendGroupItemsForGroupingByDate(groupRenderItems, columnCountPerGroup);
+    groupPanelItems = extendGroupItemsForGroupingByDate(groupPanelItems, columnCountPerGroup);
   }
 
-  return groupRenderItems;
+  return {
+    groupPanelItems,
+    baseColSpan,
+  };
 };

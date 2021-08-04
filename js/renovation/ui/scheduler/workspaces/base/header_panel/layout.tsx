@@ -23,8 +23,7 @@ export const viewFunction = ({
     groupByDate,
     groups,
     groupOrientation,
-    groupPanelCellBaseColSpan,
-    columnCountPerGroup,
+    groupPanelData,
     isRenderDateHeader,
     resourceCellTemplate,
     dateCellTemplate,
@@ -35,11 +34,10 @@ export const viewFunction = ({
   <thead>
     {isHorizontalGrouping && !groupByDate && (
       <GroupPanel
+        groupPanelData={groupPanelData}
         groups={groups}
         groupByDate={groupByDate}
         groupOrientation={groupOrientation}
-        baseColSpan={groupPanelCellBaseColSpan}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     )}
@@ -55,11 +53,10 @@ export const viewFunction = ({
     )}
     {groupByDate && (
       <GroupPanel
+        groupPanelData={groupPanelData}
         groups={groups}
         groupByDate={groupByDate}
         groupOrientation={groupOrientation}
-        baseColSpan={groupPanelCellBaseColSpan}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     )}

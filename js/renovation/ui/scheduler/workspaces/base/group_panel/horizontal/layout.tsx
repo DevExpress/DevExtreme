@@ -28,26 +28,27 @@ export const viewFunction = ({
 })
 export class GroupPanelHorizontalLayout extends JSXComponent(GroupPanelLayoutProps) {
   get groupsRenderData(): GroupRenderItem[][] {
-    const { groupsRenderData, baseColSpan } = this.props;
+    const { groupPanelData } = this.props;
+    const { baseColSpan, groupPanelItems } = groupPanelData;
 
-    const colSpans = groupsRenderData.reduceRight((currentColSpans, groupsRow, index): number[] => {
+    const colSpans = groupPanelItems.reduceRight((currentColSpans, groupsRow, index): number[] => {
       const nextColSpans = currentColSpans;
       const currentLevelGroupCount = groupsRow.length;
 
-      const previousColSpan = index === groupsRenderData.length - 1
+      const previousColSpan = index === groupPanelItems.length - 1
         ? baseColSpan
         : currentColSpans[index + 1];
-      const previousLevelGroupCount = index === groupsRenderData.length - 1
+      const previousLevelGroupCount = index === groupPanelItems.length - 1
         ? currentLevelGroupCount
-        : groupsRenderData[index + 1].length;
+        : groupPanelItems[index + 1].length;
       const groupCountDiff = previousLevelGroupCount / currentLevelGroupCount;
 
       nextColSpans[index] = groupCountDiff * previousColSpan;
 
       return nextColSpans;
-    }, [...new Array(groupsRenderData.length)]);
+    }, [...new Array(groupPanelItems.length)]);
 
-    return groupsRenderData.map((groupsRenderRow, index) => {
+    return groupPanelItems.map((groupsRenderRow, index) => {
       const colSpan = colSpans[index];
 
       return groupsRenderRow.map((groupItem) => ({
