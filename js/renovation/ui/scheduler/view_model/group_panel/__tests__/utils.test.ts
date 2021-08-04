@@ -1,7 +1,7 @@
-import { getGroupsRenderData } from '../utils';
+import { getGroupPanelData } from '../utils';
 
 describe('GroupPanel utils', () => {
-  describe('groupsRenderData', () => {
+  describe('getGroupPanelData', () => {
     const groupsBase = [{
       name: 'group 1',
       items: [{
@@ -29,7 +29,7 @@ describe('GroupPanel utils', () => {
     }];
 
     it('should transform grouping data into group items', () => {
-      const groupsRenderData = getGroupsRenderData(groupsBase, 1, false, 3);
+      const groupsRenderData = getGroupPanelData(groupsBase, 1, false, 3);
 
       expect(groupsRenderData)
         .toEqual({
@@ -77,7 +77,7 @@ describe('GroupPanel utils', () => {
           text: 'item 2', id: 2, color: 'color 2',
         }],
       }] as any;
-      const groupsRenderData = getGroupsRenderData(groups, 1, false, 5);
+      const groupsRenderData = getGroupPanelData(groups, 1, false, 5);
 
       expect(groupsRenderData)
         .toEqual({
@@ -95,7 +95,7 @@ describe('GroupPanel utils', () => {
     });
 
     it('should transform grouping data into group items corectly when appointments are groupped by date', () => {
-      const groupsRenderData = getGroupsRenderData(groupsBase, 2, true, 7);
+      const groupsRenderData = getGroupPanelData(groupsBase, 2, true, 7);
 
       expect(groupsRenderData)
         .toEqual({

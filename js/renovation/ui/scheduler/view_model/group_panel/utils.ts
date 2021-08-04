@@ -3,7 +3,7 @@ import {
   Group,
   GroupItem,
   GroupPanelData,
-} from '../../types.d';
+} from '../../workspaces/types';
 
 const extendGroupItemsForGroupingByDate = (
   groupRenderItems: GroupRenderItem[][],
@@ -23,7 +23,7 @@ const extendGroupItemsForGroupingByDate = (
     ] as GroupRenderItem[];
   }), []) as GroupRenderItem[][];
 
-export const getGroupsRenderData = (
+export const getGroupPanelData = (
   groups: Group[],
   columnCountPerGroup: number,
   groupByDate: boolean,
