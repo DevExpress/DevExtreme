@@ -9,6 +9,7 @@ import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel
 export const viewFunction = ({
   props: {
     dateHeaderData,
+    groupPanelData,
     groupByDate,
     groups,
     groupOrientation,
@@ -21,6 +22,7 @@ export const viewFunction = ({
   <HeaderPanelLayout
     dateHeaderTemplate={TimelineDateHeaderLayout}
     dateHeaderData={dateHeaderData}
+    groupPanelData={groupPanelData}
     groupByDate={groupByDate}
     groups={groups}
     groupOrientation={groupOrientation}
