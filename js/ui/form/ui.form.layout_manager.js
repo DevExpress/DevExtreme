@@ -43,6 +43,7 @@ import '../date_box';
 import '../button';
 import {
     renderLabel,
+    getLabelWidthByText,
     renderHelpText,
     adjustContainerAsButtonItem,
     convertAlignmentToJustifyContent,
@@ -777,6 +778,10 @@ const LayoutManager = Widget.inherit({
 
     _renderLabel: function(labelOptions) {
         return renderLabel(this._getRenderLabelOptions(labelOptions));
+    },
+
+    _getLabelWidthByText: function({ text, location }) {
+        return getLabelWidthByText(this._getRenderLabelOptions({ text, location }));
     },
 
     _getRenderLabelOptions: function(labelOptions = {}) {
