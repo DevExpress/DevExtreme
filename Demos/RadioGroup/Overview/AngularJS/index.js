@@ -27,8 +27,10 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             }
         },
         eventRadioGroupOptions: {
-            items: priorities,
-            value: priorities[0],
+            items: priorityEntities,
+            valueExpr: "id",
+            displayExpr: "text",
+            value: priorityEntities[0].id,
             onValueChanged: function(e) {
                 $scope.list = tasks.filter(function(item) {
                      return item.priority == e.value;

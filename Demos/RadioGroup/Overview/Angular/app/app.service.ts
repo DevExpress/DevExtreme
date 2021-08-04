@@ -2,32 +2,47 @@ import { Injectable } from '@angular/core';
 
 export class Task {
     subject: string;
-    priority: string
+    priority: number;
 }
+
+export class PriorityEntity {
+    id: number;
+    text: string;
+}
+
+const priorityEntities: PriorityEntity[] = [
+    { id: 0, text: "Low" },
+    { id: 1, text: "Normal" },
+    { id: 2, text: "Urgent" },
+    { id: 3, text: "High" },
+];
 
 let tasks: Task[] = [{
     subject: "Choose between PPO and HMO Health Plan",
-    priority: "High"
+    priority: 3
 }, {
     subject: "Non-Compete Agreements",
-    priority: "Low"
+    priority: 0
 }, {
     subject: "Comment on Revenue Projections",
-    priority: "Normal"
+    priority: 1
 }, {
     subject: "Sign Updated NDA",
-    priority: "Urgent"
+    priority: 2
 }, {
     subject: "Submit Questions Regarding New NDA",
-    priority: "High"
+    priority: 3
 }, {
     subject: "Rollout of New Website and Marketing Brochures",
-    priority: "High"
+    priority: 3
 }];
 
 @Injectable()
 export class Service {
     getTasks(): Task[] {
         return tasks;
+    }
+    getPriorityEntities(): PriorityEntity[] {
+        return priorityEntities;
     }
 }

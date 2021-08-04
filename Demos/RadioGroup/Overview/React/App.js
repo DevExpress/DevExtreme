@@ -1,13 +1,13 @@
 ﻿import React from 'react';
 import RadioGroup from 'devextreme-react/radio-group';
-import { priorities, tasks } from './data.js';
+import { priorities, priorityEntities, tasks } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       colorPriority: priorities[2],
-      selectionPriority: priorities[0]
+      selectionPriority: priorityEntities[0].id
     };
 
     this.changeColorPriority = this.changeColorPriority.bind(this);
@@ -46,7 +46,8 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Event handling</div>
             <div className="dx-field-value">
-              <RadioGroup id="radio-group-with-selection" items={priorities} value={this.state.selectionPriority} onValueChanged={this.changeSelectionPriority} />
+              <RadioGroup id="radio-group-with-selection" items={priorityEntities} value={this.state.selectionPriority}
+                valueExpr="id" displayExpr="text" onValueChanged={this.changeSelectionPriority} />
             </div>
           </div>
         </div>

@@ -1,20 +1,26 @@
 var priorities = ["Low", "Normal", "Urgent", "High"],
+    priorityEntities = [
+        { id: 0, text: "Low" },
+        { id: 1, text: "Normal" },
+        { id: 2, text: "Urgent" },
+        { id: 3, text: "High" },
+    ];
     tasks = [{
         subject: "Choose between PPO and HMO Health Plan",
-        priority: "High"
+        priority: 3
     }, {
         subject: "Non-Compete Agreements",
-        priority: "Low"
+        priority: 0
     }, {
         subject: "Comment on Revenue Projections",
-        priority: "Normal"
+        priority: 1
     }, {
         subject: "Sign Updated NDA",
-        priority: "Urgent"
+        priority: 2
     }, {
         subject: "Submit Questions Regarding New NDA",
-        priority: "High"
+        priority: 3
     }, {
         subject: "Rollout of New Website and Marketing Brochures",
-        priority: "High"
+        priority: 3
     }];

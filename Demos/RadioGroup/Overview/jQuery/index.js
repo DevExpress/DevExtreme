@@ -27,7 +27,9 @@ $(function(){
     });
     
     var radioGroup = $("#radio-group-with-selection").dxRadioGroup({
-        items: priorities,
+        items: priorityEntities,
+        valueExpr: "id",
+        displayExpr: "text",
         onValueChanged: function(e){
             $("#list").children().remove();
             $.each(tasks, function(i, item){
@@ -38,5 +40,5 @@ $(function(){
         }
     }).dxRadioGroup("instance");
     
-    radioGroup.option("value", priorities[0]);
+    radioGroup.option("value", priorityEntities[0].id);
 });

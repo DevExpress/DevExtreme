@@ -34,8 +34,8 @@
             <div class="dx-field-value">
                 <dx-radio-group
                     [items]="priorities"
-                    [(value)]="priority"
-                    [ngClass]="priority.toLowerCase()">
+                    [(value)]="colorPriority"
+                    [ngClass]="colorPriority.toLowerCase()">
                     <div *dxTemplate="let priority of 'item'">
                         <div>{{priority}}</div>
                     </div>
@@ -45,9 +45,12 @@
         <div class="dx-field">
             <div class="dx-field-label">Event handling</div>
             <div class="dx-field-value">
-                <dx-radio-group #eventRadioGroup
+                <dx-radio-group
                     id="radio-group-with-selection"
-                    [items]="priorities"
+                    [items]="priorityEntities"
+                    valueExpr="id"
+                    displayExpr="text"
+                    [(value)]="selectionPriorityId"
                     (onValueChanged)="onValueChanged($event)">
                 </dx-radio-group>
             </div>

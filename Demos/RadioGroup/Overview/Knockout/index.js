@@ -24,8 +24,10 @@ window.onload = function() {
             }
         },
         eventRadioGroupOptions: {
-            items: priorities,
-            value: priorities[0],
+            items: priorityEntities,
+            valueExpr: "id",
+            displayExpr: "text",
+            value: priorityEntities[0].id,
             onValueChanged: function(e) {
                 viewModel.list (tasks.filter(function(item) {
                      return item.priority == e.value;
