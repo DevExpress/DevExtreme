@@ -75,7 +75,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
  * @hidden
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
-    // eslint-disable-next-line no-underscore-dangle
     _templateManager: TemplateManager;
 
     constructor(element: UserDefinedElement, options?: TProperties);

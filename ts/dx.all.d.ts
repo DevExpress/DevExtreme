@@ -804,7 +804,6 @@ declare module DevExpress {
   export class DOMComponent<
     TProperties = DevExpress.DOMComponent.Properties
   > extends Component<TProperties> {
-    // eslint-disable-next-line no-underscore-dangle
     _templateManager: DevExpress.core.TemplateManager;
 
     constructor(
