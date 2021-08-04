@@ -32,13 +32,13 @@ jobs:
           # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true },
           # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true },
           # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "export" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler" },
-          # { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz" },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation" } 
         ]
 
@@ -51,11 +51,11 @@ jobs:
       run: |
         mkdir ./firefox-profile
         for p in \
-        "browser.shell.checkDefaultBrowser", false \
-        "datareporting.policy.dataSubmissionEnabled", false \
-        "font.name-list.monospace.x-western", "Liberation Mono" \
-        "font.name-list.sans-serif.x-western", "Liberation Sans" \
-        "font.name-list.serif.x-western", "Liberation Serif" ; do echo "user_pref($p);" >> ./firefox-profile/prefs.js; done
+        '"browser.shell.checkDefaultBrowser", false' \
+        '"datareporting.policy.dataSubmissionEnabled", false' \
+        '"font.name-list.monospace.x-western", "Liberation Mono"' \
+        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> ./firefox-profile/prefs.js; done
     - name: Run FireFox
       run: |
         cat ./firefox-profile/prefs.js
