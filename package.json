@@ -195,7 +195,6 @@
     "lint-renovation": "eslint --ext .tsx,.ts,.d.ts ./js/renovation",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
-    "build-diag": "dotnet build -v diag build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
     "build-npm-devextreme": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true SKIP_THEMEBUILDER=true gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default --uglify",
