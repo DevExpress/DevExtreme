@@ -494,6 +494,16 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _popupShownHandler: function() {
+        this.callBase();
+
+        if(this.option('_scrollToSelectedItemEnabled')) {
+            setTimeout(() => {
+                this._popup.option('closeOnTargetScroll', true);
+            });
+        }
+    },
+
     _scrollToSelectedItem: function() {
         const selectedIndex = this._list.option('selectedIndex');
         const listItems = this._list.option('items');
@@ -704,6 +714,8 @@ const Lookup = DropDownList.inherit({
         if(this.option('_scrollToSelectedItemEnabled')) {
             resetPosition($(this._popup.content()).parent());
         }
+
+        this._popup.option('closeOnTargetScroll', false);
     },
 
     _preventFocusOnPopup: noop,
@@ -740,8 +752,6 @@ const Lookup = DropDownList.inherit({
                 at: 'left bottom',
                 of: this.element()
             };
-
-            result.closeOnTargetScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
