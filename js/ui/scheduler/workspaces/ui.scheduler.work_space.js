@@ -1958,7 +1958,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const options = {
             groups: this.option('groups'),
             groupOrientation: this.option('groupOrientation'),
-            groupByDate: this.option('groupByDate'),
+            groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
             className: this.verticalGroupTableClass,
             groupPanelData: this.viewDataProvider.getGroupPanelData(
