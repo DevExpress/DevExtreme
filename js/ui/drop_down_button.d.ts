@@ -26,7 +26,7 @@ import {
 } from '../events/index';
 
 import {
-    Item as ListItem
+    Item as dxListItem
 } from './list';
 
 import {
@@ -309,7 +309,7 @@ export type Item = dxDropDownButtonItem;
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxDropDownButtonItem extends ListItem {
+export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null

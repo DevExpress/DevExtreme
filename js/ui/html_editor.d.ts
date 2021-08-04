@@ -26,7 +26,7 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    Item
+    Item as dxToolbarItem
 } from './toolbar';
 
 /** @public */
@@ -524,7 +524,7 @@ export type ToolbarItem = dxHtmlEditorToolbarItem;
  * @deprecated Use ToolbarItem instead
  * @namespace DevExpress.ui
  */
-export interface dxHtmlEditorToolbarItem extends Item {
+export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
      * @type Enums.HtmlEditorToolbarItem|string

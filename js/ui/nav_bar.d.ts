@@ -15,7 +15,7 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import dxTabs, {
-    Item as TabsItem,
+    Item as dxTabsItem,
     dxTabsOptions
 } from './tabs';
 
@@ -80,7 +80,7 @@ export type Item = dxNavBarItem;
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxNavBarItem extends TabsItem {
+export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid
      * @public
