@@ -6,13 +6,22 @@ on:
   workflow_dispatch:
 
 jobs:
+  cache_build:
+    concurrency: build-npm-devextreme-${{ github.sha }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build devExtreme npm package
+      uses: ./.github/actions/build_npm_devextreme
+
   demos_build:
+    needs: cache_build
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
-    - name: Get sources
-      uses: actions/checkout@v2
+    - name: Build devExtreme npm package
+      uses: ./.github/actions/build_npm_devextreme
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
@@ -23,19 +32,6 @@ jobs:
       run: |
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
-
-    - name: Restore npm cache
-      uses: actions/cache@v2
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Build devextreme package
-      run: npm run build-npm-devextreme
 
     - name: Pack devextreme package
       working-directory: ./artifacts/npm/devextreme
