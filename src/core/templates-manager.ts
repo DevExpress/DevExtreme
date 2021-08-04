@@ -74,7 +74,7 @@ class TemplatesManager {
                     placeholder
                 );
 
-                const element = mountedTemplate.$el;
+                const element = mountedTemplate.$el as HTMLElement;
 
                 domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
