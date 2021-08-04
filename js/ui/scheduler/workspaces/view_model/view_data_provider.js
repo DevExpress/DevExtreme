@@ -132,7 +132,7 @@ export default class ViewDataProvider {
             return getGroupsRenderData(
                 renderOptions.groups,
                 cellCount,
-                renderOptions.groupByDate,
+                renderOptions.isGroupedByDate,
                 renderOptions.isGroupedByDate ? 1 : cellCount,
             );
         }
