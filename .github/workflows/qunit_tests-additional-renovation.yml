@@ -52,13 +52,13 @@ jobs:
         sudo apt-get install -y dbus-x11 httping x11vnc xvfb
     - name: Setup firefox profile
       run: |
-        mkdir /firefox-profile
+        mkdir ./firefox-profile
         for p in \
         "browser.shell.checkDefaultBrowser", false' \
         "datareporting.policy.dataSubmissionEnabled", false' \
         "font.name-list.monospace.x-western", "Liberation Mono"' \
         "font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        "font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /firefox-profile/prefs.js; done
+        "font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> ./firefox-profile/prefs.js; done
 
     - name: Get sources
       uses: actions/checkout@v2

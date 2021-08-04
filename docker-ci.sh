@@ -90,7 +90,7 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile /firefox-profile $url"
+            local firefox_args="-profile ./firefox-profile $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
