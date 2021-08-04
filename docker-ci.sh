@@ -6,6 +6,7 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
+export NODE_OPTIONS=--max_old_space_size=4096
 
 function run_lint {
     npm i
