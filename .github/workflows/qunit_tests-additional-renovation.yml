@@ -1,0 +1,93 @@
+name: QUnit tests for renovation
+
+on: [push, pull_request]
+
+jobs:
+  
+  qunit-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        envs: [
+          { CONSTEL: "misc", TZ: 'PST8PDT' },
+          { CONSTEL: "misc", TZ: 'Japan' },
+          { CONSTEL: "misc", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.editors", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.editors", TZ: 'Japan' },
+          { CONSTEL: "ui.editors", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.editors", TZ: 'Europe/London' },
+          { CONSTEL: "ui.grid", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'Japan' },
+          { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.scheduler", TZ: 'Europe/London' },
+          { PERF: true, JQUERY: true, NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui" },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.editors", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.grid", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.scheduler", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "viz" },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui" },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "export" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.editors" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.grid" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui.scheduler" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "viz" },
+          { BROWSER: "firefox", JQUERY: true, CONSTEL: "renovation" } 
+        ]
+
+    runs-on: ubuntu-latest
+    name: QUnit for ${{ toJSON(matrix.envs) }}
+    timeout-minutes: 60
+
+    steps:
+    - name: Setup utils
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+      run: npm run build
+
+    - name: Run QUnit tests
+      env:
+        CONSTEL: ${{ matrix.envs.CONSTEL }}
+        BROWSER: ${{ matrix.envs.BROWSER }}
+        JQUERY: ${{ matrix.envs.JQUERY }}
+        MOBILE_UA: ${{ matrix.envs.MOBILE_UA }}
+        TZ: ${{ matrix.envs.TZ }}
+        PERF: ${{ matrix.envs.PERF }}
+        NO_HEADLESS: ${{ matrix.envs.NO_HEADLESS }}
+        NORENOVATION: "false"
+        GITHUBACTION: "true"
+        TARGET: "test"
+      run: |
+        chmod +x ./docker-ci.sh
+        ./docker-ci.sh
