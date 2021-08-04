@@ -59,17 +59,15 @@ function run_test {
         x11vnc -display :99 2>/dev/null &
     fi
 
+    export NODE_OPTIONS=--max_old_space_size=4096
+
     node -e "console.log(v8.getHeapStatistics().total_available_size / 1024 / 1024)"
-    
-    npm ls webpack
 
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
         npm i
         npm run build
         fi
-
-        find /root/.npm/_logs/*.log -exec cat {​​​​​​​}​​​​​​​ +;
         
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
