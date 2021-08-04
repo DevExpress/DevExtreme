@@ -5,7 +5,6 @@ import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { touch } from '../../core/utils/support';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
 import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
@@ -40,13 +39,8 @@ const processLongTap = function(that, dxEvent) {
         } else {
             selectionController.startSelectionWithCheckboxes();
         }
-    } else {
-        if(that.option(SHOW_CHECKBOXES_MODE) === 'onClick') {
-            selectionController.startSelectionWithCheckboxes();
-        }
-        if(that.option(SHOW_CHECKBOXES_MODE) !== 'always') {
-            selectionController.changeItemSelection(rowIndex, { control: true });
-        }
+    } else if(that.option(SELECTION_MODE) === 'single') {
+        selectionController.changeItemSelection(rowIndex, { control: true });
     }
 };
 
@@ -615,7 +609,7 @@ export const selectionModule = {
                     const $element = that.element();
                     const $editor = $element && $element.find('.' + SELECT_CHECKBOX_CLASS);
 
-                    if($element && $editor.length && that.option('selection.mode') === 'multiple') {
+                    if($element && $editor.length && that.option(SELECTION_MODE) === 'multiple') {
                         const selectAllValue = that.getController('selection').isSelectAll();
                         const hasSelection = selectAllValue !== false;
                         const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
@@ -772,12 +766,12 @@ export const selectionModule = {
 
                 _createTable: function() {
                     const that = this;
-                    const selectionMode = that.option('selection.mode');
+                    const selectionMode = that.option(SELECTION_MODE);
                     const $table = that.callBase.apply(that, arguments);
 
 
                     if(selectionMode !== 'none') {
-                        if(that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !touch) {
+                        if(that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || that.option(SELECTION_MODE) === 'single') {
                             // TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), '.' + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.event);
