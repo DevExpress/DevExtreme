@@ -38,8 +38,10 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build
       
-    - name: Zip artifacts
-      run: 7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts
+    - name: Zip artifacts 
+      run: |
+        ./7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts ./scss/bundles 
+        ./7z a -t7z -mx3 -mmt2 artifacts.7z widgets.json -r
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
