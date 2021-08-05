@@ -325,7 +325,7 @@ const LayoutManager = Widget.inherit({
         this._renderResponsiveBox();
     },
 
-    _hasBrowserFlex: function() {
+    _hasBrowserFlex: function() { // TODO: name '_hasBrowserFlex' used in tests
         return styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
     },
 
@@ -598,15 +598,22 @@ const LayoutManager = Widget.inherit({
         const name = item.dataField || item.name;
         const id = that.getItemID(name);
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
-        const labelOptions = that._getLabelOptions(item, id, isRequired);
-        const isLabelVisible = labelOptions.visible;
-        const labelText = labelOptions.text;
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         const helpText = item.helpText;
         const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-        const largeEditors = ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'];
-        const hasBrowserFlex = this._hasBrowserFlex();
-        const labelNeedBaselineAlign = (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
+
+        const labelOptions = that._getLabelOptions(item, id, isRequired);
+        const { location: labelLocation, labelID } = labelOptions;
+        const needRenderLabel = labelOptions.visible && labelOptions.text;
+        const isFlexSupported = this._hasBrowserFlex();
+        const labelNeedBaselineAlign =
+            labelLocation !== 'top'
+            &&
+            (
+                (!!item.helpText && !isFlexSupported)
+                ||
+                inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
+            );
 
         const editorOptions = this._convertToEditorOptions({
             dataField: item.dataField,
@@ -623,32 +630,30 @@ const LayoutManager = Widget.inherit({
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
-        const $label = (isLabelVisible && labelText) ? renderLabel(labelOptions) : null;
+        const $label = needRenderLabel ? renderLabel(labelOptions) : null;
         if($label) {
             $container.append($label);
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
-            if(labelNeedBaselineAlign && labelOptions.location !== 'top') {
+            if(labelNeedBaselineAlign) {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
-            if(hasBrowserFlex) {
+            if(isFlexSupported) {
                 $container.addClass(FLEX_LAYOUT_CLASS);
             }
         }
 
         $editor.data('dx-form-item', item);
         if($label) {
-            const location = labelOptions.location;
-
-            if(location === 'top' || location === 'left') {
+            if(labelLocation === 'top' || labelLocation === 'left') {
                 $container.append($editor);
             }
-            if(location === 'right') {
+            if(labelLocation === 'right') {
                 $container.prepend($editor);
             }
 
-            if(location === 'top') {
+            if(labelLocation === 'top') {
                 $container.addClass(LABEL_VERTICAL_ALIGNMENT_CLASS);
             } else {
                 $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
@@ -682,7 +687,7 @@ const LayoutManager = Widget.inherit({
                 componentType: item.editorType,
                 componentOptions: editorOptions,
                 helpID,
-                labelID: labelOptions.labelID,
+                labelID,
                 isRequired
             });
 
