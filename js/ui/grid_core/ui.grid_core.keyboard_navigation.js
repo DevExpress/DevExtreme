@@ -445,8 +445,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._dataController.pageIndex(pageIndex + pageStep);
                 eventArgs.originalEvent.preventDefault();
             }
-        } else if(scrollable && scrollable._container().height() < scrollable.$content().height()) {
-            this._scrollBy(0, scrollable._container().height() * pageStep);
+        } else if(scrollable && $(scrollable.container()).height() < scrollable.$content().height()) {
+            this._scrollBy(0, $(scrollable.container()).height() * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
     },
@@ -1066,7 +1066,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         this._isHiddenFocus = disableFocus;
 
-        if(isGroupRow($row) || this.isRowFocusType()) {
+        const isRowFocus = isGroupRow($row) || this.isRowFocusType();
+
+        if(isRowFocus) {
             $focusElement = $row;
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
@@ -1095,6 +1097,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
             }
             if(disableFocus) {
                 $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+                if(isRowFocus) {
+                    $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                }
             } else {
                 this._editorFactory.focus($focusElement);
             }
