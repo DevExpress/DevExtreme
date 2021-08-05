@@ -90,7 +90,8 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile /tmp/firefox-profile $url"
+            local profile_path=[ "$GITHUBACTION" == "true" ] && "/tmp/firefox-profile" || "/firefox-profile"
+            local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
