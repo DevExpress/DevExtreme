@@ -6,7 +6,8 @@
         "21_2"
     ],
     "labels": [
-        "dependencies"
+        "dependencies",
+        "21_2"
     ],
     "lockFileMaintenance": {
         "enabled": true,
