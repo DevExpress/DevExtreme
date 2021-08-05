@@ -145,3 +145,21 @@ export const isHorizontalView = (viewType) => {
             return false;
     }
 };
+
+export const getTotalCellCountByCompleteData = (completeData) => {
+    return completeData[completeData.length - 1].length;
+};
+
+export const getTotalRowCountByCompleteData = (completeData) => {
+    return completeData.length;
+};
+
+export const getDisplayedCellCount = (displayedCellCount, completeData) => {
+    return displayedCellCount || getTotalCellCountByCompleteData(completeData);
+};
+
+export const getDisplayedRowCount = (displayedRowCount, completeData) => {
+    return displayedRowCount || getTotalRowCountByCompleteData(completeData);
+};
+
+
