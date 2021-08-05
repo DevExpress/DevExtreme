@@ -107,17 +107,17 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: 7z x artifacts.7z
 
-    - name: Install devextreme package
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        cd ./devextreme-angular-repo/packages/devextreme-angular
-        npm install --save-dev ../../../artifacts/npm/devextreme
+    - name: Pack devextreme package
+      working-directory: ./artifacts/npm/devextreme
+      run: npm pack
 
-    - name: Run npm install for devextreme-angular repo
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        cd ./devextreme-angular-repo
-        npm install --no-audit --no-fund
+    - name: Install packages for devextreme-demos
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      run: npm install --force --no-audit --no-fund
+
+    - name: Install devextreme package
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      run: npm install --force $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
