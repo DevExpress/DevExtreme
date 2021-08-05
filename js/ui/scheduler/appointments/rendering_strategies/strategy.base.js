@@ -38,6 +38,9 @@ class BaseRenderingStrategy {
     get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
+    get viewCellDuration() { return this.options.viewCellDuration; }
+    get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
+    get topVirtualCellCount() { return this.options.topVirtualCellCount; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -92,6 +95,13 @@ class BaseRenderingStrategy {
             if(this.rtlEnabled) {
                 coordinates = this._correctRtlCoordinates(coordinates);
             }
+
+            coordinates.forEach((item) => {
+                item.leftVirtualCellCount = this.leftVirtualCellCount;
+                item.topVirtualCellCount = this.topVirtualCellCount;
+                item.leftVirtualWidth = this.leftVirtualCellCount * this.cellWidth;
+                item.topVirtualHeight = this.topVirtualCellCount * this.cellHeight;
+            });
 
             map.push(coordinates);
         }
@@ -476,6 +486,7 @@ class BaseRenderingStrategy {
     _getExtendedPositionMap(map, positions) {
         let positionCounter = 0;
         const result = [];
+
         for(let i = 0, mapLength = map.length; i < mapLength; i++) {
             const resultString = [];
             for(let j = 0, itemLength = map[i].length; j < itemLength; j++) {
@@ -487,6 +498,7 @@ class BaseRenderingStrategy {
             }
             result.push(resultString);
         }
+
         return result;
     }
 

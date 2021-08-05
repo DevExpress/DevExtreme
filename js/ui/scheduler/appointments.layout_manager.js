@@ -1,27 +1,16 @@
 import { equalByValue } from '../../core/utils/common';
-import VerticalAppointmentsStrategy from './appointments/rendering_strategies/strategy_vertical';
-import HorizontalAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal';
-import HorizontalMonthLineAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month_line';
-import HorizontalMonthAppointmentsStrategy from './appointments/rendering_strategies/strategy_horizontal_month';
-import AgendaAppointmentsStrategy from './appointments/rendering_strategies/strategy_agenda';
 import {
     getModelProvider,
     getTimeZoneCalculator,
     getResourceManager,
     getAppointmentDataProvider
 } from './instanceFactory';
-
-const RENDERING_STRATEGIES = {
-    'horizontal': HorizontalAppointmentsStrategy,
-    'horizontalMonth': HorizontalMonthAppointmentsStrategy,
-    'horizontalMonthLine': HorizontalMonthLineAppointmentsStrategy,
-    'vertical': VerticalAppointmentsStrategy,
-    'agenda': AgendaAppointmentsStrategy
-};
+import { AppointmentViewModel } from './appointments/viewModelGenerator';
 
 class AppointmentLayoutManager {
     constructor(instance) {
         this.instance = instance;
+        this.appointmentViewModel = new AppointmentViewModel();
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }
@@ -43,13 +32,21 @@ class AppointmentLayoutManager {
         }
     }
 
-    _initRenderingStrategy() {
-        const Strategy = RENDERING_STRATEGIES[this.viewRenderingStrategyName];
+    createAppointmentsMap(items) {
         const workspace = this.instance.getWorkSpace();
         const key = this.instance.key;
-        this._renderingStrategyInstance = new Strategy({
+        const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
+        const {
+            cellCountInsideLeftVirtualCell,
+            cellCountInsideTopVirtualRow
+        } = virtualScrollingDispatcher;
+
+        const result = this.appointmentViewModel.generate({
+            filteredItems: items,
             instance: this.instance,
             key,
+            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
+            viewRenderingStrategyName: this.viewRenderingStrategyName,
             adaptivityEnabled: this.modelProvider.adaptivityEnabled,
             rtlEnabled: this.modelProvider.rtlEnabled,
             startDayHour: this.modelProvider.startDayHour,
@@ -58,6 +55,8 @@ class AppointmentLayoutManager {
             agendaDuration: workspace.option('agendaDuration'),
             currentDate: this.modelProvider.currentDate,
             isVirtualScrolling: this.instance.isVirtualScrolling(),
+            leftVirtualCellCount: cellCountInsideLeftVirtualCell,
+            topVirtualCellCount: cellCountInsideTopVirtualRow,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
@@ -90,52 +89,10 @@ class AppointmentLayoutManager {
             getGroupWidthCallback: workspace.getGroupWidth.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
         });
-    }
 
-    createAppointmentsMap(items) {
-        const { allDayHeight } = this.getCellDimensions();
-        this.instance._allDayCellHeight = allDayHeight;
-        this.getGroupOrientation({
-            callback: groupOrientation => this.instance._groupOrientation = groupOrientation
-        });
+        this._positionMap = result;
 
-        const appointments = items
-            ? items.slice()
-            : [];
-
-        this._initRenderingStrategy();
-
-        this._positionMap = this.getRenderingStrategyInstance().createTaskPositionMap(appointments);
-
-        return this._createAppointmentsMapCore(appointments, this._positionMap);
-    }
-
-    _createAppointmentsMapCore(list, positionMap) {
-        const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
-        const {
-            cellCountInsideLeftVirtualCell,
-            cellCountInsideTopVirtualRow
-        } = virtualScrollingDispatcher;
-
-        return list.map((data, index) => {
-            if(!this.getRenderingStrategyInstance().keepAppointmentSettings()) {
-                delete data.settings;
-            }
-
-            const appointmentSettings = positionMap[index];
-            appointmentSettings.forEach(settings => {
-                settings.direction = this.viewRenderingStrategyName === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
-                settings.topVirtualCellCount = cellCountInsideTopVirtualRow;
-                settings.leftVirtualCellCount = cellCountInsideLeftVirtualCell;
-            });
-
-            return {
-                itemData: data,
-                settings: appointmentSettings,
-                needRepaint: true,
-                needRemove: false
-            };
-        });
+        return result;
     }
 
     _isDataChanged(data) {
