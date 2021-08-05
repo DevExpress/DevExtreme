@@ -34,7 +34,9 @@ const FilterSyncController = modules.Controller.inherit((function() {
     };
 
     const canSyncHeaderFilterWithFilterRow = function(column) {
-        return !filterUtils.getGroupInterval(column) && !(column.headerFilter && column.headerFilter.dataSource);
+        const filterValues = column.filterValues || [];
+        return (!filterUtils.getGroupInterval(column) && !(column.headerFilter && column.headerFilter.dataSource)) ||
+        (filterValues.length === 1 && filterValues[0] === null);
     };
 
     const getHeaderFilterFromCondition = function(headerFilterCondition, column) {
@@ -90,10 +92,8 @@ const FilterSyncController = modules.Controller.inherit((function() {
         if(!filterValues) return null;
 
         if(filterValues.length === 1 && (
-            (
-                canSyncHeaderFilterWithFilterRow(column)
-                && !Array.isArray(filterValues[0])
-            ) || filterValues[0] === null
+            canSyncHeaderFilterWithFilterRow(column)
+            && !Array.isArray(filterValues[0])
         )) {
             column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = '<>' : selectedOperation = '=';
             value = filterValues[0];
