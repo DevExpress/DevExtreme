@@ -1936,10 +1936,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
             className: this.verticalGroupTableClass,
-            baseColSpan: this.isGroupedByDate()
-                ? 1
-                : this._getCellCount(),
-            columnCountPerGroup: this._getCellCount(),
+            groupPanelData: this.viewDataProvider.getGroupPanelData(
+                this.generateRenderOptions(),
+            ),
         };
 
         if(this.option('groups').length) {
@@ -2003,16 +2002,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             'renovatedHeaderPanel',
             {
                 dateHeaderData: this.viewDataProvider.dateHeaderData,
+                groupPanelData: this.viewDataProvider.getGroupPanelData(
+                    this.generateRenderOptions(),
+                ),
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
                 resourceCellTemplate: this.option('resourceCellTemplate'),
-                groupPanelCellBaseColSpan: this.isGroupedByDate()
-                    ? 1
-                    : this._getCellCount(),
-                columnCountPerGroup: this._getCellCount(),
                 isRenderDateHeader,
             }
         );
