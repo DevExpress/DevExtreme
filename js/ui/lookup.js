@@ -472,8 +472,8 @@ const Lookup = DropDownList.inherit({
         this.callBase();
 
         if(this.option('_scrollToSelectedItemEnabled')) {
-            setTimeout(() => {
-                this._popup.option('closeOnTargetScroll', true);
+            this._closeOnTargetScrollTimer = setTimeout(() => {
+                this._popup?.option('closeOnTargetScroll', true);
             });
         }
     },
@@ -1122,6 +1122,13 @@ const Lookup = DropDownList.inherit({
             default:
                 this.callBase(...arguments);
         }
+    },
+
+    _dispose: function() {
+        clearTimeout(this._closeOnTargetScrollTimer);
+        this._closeOnTargetScrollTimer = null;
+
+        this.callBase();
     },
 
     focus: function() {
