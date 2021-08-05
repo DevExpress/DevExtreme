@@ -252,7 +252,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: npm install $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --force $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Zip node_modules    
       run: 7z a -t7z -mx3 -mmt2 node_modules.7z ./devextreme-demos/node_modules
