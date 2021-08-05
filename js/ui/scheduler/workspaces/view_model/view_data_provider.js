@@ -84,7 +84,7 @@ export default class ViewDataProvider {
         );
 
         this.dateHeaderData = dateHeaderDataGenerator
-            .generateDateHeaderData(this.completeDateHeaderMap, renderOptions);
+            .generateDateHeaderData(this.completeDateHeaderMap, this.completeViewDataMap, renderOptions);
 
         if(renderOptions.isGenerateTimePanelData) {
             this.timePanelData = timePanelDataGenerator.generateTimePanelData(
@@ -99,7 +99,11 @@ export default class ViewDataProvider {
         this.viewDataMapWithSelection = this.viewDataGenerator
             .markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
         this.viewData = this.viewDataGenerator
-            .getViewDataFromMap(this.viewDataMapWithSelection, renderOptions);
+            .getViewDataFromMap(
+                this.completeViewDataMap,
+                this.viewDataMapWithSelection,
+                renderOptions,
+            );
     }
 
     _transformRenderOptions(renderOptions) {
