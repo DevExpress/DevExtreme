@@ -302,7 +302,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), 'no scroll');
+        assert.equal($(scrollable.content()).width(), $(scrollable.container()).width(), 'no scroll');
     });
 
     QUnit.test('LoadPanel show when grid rendering in detail row', function(assert) {

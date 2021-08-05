@@ -222,7 +222,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // act
             const scrollable = dataGrid.getScrollable();
             scrollable.scrollTo({ x: 900 });
-            $(scrollable._container()).trigger('scroll');
+            $(scrollable.container()).trigger('scroll');
             this.clock.tick();
 
             // assert
@@ -2152,7 +2152,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        isNativeScrolling && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2179,7 +2179,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        isNativeScrolling && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
@@ -3063,7 +3063,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick(1000);
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         assert.equal(dataGrid.getTopVisibleRowData().id, 6, 'data is scrolled');
 
@@ -3071,7 +3071,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'filterValue', '1');
         dataGrid.columnOption(1, 'filterValue', '1');
         this.clock.tick(2000);
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
@@ -3618,7 +3618,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         scrollable.scrollTo({ left: 500 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
 
         this.clock.tick();
 
@@ -3628,7 +3628,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         scrollable.scrollTo({ top: 1000 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick();
 
         // assert

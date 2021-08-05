@@ -1224,7 +1224,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
-            isNativeScrolling && $(scrollable._container()).trigger('scroll');
+            isNativeScrolling && $(scrollable.container()).trigger('scroll');
             clock.tick();
 
             const topVisibleRowData = treeList.getTopVisibleRowData();
