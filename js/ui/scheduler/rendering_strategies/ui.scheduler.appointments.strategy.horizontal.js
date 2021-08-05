@@ -108,6 +108,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     needSeparateAppointment() {
         return this.instance.fire('isGroupedByDate');
     }
+
+    _isItemsCross(firstItem, secondItem) {
+        const orientation = this._getOrientation();
+
+        return this._checkItemsCrossing(firstItem, secondItem, orientation);
+    }
 }
 
 export default HorizontalRenderingStrategy;
