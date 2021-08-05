@@ -468,7 +468,6 @@ const Lookup = DropDownList.inherit({
         }
 
         this.callBase();
-
     },
 
     _scrollToSelectedItem: function() {
