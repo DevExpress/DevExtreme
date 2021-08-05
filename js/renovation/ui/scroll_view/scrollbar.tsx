@@ -408,13 +408,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   moveToBoundaryOnSizeChange(): void {
+    if (!this.props.containerHasSizes || this.props.contentSize === 0) {
+      return;
+    }
+
     const contentSizeChanged = this.props.contentSize !== this.prevContentSize;
     const containerSizeChanged = this.props.containerSize !== this.prevContainerSize;
 
-    if (this.props.containerHasSizes
-        && this.props.contentSize > 0
-        && (contentSizeChanged || containerSizeChanged)
-    ) {
+    if (contentSizeChanged || containerSizeChanged) {
       this.prevContentSize = this.props.contentSize;
       this.prevContainerSize = this.props.containerSize;
 
