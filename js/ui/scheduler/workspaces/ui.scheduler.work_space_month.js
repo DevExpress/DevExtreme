@@ -7,7 +7,6 @@ import { getBoundingRect } from '../../../core/utils/position';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     getViewStartByOptions,
-    calculateCellIndex,
     getCellText,
 } from './utils/month';
 import { calculateDayDuration, formatWeekday } from './utils/base';
@@ -44,19 +43,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     _getDateGenerationOptions() {
         return {
             ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
             cellCountInDay: 1,
-            calculateCellIndex,
-        };
-    }
-
-    generateRenderOptions() {
-        const options = super.generateRenderOptions();
-
-        return {
-            ...options,
-            columnsInDay: 1,
-            calculateCellIndex,
         };
     }
 
@@ -75,11 +62,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
         });
     }
-
-    _getHiddenInterval() {
-        return 0;
-    }
-
 
     _insertAllDayRowsIntoDateTable() {
         return false;
@@ -169,10 +151,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     scrollToTime() { return noop(); }
 
-    _getRowCountWithAllDayRows() {
-        return this._getRowCount();
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
@@ -202,7 +180,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         }
     }
 
-    _getTableAllDay() { return noop(); } //
     _toggleAllDayVisibility() { return noop(); }
     _changeAllDayVisibility() { return noop(); }
 
