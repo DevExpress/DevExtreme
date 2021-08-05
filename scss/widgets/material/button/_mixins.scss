@@ -35,7 +35,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 }
 
 @mixin dx-button-mode-text-withtext-sizing() {
-  @include dx-button-sizing($material-button-vertical-padding 8px, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
+  @include dx-button-sizing($material-button-vertical-padding $material-text-button-horizontal-padding, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
 }
 
 @mixin dx-button-text-and-icon-sizing() {
