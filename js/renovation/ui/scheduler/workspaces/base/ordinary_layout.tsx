@@ -17,6 +17,7 @@ import {
   DateHeaderData,
   DateTimeCellTemplateProps,
   Group,
+  GroupPanelData,
   ResourceCellTemplateProps,
   TimePanelData,
 } from '../types';
@@ -44,12 +45,11 @@ export const viewFunction = ({
     viewData,
     timePanelData,
     dateHeaderData,
+    groupPanelData,
     groupOrientation,
     isRenderDateHeader,
-    groupPanelCellBaseColSpan,
     groups,
     groupByDate,
-    columnCountPerGroup,
     groupPanelClassName,
     isAllDayPanelSupported,
 
@@ -74,15 +74,14 @@ export const viewFunction = ({
     <table className="dx-scheduler-header-panel">
       <HeaderPanel
         dateHeaderData={dateHeaderData}
+        groupPanelData={groupPanelData}
         timeCellTemplate={timeCellTemplate}
         dateCellTemplate={dateCellTemplate}
         isRenderDateHeader={isRenderDateHeader}
 
-        groupPanelCellBaseColSpan={groupPanelCellBaseColSpan}
         groupOrientation={groupOrientation}
         groupByDate={groupByDate}
         groups={groups}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     </table>
@@ -101,12 +100,11 @@ export const viewFunction = ({
     >
       {isRenderGroupPanel && (
         <GroupPanel
-          baseColSpan={groupPanelCellBaseColSpan}
+          groupPanelData={groupPanelData}
           className={groupPanelClassName}
           groupOrientation={groupOrientation}
           groupByDate={groupByDate}
           groups={groups}
-          columnCountPerGroup={columnCountPerGroup}
           resourceCellTemplate={resourceCellTemplate}
           height={groupPanelHeight}
         />
@@ -152,19 +150,20 @@ export class OrdinaryLayoutProps extends LayoutProps {
 
   @OneWay() dateHeaderData!: DateHeaderData;
 
+  @OneWay() groupPanelData: GroupPanelData = {
+    groupPanelItems: [],
+    baseColSpan: 1,
+  };
+
   @OneWay() intervalCount = 1;
 
   @OneWay() className = '';
 
   @OneWay() isRenderDateHeader = true;
 
-  @OneWay() groupPanelCellBaseColSpan = 1;
-
   @OneWay() groups: Group[] = [];
 
   @OneWay() groupByDate = false;
-
-  @OneWay() columnCountPerGroup = 1;
 
   @OneWay() groupPanelClassName:
   'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table'
