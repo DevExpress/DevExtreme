@@ -1390,14 +1390,14 @@ module('View Data Provider', {
                 }, {
                     colSpan: 2,
                     startDate: new Date(2021, 0, 11),
-                    groupIndex: 1,
-                    groups: { groupId: 2 },
-                    index: 0,
+                    groupIndex: 0,
+                    groups: { groupId: 1 },
+                    index: 1,
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
-                    key: 1,
+                    key: 2,
                     text: 1,
-                    today: true,
+                    today: false,
                 }]];
 
                 const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
