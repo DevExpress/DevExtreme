@@ -13,7 +13,8 @@
         "automerge": true
     },
     "vulnerabilityAlerts": {
-        "enabled": true
+        "enabled": true,
+        "automerge": true
     },
     "packageRules": [
         {
@@ -24,7 +25,7 @@
         }
     ],
     "reviewers": [
-        "team:devextreme-core"
+        "team:@DevExpress/devextreme-core"
     ],
     "ignorePaths": [
         ".github"
