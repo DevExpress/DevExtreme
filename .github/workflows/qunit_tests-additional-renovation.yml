@@ -55,7 +55,7 @@ jobs:
         '"datareporting.policy.dataSubmissionEnabled", false' \
         '"font.name-list.monospace.x-western", "Liberation Mono"' \
         '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> tmp/firefox-profile/prefs.js; done
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
     # - name: Run FireFox
     #   run: |
     #     cat ./firefox-profile/prefs.js
