@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from '../../../helpers/screenshot-comparer';
 import { extend } from '../../../../../js/core/utils/extend';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
