@@ -91,8 +91,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install $(dir /b *.tgz)
-      # run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install $(ls *.tgz)
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-angular-repo
