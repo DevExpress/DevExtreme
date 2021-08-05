@@ -1059,7 +1059,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // assert
         const scrollable = dataGrid.getScrollable();
-        assert.roughEqual(scrollable.$content().width(), $(scrollable.container()).width(), 0.01, 'no scrollbar');
+        assert.roughEqual(scrollable.$content().width(), $(scrollable.container()).width(), 0.2, 'no scrollbar');
     });
 
     QUnit.test('The scroll position should be updated after resizing column', function(assert) {
