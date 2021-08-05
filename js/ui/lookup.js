@@ -413,14 +413,6 @@ const Lookup = DropDownList.inherit({
         this._inkRipple = render();
     },
 
-    _toggleOpenState: function() {
-        this.callBase();
-
-        if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
-            this._setPopupPosition();
-        }
-    },
-
     _toggleActiveState: function($element, value, e) {
         this.callBase(...arguments);
 
@@ -493,15 +485,16 @@ const Lookup = DropDownList.inherit({
             this._popup.option('position').of = $(window);
         }
     },
-
     _popupShownHandler: function() {
+        const scrollToSelectedItemEnabled = this.option('_scrollToSelectedItemEnabled');
+        const fullScreen = this.option('dropDownOptions.fullScreen');
+
+        if(!fullScreen && scrollToSelectedItemEnabled) {
+            this._setPopupPosition();
+        }
+
         this.callBase();
 
-        if(this.option('_scrollToSelectedItemEnabled')) {
-            this._closeOnTargetScrollTimer = setTimeout(() => {
-                this._popup?.option('closeOnTargetScroll', true);
-            });
-        }
     },
 
     _scrollToSelectedItem: function() {
@@ -714,8 +707,6 @@ const Lookup = DropDownList.inherit({
         if(this.option('_scrollToSelectedItemEnabled')) {
             resetPosition($(this._popup.content()).parent());
         }
-
-        this._popup.option('closeOnTargetScroll', false);
     },
 
     _preventFocusOnPopup: noop,
@@ -752,6 +743,8 @@ const Lookup = DropDownList.inherit({
                 at: 'left bottom',
                 of: this.element()
             };
+
+            result.closeOnTargetScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (_, optionName) => {
@@ -985,7 +978,7 @@ const Lookup = DropDownList.inherit({
         if(this.option('searchEnabled')) {
             this._searchBox.focus();
         } else {
-            eventsEngine.trigger(this._$list, 'focus');
+            this._$list.get(0).focus({ preventScroll: true });
         }
     },
 
@@ -1149,13 +1142,6 @@ const Lookup = DropDownList.inherit({
             default:
                 this.callBase(...arguments);
         }
-    },
-
-    _dispose: function() {
-        clearTimeout(this._closeOnTargetScrollTimer);
-        this._closeOnTargetScrollTimer = null;
-
-        this.callBase();
     },
 
     focus: function() {
