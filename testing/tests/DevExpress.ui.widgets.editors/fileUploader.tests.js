@@ -1945,12 +1945,12 @@ QUnit.module('option change', moduleConfig, () => {
         instance._detachSelectFileDialogHandler.reset();
         instance._detachDragEventHandlers.reset();
 
-        assert.strictEqual(instance._attachSelectFileDialogHandler.callCount, 1, '_attachSelectFileDialogHandler method called');
+        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
         let items = instance._attachSelectFileDialogHandler.args[0];
         assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
         assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
 
-        assert.strictEqual(instance._attachDragEventHandlers.callCount, 1, '_attachDragEventHandlers method called');
+        assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
         items = instance._attachDragEventHandlers.args[0];
         assert.strictEqual(items.length, 1, '_attachDragEventHandlers args is valid');
         assert.strictEqual(items[0], '.dropZone', '_attachDragEventHandlers args is valid');
