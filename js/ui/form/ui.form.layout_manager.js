@@ -626,31 +626,40 @@ const LayoutManager = Widget.inherit({
         const template = item.template ? this._getTemplate(item.template) : null;
 
 
-        const $editor = $('<div>');
+        //
+        // Setup external $container:
+        //
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
+        if(isSimpleItem && isFlexSupported) {
+            $container.addClass(FLEX_LAYOUT_CLASS);
+        }
+        if(isSimpleItem && labelNeedBaselineAlign) {
+            // TODO: label related code, execute ony if needRenderLabel?
+            $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
+        }
 
+        //
+        // Setup field editor container:
+        //
+        const $fieldEditorContainer = $('<div>');
+        $fieldEditorContainer.data('dx-form-item', item);
+        adjustEditorContainer({ // TODO: label related code, execute ony if needRenderLabel?
+            $container: $fieldEditorContainer,
+            labelLocation: this.option('labelLocation'), // TODO: use 'labelOptions.location' insted?
+        });
+
+        //
+        // Setup $label:
+        //
         const $label = needRenderLabel ? renderLabel(labelOptions) : null;
         if($label) {
             $container.append($label);
-        }
-
-        if(item.itemType === SIMPLE_ITEM_TYPE) {
-            if(labelNeedBaselineAlign) {
-                $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
-            }
-            if(isFlexSupported) {
-                $container.addClass(FLEX_LAYOUT_CLASS);
-            }
-        }
-
-        $editor.data('dx-form-item', item);
-        if($label) {
             if(labelLocation === 'top' || labelLocation === 'left') {
-                $container.append($editor);
+                $container.append($fieldEditorContainer);
             }
             if(labelLocation === 'right') {
-                $container.prepend($editor);
+                $container.prepend($fieldEditorContainer);
             }
 
             if(labelLocation === 'top') {
@@ -658,19 +667,23 @@ const LayoutManager = Widget.inherit({
             } else {
                 $container.addClass(LABEL_HORIZONTAL_ALIGNMENT_CLASS);
             }
+
+            if(item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch') {
+                eventsEngine.on($label, clickEventName, function() {
+                    eventsEngine.trigger($fieldEditorContainer.children(), clickEventName);
+                });
+            }
         } else {
-            $container.append($editor);
+            $container.append($fieldEditorContainer);
         }
 
-        adjustEditorContainer({
-            $container: $editor,
-            labelLocation: this.option('labelLocation'),
-        });
-
+        //
+        // Append field editor:
+        //
         let instance;
         if(template) {
             renderTemplateTo({
-                $container: getPublicElement($editor),
+                $container: getPublicElement($fieldEditorContainer),
                 template,
                 templateOptions: {
                     dataField: item.dataField,
@@ -682,7 +695,7 @@ const LayoutManager = Widget.inherit({
             });
         } else {
             instance = renderComponentTo({
-                $container: $editor,
+                $container: $fieldEditorContainer,
                 createComponentCallback: this._createComponent.bind(this),
                 componentType: item.editorType,
                 componentOptions: editorOptions,
@@ -690,21 +703,12 @@ const LayoutManager = Widget.inherit({
                 labelID,
                 isRequired
             });
-
         }
 
-        if(instance && item.dataField) {
-            this._bindDataField(instance, item.dataField, item.editorType, $editor);
-        }
-
-        this._itemsRunTimeInfo.add({
-            item,
-            widgetInstance: instance,
-            guid: item.guid,
-            $itemContainer: $container
-        });
-
-        const editorElem = $editor.children().first();
+        //
+        // Setup $validation:
+        //
+        const editorElem = $fieldEditorContainer.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
         const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
 
@@ -750,25 +754,30 @@ const LayoutManager = Widget.inherit({
             }
         }
 
+        //
+        // Append help text elements:
+        //
         if(helpText && isSimpleItem) {
-            const $editorParent = $editor.parent();
+            const $editorParent = $fieldEditorContainer.parent();
 
             // TODO: DOM hierarchy is changed here: new node is added between $editor and $editor.parent()
             $editorParent.append(
                 $('<div>')
                     .addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS)
-                    .append($editor)
+                    .append($fieldEditorContainer)
                     .append(renderHelpText(helpText, helpID))
             );
         }
 
-        const isBooleanEditors = item.editorType === 'dxCheckBox' || item.editorType === 'dxSwitch';
-
-        if($label && isBooleanEditors) {
-            eventsEngine.on($label, clickEventName, function() {
-                eventsEngine.trigger($editor.children(), clickEventName);
-            });
+        if(instance && item.dataField) {
+            this._bindDataField(instance, item.dataField, item.editorType, $fieldEditorContainer);
         }
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: instance,
+            guid: item.guid,
+            $itemContainer: $container
+        });
     },
 
     _hasRequiredRuleInSet: function(rules) {

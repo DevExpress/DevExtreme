@@ -153,6 +153,7 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
 }
 
 export function adjustEditorContainer({ $container, labelLocation }) {
+    // TODO: inline this code
     const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
     $container.
         addClass(FIELD_ITEM_CONTENT_CLASS).
@@ -160,6 +161,7 @@ export function adjustEditorContainer({ $container, labelLocation }) {
 }
 
 export function renderTemplateTo({ $container, template, templateOptions }) {
+    // TODO: rename $container to $target
     template.render({
         model: templateOptions,
         container: $container
@@ -167,7 +169,7 @@ export function renderTemplateTo({ $container, template, templateOptions }) {
 }
 
 export function renderComponentTo({ $container, createComponentCallback, componentType, componentOptions, helpID, labelID, isRequired }) {
-    const $div = $('<div>').appendTo($container);
+    const $div = $('<div>').appendTo($container); // TODO: move <div> out of this method, pass $target
 
     try {
         const result = createComponentCallback($div, componentType, componentOptions);
