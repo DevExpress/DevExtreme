@@ -184,7 +184,8 @@ module.exports = {
         },
         {
             'files': [
-                '*.ts?(x)'
+                '*.ts',
+                '*.tsx'
             ],
             'parser': '@typescript-eslint/parser',
             'extends': [
@@ -341,6 +342,7 @@ module.exports = {
             'files': [
                 '*.d.ts'
             ],
+            'excludedFiles': 'js/renovation/**/*.d.ts',
             'parser': '@typescript-eslint/parser',
             'extends': [
                 'devextreme/typescript'

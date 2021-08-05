@@ -14,7 +14,7 @@ export interface Point {
 }
 
 export interface Translator {
-  translate(value: number | string | Date): number;
+  translate: (value: number | string | Date) => number;
 }
 
 export interface BaseEventData {

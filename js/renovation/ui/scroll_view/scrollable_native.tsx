@@ -694,10 +694,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   getInitEventData(): {
-    isNative: boolean;
-    scrollTarget: HTMLDivElement | null;
     getDirection: () => string | undefined;
     validate: (event: DxMouseEvent) => boolean;
+    isNative: boolean;
+    scrollTarget: HTMLDivElement | null;
   } {
     return {
       getDirection: this.tryGetAllowedDirection,

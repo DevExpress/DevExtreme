@@ -103,7 +103,6 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textItems(): TextItem[] | undefined {
-    // eslint-disable-next-line no-undef-init
     let items: TextItem[] | undefined = undefined;
     let parsedHtml = '';
     const { text } = this.props;
