@@ -3,7 +3,7 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
-
+import { utils } from '../utils';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     getViewStartByOptions,
@@ -178,7 +178,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     renderRTimeTable() {}
 
     renderRDateTable() {
-        this.renderRComponent(
+        utils.renovation.renderComponent(
+            this,
             this._$dateTable,
             dxrMonthDateTableLayout,
             'renovatedDateTable',
