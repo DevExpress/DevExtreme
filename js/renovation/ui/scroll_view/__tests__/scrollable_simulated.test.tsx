@@ -1197,13 +1197,13 @@ describe('Simulated > Behavior', () => {
 
       each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
         each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
-          test('containerDimensionsIsNotZero()', () => {
+          test('containerHasSizes()', () => {
             const viewModel = new Scrollable({});
 
             viewModel.containerClientHeight = containerClientHeight;
             viewModel.containerClientWidth = containerClientWidth;
 
-            expect(viewModel.containerDimensionsIsNotZero)
+            expect(viewModel.containerHasSizes)
               .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
           });
         });

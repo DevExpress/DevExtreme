@@ -96,7 +96,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     isLoadPanelVisible, pocketStateChange, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler,
-    lock, unlock, containerDimensionsIsNotZero,
+    lock, unlock, containerHasSizes,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -180,7 +180,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onScroll={onScroll}
               onEnd={onEnd}
               rtlEnabled={rtlEnabled}
-              containerDimensionsIsNotZero={containerDimensionsIsNotZero}
+              containerHasSizes={containerHasSizes}
             />
           )}
           {direction.isVertical && (
@@ -201,7 +201,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onScroll={onScroll}
               onEnd={onEnd}
-              containerDimensionsIsNotZero={containerDimensionsIsNotZero}
+              containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
               topPocketSize={topPocketClientHeight}
@@ -1190,7 +1190,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.containerRef.current!;
   }
 
-  get containerDimensionsIsNotZero(): boolean {
+  get containerHasSizes(): boolean {
     return this.containerClientHeight > 0 && this.containerClientWidth > 0;
   }
 
