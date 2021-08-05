@@ -218,7 +218,7 @@ jobs:
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
-      run: npm install --no-audit --no-fund
+      run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
