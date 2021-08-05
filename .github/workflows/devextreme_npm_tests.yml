@@ -91,7 +91,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: bash -c "npm install $(find . -maxdepth 1 -name \"devextreme-*.tgz\")"
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-angular-repo
@@ -160,7 +160,7 @@ jobs:
     - name: Install DevExtreme package 
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
-      run: npm run install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Generate entry files 
       if: steps.last_run_status.outputs.last_run_status != 'success'
