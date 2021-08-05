@@ -108,10 +108,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         date.setDate(date.getDate() + 1);
     }
 
-    _getWeekDuration() {
-        return 1;
-    }
-
     getIndicationCellCount() {
         const timeDiff = this._getTimeDiff();
         return this._calculateDurationInCells(timeDiff);
@@ -308,18 +304,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     generateRenderOptions() {
         const options = super.generateRenderOptions(true);
 
-        const groupCount = this._getGroupCount();
-        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-            ? groupCount
-            : 1;
-
-        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
-        const daysInView = cellsInGroup * horizontalGroupCount;
-
         return {
             ...options,
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-            daysInView,
             getDateForHeaderText,
         };
     }
@@ -446,7 +433,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
                 ? groupCount
                 : 1;
-            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+            const cellsInGroup = this.viewDataProvider.viewDataGenerator.daysInInterval * this.option('intervalCount');
 
             const cellsCount = cellsInGroup * horizontalGroupCount;
 

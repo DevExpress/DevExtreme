@@ -446,4 +446,8 @@ export default class ViewDataProvider {
 
         return this.getRowCount(this._options) + allDayRowCount;
     }
+
+    getFirstDayOfWeek(firstDayOfWeekOption) {
+        return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
+    }
 }

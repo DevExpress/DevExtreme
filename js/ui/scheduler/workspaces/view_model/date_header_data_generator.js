@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { getGroupCount } from '../../resources/utils';
 import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount, getTotalCellCountByCompleteData, getDisplayedCellCount } from '../utils/base';
 
 export class DateHeaderDataGenerator {
@@ -28,18 +29,27 @@ export class DateHeaderDataGenerator {
     _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
         const {
             isGroupedByDate,
-            daysInView,
             groups,
             groupOrientation,
             startDayHour,
             endDayHour,
-            hoursInterval
+            hoursInterval,
+            isHorizontalGrouping,
+            intervalCount,
         } = options;
 
         const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+
+        const groupCount = getGroupCount(groups);
+        const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate
+            ? groupCount
+            : 1;
+
+        const daysInGroup = this._viewDataGenerator.daysInInterval * intervalCount;
+        const daysInView = daysInGroup * datesRepeatCount;
 
         const weekDaysRow = [];
 
