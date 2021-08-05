@@ -1617,6 +1617,7 @@ class Scheduler extends Widget {
 
             // TODO: SSR does not work correctly with renovated render
             renovateRender: this._isRenovatedRender(isVirtualScrolling),
+            isRenovatedAppointments: this.modelProvider.isRenovatedAppointments
         }, currentViewOptions);
 
         result.observer = this;
