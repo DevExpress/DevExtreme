@@ -15,6 +15,12 @@ jobs:
       with:
         node-version: '15'
 
+    - name: Restore artifacts cache
+      uses: actions/cache@v2
+      with:
+        path: ./artifacts
+        key: build-npm-devextreme-artifacts-${{ github.sha }}
+
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
@@ -23,13 +29,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
-      run: npm install --no-audit --no-fund
-
-    - name: Restore artifacts cache
-      uses: actions/cache@v2
-      with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+      run: test -d artifacts || npm install --no-audit --no-fund
 
     - name: Build devextreme repo
       run: test -d artifacts || npm run build-npm-devextreme
@@ -48,7 +48,21 @@ jobs:
       with:
         node-version: '15'
 
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
     - name: Restore npm cache
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./mode_modules
@@ -56,15 +70,18 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-audit --no-fund
 
     - name: Restore artifacts cache
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./artifacts
         key: build-npm-devextreme-artifacts-${{ github.sha }}
 
     - name: Build devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: test -d artifacts || npm run build-npm-devextreme
 
     - name: Clone devextreme-angular repo from PR author fork
@@ -73,32 +90,42 @@ jobs:
       run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular ./devextreme-angular-repo
 
     - name: Clone devextreme-angular repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
     - name: Install devextreme package
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         cd ./devextreme-angular-repo/packages/devextreme-angular
         npm install --force ../../../artifacts/npm/devextreme
 
     - name: Run npm install for devextreme-angular repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         cd ./devextreme-angular-repo
         npm install --no-audit --no-fund
 
     - name: Update angular metadata
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
 
     - name: Build with Angular 7
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         cd ./devextreme-angular-repo
         npm run build
 
     - name: Run tests with Angular 7
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         cd ./devextreme-angular-repo
         npx lerna run --scope devextreme-angular gulp -- run.tests
+
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status
 
   test_bundlers:
     needs: cache_build
@@ -279,31 +306,49 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ matrix.CONSTEL }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
       if: github.event_name == 'pull_request'
       run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
 
     - name: Clone devextreme-demos repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Download devextreme sources
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
       with:
         name: devextreme-demos-sources
         path: ./devextreme-demos
 
     - name: Unpack artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: 7z x node_modules.7z
 
     - name: Prepare JS
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: npm run prepare-js
       
     - name: Run Web Server
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: |
         python -m http.server 8080 &
@@ -312,6 +357,7 @@ jobs:
         python -m http.server 8083 &
 
     - name: Run TestCafe tests
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       env:
         BROWSERS: chrome:headless
@@ -328,3 +374,6 @@ jobs:
         path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
         if-no-files-found: ignore
 
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status
