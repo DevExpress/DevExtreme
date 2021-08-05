@@ -7,21 +7,12 @@ concurrency:
 on: [pull_request]
 
 jobs:
-  qunit-tests:
-    strategy:
-      fail-fast: false
-      matrix:
-        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
-
+  build:
     runs-on: ubuntu-latest
-    name: Constel ${{ matrix.CONSTEL }}
+    name: Build
     timeout-minutes: 60
 
     steps:
-    - name: Setup utils
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
     - name: Get sources
       uses: actions/checkout@v2
 
@@ -46,6 +37,54 @@ jobs:
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: npm run build
+      
+    - name: Zip artifacts
+      run: 7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: devextreme-artifacts
+        path: artifacts.7z
+        retention-days: 1
+
+  qunit-tests:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Constel ${{ matrix.CONSTEL }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Setup utils
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-artifacts
+
+    - name: Unpack artifacts
+      run: 7z x artifacts.7z
 
     - name: Run QUnit tests
       env:
