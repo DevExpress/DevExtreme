@@ -21,7 +21,7 @@ describe('Pager size selector', () => {
         pageSizeChange: jest.fn(),
         pageSizes,
       },
-    };
+    } as Partial<PageSizeSmall>;
     const tree = shallow(<PageSizeSmallComponent {...props as any} /> as any);
     expect(tree.props()).toEqual({
       displayExpr: 'text',
