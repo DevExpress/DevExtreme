@@ -595,7 +595,7 @@ const LayoutManager = Widget.inherit({
 
     _renderFieldItem: function(item, $container) {
         const that = this;
-        const name = that._getName(item);
+        const name = item.dataField || item.name;
         const id = that.getItemID(name);
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
         const labelOptions = that._getLabelOptions(item, id, isRequired);
@@ -698,7 +698,32 @@ const LayoutManager = Widget.inherit({
         const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
 
         if(validationTargetInstance) {
-            that._renderValidator($validationTarget, item);
+            const isItemHaveCustomLabel = item.label && item.label.text;
+            const itemName = isItemHaveCustomLabel ? null : name;
+            const fieldName = isItemHaveCustomLabel ? item.label.text : itemName && captionize(itemName);
+            let validationRules;
+            const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+
+            if(isSimpleItem) {
+                if(item.validationRules) {
+                    validationRules = item.validationRules;
+                } else {
+                    const requiredMessage = format(this.option('requiredMessage'), fieldName || '');
+                    validationRules = item.isRequired ? [{ type: 'required', message: requiredMessage }] : null;
+                }
+            }
+
+            if(Array.isArray(validationRules) && validationRules.length) {
+                this._createComponent($validationTarget, Validator, {
+                    validationRules: validationRules,
+                    validationGroup: this.option('validationGroup'),
+                    dataGetter: function() {
+                        return {
+                            formItem: item
+                        };
+                    }
+                });
+            }
 
             if(isMaterial()) {
                 const wrapperClass = '.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS;
@@ -748,10 +773,6 @@ const LayoutManager = Widget.inherit({
         }
 
         return hasRequiredRule;
-    },
-
-    _getName: function(item) {
-        return item.dataField || item.name;
     },
 
     _isLabelNeedBaselineAlign: function(item) {
@@ -862,30 +883,6 @@ const LayoutManager = Widget.inherit({
                 }
             });
         }
-    },
-
-    _renderValidator: function($editor, item) {
-        const fieldName = this._getFieldLabelName(item);
-        const validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
-
-        if(Array.isArray(validationRules) && validationRules.length) {
-            this._createComponent($editor, Validator, {
-                validationRules: validationRules,
-                validationGroup: this.option('validationGroup'),
-                dataGetter: function() {
-                    return {
-                        formItem: item
-                    };
-                }
-            });
-        }
-    },
-
-    _getFieldLabelName: function(item) {
-        const isItemHaveCustomLabel = item.label && item.label.text;
-        const itemName = isItemHaveCustomLabel ? null : this._getName(item);
-
-        return isItemHaveCustomLabel ? item.label.text : itemName && captionize(itemName);
     },
 
     _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
