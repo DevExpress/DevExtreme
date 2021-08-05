@@ -54,9 +54,6 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Get sources
-      uses: actions/checkout@v2
-
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
@@ -84,18 +81,6 @@ jobs:
       id: last_run_status
       run: cat last_run_status
 
-    - name: Restore npm cache
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      uses: actions/cache@v2
-      with:
-        path: ./mode_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Install packages in devextreme repo
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: npm install --no-audit --no-fund
-
     - name: Download artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
@@ -111,13 +96,13 @@ jobs:
       working-directory: ./artifacts/npm/devextreme
       run: npm pack
 
-    - name: Install packages for devextreme-demos
-      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install --force --no-audit --no-fund
-
     - name: Install devextreme package
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install --force $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
+
+    - name: Install packages for devextreme-demos
+      working-directory: ./devextreme-angular-repo
+      run: npm install --no-audit --no-fund
 
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
