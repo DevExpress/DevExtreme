@@ -89,13 +89,13 @@ jobs:
         name: devextreme-npm
         path: ./devextreme-angular-repo/packages/devextreme-angular
 
+    - name: Install devextreme package
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      run: npm install --save-dev $(ls *.tgz)
+      
     - name: Install packages for devextreme-angular
       working-directory: ./devextreme-angular-repo
       run: npm install --no-audit --no-fund
-      
-    - name: Install devextreme package
-      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install $(ls *.tgz)
 
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
