@@ -229,7 +229,7 @@ describe('PagerContent', () => {
       const component = new PagerContent({
         pageCount: 1,
         pagesNavigatorVisible: 'auto',
-      } as any);
+      } as PagerContentProps);
       component.widgetRootElementRef = createTestRef(rootElement);
       component.keyboardAction.registerKeyboardAction(element, action);
       expect(registerKeyboardAction).toBeCalledWith(
@@ -283,7 +283,7 @@ describe('PagerContent', () => {
         const component = new PagerContent({
           pageCount: 1,
           pagesNavigatorVisible: 'auto',
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisible).toBe(true);
         component.props.pagesNavigatorVisible = false;
         expect(component.pagesContainerVisible).toBe(false);
@@ -293,7 +293,7 @@ describe('PagerContent', () => {
         const component = new PagerContent({
           pageCount: 0,
           pagesNavigatorVisible: 'auto',
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisible).toBe(false);
         component.props.pageCount = 1;
         expect(component.pagesContainerVisible).toBe(true);
@@ -306,7 +306,7 @@ describe('PagerContent', () => {
           pageCount: 1,
           hasKnownLastPage: true,
           pagesNavigatorVisible: 'auto',
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisibility).toBe('hidden');
       });
 
@@ -314,7 +314,7 @@ describe('PagerContent', () => {
         const component = new PagerContent({
           pagesNavigatorVisible: 'auto',
           pageCount: 2,
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisibility).toBeUndefined();
       });
 
@@ -322,7 +322,7 @@ describe('PagerContent', () => {
         const component = new PagerContent({
           pagesNavigatorVisible: true,
           pageCount: 1,
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisibility).toBeUndefined();
       });
 
@@ -331,7 +331,7 @@ describe('PagerContent', () => {
           hasKnownLastPage: false,
           pagesNavigatorVisible: 'auto',
           pageCount: 1,
-        } as any);
+        } as PagerContentProps);
         expect(component.pagesContainerVisibility).toBeUndefined();
       });
     });
@@ -339,7 +339,7 @@ describe('PagerContent', () => {
     it('pageIndexSelectorVisible', () => {
       const component = new PagerContent({
         pageSize: 0,
-      } as any);
+      } as PagerContentProps);
       expect(component.pageIndexSelectorVisible).toBe(false);
       component.props.pageSize = 10;
       expect(component.pageIndexSelectorVisible).toBe(true);
@@ -350,14 +350,14 @@ describe('PagerContent', () => {
         let component = new PagerContent({
           displayMode: 'full',
           isLargeDisplayMode: true,
-        } as any);
+        } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.classes).not.toEqual(expect.stringContaining('dx-light-mode'));
 
         component = new PagerContent({
           displayMode: 'compact',
           isLargeDisplayMode: true,
-        } as any);
+        } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(false);
         expect(component.classes).toEqual(expect.stringContaining('dx-light-mode'));
       });
@@ -384,7 +384,7 @@ describe('PagerContent', () => {
             displayMode,
             lightModeEnabled,
             isLargeDisplayMode,
-          } as any);
+          } as PagerContentProps);
           expect(component.isLargeDisplayMode).toBe(expected);
         });
       });
@@ -411,7 +411,7 @@ describe('PagerContent', () => {
           const component = new PagerContent({
             showInfo,
             infoTextVisible,
-          } as any);
+          } as PagerContentProps);
           Object.defineProperty(component, 'isLargeDisplayMode', { get: () => isLargeDisplayMode });
           expect(component.infoVisible).toBe(expected);
         });

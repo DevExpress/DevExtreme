@@ -32,15 +32,17 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class PageSizeSmallProps extends PagerProps {
+export class PageSizeSmallProps {
   @Ref() parentRef!: RefObject<HTMLElement>;
 
   @OneWay() pageSizes!: FullPageSize[];
 }
 
+type PageSizeSmallPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSmallProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall
-  extends JSXComponent<PageSizeSmallProps, 'parentRef' | 'pageSizes'>() {
+  extends JSXComponent<PageSizeSmallPropsType, 'parentRef' | 'pageSizes' | 'pageSizeChange'>() {
   @InternalState() private minWidth = 10;
 
   get width(): number {

@@ -19,6 +19,12 @@ export class PagerProps extends BasePagerProps {
 }
 
 @ComponentBindings()
-export class ExtendedPagerProps extends PagerProps {
-  @OneWay() pageSizes: (number | 'all')[] = [5, 10];
+export class InternalPagerProps extends PagerProps {
+  @OneWay() pageIndex = 1;
+
+  @OneWay() pageSize = 5;
+
+  @Event() pageIndexChange!: EventCallback<number>;
+
+  @Event() pageSizeChange!: EventCallback<number>;
 }

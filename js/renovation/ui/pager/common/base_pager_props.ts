@@ -40,4 +40,6 @@ export class BasePagerProps {
   @OneWay() totalCount = 0;
 
   @Event() onKeyDown?: EventCallback<Event>;
+
+  @OneWay() pageSizes: (number | 'all')[] = [5, 10];
 }

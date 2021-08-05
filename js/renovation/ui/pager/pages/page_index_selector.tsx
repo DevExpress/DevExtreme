@@ -75,12 +75,16 @@ function getIncrement(direction: Direction): number {
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageIndexSelectorProps extends PagerProps {
+export class PageIndexSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 }
 
+type PageIndexSelectorPropsType = Pick<PagerProps,
+'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |
+'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PageIndexSelector extends JSXComponent<PageIndexSelectorProps, 'pageIndexChange'>() {
+export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 

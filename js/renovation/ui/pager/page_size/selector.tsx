@@ -6,7 +6,7 @@ import {
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import { ExtendedPagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 
@@ -42,15 +42,17 @@ function getAllText(): string {
 
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-class PageSizeSelectorProps extends ExtendedPagerProps {
+class PageSizeSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
 
+type PageSizeSelectorPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent<PageSizeSelectorProps>() {
+  extends JSXComponent<PageSizeSelectorPropsType>() {
   @Ref() htmlRef!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

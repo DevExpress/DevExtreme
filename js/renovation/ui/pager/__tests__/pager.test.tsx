@@ -5,14 +5,14 @@ import { PagerContent } from '../content';
 import { Pager as PagerComponent } from '../pager';
 import { PageSizeLarge } from '../page_size/large';
 import { PageIndexSelector } from '../pages/page_index_selector';
-import { ExtendedPagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 
 jest.mock('../../editors/drop_down_editors/select_box', () => ({ SelectBox: jest.fn() }));
 
 describe('Pager', () => {
   describe('View', () => {
     it('render pager with defaults', () => {
-      const props = new ExtendedPagerProps();
+      const props = new InternalPagerProps();
       const tree = mount<PagerComponent>(<PagerComponent {...props} />);
       const pager = tree.childAt(0);
       const {
