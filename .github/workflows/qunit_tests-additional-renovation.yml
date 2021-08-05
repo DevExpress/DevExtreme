@@ -49,7 +49,7 @@ jobs:
     steps:
     - name: Setup firefox profile
       run: |
-        mkdir ./firefox-profile
+        mkdir /tmp/firefox-profile
         for p in \
         '"browser.shell.checkDefaultBrowser", false' \
         '"datareporting.policy.dataSubmissionEnabled", false' \
@@ -60,9 +60,9 @@ jobs:
     #   run: |
     #     cat ./firefox-profile/prefs.js
     #     firefox -headless -profile ./firefox-profile http://localhost:20060/run?notimers=true&constellation=misc
-    # - name: Setup utils
-    #   run: |
-    #     sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+    - name: Setup utils
+      run: |
+        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
     - name: Setup utils
       run: |
         sudo apt-get install -y httping
