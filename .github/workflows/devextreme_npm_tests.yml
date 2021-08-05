@@ -1,9 +1,9 @@
-name: devextreme package tests
+name: DevExtreme package tests
 
 on: [push, pull_request]
 
 jobs:
-  cache_build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,8 +34,18 @@ jobs:
     - name: Build devextreme repo
       run: test -d artifacts || npm run build-npm-devextreme
 
+    - name: Zip artifacts    
+      run: 7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts
+
+    - name: Copy build artifacts      
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifacts
+        path: artifacts.7z
+        retention-days: 1
+
   test_angular:
-    needs: cache_build
+    needs: build
     runs-on: windows-latest
     timeout-minutes: 30
 
@@ -73,16 +83,16 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-audit --no-fund
 
-    - name: Restore artifacts cache
+    - name: Download artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      uses: actions/cache@v2
+      uses: actions/download-artifact@v2
       with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+        name: artifacts
+        path: ./
 
-    - name: Build devextreme repo
+    - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: test -d artifacts || npm run build-npm-devextreme
+      run: 7z x artifacts.7z
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
@@ -98,7 +108,7 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         cd ./devextreme-angular-repo/packages/devextreme-angular
-        npm install --force ../../../artifacts/npm/devextreme
+        npm install --save-dev ../../../artifacts/npm/devextreme
 
     - name: Run npm install for devextreme-angular repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -128,7 +138,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   test_bundlers:
-    needs: cache_build
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -166,16 +176,16 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-audit --no-fund
 
-    - name: Restore artifacts cache
+    - name: Download artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      uses: actions/cache@v2
+      uses: actions/download-artifact@v2
       with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+        name: artifacts
+        path: ./
 
-    - name: Build devextreme repo
+    - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: test -d artifacts || npm run build-npm-devextreme
+      run: 7z x artifacts.7z
 
     - name: Install bundlers
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -227,7 +237,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
       
   build_demos:
-    needs: cache_build
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -250,14 +260,16 @@ jobs:
     - name: Install packages in devextreme repo
       run: npm install --no-audit --no-fund
 
-    - name: Restore artifacts cache
-      uses: actions/cache@v2
+    - name: Download artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/download-artifact@v2
       with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+        name: artifacts
+        path: ./
 
-    - name: Build devextreme repo
-      run: test -d artifacts || npm run build-npm-devextreme
+    - name: Unpack artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: 7z x artifacts.7z
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
