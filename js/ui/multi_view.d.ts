@@ -62,10 +62,11 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -80,10 +81,11 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     focusStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<string | dxMultiViewItem | any>
      * @fires dxMultiViewOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxMultiViewItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -116,9 +118,13 @@ export default class dxMultiView extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxMultiView
+ */
+export type Item = dxMultiViewItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMultiViewItem extends CollectionWidgetItem {

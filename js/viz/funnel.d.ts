@@ -47,22 +47,28 @@ import BaseWidget, {
     IncidentInfo
 } from './core/base_widget';
 
+
 /**
- * @docid
- * @inherits BaseLegendItem
- * @type object
+ * @public
+ * @namespace DevExpress.viz.dxFunnel
+ */
+export type LegendItem = FunnelLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
  * @namespace DevExpress.viz
  */
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
      * @docid
+     * @type dxFunnelItem
      * @public
      */
-    item?: dxFunnelItem;
+    item?: Item;
 }
 
 interface FunnelItemInfo {
-  readonly item: dxFunnelItem
+  readonly item: Item
 }
 
 /** @public */
@@ -363,7 +369,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
+      customizeText?: ((itemInfo: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }) => string),
       /**
        * @docid
        * @default '#767676' [prop](color)
@@ -544,14 +550,14 @@ export interface dxFunnelLegend extends BaseLegend {
      * @type_function_return string
      * @public
      */
-    customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+    customizeHint?: ((itemInfo: { item?: Item, text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.customizeItems
      * @type_function_param1 items:Array<FunnelLegendItem>
      * @type_function_return Array<FunnelLegendItem>
      * @public
      */
-    customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxFunnelOptions.legend.customizeText
      * @type_function_param1 itemInfo:object
@@ -561,7 +567,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+    customizeText?: ((itemInfo: { item?: Item, text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.markerTemplate
      * @default undefined
@@ -570,7 +576,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -593,7 +599,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
@@ -606,7 +612,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
+    customizeTooltip?: ((info: { item?: Item, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
 }
 /**
  * @docid
@@ -630,7 +636,7 @@ export default class dxFunnel extends BaseWidget {
      * @return Array<dxFunnelItem>
      * @public
      */
-    getAllItems(): Array<dxFunnelItem>;
+    getAllItems(): Array<Item>;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -641,8 +647,12 @@ export default class dxFunnel extends BaseWidget {
 }
 
 /**
- * @docid
- * @publicName Item
+ * @namespace DevExpress.viz.dxFunnel
+ */
+export type Item = dxFunnelItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.viz
  */
 export interface dxFunnelItem {
