@@ -86,6 +86,9 @@ jobs:
     - name: Unpack artifacts
       run: 7z x artifacts.7z
 
+    - name: Build dotnet
+      run: dotnet build build/build-dotnet.sln
+      
     - name: Run QUnit tests
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
