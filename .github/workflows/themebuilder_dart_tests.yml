@@ -1,6 +1,10 @@
 name: Themebuilder and Styles tests
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
 
 jobs:
   dart-test:
@@ -11,16 +15,15 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: .\node_modules
-    #     key: ${{ runner.os }}-node-modules-v4-${{ hashFiles('**/package.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node-modules-v4
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build etalon bundles
       run: npx gulp style-compiler-themes-ci
@@ -32,8 +35,8 @@ jobs:
       run: pub get
       working-directory: ./themebuilder-scss/dart-compiler
 
-    - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+    - name: Run npm install for themebuilder-scss
+      run: npm install --no-audit --no-fund
       working-directory: ./themebuilder-scss
 
     - name: Build

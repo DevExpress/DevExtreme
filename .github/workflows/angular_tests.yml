@@ -1,6 +1,10 @@
-name: Angular Wrapper Tests
+name: Angular wrapper tests
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request]
 
 jobs:
   test:
@@ -20,11 +24,18 @@ jobs:
       run: |
         test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./mode_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
     - name: Install packages in devextreme repo
       run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: npm run build
+      run: npm run build-npm-devextreme
 
     - name: Install devextreme package
       run: |

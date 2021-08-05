@@ -26,18 +26,19 @@ function exportDataGrid(doc, dataGrid, options) {
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
 
             const dataRowsCount = dataProvider.getRowsCount();
+            const rowOptions = options.rowOptions || {};
             let currentRowInfo;
             let prevRowInfo;
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 prevRowInfo = currentRowInfo;
-                currentRowInfo = createRowInfo({ dataProvider, rowIndex, prevRowInfo });
+                currentRowInfo = createRowInfo({ dataProvider, rowIndex, rowOptions, prevRowInfo });
 
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
                     const pdfCell = createPdfCell(cellInfo);
-                    if(options.onCellExporting) {
-                        options.onCellExporting({ gridCell: { value: cellInfo.value }, pdfCell });
+                    if(options.customizeCell) {
+                        options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell });
                     }
                     currentRowPdfCells.push(pdfCell);
                 });
@@ -54,7 +55,7 @@ function exportDataGrid(doc, dataGrid, options) {
                     pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
-                let rowHeight = null; // TODO: Default Value
+                let rowHeight = currentRowInfo.rowHeight; // TODO: Default Value
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);

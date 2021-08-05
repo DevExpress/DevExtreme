@@ -5113,13 +5113,9 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
-     * [descr:dxCheckBoxOptions.iconHeight]
+     * [descr:dxCheckBoxOptions.iconSize]
      */
-    iconHeight?: number | string;
-    /**
-     * [descr:dxCheckBoxOptions.iconWidth]
-     */
-    iconWidth?: number | string;
+    iconSize?: number | string;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
@@ -8678,6 +8674,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9436,6 +9434,8 @@ declare module DevExpress.ui {
           | 'italic'
           | 'underline'
           | 'fontColor'
+          | 'lineStyle'
+          | 'lineWidth'
           | 'lineColor'
           | 'fillColor'
           | 'textAlignLeft'
@@ -9496,6 +9496,8 @@ declare module DevExpress.ui {
             | 'italic'
             | 'underline'
             | 'fontColor'
+            | 'lineStyle'
+            | 'lineWidth'
             | 'lineColor'
             | 'fillColor'
             | 'textAlignLeft'
@@ -9587,6 +9589,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9652,6 +9656,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9717,6 +9723,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -12841,6 +12849,10 @@ declare module DevExpress.ui {
        */
       enablePredecessorGap?: boolean;
     };
+    /**
+     * [descr:dxGanttOptions.sorting]
+     */
+    sorting?: Sorting;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
@@ -22046,6 +22058,32 @@ declare module DevExpress.ui {
      * [descr:SearchBoxMixinOptions.searchValue]
      */
     searchValue?: string;
+  }
+  /**
+   * [descr:Sorting]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface Sorting {
+    /**
+     * [descr:Sorting.ascendingText]
+     */
+    ascendingText?: string;
+    /**
+     * [descr:Sorting.clearText]
+     */
+    clearText?: string;
+    /**
+     * [descr:Sorting.descendingText]
+     */
+    descendingText?: string;
+    /**
+     * [descr:Sorting.mode]
+     */
+    mode?: 'multiple' | 'none' | 'single';
+    /**
+     * [descr:Sorting.showSortIndexes]
+     */
+    showSortIndexes?: boolean;
   }
   /**
    * [descr:StringLengthRule]

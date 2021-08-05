@@ -704,18 +704,20 @@ module('Virtual scrolling integration', () => {
                                 mode: 'virtual',
                                 orientation: 'both'
                             },
+                            dataSource: [{
+                                startDate: new Date(2015, 2, 2, 0),
+                                endDate: new Date(2015, 2, 2, 0, 30),
+                                recurrenceRule
+                            }],
                             height: 400
                         });
 
                         const { instance } = this.scheduler;
 
-                        const settings = instance.fire('createAppointmentSettings', {
-                            startDate: new Date(2015, 2, 2, 0),
-                            endDate: new Date(2015, 2, 2, 0, 30),
-                            recurrenceRule
-                        });
+                        const layoutManager = instance.getLayoutManager();
+                        const settings = layoutManager._positionMap[0][0];
 
-                        assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                        assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                     });
                 });
 
@@ -1248,7 +1250,9 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                                    const layoutManager = instance.getLayoutManager();
+                                    const settings = layoutManager._positionMap[0][0];
 
                                     assert.equal(
                                         settings.groupIndex,
@@ -1297,19 +1301,21 @@ module('Virtual scrolling integration', () => {
                             fieldExpr: 'resourceId0',
                             dataSource: [{ id: 0 }]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2, 0),
+                            endDate: new Date(2015, 2, 2, 0, 30),
+                            resourceId0: 0
+                        }],
                         height: 400,
                         width: 800
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2, 0),
-                        endDate: new Date(2015, 2, 2, 0, 30),
-                        resourceId0: 0
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
 
                 test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has horizontal group orientation`, function(assert) {
@@ -1331,19 +1337,21 @@ module('Virtual scrolling integration', () => {
                                 { id: 1 }
                             ]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2, 0),
+                            endDate: new Date(2015, 2, 2, 0, 30),
+                            resourceId0: 1
+                        }],
                         height: 400,
                         width: 800
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2, 0),
-                        endDate: new Date(2015, 2, 2, 0, 30),
-                        resourceId0: 1
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 1, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 1, 'groupIndex is correct');
                 });
 
                 test(`Grouped allDay appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, function(assert) {
@@ -1362,19 +1370,21 @@ module('Virtual scrolling integration', () => {
                             fieldExpr: 'resourceId0',
                             dataSource: [{ id: 0 }]
                         }],
+                        dataSource: [{
+                            startDate: new Date(2015, 2, 2),
+                            endDate: new Date(2015, 2, 2),
+                            resourceId0: 0,
+                            allDay: true
+                        }],
                         height: 400
                     });
 
                     const { instance } = this.scheduler;
 
-                    const settings = instance.fire('createAppointmentSettings', {
-                        startDate: new Date(2015, 2, 2),
-                        endDate: new Date(2015, 2, 2),
-                        resourceId0: 0,
-                        allDay: true
-                    });
+                    const layoutManager = instance.getLayoutManager();
+                    const settings = layoutManager._positionMap[0][0];
 
-                    assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
+                    assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
             });
         });
@@ -1462,7 +1472,9 @@ module('Virtual scrolling integration', () => {
                                 const { filteredItems } = getAppointmentDataProvider(instance.key);
 
                                 filteredItems.forEach((dataItem, index) => {
-                                    const settings = instance.fire('createAppointmentSettings', dataItem);
+                                    const layoutManager = instance.getLayoutManager();
+                                    const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+                                    const settings = appointmentRenderingStrategy.generateAppointmentSettings(dataItem);
                                     const {
                                         groupIndex,
                                         topPositions
@@ -3005,51 +3017,6 @@ module('Virtual scrolling integration', () => {
             };
         }
     }, function() {
-        test('Appointment should not repaint if grid cells is exists for it', function(assert) {
-            const data = [{
-                startDate: new Date(2020, 8, 7, 2),
-                endDate: new Date(2020, 8, 7, 3),
-                text: 'test'
-            }];
-
-            this.createInstance({
-                height: 600,
-                width: 800,
-                currentDate: new Date(2020, 8, 7),
-                scrolling: {
-                    mode: 'virtual',
-                    orientation: 'both'
-                },
-                currentView: 'week',
-                views: [{
-                    type: 'week',
-                    intervalCount: 10,
-                }],
-                dataSource: data
-            });
-
-            const scrollable = this.instance.getWorkSpaceScrollable();
-
-            return asyncWrapper(
-                assert,
-                promise => asyncScrollTest(
-                    assert,
-                    promise,
-                    () => {
-                        const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
-
-                        assert.deepEqual(appointmentsItems[0].itemData, data[0], 'Item1 is correct');
-                        assert.notOk(appointmentsItems[0].needRepaint, 'Item should not be repainted');
-                        assert.notOk(appointmentsItems[0].needRemove, 'Item0 should not be removed');
-                        assert.equal(this.instance.getWorkSpace().virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'Virtual cells count is correct');
-                    },
-                    scrollable,
-                    { x: 500 }
-                )
-            );
-        });
-
-
         [
             {
                 groupOrientation: 'horizontal',

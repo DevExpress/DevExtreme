@@ -19,12 +19,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
 
-        let appointmentDuration = this._getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
+        let duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
-        appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, normalizedEndDate);
+        duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
         const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
-        const durationInCells = appointmentDuration / cellDuration;
+        const durationInCells = duration / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
@@ -104,6 +104,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
     isAllDay(appointmentData) {
         return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
+    }
+
+    _isItemsCross(firstItem, secondItem) {
+        const orientation = this._getOrientation();
+
+        return this._checkItemsCrossing(firstItem, secondItem, orientation);
     }
 }
 

@@ -111,7 +111,9 @@ module('Subscribes', {
                 }
             });
 
-            const { dateSettingsStrategy } = this.instance._getAppointmentSettingsGenerator();
+            const layoutManager = this.instance.getLayoutManager();
+            const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+            const { dateSettingsStrategy } = appointmentRenderingStrategy.getAppointmentSettingsGenerator();
 
             assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
         });
@@ -160,9 +162,11 @@ module('Subscribes', {
             currentDate: 1425416400000
         });
 
-        const coordinate = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 3, 22),
-            'endDate': new Date(2015, 2, 17, 10, 30)
+        const layoutManager = this.instance.getLayoutManager();
+        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+        const coordinate = appointmentRenderingStrategy.generateAppointmentSettings({
+            startDate: new Date(2015, 2, 3, 22),
+            endDate: new Date(2015, 2, 17, 10, 30)
         });
         assert.roughEqual(coordinate[0].top, 0, 1.001, 'Top coordinate is OK');
     });
@@ -223,61 +227,77 @@ module('Subscribes', {
         assert.ok(needRecalculate, 'Resizable area should be recalculated');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                startDate: new Date(2015, 2, 2, 0),
+                endDate: new Date(2015, 2, 3, 0),
+                recurrenceRule: 'FREQ=DAILY'
+            }]
         });
 
-        const result = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
-            'recurrenceRule': 'FREQ=DAILY'
-        });
-        assert.equal(result.length, 7, 'count is OK');
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
+
+        assert.equal(_positionMap[0].length, 7, 'count is OK');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                'startDate': new Date(2015, 2, 2, 0),
+                'endDate': new Date(2015, 2, 3, 0),
+                'recurrenceRule': 'FREQ=DAILY',
+                allDay: true
+            }]
         });
 
-        const result = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
-            'recurrenceRule': 'FREQ=DAILY',
-            allDay: true
-        });
-        assert.equal(result.length, 7, 'count is OK');
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
+
+        assert.equal(_positionMap[0].length, 7, 'count is OK');
     });
 
-    test('\'createAppointmentSettings\' should not change dateRange', function(assert) {
+    test('"createAppointmentSettings" should not change dateRange', function(assert) {
         this.createInstance({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                'startDate': new Date(2015, 2, 2, 0),
+                'endDate': new Date(2015, 2, 3, 0),
+                'recurrenceRule': 'FREQ=DAILY',
+                allDay: true
+            }]
         });
 
         const instance = this.instance;
         const dateRange = instance._workSpace.getDateRange();
 
-        instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
+        const layoutManager = this.instance.getLayoutManager();
+        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+
+        appointmentRenderingStrategy.generateAppointmentSettings({
+            'startDate': new Date(2015, 2, 2, 1),
+            'endDate': new Date(2015, 2, 3, 1),
             'recurrenceRule': 'FREQ=DAILY',
             allDay: true
         });
+
         assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
     });
 
@@ -285,17 +305,20 @@ module('Subscribes', {
         this.createInstance({
             currentView: 'timelineDay',
             views: ['timelineDay'],
-            currentDate: new Date(2015, 2, 3)
+            currentDate: new Date(2015, 2, 3),
+            dataSource: [{
+                'startDate': new Date(2015, 2, 3, 0, 30),
+                'endDate': new Date(2015, 2, 5, 15, 30)
+            }]
         });
+
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
 
         const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1);
         const expectedLeftCoordinate = $expectedCell.position().left;
 
-        const coordinate = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 3, 0, 30),
-            'endDate': new Date(2015, 2, 5, 15, 30)
-        });
-        assert.equal(coordinate[0].left, expectedLeftCoordinate, 'left coordinate is OK');
+        assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
     test('\'updateAppointmentStartDate\' should work correct with custom data fields', function(assert) {
@@ -663,10 +686,12 @@ module('Subscribes', {
     test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
         this.createInstance();
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 2, 20),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 2, 20)
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -678,10 +703,12 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 4, 20),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 4, 20)
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -693,10 +720,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 3, 0),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 3, 0)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -708,10 +736,11 @@ module('Subscribes', {
             endDayHour: 22
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 4, 25, 21),
-            endDate: new Date(2015, 4, 26, 3),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 4, 25, 21),
+            new Date(2015, 4, 26, 3)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -723,10 +752,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 10),
-            endDate: new Date(2015, 2, 4, 17),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 10),
+            new Date(2015, 2, 4, 17)
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -738,10 +768,11 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+        );
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -753,11 +784,13 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -770,11 +803,13 @@ module('Subscribes', {
             cellDuration: 61
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
         assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
     });
 
@@ -875,7 +910,7 @@ module('Subscribes', {
         assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
     });
 
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with scheduler configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with scheduler configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -889,18 +924,18 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
 
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with view configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with view configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -915,13 +950,13 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance.modelProvider.maxAppointmentsPerCell;
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });
@@ -1089,16 +1124,18 @@ module('Subscribes', {
     [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
         test(`Appointments should not contains groupIndex if recurrenceRule: ${recurrenceRule}`, function(assert) {
             this.createInstance({
-                currentDate: new Date(2015, 2, 2)
+                currentDate: new Date(2015, 2, 2),
+                dataSource: [{
+                    startDate: new Date(2015, 2, 2, 0),
+                    endDate: new Date(2015, 2, 3, 0),
+                    recurrenceRule: undefined
+                }]
             });
 
-            const settings = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2015, 2, 2, 0),
-                endDate: new Date(2015, 2, 3, 0),
-                recurrenceRule
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const { _positionMap } = layoutManager;
 
-            assert.notOk(settings[0].groupIndex, 'no groupIndex');
+            assert.notOk(_positionMap[0][0].groupIndex, 'no groupIndex');
         });
     });
 });
@@ -1158,7 +1195,7 @@ module('Grouping By Date', {
             assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
         });
 
-        test(`'createAppointmentSettings' should work correct for allDay appointment when groupByDate = true, Week view when renovateRender is ${isRenovatedRender}`, function(assert) {
+        test(`"createAppointmentSettings" should work correct for allDay appointment when groupByDate = true, Week view when renovateRender is ${isRenovatedRender}`, function(assert) {
             const priorityData = [
                 {
                     text: 'Low Priority',
@@ -1190,14 +1227,16 @@ module('Grouping By Date', {
                     }
                 ],
                 renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 21, 9, 0),
+                    endDate: new Date(2018, 4, 23, 9, 0),
+                    priorityId: 2,
+                    allDay: true
+                }]
             });
 
-            const results = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2018, 4, 21, 9, 0),
-                endDate: new Date(2018, 4, 23, 9, 0),
-                priorityId: 2,
-                allDay: true
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
 
             assert.equal(results.length, 3, 'Result length is OK');
             this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 196, 1.1);
@@ -1205,7 +1244,7 @@ module('Grouping By Date', {
             this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 324, 1.1);
         });
 
-        test(`createAppointmentSettings' should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
+        test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
             const priorityData = [
                 {
                     text: 'Low Priority',
@@ -1236,17 +1275,19 @@ module('Grouping By Date', {
                     }
                 ],
                 renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 22, 10, 0),
+                    endDate: new Date(2018, 4, 24),
+                    priorityId: 2
+                }]
             });
 
             const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
             const cellWidth = $cell.getBoundingClientRect().width;
             const cellHeight = $cell.getBoundingClientRect().height;
 
-            const results = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2018, 4, 22, 10, 0),
-                endDate: new Date(2018, 4, 24),
-                priorityId: 2
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
             this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
@@ -1284,18 +1325,20 @@ module('Grouping By Date', {
                     }
                 ],
                 renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 22, 10, 0),
+                    endDate: new Date(2018, 4, 23, 12),
+                    priorityId: 2,
+                    recurrenceRule: 'FREQ=DAILY;COUNT=3'
+                }]
             });
 
             const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
             const cellWidth = $cell.getBoundingClientRect().width;
             const cellHeight = $cell.getBoundingClientRect().height;
 
-            const results = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2018, 4, 22, 10, 0),
-                endDate: new Date(2018, 4, 23, 12),
-                priorityId: 2,
-                recurrenceRule: 'FREQ=DAILY;COUNT=3'
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
 
             assert.equal(results.length, 6, 'Coordinates count is ok');
             this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
@@ -1340,15 +1383,17 @@ module('Grouping By Date', {
                     }
                 ],
                 renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 21, 10, 0),
+                    endDate: new Date(2018, 4, 21, 12, 0),
+                    priorityId: 2
+                }]
             });
 
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
 
-            const results = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2018, 4, 21, 10, 0),
-                endDate: new Date(2018, 4, 21, 12, 0),
-                priorityId: 2
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
 
             this.checkNeedCoordinatesResult(assert, results[0], 5, 0, 0, cellWidth * 5, 1.5);
             this.checkNeedCoordinatesResult(assert, results[1], 7, 0, 0, cellWidth * 7, 1.5);

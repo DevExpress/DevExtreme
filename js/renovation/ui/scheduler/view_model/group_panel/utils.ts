@@ -2,14 +2,15 @@ import {
   GroupRenderItem,
   Group,
   GroupItem,
-} from '../../types.d';
+  GroupPanelData,
+} from '../../workspaces/types';
 
 const extendGroupItemsForGroupingByDate = (
   groupRenderItems: GroupRenderItem[][],
   columnCountPerGroup: number,
 ): GroupRenderItem[][] => [...new Array(columnCountPerGroup)]
   .reduce((currentGroupItems, _, index) => groupRenderItems.map((groupsRow, rowIndex) => {
-    const currentRow = currentGroupItems[rowIndex] || [];
+    const currentRow = (currentGroupItems as [])[rowIndex] || [];
 
     return [
       ...currentRow,
@@ -22,13 +23,14 @@ const extendGroupItemsForGroupingByDate = (
     ] as GroupRenderItem[];
   }), []) as GroupRenderItem[][];
 
-export const getGroupsRenderData = (
+export const getGroupPanelData = (
   groups: Group[],
   columnCountPerGroup: number,
   groupByDate: boolean,
-): GroupRenderItem[][] => {
+  baseColSpan: number,
+): GroupPanelData => {
   let repeatCount = 1;
-  let groupRenderItems = groups.map((group: Group) => {
+  let groupPanelItems = groups.map((group: Group) => {
     const result = [] as GroupRenderItem[];
     const { name: resourceName, items, data } = group;
 
@@ -48,8 +50,11 @@ export const getGroupsRenderData = (
   });
 
   if (groupByDate) {
-    groupRenderItems = extendGroupItemsForGroupingByDate(groupRenderItems, columnCountPerGroup);
+    groupPanelItems = extendGroupItemsForGroupingByDate(groupPanelItems, columnCountPerGroup);
   }
 
-  return groupRenderItems;
+  return {
+    groupPanelItems,
+    baseColSpan,
+  };
 };

@@ -41,7 +41,8 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxOverlay({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                useResizeObserver: false
             });
         };
 
@@ -52,7 +53,8 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
         const overlay = $('#element').dxOverlay({
             shading,
             visible: false,
-            animation: null
+            animation: null,
+            useResizeObserver: false
         }).dxOverlay('instance');
 
         const measureFunction = function() {
@@ -68,7 +70,8 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxPopup({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                useResizeObserver: false
             });
         };
 

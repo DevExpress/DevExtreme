@@ -525,6 +525,9 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Razvrsti naraščajoče",
+        "dxGantt-sortingDescendingText": "Razvrsti padajoče",
+        "dxGantt-sortingClearText": "Brez razvrščanja"
     }
 }

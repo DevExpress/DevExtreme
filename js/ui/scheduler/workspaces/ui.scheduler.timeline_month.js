@@ -3,7 +3,7 @@ import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-import { calculateCellIndex, getViewStartByOptions } from './utils/month';
+import { getViewStartByOptions } from './utils/month';
 import { formatWeekdayAndDay } from './utils/base';
 import { VIEWS } from '../constants';
 
@@ -32,10 +32,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return this.option('dateCellTemplate');
     }
 
-    _getHiddenInterval() {
-        return 0;
-    }
-
     _calculateDurationInCells(timeDiff) {
         return timeDiff / this.getCellDuration();
     }
@@ -57,14 +53,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    }
-
-    _getDateGenerationOptions() {
-        return {
-            ...super._getDateGenerationOptions(),
-            columnsInDay: 1,
-            calculateCellIndex,
-        };
     }
 
     getPositionShift() {
@@ -89,8 +77,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return {
             ...options,
             getDateForHeaderText: (_, date) => date,
-            columnsInDay: 1,
-            calculateCellIndex,
         };
     }
 }

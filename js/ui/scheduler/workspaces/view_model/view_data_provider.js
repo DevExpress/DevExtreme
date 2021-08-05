@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { getGroupPanelData } from '../../../../renovation/ui/scheduler/view_model/group_panel/utils';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
 import { calculateIsGroupedAllDayPanel } from '../utils/base';
@@ -44,6 +45,8 @@ export default class ViewDataProvider {
     }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
+
+    get hiddenInterval() { return this.viewDataGenerator.hiddenInterval; }
 
     update(options, isGenerateNewViewData) {
         this.viewDataGenerator = getViewDataGeneratorByViewType(options.viewType);
@@ -124,6 +127,21 @@ export default class ViewDataProvider {
         };
     }
 
+    getGroupPanelData(options) {
+        const renderOptions = this._transformRenderOptions(options);
+        if(renderOptions.groups.length > 0) {
+            const cellCount = this.getCellCount(renderOptions);
+            return getGroupPanelData(
+                renderOptions.groups,
+                cellCount,
+                renderOptions.isGroupedByDate,
+                renderOptions.isGroupedByDate ? 1 : cellCount,
+            );
+        }
+
+        return undefined;
+    }
+
     getGroupStartDate(groupIndex) {
         return this._groupedDataMapProvider.getGroupStartDate(groupIndex);
     }
@@ -176,7 +194,7 @@ export default class ViewDataProvider {
     }
 
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
-        const rowsPerGroup = this._options.rowCountWithAllDayRow;
+        const rowsPerGroup = this._getRowCountWithAllDayRows();
         const isShowAllDayPanel = this._options.isAllDayPanelVisible;
 
         const firstRowInGroup = this._options.isVerticalGrouping
@@ -413,5 +431,15 @@ export default class ViewDataProvider {
 
     getRowCount(options) {
         return this.viewDataGenerator.getRowCount(options);
+    }
+
+    getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
+        return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
+    }
+
+    _getRowCountWithAllDayRows() {
+        const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
+
+        return this.getRowCount(this._options) + allDayRowCount;
     }
 }

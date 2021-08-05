@@ -545,9 +545,9 @@ export const SimulatedStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
+        this._$container = $(scrollable.container());
         this._$wrapper = scrollable._$wrapper;
-        this._$content = scrollable._$content;
+        this._$content = scrollable.$content();
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);

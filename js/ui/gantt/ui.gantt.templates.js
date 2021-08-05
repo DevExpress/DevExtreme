@@ -10,10 +10,11 @@ export class GanttTemplatesManager {
     getTaskTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
         const isTooltipShowing = true;
         const template = taskTooltipContentTemplateOption && this._gantt._getTemplate(taskTooltipContentTemplateOption);
-        const createTemplateFunction = template && ((container, item) => {
+        const createTemplateFunction = template && ((container, item, callback) => {
             template.render({
                 model: this._gantt.getTaskDataByCoreData(item),
-                container: getPublicElement($(container))
+                container: getPublicElement($(container)),
+                onRendered: () => { callback(); }
             });
             return isTooltipShowing;
         });
@@ -23,11 +24,11 @@ export class GanttTemplatesManager {
     getTaskProgressTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
         const isTooltipShowing = true;
         const template = taskTooltipContentTemplateOption && this._gantt._getTemplate(taskTooltipContentTemplateOption);
-        const createTemplateFunction = template && ((container, item, callback, posX) => {
+        const createTemplateFunction = template && ((container, item, callback) => {
             template.render({
                 model: item,
                 container: getPublicElement($(container)),
-                onRendered: () => { callback(posX); }
+                onRendered: () => { callback(); }
             });
             return isTooltipShowing;
         });
@@ -37,11 +38,11 @@ export class GanttTemplatesManager {
     getTaskTimeTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
         const isTooltipShowing = true;
         const template = taskTooltipContentTemplateOption && this._gantt._getTemplate(taskTooltipContentTemplateOption);
-        const createTemplateFunction = template && ((container, item, callback, posX) => {
+        const createTemplateFunction = template && ((container, item, callback) => {
             template.render({
                 model: item,
                 container: getPublicElement($(container)),
-                onRendered: () => { callback(posX); }
+                onRendered: () => { callback(); }
             });
             return isTooltipShowing;
         });

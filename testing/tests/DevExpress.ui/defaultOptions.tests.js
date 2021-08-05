@@ -33,6 +33,7 @@ const Menu = require('ui/menu/ui.menu');
 const ContextMenu = require('ui/context_menu/ui.context_menu');
 const NumberBox = require('ui/number_box');
 const NavBar = require('ui/nav_bar');
+const Widget = require('ui/widget/ui.widget');
 const Popup = require('ui/popup');
 const Popover = require('ui/popover');
 const RadioGroup = require('ui/radio_group');
@@ -305,7 +306,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
     useItemTextAsTitle: true,
@@ -560,6 +561,40 @@ testComponentDefaults(Popup,
             show: { type: 'fade', duration: 400, from: 0, to: 1 },
             hide: { type: 'fade', duration: 400, from: 1, to: 0 }
         }
+    }
+);
+
+testComponentDefaults(Widget,
+    {},
+    {
+        useResizeObserver: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'ios',
+            version: '13.3'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
+    }
+);
+
+testComponentDefaults(Widget,
+    {},
+    {
+        useResizeObserver: false
+    },
+    function() {
+        this.originalRealDevice = devices.real();
+        devices.real({
+            platform: 'android',
+            version: '4.4.4'
+        });
+    },
+    function() {
+        devices.real(this.originalRealDevice);
     }
 );
 

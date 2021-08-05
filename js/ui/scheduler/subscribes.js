@@ -4,7 +4,6 @@ import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
-import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import {
@@ -50,10 +49,6 @@ const subscribes = {
 
     setCellDataCacheAlias: function(appointment, geometry) {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
-    },
-
-    createAppointmentSettings: function(appointment) {
-        return this._getAppointmentSettingsGenerator(appointment).create();
     },
 
     isGroupedByDate: function() { // TODO replace with ModelProvider
@@ -240,10 +235,6 @@ const subscribes = {
         return this.getWorkSpace().getCellHeight();
     },
 
-    getRenderingStrategy: function() {
-        return this._getAppointmentsRenderingStrategy();
-    },
-
     getMaxAppointmentCountPerCellByType: function(isAllDay) {
         return this.getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
     },
@@ -368,10 +359,6 @@ const subscribes = {
         return this.getEndViewDate();
     },
 
-    getMaxAppointmentsPerCell: function() {
-        return this.getMaxAppointmentsPerCell();
-    },
-
     forceMaxAppointmentPerCell: function() {
         return this.forceMaxAppointmentPerCell();
     },
@@ -397,54 +384,6 @@ const subscribes = {
 
     getTargetedAppointmentData: function(appointment, element) {
         return this.getTargetedAppointment(appointment, element);
-    },
-
-    getAppointmentDurationInMs: function(options) {
-        const startDate = options.startDate;
-        const endDate = options.endDate;
-        const allDay = options.allDay;
-        const appointmentDuration = endDate.getTime() - startDate.getTime();
-
-        const dayDuration = toMs('day');
-        const visibleDayDuration = this._workSpace.getVisibleDayDuration();
-        let result = 0;
-
-        if(allDay) {
-            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
-
-            result = ceilQuantityOfDays * visibleDayDuration;
-        } else {
-            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
-            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
-            let tailDuration;
-
-            if(isDifferentDates) {
-                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
-                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
-
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
-
-                const startDayTime = this.option('startDayHour') * toMs('hour');
-                const endPartDuration = endDate - dateUtils.trimTime(endDate);
-
-                if(endPartDuration < startDayTime) {
-                    if(floorQuantityOfDays) {
-                        tailDuration -= hiddenDayDuration;
-                    }
-
-                    tailDuration += startDayTime - endPartDuration;
-                }
-            } else {
-                tailDuration = appointmentDuration % dayDuration;
-            }
-
-            if(tailDuration > visibleDayDuration) {
-                tailDuration = visibleDayDuration;
-            }
-
-            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
-        }
-        return result;
     },
 
     getEndDayHour: function() {

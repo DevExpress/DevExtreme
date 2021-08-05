@@ -4,6 +4,7 @@ import { extend } from '../../../../core/utils/extend';
 import dateUtils from '../../../../core/utils/date';
 import { isNumeric, isObject } from '../../../../core/utils/type';
 import { current as currentTheme } from '../../../themes';
+import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
 
@@ -22,17 +23,23 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get key() { return this.options.key; }
     get instance() { return this.options.instance; } // TODO get rid of this
+    get key() { return this.options.key; }
+    get isAdaptive() { return this.options.adaptivityEnabled; }
+    get rtlEnabled() { return this.options.rtlEnabled; }
+    get startDayHour() { return this.options.startDayHour; }
+    get endDayHour() { return this.options.endDayHour; }
+    get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
     get cellWidth() { return this.options.getCellWidth(); }
     get cellHeight() { return this.options.getCellHeight(); }
     get allDayHeight() { return this.options.getAllDayHeight(); }
     get resizableStep() { return this.options.getResizableStep(); }
-    get isAdaptive() { return this.options.isAdaptive; }
-    get rtlEnabled() { return this.options.rtlEnabled; }
     get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
+    get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
+    get viewStartDayHour() { return this.options.viewStartDayHour; }
+    get viewEndDayHour() { return this.options.viewEndDayHour; }
 
-    get isVirtualScrolling() { return this.options.isVirtualScrolling(); }
+    get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
     _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
         coordinates.top = coordinates.top + this.getCollectorTopOffset(isAllDay);
@@ -119,7 +126,7 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(appointment) {
-        const position = this._getAppointmentCoordinates(appointment);
+        const position = this.generateAppointmentSettings(appointment);
         const allDay = this.isAllDay(appointment);
 
         let result = [];
@@ -194,8 +201,23 @@ class BaseRenderingStrategy {
         return result;
     }
 
-    _getAppointmentCoordinates(appointment) {
-        return this.instance.fire('createAppointmentSettings', appointment);
+    getAppointmentSettingsGenerator(rawAppointment) {
+        return new AppointmentSettingsGenerator({
+            rawAppointment,
+            appointmentTakesAllDay: this.isAppointmentTakesAllDay(rawAppointment), // TODO move to the settings
+            ...this.options
+        });
+    }
+    generateAppointmentSettings(rawAppointment) {
+        return this.getAppointmentSettingsGenerator(rawAppointment).create();
+    }
+
+    isAppointmentTakesAllDay(rawAppointment) {
+        return this.options.appointmentDataProvider.appointmentTakesAllDay(
+            rawAppointment,
+            this.viewStartDayHour,
+            this.viewEndDayHour
+        );
     }
 
     _getAppointmentParts() {
@@ -505,14 +527,6 @@ class BaseRenderingStrategy {
         return duration + diff * toMs('minute');
     }
 
-    _getAppointmentDurationInMs(startDate, endDate, allDay) {
-        return this.instance.fire('getAppointmentDurationInMs', {
-            startDate: startDate,
-            endDate: endDate,
-            allDay: allDay,
-        });
-    }
-
     _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
@@ -592,7 +606,7 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.maxAppointmentsPerCell;
         const offsets = this._getOffsets();
         const appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
@@ -637,7 +651,7 @@ class BaseRenderingStrategy {
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+            const overlappingMode = this.maxAppointmentsPerCell;
             let appointmentCountPerCell;
 
             if(isNumeric(overlappingMode)) {
@@ -701,6 +715,53 @@ class BaseRenderingStrategy {
     _needHorizontalGroupBounds() {
         return false;
     }
+
+    getAppointmentDurationInMs(startDate, endDate, allDay) {
+        const appointmentDuration = endDate.getTime() - startDate.getTime();
+        const dayDuration = toMs('day');
+        const visibleDayDuration = this.visibleDayDuration;
+        let result = 0;
+
+        if(allDay) {
+            const ceilQuantityOfDays = Math.ceil(appointmentDuration / dayDuration);
+
+            result = ceilQuantityOfDays * visibleDayDuration;
+        } else {
+            const isDifferentDates = !timeZoneUtils.isSameAppointmentDates(startDate, endDate);
+            const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
+            let tailDuration;
+
+            if(isDifferentDates) {
+                const startDateEndHour = new Date(new Date(startDate).setHours(this.endDayHour, 0, 0));
+                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
+
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
+
+                const startDayTime = this.startDayHour * toMs('hour');
+                const endPartDuration = endDate - dateUtils.trimTime(endDate);
+
+                if(endPartDuration < startDayTime) {
+                    if(floorQuantityOfDays) {
+                        tailDuration -= hiddenDayDuration;
+                    }
+
+                    tailDuration += startDayTime - endPartDuration;
+                }
+            } else {
+                tailDuration = appointmentDuration % dayDuration;
+            }
+
+            if(tailDuration > visibleDayDuration) {
+                tailDuration = visibleDayDuration;
+            }
+
+            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
+        }
+
+        return result;
+    }
+
+
 }
 
 export default BaseRenderingStrategy;
