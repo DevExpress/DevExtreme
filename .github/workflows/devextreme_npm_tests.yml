@@ -38,14 +38,11 @@ jobs:
     - name: Build devextreme repo
       run: test -d artifacts || npm run build-npm-devextreme
 
-    - name: Zip artifacts    
-      run: 7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts
-
     - name: Copy build artifacts      
       uses: actions/upload-artifact@v2
       with:
-        name: artifacts
-        path: artifacts.7z
+        name: devextreme-npm
+        path: ./artifacts/npm/devextreme/devextreme-*.tgz
         retention-days: 1
 
   test_angular:
@@ -85,20 +82,12 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
       with:
-        name: artifacts
+        name: devextreme-npm
         path: ./
-
-    - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: 7z x artifacts.7z
-
-    - name: Pack devextreme package
-      working-directory: ./artifacts/npm/devextreme
-      run: npm pack
 
     - name: Install devextreme package
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-angular-repo
@@ -156,12 +145,8 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
       with:
-        name: artifacts
+        name: devextreme-npm
         path: ./
-
-    - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: 7z x artifacts.7z
 
     - name: Install bundlers
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -171,7 +156,7 @@ jobs:
     - name: Install DevExtreme package 
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
-      run: npm run install:devextreme  
+      run: npm run install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Generate entry files 
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -240,16 +225,8 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
       with:
-        name: artifacts
+        name: devextreme-npm
         path: ./
-
-    - name: Unpack artifacts
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: 7z x artifacts.7z
-
-    - name: Pack devextreme package
-      working-directory: ./artifacts/npm/devextreme
-      run: npm pack
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
@@ -257,7 +234,7 @@ jobs:
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
-      run: npm install --force $(find ../artifacts/npm/devextreme/ -maxdepth 1 -name "devextreme-*.tgz")
+      run: npm install --force $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
     - name: Zip node_modules    
       run: 7z a -t7z -mx3 -mmt2 node_modules.7z ./devextreme-demos/node_modules
