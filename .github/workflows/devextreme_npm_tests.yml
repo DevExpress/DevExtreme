@@ -92,7 +92,9 @@ jobs:
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install --save-dev $(ls *.tgz)
+      run: |
+        ls
+        npm install --save-dev $(ls *.tgz)
       shell: bash
       
     - name: Install packages for devextreme-angular
