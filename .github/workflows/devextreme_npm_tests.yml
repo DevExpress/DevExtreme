@@ -167,18 +167,6 @@ jobs:
       id: last_run_status
       run: cat last_run_status
 
-    - name: Restore npm cache
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      uses: actions/cache@v2
-      with:
-        path: ./mode_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Install packages in devextreme repo
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: npm install --no-audit --no-fund
-
     - name: Download artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/download-artifact@v2
