@@ -44,6 +44,24 @@ QUnit.module('Sync with FilterValue', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), 2);
     });
 
+    ['string', 'number', 'date'].forEach(dataType => {
+        QUnit.test(`check equals to null for ${dataType} column (T1017975)`, function(assert) {
+            // act
+            this.setupDataGrid({
+                filterValue: ['field', '=', null],
+                columns: [{ dataField: 'field', allowHeaderFiltering: true, dataType }]
+            });
+
+            // act
+            this.columnOption('field', { filterValues: [null] });
+
+            // assert
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), [null]);
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterType'), 'include');
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), undefined);
+        });
+    });
+
     QUnit.test('anyof with one value', function(assert) {
         // arrange, act
         this.setupDataGrid({
