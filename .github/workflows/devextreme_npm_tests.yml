@@ -79,7 +79,7 @@ jobs:
     - name: Install devextreme package
       run: |
         cd ./devextreme-angular-repo/packages/devextreme-angular
-        npm install --save-dev ../../../artifacts/npm/devextreme
+        npm install --force ../../../artifacts/npm/devextreme
 
     - name: Run npm install for devextreme-angular repo
       run: |
@@ -114,7 +114,21 @@ jobs:
       with:
         node-version: '15'
 
+    - name: Set default run status
+      run: echo "default" > last_run_status
+
+    - name: Restore last run status
+      uses: actions/cache@v2
+      with:
+        path: last_run_status
+        key: last-run-status-${{ github.job }}-${{ github.sha }}
+
+    - name: Set last run status
+      id: last_run_status
+      run: cat last_run_status
+
     - name: Restore npm cache
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./mode_modules
@@ -122,52 +136,68 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: npm install --no-audit --no-fund
 
     - name: Restore artifacts cache
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
         path: ./artifacts
         key: build-npm-devextreme-artifacts-${{ github.sha }}
 
     - name: Build devextreme repo
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       run: test -d artifacts || npm run build-npm-devextreme
 
     - name: Install bundlers
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers  
       run: npm install --no-audit --no-fund
 
     - name: Install DevExtreme package 
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run install:devextreme  
 
     - name: Generate entry files 
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run generate-entry-files  
 
     - name: Build webpack cjs
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:webpack-cjs
 
     - name: Build browserify cjs
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:browserify-cjs
 
     - name: Build webpack
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:webpack
 
     - name: Build rollup
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:rollup
       
     - name: Build parcel
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:parcel
       
     - name: Build vite
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:vite
+
+    - name: Save run status
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: echo "::set-output name=last_run_status::success" > last_run_status
       
   build_demos:
     needs: cache_build
@@ -218,7 +248,7 @@ jobs:
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --force --no-audit --no-fund
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
