@@ -599,9 +599,14 @@ const LayoutManager = Widget.inherit({
         const id = that.getItemID(name);
         const isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules);
         const labelOptions = that._getLabelOptions(item, id, isRequired);
+        const isLabelVisible = labelOptions.visible;
+        const labelText = labelOptions.text;
         const helpID = item.helpText ? ('dx-' + new Guid()) : null;
         const helpText = item.helpText;
         const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+        const largeEditors = ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'];
+        const hasBrowserFlex = this._hasBrowserFlex();
+        const labelNeedBaselineAlign = (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
 
         const editorOptions = this._convertToEditorOptions({
             dataField: item.dataField,
@@ -611,22 +616,23 @@ const LayoutManager = Widget.inherit({
             id,
             validationBoundary: that.option('validationBoundary')
         });
-        const template = that._getTemplateByFieldItem(item);
+        const template = item.template ? this._getTemplate(item.template) : null;
+
 
         const $editor = $('<div>');
         this._addItemClasses($container, item.col);
         $container.addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS);
 
-        const $label = (labelOptions.visible && labelOptions.text) ? renderLabel(labelOptions) : null;
+        const $label = (isLabelVisible && labelText) ? renderLabel(labelOptions) : null;
         if($label) {
             $container.append($label);
         }
 
         if(item.itemType === SIMPLE_ITEM_TYPE) {
-            if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== 'top') {
+            if(labelNeedBaselineAlign && labelOptions.location !== 'top') {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
-            if(that._hasBrowserFlex()) {
+            if(hasBrowserFlex) {
                 $container.addClass(FLEX_LAYOUT_CLASS);
             }
         }
@@ -773,11 +779,6 @@ const LayoutManager = Widget.inherit({
         }
 
         return hasRequiredRule;
-    },
-
-    _isLabelNeedBaselineAlign: function(item) {
-        const largeEditors = ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'];
-        return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
 
     _isLabelNeedId: function(item) {
@@ -965,10 +966,6 @@ const LayoutManager = Widget.inherit({
         });
 
         return instance;
-    },
-
-    _getTemplateByFieldItem: function(fieldItem) {
-        return fieldItem.template ? this._getTemplate(fieldItem.template) : null;
     },
 
     _generateRatio: function(count, isAutoSize) {
