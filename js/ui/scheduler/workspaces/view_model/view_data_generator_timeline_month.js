@@ -37,4 +37,8 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
 
         return cellCount;
     }
+
+    setHiddenInterval() {
+        this.hiddenInterval = 0;
+    }
 }

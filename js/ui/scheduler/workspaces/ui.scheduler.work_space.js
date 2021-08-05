@@ -60,8 +60,6 @@ import {
     getFirstDayOfWeek,
     calculateViewStartDate,
     getViewStartByOptions,
-    calculateCellIndex,
-    getDateByCellIndices,
     validateDayHours,
     getStartViewDateTimeOffset,
     isDateAndTimeView,
@@ -208,8 +206,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     get viewDirection() { return 'vertical'; }
 
     get renovatedHeaderPanelComponent() { return dxrDateHeader; }
-
-    get isWorkView() { return false; }
 
     get timeZoneCalculator() {
         return this.option('timeZoneCalculator');
@@ -570,12 +566,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getRowCountWithAllDayRows() {
-        const allDayRowCount = this._isShowAllDayPanel() ? 1 : 0;
-
-        return this._getRowCount() + allDayRowCount;
-    }
-
     _getCellCount() {
         return this.viewDataProvider.getCellCount({
             intervalCount: this.option('intervalCount'),
@@ -644,7 +634,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             isAllDayPanelVisible: this.isAllDayPanelVisible,
             selectedCells: this.cellsSelectionState.getSelectedCells(),
             focusedCell: this.cellsSelectionState.focusedCell,
-            rowCountWithAllDayRow: this._getRowCountWithAllDayRows(),
             headerCellTextFormat: this._getFormat(),
             getDateForHeaderText: (_, date) => date,
             startDayHour: this.option('startDayHour'),
@@ -657,13 +646,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: this.option('startDate'),
             firstDayOfWeek: this._firstDayOfWeek(),
 
-            isWorkView: this.isWorkView,
-            columnsInDay: 1, // TODO: try to remove
-            hiddenInterval: this._hiddenInterval, // TODO: remove
-            calculateCellIndex,
-            tableAllDay: this._getTableAllDay(),
-            rowCountBase: this._getRowCount(), // TODO: remove
-            columnCountBase: this._getCellCount(), // TODO: remove
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
 
@@ -920,10 +902,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
     }
 
-    _getTableAllDay() {
-        return false;
-    }
-
     calculateEndDate(startDate) {
         const viewDataGenerator = this.viewDataProvider.viewDataGenerator;
 
@@ -1022,7 +1000,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getScrollableContainer() {
-        return this._dateTableScrollable._container();
+        return $(this._dateTableScrollable.container());
     }
 
     getHeaderPanelHeight() {
@@ -1051,30 +1029,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
+    // TODO: necessary for old render
     _getDateGenerationOptions(isOldRender = false) {
         return {
             startDayHour: this.option('startDayHour'),
             endDayHour: this.option('endDayHour'),
-            isWorkView: this.isWorkView,
-            columnsInDay: 1,
-            hiddenInterval: this._hiddenInterval,
-            calculateCellIndex,
+            isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
             interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
-            startViewDate: isOldRender ? this.getStartViewDate() : undefined, // TODO: necessary for old render
-            rowCountBase: this._getRowCount(),
-            columnCountBase: this._getCellCount(),
-            tableAllDay: this._getTableAllDay(),
+            startViewDate: this.getStartViewDate(),
             firstDayOfWeek: this._firstDayOfWeek(),
         };
     }
 
-    _getHiddenInterval() {
-        if(this._hiddenInterval === undefined) {
-            this._hiddenInterval = DAY_MS - this.getVisibleDayDuration();
-        }
-        return this._hiddenInterval;
-    }
-
+    // TODO: refactor current time indicator
     _getIntervalBetween(currentDate, allDay) {
         const firstViewDate = this.getStartViewDate();
 
@@ -1086,7 +1053,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         let result = (days - weekendsCount) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - days * this._getHiddenInterval() - weekendsCount * this.getVisibleDayDuration();
+            const hiddenInterval = this.viewDataProvider.hiddenInterval;
+            const visibleDayDuration = this.getVisibleDayDuration();
+
+            result = fullInterval - days * hiddenInterval - weekendsCount * visibleDayDuration;
         }
 
         return result;
@@ -1321,6 +1291,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             && this._getGroupCount() > 0;
     }
 
+    // TODO: refactor current time indicator
     getCellIndexByDate(date, inAllDayRow) {
         const viewDataGenerator = this.viewDataProvider.viewDataGenerator;
 
@@ -1506,7 +1477,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getVisibleDayDuration() {
-        return this.option('hoursInterval') * this._getCellCountInDay() * HOUR_MS;
+        const startDayHour = this.option('startDayHour');
+        const endDayHour = this.option('endDayHour');
+        const hoursInterval = this.option('hoursInterval');
+
+        return this.viewDataProvider.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
     }
 
     getGroupBounds(coordinates) {
@@ -1900,8 +1875,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return (cell, rowIndex, columnIndex) => {
             const validColumnIndex = columnIndex % this._getCellCount();
             const options = this._getDateGenerationOptions(true);
-            let startDate = getDateByCellIndices(
-                options, rowIndex, validColumnIndex, options.calculateCellIndex, this._getCellCountInDay(),
+            let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
+                options, rowIndex, validColumnIndex, this._getCellCountInDay(),
             );
 
             startDate = dateUtils.trimTime(startDate);
@@ -2547,8 +2522,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _toggleFixedScrollableClass() { return noop(); }
 
     _renderView() {
-        this._hiddenInterval = this._getHiddenInterval();
-
         if(this.isRenovatedRender()) {
             if(this._isVerticalGroupedWorkSpace()) {
                 this.renderRGroupPanel();
@@ -2639,7 +2612,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._shader?.clean();
 
-        delete this._hiddenInterval;
         delete this._interval;
     }
 
