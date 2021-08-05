@@ -2291,37 +2291,30 @@ QUnit.module('popup options', {
         assert.strictEqual(popup.option('animation'), null, 'animation option is passed to the popup after runtime change');
     });
 
-    [true, false].forEach(dropDownCentered => {
-        QUnit.test(`closeOnTargetScroll should be set to true for shown popup in Material theme if dropDownCentered=${dropDownCentered}`, function(assert) {
-            const isMaterialStub = sinon.stub(themes, 'isMaterial');
-            const $lookup = $('#lookup');
+    QUnit.test('Check closeOnTargetScroll option in Material theme', function(assert) {
+        const isMaterialStub = sinon.stub(themes, 'isMaterial');
+        const $lookup = $('#lookup');
 
-            isMaterialStub.returns(true);
+        isMaterialStub.returns(true);
 
-            try {
-                const lookup = $lookup
-                    .dxLookup({
-                        dataSource: ['blue', 'orange', 'lime', 'purple'],
-                        value: 'orange',
-                        dropDownCentered
-                    })
-                    .dxLookup('instance');
+        try {
+            const lookup = $lookup
+                .dxLookup({
+                    dataSource: ['blue', 'orange', 'lime', 'purple'],
+                    value: 'orange'
+                })
+                .dxLookup('instance');
 
-                assert.notOk(lookup.option('dropDownOptions.closeOnTargetScroll'), 'false before opening');
+            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (without centering)');
 
-                lookup.open();
-                this.clock.tick();
-                assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'true after opening');
+            lookup.option('dropDownCentered', true);
 
-                lookup.close();
-                this.clock.tick();
-                assert.notOk(lookup.option('dropDownOptions.closeOnTargetScroll'), 'false before opening');
+            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (with centering)');
 
-            } finally {
-                $lookup.dxLookup('instance').dispose();
-                isMaterialStub.restore();
-            }
-        });
+        } finally {
+            $lookup.dxLookup('instance').dispose();
+            isMaterialStub.restore();
+        }
     });
 });
 
