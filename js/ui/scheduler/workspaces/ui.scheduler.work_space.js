@@ -610,24 +610,17 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
-        const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
 
-        const cellCount = this._getTotalCellCount(groupCount);
-        const rowCount = this._getTotalRowCount(groupCount, isVerticalGrouping);
         const groupOrientation = groupCount > 0
             ? this.option('groupOrientation')
             : this._getDefaultGroupStrategy();
 
         const options = {
             groupByDate: this.option('groupByDate'),
-            cellCount,
             startRowIndex: 0,
             startCellIndex: 0,
             groupOrientation,
-            rowCount,
-            totalRowCount: rowCount,
-            totalCellCount: cellCount,
             today: this._getToday?.(),
             groups: this.option('groups'),
             isProvideVirtualCellsWidth,
