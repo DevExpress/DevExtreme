@@ -55,10 +55,10 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '15'
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '15'
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
@@ -88,20 +88,20 @@ jobs:
       with:
         name: devextreme-npm
         path: ./devextreme-angular-repo/packages/devextreme-angular
-
-    - name: Install packages for devextreme-angular
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      working-directory: ./devextreme-angular-repo
-      run: npm install --unsafe-perm --no-audit --no-fund
-      
+   
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
       run: |
         ls
         npm install --save-dev $(ls *.tgz)
-      shell: bash
+      # shell: bash
 
+    - name: Install packages for devextreme-angular
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-angular-repo
+      run: npm install --no-audit --no-fund
+      
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
