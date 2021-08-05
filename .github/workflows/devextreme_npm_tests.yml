@@ -58,7 +58,7 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
-   - name: Restore npm cache
+    - name: Restore npm cache
       uses: actions/cache@v2
       with:
         path: ./mode_modules
