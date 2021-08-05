@@ -49,7 +49,7 @@ jobs:
     steps:
     - name: Setup firefox profile
       run: |
-        mkdir /tmp/firefox-profile
+        mkdir -p /tmp/firefox-profile
         for p in \
         '"browser.shell.checkDefaultBrowser", false' \
         '"datareporting.policy.dataSubmissionEnabled", false' \
