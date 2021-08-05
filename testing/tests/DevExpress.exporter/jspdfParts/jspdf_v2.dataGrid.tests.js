@@ -59,6 +59,12 @@ function createMockPdfDoc() {
         this.__setFillColor.apply(this, arguments);
     };
 
+    result.__setTextColor = result.setTextColor;
+    result.setTextColor = function() {
+        this.__log.push('setTextColor,' + argumentsToString.apply(null, arguments));
+        this.__setTextColor.apply(this, arguments);
+    };
+
     result.__rect = result.rect;
     result.rect = function() {
         this.__log.push('rect,' + argumentsToString.apply(null, arguments));
