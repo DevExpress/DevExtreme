@@ -2308,9 +2308,13 @@ QUnit.module('popup options', {
                     .dxLookup('instance');
 
                 assert.notOk(lookup.option('dropDownOptions.closeOnTargetScroll'), 'false before opening');
+
                 lookup.open();
+                this.clock.tick();
                 assert.ok(lookup.option('dropDownOptions.closeOnTargetScroll'), 'true after opening');
+
                 lookup.close();
+                this.clock.tick();
                 assert.notOk(lookup.option('dropDownOptions.closeOnTargetScroll'), 'false before opening');
 
             } finally {
@@ -3252,9 +3256,11 @@ if(devices.real().deviceType === 'desktop') {
 QUnit.module('default options', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('Check default popupWidth, popupHeight, position.of for Material theme', function(assert) {
