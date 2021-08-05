@@ -5,6 +5,9 @@
     "baseBranches": [
         "21_2"
     ],
+    "labels": [
+        "dependencies"
+    ],
     "lockFileMaintenance": {
         "enabled": true,
         "schedule": [
