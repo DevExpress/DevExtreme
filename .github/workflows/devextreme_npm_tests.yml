@@ -83,7 +83,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
-        path: ./
+        path: ./devextreme-angular-repo/packages/devextreme-angular
 
     - name: Install devextreme package
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
@@ -146,7 +146,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
-        path: ./
+        path: ./testing/bundlers
 
     - name: Install bundlers
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -226,7 +226,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
-        path: ./
+        path: ./devextreme-demos
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
