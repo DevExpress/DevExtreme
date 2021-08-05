@@ -1011,7 +1011,15 @@ module('View Data Provider', {
                 groupByDate: false,
                 groups: [{
                     name: 'groupId',
-                    items: [{ id: 1 }, { id: 2 }],
+                    items: [{
+                        id: 1,
+                        color: 'red',
+                        text: 'First group',
+                    }, {
+                        id: 2,
+                        color: 'green',
+                        text: 'Second group',
+                    }]
                 }],
                 isAllDayPanelVisible: false,
                 isGroupedByDate: false,
@@ -1874,6 +1882,35 @@ module('View Data Provider', {
                 };
 
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
+
+            test('groupPanelData should be generated correctly', function(assert) {
+                const viewDataProvider = createViewDataProvider({
+                    renderOptions: dataGenerationRenderOptions,
+                });
+
+                const expectedGroupPanelData = {
+                    baseColSpan: 2,
+                    groupPanelItems: [[{
+                        color: 'red',
+                        data: undefined,
+                        id: 1,
+                        key: '0_groupId_1',
+                        resourceName: 'groupId',
+                        text: 'First group'
+                    }, {
+                        color: 'green',
+                        data: undefined,
+                        id: 2,
+                        key: '0_groupId_2',
+                        resourceName: 'groupId',
+                        text: 'Second group'
+                    }]]
+                };
+
+                const groupPanelData = viewDataProvider.getGroupPanelData(dataGenerationRenderOptions);
+
+                assert.deepEqual(groupPanelData, expectedGroupPanelData, 'Correct group panel data');
             });
         });
 

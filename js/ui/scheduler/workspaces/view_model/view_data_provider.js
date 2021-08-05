@@ -1,4 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
+import { getGroupPanelData } from '../../../../renovation/ui/scheduler/view_model/group_panel/utils';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { VIEWS } from '../../constants';
 import { calculateIsGroupedAllDayPanel } from '../utils/base';
@@ -128,6 +129,21 @@ export default class ViewDataProvider {
             groupOrientation,
             isAllDayPanelVisible,
         };
+    }
+
+    getGroupPanelData(options) {
+        const renderOptions = this._transformRenderOptions(options);
+        if(renderOptions.groups.length > 0) {
+            const cellCount = this.getCellCount(renderOptions);
+            return getGroupPanelData(
+                renderOptions.groups,
+                cellCount,
+                renderOptions.isGroupedByDate,
+                renderOptions.isGroupedByDate ? 1 : cellCount,
+            );
+        }
+
+        return undefined;
     }
 
     getGroupStartDate(groupIndex) {

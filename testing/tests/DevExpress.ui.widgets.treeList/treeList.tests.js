@@ -1224,7 +1224,7 @@ QUnit.module('Expand/Collapse rows', () => {
 
         try {
             scrollable.scrollTo({ y: 300 }); // scroll to the last page
-            isNativeScrolling && $(scrollable._container()).trigger('scroll');
+            isNativeScrolling && $(scrollable.container()).trigger('scroll');
             clock.tick();
 
             const topVisibleRowData = treeList.getTopVisibleRowData();
@@ -1624,7 +1624,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         const d = treeList.navigateToRow(5);
         d.done(callback);
 
-        $(treeList.getScrollable()._container()).trigger('scroll');
+        $(treeList.getScrollable().container()).trigger('scroll');
         this.clock.tick();
 
         // assert
