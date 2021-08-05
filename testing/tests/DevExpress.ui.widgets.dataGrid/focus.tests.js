@@ -73,7 +73,7 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
 const scrollTo = function(that, location) {
     const scrollable = that.getScrollable();
     scrollable.scrollTo(location);
-    $(scrollable._container()).trigger('scroll');
+    $(scrollable.container()).trigger('scroll');
 };
 
 QUnit.module('Focused row', getModuleConfig(true), () => {
@@ -2451,7 +2451,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         rowsView.height(400);
         rowsView.resize();
         const scrollable = rowsView.getScrollable();
-        const $scrollContainer = $(scrollable._container());
+        const $scrollContainer = $(scrollable.container());
         const keyboardController = this.getController('keyboardNavigation');
         keyboardController._focusedView = rowsView;
 

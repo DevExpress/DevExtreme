@@ -3247,7 +3247,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
 
         // act
         scrollable.scrollTo({ x: 10 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
 
         // assert
         const $fixedTableElement = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
