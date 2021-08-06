@@ -26,12 +26,6 @@ class AppointmentLayoutManager {
         }
     }
 
-    getGroupOrientation(options) {
-        if(this.instance._workSpace) {
-            options.callback(this.instance._workSpace._getRealGroupOrientation());
-        }
-    }
-
     _getRenderingStrategyOptions() {
         const workspace = this.instance.getWorkSpace();
         const key = this.instance.key;
@@ -58,6 +52,7 @@ class AppointmentLayoutManager {
             topVirtualCellCount: cellCountInsideTopVirtualRow,
             dateTableOffset: this.instance.getWorkSpaceDateTableOffset(),
             startViewDate: workspace.getStartViewDate(),
+            groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
             getCellWidth: () => workspace.getCellWidth(),
             getCellHeight: () => workspace.getCellHeight(),

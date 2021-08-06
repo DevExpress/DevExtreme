@@ -41,6 +41,7 @@ class BaseRenderingStrategy {
     get viewCellDuration() { return this.options.viewCellDuration; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
+    get groupOrientation() { return this.options.groupOrientation; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
