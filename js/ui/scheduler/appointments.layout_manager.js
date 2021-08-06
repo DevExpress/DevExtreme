@@ -32,7 +32,7 @@ class AppointmentLayoutManager {
         }
     }
 
-    createAppointmentsMap(items) {
+    _getRenderingStrategyOptions() {
         const workspace = this.instance.getWorkSpace();
         const key = this.instance.key;
         const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
@@ -41,8 +41,7 @@ class AppointmentLayoutManager {
             cellCountInsideTopVirtualRow
         } = virtualScrollingDispatcher;
 
-        const result = this.appointmentViewModel.generate({
-            filteredItems: items,
+        return {
             instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
@@ -88,11 +87,23 @@ class AppointmentLayoutManager {
             getPositionShiftCallback: workspace.getPositionShift.bind(workspace),
             getGroupWidthCallback: workspace.getGroupWidth.bind(workspace),
             DOMMetaData: workspace.getDOMElementsMetaData(),
+        };
+    }
+
+    createAppointmentsMap(items) {
+        const renderingStrategyOptions = this._getRenderingStrategyOptions();
+
+        const {
+            viewModel,
+            positionMap
+        } = this.appointmentViewModel.generate({
+            filteredItems: items,
+            ...renderingStrategyOptions,
         });
 
-        this._positionMap = result;
+        this._positionMap = positionMap;
 
-        return result;
+        return viewModel;
     }
 
     _isDataChanged(data) {
@@ -191,6 +202,12 @@ class AppointmentLayoutManager {
     }
 
     getRenderingStrategyInstance() {
+        const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
+        if(!renderingStrategy) {
+            const options = this._getRenderingStrategyOptions();
+            this.appointmentViewModel.initRenderingStrategy(options);
+        }
+
         return this.appointmentViewModel.getRenderingStrategy();
     }
 }

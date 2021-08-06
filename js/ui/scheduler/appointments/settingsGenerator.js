@@ -578,7 +578,7 @@ export class AppointmentSettingsGenerator {
                 dateText,
             };
 
-            this._setResourceColor(info, sourceAppointment.groupIndex);
+            this._setResourceColor(info, coordinates.groupIndex);
 
             infos.push({
                 ...coordinates,

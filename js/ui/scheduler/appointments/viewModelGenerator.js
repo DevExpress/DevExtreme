@@ -22,7 +22,7 @@ export class AppointmentViewModel {
         const {
             isRenovatedAppointments,
             filteredItems,
-            isVerticalOrientation
+            viewRenderingStrategyName
         } = options;
         const appointments = filteredItems
             ? filteredItems.slice()
@@ -30,17 +30,20 @@ export class AppointmentViewModel {
 
         this.initRenderingStrategy(options);
 
-        const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments);
-        const viewModel = this.postProcess(filteredItems, positionMap, isVerticalOrientation, isRenovatedAppointments);
+        const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
+        const viewModel = this.postProcess(appointments, positionMap, viewRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
             return this.makeRenovatedViewModel(viewModel);
         }
 
-        return viewModel;
+        return {
+            positionMap,
+            viewModel
+        };
     }
-    postProcess(filteredItems, positionMap, isVerticalOrientation, isRenovatedAppointments) {
+    postProcess(filteredItems, positionMap, viewRenderingStrategyName, isRenovatedAppointments) {
         return filteredItems.map((data, index) => {
             // TODO research do we need this code
             if(!this.getRenderingStrategy().keepAppointmentSettings()) {
@@ -50,7 +53,7 @@ export class AppointmentViewModel {
             // TODO Seems we can analize direction in the rendering strategies
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach((item) => {
-                item.direction = isVerticalOrientation && !item.allDay
+                item.direction = viewRenderingStrategyName === 'vertical' && !item.allDay
                     ? 'vertical'
                     : 'horizontal';
             });

@@ -85,7 +85,7 @@ class BaseRenderingStrategy {
     createTaskPositionMap(items) {
         delete this._maxAppointmentCountPerCell;
 
-        const length = items && items.length;
+        const length = items?.length;
         if(!length) return;
 
         const map = [];
