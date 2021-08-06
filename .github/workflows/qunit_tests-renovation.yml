@@ -102,6 +102,11 @@ jobs:
         path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
+        
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-artifacts
 
     - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
