@@ -196,7 +196,7 @@ const Overlay = Widget.inherit({
 
             dragEnabled: false,
 
-            dragArea: 'container',
+            dragArea: undefined,
 
             resizeEnabled: false,
             onResizeStart: null,
@@ -1104,18 +1104,14 @@ const Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
+        const { dragArea } = this.option();
+        if(dragArea?.container) {
+            return dragArea.container;
+        }
         const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
 
-        switch(this.option('dragArea')) {
-            case 'container':
-                return $container;
-            case 'window':
-            case 'outOfWindow':
-                return $(window);
-            default:
-                return $container;
-        }
+        return $container;
     },
 
     _deltaSize: function() {
@@ -1127,7 +1123,6 @@ const Overlay = Widget.inherit({
         let containerWidth = $container.outerWidth();
         let containerHeight = $container.outerHeight();
         const document = domAdapter.getDocument();
-
         if(this._isWindow($container)) {
             const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
             const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
@@ -1136,12 +1131,12 @@ const Overlay = Widget.inherit({
             containerWidth = fullPageWidth;
         }
 
-        containerHeight = Math.min(containerHeight, $(document).outerHeight());
         containerWidth = Math.min(containerWidth, $(document).outerWidth());
+        const outsideMultiplayer = this.option('dragArea')?.outsideMultiplayer;
 
         return {
-            width: containerWidth - contentWidth,
-            height: containerHeight - contentHeight
+            width: containerWidth - contentWidth + (contentWidth * outsideMultiplayer),
+            height: containerHeight - contentHeight + (contentHeight * outsideMultiplayer),
         };
     },
 
@@ -1170,22 +1165,25 @@ const Overlay = Widget.inherit({
     },
 
     _allowedOffsets: function() {
-        const position = this.option('dragArea') === 'container'
-            ? locate(this._$content)
-            : getOffset(this._$content.get(0));
+        const { dragArea } = this.option();
+        const popupPosition = getOffset(this._$content.get(0));
+        const dragAreaPosition = this._isWindow(this._getDragResizeContainer())
+            ? { top: 0, left: 0 }
+            : getOffset(this._getDragResizeContainer().get(0));
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isContainerWindow() ? locate(this._$wrapper) : { top: 0, left: 0 };
-        const boundaryOffset = this.option('boundaryOffset');
-        const outOfWindowOffset = this.option('dragArea') === 'outOfWindow'
-            ? { height: this._$content.outerHeight(), width: this._$content.outerWidth() }
-            : { height: 0, width: 0 };
+
+        const dragAreaOffsetMultiplayer = dragArea?.outsideMultiplayer;
+        const dragAreaOffset = {
+            width: this._$content.outerWidth() * dragAreaOffsetMultiplayer,
+            height: this._$content.outerHeight() * dragAreaOffsetMultiplayer
+        };
 
         return {
-            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v + outOfWindowOffset.height : 0,
-            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v + outOfWindowOffset.height : 0,
-            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h + outOfWindowOffset.width : 0,
-            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h + outOfWindowOffset.width : 0
+            top: isAllowedDrag ? popupPosition.top - dragAreaPosition.top + dragAreaOffset.height : 0,
+            bottom: isAllowedDrag ? -popupPosition.top + dragAreaPosition.top + deltaSize.height : 0,
+            left: isAllowedDrag ? popupPosition.left - dragAreaPosition.left + dragAreaOffset.width : 0,
+            right: isAllowedDrag ? -popupPosition.left + dragAreaPosition.left + deltaSize.width : 0
         };
     },
 
