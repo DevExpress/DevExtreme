@@ -54,7 +54,7 @@ function run_test {
         sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
-    if [ "$NO_HEADLESS" == "true" ] && [ "$GITHUBACTION" != "true" ]; then
+    if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
     fi
