@@ -66,7 +66,7 @@ export function locale(): string;
 
 /**
  * @docid localization.locale
- * @publicName locale(localeToSet)
+ * @publicName locale(locale)
  * @param1 locale:string
  * @static
  * @module localization
@@ -74,7 +74,8 @@ export function locale(): string;
  * @namespace DevExpress.localization
  * @public
  */
-export function locale(localeToSet: string): void;
+// eslint-disable-next-line @typescript-eslint/no-shadow
+export function locale(locale: string): void;
 
 /**
  * @docid localization.parseDate

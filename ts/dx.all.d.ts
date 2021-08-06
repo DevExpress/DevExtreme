@@ -698,9 +698,9 @@ declare module DevExpress {
    */
   export function config(): globalConfig;
   /**
-   * [descr:config(configuration)]
-   */
-  export function config(configuration: globalConfig): void;
+                                                              * [descr:config(config)]
+                                                              */
+                                                             export function config(config: globalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3924,9 +3924,9 @@ declare module DevExpress.localization {
    */
   export function locale(): string;
   /**
-   * [descr:localization.locale(localeToSet)]
-   */
-  export function locale(localeToSet: string): void;
+                                                              * [descr:localization.locale(locale)]
+                                                              */
+                                                             export function locale(locale: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */

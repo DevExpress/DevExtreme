@@ -15,14 +15,15 @@ declare function config(): globalConfig;
 
 /**
  * @docid
- * @publicName config(configuration)
+ * @publicName config(config)
  * @param1 config:globalConfig
  * @namespace DevExpress
  * @module core/config
  * @export default
  * @public
  */
-declare function config(configuration: globalConfig): void;
+// eslint-disable-next-line @typescript-eslint/no-shadow
+declare function config(config: globalConfig): void;
 
 /**
  * @docid
