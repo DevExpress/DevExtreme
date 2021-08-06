@@ -1,6 +1,7 @@
 import {
   ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
+import { EventCallback } from '../../common/event_callback';
 
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
@@ -40,5 +41,5 @@ export class BasePagerProps {
 
   @OneWay() totalCount = 0;
 
-  @Event() onKeyDown?: (e: Event) => void;
+  @Event() onKeyDown?: EventCallback<Event>;
 }

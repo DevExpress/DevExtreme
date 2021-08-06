@@ -163,11 +163,13 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   }
 
   get pagesContainerVisible(): boolean {
-    return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
+    const { pagesNavigatorVisible, pageCount } = this.props;
+    return !!pagesNavigatorVisible && pageCount > 0;
   }
 
   get pagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
+    const { pagesNavigatorVisible, pageCount, hasKnownLastPage } = this.props;
+    if (pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage) {
       return 'hidden';
     }
     return undefined;

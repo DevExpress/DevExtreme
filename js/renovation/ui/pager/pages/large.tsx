@@ -149,7 +149,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   }
 
   private onPageClick(pageIndex: number): void {
-    this.props.pageIndexChange(pageIndex);
+    this.props.pageIndexChange?.(pageIndex);
   }
 
   get pageIndexes(): PageIndexes {

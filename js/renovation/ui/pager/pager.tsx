@@ -25,25 +25,26 @@ export const viewFunction = ({
   jQuery: { register: true, component: GridPagerWrapper },
   view: viewFunction,
 })
-export class Pager extends JSXComponent<InternalPagerProps, 'pageIndexChange' | 'pageSizeChange'>() {
+export class Pager extends JSXComponent<InternalPagerProps>() {
   pageIndexChange(newPageIndex: number): void {
-    if (this.props.gridCompatibility) {
-      this.props.pageIndexChange?.(newPageIndex + 1);
+    const { pageIndexChange, gridCompatibility } = this.props;
+    if (gridCompatibility) {
+      pageIndexChange?.(newPageIndex + 1);
     } else {
-      this.props.pageIndexChange?.(newPageIndex);
+      pageIndexChange?.(newPageIndex);
     }
   }
 
   get pageIndex(): number {
     const { pageIndex, pageIndexChange, gridCompatibility } = this.props;
     if (gridCompatibility) {
-      pageIndexChange?.(pageIndex - 1);
+      pageIndexChange(pageIndex - 1);
     }
-    return this.props.pageIndex;
+    return pageIndex;
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.props.pageSizeChange?.(newPageSize);
+    this.props.pageSizeChange(newPageSize);
   }
 
   get className(): string | undefined {

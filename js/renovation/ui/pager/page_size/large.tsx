@@ -50,7 +50,6 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
   private onPageSizeChange(processedPageSize: number) {
     return () => {
       this.props.pageSizeChange(processedPageSize);
-      return this.props.pageSize;
     };
   }
 }

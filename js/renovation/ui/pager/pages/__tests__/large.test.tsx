@@ -9,11 +9,19 @@ describe('View', () => {
   it('render', () => {
     const page1 = {
       key: '0',
-      pageProps: { index: 0, selected: true, onClick: jest.fn() },
+      pageProps: {
+        index: 0,
+        selected: true,
+        onClick: jest.fn(),
+      },
     };
     const page2 = {
       key: '1',
-      pageProps: { index: 1, selected: false, onClick: jest.fn() },
+      pageProps: {
+        index: 1,
+        selected: false,
+        onClick: jest.fn(),
+      },
     };
     const pages = [page1, { key: 'low' }, page2];
     const tree = shallow(
