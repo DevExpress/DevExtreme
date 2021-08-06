@@ -359,7 +359,7 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('keep elementAttr option untouched', () => {
-    $('component').addClass('custom-css-class attr-class');
+    $('#component').addClass('custom-css-class attr-class');
     $('#component').attr('data-custom-attr', 'attr-value');
 
     $('#component').dxTestWidget({ elementAttr: { id: 'attr-id', class: 'attr-css-class attr-class' } });
@@ -379,22 +379,16 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
-  it('pass updated style on repaint', () => {
-    $('#component').css('width', '123.5px');
-    $('#component').css('height', '456.6px');
-
+  it('should reset illegally added styles on repaint', () => {
+    $('#component').css({ width: '123.5px', height: '456.6px' });
     $('#component').dxTestWidget({});
 
-    $('#component').css('width', '23.5px');
-    $('#component').css('height', '56.6px');
-    $('#component').css('display', 'inline');
-
+    $('#component').css({ width: '23.5px', height: '56.6px', display: 'inline' });
     $('#component').dxTestWidget('repaint');
 
     expect($('#component').dxTestWidget('getLastReceivedProps').style).toEqual({
-      width: '23.5px',
-      height: '56.6px',
-      display: 'inline',
+      width: '123.5px',
+      height: '456.6px',
     });
   });
 

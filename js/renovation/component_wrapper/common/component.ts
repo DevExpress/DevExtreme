@@ -32,6 +32,37 @@ interface ElementAttributes extends Record<string, unknown> {
   class: string;
 }
 
+function getElementStyle(el: HTMLElement): Record<string, unknown> {
+  const elemStyle: CSSStyleDeclaration = el.style;
+
+  const style = {};
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
+  for (let i = 0; i < elemStyle.length; i += 1) {
+    style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
+  }
+
+  return style;
+}
+
+function getElementClass(el: HTMLElement): string {
+  return el.getAttribute('class') ?? '';
+}
+
+function getElementAttrs(el: HTMLElement): HTMLAttributes<HTMLElement> {
+  const { attributes } = el;
+
+  return {
+    ...Object.keys(attributes).reduce((result, key) => {
+      const updatedAttributes = result;
+      if (attributes[key].specified) {
+        updatedAttributes[attributes[key].name] = attributes[key].value;
+      }
+      return updatedAttributes;
+    }, {}),
+    class: getElementClass(el),
+    style: getElementStyle(el),
+  };
+}
 export interface ComponentWrapperProps extends Record<string, unknown> {
   onContentReady?: (e: Record<string, unknown>) => void;
   elementAttr?: ElementAttributes;
@@ -51,16 +82,11 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
 
   _documentFragment!: DocumentFragment;
 
-  _elementAttr!: {
-    [name: string]: unknown;
-    class?: string;
-  };
+  _elementAttr!: HTMLAttributes<HTMLElement>;
 
   _isNodeReplaced!: boolean;
 
   _props!: Record<string, unknown>;
-
-  _storedClasses?: string;
 
   _viewRef!: RefObject<unknown>;
 
@@ -206,30 +232,10 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._dispose();
   }
 
-  get elementAttr(): HTMLAttributes<unknown> {
+  get elementAttr(): HTMLAttributes<HTMLElement> {
     if (!this._elementAttr) {
-      const { attributes } = this.$element()[0];
-      this._elementAttr = {
-        ...Object.keys(attributes).reduce((result, key) => {
-          const updatedAttributes = result;
-          if (attributes[key].specified) {
-            updatedAttributes[attributes[key].name] = attributes[key].value;
-          }
-          return updatedAttributes;
-        }, {}),
-      };
-      this._storedClasses = this.$element()[0].getAttribute('class') || '';
+      this._elementAttr = getElementAttrs(this.$element()[0]);
     }
-    const elemStyle: CSSStyleDeclaration = this.$element()[0].style;
-
-    const style = {};
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < elemStyle.length; i += 1) {
-      style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
-    }
-    this._elementAttr.style = style;
-
-    this._elementAttr.class = this._storedClasses;
 
     return this._elementAttr;
   }

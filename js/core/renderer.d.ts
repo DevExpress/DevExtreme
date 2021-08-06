@@ -28,6 +28,8 @@ export interface dxElementWrapper {
   contents(): this;
 
   css(propertyName: string, value: string | number): this;
+  css(propertyName: Record<string, unknown>): this;
+  css(propertyName: string): string | number;
 
   data(key: string, value: any): this;
 
