@@ -3096,8 +3096,7 @@ declare module DevExpress.excelExporter {
    * @deprecated Use PivotGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ExcelPivotGridCell
-    extends DevExpress.ui.dxPivotGridPivotGridCell {
+  export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGrid.Cell {
     /**
      * [descr:ExcelPivotGridCell.area]
      */
@@ -4938,14 +4937,14 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxContextMenu>;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated Use DevExpress.ui.dxContextMenu.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * [descr:dxContextMenuItem.items]
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<DevExpress.ui.dxContextMenu.Item>;
   }
   /**
    * @deprecated use Properties instead
@@ -9567,7 +9566,7 @@ declare module DevExpress.ui {
    * [descr:dxDiagramShape]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxDiagramShape extends dxDiagramItem {
+  export interface dxDiagramShape extends DevExpress.ui.dxDiagram.Item {
     /**
      * [descr:dxDiagramShape.text]
      */
@@ -9987,7 +9986,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxDropDownButtonItem extends dxListItem {
+  export interface dxDropDownButtonItem extends DevExpress.ui.dxList.Item {
     /**
      * [descr:dxDropDownButtonItem.onClick]
      */
@@ -10437,14 +10436,15 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * @deprecated Use ContexMenuItem instead
+   * @deprecated Use DevExpress.ui.dxFileManager.ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+  export interface dxFileManagerContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
     /**
      * [descr:dxFileManagerContextMenuItem.items]
      */
-    items?: Array<dxFileManagerContextMenuItem>;
+    items?: Array<DevExpress.ui.dxFileManager.ContextMenuItem>;
     /**
      * [descr:dxFileManagerContextMenuItem.name]
      */
@@ -10756,7 +10756,8 @@ declare module DevExpress.ui {
    * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxFileManagerToolbarItem extends dxToolbarItem {
+  export interface dxFileManagerToolbarItem
+    extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxFileManagerToolbarItem.icon]
      */
@@ -12377,7 +12378,8 @@ declare module DevExpress.ui {
    * @deprecated Use ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttContextMenuItem extends dxContextMenuItem {
+  export interface dxGanttContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
@@ -12863,7 +12865,7 @@ declare module DevExpress.ui {
    * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGanttToolbarItem extends dxToolbarItem {
+  export interface dxGanttToolbarItem extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
@@ -13307,7 +13309,8 @@ declare module DevExpress.ui {
    * @deprecated Use ToolbarItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
+  export interface dxHtmlEditorToolbarItem
+    extends DevExpress.ui.dxToolbar.Item {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */
@@ -14608,14 +14611,14 @@ declare module DevExpress.ui {
       | 'onHover';
   }
   /**
-   * @deprecated 
+   * @deprecated Use DevExpress.ui.dxMenu.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * [descr:dxMenuItem.items]
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<DevExpress.ui.dxMenu.Item>;
   }
   /**
    * @deprecated use Properties instead
@@ -14809,7 +14812,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxNavBarItem extends dxTabsItem {
+  export interface dxNavBarItem extends DevExpress.ui.dxTabs.Item {
     /**
      * [descr:dxNavBarItem.badge]
      */
@@ -18345,7 +18348,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTabPanelItem extends dxMultiViewItem {
+  export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
     /**
      * [descr:dxTabPanelItem.badge]
      */
@@ -20360,7 +20363,7 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated Use DevExpress.ui.dxTreeView.Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewItem extends CollectionWidgetItem {
@@ -20379,7 +20382,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewItem.items]
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<DevExpress.ui.dxTreeView.Item>;
     /**
      * [descr:dxTreeViewItem.id]
      */

@@ -26,7 +26,7 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    dxToolbarItem
+    Item as dxToolbarItem
 } from './toolbar';
 
 /** @public */

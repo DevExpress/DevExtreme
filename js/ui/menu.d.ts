@@ -273,15 +273,16 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 export type Item = dxMenuItem;
 
 /**
- * @deprecated
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxMenuItem>
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

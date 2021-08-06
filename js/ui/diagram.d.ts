@@ -1254,7 +1254,7 @@ export interface dxDiagramItem {
  * @inherits dxDiagramItem
  * @namespace DevExpress.ui
  */
-export interface dxDiagramShape extends dxDiagramItem {
+export interface dxDiagramShape extends Item {
     /**
      * @docid
      * @public
