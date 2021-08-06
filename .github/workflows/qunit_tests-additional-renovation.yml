@@ -9,29 +9,29 @@ jobs:
       fail-fast: false
       matrix:
         envs: [
-          # { CONSTEL: "misc", TZ: 'PST8PDT' },
-          # { CONSTEL: "misc", TZ: 'Japan' },
-          # { CONSTEL: "misc", TZ: 'Australia/ACT' },
-          # { CONSTEL: "ui.editors", TZ: 'PST8PDT' },
-          # { CONSTEL: "ui.editors", TZ: 'Japan' },
-          # { CONSTEL: "ui.editors", TZ: 'Australia/ACT' },
-          # { CONSTEL: "ui.editors", TZ: 'Europe/London' },
-          # { CONSTEL: "ui.grid", TZ: 'PST8PDT' },
-          # { CONSTEL: "ui.scheduler", TZ: 'PST8PDT' },
-          # { CONSTEL: "ui.scheduler", TZ: 'Japan' },
-          # { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT' },
-          # { CONSTEL: "ui.scheduler", TZ: 'Europe/London' },
-          # { PERF: true, JQUERY: true, NO_HEADLESS: true },
-          # { MOBILE_UA: "ios9", CONSTEL: "ui" },
-          # { MOBILE_UA: "ios9", CONSTEL: "ui.editors", NO_HEADLESS: true },
-          # { MOBILE_UA: "ios9", CONSTEL: "ui.grid", NO_HEADLESS: true },
-          # { MOBILE_UA: "ios9", CONSTEL: "ui.scheduler", NO_HEADLESS: true },
-          # { MOBILE_UA: "ios9", CONSTEL: "viz" },
-          # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui" },
-          # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true },
-          # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true },
-          # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true },
-          # { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz" },
+          { CONSTEL: "misc", TZ: 'PST8PDT' },
+          { CONSTEL: "misc", TZ: 'Japan' },
+          { CONSTEL: "misc", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.editors", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.editors", TZ: 'Japan' },
+          { CONSTEL: "ui.editors", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.editors", TZ: 'Europe/London' },
+          { CONSTEL: "ui.grid", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'PST8PDT' },
+          { CONSTEL: "ui.scheduler", TZ: 'Japan' },
+          { CONSTEL: "ui.scheduler", TZ: 'Australia/ACT' },
+          { CONSTEL: "ui.scheduler", TZ: 'Europe/London' },
+          { PERF: true, JQUERY: true, NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui" },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.editors", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.grid", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "ui.scheduler", NO_HEADLESS: true },
+          { MOBILE_UA: "ios9", CONSTEL: "viz" },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui" },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.editors", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.grid", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "ui.scheduler", NO_HEADLESS: true },
+          { MOBILE_UA: "android6", JQUERY: true, CONSTEL: "viz" },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "export" },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "misc" },
           { BROWSER: "firefox", JQUERY: true, CONSTEL: "ui" },
@@ -56,10 +56,6 @@ jobs:
         '"font.name-list.monospace.x-western", "Liberation Mono"' \
         '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
         '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-    # - name: Run FireFox
-    #   run: |
-    #     cat ./firefox-profile/prefs.js
-    #     firefox -headless -profile ./firefox-profile http://localhost:20060/run?notimers=true&constellation=misc
     - name: Setup utils
       run: |
         sudo apt-get install -y dbus-x11 httping x11vnc xvfb
