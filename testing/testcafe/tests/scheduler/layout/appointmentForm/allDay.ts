@@ -108,13 +108,13 @@ test('StartDate and endDate should have correct type after "allDay" and "repeat"
 
   await t
     .doubleClick(scheduler.getDateTableCell(0, 0))
-    .expect(await takeScreenshot('form-before-change-allday-and-reccurence-options.png'))
+    .expect(await takeScreenshot('a1.png', '.dx-scheduler-appointment-popup > div'))
     .ok()
 
     .click(appointmentPopup.allDayElement)
     .click(appointmentPopup.recurrenceElement)
 
-    .expect(await takeScreenshot('form-after-change-allday-and-reccurence-options.png'))
+    .expect(await takeScreenshot('a2.png', '.dx-scheduler-appointment-popup > div'))
     .ok()
 
     .expect(compareResults.isValid())
