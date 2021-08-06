@@ -248,6 +248,22 @@ QUnit.module('render', () => {
             fixtures.simple.drop();
         }
     });
+
+    QUnit.test('there should be no error if target=undefined (T1019015)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover, {
+                visible: true,
+                target: undefined
+            });
+            assert.ok(true, 'no error is raised');
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e}`);
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
 });
 
 QUnit.module('options change', () => {
