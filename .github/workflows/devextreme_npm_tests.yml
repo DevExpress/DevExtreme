@@ -22,9 +22,9 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
-        path: ./mode_modules
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        # restore-keys: ${{ runner.os }}-node-modules
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Restore artifacts cache
       uses: actions/cache@v2
@@ -50,6 +50,7 @@ jobs:
         retention-days: 1
 
   test_angular:
+    name: Angular wrapper tests
     needs: build
     runs-on: windows-latest
     timeout-minutes: 30
@@ -76,9 +77,9 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/cache@v2
       with:
-        path: ./mode_modules
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        # restore-keys: ${{ runner.os }}-node-modules
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -133,6 +134,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   test_bundlers:
+    name: Bundlers tests
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -223,7 +225,7 @@ jobs:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.CONSTEL }}
+    name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 20
   
     steps:
