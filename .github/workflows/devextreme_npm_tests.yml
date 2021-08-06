@@ -4,7 +4,7 @@ concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -19,18 +19,18 @@ jobs:
       with:
         node-version: '15'
 
-    - name: Restore artifacts cache
-      uses: actions/cache@v2
-      with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
-
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
         path: ./mode_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Restore artifacts cache
+      uses: actions/cache@v2
+      with:
+        path: ./artifacts
+        key: build-npm-devextreme-artifacts-${{ github.sha }}
 
     - name: Install packages in devextreme repo
       run: test -d artifacts || npm install --no-audit --no-fund
@@ -55,10 +55,18 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Use Node.js
-      uses: actions/setup-node@v2
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
       with:
-        node-version: '15'
+        path: ./mode_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install packages in devextreme repo
+      run: npm install --no-audit --no-fund
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
@@ -88,20 +96,17 @@ jobs:
       with:
         name: devextreme-npm
         path: ./devextreme-angular-repo/packages/devextreme-angular
+   
+    - name: Install devextreme package
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      run: npm install --save-dev $(ls *.tgz)
 
     - name: Install packages for devextreme-angular
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo
-      run: npm install --unsafe-perm --no-audit --no-fund
+      run: npm install --no-audit --no-fund
       
-    - name: Install devextreme package
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: |
-        ls
-        npm install --save-dev $(ls *.tgz)
-      shell: bash
-
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
@@ -253,10 +258,12 @@ jobs:
         path: ./devextreme-demos
 
     - name: Install packages for devextreme-demos
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: npm install --no-audit --no-fund
 
     - name: Install devextreme package
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: npm install $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
