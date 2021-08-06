@@ -2050,6 +2050,23 @@ testModule('close on target scroll', moduleConfig, () => {
         assert.strictEqual(overlay.option('visible'), true, 'overlay should not be hidden if show animation is not completed');
     });
 
+    test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            closeOnTargetScroll: true,
+            position: {
+                my: 'left top',
+                at: 'left bottom',
+                of: $.Event('dxpointerdown', { pointerType: 'mouse', pageX: 50, pageY: 50, target: $('#overlayInputTarget').get(0) })
+            },
+            visible: true
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $content = overlay.$content();
+
+        $('#parentContainer').triggerHandler('scroll');
+        assert.strictEqual($content.is(':visible'), false, 'Overlay should be hidden after scroll event on any parent');
+    });
+
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: false,
@@ -2164,6 +2181,30 @@ testModule('close on target scroll', moduleConfig, () => {
         overlay.hide();
         const parentEvents = $._data(containerParent).events || {};
         assert.strictEqual('scroll' in parentEvents, false, 'scroll unsubscribed');
+    });
+
+    test('all opened overlays should be closed on scroll', function(assert) {
+        const $target = $('#overlayInputTarget');
+
+        const $overlay1 = $('#overlay').dxOverlay({
+            closeOnTargetScroll: true,
+            position: {
+                of: $target
+            },
+            visible: true
+        });
+
+        const $overlay2 = $('#overlay2').dxOverlay({
+            closeOnTargetScroll: true,
+            position: {
+                of: $target
+            },
+            visible: true
+        });
+
+        $('#parentContainer').triggerHandler('scroll');
+        assert.strictEqual($overlay1.dxOverlay('option', 'visible'), false, 'overlay1 closed');
+        assert.strictEqual($overlay2.dxOverlay('option', 'visible'), false, 'overlay2 closed');
     });
 
     test('target scroll subscriptions should be unsubscribed for current overlay', function(assert) {
