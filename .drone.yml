@@ -26,34 +26,34 @@ pipeline:
 matrix:
   include:
     - { TARGET: ts }
-    - { TARGET: test, CONSTEL: misc, TZ: 'PST8PDT' }
-    - { TARGET: test, CONSTEL: misc, TZ: 'Japan' }
-    - { TARGET: test, CONSTEL: misc, TZ: 'Australia/ACT' }
-    - { TARGET: test, CONSTEL: ui.editors, TZ: 'PST8PDT' }
-    - { TARGET: test, CONSTEL: ui.editors, TZ: 'Japan' }
-    - { TARGET: test, CONSTEL: ui.editors, TZ: 'Australia/ACT' }
-    - { TARGET: test, CONSTEL: ui.editors, TZ: 'Europe/London' }
-    - { TARGET: test, CONSTEL: ui.grid, TZ: 'PST8PDT' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'PST8PDT' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Japan' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Australia/ACT' }
-    - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Europe/London' }
-    - { TARGET: test, PERF: true, JQUERY: true, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: viz }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.editors, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.grid, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.scheduler, NO_HEADLESS: true }
-    - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: viz }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: misc }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.editors }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.grid }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
-    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: renovation }
+    # - { TARGET: test, CONSTEL: misc, TZ: 'PST8PDT' }
+    # - { TARGET: test, CONSTEL: misc, TZ: 'Japan' }
+    # - { TARGET: test, CONSTEL: misc, TZ: 'Australia/ACT' }
+    # - { TARGET: test, CONSTEL: ui.editors, TZ: 'PST8PDT' }
+    # - { TARGET: test, CONSTEL: ui.editors, TZ: 'Japan' }
+    # - { TARGET: test, CONSTEL: ui.editors, TZ: 'Australia/ACT' }
+    # - { TARGET: test, CONSTEL: ui.editors, TZ: 'Europe/London' }
+    # - { TARGET: test, CONSTEL: ui.grid, TZ: 'PST8PDT' }
+    # - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'PST8PDT' }
+    # - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Japan' }
+    # - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Australia/ACT' }
+    # - { TARGET: test, CONSTEL: ui.scheduler, TZ: 'Europe/London' }
+    # - { TARGET: test, PERF: true, JQUERY: true, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
+    # - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: ios9, CONSTEL: viz }
+    # - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui }
+    # - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.editors, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.grid, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: ui.scheduler, NO_HEADLESS: true }
+    # - { TARGET: test, MOBILE_UA: android6, JQUERY: true, CONSTEL: viz }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: misc }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.editors }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.grid }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
+    # - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: renovation }

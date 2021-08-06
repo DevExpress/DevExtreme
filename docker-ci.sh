@@ -51,7 +51,7 @@ function run_test {
 
     if [ -n "$TZ" ]; then
         sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        dpkg-reconfigure --frontend noninteractive tzdata
+        sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
