@@ -187,7 +187,7 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
      * @type_function_param1_field2 excelCell:Object
      * @public
      */
-    customizeCell?: ((options: { gridCell?: ExcelDataGridCell; excelCell?: any }) => void);
+    customizeCell?: ((options: { gridCell?: DataGridCell; excelCell?: any }) => void);
 }
 
 /**

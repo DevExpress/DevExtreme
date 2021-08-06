@@ -11,7 +11,7 @@ import {
 } from './collection/ui.collection_widget.base';
 
 import dxTabs, {
-    dxTabsItem,
+    Item as dxTabsItem,
     dxTabsOptions,
 } from './tabs';
 
