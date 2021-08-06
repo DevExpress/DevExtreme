@@ -2,53 +2,46 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  Nested,
   OneWay,
   Event,
 } from '@devextreme-generator/declarations';
+
+import { Toolbar } from '../../toolbar/toolbar';
 
 import '../../../../ui/button_group';
 import '../../../../ui/drop_down_button';
 
 import dateUtils from '../../../../core/utils/date';
-
+import {
+  formatViews, getCaption,
+  getStep, getViewName,
+  getNextIntervalDate,
+} from '../../../../ui/scheduler/header/utils';
 import { showCalendar, formToolbarItem } from './utils';
+
+import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
-  Toolbar,
-} from '../../toolbar/toolbar';
-import {
-  ToolbarItem,
-  ToolbarLocationType,
-} from '../../toolbar/toolbar_props';
-import {
-  Direction,
+  ItemOptions, Direction,
   ItemView,
-  ConfigOptionType,
-  Caption,
   DefaultElement,
 } from './types';
-import {
-  SchedulerToolbarItem,
-} from './toolbar_props';
-import {
-  ViewType,
-  ViewProps,
-} from '../props';
-import {
-  formatViews, getCaption, getNextIntervalDate, getStep, getViewName,
-} from '../../../../ui/scheduler/header/utils';
+import { View } from '../types.d';
+
+import { SchedulerToolbarItem } from './toolbar_props';
+import { ViewProps } from '../props';
+import { ToolbarItem, ToolbarLocationType } from '../../toolbar/toolbar_props';
 
 const { trimTime } = dateUtils;
 
 function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
   return (
-    <Toolbar items={viewModel.items} /* {...restAttrbutes} */ />
+    <Toolbar items={viewModel.items} />
   );
 }
 
 @ComponentBindings()
 export class SchedulerToolbarProps {
-  @Nested() items: SchedulerToolbarItem[] = [
+  @OneWay() items: SchedulerToolbarItem[] = [
     {
       defaultElement: 'dateNavigator' as DefaultElement,
       location: 'before' as ToolbarLocationType,
@@ -59,19 +52,19 @@ export class SchedulerToolbarProps {
     },
   ] as SchedulerToolbarItem[];
 
-  @OneWay() views?: (ViewType | ViewProps)[] = ['day', 'week'];
+  @OneWay() views: (View | ViewProps)[] = ['day', 'week'];
 
-  @OneWay() currentView: string | ViewType = 'day';
+  @OneWay() currentView: string | View = 'day';
 
-  @Event() onCurrentViewUpdate?: (view: string | ViewType) => void;
+  @Event() onCurrentViewUpdate?: (view: string | View) => void;
 
   @OneWay() currentDate: Date = new Date();
 
   @Event() onCurrentDateUpdate?: (date: Date) => void;
 
-  @OneWay() min: Date = new Date(0);
+  @OneWay() min?: Date | undefined;
 
-  @OneWay() max: Date = new Date(2022, 0, 0);
+  @OneWay() max?: Date | undefined;
 
   @OneWay() intervalCount = 1;
 
@@ -83,15 +76,7 @@ export class SchedulerToolbarProps {
 
   @OneWay() useDropDownViewSwitcher = false;
 
-  @OneWay() customizationFunction?: (caption: Caption) => string;
-
-  @OneWay() focusStateEnabled?: boolean;
-
-  @OneWay() tabIndex?: number;
-
-  // Не нужны, т.к. currentView и currentDate - TwoWay пропсы
-  // @OneWay() setCurrentView?: (view: ItemView) => void;
-  // @OneWay() setCurrentDate?: (date: Date) => void;
+  @OneWay() customizationFunction?: (caption: DateNavigatorTextInfo) => string;
 }
 
 @Component({ view: viewFunction })
@@ -100,8 +85,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     return getStep(this.props.currentView) as string;
   }
 
-  // добавить эффект?
-  get caption(): Caption {
+  get caption(): DateNavigatorTextInfo {
     const options = {
       step: this.step,
       intervalCount: this.props.intervalCount,
@@ -114,7 +98,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
       options,
       this.props.useShortDateFormat,
       this.props.customizationFunction,
-    ) as Caption;
+    ) as DateNavigatorTextInfo;
   }
 
   get captionText(): string {
@@ -129,16 +113,12 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
     return getViewName(this.props.currentView) as string;
   }
 
-  // TODO check if view is copy or not
   setCurrentView(view: ItemView): void {
-    // this.props.currentView = view.name;
     this.props.onCurrentViewUpdate?.(view.name);
   }
 
-  // TODO check if it copy
   setCurrentDate(date: Date): void {
-    // this.props.currentDate = date;
-    this.props.onCurrentDateUpdate?.(date);
+    this.props.onCurrentDateUpdate?.(new Date(date));
   }
 
   get intervalOptions(): {
@@ -170,6 +150,10 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   isPreviousButtonDisabled(): boolean {
+    if (this.props.min === undefined) {
+      return false;
+    }
+
     const min = trimTime(new Date(this.props.min));
 
     const { startDate } = this.caption;
@@ -179,6 +163,10 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   isNextButtonDisabled(): boolean {
+    if (this.props.max === undefined) {
+      return false;
+    }
+
     const max = new Date(new Date(this.props.max).setHours(23, 59, 59));
 
     const { endDate } = this.caption;
@@ -188,7 +176,7 @@ export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps
   }
 
   get items(): ToolbarItem[] {
-    const options: ConfigOptionType = {
+    const options: ItemOptions = {
       useDropDownViewSwitcher: this.props.useDropDownViewSwitcher,
       selectedView: this.selectedView,
       views: this.views,

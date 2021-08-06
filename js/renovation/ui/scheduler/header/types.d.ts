@@ -1,24 +1,8 @@
-import {
-  ToolbarButtonGroupItemPropsType,
-} from '../../toolbar/toolbar_props';
-
 export type DefaultElement = 'dateNavigator' | 'viewSwitcher';
 
 export type Direction = -1 | 1;
 
-export interface ItemView {
-  text: string;
-  name: string;
-  view: {
-    text: string;
-    type: string;
-    name: string;
-  };
-}
-
-export type SchedulerToolbarButtonGroupItemPropsType = ToolbarButtonGroupItemPropsType | string;
-
-export interface ConfigOptionType {
+export interface ItemOptions {
   useDropDownViewSwitcher: boolean;
   selectedView: string;
   views: ItemView[];
@@ -30,8 +14,12 @@ export interface ConfigOptionType {
   isNextButtonDisabled: boolean;
 }
 
-export interface Caption {
-  startDate: Date;
-  endDate: Date;
+export interface ItemView {
   text: string;
+  name: string;
+  view: {
+    text: string;
+    type: string;
+    name: string;
+  };
 }

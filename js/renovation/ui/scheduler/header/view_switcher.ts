@@ -1,7 +1,5 @@
-import {
-  ToolbarItem,
-} from '../../toolbar/toolbar_props';
 import { ItemView } from './types';
+import { ToolbarItem } from '../../toolbar/toolbar_props';
 
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
@@ -21,6 +19,7 @@ export const getViewSwitcher = (
     selectedItemKeys: [selectedView],
     stylingMode: 'contained',
     onItemClick: (e) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setCurrentView(e.itemData.view);
     },
   },
@@ -46,6 +45,7 @@ export const getDropDownViewSwitcher = (
       class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
     },
     onItemClick: (e) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setCurrentView(e.itemData.view);
     },
   },

@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars-experimental */
 import {
+  Direction,
+} from './types';
+import {
   ToolbarItem,
   ToolbarWidgetType,
   ToolbarButtonStylingMode,
   ToolbarButtonGroupItemPropsType,
 } from '../../toolbar/toolbar_props';
-
-import {
-  Direction,
-  SchedulerToolbarButtonGroupItemPropsType,
-} from './types';
 
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
 
@@ -23,7 +21,7 @@ const DIRECTION_RIGHT: Direction = 1;
 
 const getPreviousButtonOptions = (
   isPreviousButtonDisabled: boolean,
-): SchedulerToolbarButtonGroupItemPropsType => ({
+): ToolbarButtonGroupItemPropsType => ({
   icon: 'chevronprev',
   // elementAttr: { class: PREVIOUS_BUTTON_CLASS },
   disabled: isPreviousButtonDisabled,
@@ -31,14 +29,14 @@ const getPreviousButtonOptions = (
 
 const getCalendarButtonOptions = (
   captionText: string,
-): SchedulerToolbarButtonGroupItemPropsType => ({
+): ToolbarButtonGroupItemPropsType => ({
   text: captionText,
   // elementAttr: { class: CALENDAR_BUTTON_CLASS },
 });
 
 const getNextButtonOptions = (
   isNextButtonDisabled: boolean,
-): SchedulerToolbarButtonGroupItemPropsType => ({
+): ToolbarButtonGroupItemPropsType => ({
   icon: 'chevronnext',
   // elementAttr: { class: NEXT_BUTTON_CLASS },
   disabled: isNextButtonDisabled,

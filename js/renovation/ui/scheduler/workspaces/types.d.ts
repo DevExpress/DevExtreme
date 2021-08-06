@@ -133,6 +133,3 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
 }
-
-export type ViewType = 'day' | 'week' | 'workWeek' | 'month'
-| 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda';

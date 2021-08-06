@@ -1,16 +1,9 @@
 import { getViewSwitcher, getDropDownViewSwitcher } from './view_switcher';
 import { getDateNavigator } from './date_navigator';
 
-import {
-  ToolbarItem,
-} from '../../toolbar/toolbar_props';
-
-import {
-  ConfigOptionType,
-} from './types';
-import {
-  SchedulerToolbarItem,
-} from './toolbar_props';
+import { ItemOptions } from './types';
+import { ToolbarItem } from '../../toolbar/toolbar_props';
+import { SchedulerToolbarItem } from './toolbar_props';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
@@ -18,7 +11,7 @@ const DATE_NAVIGATOR = 'dateNavigator';
 
 export const formToolbarItem = (
   item: SchedulerToolbarItem,
-  options: ConfigOptionType,
+  options: ItemOptions,
 ): ToolbarItem => {
   const {
     useDropDownViewSwitcher,
@@ -50,7 +43,7 @@ export const formToolbarItem = (
           isPreviousButtonDisabled, isNextButtonDisabled,
         );
       default:
-        console.log(`Unknown default element type: ${defaultElementType}`);
+        console.error(`Unknown default element type: ${defaultElementType}`);
         break;
     }
   }
@@ -59,5 +52,5 @@ export const formToolbarItem = (
 };
 
 export const showCalendar = (): void => {
-  console.log('Rendering calendar');
+  console.log('Rendering calendar'); // TODO
 };

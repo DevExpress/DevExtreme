@@ -8,9 +8,12 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 
+import { SchedulerToolbarItem } from './header/toolbar_props';
 import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
+import { DefaultElement } from './header/types';
+import { ToolbarLocationType } from '../toolbar/toolbar_props';
 
 import type {
   AppointmentCollectorTemplateData,
@@ -147,7 +150,7 @@ export class ViewProps extends BaseSchedulerProps {
   startDate?: Date | number | string;
 
   @OneWay()
-  type?: ViewType;
+  type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
   @Nested()
   scrolling?: ScrollingProps;
@@ -231,7 +234,7 @@ export class SchedulerProps extends BaseSchedulerProps {
   currentDate?: Date | number | string = new Date();
 
   @TwoWay()
-  currentView?: string | ViewType = 'day';
+  currentView?: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
 
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
@@ -294,8 +297,8 @@ export class SchedulerProps extends BaseSchedulerProps {
   @OneWay()
   useDropDownViewSwitcher?: boolean;
 
-  @OneWay()
-  views?: (ViewType | ViewProps)[];
+  @Nested()
+  views?: ('agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' | ViewProps)[];
 
   /* Events */
 
@@ -366,15 +369,16 @@ export class SchedulerProps extends BaseSchedulerProps {
 
   @OneWay()
   textExpr?: string;
-}
 
-export type ViewType =
-  'day'
-  | 'week'
-  | 'workWeek'
-  | 'month'
-  | 'timelineDay'
-  | 'timelineWeek'
-  | 'timelineWorkWeek'
-  | 'timelineMonth'
-  | 'agenda';
+  @OneWay()
+  toolbar: SchedulerToolbarItem[] = [
+    {
+      defaultElement: 'dateNavigator' as DefaultElement,
+      location: 'before' as ToolbarLocationType,
+    },
+    {
+      defaultElement: 'viewSwitcher' as DefaultElement,
+      location: 'after' as ToolbarLocationType,
+    },
+  ] as SchedulerToolbarItem[];
+}

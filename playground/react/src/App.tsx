@@ -8,7 +8,6 @@ function App() {
 
     return (
         <>
-
           <SchedulerToolbar
             views={['day', 'week', 'month']}
 
