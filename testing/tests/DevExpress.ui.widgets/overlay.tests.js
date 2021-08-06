@@ -2050,6 +2050,24 @@ testModule('close on target scroll', moduleConfig, () => {
         assert.strictEqual(overlay.option('visible'), true, 'overlay should not be hidden if show animation is not completed');
     });
 
+    test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            closeOnTargetScroll: true,
+            container: $('#test'),
+            position: {
+                my: 'left top',
+                at: 'left bottom',
+                of: $.Event('dxpointerdown', { pointerType: 'mouse', pageX: 50, pageY: 50, target: $('#overlayInputTarget').get(0) })
+            },
+            visible: true
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const $content = overlay.$content();
+
+        $('#parentContainer').triggerHandler('scroll');
+        assert.strictEqual($content.is(':visible'), false, 'Overlay should be hidden after scroll event on any parent');
+    });
+
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: false,
@@ -2164,6 +2182,26 @@ testModule('close on target scroll', moduleConfig, () => {
         overlay.hide();
         const parentEvents = $._data(containerParent).events || {};
         assert.strictEqual('scroll' in parentEvents, false, 'scroll unsubscribed');
+    });
+
+    test('all opened overlays should be closed on scroll', function(assert) {
+        const container = $('#overlayInputTarget');
+
+        const $overlay1 = $('#overlay').dxOverlay({
+            closeOnTargetScroll: true,
+            visible: true,
+            container
+        });
+
+        const $overlay2 = $('#overlay2').dxOverlay({
+            closeOnTargetScroll: true,
+            visible: true,
+            container
+        });
+
+        $('#parentContainer').triggerHandler('scroll');
+        assert.strictEqual($overlay1.dxOverlay('option', 'visible'), false, 'overlay1 closed');
+        assert.strictEqual($overlay2.dxOverlay('option', 'visible'), false, 'overlay2 closed');
     });
 
     test('target scroll subscriptions should be unsubscribed for current overlay', function(assert) {
@@ -2291,7 +2329,7 @@ testModule('container', moduleConfig, () => {
             visible: true,
             copyRootClassesToWrapper: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
         assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
@@ -2303,7 +2341,7 @@ testModule('container', moduleConfig, () => {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.notOk($wrapper.hasClass('something'), 'class was not added to wrapper');
         assert.notOk($wrapper.hasClass('another'), 'another class was not added to wrapper');
@@ -2603,7 +2641,7 @@ testModule('target', {
 
         overlay.show();
 
-        const $wrapper = overlay.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $wrapper = overlay.$wrapper();
 
         assert.strictEqual($wrapper.css('transform'), 'matrix(1, 0, 0, 1, 100, 21)');
     });
