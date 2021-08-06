@@ -2,7 +2,7 @@ import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 
 // this function is large and will grow
-export function drawPdfTable(doc, table) {
+export function drawPdfTable(doc, styles, table) {
     if(!isDefined(doc)) {
         throw 'doc is required';
     }
@@ -53,6 +53,10 @@ export function drawPdfTable(doc, table) {
             if(isDefined(cell.backgroundColor)) {
                 doc.setFillColor(cell.backgroundColor);
                 doc.rect(cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
+            }
+            const textColor = isDefined(cell.textColor) ? cell.textColor : styles.textColor;
+            if(textColor !== doc.getTextColor()) {
+                doc.setTextColor(textColor);
             }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
                 const textY = cell._rect.y + (cell._rect.h / 2);
