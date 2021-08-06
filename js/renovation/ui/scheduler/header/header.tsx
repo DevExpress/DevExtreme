@@ -6,6 +6,8 @@ import {
   Event,
 } from '@devextreme-generator/declarations';
 
+import devices from '../../../../core/devices';
+
 import { Toolbar } from '../../toolbar/toolbar';
 
 import '../../../../ui/button_group';
@@ -22,12 +24,11 @@ import { showCalendar, formToolbarItem } from './utils';
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
   ItemOptions, Direction,
-  ItemView,
-  DefaultElement,
+  ItemView, DefaultElement,
+  SchedulerToolbarItem,
 } from './types';
 import { View } from '../types.d';
 
-import { SchedulerToolbarItem } from './toolbar_props';
 import { ViewProps } from '../props';
 import { ToolbarItem, ToolbarLocationType } from '../../toolbar/toolbar_props';
 
@@ -62,9 +63,9 @@ export class SchedulerToolbarProps {
 
   @Event() onCurrentDateUpdate?: (date: Date) => void;
 
-  @OneWay() min?: Date | undefined;
+  @OneWay() min?: Date;
 
-  @OneWay() max?: Date | undefined;
+  @OneWay() max?: Date;
 
   @OneWay() intervalCount = 1;
 
@@ -72,7 +73,7 @@ export class SchedulerToolbarProps {
 
   @OneWay() agendaDuration = 1;
 
-  @OneWay() useShortDateFormat = false; // TODO devices.real().generic || devices.isSimulator()
+  @OneWay() useShortDateFormat = !devices.real().generic || devices.isSimulator();
 
   @OneWay() useDropDownViewSwitcher = false;
 

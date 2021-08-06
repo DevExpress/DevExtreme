@@ -1,9 +1,8 @@
 import { getViewSwitcher, getDropDownViewSwitcher } from './view_switcher';
 import { getDateNavigator } from './date_navigator';
 
-import { ItemOptions } from './types';
+import { ItemOptions, SchedulerToolbarItem } from './types';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
-import { SchedulerToolbarItem } from './toolbar_props';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';

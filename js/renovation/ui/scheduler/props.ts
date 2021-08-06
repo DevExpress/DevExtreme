@@ -8,11 +8,11 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 
-import { SchedulerToolbarItem } from './header/toolbar_props';
+import { SchedulerToolbarItem, DefaultElement } from './header/types';
 import type { template } from '../../../core/templates/template';
 import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
-import { DefaultElement } from './header/types';
+
 import { ToolbarLocationType } from '../toolbar/toolbar_props';
 
 import type {
@@ -298,7 +298,7 @@ export class SchedulerProps extends BaseSchedulerProps {
   useDropDownViewSwitcher?: boolean;
 
   @Nested()
-  views?: ('agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' | ViewProps)[];
+  views?: ('day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | ViewProps)[];
 
   /* Events */
 
