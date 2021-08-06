@@ -24,4 +24,5 @@ export class EdmLiteral {
  * @export keyConverters
  * @public
  */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
 export var keyConverters: any;

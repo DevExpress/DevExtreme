@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from './palette';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    Format
+    Format,
 } from '../localization';
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
 } from './common';
 
 import BaseWidget, {
@@ -34,7 +34,7 @@ import BaseWidget, {
     Font,
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 /**
@@ -154,12 +154,12 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @docid
        * @default 315
        */
-      endAngle?: number,
+      endAngle?: number;
       /**
        * @docid
        * @default 225
        */
-      startAngle?: number
+      startAngle?: number;
     };
     /**
      * @docid
@@ -170,12 +170,12 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @docid
        * @default undefined
        */
-      connectorColor?: string,
+      connectorColor?: string;
       /**
        * @docid
        * @default 2
        */
-      connectorWidth?: number,
+      connectorWidth?: number;
       /**
        * @docid
        * @type_function_param1 barValue:object
@@ -184,27 +184,27 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
        * @type_function_return string
        * @notUsedInTheme
        */
-      customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
+      customizeText?: ((barValue: { value?: number; valueText?: string }) => string);
       /**
        * @docid
        * @default 16 &prop(size)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
        * @extends CommonVizFormat
        */
-      format?: Format,
+      format?: Format;
       /**
        * @docid
        * @default 20
        */
-      indent?: number,
+      indent?: number;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -304,7 +304,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @type_function_return string
      * @public
      */
-    customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+    customizeHint?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.customizeItems
      * @type_function_param1 items:Array<BarGaugeLegendItem>
@@ -321,7 +321,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+    customizeText?: ((arg: { item?: BarGaugeBarInfo; text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.itemTextFormat
      * @extends CommonVizFormat
@@ -350,7 +350,7 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
      * @docid dxBarGaugeOptions.loadingIndicator.enabled
      * @hidden
      */
-    enabled?: boolean
+    enabled?: boolean;
 }
 /** @namespace DevExpress.viz */
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
@@ -365,7 +365,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string; index?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -376,7 +376,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
+    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string; index?: number }) => any);
     /**
      * @docid dxBarGaugeOptions.tooltip.interactive
      * @default false

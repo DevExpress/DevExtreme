@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,27 +22,27 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    dxSortableOptions
+    dxSortableOptions,
 } from './sortable';
 
 import {
-    SearchBoxMixinOptions
+    SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
 interface ListItemInfo {
     readonly itemData?: any;
     readonly itemElement: DxElement;
-    readonly itemIndex: number | { group: number; item: number; };
+    readonly itemIndex: number | { group: number; item: number };
 }
 
 export interface ScrollInfo {
@@ -64,7 +64,7 @@ export type GroupRenderedEvent = EventInfo<dxList> & {
     readonly groupData?: any;
     readonly groupElement?: DxElement;
     readonly groupIndex?: number;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxList>;
@@ -81,7 +81,7 @@ export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
 /** @public */
 export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
     cancel?: boolean | PromiseLike<void>;
-}
+};
 
 /** @public */
 export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
@@ -93,12 +93,12 @@ export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
 export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
     readonly fromIndex: number;
     readonly toIndex: number;
-}
+};
 
 /** @public */
 export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
     readonly direction: string;
-}
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxList> & ChangedOptionInfo;
@@ -115,7 +115,7 @@ export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxList> & {
     readonly value: boolean;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
@@ -230,11 +230,11 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param2 itemData:object
        * @type_function_return void
        */
-      action?: ((itemElement: DxElement, itemData: any) => any),
+      action?: ((itemElement: DxElement, itemData: any) => any);
       /**
        * @docid
        */
-      text?: string
+      text?: string;
     }>;
     /**
      * @docid
