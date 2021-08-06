@@ -1,12 +1,11 @@
 import {
-  ComponentBindings, OneWay, TwoWay, Event,
+  ComponentBindings, OneWay, Event,
 } from '@devextreme-generator/declarations';
-import { EventCallback } from '../../common/event_callback';
 
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 @ComponentBindings()
-export class PagerProps {
+export class BasePagerProps {
   @OneWay() gridCompatibility = true;
 
   @OneWay() className?: string;
@@ -30,14 +29,6 @@ export class PagerProps {
   @OneWay() hasKnownLastPage = true;
 
   @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
-
-  @TwoWay() pageIndex = 1;
-
-  @Event() pageIndexChange?: EventCallback<number>;
-
-  @TwoWay() pageSize = 5;
-
-  @Event() pageSizeChange?: EventCallback<number>;
 
   @OneWay() showPageSizes = true;
 

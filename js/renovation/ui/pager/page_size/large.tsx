@@ -5,7 +5,7 @@ import {
 
 import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types.d';
-import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
 
 export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
@@ -25,7 +25,7 @@ export const viewFunction = ({ pageSizesText }: PageSizeLarge): JSX.Element => (
 export class PageSizeLargeProps {
   @OneWay() pageSizes!: FullPageSize[];
 }
-type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
+type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSizes'>() {
   get pageSizesText(): {
@@ -48,6 +48,9 @@ export class PageSizeLarge extends JSXComponent<PageSizeLargePropsType, 'pageSiz
   }
 
   private onPageSizeChange(processedPageSize: number) {
-    return () => { this.props.pageSize = processedPageSize; };
+    return () => {
+      this.props.pageSizeChange(processedPageSize);
+      return this.props.pageSize;
+    };
   }
 }

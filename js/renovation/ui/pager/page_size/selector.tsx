@@ -6,7 +6,7 @@ import {
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import { PagerProps } from '../common/pager_props';
+import { InternalPagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 
@@ -46,7 +46,7 @@ class PageSizeSelectorProps {
 
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
   extends JSXComponent<PageSizeSelectorPropsType>() {

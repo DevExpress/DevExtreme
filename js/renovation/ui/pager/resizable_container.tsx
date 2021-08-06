@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
-import { PagerProps } from './common/pager_props';
+import { InternalPagerProps } from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';
@@ -68,7 +68,7 @@ function getElementsWidth({
 
 @ComponentBindings()
 export class ResizableContainerProps {
-  @OneWay() pagerProps!: PagerProps;
+  @OneWay() pagerProps!: InternalPagerProps;
 
   @Template() contentTemplate!: JSXTemplate<PagerContentProps>;
 }
