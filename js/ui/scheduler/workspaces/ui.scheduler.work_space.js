@@ -610,24 +610,17 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions(isProvideVirtualCellsWidth) {
-        const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
         const groupCount = this._getGroupCount();
 
-        const cellCount = this._getTotalCellCount(groupCount);
-        const rowCount = this._getTotalRowCount(groupCount, isVerticalGrouping);
         const groupOrientation = groupCount > 0
             ? this.option('groupOrientation')
             : this._getDefaultGroupStrategy();
 
         const options = {
             groupByDate: this.option('groupByDate'),
-            cellCount,
             startRowIndex: 0,
             startCellIndex: 0,
             groupOrientation,
-            rowCount,
-            totalRowCount: rowCount,
-            totalCellCount: cellCount,
             today: this._getToday?.(),
             groups: this.option('groups'),
             isProvideVirtualCellsWidth,
@@ -1936,10 +1929,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
             className: this.verticalGroupTableClass,
-            baseColSpan: this.isGroupedByDate()
-                ? 1
-                : this._getCellCount(),
-            columnCountPerGroup: this._getCellCount(),
+            groupPanelData: this.viewDataProvider.getGroupPanelData(
+                this.generateRenderOptions(),
+            ),
         };
 
         if(this.option('groups').length) {
@@ -2003,16 +1995,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             'renovatedHeaderPanel',
             {
                 dateHeaderData: this.viewDataProvider.dateHeaderData,
+                groupPanelData: this.viewDataProvider.getGroupPanelData(
+                    this.generateRenderOptions(),
+                ),
                 dateCellTemplate: this.option('dateCellTemplate'),
                 timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
                 resourceCellTemplate: this.option('resourceCellTemplate'),
-                groupPanelCellBaseColSpan: this.isGroupedByDate()
-                    ? 1
-                    : this._getCellCount(),
-                columnCountPerGroup: this._getCellCount(),
                 isRenderDateHeader,
             }
         );
@@ -2225,19 +2216,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'selectedCellData':
                 break;
-            case 'scrolling':
-                if(this._isVirtualModeOn()) {
-                    if(!this.option('renovateRender')) {
-                        this.option('renovateRender', true);
-                    } else {
-                        this.repaint();
-                    }
-                } else {
-                    this.option('renovateRender', false);
-                }
-
-                break;
             case 'renovateRender':
+            case 'scrolling':
                 this.repaint();
                 break;
             case 'schedulerHeight':

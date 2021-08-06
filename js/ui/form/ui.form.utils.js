@@ -152,16 +152,6 @@ export function adjustContainerAsButtonItem({ $container, justifyContent, textAl
     $container.parent().css('justifyContent', justifyContent);
 }
 
-export function convertToTemplateOptions(renderOptions, editorOptions, componentOwner) {
-    return {
-        dataField: renderOptions.dataField,
-        editorType: renderOptions.editorType,
-        editorOptions: editorOptions,
-        component: componentOwner,
-        name: renderOptions.name
-    };
-}
-
 export function adjustEditorContainer({ $container, labelLocation }) {
     const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
     $container.
