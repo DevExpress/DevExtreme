@@ -2332,7 +2332,7 @@ testModule('container', moduleConfig, () => {
             visible: true,
             copyRootClassesToWrapper: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
         assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
@@ -2344,7 +2344,7 @@ testModule('container', moduleConfig, () => {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.notOk($wrapper.hasClass('something'), 'class was not added to wrapper');
         assert.notOk($wrapper.hasClass('another'), 'another class was not added to wrapper');
@@ -2644,7 +2644,7 @@ testModule('target', {
 
         overlay.show();
 
-        const $wrapper = overlay.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $wrapper = overlay.$wrapper();
 
         assert.strictEqual($wrapper.css('transform'), 'matrix(1, 0, 0, 1, 100, 21)');
     });
