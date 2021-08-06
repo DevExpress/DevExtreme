@@ -522,7 +522,7 @@ export class AppointmentSettingsGenerator {
     get rawAppointment() { return this.options.rawAppointment; }
     get resourceManager() { return this.options.resourceManager; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
-    get groups() { return this.options.groups; }
+    get groups() { return this.resourceManager.loadedResources; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,

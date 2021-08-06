@@ -557,7 +557,6 @@ class Scheduler extends Widget {
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
-                this.getLayoutManager()._initRenderingStrategy();
 
                 this._validateDayHours();
 

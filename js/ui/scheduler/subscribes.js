@@ -128,7 +128,7 @@ const subscribes = {
         const startDate = timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
         const endDate = timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
-        const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.options('currentView') !== 'month');
+        const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.option('currentView') !== 'month');
 
         return {
             text: targetedAdapter.text || appointmentAdapter.text,
