@@ -1437,7 +1437,8 @@ const Overlay = Widget.inherit({
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
 
-        this._actions = this._scrollHandler = this._$prevTargetParents = null;
+        this._actions = null;
+        this._parentsScrollSubscriptionInfo = null;
 
         this.callBase();
 
