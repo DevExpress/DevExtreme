@@ -24,7 +24,7 @@ jobs:
       with:
         path: ./mode_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        # restore-keys: ${{ runner.os }}-node-modules
 
     - name: Restore artifacts cache
       uses: actions/cache@v2
@@ -78,7 +78,7 @@ jobs:
       with:
         path: ./mode_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        # restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
