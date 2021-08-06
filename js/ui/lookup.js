@@ -946,7 +946,8 @@ const Lookup = DropDownList.inherit({
     _runWithoutCloseOnScroll: function(callback) {
         // NOTE: Focus can trigger "scroll" event
 
-        const { _scrollToSelectedItemEnabled, closeOnTargetScroll } = this.option();
+        const { _scrollToSelectedItemEnabled } = this.option();
+        const closeOnTargetScroll = this._popup.option('closeOnTargetScroll');
 
         if(!_scrollToSelectedItemEnabled) {
             callback();
@@ -954,7 +955,7 @@ const Lookup = DropDownList.inherit({
             this._popup.option('closeOnTargetScroll', false);
             callback();
             this._closeOnTargetScrollTimer = setTimeout(() => {
-                this._popup?.option('closeOnTargetScroll', closeOnTargetScroll);
+                this._popup.option('closeOnTargetScroll', closeOnTargetScroll);
             });
         }
     },
