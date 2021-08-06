@@ -2053,6 +2053,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2184,22 +2185,18 @@ testModule('close on target scroll', moduleConfig, () => {
     });
 
     test('all opened overlays should be closed on scroll', function(assert) {
-        const $target = $('#overlayInputTarget');
+        const container = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         $('#parentContainer').triggerHandler('scroll');

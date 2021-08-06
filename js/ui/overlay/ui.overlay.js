@@ -275,7 +275,7 @@ const Overlay = Widget.inherit({
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
         this._parentsScrollSubscriptionInfo = {
-            handler: (e => { this._targetParentsScrollHandler(e); })
+            handler: e => { this._targetParentsScrollHandler(e); }
         };
 
         this._updateResizeCallbackSkipCondition();
@@ -871,9 +871,9 @@ const Overlay = Widget.inherit({
 
     _toggleParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
-        const parentsScrollSubscriptionInfo = this._parentsScrollSubscriptionInfo;
+        const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
-        eventsEngine.off(parentsScrollSubscriptionInfo.prevTargets, scrollEvent, parentsScrollSubscriptionInfo.handler);
+        eventsEngine.off(prevTargets, scrollEvent, handler);
 
         const closeOnScroll = this.option('closeOnTargetScroll');
         if(needSubscribe && closeOnScroll) {
@@ -881,8 +881,8 @@ const Overlay = Widget.inherit({
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
-            eventsEngine.on($parents, scrollEvent, parentsScrollSubscriptionInfo.handler);
-            parentsScrollSubscriptionInfo.prevTargets = $parents;
+            eventsEngine.on($parents, scrollEvent, handler);
+            this._parentsScrollSubscriptionInfo.prevTargets = $parents;
         }
     },
 
