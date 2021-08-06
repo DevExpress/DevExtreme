@@ -213,7 +213,7 @@ describe('CheckBox', () => {
           expect(icon?.style.fontSize).toEqual('16px');
         });
 
-        it('should change icon font size after runtime changing "iconWidth" option', () => {
+        it('should change icon font size after runtime changing "iconSize" option', () => {
           const checkBox = new CheckBox({ iconSize: 22 });
           checkBox.iconRef = { current: { style: {} } } as any;
           const icon = checkBox.iconRef.current;

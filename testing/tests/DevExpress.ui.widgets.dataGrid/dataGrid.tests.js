@@ -3785,7 +3785,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
+        $(dataGrid.getScrollable().container()).trigger('scroll'); // need to trigger scroll manually to resolve deffered
 
         // assert
         assert.strictEqual(d.state(), 'resolved', 'row is navigated');
@@ -3824,7 +3824,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual(d.state(), 'pending', 'row is not navigated');
 
         // act
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
         this.clock.tick(500);
 
         // assert

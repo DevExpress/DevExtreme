@@ -35,7 +35,7 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
     }
 
     .dx-switch-container::before {
-      background-color: color.change($base-text-color, $alpha: 0.12);
+      background-color: color.change($base-text-color, $alpha: 0.2);
     }
   }
 

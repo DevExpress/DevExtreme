@@ -299,10 +299,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getRowCountWithAllDayRows() {
-        return this._getRowCount();
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
@@ -325,14 +321,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
             daysInView,
             getDateForHeaderText,
-            columnsInDay: this._getCellCountInDay(),
-        };
-    }
-
-    _getDateGenerationOptions() {
-        return {
-            ...super._getDateGenerationOptions(),
-            columnsInDay: this._getCellCountInDay(),
         };
     }
 
@@ -374,7 +362,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderView() {
-        this._hiddenInterval = this._getHiddenInterval();
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();

@@ -344,12 +344,13 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-lookup {
       height: auto;
-    }
 
-    .dx-lookup-field {
-      padding-left: $material-grid-base-cell-horizontal-padding;
-      padding-top: $material-grid-base-cell-vertical-padding;
-      padding-bottom: $material-grid-base-cell-vertical-padding;
+      .dx-lookup-field {
+        padding-left: $material-grid-base-cell-horizontal-padding;
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
+        font-size: $material-grid-base-cell-font-size;
+      }
     }
 
     .dx-dropdowneditor-button-visible.dx-dropdowneditor {
