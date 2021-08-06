@@ -4,16 +4,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import {
-    DataExpressionMixinOptions
+    DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
 /** @public */

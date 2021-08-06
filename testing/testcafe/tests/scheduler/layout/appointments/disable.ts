@@ -6,26 +6,34 @@ import url from '../../../../helpers/getPageUrl';
 fixture`Layout:Appointments:disable`
   .page(url(__dirname, '../../../container.html'));
 
-test.skip('Appointment popup should be readOnly if appointment is disabled', async (t) => {
+test('Appointment popup should be readOnly if appointment is disabled', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.expect(await takeScreenshot('disabled-appointments-in-grid.png')).ok();
 
-  await t.doubleClick(scheduler.getAppointment('A', 0).element, { speed: 0.1 })
+  await t.click(scheduler.getAppointment('A', 0).element, { speed: 0.1 })
+    .click(scheduler.appointmentTooltip.getListItem('A').element, { speed: 0.1 })
     .expect(await takeScreenshot('disabled-appointment.png')).ok();
+
   await t.click(scheduler.appointmentPopup.cancelButton);
 
-  await t.doubleClick(scheduler.getAppointment('B').element, { speed: 0.1 })
+  await t.click(scheduler.getAppointment('B').element, { speed: 0.1 })
+    .click(scheduler.appointmentTooltip.getListItem('B').element, { speed: 0.1 })
     .expect(await takeScreenshot('enabled-appointment.png')).ok();
+
   await t.click(scheduler.appointmentPopup.cancelButton);
 
-  await t.doubleClick(scheduler.getAppointment('C').element, { speed: 0.1 })
+  await t.click(scheduler.getAppointment('C').element, { speed: 0.1 })
+    .click(scheduler.appointmentTooltip.getListItem('C').element, { speed: 0.1 })
     .expect(await takeScreenshot('disabled-by-function-appointment.png')).ok();
+
   await t.click(scheduler.appointmentPopup.cancelButton);
 
-  await t.doubleClick(scheduler.getAppointment('D').element, { speed: 0.1 })
+  await t.click(scheduler.getAppointment('D').element, { speed: 0.1 })
+    .click(scheduler.appointmentTooltip.getListItem('D').element, { speed: 0.1 })
     .expect(await takeScreenshot('enabled-by-function-appointment.png')).ok();
+
   await t.click(scheduler.appointmentPopup.cancelButton);
 
   await t.expect(compareResults.isValid())

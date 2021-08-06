@@ -125,15 +125,17 @@ describe('OrdinaryLayout', () => {
     it('should render HeaderPanel and pass to it correct props', () => {
       const props = {
         dateHeaderData,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
         timeCellTemplate: () => null,
         dateCellTemplate: () => null,
         isRenderDateHeader: true,
 
-        groupPanelCellBaseColSpan: 4,
         groupOrientation: 'horizontal',
         groupByDate: false,
         groups,
-        columnCountPerGroup: 32,
         resourceCellTemplate: () => null,
       };
       const layout = render({ props });
@@ -176,8 +178,10 @@ describe('OrdinaryLayout', () => {
         dataCellTemplate: () => null,
       };
       const layout = render({
-        props,
-        dateTableRef: 'dateTableRef',
+        props: {
+          ...props,
+          dateTableRef: 'dateTableRef',
+        },
       });
 
       const dateTable = layout.find(dateTableTemplate);
@@ -233,13 +237,15 @@ describe('OrdinaryLayout', () => {
     it('should render group panel when isRenderGroupPanel is true', () => {
       const resourceCellTemplate = () => null;
       const props = {
-        groupPanelCellBaseColSpan: 34,
         groupOrientation: 'vertical',
         groupByDate: false,
         groups,
-        columnCountPerGroup: 34,
         resourceCellTemplate,
         groupPanelClassName: 'groupPanelClassName',
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
       };
       const layout = render({
         isRenderGroupPanel: true,
@@ -261,11 +267,13 @@ describe('OrdinaryLayout', () => {
           groupOrientation: 'vertical',
           groupByDate: false,
           groups,
-          columnCountPerGroup: 34,
           resourceCellTemplate,
           height: 497,
-          baseColSpan: 34,
           className: 'groupPanelClassName',
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 34,
+          },
         });
     });
 
@@ -284,6 +292,7 @@ describe('OrdinaryLayout', () => {
         props: {
           isAllDayPanelSupported: true,
           dataCellTemplate,
+          allDayPanelRef: 'allDayPanelRef',
         },
         isStandaloneAllDayPanel: true,
         isSetAllDayTitleClass: true,
@@ -303,6 +312,7 @@ describe('OrdinaryLayout', () => {
           viewData,
           dataCellTemplate,
           visible: true,
+          tableRef: 'allDayPanelRef',
         });
       expect(allDayPanelTitle.props())
         .toEqual({
@@ -317,15 +327,15 @@ describe('OrdinaryLayout', () => {
     describe('Effects', () => {
       describe('groupPanelHeightEffect', () => {
         it('should set groupPanelHeight', () => {
-          const layout = new OrdinaryLayout({} as any);
-
-          layout.dateTableRef = {
-            current: {
-              getBoundingClientRect: () => ({
-                height: 325,
-              }),
+          const layout = new OrdinaryLayout({
+            dateTableRef: {
+              current: {
+                getBoundingClientRect: () => ({
+                  height: 325,
+                }),
+              },
             },
-          } as any;
+          } as any);
 
           layout.groupPanelHeightEffect();
 
@@ -334,11 +344,11 @@ describe('OrdinaryLayout', () => {
         });
 
         it('should work if tableRef was not initialized', () => {
-          const layout = new OrdinaryLayout({} as any);
-
-          layout.dateTableRef = {
-            current: null,
-          } as any;
+          const layout = new OrdinaryLayout({
+            dateTableRef: {
+              current: null,
+            },
+          } as any);
 
           layout.groupPanelHeightEffect();
 

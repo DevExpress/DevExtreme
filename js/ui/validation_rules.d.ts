@@ -2,12 +2,12 @@
  * @public
  */
 export interface ValidationCallbackData {
-    value?: string | number,
-    rule: any,
-    validator: any,
-    data?: any,
-    column?: any,
-    formItem?: any
+    value?: string | number;
+    rule: any;
+    validator: any;
+    data?: any;
+    column?: any;
+    formItem?: any;
 }
 
 /**

@@ -1,17 +1,17 @@
 import {
-    AnimationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    PositionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -19,13 +19,13 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
     dxPopupOptions,
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -92,12 +92,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -122,12 +122,12 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid

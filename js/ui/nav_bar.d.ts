@@ -3,16 +3,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxTabs, {
     dxTabsItem,
-    dxTabsOptions
+    dxTabsOptions,
 } from './tabs';
 
 /** @public */

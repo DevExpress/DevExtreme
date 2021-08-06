@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -12,27 +12,26 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import FileSystemItem from '../file_management/file_system_item';
 
 import {
-    dxContextMenuItem
+    dxContextMenuItem,
 } from './context_menu';
 
 import {
-    dxToolbarItem
+    dxToolbarItem,
 } from './toolbar';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
-
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
@@ -44,39 +43,38 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemIndex: number;
     readonly fileSystemItem?: FileSystemItem;
     readonly viewArea: 'navPane' | 'itemView';
-}
+};
 
 /** @public */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
     readonly fileSystemItem?: FileSystemItem;
     readonly targetElement?: DxElement;
     readonly viewArea: 'navPane' | 'itemView';
-}
+};
 
 /** @public */
 export type CurrentDirectoryChangedEvent = EventInfo<dxFileManager> & {
     readonly directory: FileSystemItem;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxFileManager>;
 
 /** @public */
-export type ErrorOccurredEvent =  EventInfo<dxFileManager> & {
+export type ErrorOccurredEvent = EventInfo<dxFileManager> & {
     readonly errorCode?: number;
     errorText?: string;
     readonly fileSystemItem?: FileSystemItem;
-}
+};
 
 /** @public */
-export type FocusedItemChangedEvent =  EventInfo<dxFileManager> & {
+export type FocusedItemChangedEvent = EventInfo<dxFileManager> & {
     readonly item?: FileSystemItem;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxFileManager>;
-
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
@@ -84,22 +82,22 @@ export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
 /** @public */
 export type SelectedFileOpenedEvent = EventInfo<dxFileManager> & {
     readonly file: FileSystemItem;
-}
+};
 
 /** @public */
-export type SelectionChangedEvent =  EventInfo<dxFileManager> & {
+export type SelectionChangedEvent = EventInfo<dxFileManager> & {
     readonly currentSelectedItemKeys: Array<string>;
     readonly currentDeselectedItemKeys: Array<string>;
     readonly selectedItems: Array<FileSystemItem>;
     readonly selectedItemKeys: Array<string>;
-}
+};
 
 /** @public */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -163,24 +161,24 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
          * @docid
          * @default ["thumbnail", "name", "dateModified", "size"]
          */
-        columns?: Array<dxFileManagerDetailsColumn | string>
-      },
+        columns?: Array<dxFileManagerDetailsColumn | string>;
+      };
       /**
        * @docid
        * @type Enums.FileManagerItemViewMode
        * @default "details"
        */
-      mode?: 'details' | 'thumbnails',
+      mode?: 'details' | 'thumbnails';
       /**
        * @docid
        * @default true
        */
-      showFolders?: boolean,
+      showFolders?: boolean;
       /**
        * @docid
        * @default true
        */
-      showParentFolder?: boolean
+      showParentFolder?: boolean;
     };
     /**
      * @docid
@@ -191,13 +189,13 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default true
        */
-      showPanel?: boolean,
+      showPanel?: boolean;
       /**
        * @docid
        * @default true
        */
-      showPopup?: boolean
-    }
+      showPopup?: boolean;
+    };
     /**
      * @docid
      * @default null
@@ -320,37 +318,37 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default false
        */
-      copy?: boolean,
+      copy?: boolean;
       /**
        * @docid
        * @default false
        */
-      create?: boolean,
+      create?: boolean;
       /**
        * @docid
        * @default false
        */
-      download?: boolean,
+      download?: boolean;
       /**
        * @docid
        * @default false
        */
-      move?: boolean,
+      move?: boolean;
       /**
        * @docid
        * @default false
        */
-      delete?: boolean,
+      delete?: boolean;
       /**
        * @docid
        * @default false
        */
-      rename?: boolean,
+      rename?: boolean;
       /**
        * @docid
        * @default false
        */
-      upload?: boolean
+      upload?: boolean;
     };
     /**
      * @docid
@@ -391,12 +389,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
        * @docid
        * @default 0
        */
-      maxFileSize?: number,
+      maxFileSize?: number;
       /**
        * @docid
        * @default 200000
        */
-      chunkSize?: number
+      chunkSize?: number;
     };
 }
 /**
@@ -545,7 +543,6 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      */
     menuItemTemplate?: template | (() => string | UserDefinedElement);
 }
-
 
 /**
  * @docid

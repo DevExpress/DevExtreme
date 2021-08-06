@@ -59,7 +59,6 @@ export const getDropDownViewSwitcher = (header, item) => {
             keyExpr: 'name',
             selectedItemKey: selectedView,
             displayExpr: 'text',
-            splitButton: true,
             elementAttr: {
                 class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
             },

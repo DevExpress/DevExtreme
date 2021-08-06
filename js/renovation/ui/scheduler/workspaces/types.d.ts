@@ -68,6 +68,11 @@ export interface GroupRenderItem extends GroupItem {
   isLastGroupCell?: boolean;
 }
 
+export interface GroupPanelData {
+  groupPanelItems: GroupRenderItem[][];
+  baseColSpan: number;
+}
+
 export interface Group {
   name: string;
   items: GroupItem[];

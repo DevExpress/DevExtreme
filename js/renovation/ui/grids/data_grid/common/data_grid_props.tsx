@@ -826,10 +826,10 @@ export class DataGridRowDragging {
   autoScroll?: boolean;
 
   @OneWay()
-  boundary?: string | UserDefinedElement;
+  boundary?: string | HTMLElement;
 
   @OneWay()
-  container?: string | UserDefinedElement;
+  container?: string | HTMLElement;
 
   @OneWay()
   cursorOffset?: string | { x?: number; y?: number };

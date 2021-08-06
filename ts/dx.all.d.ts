@@ -698,9 +698,9 @@ declare module DevExpress {
    */
   export function config(): globalConfig;
   /**
-   * [descr:config(config)]
-   */
-  export function config(config: globalConfig): void;
+                                                              * [descr:config(config)]
+                                                              */
+                                                             export function config(config: globalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -804,16 +804,27 @@ declare module DevExpress {
   export class DOMComponent<
     TProperties = DevExpress.DOMComponent.Properties
   > extends Component<TProperties> {
+    _templateManager: DevExpress.core.TemplateManager;
+
     constructor(
       element: DevExpress.core.UserDefinedElement,
       options?: TProperties
     );
+
+    /**
+     * [descr:DOMComponent.getInstance(element)]
+     */
+    static getInstance(
+      element: DevExpress.core.UserDefinedElement
+    ): DOMComponent<DevExpress.DOMComponent.Properties>;
+
     /**
      * [descr:DOMComponent.defaultOptions(rule)]
      */
     static defaultOptions<TProperties = DevExpress.DOMComponent.Properties>(
       rule: Partial<DevExpress.core.Rule<TProperties>>
     ): void;
+
     /**
      * [descr:DOMComponent.dispose()]
      */
@@ -822,12 +833,6 @@ declare module DevExpress {
      * [descr:DOMComponent.element()]
      */
     element(): DevExpress.core.DxElement;
-    /**
-     * [descr:DOMComponent.getInstance(element)]
-     */
-    static getInstance(
-      element: DevExpress.core.UserDefinedElement
-    ): DOMComponent<DevExpress.DOMComponent.Properties>;
 
     $element(): DevExpress.core.UserDefinedElement;
     _getTemplate(template: unknown): DevExpress.core.FunctionTemplate;
@@ -837,8 +842,7 @@ declare module DevExpress {
       fullName: string,
       value: unknown,
       previousValue: unknown
-    );
-    _templateManager: DevExpress.core.TemplateManager;
+    ): void;
   }
   module DOMComponent {
     /**
@@ -850,6 +854,8 @@ declare module DevExpress {
      */
     type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
+  /* eslint-disable no-underscore-dangle */
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1324,9 +1330,9 @@ declare module DevExpress {
     stop(): void;
   }
   /**
-   * [descr:validationEngine]
-   */
-  export class validationEngine {
+                                                                        * [descr:validationEngine]
+                                                                        */
+                                                                       export class validationEngine {
     /**
      * [descr:validationEngine.getGroupConfig()]
      */
@@ -1518,6 +1524,7 @@ declare module DevExpress.core {
       transclude?: boolean;
     }): DxElement;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1543,6 +1550,7 @@ declare module DevExpress.core {
    * [descr:template]
    */
   export type template = string | Function | UserDefinedElement;
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1571,10 +1579,10 @@ declare module DevExpress.core {
 }
 declare module DevExpress.core.utils {
   /**
-   * [descr:DxPromise]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DxPromise<T = void> = {} extends PromiseType<T>
+                                                                         * [descr:DxPromise]
+                                                                         * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                         */
+                                                                        export type DxPromise<T = void> = {} extends PromiseType<T>
     ? Promise<T>
     : PromiseType<T>;
 }
@@ -2251,14 +2259,14 @@ declare module DevExpress.data {
      */
     interface PromiseExtension<T> {
       then<TResult1 = T, TResult2 = never>(
-        onfulfilled?:
+        onFulfilled?:
           | ((
               value: T,
               extraParameters?: T
             ) => TResult1 | PromiseLike<TResult1>)
           | undefined
           | null,
-        onrejected?:
+        onRejected?:
           | ((reason: any) => TResult2 | PromiseLike<TResult2>)
           | undefined
           | null
@@ -3003,9 +3011,9 @@ declare module DevExpress.data {
         summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
       });
   /**
-   * [descr:XmlaStore]
-   */
-  export class XmlaStore {
+                                                                        * [descr:XmlaStore]
+                                                                        */
+                                                                       export class XmlaStore {
     constructor(options?: XmlaStoreOptions);
   }
   /**
@@ -3049,9 +3057,9 @@ declare module DevExpress.data.utils {
 }
 declare module DevExpress.data.utils.odata {
   /**
-   * [descr:Utils.keyConverters]
-   */
-  export var keyConverters: any;
+                                                                                                                                                          * [descr:Utils.keyConverters]
+                                                                                                                                                          */
+                                                                                                                                                         export var keyConverters: any;
 }
 declare module DevExpress.events {
   export interface Cancelable {
@@ -3063,6 +3071,7 @@ declare module DevExpress.events {
     readonly value?: any;
     readonly previousValue?: any;
   }
+  /* eslint-enable @typescript-eslint/no-empty-interface */
   /**
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -3087,14 +3096,17 @@ declare module DevExpress.events {
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
+
     /**
      * [descr:EventObject.data]
      */
     data: any;
+
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
     /**
      * [descr:EventObject.target]
      */
@@ -3769,9 +3781,9 @@ declare module DevExpress.fileManagement {
     ): DevExpress.core.utils.DxPromise<any>;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+                                                                   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                   */
+                                                                  export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * [descr:FileSystemProviderBaseOptions.dateModifiedExpr]
      */
@@ -3912,9 +3924,9 @@ declare module DevExpress.localization {
    */
   export function locale(): string;
   /**
-   * [descr:localization.locale(locale)]
-   */
-  export function locale(locale: string): void;
+                                                              * [descr:localization.locale(locale)]
+                                                              */
+                                                             export function locale(locale: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */
@@ -4305,9 +4317,9 @@ declare module DevExpress.ui {
     getDataSource(): DevExpress.data.DataSource;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
+                                                                   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                   */
+                                                                  export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
@@ -4345,10 +4357,10 @@ declare module DevExpress.ui {
     valueExpr?: string | ((item: any) => string | number | boolean);
   }
   /**
-   * [descr:DraggableBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DraggableBase {}
+                                                                       * [descr:DraggableBase]
+                                                                       * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                       */
+                                                                      export interface DraggableBase {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -5113,13 +5125,9 @@ declare module DevExpress.ui {
      */
     hoverStateEnabled?: boolean;
     /**
-     * [descr:dxCheckBoxOptions.iconHeight]
+     * [descr:dxCheckBoxOptions.iconSize]
      */
-    iconHeight?: number | string;
-    /**
-     * [descr:dxCheckBoxOptions.iconWidth]
-     */
-    iconWidth?: number | string;
+    iconSize?: number | string;
     /**
      * [descr:dxCheckBoxOptions.name]
      */
@@ -5481,7 +5489,6 @@ declare module DevExpress.ui {
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: any): boolean;
     isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
     keyOf(obj: any): any;
     navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
@@ -8678,6 +8685,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9436,6 +9445,8 @@ declare module DevExpress.ui {
           | 'italic'
           | 'underline'
           | 'fontColor'
+          | 'lineStyle'
+          | 'lineWidth'
           | 'lineColor'
           | 'fillColor'
           | 'textAlignLeft'
@@ -9496,6 +9507,8 @@ declare module DevExpress.ui {
             | 'italic'
             | 'underline'
             | 'fontColor'
+            | 'lineStyle'
+            | 'lineWidth'
             | 'lineColor'
             | 'fillColor'
             | 'textAlignLeft'
@@ -9587,6 +9600,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9652,6 +9667,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -9717,6 +9734,8 @@ declare module DevExpress.ui {
         | 'italic'
         | 'underline'
         | 'fontColor'
+        | 'lineStyle'
+        | 'lineWidth'
         | 'lineColor'
         | 'fillColor'
         | 'textAlignLeft'
@@ -13767,9 +13786,9 @@ declare module DevExpress.ui {
     escapeChar?: string | Array<string>;
   }
   /**
-   * [descr:dxItem]
-   */
-  export var dxItem: any;
+                                                                                                                                                          * [descr:dxItem]
+                                                                                                                                                          */
+                                                                                                                                                         export var dxItem: any;
   /**
    * [descr:dxList]
    */
@@ -22016,10 +22035,10 @@ declare module DevExpress.ui {
     type: 'required';
   }
   /**
-   * [descr:SearchBoxMixin]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export class SearchBoxMixin {
+                                                                        * [descr:SearchBoxMixin]
+                                                                        * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                        */
+                                                                       export class SearchBoxMixin {
     constructor(options?: SearchBoxMixinOptions);
   }
   /**
@@ -22113,9 +22132,9 @@ declare module DevExpress.ui {
    */
   export type Template = DevExpress.core.template;
   /**
-   * [descr:ui.themes]
-   */
-  export class themes {
+                                                                        * [descr:ui.themes]
+                                                                        */
+                                                                       export class themes {
     /**
      * [descr:ui.themes.current()]
      */
@@ -33743,10 +33762,10 @@ declare module DevExpress.viz {
 }
 declare module DevExpress.viz.map {
   /**
-   * [descr:viz.map.projection(data)]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const projection: {
+                                                                      * [descr:viz.map.projection(data)]
+                                                                      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+                                                                      */
+                                                                     export const projection: {
     /**
      * [descr:viz.map.projection.add(name, projection)]
      */

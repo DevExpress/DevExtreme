@@ -423,7 +423,7 @@ QUnit.module('Checkbox', function() {
                     assert.strictEqual(this.$element.css('height'), `${iconSize}px`, 'root element height equals icon height');
                 });
 
-                QUnit.test('checkbox root element size should not adjust to "iconWidth"/"iconHeight" options if "widht"/"height" options not defined', function(assert) {
+                QUnit.test('checkbox root element size should not adjust to "iconSize" options if "widht"/"height" options not defined', function(assert) {
                     const iconSize = 45;
                     const width = 30;
                     const height = 30;
