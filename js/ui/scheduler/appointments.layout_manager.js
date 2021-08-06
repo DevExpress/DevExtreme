@@ -191,11 +191,7 @@ class AppointmentLayoutManager {
     }
 
     getRenderingStrategyInstance() {
-        if(!this._renderingStrategyInstance) {
-            this._initRenderingStrategy();
-        }
-
-        return this._renderingStrategyInstance;
+        return this.appointmentViewModel.getRenderingStrategy();
     }
 }
 
