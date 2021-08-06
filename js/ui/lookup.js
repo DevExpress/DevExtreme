@@ -991,7 +991,7 @@ const Lookup = DropDownList.inherit({
         } else {
             this._popup.option('closeOnTargetScroll', false);
             callback();
-            this._closeOnTargetScrollTimer = setTimeout(() => {
+            this._closeOnTargetScrollTimer = setTimeout(() => { // T1018037
                 this._popup.option('closeOnTargetScroll', closeOnTargetScroll);
             });
         }
@@ -1064,6 +1064,9 @@ const Lookup = DropDownList.inherit({
 
     _clean: function() {
         this._$fieldWrapper.remove();
+        clearTimeout(this._closeOnTargetScrollTimer);
+
+        this._closeOnTargetScrollTimer = null;
         this._$searchBox = null;
         delete this._inkRipple;
         this.callBase();
@@ -1084,13 +1087,6 @@ const Lookup = DropDownList.inherit({
             'position': { since: '20.1', alias: 'dropDownOptions.position' },
             'animation': { since: '20.1', alias: 'dropDownOptions.animation' }
         });
-    },
-
-    _dispose: function() {
-        clearTimeout(this._closeOnTargetScrollTimer);
-        this._closeOnTargetScrollTimer = null;
-
-        this.callBase();
     },
 
     _optionChanged: function(args) {
