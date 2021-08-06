@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -18,16 +18,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
     dxMultiViewItem,
-    dxMultiViewOptions
+    dxMultiViewOptions,
 } from './multi_view';
 
 /** @public */
@@ -61,19 +61,19 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead

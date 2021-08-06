@@ -1,30 +1,30 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
     PaletteType,
-    PaletteExtensionModeType
+    PaletteExtensionModeType,
 } from '../palette';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 import {
-    Format
+    Format,
 } from '../../localization';
 
 import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
 } from '../core/base_widget';
 
 export interface TooltipInfo {
@@ -181,15 +181,15 @@ export interface BaseGaugeRangeContainer {
        * @docid BaseGaugeOptions.rangeContainer.ranges.color
        *
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
        */
-      endValue?: number,
+      endValue?: number;
       /**
        * @docid BaseGaugeOptions.rangeContainer.ranges.startValue
        */
-      startValue?: number
+      startValue?: number;
     }>;
 }
 /** @namespace DevExpress.viz */
@@ -236,27 +236,27 @@ export interface BaseGaugeScale {
        * @docid BaseGaugeOptions.scale.minorTick.color
        * @default '#FFFFFF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.length
        * @default 3
        */
-      length?: number,
+      length?: number;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.opacity
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.visible
        * @default false
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseGaugeOptions.scale.minorTick.width
        * @default 1
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseGaugeOptions.scale.minorTickInterval
@@ -286,27 +286,27 @@ export interface BaseGaugeScale {
        * @docid BaseGaugeOptions.scale.tick.color
        * @default '#FFFFFF'
        */
-      color?: string,
+      color?: string;
       /**
        * @docid BaseGaugeOptions.scale.tick.length
        * @default 5
        */
-      length?: number,
+      length?: number;
       /**
        * @docid BaseGaugeOptions.scale.tick.opacity
        * @default 1
        */
-      opacity?: number,
+      opacity?: number;
       /**
        * @docid BaseGaugeOptions.scale.tick.visible
        * @default true
        */
-      visible?: boolean,
+      visible?: boolean;
       /**
        * @docid BaseGaugeOptions.scale.tick.width
        * @default 2
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid BaseGaugeOptions.scale.tickInterval
@@ -326,7 +326,7 @@ export interface BaseGaugeScaleLabel {
      * @notUsedInTheme
      * @public
      */
-    customizeText?: ((scaleValue: { value?: number, valueText?: string }) => string);
+    customizeText?: ((scaleValue: { value?: number; valueText?: string }) => string);
     /**
      * @docid BaseGaugeOptions.scale.label.font
      * @default '#767676' &prop(color)
@@ -371,7 +371,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((scaleValue: { value?: number; valueText?: string }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
@@ -381,7 +381,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
+    customizeTooltip?: ((scaleValue: { value?: number; valueText?: string }) => any);
     /**
      * @docid BaseGaugeOptions.tooltip.interactive
      * @default false
@@ -555,25 +555,25 @@ export interface CommonIndicator {
        * @default undefined
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string),
+      customizeText?: ((indicatedValue: { value?: number; valueText?: string }) => string);
       /**
        * @docid
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        * @default 14 &prop(size)
        */
-      font?: Font,
+      font?: Font;
       /**
        * @docid
        * @extends CommonVizFormat
        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
        */
-      format?: Format,
+      format?: Format;
       /**
        * @docid
        * @default 0
        * @propertyOf circularRangeBar,linearRangeBar
        */
-      indent?: number
+      indent?: number;
     };
     /**
      * @docid

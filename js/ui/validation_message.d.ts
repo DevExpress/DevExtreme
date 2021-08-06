@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import dxOverlay, {
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
 /** @namespace DevExpress.ui */

@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,16 +17,16 @@ import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 import {
-    dxToolbarItem
+    dxToolbarItem,
 } from './toolbar';
 
 /** @public */
@@ -293,7 +293,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @return Object
      * @public
      */
-    getSelection(focus?: boolean|undefined): any;
+    getSelection(focus?: boolean | undefined): any;
     /**
      * @docid
      * @publicName getText(index, length)

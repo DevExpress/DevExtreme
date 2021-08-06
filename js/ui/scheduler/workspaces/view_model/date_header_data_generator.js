@@ -1,5 +1,5 @@
 import dateUtils from '../../../../core/utils/date';
-import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount } from '../utils/base';
+import { getHeaderCellText, formatWeekdayAndDay, getHorizontalGroupCount, getTotalCellCountByCompleteData, getDisplayedCellCount } from '../utils/base';
 
 export class DateHeaderDataGenerator {
     constructor(viewDataGenerator) {
@@ -124,7 +124,7 @@ export class DateHeaderDataGenerator {
         });
     }
 
-    generateDateHeaderData(completeDateHeaderMap, options) {
+    generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options) {
         const {
             isGenerateWeekDaysHeaderData,
             cellWidth,
@@ -142,6 +142,7 @@ export class DateHeaderDataGenerator {
             weekDayRowConfig = this._generateDateHeaderDataRow(
                 options,
                 completeDateHeaderMap,
+                completeViewDataMap,
                 this._viewDataGenerator.getCellCountInDay(
                     startDayHour, endDayHour, hoursInterval,
                 ),
@@ -155,6 +156,7 @@ export class DateHeaderDataGenerator {
         const datesRowConfig = this._generateDateHeaderDataRow(
             options,
             completeDateHeaderMap,
+            completeViewDataMap,
             1,
             isGenerateWeekDaysHeaderData ? 1 : 0,
             validCellWidth,
@@ -175,11 +177,17 @@ export class DateHeaderDataGenerator {
         };
     }
 
-    _generateDateHeaderDataRow(options, completeDateHeaderMap, baseColSpan, rowIndex, cellWidth) {
+    _generateDateHeaderDataRow(
+        options,
+        completeDateHeaderMap,
+        completeViewDataMap,
+        baseColSpan,
+        rowIndex,
+        cellWidth,
+    ) {
         const {
             startCellIndex,
             cellCount,
-            totalCellCount,
             isProvideVirtualCellsWidth,
             groups,
             groupOrientation,
@@ -189,7 +197,9 @@ export class DateHeaderDataGenerator {
         const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
         const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
         const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
-        const actualCellCount = Math.ceil((startCellIndex + cellCount) / colSpan);
+        const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
+        const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / colSpan);
+        const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
 
         const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
 

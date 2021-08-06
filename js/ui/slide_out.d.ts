@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,13 +22,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */

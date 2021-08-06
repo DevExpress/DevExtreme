@@ -1,4 +1,6 @@
-import { FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation } from './index';
+import {
+ FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
+} from './index';
 import { DxPromise } from '../core/utils/deferred';
 import Store, { StoreOptions } from './abstract_store';
 import { CustomStoreOptions } from './custom_store';
@@ -147,7 +149,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return boolean
      * @public
      */
-    cancel(operationId : number): boolean;
+    cancel(operationId: number): boolean;
     /**
      * @docid
      * @publicName dispose()
@@ -264,7 +266,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return this
      * @public
      */
-    on(events: {[key in EventName]?: Function}): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * @docid
      * @publicName pageIndex()
@@ -414,4 +416,4 @@ export default class DataSource<TKey = any, TValue = any> {
     totalCount(): number;
 }
 
-type EventName = 'changed'|'loadError'|'loadingChanged';
+type EventName = 'changed' | 'loadError' | 'loadingChanged';

@@ -1,5 +1,5 @@
 import {
-    PositionConfig
+    PositionConfig,
 } from '../animation/position';
 
 /**
@@ -22,6 +22,7 @@ declare function config(): globalConfig;
  * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 declare function config(config: globalConfig): void;
 
 /**
@@ -62,39 +63,39 @@ export interface globalConfig {
        * @docid
        * @default "close"
        */
-      closeIcon?: string,
+      closeIcon?: string;
       /**
        * @docid
        * @type Enums.floatingActionButtonDirection
        * @default "auto"
        */
-      direction?: 'auto' | 'up' | 'down',
+      direction?: 'auto' | 'up' | 'down';
       /**
        * @docid
        * @default "add"
        */
-      icon?: string,
+      icon?: string;
       /**
        * @docid
        * @default ""
        */
-      label?: string,
+      label?: string;
       /**
        * @docid
        * @default 5
        */
-      maxSpeedDialActionCount?: number,
+      maxSpeedDialActionCount?: number;
       /**
        * @docid
        * @type Enums.PositionAlignment|PositionConfig|function
        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
        */
-      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function,
+      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
       /**
        * @docid
        * @default false
        */
-      shading?: boolean
+      shading?: boolean;
     };
     /**
      * @docid
@@ -140,6 +141,5 @@ export interface globalConfig {
      */
     useLegacyVisibleIndex?: boolean;
 }
-
 
 export default config;

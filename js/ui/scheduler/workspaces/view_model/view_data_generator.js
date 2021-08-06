@@ -6,6 +6,10 @@ import {
     calculateDayDuration,
     isHorizontalView,
     getStartViewDateWithoutDST,
+    getDisplayedRowCount,
+    getTotalCellCountByCompleteData,
+    getTotalRowCountByCompleteData,
+    getDisplayedCellCount,
 } from '../utils/base';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
@@ -216,8 +220,10 @@ export class ViewDataGenerator {
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
 
+        const displayedRowCount = getDisplayedRowCount(rowCount, completeViewDataMap);
+
         const dateTableMap = completeViewDataMap
-            .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
+            .slice(correctedStartRowIndex, correctedStartRowIndex + displayedRowCount)
             .map((row, rowIndex) => sliceCells(row, rowIndex, startCellIndex, cellCount));
 
         return {
@@ -230,14 +236,12 @@ export class ViewDataGenerator {
         return !isVerticalGrouping && isAllDayPanelVisible;
     }
 
-    getViewDataFromMap(viewDataMap, options) {
+    getViewDataFromMap(completeViewDataMap, viewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
-            totalCellCount,
-            totalRowCount,
             cellCount,
             rowCount,
             startRowIndex,
@@ -285,6 +289,11 @@ export class ViewDataGenerator {
             groupedData[0].allDayPanel = allDayPanelMap.map(({ cellData }) => cellData);
         }
 
+        const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
+        const totalRowCount = getTotalRowCountByCompleteData(completeViewDataMap);
+        const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
+        const displayedRowCount = getDisplayedRowCount(rowCount, completeViewDataMap);
+
         return {
             groupedData,
             topVirtualRowHeight,
@@ -293,9 +302,9 @@ export class ViewDataGenerator {
             rightVirtualCellWidth: isProvideVirtualCellsWidth ? rightVirtualCellWidth : undefined,
             isGroupedAllDayPanel,
             leftVirtualCellCount: startCellIndex,
-            rightVirtualCellCount: cellCount === undefined ? 0 : totalCellCount - startCellIndex - cellCount,
+            rightVirtualCellCount: cellCount === undefined ? 0 : totalCellCount - startCellIndex - displayedCellCount,
             topVirtualRowCount: startRowIndex,
-            bottomVirtualRowCount: totalRowCount - startRowIndex - rowCount,
+            bottomVirtualRowCount: totalRowCount - startRowIndex - displayedRowCount,
         };
     }
 
