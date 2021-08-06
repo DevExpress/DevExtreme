@@ -943,16 +943,34 @@ const Lookup = DropDownList.inherit({
         this._refreshSelected();
     },
 
+    _runWithoutCloseOnScroll: function(callback) {
+        // NOTE: Focus can trigger "scroll" event
+
+        const { _scrollToSelectedItemEnabled, closeOnTargetScroll } = this.option();
+
+        if(!_scrollToSelectedItemEnabled) {
+            callback();
+        } else {
+            this._popup.option('closeOnTargetScroll', false);
+            callback();
+            this._closeOnTargetScrollTimer = setTimeout(() => {
+                this._popup?.option('closeOnTargetScroll', closeOnTargetScroll);
+            });
+        }
+    },
+
     _setFocusPolicy: function() {
         if(!this.option('focusStateEnabled')) {
             return;
         }
 
-        if(this.option('searchEnabled')) {
-            this._searchBox.focus();
-        } else {
-            this._$list.get(0).focus({ preventScroll: true });
-        }
+        this._runWithoutCloseOnScroll(() => {
+            if(this.option('searchEnabled')) {
+                this._searchBox.focus();
+            } else {
+                eventsEngine.trigger(this._$list, 'focus');
+            }
+        });
     },
 
     _focusTarget: function() {
@@ -1027,6 +1045,13 @@ const Lookup = DropDownList.inherit({
             'position': { since: '20.1', alias: 'dropDownOptions.position' },
             'animation': { since: '20.1', alias: 'dropDownOptions.animation' }
         });
+    },
+
+    _dispose: function() {
+        clearTimeout(this._closeOnTargetScrollTimer);
+        this._closeOnTargetScrollTimer = null;
+
+        this.callBase();
     },
 
     _optionChanged: function(args) {

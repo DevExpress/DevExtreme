@@ -3247,9 +3247,11 @@ if(devices.real().deviceType === 'desktop') {
 QUnit.module('default options', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('Check default popupWidth, popupHeight, position.of for Material theme', function(assert) {
