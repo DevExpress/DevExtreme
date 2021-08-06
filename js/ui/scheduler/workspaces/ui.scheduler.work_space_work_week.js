@@ -11,8 +11,6 @@ const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     get type() { return VIEWS.WORK_WEEK; }
 
-    get isWorkView() { return true; }
-
     constructor(...args) {
         super(...args);
 

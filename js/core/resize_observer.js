@@ -1,10 +1,16 @@
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from './utils/window';
 const window = getWindow();
 
-class ResizeObserver {
-    constructor(options) {
+const ResizeObserver = (function() {
+    let instance;
+
+    function ResizeObserver(options) {
         if(!hasWindow()) {
             return;
+        }
+
+        if(instance) {
+            return instance;
         }
 
         this._observer = new window.ResizeObserver((...args) => {
@@ -13,19 +19,22 @@ class ResizeObserver {
                 options.callback(...args);
             }
         });
+        return instance = this;
     }
 
-    observe(element) {
+    ResizeObserver.prototype.observe = function(element) {
         this._observer?.observe(element);
-    }
+    };
 
-    unobserve(element) {
+    ResizeObserver.prototype.unobserve = function(element) {
         this._observer?.unobserve(element);
-    }
+    };
 
-    disconnect() {
+    ResizeObserver.prototype.disconnect = function() {
         this._observer?.disconnect();
-    }
-}
+    };
+
+    return ResizeObserver;
+})();
 
 export default ResizeObserver;

@@ -1,3 +1,4 @@
+import { getDisplayedRowCount } from '../utils/base';
 import { getTimePanelCellText } from '../utils/week';
 
 export class TimePanelDataGenerator {
@@ -75,8 +76,9 @@ export class TimePanelDataGenerator {
         const indexDifference = isVerticalGrouping || !isAllDayPanelVisible ? 0 : 1;
         const correctedStartRowIndex = startRowIndex + indexDifference;
 
+        const displayedRowCount = getDisplayedRowCount(rowCount, completeTimePanelMap);
         const timePanelMap = completeTimePanelMap
-            .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount);
+            .slice(correctedStartRowIndex, correctedStartRowIndex + displayedRowCount);
 
         const timePanelData = {
             topVirtualRowHeight,

@@ -17,6 +17,7 @@ import {
   DateHeaderData,
   DateTimeCellTemplateProps,
   Group,
+  GroupPanelData,
   ResourceCellTemplateProps,
   TimePanelData,
 } from '../types';
@@ -34,7 +35,6 @@ export const viewFunction = ({
   isRenderGroupPanel,
   isStandaloneAllDayPanel,
   isSetAllDayTitleClass,
-  dateTableRef,
   groupPanelHeight,
 
   props: {
@@ -45,12 +45,11 @@ export const viewFunction = ({
     viewData,
     timePanelData,
     dateHeaderData,
+    groupPanelData,
     groupOrientation,
     isRenderDateHeader,
-    groupPanelCellBaseColSpan,
     groups,
     groupByDate,
-    columnCountPerGroup,
     groupPanelClassName,
     isAllDayPanelSupported,
 
@@ -58,6 +57,9 @@ export const viewFunction = ({
     timeCellTemplate,
     dateCellTemplate,
     resourceCellTemplate,
+
+    dateTableRef,
+    allDayPanelRef,
   },
 }: OrdinaryLayout): JSX.Element => (
   <Widget
@@ -72,15 +74,14 @@ export const viewFunction = ({
     <table className="dx-scheduler-header-panel">
       <HeaderPanel
         dateHeaderData={dateHeaderData}
+        groupPanelData={groupPanelData}
         timeCellTemplate={timeCellTemplate}
         dateCellTemplate={dateCellTemplate}
         isRenderDateHeader={isRenderDateHeader}
 
-        groupPanelCellBaseColSpan={groupPanelCellBaseColSpan}
         groupOrientation={groupOrientation}
         groupByDate={groupByDate}
         groups={groups}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     </table>
@@ -89,6 +90,7 @@ export const viewFunction = ({
         visible={isStandaloneAllDayPanel}
         viewData={viewData}
         dataCellTemplate={dataCellTemplate}
+        tableRef={allDayPanelRef}
       />
     )}
     <Scrollable
@@ -98,12 +100,11 @@ export const viewFunction = ({
     >
       {isRenderGroupPanel && (
         <GroupPanel
-          baseColSpan={groupPanelCellBaseColSpan}
+          groupPanelData={groupPanelData}
           className={groupPanelClassName}
           groupOrientation={groupOrientation}
           groupByDate={groupByDate}
           groups={groups}
-          columnCountPerGroup={columnCountPerGroup}
           resourceCellTemplate={resourceCellTemplate}
           height={groupPanelHeight}
         />
@@ -149,19 +150,20 @@ export class OrdinaryLayoutProps extends LayoutProps {
 
   @OneWay() dateHeaderData!: DateHeaderData;
 
+  @OneWay() groupPanelData: GroupPanelData = {
+    groupPanelItems: [],
+    baseColSpan: 1,
+  };
+
   @OneWay() intervalCount = 1;
 
   @OneWay() className = '';
 
   @OneWay() isRenderDateHeader = true;
 
-  @OneWay() groupPanelCellBaseColSpan = 1;
-
   @OneWay() groups: Group[] = [];
 
   @OneWay() groupByDate = false;
-
-  @OneWay() columnCountPerGroup = 1;
 
   @OneWay() groupPanelClassName:
   'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table'
@@ -174,6 +176,10 @@ export class OrdinaryLayoutProps extends LayoutProps {
   @OneWay() isAllDayPanelSupported = false;
 
   @OneWay() isAllDayPanelVisible = false;
+
+  @ForwardRef() dateTableRef!: RefObject<HTMLTableElement>;
+
+  @ForwardRef() allDayPanelRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({
@@ -181,13 +187,10 @@ export class OrdinaryLayoutProps extends LayoutProps {
   view: viewFunction,
 })
 export class OrdinaryLayout extends JSXComponent<
-OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData'
+OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
 >() {
   @InternalState()
   groupPanelHeight: number | undefined;
-
-  @ForwardRef()
-  dateTableRef!: RefObject<HTMLTableElement>;
 
   get classes(): string {
     const {
@@ -252,6 +255,6 @@ OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderDa
 
   @Effect()
   groupPanelHeightEffect(): void {
-    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
+    this.groupPanelHeight = this.props.dateTableRef.current?.getBoundingClientRect().height;
   }
 }

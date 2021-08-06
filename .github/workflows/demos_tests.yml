@@ -1,9 +1,10 @@
 name: Demos visual tests
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on: [pull_request, workflow_dispatch]
 
 jobs:
   demos_build:
@@ -24,16 +25,15 @@ jobs:
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-node
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build devextreme package
       run: npm run build-npm-devextreme
@@ -44,7 +44,7 @@ jobs:
 
     - name: Install packages for devextreme-demos
       working-directory: ./devextreme-demos
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Install devextreme package
       working-directory: ./devextreme-demos
