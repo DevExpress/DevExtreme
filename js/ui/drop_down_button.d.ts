@@ -73,10 +73,11 @@ export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid
+     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -137,10 +138,11 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<dxDropDownButtonItem | any>
      * @default null
      * @public
      */
-    items?: Array<dxDropDownButtonItem | any>;
+    items?: Array<Item | any>;
     /**
      * @docid
      * @default 'this'
@@ -298,9 +300,13 @@ export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
 }
 
 /**
- * @docid
- * @inherits dxListItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxDropDownButton
+ */
+export type Item = dxDropDownButtonItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxDropDownButtonItem extends dxListItem {
