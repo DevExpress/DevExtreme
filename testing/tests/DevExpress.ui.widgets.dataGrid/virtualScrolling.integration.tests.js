@@ -1070,7 +1070,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     // T644981
     QUnit.test('ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual', function(assert) {
-        this.clock.restore();
         const done = assert.async();
         // arrange, act
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1127,6 +1126,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
         });
+
+        this.clock.tick();
     });
 
     QUnit.test('scrolling after ungrouping should works correctly with large amount of data if row rendering mode is virtual', function(assert) {
