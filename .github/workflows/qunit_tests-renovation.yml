@@ -40,8 +40,7 @@ jobs:
       
     - name: Zip artifacts 
       run: |
-        7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts ./scss/bundles 
-        7z a -t7z -mx3 -mmt2 artifacts.7z widgets.json -r
+        7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts ./scss*/bundles .\testing*\tests\Renovation\widgets.json
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
