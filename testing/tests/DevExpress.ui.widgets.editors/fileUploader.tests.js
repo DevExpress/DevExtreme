@@ -1927,6 +1927,53 @@ QUnit.module('option change', moduleConfig, () => {
         const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         assert.equal($fileInput.val(), fakeFile.name, 'value was not set to empty string');
     });
+    QUnit.test('event subscriptions should be removed before widget is disposed of (T1016127)', function(assert) {
+        const customDropZone = $('<div>').addClass('dropZone').appendTo('#qunit-fixture');
+        const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+        const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
+        sinon.stub(instance, '_attachSelectFileDialogHandler');
+        sinon.stub(instance, '_detachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachDragEventHandlers');
+        sinon.stub(instance, '_detachDragEventHandlers');
+
+        instance.option({
+            uploadMode: 'useButtons',
+            dialogTrigger: '.trigger',
+            dropZone: '.dropZone'
+        });
+        this.clock.tick(100);
+        instance._detachSelectFileDialogHandler.reset();
+        instance._detachDragEventHandlers.reset();
+
+        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
+        let items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
+
+        assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
+        items = instance._attachDragEventHandlers.args[0];
+        assert.strictEqual(items.length, 1, '_attachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_attachDragEventHandlers args is valid');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._detachSelectFileDialogHandler.callCount, 1, '_detachSelectFileDialogHandler method called');
+        items = instance._detachSelectFileDialogHandler.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandler args is valid');
+
+        assert.strictEqual(instance._detachDragEventHandlers.callCount, 1, '_detachDragEventHandlers method called');
+        items = instance._detachDragEventHandlers.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_detachDragEventHandlers args is valid');
+
+        instance._attachSelectFileDialogHandler.restore();
+        instance._detachSelectFileDialogHandler.restore();
+        instance._attachDragEventHandlers.restore();
+        instance._detachDragEventHandlers.restore();
+        customDropZone.remove();
+        customDialogTrigger.remove();
+    });
 });
 
 QUnit.module('file uploading', moduleConfig, () => {
