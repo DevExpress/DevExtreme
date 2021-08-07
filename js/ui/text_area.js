@@ -7,7 +7,7 @@ import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
 import { addNamespace, eventData } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
-import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
+import scrollEvents from '../events/gesture/emitter.gesture.scroll';
 import { getVerticalOffsets, getElementBoxParams, parseHeight } from '../core/utils/size';
 import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';

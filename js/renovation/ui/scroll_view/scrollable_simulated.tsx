@@ -9,6 +9,7 @@ import {
   Mutable,
   ForwardRef,
 } from '@devextreme-generator/declarations';
+import '../../../events/gesture/emitter.gesture.scroll';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -23,7 +24,7 @@ import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../.
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-import '../../../events/gesture/emitter.gesture.scroll';
+
 import eventsEngine from '../../../events/core/events_engine';
 
 import {
