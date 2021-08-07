@@ -10,6 +10,7 @@ import {
   InternalState,
   ForwardRef,
 } from '@devextreme-generator/declarations';
+import '../../../events/gesture/emitter.gesture.scroll';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
@@ -32,7 +33,6 @@ import {
 import { TopPocketProps, TopPocket } from './top_pocket';
 import { BottomPocketProps, BottomPocket } from './bottom_pocket';
 import { nativeScrolling } from '../../../core/utils/support';
-import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   ScrollEventArgs,
