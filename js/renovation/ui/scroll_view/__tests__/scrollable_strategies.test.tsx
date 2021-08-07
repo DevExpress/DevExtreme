@@ -455,6 +455,8 @@ each([{
                         (getScrollRtlBehavior as jest.Mock)
                           .mockReturnValue(rtlBehavior);
 
+                        const onScrollHandler = jest.fn();
+
                         const event = { ...defaultEvent };
                         const helper = new ScrollableTestHelper({
                           direction,
@@ -462,14 +464,19 @@ each([{
                           reachBottomEnabled,
                           forceGeneratePockets,
                           rtlEnabled,
+                          onScroll: onScrollHandler,
                         });
 
                         helper.viewModel.eventForUserAction = event;
                         helper.initContainerPosition(scrollOffset);
                         helper.viewModel.handlePocketState = jest.fn();
+                        helper.viewModel.canRiseScrollAction = false;
 
                         helper.viewModel.scrollEffect();
                         emit('scroll');
+                        expect(helper.viewModel.canRiseScrollAction).toEqual(true);
+
+                        helper.viewModel.riseScroll();
 
                         const expectedArgs = expected;
                         expectedArgs.event = { ...defaultEvent };
@@ -482,7 +489,9 @@ each([{
                           delete expectedArgs.reachedBottom;
                         }
 
-                        helper.checkActionHandlerCalls(expect, ['onScroll'], [[expectedArgs]]);
+                        expect(onScrollHandler).toBeCalledTimes(1);
+                        expect(onScrollHandler).toBeCalledWith(expectedArgs);
+                        expect(helper.viewModel.canRiseScrollAction).toEqual(false);
                       });
                     });
                   });
@@ -500,7 +509,32 @@ each([{
           scrollable.scrollEffect();
           emit('scroll');
 
-          expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
+          expect(scrollable.riseScroll.bind(scrollable)).not.toThrow();
+        });
+
+        it('should not raise scrollAction when canRiseScrollAction is false', () => {
+          const onScrollHandler = jest.fn();
+          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+          scrollable.canRiseScrollAction = false;
+
+          scrollable.riseScroll();
+
+          expect(onScrollHandler).toBeCalledTimes(0);
+          scrollable.canRiseScrollAction = false;
+        });
+
+        it('should raise scrollAction when canRiseScrollAction is true', () => {
+          const onScrollHandler = jest.fn();
+          const scrollable = new Scrollable({ onScroll: onScrollHandler });
+
+          scrollable.canRiseScrollAction = true;
+          scrollable.getEventArgs = jest.fn(() => ({ fakeProp: 1 }));
+
+          scrollable.riseScroll();
+
+          expect(onScrollHandler).toBeCalledTimes(1);
+          expect(onScrollHandler).toBeCalledWith({ fakeProp: 1 });
+          scrollable.canRiseScrollAction = false;
         });
       });
     });
