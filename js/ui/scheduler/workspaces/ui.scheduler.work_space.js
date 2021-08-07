@@ -842,7 +842,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
 
-        headerPanelHeight && this._headerScrollable && this._headerScrollable.$element().height(headerPanelHeight + allDayPanelHeight);
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.option('height', headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.$element().css({
             'paddingBottom': allDayPanelHeight + headerPanelHeight + 'px',
