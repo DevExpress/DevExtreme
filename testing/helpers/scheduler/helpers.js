@@ -270,9 +270,7 @@ class Appointment extends ClickElementWrapper {
 
     click() {
         const clock = sinon.useFakeTimers();
-
         this.getElement().trigger('dxclick');
-
         clock.tick(300);
         clock.restore();
     }
