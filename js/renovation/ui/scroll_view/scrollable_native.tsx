@@ -238,6 +238,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @InternalState() needForceScrollbarsVisibility = false;
 
+  @InternalState() canRiseScrollAction = false;
+
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
   @InternalState() isLoadPanelVisible = false;
@@ -424,6 +426,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       });
   }
 
+  @Effect({ run: 'always' }) riseScroll(): void {
+    if (this.canRiseScrollAction) {
+      this.props.onScroll?.(this.getEventArgs());
+      this.canRiseScrollAction = false;
+    }
+  }
+
   @Effect() effectDisabledState(): void {
     if (this.props.disabled) {
       this.lock();
@@ -564,7 +573,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       this.moveScrollbars();
     }
 
-    this.props.onScroll?.(this.getEventArgs());
+    this.canRiseScrollAction = true;
 
     this.handlePocketState();
   }
