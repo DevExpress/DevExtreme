@@ -132,6 +132,8 @@ class AppointmentLayoutManager {
                 rowIndex,
                 topVirtualCellCount: undefined,
                 leftVirtualCellCount: undefined,
+                leftVirtualWidth: undefined,
+                topVirtualHeight: undefined,
                 hMax,
                 vMax,
                 info: {},
