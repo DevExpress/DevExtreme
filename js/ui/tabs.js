@@ -318,6 +318,8 @@ const Tabs = CollectionWidget.inherit({
         });
 
         this.$element().append(this._scrollable.$element());
+        // itemContainer is other DOM node after reinitialize of scrollable
+        this._$wrapper = this.$element().find(`.${TABS_WRAPPER_CLASS}`);
     },
 
     _scrollToItem: function(itemData) {
