@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 
 import { RefObject } from '@devextreme-generator/declarations';
 import {
-  clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
+  clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
 
 import {
@@ -130,7 +130,7 @@ describe('Scrollbar', () => {
 
     it('should subscribe to pointerDown event', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
       scrollbar.expand = jest.fn();
 
       scrollbar.pointerDownEffect();
@@ -139,20 +139,9 @@ describe('Scrollbar', () => {
       expect(scrollbar.expand).toHaveBeenCalledTimes(1);
     });
 
-    it('pointerDownEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerDownEffect();
-
-      expect(getEventHandlers('dxpointerdown').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerdown').length).toBe(0);
-    });
-
     it('Down & Up effects should add & remove scroll active class', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
+      scrollbar.scrollRef = { current: {} as HTMLElement } as RefObject;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
@@ -175,17 +164,6 @@ describe('Scrollbar', () => {
       emit('dxpointerup');
 
       expect(scrollbar.collapse).toHaveBeenCalledTimes(1);
-    });
-
-    it('pointerUpEffect should return unsubscribe callback', () => {
-      const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
-
-      const detach = scrollbar.pointerUpEffect();
-
-      expect(getEventHandlers('dxpointerup').length).toBe(1);
-      detach();
-      expect(getEventHandlers('dxpointerup').length).toBe(0);
     });
 
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
