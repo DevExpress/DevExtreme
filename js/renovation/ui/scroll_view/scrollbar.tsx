@@ -11,7 +11,7 @@ import {
 
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isDefined } from '../../../core/utils/type';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
@@ -26,9 +26,9 @@ import {
 } from './common/consts';
 
 import {
-  dxPointerDown,
-  dxPointerUp,
-} from '../../../events/short';
+  subscribeToDXPointerDownEvent,
+  subscribeToDXPointerUpEvent,
+} from '../../utils/subscribe_to_event';
 
 import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 import { ScrollableProps } from './scrollable_props';
@@ -128,27 +128,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
   @Effect()
-  pointerDownEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollbar';
-
-    dxPointerDown.on(this.scrollRef.current,
-      () => {
-        this.expand();
-      }, { namespace });
-
-    return (): void => dxPointerDown.off(this.scrollRef.current, { namespace });
+  pointerDownEffect(): EffectReturn {
+    return subscribeToDXPointerDownEvent(this.scrollRef.current, () => { this.expand(); });
   }
 
   @Effect()
-  pointerUpEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollbar';
-
-    dxPointerUp.on(domAdapter.getDocument(),
-      () => {
-        this.collapse();
-      }, { namespace });
-
-    return (): void => dxPointerUp.off(this.scrollRef.current, { namespace });
+  pointerUpEffect(): EffectReturn {
+    return subscribeToDXPointerUpEvent(domAdapter.getDocument(), () => { this.collapse(); });
   }
 
   @Method()

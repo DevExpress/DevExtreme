@@ -11,7 +11,12 @@ import {
   ForwardRef,
 } from '@devextreme-generator/declarations';
 import '../../../events/gesture/emitter.gesture.scroll';
-import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import {
+  subscribeToScrollEvent,
+  subscribeToDXScrollEndEvent,
+  subscribeToDXScrollMoveEvent,
+  subscribeToDXScrollStopEvent,
+} from '../../utils/subscribe_to_event';
 import { Widget, WidgetProps } from '../common/widget';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -64,9 +69,6 @@ import { Scrollbar } from './scrollbar';
 
 import {
   dxScrollInit,
-  dxScrollMove,
-  dxScrollEnd,
-  dxScrollStop,
 } from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { isVisible } from './utils/is_element_visible';
@@ -472,39 +474,29 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Effect()
-  moveEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollMove.on(this.wrapperRef.current,
+  moveEffect(): EffectReturn {
+    return subscribeToDXScrollMoveEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleMove(event);
-      }, { namespace });
-
-    return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
+      },
+    );
   }
 
   @Effect()
-  endEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollEnd.on(this.wrapperRef.current,
-      () => {
-        this.handleEnd();
-      }, { namespace });
-
-    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
+  endEffect(): EffectReturn {
+    return subscribeToDXScrollEndEvent(
+      this.wrapperRef.current,
+      () => { this.handleEnd(); },
+    );
   }
 
   @Effect()
-  stopEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollStop.on(this.wrapperRef.current,
-      () => {
-        this.handleStop();
-      }, { namespace });
-
-    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
+  stopEffect(): EffectReturn {
+    return subscribeToDXScrollStopEvent(
+      this.wrapperRef.current,
+      () => { this.handleStop(); },
+    );
   }
 
   @Effect({ run: 'once' })
