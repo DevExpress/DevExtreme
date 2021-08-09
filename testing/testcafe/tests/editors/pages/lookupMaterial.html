@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lookup in Material theme</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.material.blue.light.css"/>
+
+    <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+<body>
+    <div id='lookup'></div>
+    <script>
+        $(function() {
+            const $lookup = $('#lookup');
+            $lookup.css({ top: $(window).height() - $lookup.height()});
+            $lookup.dxLookup({
+                items: [1, 2, 3],
+                usePopover: false,
+                opened: true,
+                dropDownOptions: {
+                    closeOnTargetScroll: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>

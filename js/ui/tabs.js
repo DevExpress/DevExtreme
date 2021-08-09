@@ -468,3 +468,9 @@ Tabs.ItemClass = TabsItem;
 registerComponent('dxTabs', Tabs);
 
 export default Tabs;
+
+/**
+ * @name dxTabsItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

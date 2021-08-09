@@ -601,7 +601,11 @@ testComponentDefaults(Widget,
 testComponentDefaults(Popover,
     {},
     {
-        position: 'bottom',
+        position: {
+            at: 'bottom center',
+            collision: 'fit flip',
+            my: 'top center'
+        },
         target: undefined,
         animation: {
             show: {

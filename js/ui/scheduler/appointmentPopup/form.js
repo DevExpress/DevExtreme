@@ -22,10 +22,6 @@ export const APPOINTMENT_FORM_GROUP_NAMES = {
     Recurrence: 'recurrenceGroup'
 };
 
-const getAllDayEndDate = startDate => {
-    return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
-};
-
 const getStartDateWithStartHour = (startDate, startDayHour) => {
     return new Date(new Date(startDate).setHours(startDayHour));
 };
@@ -272,8 +268,8 @@ export class AppointmentForm {
                             if(this.semaphore.isFree() && startDate) {
                                 if(value) {
                                     const allDayStartDate = dateUtils.trimTime(startDate);
-                                    startDateEditor.option('value', allDayStartDate);
-                                    endDateEditor.option('value', getAllDayEndDate(allDayStartDate));
+                                    startDateEditor.option('value', new Date(allDayStartDate));
+                                    endDateEditor.option('value', new Date(allDayStartDate));
                                 } else {
                                     const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
                                     const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);

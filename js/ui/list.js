@@ -5,3 +5,9 @@ import registerComponent from '../core/component_registrator';
 registerComponent('dxList', ListEdit);
 
 export default ListEdit;
+
+/**
+ * @name dxListItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

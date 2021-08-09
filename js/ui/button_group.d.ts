@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -12,16 +12,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -70,9 +70,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<dxButtonGroupItem>
      * @public
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default 'text'
@@ -146,10 +147,14 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
 export default class dxButtonGroup extends Widget<dxButtonGroupOptions> { }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxButtonGroup
+ */
+export type Item = dxButtonGroupItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**

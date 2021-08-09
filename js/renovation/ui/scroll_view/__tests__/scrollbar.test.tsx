@@ -234,7 +234,7 @@ describe('Scrollbar', () => {
         each([0, 80]).describe('maxOffset: %o', (maxOffset) => {
           each([0, 100, 500]).describe('contentSize: %o', (contentSize) => {
             each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {
-              each([true, false]).describe('containerDimensionsIsNotZero: %o', (containerDimensionsIsNotZero) => {
+              each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
                 it('moveToBoundaryOnSizeChange() should call moveTo(boundaryLocation)', () => {
                   const topPocketSize = 85;
 
@@ -246,7 +246,7 @@ describe('Scrollbar', () => {
                     scrollLocation,
                     contentSize,
                     containerSize,
-                    containerDimensionsIsNotZero,
+                    containerHasSizes,
                   });
 
                   const minOffset = -300;
@@ -273,7 +273,7 @@ describe('Scrollbar', () => {
                         const contentSizeChanged = contentSize !== prevContentSize;
                         const containerSizeChanged = containerSize !== prevContainerSize;
 
-                        if (containerDimensionsIsNotZero
+                        if (containerHasSizes
                           && contentSize > 0
                           && (contentSizeChanged || containerSizeChanged)
                           && scrollLocation <= maxOffset

@@ -14,7 +14,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
             options.startDayHour,
             options.startDate,
             this._getIntervalDuration(options.intervalCount),
-            options.firstDayOfWeek,
+            this.getFirstDayOfWeek(options.firstDayOfWeek),
         );
     }
 }

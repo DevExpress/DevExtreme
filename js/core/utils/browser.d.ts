@@ -6,7 +6,7 @@ export type BrowserInfo = {
     unknown?: boolean;
     msie?: boolean;
     version?: string;
-}
+};
 
 declare const browser: BrowserInfo;
 export default browser;

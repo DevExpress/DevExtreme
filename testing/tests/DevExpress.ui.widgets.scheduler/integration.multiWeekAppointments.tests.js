@@ -433,7 +433,6 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
     } finally {
         clock.restore();
     }
-
 });
 
 QUnit.test('Multi-week appointments should have correct resizable handles', function(assert) {

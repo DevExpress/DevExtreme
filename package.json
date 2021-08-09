@@ -187,11 +187,12 @@
   },
   "scripts": {
     "clean": "gulp clean",
-    "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation",
+    "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts",
     "lint-js": "eslint --ext .js",
     "lint-ts": "eslint --ext .tsx,.ts --ignore-pattern ./js/renovation/",
     "lint-css": "stylelint scss",
     "lint-renovation": "eslint --ext .tsx,.ts,.d.ts ./js/renovation",
+    "lint-dts": "eslint js --ext .d.ts --ignore-pattern ./js/renovation/",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",

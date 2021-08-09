@@ -329,10 +329,14 @@ QUnit.module('Timeline Day', {
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
             groupOrientation: 'horizontal',
             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
         }).dxSchedulerTimelineDay('instance');
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
 
