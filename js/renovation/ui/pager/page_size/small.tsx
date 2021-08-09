@@ -1,5 +1,12 @@
 import {
-  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref, RefObject,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  InternalState,
+  Effect,
+  Component,
+  Ref,
+  RefObject,
 } from '@devextreme-generator/declarations';
 
 import { SelectBox } from '../../editors/drop_down_editors/select_box';
@@ -30,6 +37,7 @@ export class PageSizeSmallProps {
 
   @OneWay() pageSizes!: FullPageSize[];
 }
+
 type PageSizeSmallPropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })

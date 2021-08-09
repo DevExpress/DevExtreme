@@ -76,10 +76,10 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
 
   selectLastPageIndex(): void {
     const { pageCount, pageIndexChange } = this.props;
-    pageIndexChange?.(pageCount - 1);
+    pageIndexChange(pageCount - 1);
   }
 
   valueChange(value: number): void {
-    this.props.pageIndexChange?.(value - 1);
+    this.props.pageIndexChange(value - 1);
   }
 }

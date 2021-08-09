@@ -16,7 +16,7 @@ export class PagerProps extends BasePagerProps {
 }
 
 @ComponentBindings()
-export class InternalPagerProps extends BasePagerProps {
+export class InternalPagerProps extends PagerProps {
   @OneWay() pageSize = 5;
 
   @OneWay() pageIndex = 1;

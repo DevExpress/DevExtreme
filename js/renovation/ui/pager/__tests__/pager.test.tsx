@@ -64,7 +64,6 @@ describe('Pager', () => {
       const component = new PagerComponent({
         pageSize: 5,
         gridCompatibility: false,
-        pageIndexChange: jest.fn(),
         pageSizeChange: jest.fn(),
       });
       expect(component.props.pageSize).toBe(5);
@@ -77,7 +76,6 @@ describe('Pager', () => {
         pageIndex: 5,
         gridCompatibility: false,
         pageIndexChange: jest.fn(),
-        pageSizeChange: jest.fn(),
       });
       expect(component.props.pageIndex).toBe(5);
       component.pageIndexChange(10);
@@ -88,8 +86,6 @@ describe('Pager', () => {
       const component = new PagerComponent({
         className: 'custom',
         gridCompatibility: false,
-        pageIndexChange: jest.fn(),
-        pageSizeChange: jest.fn(),
       });
       expect(component.className).toBe('custom');
     });
@@ -120,7 +116,6 @@ describe('Pager', () => {
           pageIndex: 4,
           gridCompatibility: true,
           pageIndexChange: jest.fn(),
-          pageSizeChange: jest.fn(),
         });
         expect(component.pageIndexChange).toBeCalledWith(3);
       });
@@ -129,7 +124,6 @@ describe('Pager', () => {
         const component = new PagerComponent({
           gridCompatibility: true,
           pageIndexChange: jest.fn(),
-          pageSizeChange: jest.fn(),
         });
         component.pageIndexChange(4);
         expect(component.props.pageIndexChange).toBeCalledWith(5);
@@ -139,8 +133,6 @@ describe('Pager', () => {
         const component = new PagerComponent({
           className: 'custom',
           gridCompatibility: true,
-          pageIndexChange: jest.fn(),
-          pageSizeChange: jest.fn(),
         });
         expect(component.className).toBe('dx-datagrid-pager custom');
       });

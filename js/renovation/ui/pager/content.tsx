@@ -1,7 +1,14 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect, RefObject,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  ForwardRef,
+  Provider,
+  Effect,
+  RefObject,
 } from '@devextreme-generator/declarations';
 
 import { InfoText } from './info';
