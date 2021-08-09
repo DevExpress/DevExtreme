@@ -123,7 +123,7 @@ function run_test {
                     --remote-debugging-port=9222
                 )
             else
-                chrome_command="dbus-launch --exit-with-session $chrome_command"
+                # chrome_command="dbus-launch --exit-with-session $chrome_command"
                 chrome_args+=(
                     --no-first-run
                     --no-default-browser-check
