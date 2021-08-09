@@ -256,7 +256,7 @@ describe('PagerContent', () => {
       const onKeyDownMock = jest.fn();
       const component = new PagerContent({
         onKeyDown: onKeyDownMock as any,
-      });
+      } as PagerContentProps);
 
       component.keyboardAction.registerKeyboardAction(element, action);
 

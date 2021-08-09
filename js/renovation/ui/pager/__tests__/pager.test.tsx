@@ -103,14 +103,18 @@ describe('Pager', () => {
 
       pageIndexChange(1);
       expect(component.props.pageIndexChange).toBeCalledWith(1);
-      pageSizeChange?.(10);
+      pageSizeChange(10);
       expect(component.props.pageSizeChange).toBeCalledWith(10);
     });
 
     describe('gridCompatibility', () => {
       it('pageIndex', () => {
-        const component = new PagerComponent({ pageIndex: 4, gridCompatibility: true });
-        expect(component.pageIndex).toBe(3);
+        const component = new PagerComponent({
+          pageIndex: 4,
+          gridCompatibility: true,
+          pageIndexChange: jest.fn(),
+        });
+        expect(component.pageIndexChange).toBeCalledWith(3);
       });
 
       it('pageIndexChange', () => {

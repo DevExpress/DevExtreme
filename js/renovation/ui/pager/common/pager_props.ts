@@ -12,10 +12,6 @@ export class PagerProps extends BasePagerProps {
   @TwoWay() pageIndex = 1;
 
   @TwoWay() pageSize = 5;
-
-  @Event() pageIndexChange!: EventCallback<number>;
-
-  @Event() pageSizeChange!: EventCallback<number>;
 }
 
 @ComponentBindings()
