@@ -4,7 +4,6 @@ import SchedulerTimelineWeek from './ui.scheduler.timeline_week';
 import {
     getWeekendsCount,
     isDataOnWeekend,
-    getFirstDayOfWeek,
 } from './utils/work_week';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
@@ -21,14 +20,6 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
 
     _getElementClass() {
         return TIMELINE_CLASS;
-    }
-
-    _getWeekDuration() {
-        return 5;
-    }
-
-    _firstDayOfWeek() {
-        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _isSkippedData(date) {
