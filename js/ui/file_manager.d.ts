@@ -18,11 +18,11 @@ import {
 import FileSystemItem from '../file_management/file_system_item';
 
 import {
-    dxContextMenuItem,
+    Item as dxContextMenuItem,
 } from './context_menu';
 
 import {
-    dxToolbarItem,
+    Item as dxToolbarItem,
 } from './toolbar';
 
 import Widget, {
@@ -451,15 +451,16 @@ export interface dxFileManagerContextMenu {
 export type ContextMenuItem = dxFileManagerContextMenuItem;
 
 /**
- * @deprecated Use ContexMenuItem instead
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
      * @public
+     * @type Array<dxFileManagerContextMenuItem>
      */
-    items?: Array<dxFileManagerContextMenuItem>;
+    items?: Array<ContextMenuItem>;
     /**
      * @docid
      * @type Enums.FileManagerContextMenuItem|string
