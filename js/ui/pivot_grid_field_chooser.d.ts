@@ -6,7 +6,7 @@ import {
 } from '../events/index';
 
 import PivotGridDataSource, {
-    PivotGridDataSourceField,
+    Field,
 } from './pivot_grid/data_source';
 
 import Widget, {
@@ -19,7 +19,7 @@ export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 /** @public */
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     readonly area?: string;
-    readonly field?: PivotGridDataSourceField;
+    readonly field?: Field;
     readonly event?: DxEvent;
     items?: Array<any>;
 };
