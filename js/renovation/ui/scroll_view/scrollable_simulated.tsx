@@ -18,6 +18,7 @@ import {
   subscribeToDXScrollStopEvent,
   subscribeToDXScrollCancelEvent,
   subscribeToKeyDownEvent,
+  subscribeToScrollInitEvent,
 } from '../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from './load_panel';
 
@@ -28,7 +29,9 @@ import { getBoundaryProps } from './utils/get_boundary_props';
 import { getElementLocationInternal } from './utils/get_element_location_internal';
 
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
-import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../../../events/utils/index';
+import {
+  isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
+} from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
@@ -72,9 +75,6 @@ import { getElementComputedStyle } from './utils/get_element_computed_style';
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
 
-import {
-  dxScrollInit,
-} from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { convertToLocation } from './utils/convert_location';
 import { getScrollTopMax } from './utils/get_scroll_top_max';
@@ -475,15 +475,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect()
-  initEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollInit.on(this.wrapperRef.current,
+  initEffect(): EffectReturn {
+    return subscribeToScrollInitEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleInit(event);
-      }, this.getInitEventData(), { namespace });
-
-    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
+      },
+      this.getInitEventData(),
+    );
   }
 
   @Effect()

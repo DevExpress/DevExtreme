@@ -5,10 +5,16 @@ import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import pointerEvents from '../../events/pointer';
 
 export function subscribeToEvent(eventName: string) {
-  return (element: HTMLElement | Document | undefined | null, handler: unknown): EffectReturn => {
+  return (
+    element: HTMLElement | Document | undefined | null,
+    handler: unknown,
+    eventData?: unknown,
+  ): EffectReturn => {
     if (handler && element) {
-      eventsEngine.on(element, eventName, handler);
-      return (): void => eventsEngine.off(element, eventName, handler);
+      eventsEngine.on(element, eventName, eventData, handler);
+      return (): void => {
+        eventsEngine.off(element, eventName, handler);
+      };
     }
     return undefined;
   };
@@ -16,6 +22,7 @@ export function subscribeToEvent(eventName: string) {
 export const subscribeToClickEvent = subscribeToEvent(clickEvent.name);
 
 export const subscribeToScrollEvent = subscribeToEvent(scrollEvents.scroll);
+export const subscribeToScrollInitEvent = subscribeToEvent(scrollEvents.init);
 export const subscribeToDXScrollStartEvent = subscribeToEvent(scrollEvents.start);
 export const subscribeToDXScrollMoveEvent = subscribeToEvent(scrollEvents.move);
 export const subscribeToDXScrollEndEvent = subscribeToEvent(scrollEvents.end);

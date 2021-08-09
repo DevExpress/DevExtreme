@@ -13,6 +13,7 @@ import {
 import '../../../events/gesture/emitter.gesture.scroll';
 import {
   subscribeToScrollEvent,
+  subscribeToScrollInitEvent,
   subscribeToDXScrollEndEvent,
   subscribeToDXScrollMoveEvent,
   subscribeToDXScrollStopEvent,
@@ -67,9 +68,6 @@ import {
 
 import { Scrollbar } from './scrollbar';
 
-import {
-  dxScrollInit,
-} from '../../../events/short';
 import { getOffsetDistance } from './utils/get_offset_distance';
 import { isVisible } from './utils/is_element_visible';
 
@@ -453,15 +451,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Effect()
-  initEffect(): DisposeEffectReturn {
-    const namespace = 'dxScrollable';
-
-    dxScrollInit.on(this.wrapperRef.current,
+  initEffect(): EffectReturn {
+    return subscribeToScrollInitEvent(
+      this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleInit(event);
-      }, this.getInitEventData(), { namespace });
-
-    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
+      },
+      this.getInitEventData(),
+    );
   }
 
   @Effect()
