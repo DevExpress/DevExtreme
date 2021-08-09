@@ -50,16 +50,16 @@ const POPUP_CONFIG = {
     ]
 };
 
-const DONE_BUTTON_ITEM_CONFIG = {
+const createDoneButtonConfig = () => ({
     shortcut: 'done',
     options: { text: messageLocalization.format('Done') },
     location: TOOLBAR_LOCATION.AFTER,
-};
+});
 
-const CANCEL_BUTTON_ITEM_CONFIG = {
+const createCancelButtonConfig = () => ({
     shortcut: 'cancel',
     location: isIOSPlatform() ? TOOLBAR_LOCATION.BEFORE : TOOLBAR_LOCATION.AFTER
-};
+});
 
 export const ACTION_TO_APPOINTMENT = {
     CREATE: 0,
@@ -276,11 +276,11 @@ export class AppointmentPopup {
 
         if(isVisible) {
             result.push({
-                ...DONE_BUTTON_ITEM_CONFIG,
+                ...createDoneButtonConfig(),
                 onClick: e => this._doneButtonClickHandler(e)
             });
         }
-        result.push(CANCEL_BUTTON_ITEM_CONFIG);
+        result.push(createCancelButtonConfig());
 
         return result;
     }
