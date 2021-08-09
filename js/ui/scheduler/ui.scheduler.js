@@ -1301,6 +1301,8 @@ class Scheduler extends Widget {
             getDataAccessors: () => this._dataAccessors,
             createComponent: (element, component, options) => this._createComponent(element, component, options),
 
+            getEditingConfig: () => this._editing,
+
             getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
             getStartDayHour: () => this.option('startDayHour'),
             getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),

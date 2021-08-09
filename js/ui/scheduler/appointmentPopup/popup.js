@@ -167,23 +167,15 @@ export class AppointmentPopup {
     }
 
     _createForm() {
-        const { expr } = this.scheduler.getDataAccessors();
-        const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
         const rawAppointment = this.state.appointment.data;
         const formData = this._createAppointmentFormData(rawAppointment);
 
         this.form.create(
-            expr,
             this.triggerResize.bind(this),
             this.changeSize.bind(this),
             formData,
-            allowTimeZoneEditing,
             formData
         );
-    }
-
-    _getAllowTimeZoneEditing() {
-        return this.scheduler.getEditingConfig().allowTimeZoneEditing;
     }
 
     _isReadOnly(rawAppointment) {
