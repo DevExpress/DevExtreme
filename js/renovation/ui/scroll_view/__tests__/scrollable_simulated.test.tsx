@@ -19,7 +19,7 @@ import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../test_utils/events_mock';
-import { getElementComputedStyle } from '../utils/get_element_computed_style';
+import { getElementPaddingBottom } from '../utils/get_element_style';
 import {
   ScrollableSimulated as Scrollable,
 } from '../scrollable_simulated';
@@ -43,14 +43,10 @@ jest.mock('../../../../core/devices', () => {
   return actualDevices;
 });
 
-jest.mock('../utils/get_element_computed_style', () => ({
-  ...jest.requireActual('../utils/get_element_computed_style'),
-  getElementComputedStyle: jest.fn(() => ({
-    paddingBottom: '8px',
-  })),
+jest.mock('../utils/get_element_style', () => ({
+  ...jest.requireActual('../utils/get_element_style'),
+  getElementPaddingBottom: jest.fn(() => 8),
 }));
-
-jest.mock('../../../utils/get_computed_style');
 
 describe('Simulated > View', () => {
   it('render with defaults', () => {
@@ -186,7 +182,8 @@ describe('Simulated > Behavior', () => {
     });
 
     it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o', () => {
-      (getElementComputedStyle as jest.Mock).mockReturnValue({ paddingBottom: '8px' });
+      (getElementPaddingBottom as jest.Mock).mockReturnValue(8);
+
       const viewModel = new Scrollable({});
 
       viewModel.scrollableOffsetLeft = 5;

@@ -59,7 +59,9 @@ import {
 } from './types.d';
 
 import { getElementOffset } from '../../utils/get_element_offset';
-import { getElementComputedStyle } from './utils/get_element_computed_style';
+import {
+  getElementPaddingBottom, getElementOverflowX, getElementOverflowY,
+} from './utils/get_element_style';
 
 import { TopPocket } from './top_pocket';
 import { BottomPocket } from './bottom_pocket';
@@ -79,9 +81,6 @@ import { getScrollTopMax } from './utils/get_scroll_top_max';
 import { getScrollLeftMax } from './utils/get_scroll_left_max';
 import { inRange } from '../../../core/utils/math';
 import { isVisible } from './utils/is_element_visible';
-import { getElementPaddingBottom } from './utils/get_element_padding';
-
-const DEFAULT_OFFSET = { top: 0, left: 0 };
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -1183,7 +1182,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       this.bottomPocketClientHeight = bottomPocketEl.clientHeight;
     }
 
-    this.contentPaddingBottom = getElementPaddingBottom(this.contentRef.current!);
+    this.contentPaddingBottom = getElementPaddingBottom(contentEl);
   }
 
   get containerElement(): HTMLDivElement {
@@ -1201,10 +1200,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current).overflowX === 'hidden';
-
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (getElementOverflowX(this.contentRef.current) === 'hidden') {
       return this.contentClientWidth;
     }
 
@@ -1219,10 +1216,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     // T320141
-    const isOverflowHidden = getElementComputedStyle(this.contentRef.current).overflowY === 'hidden';
-
     /* istanbul ignore next */
-    if (isOverflowHidden) {
+    if (getElementOverflowY(this.contentRef.current) === 'hidden') {
       return this.contentClientHeight;
     }
 
@@ -1233,7 +1228,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   /* istanbul ignore next */
   get scrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current as Element) ?? DEFAULT_OFFSET;
+    return getElementOffset(this.scrollableRef.current);
   }
 
   get contentStyles(): { [key: string]: string } {
