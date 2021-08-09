@@ -32,11 +32,15 @@ import { View } from '../types.d';
 import { ViewProps } from '../props';
 import { ToolbarItem, ToolbarLocationType } from '../../toolbar/toolbar_props';
 
+
 const { trimTime } = dateUtils;
 
-function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
+export function viewFunction(viewModel: SchedulerToolbar): JSX.Element {
   return (
-    <Toolbar items={viewModel.items} />
+    <Toolbar
+      items={viewModel.items}
+      //elementAttr={{class: viewModel.class}}
+    />
   );
 }
 
@@ -82,8 +86,12 @@ export class SchedulerToolbarProps {
 
 @Component({ view: viewFunction })
 export default class SchedulerToolbar extends JSXComponent(SchedulerToolbarProps) {
+  get cssClass(): string {
+    return 'dx-scheduler-header';
+  }
+
   get step(): string {
-    return getStep(this.props.currentView) as string;
+      return getStep(this.props.currentView) as string;
   }
 
   get caption(): DateNavigatorTextInfo {
