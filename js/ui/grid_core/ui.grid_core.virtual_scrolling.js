@@ -640,7 +640,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const dataController = this._dataController;
                 dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
-                if(this.option(NEW_SCROLLING_MODE) && !isDefined(dataController._loadViewportParams)) {
+                if(this.option(NEW_SCROLLING_MODE)/* && !isDefined(dataController._loadViewportParams)*/) {
                     const viewportSize = dataController.viewportSize();
                     const viewportIsNotFilled = viewportSize > dataController.items().length && (isAppendMode(this) || dataController.totalItemsCount() > viewportSize);
                     viewportIsNotFilled && dataController.loadViewport();
@@ -733,7 +733,7 @@ export const virtualScrollingModule = {
                 preloadEnabled: false,
                 rowRenderingMode: 'standard',
                 loadTwoPagesOnStart: false,
-                newMode: false,
+                newMode: true,
                 minGap: 1
             }
         };
@@ -807,6 +807,8 @@ export const virtualScrollingModule = {
                             this._dataSource?.setViewportItemIndex(this._rowsScrollController.getViewportItemIndex());
                         });
 
+                        this._updateLoadViewportParams();
+
                         if(this.isLoaded() && !this.option(NEW_SCROLLING_MODE)) {
                             this._rowsScrollController.load();
                         }
@@ -826,7 +828,7 @@ export const virtualScrollingModule = {
                             },
                             totalItemsCount: function() {
                                 if(that.option(NEW_SCROLLING_MODE)) {
-                                    return that.totalItemsCount() + that._uncountableItemCount;
+                                    return isVirtualMode(that) ? that.totalItemsCount() + that._uncountableItemCount : that._itemCount;
                                 }
 
                                 return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
@@ -982,6 +984,7 @@ export const virtualScrollingModule = {
                             this._uncountableItemCount = items.filter(item => !isItemCountableByDataSource(item, this._dataSource)).length;
                             this._updateLoadViewportParams();
                             const { skipForCurrentPage } = this.getLoadPageParams();
+                            this._itemCount = items.length;
 
                             return items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
                         }

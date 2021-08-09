@@ -122,7 +122,7 @@ export const VirtualScrollController = Class.inherit((function() {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._viewportSize = 0;
+            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 20 : 0; // ???
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._contentSize = 0;
@@ -342,7 +342,7 @@ export const VirtualScrollController = Class.inherit((function() {
             let take = Math.ceil((bottomIndex + minGap) / maxGap) * maxGap - skip;
 
             if(virtualMode) {
-                const remainedItems = this._dataOptions.totalItemsCount() - skip;
+                const remainedItems = Math.max(0, this._dataOptions.totalItemsCount() - skip);
                 take = Math.min(take, remainedItems);
             }
 
