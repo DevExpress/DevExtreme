@@ -55,10 +55,8 @@ function run_test {
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
-        if [ "$GITHUBACTION" == "true" ]; then
         Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
-        else
-        Xvfb :99 -ac -screen 0 1200x600x24 &
+        if [ "$GITHUBACTION" != "true" ]; then
         x11vnc -display :99 2>/dev/null &
         fi
     fi
@@ -123,7 +121,7 @@ function run_test {
                     --remote-debugging-port=9222
                 )
             else
-                # chrome_command="dbus-launch --exit-with-session $chrome_command"
+                chrome_command="dbus-launch --exit-with-session $chrome_command"
                 chrome_args+=(
                     --no-first-run
                     --no-default-browser-check
@@ -173,7 +171,7 @@ function run_test {
                 tput setaf 9
             fi
             google-chrome-stable --version
-            eval "$chrome_command ${chrome_args[@]} '$url'" &
+            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
     esac
