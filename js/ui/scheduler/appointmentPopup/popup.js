@@ -2,7 +2,6 @@ import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
 import { Deferred, when } from '../../../core/utils/deferred';
-import { isDefined } from '../../../core/utils/type';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { triggerResizeEvent } from '../../../events/visibility_change';
 import messageLocalization from '../../../localization/message';
@@ -79,8 +78,6 @@ export class AppointmentPopup {
             saveChangesLocker: false,
             appointment: {
                 data: null,
-                isEmptyText: false,
-                isEmptyDescription: false
             },
         };
     }
@@ -137,7 +134,7 @@ export class AppointmentPopup {
         this._updateForm();
 
         const arg = {
-            form: this.form.form,
+            form: this.form.dxForm,
             popup: this.popup,
             appointmentData: this.state.appointment.data,
             cancel: false
@@ -173,7 +170,7 @@ export class AppointmentPopup {
         const rawAppointment = this.state.appointment.data;
         const formData = this._createFormData(rawAppointment);
 
-        this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData);
+        this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
     }
 
     _isReadOnly(rawAppointment) {
@@ -206,24 +203,15 @@ export class AppointmentPopup {
             appointment.endDate = appointment.calculateEndDate('toAppointment');
         }
 
-        this.state.appointment.isEmptyText = appointment.text === undefined;
-        this.state.appointment.isEmptyDescription = appointment.description === undefined;
-
-        // if(appointment.text === undefined) {
-        //     appointment.text = '';
+        // TODO
+        // if(appointment.recurrenceRule === undefined) {
+        //     appointment.recurrenceRule = '';
         // }
-        // if(appointment.description === undefined) {
-        //     appointment.description = '';
-        // }
-        if(appointment.recurrenceRule === undefined) {
-            appointment.recurrenceRule = '';
-        }
 
         const formData = appointment.source();
 
         this.form.readOnly = this._isReadOnly(formData);
         this.form.updateFormData(formData);
-        this.form.setEditorsType(appointment.allDay);
     }
 
     _isPopupFullScreenNeeded() {
@@ -261,7 +249,7 @@ export class AppointmentPopup {
     }
 
     updatePopupFullScreenMode() {
-        if(this.form.dxForm) {
+        if(this.form.dxForm) { // TODO
             const formData = this.form.formData;
             const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
 
@@ -288,7 +276,7 @@ export class AppointmentPopup {
     saveChangesAsync(isShowLoadPanel) {
         const deferred = new Deferred();
         const validation = this.form.dxForm.validate();
-        const state = this.state.appointment;
+        // const state = this.state.appointment;
 
         isShowLoadPanel && this._showLoadPanel();
 
@@ -302,19 +290,12 @@ export class AppointmentPopup {
             const adapter = this._createAppointmentAdapter(this.form.formData);
             const appointment = adapter.clone({ pathTimeZone: 'fromAppointment' }).source(); // TODO:
 
-            // if(state.isEmptyText && adapter.text === '') {
-            //     delete appointment.text; // TODO
-            // }
-            // if(state.isEmptyDescription && adapter.description === '') {
-            //     delete appointment.description; // TODO
+            // TODO
+            // if(state.data.recurrenceRule === undefined && adapter.recurrenceRule === '') { // TODO: plug for recurrent editor
+            //     delete appointment.recurrenceRule;
             // }
 
-            if(state.data.recurrenceRule === undefined && adapter.recurrenceRule === '') { // TODO: plug for recurrent editor
-                delete appointment.recurrenceRule;
-            }
-            if(isDefined(appointment.repeat)) {
-                delete appointment.repeat; // TODO
-            }
+            delete appointment.repeat;
 
             switch(this.state.action) {
                 case ACTION_TO_APPOINTMENT.CREATE:

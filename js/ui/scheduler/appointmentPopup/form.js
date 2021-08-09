@@ -391,8 +391,10 @@ export class AppointmentForm {
 
     updateFormData(formData) {
         this.semaphore.take();
+
         const dataExprs = this.scheduler.getDataAccessors().expr;
 
+        const allDay = formData[dataExprs.allDayExpr];
         const startDate = new Date(formData[dataExprs.startDateExpr]);
         const endDate = new Date(formData[dataExprs.endDateExpr]);
 
@@ -401,6 +403,7 @@ export class AppointmentForm {
         this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
 
         this.form.option('formData', formData);
+        this.setEditorsType(allDay);
 
         this.semaphore.release();
     }
