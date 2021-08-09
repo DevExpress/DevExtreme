@@ -40,7 +40,7 @@ jobs:
       
     - name: Zip artifacts 
       run: |
-        7z a -t7z -mx3 -mmt2 artifacts.7z ./artifacts ./scss*/bundles ./testing*/tests/Renovation/widgets.json
+        7z a -tzip -mx3 -mmt2 artifacts.zip ./artifacts ./scss*/bundles ./testing*/tests/Renovation/widgets.json
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
@@ -110,8 +110,8 @@ jobs:
 
     - name: Unpack artifacts
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: 7z x artifacts.7z
-
+      run: 7z x artifacts.zip
+      
     - name: Build dotnet
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: dotnet build build/build-dotnet.sln
