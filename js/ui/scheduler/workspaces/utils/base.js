@@ -49,7 +49,6 @@ export const getCalculatedFirstDayOfWeek = (firstDayOfWeekOption) => {
         : dateLocalization.firstDayOfWeekIndex();
 };
 
-export const getFirstDayOfWeek = (firstDayOfWeekOption) => firstDayOfWeekOption;
 export const calculateViewStartDate = (startDateOption) => startDateOption;
 
 export const calculateCellIndex = (rowIndex, columnIndex, rowCount, columnCount) => {

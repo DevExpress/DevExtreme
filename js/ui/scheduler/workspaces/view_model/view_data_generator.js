@@ -425,7 +425,7 @@ export class ViewDataGenerator {
         const offsetByCount = this.isWorkView
             ? this.getTimeOffsetByColumnIndex(
                 columnIndex,
-                firstDayOfWeek,
+                this.getFirstDayOfWeek(firstDayOfWeek),
                 columnCountBase,
                 intervalCount,
             ) : 0;
@@ -693,5 +693,9 @@ export class ViewDataGenerator {
         const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
         return hoursInterval * cellCountInDay * HOUR_MS;
+    }
+
+    getFirstDayOfWeek(firstDayOfWeekOption) {
+        return firstDayOfWeekOption;
     }
 }

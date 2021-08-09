@@ -57,7 +57,6 @@ import CellsSelectionState from './cells_selection_state';
 import { cache } from './cache';
 import { CellsSelectionController } from './cells_selection_controller';
 import {
-    getFirstDayOfWeek,
     calculateViewStartDate,
     getViewStartByOptions,
     validateDayHours,
@@ -639,7 +638,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             hoursInterval: this.option('hoursInterval'),
             currentDate: this.option('currentDate'),
             startDate: this.option('startDate'),
-            firstDayOfWeek: this._firstDayOfWeek(),
+            firstDayOfWeek: this.option('firstDayOfWeek'),
 
             ...this.virtualScrollingDispatcher.getRenderState(),
         };
@@ -707,7 +706,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _firstDayOfWeek() {
-        return getFirstDayOfWeek(this.option('firstDayOfWeek'));
+        return this.viewDataProvider.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     }
 
     _attachEvents() {
