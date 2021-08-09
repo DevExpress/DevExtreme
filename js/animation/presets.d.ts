@@ -1,9 +1,9 @@
 import {
-    Device
+    Device,
 } from '../core/devices';
 
 import {
-    AnimationConfig
+    AnimationConfig,
 } from './fx';
 
 /**
@@ -56,7 +56,7 @@ declare const animationPresets: {
      * @param2_field2 device:Device
      * @public
      */
-    registerPreset(name: string, config: { animation: AnimationConfig, device?: Device }): void;
+    registerPreset(name: string, config: { animation: AnimationConfig; device?: Device }): void;
     /**
      * @docid
      * @publicName resetToDefaults()

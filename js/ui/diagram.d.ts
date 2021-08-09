@@ -1,13 +1,13 @@
 import {
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -15,13 +15,12 @@ import Store from '../data/abstract_store';
 import {
   EventInfo,
   InitializedEventInfo,
-  ChangedOptionInfo
+  ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
-
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDiagram>;
@@ -31,7 +30,7 @@ export type CustomCommandEvent = {
     readonly component: dxDiagram;
     readonly element: DxElement;
     readonly name: string;
-}
+};
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDiagram>;
@@ -41,13 +40,13 @@ export type InitializedEvent = InitializedEventInfo<dxDiagram>;
 
 /** @public */
 export type ItemClickEvent = EventInfo<dxDiagram> & {
-    readonly item: dxDiagramItem;
-}
+    readonly item: Item;
+};
 
 /** @public */
 export type ItemDblClickEvent = EventInfo<dxDiagram> & {
-    readonly item: dxDiagramItem;
-}
+    readonly item: Item;
+};
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
@@ -55,21 +54,21 @@ export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 /** @public */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
     readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
-    readonly args: dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs;
+    readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
     readonly reason: 'checkUIElementAvailability' | 'modelModification';
     allowed?: boolean;
-}
+};
 
 /** @public */
 export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
     readonly changes: any[];
-    allowed?: boolean 
-}
+    allowed?: boolean;
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxDiagram> & {
-    readonly items: Array<dxDiagramItem>;
-}
+    readonly items: Array<Item>;
+};
 
 /** @public */
 export type CustomShapeTemplateData = {
@@ -104,12 +103,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>,
+      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean
+      enabled?: boolean;
     };
     /**
      * @docid
@@ -121,32 +120,32 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @type Enums.DiagramShapeCategory|String
        */
-      category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string,
+      category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string;
       /**
        * @docid
        * @type Enums.DiagramToolboxDisplayMode
        */
-      displayMode?: 'icons' | 'texts',
+      displayMode?: 'icons' | 'texts';
       /**
        * @docid
        * @default true
        */
-      enabled?: boolean,
+      enabled?: boolean;
       /**
        * @docid
        * @default 4
        */
-      shapeIconsPerRow?: number,
+      shapeIconsPerRow?: number;
       /**
        * @docid
        * @type Array<Enums.DiagramShapeType>|Array<String>
        */
-      shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>,
+      shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>;
       /**
        * @docid
        * @default 152
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -185,48 +184,48 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      allowEditImage?: boolean,
+      allowEditImage?: boolean;
       /**
        * @docid
        */
-      allowEditText?: boolean,
+      allowEditText?: boolean;
       /**
        * @docid
        */
-      allowResize?: boolean,
+      allowResize?: boolean;
       /**
        * @docid
        */
-      backgroundImageHeight?: number,
+      backgroundImageHeight?: number;
       /**
        * @docid
        */
-      backgroundImageLeft?: number,
+      backgroundImageLeft?: number;
       /**
        * @docid
        */
-      backgroundImageTop?: number,
+      backgroundImageTop?: number;
       /**
        * @docid
        */
-      backgroundImageUrl?: string,
+      backgroundImageUrl?: string;
       /**
        * @docid
        */
-      backgroundImageToolboxUrl?: string,
+      backgroundImageToolboxUrl?: string;
       /**
        * @docid
        */
-      backgroundImageWidth?: number,
+      backgroundImageWidth?: number;
       /**
        * @docid
        * @type Enums.DiagramShapeType|String
        */
-      baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string,
+      baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
       /**
        * @docid
        */
-      category?: string,
+      category?: string;
       /**
        * @docid
        */
@@ -234,108 +233,64 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        x?: number,
+        x?: number;
         /**
          * @docid
          */
-        y?: number
-      }>,
+        y?: number;
+      }>;
       /**
        * @docid
        */
-      defaultHeight?: number,
+      defaultHeight?: number;
       /**
        * @docid
        */
-      defaultImageUrl?: string,
+      defaultImageUrl?: string;
       /**
        * @docid
        */
-      defaultText?: string,
+      defaultText?: string;
       /**
        * @docid
        */
-      defaultWidth?: number,
+      defaultWidth?: number;
       /**
        * @docid
        */
-      imageHeight?: number,
+      imageHeight?: number;
       /**
        * @docid
        */
-      imageLeft?: number,
+      imageLeft?: number;
       /**
        * @docid
        */
-      imageTop?: number,
+      imageTop?: number;
       /**
        * @docid
        */
-      imageWidth?: number,
+      imageWidth?: number;
       /**
        * @docid
        */
-      keepRatioOnAutoSize?: boolean
+      keepRatioOnAutoSize?: boolean;
       /**
        * @docid
        */
-      maxHeight?: number,
+      maxHeight?: number;
       /**
        * @docid
        */
-      maxWidth?: number,
+      maxWidth?: number;
       /**
        * @docid
        */
-      minHeight?: number,
+      minHeight?: number;
       /**
        * @docid
        */
-      minWidth?: number,
-      /**
-       * @docid
-       * @type_function_param1 container:dxSVGElement
-       * @type_function_param2 data:object
-       * @type_function_param2_field1 item:dxDiagramShape
-       * @type_function_return void
-       */
-      template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any),
-      /**
-       * @docid
-       */
-      templateHeight?: number,
-      /**
-       * @docid
-       */
-      templateLeft?: number,
-      /**
-       * @docid
-       */
-      templateTop?: number,
-      /**
-       * @docid
-       */
-      templateWidth?: number,
-      /**
-       * @docid
-       */
-      textHeight?: number,
-      /**
-       * @docid
-       */
-      textLeft?: number,
-      /**
-       * @docid
-       */
-      textTop?: number,
-      /**
-       * @docid
-       */
-      textWidth?: number,
-      /**
-       * @docid
-       */
-      title?: string,
+      minWidth?: number;
       /**
        * @docid
        * @type_function_param1 container:dxSVGElement
@@ -343,15 +298,59 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param2_field1 item:dxDiagramShape
        * @type_function_return void
        */
-      toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any),
+      template?: template | ((container: DxElement<SVGElement>, data: CustomShapeTemplateData) => any);
       /**
        * @docid
        */
-      toolboxWidthToHeightRatio?: number,
+      templateHeight?: number;
       /**
        * @docid
        */
-      type?: string
+      templateLeft?: number;
+      /**
+       * @docid
+       */
+      templateTop?: number;
+      /**
+       * @docid
+       */
+      templateWidth?: number;
+      /**
+       * @docid
+       */
+      textHeight?: number;
+      /**
+       * @docid
+       */
+      textLeft?: number;
+      /**
+       * @docid
+       */
+      textTop?: number;
+      /**
+       * @docid
+       */
+      textWidth?: number;
+      /**
+       * @docid
+       */
+      title?: string;
+      /**
+       * @docid
+       * @type_function_param1 container:dxSVGElement
+       * @type_function_param2 data:object
+       * @type_function_param2_field1 item:dxDiagramShape
+       * @type_function_return void
+       */
+      toolboxTemplate?: template | ((container: DxElement<SVGElement>, data: CustomShapeToolboxTemplateData) => any);
+      /**
+       * @docid
+       */
+      toolboxWidthToHeightRatio?: number;
+      /**
+       * @docid
+       */
+      type?: string;
     }>;
     /**
      * @docid
@@ -362,49 +361,49 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      style?: Object,
+      style?: Object;
       /**
        * @docid
        */
-      textStyle?: Object,
+      textStyle?: Object;
       /**
        * @docid
        * @type Enums.DiagramConnectorLineType
        * @default 'orthogonal'
        */
-      connectorLineType?: 'straight' | 'orthogonal',
+      connectorLineType?: 'straight' | 'orthogonal';
       /**
        * @docid
        * @type Enums.DiagramConnectorLineEnd
        * @default 'none'
        */
-      connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle',
+      connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
       /**
        * @docid
        * @type Enums.DiagramConnectorLineEnd
        * @default 'arrow'
        */
-      connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle',
+      connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
       /**
        * @docid
        * @default undefined
        */
-      shapeMinWidth?: number,
+      shapeMinWidth?: number;
       /**
        * @docid
        * @default undefined
        */
-      shapeMaxWidth?: number,
+      shapeMaxWidth?: number;
       /**
        * @docid
        * @default undefined
        */
-      shapeMinHeight?: number,
+      shapeMinHeight?: number;
       /**
        * @docid
        * @default undefined
        */
-      shapeMaxHeight?: number
+      shapeMaxHeight?: number;
     };
     /**
      * @docid
@@ -416,47 +415,47 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default true
        */
-      allowAddShape?: boolean,
+      allowAddShape?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowDeleteShape?: boolean,
+      allowDeleteShape?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowDeleteConnector?: boolean,
+      allowDeleteConnector?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowChangeConnection?: boolean,
+      allowChangeConnection?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowChangeConnectorPoints?: boolean,
+      allowChangeConnectorPoints?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowChangeConnectorText?: boolean,
+      allowChangeConnectorText?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowChangeShapeText?: boolean,
+      allowChangeShapeText?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowResizeShape?: boolean,
+      allowResizeShape?: boolean;
       /**
        * @docid
        * @default true
        */
-      allowMoveShape?: boolean
+      allowMoveShape?: boolean;
     };
     /**
      * @docid
@@ -469,96 +468,96 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type_function_param1 data:object
        * @default undefined
        */
-      customDataExpr?: string | ((data: any) => any),
+      customDataExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "from"
        */
-      fromExpr?: string | ((data: any) => any),
+      fromExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      fromLineEndExpr?: string | ((data: any) => any),
+      fromLineEndExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      fromPointIndexExpr?: string | ((data: any) => any),
+      fromPointIndexExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      keyExpr?: string | ((data: any) => any),
+      keyExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lineTypeExpr?: string | ((data: any) => any),
+      lineTypeExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lockedExpr?: string | ((data: any) => any),
+      lockedExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      pointsExpr?: string | ((data: any) => any),
+      pointsExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      styleExpr?: string | ((data: any) => any),
+      styleExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textExpr?: string | ((data: any) => any),
+      textExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any) => any),
+      textStyleExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "to"
        */
-      toExpr?: string | ((data: any) => any),
+      toExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      toLineEndExpr?: string | ((data: any) => any),
+      toLineEndExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      toPointIndexExpr?: string | ((data: any) => any),
+      toPointIndexExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any) => any)
+      zIndexExpr?: string | ((data: any) => any);
     };
     /**
      * @docid
@@ -569,13 +568,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default "Diagram"
        */
-      fileName?: string,
+      fileName?: string;
       /**
        * @docid
        * @default undefined
        * @deprecated
        */
-      proxyUrl?: string
+      proxyUrl?: string;
     };
     /**
      * @docid
@@ -591,11 +590,11 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      items?: Array<number>,
+      items?: Array<number>;
       /**
        * @docid
        */
-      value?: number
+      value?: number;
     };
     /**
      * @docid
@@ -613,125 +612,125 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
          * @docid
          * @type Enums.DiagramDataLayoutOrientation
          */
-        orientation?: 'vertical' | 'horizontal',
+        orientation?: 'vertical' | 'horizontal';
         /**
          * @docid
          * @type Enums.DiagramDataLayoutType
          */
-        type?: 'off' | 'tree' | 'layered'
-      },
+        type?: 'off' | 'tree' | 'layered';
+      };
       /**
        * @docid
        * @default true
        */
-      autoSizeEnabled?: boolean,
+      autoSizeEnabled?: boolean;
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "children"
        */
-      containerChildrenExpr?: string | ((data: any) => any),
+      containerChildrenExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      containerKeyExpr?: string | ((data: any) => any),
+      containerKeyExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      customDataExpr?: string | ((data: any) => any),
+      customDataExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @default null
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions,
+      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      heightExpr?: string | ((data: any) => any),
+      heightExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      imageUrlExpr?: string | ((data: any) => any),
+      imageUrlExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      itemsExpr?: string | ((data: any) => any),
+      itemsExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "id"
        */
-      keyExpr?: string | ((data: any) => any),
+      keyExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      leftExpr?: string | ((data: any) => any),
+      leftExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      lockedExpr?: string | ((data: any) => any),
+      lockedExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      parentKeyExpr?: string | ((data: any) => any),
+      parentKeyExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      styleExpr?: string | ((data: any) => any),
+      styleExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "text"
        */
-      textExpr?: string | ((data: any) => any),
+      textExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any) => any),
+      textStyleExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      topExpr?: string | ((data: any) => any),
+      topExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default "type"
        */
-      typeExpr?: string | ((data: any) => any),
+      typeExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      widthExpr?: string | ((data: any) => any),
+      widthExpr?: string | ((data: any) => any);
       /**
        * @docid
        * @type_function_param1 data:object
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any) => any)
+      zIndexExpr?: string | ((data: any) => any);
     };
     /**
      * @docid
@@ -824,7 +823,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        */
@@ -832,20 +831,20 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        height?: number,
+        height?: number;
         /**
          * @docid
          */
-        text?: string,
+        text?: string;
         /**
          * @docid
          */
-        width?: number
-      }>,
+        width?: number;
+      }>;
       /**
        * @docid
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -862,7 +861,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
          * @docid
          * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
          */
-        commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'|'simpleView'|'toolbox'>,
+        commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
         /**
          * @docid
          */
@@ -871,23 +870,23 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
            * @docid
            * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
            */
-          commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'|'simpleView'|'toolbox'>,
+          commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
           /**
            * @docid
            */
-          title?: string
-        }>,
+          title?: string;
+        }>;
         /**
          * @docid
          */
-        title?: string
-      }>,
+        title?: string;
+      }>;
       /**
        * @docid
        * @type Enums.DiagramPanelVisibility
        * @default 'auto'
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled'
+      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
     };
     /**
      * @docid
@@ -924,12 +923,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>,
+      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
       /**
        * @docid
        * @default false
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -942,12 +941,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>,
+      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -960,12 +959,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>,
+      commands?: Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox'>;
       /**
        * @docid
        * @default true
        */
-      visible?: boolean
+      visible?: boolean;
     };
     /**
      * @docid
@@ -983,47 +982,47 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
          * @docid
          * @type Enums.DiagramShapeCategory|String
          */
-        category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string,
+        category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string;
         /**
          * @docid
          * @type Enums.DiagramToolboxDisplayMode
          */
-        displayMode?: 'icons' | 'texts',
+        displayMode?: 'icons' | 'texts';
         /**
          * @docid
          */
-        expanded?: boolean,
+        expanded?: boolean;
         /**
          * @docid
          * @type Array<Enums.DiagramShapeType>|Array<String>
          */
-        shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>,
+        shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>;
         /**
          * @docid
          */
-        title?: string
-      }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>,
+        title?: string;
+      }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>;
       /**
        * @docid
        * @default 3
        */
-      shapeIconsPerRow?: number,
+      shapeIconsPerRow?: number;
       /**
        * @docid
        * @default true
        */
-      showSearch?: boolean,
+      showSearch?: boolean;
       /**
        * @docid
        * @type Enums.DiagramPanelVisibility
        * @default 'auto'
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled',
+      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
       /**
        * @docid
        * @default undefined
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -1049,12 +1048,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      items?: Array<number>,
+      items?: Array<number>;
       /**
        * @docid
        * @default undefined
        */
-      value?: number
+      value?: number;
     };
 }
 /**
@@ -1087,7 +1086,7 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @return dxDiagramItem
      * @public
      */
-    getItemByKey(key: Object): dxDiagramItem;
+    getItemByKey(key: Object): Item;
     /**
      * @docid
      * @publicName getItemById(id)
@@ -1095,35 +1094,35 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @return dxDiagramItem
      * @public
      */
-    getItemById(id: string): dxDiagramItem;
+    getItemById(id: string): Item;
     /**
      * @docid
      * @publicName getItems()
      * @return Array<dxDiagramItem>
      * @public
      */
-     getItems(): Array<dxDiagramItem>;
+     getItems(): Array<Item>;
     /**
      * @docid
      * @publicName getSelectedItems()
      * @return Array<dxDiagramItem>
      * @public
      */
-     getSelectedItems(): Array<dxDiagramItem>;
+     getSelectedItems(): Array<Item>;
     /**
      * @docid
      * @publicName setSelectedItems(items)
      * @param1 items:Array<dxDiagramItem>
      * @public
      */
-     setSelectedItems(items: Array<dxDiagramItem>): void;
+     setSelectedItems(items: Array<Item>): void;
     /**
      * @docid
      * @publicName scrollToItem(item)
      * @param1 item:dxDiagramItem
      * @public
      */
-     scrollToItem(item: dxDiagramItem): void;
+     scrollToItem(item: Item): void;
     /**
      * @docid
      * @publicName export()
@@ -1184,11 +1183,11 @@ export interface dxDiagramConnector extends dxDiagramItem {
       /**
        * @docid
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        */
-      y?: number
+      y?: number;
     }>;
 
     /**
@@ -1214,7 +1213,13 @@ export interface dxDiagramConnector extends dxDiagramItem {
 }
 
 /**
- * @docid
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
+export type Item = dxDiagramItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxDiagramItem {
@@ -1266,11 +1271,11 @@ export interface dxDiagramShape extends dxDiagramItem {
       /**
        * @docid
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        */
-      y?: number
+      y?: number;
     };
 
     /**
@@ -1281,11 +1286,11 @@ export interface dxDiagramShape extends dxDiagramItem {
       /**
        * @docid
        */
-      height?: number,
+      height?: number;
       /**
        * @docid
        */
-      width?: number
+      width?: number;
     };
     /**
      * @docid
@@ -1357,11 +1362,11 @@ export interface dxDiagramAddShapeArgs {
       /**
        * @docid
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        */
-      y?: number
+      y?: number;
     };
 }
 
@@ -1452,11 +1457,11 @@ export interface dxDiagramChangeConnectorPointsArgs {
     /**
      * @docid
      */
-    x?: number,
+    x?: number;
     /**
      * @docid
      */
-    y?: number
+    y?: number;
   }>;
   /**
    * @docid
@@ -1465,11 +1470,11 @@ export interface dxDiagramChangeConnectorPointsArgs {
     /**
      * @docid
      */
-    x?: number,
+    x?: number;
     /**
      * @docid
      */
-    y?: number
+    y?: number;
   }>;
 }
 
@@ -1558,11 +1563,11 @@ export interface dxDiagramResizeShapeArgs {
     /**
      * @docid
      */
-    height?: number,
+    height?: number;
     /**
      * @docid
      */
-    width?: number
+    width?: number;
   };
   /**
    * @docid
@@ -1571,11 +1576,11 @@ export interface dxDiagramResizeShapeArgs {
     /**
      * @docid
      */
-    height?: number,
+    height?: number;
     /**
      * @docid
      */
-    width?: number
+    width?: number;
   };
 }
 
@@ -1596,11 +1601,11 @@ export interface dxDiagramMoveShapeArgs {
       /**
        * @docid
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        */
-      y?: number
+      y?: number;
   };
   /**
    * @docid
@@ -1609,11 +1614,11 @@ export interface dxDiagramMoveShapeArgs {
       /**
        * @docid
        */
-      x?: number,
+      x?: number;
       /**
        * @docid
        */
-      y?: number
+      y?: number;
   };
 }
 

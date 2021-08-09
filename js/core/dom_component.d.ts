@@ -1,17 +1,18 @@
 import {
     Component,
-    ComponentOptions
+    ComponentOptions,
 } from './component';
-
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from './element';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { Rule } from './options/utils';
+
+/* eslint-disable no-underscore-dangle */
 
 /** @namespace DevExpress */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
@@ -20,13 +21,13 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @default {}
      * @public
      */
-    bindingOptions?: {[key:string]: any};
+    bindingOptions?: { [key: string]: any };
     /**
      * @docid
      * @default {}
      * @public
      */
-    elementAttr?: {[key:string]: any};
+    elementAttr?: { [key: string]: any };
     /**
      * @docid
      * @default undefined
@@ -41,7 +42,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onDisposing?: ((e: { component?: TComponent, element?: DxElement, model?: any }) => void);
+    onDisposing?: ((e: { component?: TComponent; element?: DxElement; model?: any }) => void);
     /**
      * @docid
      * @action
@@ -49,7 +50,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @type_function_param1_field1 component:<DOMComponent>
      * @public
      */
-    onOptionChanged?: ((e: { component?: TComponent, element?: DxElement, model?: any, name?: string, fullName?: string, value?: any }) => void);
+    onOptionChanged?: ((e: { component?: TComponent; element?: DxElement; model?: any; name?: string; fullName?: string; value?: any }) => void);
     /**
      * @docid
      * @default false
@@ -74,7 +75,21 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
  * @hidden
  */
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
+    _templateManager: TemplateManager;
+
     constructor(element: UserDefinedElement, options?: TProperties);
+
+    /**
+     * @docid
+     * @static
+     * @section uiWidgets
+     * @publicName getInstance(element)
+     * @param1 element:Element|JQuery
+     * @return DOMComponent
+     * @public
+     */
+    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
+
     /**
      * @docid
      * @static
@@ -86,6 +101,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @public
      */
     static defaultOptions<TProperties = Properties>(rule: Partial<Rule<TProperties>>): void;
+
     /**
      * @docid
      * @publicName dispose()
@@ -99,29 +115,18 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      * @public
      */
     element(): DxElement;
-    /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName getInstance(element)
-     * @param1 element:Element|JQuery
-     * @return DOMComponent
-     * @public
-     */
-    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
     $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
-    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown);
-    _templateManager: TemplateManager;
+    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
 }
 
 export type ComponentClass<TProperties> = {
     new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
-    getInstance: (widgetRef: HTMLDivElement) => DOMComponent<TProperties>;
-}
+    getInstance(widgetRef: HTMLDivElement): DOMComponent<TProperties>;
+};
 
 interface DOMComponentInstance extends DOMComponent<Properties> { }
 

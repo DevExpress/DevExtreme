@@ -11,8 +11,7 @@ import {
   DateTimeCellTemplateProps,
 } from '../../types.d';
 import { isHorizontalGroupingApplied } from '../../utils';
-import { GroupPanel } from '../group_panel/group_panel';
-import { GroupPanelProps } from '../group_panel/group_panel_props';
+import { GroupPanel, GroupPanelProps } from '../group_panel/group_panel';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel';
 
@@ -23,8 +22,7 @@ export const viewFunction = ({
     groupByDate,
     groups,
     groupOrientation,
-    groupPanelCellBaseColSpan,
-    columnCountPerGroup,
+    groupPanelData,
     isRenderDateHeader,
     resourceCellTemplate,
     dateCellTemplate,
@@ -35,11 +33,10 @@ export const viewFunction = ({
   <thead>
     {isHorizontalGrouping && !groupByDate && (
       <GroupPanel
+        groupPanelData={groupPanelData}
         groups={groups}
         groupByDate={groupByDate}
         groupOrientation={groupOrientation}
-        baseColSpan={groupPanelCellBaseColSpan}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     )}
@@ -55,11 +52,10 @@ export const viewFunction = ({
     )}
     {groupByDate && (
       <GroupPanel
+        groupPanelData={groupPanelData}
         groups={groups}
         groupByDate={groupByDate}
         groupOrientation={groupOrientation}
-        baseColSpan={groupPanelCellBaseColSpan}
-        columnCountPerGroup={columnCountPerGroup}
         resourceCellTemplate={resourceCellTemplate}
       />
     )}
@@ -71,8 +67,6 @@ export class HeaderPanelLayoutProps extends GroupPanelProps {
   @OneWay() dateHeaderData!: DateHeaderData;
 
   @OneWay() isRenderDateHeader = true;
-
-  @OneWay() groupPanelCellBaseColSpan = 1;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 

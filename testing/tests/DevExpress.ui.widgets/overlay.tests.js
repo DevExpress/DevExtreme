@@ -1366,7 +1366,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -1389,7 +1397,15 @@ testModule('animation', moduleConfig, () => {
         const origFX = fx.animate;
 
         try {
-            const widgetPosition = { my: 'top', at: 'top', of: window };
+            const widgetPosition = {
+                my: 'top',
+                at: 'top',
+                of: window,
+                boundaryOffset: {
+                    h: 0,
+                    v: 0
+                }
+            };
             const animationShowToPosition = { my: 'bottom', at: 'bottom', of: window };
 
             const $overlay = $('#overlay').dxOverlay({
@@ -1998,6 +2014,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2017,6 +2034,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2035,6 +2053,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of jQuery Event target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2052,6 +2071,7 @@ testModule('close on target scroll', moduleConfig, () => {
     test('overlay should not be hidden on any target\'s parents scroll events if option set to false', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: false,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2122,6 +2142,7 @@ testModule('close on target scroll', moduleConfig, () => {
         const $overlay = $('#overlay').dxOverlay({
             visible: true,
             closeOnTargetScroll: true,
+            container: $('#test'),
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2142,9 +2163,11 @@ testModule('close on target scroll', moduleConfig, () => {
 
     test('scroll subscriptions should be unsubscribed from subscribed elements', function(assert) {
         const $target = $('#overlayInputTarget');
+        const $container = $('#test');
 
         const $overlay = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
+            container: $container,
             position: {
                 my: 'left top',
                 at: 'left bottom',
@@ -2154,30 +2177,26 @@ testModule('close on target scroll', moduleConfig, () => {
         });
         const overlay = $overlay.dxOverlay('instance');
 
-        const targetParent = $target.parent().get(0);
+        const containerParent = $container.parent().get(0);
         $target.detach();
         overlay.hide();
-        const parentEvents = $._data(targetParent).events || {};
+        const parentEvents = $._data(containerParent).events || {};
         assert.strictEqual('scroll' in parentEvents, false, 'scroll unsubscribed');
     });
 
     test('all opened overlays should be closed on scroll', function(assert) {
-        const $target = $('#overlayInputTarget');
+        const container = $('#overlayInputTarget');
 
         const $overlay1 = $('#overlay').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         const $overlay2 = $('#overlay2').dxOverlay({
             closeOnTargetScroll: true,
-            position: {
-                of: $target
-            },
-            visible: true
+            visible: true,
+            container
         });
 
         $('#parentContainer').triggerHandler('scroll');
@@ -2192,6 +2211,7 @@ testModule('close on target scroll', moduleConfig, () => {
             closeOnTargetScroll: function() {
                 return $overlay2.dxOverlay('option', 'visible');
             },
+            container: $('#test'),
             position: {
                 of: $target
             },
@@ -2200,6 +2220,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const $overlay2 = $('#overlay2').dxOverlay({
             closeOnTargetScroll: true,
+            container: $('#overlay'),
             position: {
                 of: $target
             },
@@ -2308,7 +2329,7 @@ testModule('container', moduleConfig, () => {
             visible: true,
             copyRootClassesToWrapper: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.ok($wrapper.hasClass('something'), 'class added to wrapper');
         assert.ok($wrapper.hasClass('another'), 'another class added to wrapper');
@@ -2320,7 +2341,7 @@ testModule('container', moduleConfig, () => {
         const instance = $('#overlayWithClass').dxOverlay({
             visible: true
         }).dxOverlay('instance');
-        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        const $wrapper = instance.$wrapper();
 
         assert.notOk($wrapper.hasClass('something'), 'class was not added to wrapper');
         assert.notOk($wrapper.hasClass('another'), 'another class was not added to wrapper');
@@ -2533,11 +2554,11 @@ testModule('container', moduleConfig, () => {
 });
 
 
-testModule('target', moduleConfig, () => {
-    test('target option should be present in positions', function(assert) {
-        const $target = $('#container');
-
-        const OverlayTarget = Overlay.inherit({
+testModule('target', {
+    beforeEach() {
+        moduleConfig.beforeEach.apply(this, arguments);
+        this.animate = sinon.stub(fx, 'animate');
+        this.baseOverlayOptions = {
 
             _defaultOptionsRules: function() {
                 return [];
@@ -2547,7 +2568,6 @@ testModule('target', moduleConfig, () => {
                 return $.extend(
                     this.callBase(),
                     {
-                        position: { of: $(window) },
                         animation: {
                             show: {
                                 to: { position: { of: $(window) } },
@@ -2562,22 +2582,68 @@ testModule('target', moduleConfig, () => {
                 );
             }
 
-        });
+        };
+    },
+    afterEach() {
+        moduleConfig.afterEach.apply(this, arguments);
+        this.animate.restore();
+    }
+}, () => {
+    test('target option should be present in show animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
 
         const $overlay = $('#overlay');
         const overlay = new OverlayTarget($overlay, {
             target: $target
         });
 
-        $.each([
-            'position.of',
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ], function(_, item) {
-            assert.strictEqual(overlay.option(item).get(0), $target.get(0), item + ' set');
+        overlay.show();
+
+        const animationShowSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationShowSettings.to.position.of.get(0), $target.get(0), 'animation.show.to.position.of');
+        assert.strictEqual(animationShowSettings.from.position.of.get(0), $target.get(0), 'animation.show.from.position.of');
+    });
+
+    test('target option should be present in hide animation position', function(assert) {
+        const $target = $('#container');
+
+        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
+
+        const $overlay = $('#overlay');
+        const overlay = new OverlayTarget($overlay, {
+            target: $target
         });
+
+        overlay.show();
+        this.animate.reset();
+        overlay.hide();
+
+        const animationHideSettings = this.animate.getCall(0).args[1];
+
+        assert.strictEqual(this.animate.callCount, 1, 'animation count');
+        assert.strictEqual(animationHideSettings.to.position.of.get(0), $target.get(0), 'animation.hide.to.position.of');
+        assert.strictEqual(animationHideSettings.from.position.of.get(0), $target.get(0), 'animation.hide.from.position.of');
+    });
+
+    test('target participation in position calculation', function(assert) {
+        const $target = $('#container').css({
+            position: 'absolute',
+            left: 100
+        });
+
+        const overlay = new Overlay($('#overlay'), {
+            target: $target
+        });
+
+        overlay.show();
+
+        const $wrapper = overlay.$wrapper();
+
+        assert.strictEqual($wrapper.css('transform'), 'matrix(1, 0, 0, 1, 100, 21)');
     });
 });
 
@@ -3997,7 +4063,6 @@ testModule('renderGeometry', {
             maxWidth: 10,
             minHeight: 2000,
             maxHeight: 10,
-            boundaryOffset: { h: 10, v: 10 },
             position: { of: 'body' }
         };
         for(const optionName in newOptions) {

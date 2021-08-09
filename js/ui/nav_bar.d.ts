@@ -3,16 +3,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxTabs, {
     dxTabsItem,
-    dxTabsOptions
+    dxTabsOptions,
 } from './tabs';
 
 /** @public */
@@ -65,9 +65,13 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
 export default class dxNavBar extends dxTabs<dxNavBarOptions> { }
 
 /**
- * @docid
- * @inherits dxTabsItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxNavBar
+ */
+export type Item = dxNavBarItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxNavBarItem extends dxTabsItem {

@@ -24,7 +24,6 @@ RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
 RUN npm set audit false
 RUN npm set fund false
-RUN npm set package-lock false
 
 # .NET Core
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
